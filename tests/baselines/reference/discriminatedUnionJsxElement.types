@@ -14,7 +14,7 @@ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLin
 
 function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
 >Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
->     : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^
+>     : ^               ^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^
 >ListItemVariant : any
 >                : ^^^
 >data : IData<MenuItemVariant>

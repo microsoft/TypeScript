@@ -217,10 +217,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
                 }], session);
             }
             catch (e) {
-                assert.strictEqual(
-                    e.message.replace(/\r?\n/, "\n"),
-                    `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
-                );
+                session.logger.info(e.message);
             }
             const file2Path = file.path.replace("#1", "#2");
             openFilesForSession([{ file: file2Path, content: file.content }], session);

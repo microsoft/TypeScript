@@ -59,7 +59,7 @@ interface MachineConfig<TActor extends ProvidedActor> {
 
 declare function assign<TActor extends ProvidedActor>(
 >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
->       : ^      ^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                             ^^^^^                    
+>       : ^      ^^^^^^^^^             ^^ ^^                                             ^^^^^                    
 
   _: (spawn: (actor: TActor["src"]) => void) => {},
 >_ : (spawn: (actor: TActor["src"]) => void) => {}
@@ -90,7 +90,7 @@ type ToProvidedActor<TActors extends Record<string, UnknownActorLogic>> =
 
 declare function setup<
 >setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
->      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^                                                   ^^^^^                                                                                                            
+>      : ^       ^^^^^^^^^                                 ^^^^^^^               ^^^                                                   ^^^^^                                                                                                            
 
   TActors extends Record<string, UnknownActorLogic> = {},
 >(implementations?: {
@@ -104,7 +104,7 @@ declare function setup<
 }): {
   createMachine: <
 >createMachine : <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void
->              : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^    
+>              : ^^^^^^^       ^^^^^^^^^                                       ^^      ^^       ^^^^^    
 
     const TConfig extends MachineConfig<ToProvidedActor<TActors>>,
   >(
@@ -130,7 +130,7 @@ setup({
 >setup({  actors: { counter: counterLogic },}) : { createMachine: <const TConfig extends MachineConfig<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>>(config: TConfig) => void; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
 >setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
->      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^^^^^^^^
+>      : ^       ^^^^^^^^^                                 ^^^^^^^               ^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^                                       ^^      ^^       ^^^^^^^^^^^^
 >{  actors: { counter: counterLogic },} : { actors: { counter: ActorLogic<{ type: "INCREMENT"; }>; }; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ setup({
 >assign((spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  }) : AssignAction<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
->       : ^      ^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^             ^^ ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  } : (spawn: (actor: "counter") => void) => {}
 >                                                                                     : ^     ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >spawn : (actor: "counter") => void
@@ -194,7 +194,7 @@ setup().createMachine({
 >setup() : { createMachine: <const TConfig extends MachineConfig<never>>(config: TConfig) => void; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
 >setup : <TActors extends Record<string, UnknownActorLogic> = {}>(implementations?: { actors?: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: <const TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
->      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^^^^^^^^
+>      : ^       ^^^^^^^^^                                 ^^^^^^^               ^^^                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^                                       ^^      ^^       ^^^^^^^^^^^^
 >createMachine : <const TConfig extends MachineConfig<never>>(config: TConfig) => void
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
 >{  entry: assign(() => ({})),} : { entry: AssignAction<never>; }
@@ -206,7 +206,7 @@ setup().createMachine({
 >assign(() => ({})) : AssignAction<never>
 >                   : ^^^^^^^^^^^^^^^^^^^
 >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
->       : ^      ^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^             ^^ ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({}) : () => {}
 >           : ^^^^^^^^
 >({}) : {}

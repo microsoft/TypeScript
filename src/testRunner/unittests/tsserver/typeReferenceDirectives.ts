@@ -10,7 +10,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: typeReferenceDirectives", () => {
+describe("unittests:: tsserver:: typeReferenceDirectives::", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
         const libProjectLocation = `/user/username/projects/myproject/lib`;
         const typeLib: File = {
@@ -52,6 +52,7 @@ declare class TestLib {
                 compilerOptions: {
                     module: "amd",
                     typeRoots: ["../lib/@types", "../lib/@app"],
+                    traceResolution: true,
                 },
             }),
         };

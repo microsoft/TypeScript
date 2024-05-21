@@ -55,7 +55,7 @@ function fx2<T>(x: T | undefined) {
 
 function fx3<T extends string | number>(x: T) {
 >fx3 : <T extends string | number>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -143,7 +143,7 @@ declare function isXSorY(obj: unknown): obj is XS | Y;
 
 function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 >fx5 : <T extends X>(obj: X | YS, c: typeof XS | typeof Y) => void
->    : ^^^^^^^^^^^^^^   ^^      ^^ ^^                    ^^^^^^^^^
+>    : ^^^^^^^^^^^ ^^   ^^      ^^ ^^                    ^^^^^^^^^
 >obj : X | YS
 >    : ^^^^^^
 >c : typeof XS | typeof Y

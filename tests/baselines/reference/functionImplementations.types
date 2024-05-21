@@ -217,7 +217,7 @@ var n = function <T extends {}>(x: T) {
 >function <T extends {}>(x: T) {    return x;} (4) : 4
 >                                                  : ^
 >function <T extends {}>(x: T) {    return x;} : <T extends {}>(x: T) => T
->                                              : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^
+>                                              : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 

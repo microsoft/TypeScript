@@ -11,7 +11,7 @@ declare function wrap<X>(x: X): { x: X };
 
 declare function call<A extends unknown[], T>(x: { x: (...args: A) => T }, ...args: A): T;
 >call : <A extends unknown[], T>(x: { x: (...args: A) => T; }, ...args: A) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                         ^^^^^    ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^         ^^ ^^ ^^                         ^^^^^    ^^ ^^^^^ 
 >x : { x: (...args: A) => T; }
 >  : ^^^^^                 ^^^
 >x : (...args: A) => T
@@ -28,7 +28,7 @@ const leak = call(wrap(<T>(x: T) => x), 1);
 >call(wrap(<T>(x: T) => x), 1) : number
 >                              : ^^^^^^
 >call : <A extends unknown[], T>(x: { x: (...args: A) => T; }, ...args: A) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                         ^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^         ^^ ^^ ^^                         ^^^^^    ^^ ^^^^^^
 >wrap(<T>(x: T) => x) : { x: (x: A[0]) => A[0]; }
 >                     : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >wrap : <X>(x: X) => { x: X; }

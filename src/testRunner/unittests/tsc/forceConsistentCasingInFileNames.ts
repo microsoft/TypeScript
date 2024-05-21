@@ -26,4 +26,19 @@ describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
         commandLineArgs: ["-p", "/home/src/projects/project/tsconfig.json", "--explainFiles"],
         fs: () => loadProjectFromFiles(getFsContentsForMultipleErrorsForceConsistentCasingInFileNames()),
     });
+
+    verifyTsc({
+        scenario: "forceConsistentCasingInFileNames",
+        subScenario: "with type ref from file",
+        commandLineArgs: ["-p", "/src/project/src", "--explainFiles", "--traceResolution"],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/src/fileOne.d.ts": `declare class c { }`,
+                "/src/project/src/file2.d.ts": dedent`
+                    /// <reference types="./fileOne.d.ts"/>
+                    declare const y: c;
+                `,
+                "/src/project/src/tsconfig.json": "{ }",
+            }),
+    });
 });

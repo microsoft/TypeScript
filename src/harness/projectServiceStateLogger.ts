@@ -104,7 +104,11 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
-        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(/*toRetainConfiguredProjects*/ undefined);
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(
+            /*toRetainConfiguredProjects*/ undefined,
+            /*openFilesWithRetainedConfiguredProject*/ undefined,
+            /*externalProjectsRetainingConfiguredProjects*/ undefined,
+        );
         const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],

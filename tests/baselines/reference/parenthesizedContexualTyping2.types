@@ -36,7 +36,7 @@ function fun<T>(f: FuncType, g: FuncType, x: T): T;
 >  : ^
 
 function fun<T>(...rest: any[]): T {
->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_2>(f: FuncType, g: FuncType, x: T_2): T_2; }
+>fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >    : ^^^   ^^ ^^        ^^ ^^   ^^^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
@@ -51,8 +51,8 @@ var a = fun(x => { x<number>(undefined); return x; }, 10);
 >  : ^^^^^^
 >fun(x => { x<number>(undefined); return x; }, 10) : 10
 >                                                  : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
@@ -73,8 +73,8 @@ var b = fun((x => { x<number>(undefined); return x; }), 10);
 >  : ^^^^^^
 >fun((x => { x<number>(undefined); return x; }), 10) : 10
 >                                                    : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                           : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -97,8 +97,8 @@ var c = fun(((x => { x<number>(undefined); return x; })), 10);
 >  : ^^^^^^
 >fun(((x => { x<number>(undefined); return x; })), 10) : 10
 >                                                      : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                             : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -123,8 +123,8 @@ var d = fun((((x => { x<number>(undefined); return x; }))), 10);
 >  : ^^^^^^
 >fun((((x => { x<number>(undefined); return x; }))), 10) : 10
 >                                                        : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(((x => { x<number>(undefined); return x; }))) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                               : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -151,8 +151,8 @@ var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined
 >  : ^^^^^^
 >fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined); return x; }, 10) : 10
 >                                                                                            : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
@@ -185,8 +185,8 @@ var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefin
 >  : ^^^^^^
 >fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefined); return x; }), 10) : 10
 >                                                                                               : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                           : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -223,8 +223,8 @@ var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(unde
 >  : ^^^^^^
 >fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(undefined); return x; })), 10) : 10
 >                                                                                                   : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                             : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -265,8 +265,8 @@ var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(un
 >  : ^^^^^^
 >fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(undefined); return x; })), 10) : 10
 >                                                                                                     : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(((x => { x<number>(undefined); return x; }))) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >                                               : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -310,8 +310,8 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >  : ^^^^^^
 >fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10) : 10
 >                                                                                           : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : (x: <T>(p: T) => T) => any
 >                                                                                  : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : (x: <T>(p: T) => T) => any
@@ -354,8 +354,8 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >  : ^^^^^^
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10) : 10
 >                                                                                               : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
 >                                                                                      : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
@@ -402,8 +402,8 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >  : ^^^^^^
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10) : 10
 >                                                                                                                                         : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
 >                                                                                      : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
@@ -462,8 +462,8 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >  : ^^^^^^
 >fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10) : 10
 >                                                                                                                                                  : ^^
->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
->    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^   ^^ ^^        ^^ ^^        ^^ ^^   ^^^^^^^^^
+>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>    : ^^^ ^^ ^^        ^^ ^^ ^^^^^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^^^^^
 >((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : (x: <T>(p: T) => T) => any
 >                                                                                            : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : (x: <T>(p: T) => T) => any

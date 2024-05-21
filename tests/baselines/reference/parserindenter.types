@@ -183,7 +183,7 @@ module Formatting {
 
         public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEdits : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                    : ^     ^^         ^^         ^^         ^^    ^^         ^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^         ^^         ^^         ^^    ^^         ^^              ^^       ^^^^^                 
 >token : TokenSpan
 >      : ^^^^^^^^^
 >nextToken : TokenSpan
@@ -477,7 +477,7 @@ module Formatting {
 
         public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                          : ^     ^^         ^^         ^^         ^^    ^^         ^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^         ^^         ^^         ^^    ^^         ^^              ^^       ^^^^^                 
 >token : TokenSpan
 >      : ^^^^^^^^^
 >nextToken : TokenSpan
@@ -960,7 +960,7 @@ module Formatting {
 
         private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
 >GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
->                           : ^     ^^         ^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^     ^^         ^^^^^                 
 >token : TokenSpan
 >      : ^^^^^^^^^
 
@@ -1371,7 +1371,7 @@ module Formatting {
 
         private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                          : ^     ^^         ^^    ^^         ^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^         ^^    ^^         ^^^^^               
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1646,7 +1646,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
->                                   : ^    ^^         ^^^^^^^^^^^^^^^^^^^^
+>                                   : ^    ^^         ^^^^^               
 >node : ParseNode
 >     : ^^^^^^^^^
 
@@ -1805,7 +1805,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                      : ^     ^^         ^^    ^^         ^^^^^^^^^^^^^^^^^^^^
+>                                      : ^     ^^         ^^    ^^         ^^^^^               
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1941,7 +1941,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                    : ^     ^^         ^^    ^^         ^^^^^^^^^^^^^^^^^^^^
+>                                    : ^     ^^         ^^    ^^         ^^^^^               
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -2441,7 +2441,7 @@ module Formatting {
 
         private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->              : ^          ^^               ^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
+>              : ^          ^^               ^^                  ^^      ^^              ^^       ^^^^^            
 >indentInfo : IndentationInfo
 >           : ^^^^^^^^^^^^^^^
 >tokenStartPosition : number
@@ -3005,7 +3005,7 @@ module Formatting {
 
         private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                : ^     ^^         ^^    ^^         ^^^^^^^^^^^^^^^^^^^^
+>                                : ^     ^^         ^^    ^^         ^^^^^               
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -3164,7 +3164,7 @@ module Formatting {
 
         private ApplyIndentationDelta1(tokenStartPosition: number, delta: number): IndentationInfo {
 >ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
->                       : ^                  ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>                       : ^                  ^^      ^^     ^^      ^^^^^               
 >tokenStartPosition : number
 >                   : ^^^^^^
 >delta : number
@@ -3253,7 +3253,7 @@ module Formatting {
 
         private ApplyIndentationDelta2(currentIndent: string, delta: number): IndentationInfo {
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                       : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>                       : ^             ^^      ^^     ^^      ^^^^^               
 >currentIndent : string
 >              : ^^^^^^
 >delta : number

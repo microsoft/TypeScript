@@ -4200,10 +4200,6 @@
         "category": "Error",
         "code": 4085
     },
-    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Error",
-        "code": 4090
-    },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4091

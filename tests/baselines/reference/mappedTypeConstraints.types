@@ -3,7 +3,7 @@
 === mappedTypeConstraints.ts ===
 function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
 >f0 : <T extends { a: string; b: string; }>(obj: Pick<T, Extract<keyof T, "b">>) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^                              ^^^^^^^^^
+>   : ^ ^^^^^^^^^                         ^^   ^^                              ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -22,7 +22,7 @@ function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b
 
 function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a'>>) {
 >f1 : <T extends { a: string; b: string; }>(obj: Pick<T, Exclude<keyof T, "a">>) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^                              ^^^^^^^^^
+>   : ^ ^^^^^^^^^                         ^^   ^^                              ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -41,7 +41,7 @@ function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a
 
 function f2<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T | U, keyof (T | U)>) {
 >f2 : <T extends { a: string; b: string; }, U extends { b: string; c: string; }>(obj: Pick<T | U, keyof (T | U)>) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^                          ^^^^^^^^^
+>   : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^                         ^^   ^^                          ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -64,7 +64,7 @@ function f2<T extends { a: string, b: string }, U extends { b: string, c: string
 
 function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
 >f3 : <T extends { a: string; b: string; }, U extends { b: string; c: string; }>(obj: Pick<T & U, keyof (T & U)>) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^                          ^^^^^^^^^
+>   : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^                         ^^   ^^                          ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -103,7 +103,7 @@ function f3<T extends { a: string, b: string }, U extends { b: string, c: string
 
 function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {
 >f4 : <T extends { a: string; b: string; }>(obj: Record<Exclude<keyof T, "b"> | "c", string>) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^                                           ^^^^^^^^^
+>   : ^ ^^^^^^^^^                         ^^   ^^                                           ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -146,9 +146,9 @@ type TargetProps = {
 
 const modifier = <T extends TargetProps>(targetProps: T) => {
 >modifier : <T extends TargetProps>(targetProps: T) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^           ^^ ^^^^^^^^^
+>         : ^ ^^^^^^^^^           ^^           ^^ ^^^^^^^^^
 ><T extends TargetProps>(targetProps: T) => {    let {bar, ...rest} = targetProps;    rest.foo;} : <T extends TargetProps>(targetProps: T) => void
->                                                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^           ^^ ^^^^^^^^^
+>                                                                                                : ^ ^^^^^^^^^           ^^           ^^ ^^^^^^^^^
 >targetProps : T
 >            : ^
 

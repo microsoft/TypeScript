@@ -141,10 +141,16 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
 export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
     | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
+
+export type ReadableProgramBuildInfoResolvedRoot = [
+    original: ts.ProgramBuildInfoResolvedRoot,
+    readable: [resolved: string, root: string],
+];
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "resolvedRoot" | "referencedMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
+    resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
     referencedMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
@@ -153,9 +159,10 @@ export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmit
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
 };
 export type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
-export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
+export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "resolvedRoot" | "pendingEmit"> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
+    resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
     pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
 };
 
@@ -180,6 +187,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             ...buildInfo.program,
             fileInfos,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
+            resolvedRoot: buildInfo.program.resolvedRoot?.map(toReadableProgramBuildInfoResolvedRoot),
             pendingEmit: pendingEmit === undefined ?
                 undefined :
                 [
@@ -198,6 +206,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             fileNamesList,
             fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined!,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
+            resolvedRoot: buildInfo.program.resolvedRoot?.map(toReadableProgramBuildInfoResolvedRoot),
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
@@ -243,6 +252,10 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         const readable: string[] = [];
         for (let index = original[0]; index <= original[1]; index++) readable.push(toFileName(index));
         return [original, readable];
+    }
+
+    function toReadableProgramBuildInfoResolvedRoot(original: ts.ProgramBuildInfoResolvedRoot): ReadableProgramBuildInfoResolvedRoot {
+        return [original, [toFileName(original[0]), toFileName(original[1])]];
     }
 
     function toMapOfReferencedSet(referenceMap: ts.ProgramBuildInfoReferencedMap | undefined): ts.MapLike<string[]> | undefined {

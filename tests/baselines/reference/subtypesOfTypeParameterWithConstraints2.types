@@ -5,7 +5,7 @@
 
 function f1<T extends U, U>(x: T, y: U) {
 >f1 : <T extends U, U>(x: T, y: U) => void
->   : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -39,7 +39,7 @@ function f1<T extends U, U>(x: T, y: U) {
 // V > U > T
 function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
 >f2 : <T extends U, U extends V, V>(x: T, y: U, z: V) => void
->   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -125,7 +125,7 @@ function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
 // Date > U > T
 function f3<T extends U, U extends Date>(x: T, y: U) {
 >f3 : <T extends U, U extends Date>(x: T, y: U) => void
->   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -270,7 +270,7 @@ module c {
 
 function f4<T extends Number>(x: T) {
 >f4 : <T extends Number>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -320,7 +320,7 @@ function f4<T extends Number>(x: T) {
 
 function f5<T extends Number>(x: T) {
 >f5 : <T extends Number>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -351,7 +351,7 @@ function f5<T extends Number>(x: T) {
 
 function f6<T extends String>(x: T) {
 >f6 : <T extends String>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -382,7 +382,7 @@ function f6<T extends String>(x: T) {
 
 function f7<T extends Boolean>(x: T) {
 >f7 : <T extends Boolean>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -413,7 +413,7 @@ function f7<T extends Boolean>(x: T) {
 
 function f8<T extends Date>(x: T) {
 >f8 : <T extends Date>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -448,7 +448,7 @@ function f8<T extends Date>(x: T) {
 
 function f9<T extends RegExp>(x: T) {
 >f9 : <T extends RegExp>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -479,7 +479,7 @@ function f9<T extends RegExp>(x: T) {
 
 function f10<T extends { foo: number }>(x: T) {
 >f10 : <T extends { foo: number; }>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >x : T
@@ -520,7 +520,7 @@ function f10<T extends { foo: number }>(x: T) {
 
 function f11<T extends () => void>(x: T) {
 >f11 : <T extends () => void>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^    ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -551,7 +551,7 @@ function f11<T extends () => void>(x: T) {
 
 function f12<T extends <U>(x: U) => U>(x: T) {
 >f12 : <T extends <U>(x: U) => U>(x: T) => void
->    : ^ ^^^^^^^^^^ ^^ ^^ ^^^^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : U
 >  : ^
 >x : T
@@ -592,7 +592,7 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 
 function f13<T extends I1>(x: T) {
 >f13 : <T extends I1>(x: T) => void
->    : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -627,7 +627,7 @@ function f13<T extends I1>(x: T) {
 
 function f14<T extends C1>(x: T) {
 >f14 : <T extends C1>(x: T) => void
->    : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -662,7 +662,7 @@ function f14<T extends C1>(x: T) {
 
 function f15<T extends C2<number>>(x: T) {
 >f15 : <T extends C2<number>>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -697,7 +697,7 @@ function f15<T extends C2<number>>(x: T) {
 
 function f16<T extends E>(x: T) {
 >f16 : <T extends E>(x: T) => void
->    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -760,7 +760,7 @@ function f16<T extends E>(x: T) {
 
 function f17<T extends typeof f>(x: T) {
 >f17 : <T extends typeof f>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >f : typeof f
 >  : ^^^^^^^^
 >x : T
@@ -799,7 +799,7 @@ function f17<T extends typeof f>(x: T) {
 
 function f18<T extends typeof c>(x: T) {
 >f18 : <T extends typeof c>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^^^^
 >c : typeof c
 >  : ^^^^^^^^
 >x : T
@@ -844,7 +844,7 @@ function f19<T>(x: T) {
 
     function f17<U extends T>(a: U) {
 >f17 : <U extends T>(a: U) => void
->    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
 
@@ -875,7 +875,7 @@ function f19<T>(x: T) {
 
     function f18<V extends U, U extends T>(a: V) {
 >f18 : <V extends U, U extends T>(a: V) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : V
 >  : ^
 
@@ -907,7 +907,7 @@ function f19<T>(x: T) {
 
 function f20<T extends Number>(x: T) {
 >f20 : <T extends Number>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -942,7 +942,7 @@ function f20<T extends Number>(x: T) {
 
 function f21<T extends Number>(x: T) {
 >f21 : <T extends Number>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

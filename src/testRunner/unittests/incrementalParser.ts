@@ -120,7 +120,7 @@ function insertCode(source: string, index: number, toInsert: string) {
     }
 }
 
-describe("unittests:: Incremental Parser", () => {
+describe("unittests:: incrementalParser::", () => {
     it("Inserting into method", () => {
         const source = "class C {\r\n" +
             "    public foo1() { }\r\n" +
@@ -804,6 +804,15 @@ module m3 { }\
 
         const index = source.indexOf("extends");
         deleteCode(source, index, "extends IFoo<T>");
+    });
+
+    it("when comment changes to incomplete", () => {
+        const source = "function bug(\r\n    test /** */ true = test test 123\r\n) {}";
+        const oldText = ts.ScriptSnapshot.fromString(source);
+        const index = source.indexOf("/");
+        const newTextAndChange = withChange(oldText, index, 1, "");
+
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
     });
 
     it("Type after incomplete enum 1", () => {

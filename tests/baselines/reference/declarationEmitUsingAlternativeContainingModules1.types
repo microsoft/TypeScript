@@ -349,7 +349,7 @@ type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
 
 declare function useQuery<
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
 
   TQueryFnData = unknown,
   TError = DefaultError,
@@ -366,7 +366,7 @@ export { type UseQueryReturnType, useQuery };
 >UseQueryReturnType : any
 >                   : ^^^
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/@tanstack/vue-query/build/modern/index.d.ts ===
 export { UseQueryReturnType, useQuery } from './useQuery-CPqkvEsh.js';

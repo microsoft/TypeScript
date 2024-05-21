@@ -3,7 +3,7 @@
 === indexedAccessAndNullableNarrowing.ts ===
 function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) {
 >f1 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^                ^^^^^^^^^
 >x : T[K] | undefined
 >  : ^^^^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefine
 
 function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
 >f2 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | null) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^
+>   : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^           ^^^^^^^^^
 >x : T[K] | null
 >  : ^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
 
 function f3<T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) {
 >f3 : <T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^    ^^  ^^                  ^^  ^^                           ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^       ^^ ^^    ^^  ^^                  ^^  ^^                           ^^^^^^^^^
 >t : T[K]
 >  : ^^^^
 >p1 : Partial<T>[K] & {}
@@ -98,7 +98,7 @@ type State = AnyObject;
 
 declare function hasOwnProperty<T extends AnyObject>(
 >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
->               : ^ ^^^^^^^^^^^^^^^^^^^^      ^^ ^^    ^^           ^^^^^               
+>               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^               
 
     object: T,
 >object : T
@@ -113,7 +113,7 @@ declare function hasOwnProperty<T extends AnyObject>(
 interface Store<S = State> {
     setState<K extends keyof S>(key: K, value: S[K]): void;
 >setState : <K extends keyof S>(key: K, value: S[K]) => void
->         : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^    ^^^^^    
+>         : ^ ^^^^^^^^^       ^^   ^^ ^^     ^^    ^^^^^    
 >key : K
 >    : ^
 >value : S[K]
@@ -121,8 +121,8 @@ interface Store<S = State> {
 }
 
 export function syncStoreProp<
->syncStoreProp : <S extends AnyObject, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
->              : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^     ^^        ^^     ^^ ^^   ^^ ^^^^^^^^^
+>syncStoreProp : <S extends State, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
+>              : ^ ^^^^^^^^^     ^^ ^^^^^^^^^          ^^ ^^^^^^^^^       ^^     ^^        ^^     ^^ ^^   ^^ ^^^^^^^^^
 
     S extends State,
     P extends Partial<S>,
@@ -143,7 +143,7 @@ export function syncStoreProp<
 >hasOwnProperty(props, key) : boolean
 >                           : ^^^^^^^
 >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
->               : ^ ^^^^^^^^^^^^^^^^^^^^      ^^ ^^    ^^           ^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^^^^^^^^^^^^^^^^
 >props : P
 >      : ^
 >key : string | number | symbol

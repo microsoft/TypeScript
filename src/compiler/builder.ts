@@ -1,6 +1,7 @@
 import {
     addRange,
     AffectedFileResult,
+    append,
     arrayFrom,
     arrayToMap,
     BuilderProgram,
@@ -990,10 +991,13 @@ export type ProgramBuildInfoRootStartEnd = [start: ProgramBuildInfoFileId, end: 
  */
 export type ProgramBuildInfoRoot = ProgramBuildInfoRootStartEnd | ProgramBuildInfoFileId;
 /** @internal */
+export type ProgramBuildInfoResolvedRoot = [resolved: ProgramBuildInfoFileId, root: ProgramBuildInfoFileId];
+/** @internal */
 export interface ProgramMultiFileEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramMultiFileEmitBuildInfoFileInfo[];
     root: readonly ProgramBuildInfoRoot[];
+    resolvedRoot: readonly ProgramBuildInfoResolvedRoot[] | undefined;
     options: CompilerOptions | undefined;
     fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
     referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -1023,6 +1027,7 @@ export interface ProgramBundleEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramBundleEmitBuildInfoFileInfo[];
     root: readonly ProgramBuildInfoRoot[];
+    resolvedRoot: readonly ProgramBuildInfoResolvedRoot[] | undefined;
     options: CompilerOptions | undefined;
     outSignature: EmitSignature | undefined;
     latestChangedDtsFile: string | undefined;
@@ -1047,6 +1052,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+    const rootFileNames = new Set(state.program!.getRootFileNames().map(f => toPath(f, currentDirectory, state.program!.getCanonicalFileName)));
     const root: ProgramBuildInfoRoot[] = [];
     if (state.compilerOptions.outFile) {
         // Copy all fileInfo, version and impliedFormat
@@ -1063,6 +1069,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             fileNames,
             fileInfos,
             root,
+            resolvedRoot: toResolvedRoot(),
             options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
             outSignature: state.outSignature,
             latestChangedDtsFile,
@@ -1090,7 +1097,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
                 const emitSignature = state.emitSignatures?.get(key);
                 if (emitSignature !== actualSignature) {
-                    (emitSignatures ||= []).push(
+                    emitSignatures = append(
+                        emitSignatures,
                         emitSignature === undefined ?
                             fileId : // There is no emit, encode as false
                             // fileId, signature: emptyArray if signature only differs in dtsMap option than our own compilerOptions otherwise EmitSignature
@@ -1133,7 +1141,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
                 const file = state.program!.getSourceFileByPath(path);
                 if (!file || !sourceFileMayBeEmitted(file, state.program!)) continue;
                 const fileId = toFileId(path), pendingEmit = state.affectedFilesPendingEmit.get(path)!;
-                (affectedFilesPendingEmit ||= []).push(
+                affectedFilesPendingEmit = append(
+                    affectedFilesPendingEmit,
                     pendingEmit === fullEmitForOptions ?
                         fileId : // Pending full emit per options
                         pendingEmit === BuilderFileEmit.Dts ?
@@ -1147,7 +1156,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
     let changeFileSet: ProgramBuildInfoFileId[] | undefined;
     if (state.changedFilesSet.size) {
         for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
-            (changeFileSet ||= []).push(toFileId(path));
+            changeFileSet = append(changeFileSet, toFileId(path));
         }
     }
     const emitDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics(state.emitDiagnosticsPerFile);
@@ -1155,6 +1164,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         fileNames,
         fileInfos,
         root,
+        resolvedRoot: toResolvedRoot(),
         options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
         fileIdsList,
         referencedMap,
@@ -1189,8 +1199,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         const key = fileIds.join();
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
-            (fileIdsList ||= []).push(fileIds);
-            (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
+            fileIdsList = append(fileIdsList, fileIds);
+            (fileNamesToFileIdListId ??= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
         }
         return fileIdListId;
     }
@@ -1212,6 +1222,17 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         // Convert lastButOne as [lastButOne, fileId]
         root[root.length - 2] = [lastButOne, fileId];
         return root.length = root.length - 1;
+    }
+
+    function toResolvedRoot(): ProgramBuildInfoResolvedRoot[] | undefined {
+        let result: ProgramBuildInfoResolvedRoot[] | undefined;
+        rootFileNames.forEach(path => {
+            const file = state.program!.getSourceFileByPath(path);
+            if (file && path !== file.resolvedPath) {
+                result = append(result, [toFileId(file.resolvedPath), toFileId(path)]);
+            }
+        });
+        return result;
     }
 
     /**
@@ -1253,7 +1274,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         if (diagnostics) {
             for (const key of arrayFrom(diagnostics.keys()).sort(compareStringsCaseSensitive)) {
                 const value = diagnostics.get(key)!;
-                (result ||= []).push(
+                result = append(
+                    result,
                     value.length ?
                         [
                             toFileId(key),
@@ -1909,7 +1931,9 @@ export function getBuildInfoFileVersionMap(
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();
     let rootIndex = 0;
-    const roots: Path[] = [];
+    // Root name to resolved
+    const roots = new Map<Path, Path | undefined>();
+    const resolvedRoots = new Map(program.resolvedRoot);
     program.fileInfos.forEach((fileInfo, index) => {
         const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
         const version = isString(fileInfo) ? fileInfo : fileInfo.version;
@@ -1919,17 +1943,27 @@ export function getBuildInfoFileVersionMap(
             const fileId = (index + 1) as ProgramBuildInfoFileId;
             if (isArray(current)) {
                 if (current[0] <= fileId && fileId <= current[1]) {
-                    roots.push(path);
+                    addRoot(fileId, path);
                     if (current[1] === fileId) rootIndex++;
                 }
             }
             else if (current === fileId) {
-                roots.push(path);
+                addRoot(fileId, path);
                 rootIndex++;
             }
         }
     });
     return { fileInfos, roots };
+
+    function addRoot(fileId: ProgramBuildInfoFileId, path: Path) {
+        const root = resolvedRoots.get(fileId);
+        if (root) {
+            roots.set(toPath(program.fileNames[root - 1], buildInfoDirectory, getCanonicalFileName), path);
+        }
+        else {
+            roots.set(path, undefined);
+        }
+    }
 }
 
 /** @internal */

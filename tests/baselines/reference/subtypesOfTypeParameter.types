@@ -615,7 +615,7 @@ function f2<T, U>(x: T, y: U) {
 
     function f18<T, U extends T>(a: U) {
 >f18 : <T, U extends T>(a: U) => void
->    : ^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
 

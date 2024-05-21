@@ -83,7 +83,7 @@ interface BookDef {
 
 function insertOnConflictDoNothing<Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>): boolean {
 >insertOnConflictDoNothing : <Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>) => boolean
->                          : ^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^      ^^               ^^               ^^                         ^^^^^       
+>                          : ^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^      ^^               ^^               ^^                         ^^^^^       
 >_table : Table<Req, Def>
 >       : ^^^^^^^^^^^^^^^
 >_conflictTarget : ConflictTarget<Req & Def>
@@ -104,7 +104,7 @@ function f() {
 >insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"])) : boolean
 >                                                                              : ^^^^^^^
 >insertOnConflictDoNothing : <Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>) => boolean
->                          : ^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^      ^^               ^^               ^^                         ^^^^^^^^^^^^
+>                          : ^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^      ^^               ^^               ^^                         ^^^^^^^^^^^^
 >bookTable : Table<BookReq, BookDef>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^
 >ConflictTarget.tableColumns(["serial"]) : ConflictTarget<BookReq & BookDef>

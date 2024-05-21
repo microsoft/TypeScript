@@ -27,8 +27,8 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             if (!cache || currentKey !== key(fromFileName, preferences, options)) return undefined;
             return cache.get(toFileName);
         },
-        set(fromFileName, toFileName, preferences, options, modulePaths, moduleSpecifiers) {
-            ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
+        set(fromFileName, toFileName, preferences, options, kind, modulePaths, moduleSpecifiers) {
+            ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(kind, modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
 
             // If any module specifiers were generated based off paths in node_modules,
             // a package.json file in that package was read and is an input to the cached.
@@ -58,7 +58,7 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 info.modulePaths = modulePaths;
             }
             else {
-                cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
+                cache.set(toFileName, createInfo(/*kind*/ undefined, modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
             }
         },
         setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
@@ -68,7 +68,7 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 info.isBlockedByPackageJsonDependencies = isBlockedByPackageJsonDependencies;
             }
             else {
-                cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
+                cache.set(toFileName, createInfo(/*kind*/ undefined, /*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
             }
         },
         clear() {
@@ -100,10 +100,11 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
     }
 
     function createInfo(
+        kind: ResolvedModuleSpecifierInfo["kind"] | undefined,
         modulePaths: readonly ModulePath[] | undefined,
         moduleSpecifiers: readonly string[] | undefined,
         isBlockedByPackageJsonDependencies: boolean | undefined,
     ): ResolvedModuleSpecifierInfo {
-        return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
+        return { kind, modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
     }
 }

@@ -94,7 +94,7 @@ function f1<T>(x: T) {
 
 function f2<T extends string | number>(x: T) {
 >f2 : <T extends string | number>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -105,7 +105,7 @@ function f2<T extends string | number>(x: T) {
 
 function f3<T extends keyof Shape>(x: T) {
 >f3 : <T extends keyof Shape>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^           ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -115,8 +115,8 @@ function f3<T extends keyof Shape>(x: T) {
 }
 
 function f4<T extends keyof Named>(x: T) {
->f4 : <T extends "name">(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>f4 : <T extends keyof Named>(x: T) => void
+>   : ^ ^^^^^^^^^           ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -392,7 +392,7 @@ interface Foo {
 
 function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >obj : T
 >    : ^
 >props : Pick<T, K>
@@ -440,7 +440,7 @@ setState(foo, { a: "test", b: 43 })
 >setState(foo, { a: "test", b: 43 }) : void
 >                                    : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ a: "test", b: 43 } : { a: string; b: number; }
@@ -458,7 +458,7 @@ setState(foo, { a: "hi" });
 >setState(foo, { a: "hi" }) : void
 >                           : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ a: "hi" } : { a: string; }
@@ -472,7 +472,7 @@ setState(foo, { b: undefined });
 >setState(foo, { b: undefined }) : void
 >                                : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ b: undefined } : { b: undefined; }
@@ -486,7 +486,7 @@ setState(foo, { });
 >setState(foo, { }) : void
 >                   : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ } : {}
@@ -496,7 +496,7 @@ setState(foo, foo);
 >setState(foo, foo) : void
 >                   : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >foo : Foo
@@ -506,7 +506,7 @@ setState(foo, { a: undefined });  // Error
 >setState(foo, { a: undefined }) : void
 >                                : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ a: undefined } : { a: undefined; }
@@ -520,7 +520,7 @@ setState(foo, { c: true });  // Error
 >setState(foo, { c: true }) : void
 >                           : ^^^^
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->         : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^          ^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^     ^^          ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >{ c: true } : { c: boolean; }
@@ -540,7 +540,7 @@ class C<T> {
 
     setState<K extends keyof T>(props: Pick<T, K>) {
 >setState : <K extends keyof T>(props: Pick<T, K>) => void
->         : ^ ^^^^^^^^^^^^^^^^^^     ^^          ^^^^^^^^^
+>         : ^ ^^^^^^^^^       ^^     ^^          ^^^^^^^^^
 >props : Pick<T, K>
 >      : ^^^^^^^^^^
 
@@ -800,7 +800,7 @@ let f: Foo2<O, 'x'> = {
 
 function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 >test1 : <T, K extends keyof T>(obj: Pick<T, K>) => void
->      : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^          ^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^^^^^
 >obj : Pick<T, K>
 >    : ^^^^^^^^^^
 
@@ -817,7 +817,7 @@ function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 
 function test2<T, K extends keyof T>(obj: Record<K, number>) {
 >test2 : <T, K extends keyof T>(obj: Record<K, number>) => void
->      : ^^^^ ^^^^^^^^^^^^^^^^^^   ^^                 ^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^       ^^   ^^                 ^^^^^^^^^
 >obj : Record<K, number>
 >    : ^^^^^^^^^^^^^^^^^
 

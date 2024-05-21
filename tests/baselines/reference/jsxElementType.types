@@ -419,7 +419,7 @@ function ReactNativeFlatList(
 // testing higher-order component compat
 function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >f1 : <T extends (props: {}) => React.ReactElement<any>>(Component: T) => JSX.Element
->   : ^ ^^^^^^^^^^     ^^  ^^^^^                       ^^         ^^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^                                      ^^         ^^ ^^^^^^^^^^^^^^^^
 >props : {}
 >      : ^^
 >React : any

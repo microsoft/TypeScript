@@ -5,7 +5,7 @@
 
 declare function foo2<T extends { [P in keyof T & string as Capitalize<P>]: V }, V extends string>(a: T): T;
 >foo2 : <T extends { [P in keyof T & string as Capitalize<P>]: V; }, V extends string>(a: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^                                                ^^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >a : T
 >  : ^
 
@@ -15,7 +15,7 @@ export const r2 = foo2({A: "a"});
 >foo2({A: "a"}) : { A: string; }
 >               : ^^^^^^^^^^^^^^
 >foo2 : <T extends { [P in keyof T & string as Capitalize<P>]: V; }, V extends string>(a: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>     : ^ ^^^^^^^^^                                                ^^ ^^^^^^^^^      ^^ ^^ ^^^^^^
 >{A: "a"} : { A: string; }
 >         : ^^^^^^^^^^^^^^
 >A : string

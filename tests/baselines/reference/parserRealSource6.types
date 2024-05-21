@@ -66,11 +66,11 @@ module TypeScript {
 
         public scopeGetter: () => SymbolScope = null;
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 
         public objectLiteralScopeGetter: () => SymbolScope = null;
 >objectLiteralScopeGetter : () => SymbolScope
->                         : ^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^           
 
         public scopeStartAST: AST = null;
 >scopeStartAST : AST
@@ -133,7 +133,7 @@ module TypeScript {
 
         public getScope(): SymbolScope {
 >getScope : () => SymbolScope
->         : ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           
 
             return this.scopeGetter();
 >this.scopeGetter() : SymbolScope
@@ -148,7 +148,7 @@ module TypeScript {
 
         public getObjectLiteralScope(): SymbolScope {
 >getObjectLiteralScope : () => SymbolScope
->                      : ^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^           
 
             return this.objectLiteralScopeGetter();
 >this.objectLiteralScopeGetter() : SymbolScope
@@ -193,7 +193,7 @@ module TypeScript {
 
         public getScriptFragmentStartAST(): AST {
 >getScriptFragmentStartAST : () => AST
->                          : ^^^^^^^^^
+>                          : ^^^^^^   
 
             return this.scopeStartAST;
 >this.scopeStartAST : AST
@@ -225,7 +225,7 @@ module TypeScript {
 
         public getScriptFragment(): Script {
 >getScriptFragment : () => Script
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 
             if (this.scriptFragment == null) {
 >this.scriptFragment == null : boolean

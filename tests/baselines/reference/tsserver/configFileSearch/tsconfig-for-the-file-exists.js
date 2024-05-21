@@ -306,22 +306,21 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj:: Result: /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/project/tsconfig.json :: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /a/b/projects/project/tsconfig.json Detected file add/remove of non supported extension: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/project/tsconfig.json :: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-3: /a/b/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+2: /a/b/projects/project/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json]
 {}
 
 
 Timeout callback:: count: 2
-3: /a/b/projects/project/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+2: /a/b/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/b/projects/project/tsconfig.json (Configured) *changed*

@@ -59,7 +59,7 @@ declare const itNum: Iterable<number>
 
 declare function fn1<const T extends readonly unknown[]>(...args: T): T;
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -69,7 +69,7 @@ const res1 = fn1(..."hello");
 >fn1(..."hello") : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >..."hello" : string
 >           : ^^^^^^
 >"hello" : "hello"
@@ -81,7 +81,7 @@ const res2 = fn1(...itNum);
 >fn1(...itNum) : readonly number[]
 >              : ^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >...itNum : number
 >         : ^^^^^^
 >itNum : Iterable<number>
@@ -93,7 +93,7 @@ const res3 = fn1(true, ..."hello");
 >fn1(true, ..."hello") : readonly [true, ...string[]]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >..."hello" : string
@@ -107,7 +107,7 @@ const res4 = fn1(true, ...itNum);
 >fn1(true, ...itNum) : readonly [true, ...number[]]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >...itNum : number
@@ -118,7 +118,7 @@ const res4 = fn1(true, ...itNum);
 // repro from #52781
 declare function foo<T extends unknown[]>(...args: T): T;
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -128,7 +128,7 @@ const p1 = foo(..."hello");
 >foo(..."hello") : string[]
 >                : ^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
 >..."hello" : string
 >           : ^^^^^^
 >"hello" : "hello"
@@ -140,7 +140,7 @@ const p2 = foo(...itNum);
 >foo(...itNum) : number[]
 >              : ^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
 >...itNum : number
 >         : ^^^^^^
 >itNum : Iterable<number>
@@ -152,7 +152,7 @@ const p3 = foo(true, ..."hello");
 >foo(true, ..."hello") : [boolean, ...string[]]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >..."hello" : string
@@ -166,7 +166,7 @@ const p4 = foo(true, ...itNum);
 >foo(true, ...itNum) : [boolean, ...number[]]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >...itNum : number
