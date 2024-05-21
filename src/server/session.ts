@@ -962,7 +962,6 @@ export interface SessionOptions {
     serverMode?: LanguageServiceMode;
     throttleWaitMilliseconds?: number;
     noGetErrOnBackgroundUpdate?: boolean;
-    includeDiagnosticsDuration?: boolean;
 
     globalPlugins?: readonly string[];
     pluginProbeLocations?: readonly string[];
@@ -992,7 +991,6 @@ export class Session<TMessage = string> implements EventSender {
     private suppressDiagnosticEvents?: boolean;
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
-    private includeDiagnosticsDuration: boolean;
 
     // Maps a file name to duration in milliseconds of semantic checking
     private semanticCheckPerformance: Map<NormalizedPath, number>;
@@ -1009,7 +1007,6 @@ export class Session<TMessage = string> implements EventSender {
         this.canUseEvents = opts.canUseEvents;
         this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
         this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
-        this.includeDiagnosticsDuration = opts.includeDiagnosticsDuration ?? true;
         this.semanticCheckPerformance = new Map();
 
         const { throttleWaitMilliseconds } = opts;
@@ -1319,10 +1316,8 @@ export class Session<TMessage = string> implements EventSender {
                 file,
                 diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
                 spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+                duration,
             };
-            if (this.includeDiagnosticsDuration) {
-                body.duration = duration;
-            }
             this.event<protocol.DiagnosticEventBody>(
                 body,
                 kind,

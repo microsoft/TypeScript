@@ -188,7 +188,8 @@ Info seq  [hh:mm:ss:mss] event:
               }
             ]
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

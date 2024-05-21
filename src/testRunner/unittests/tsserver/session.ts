@@ -71,7 +71,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             logger: nullLogger(),
             canUseEvents: true,
             incrementalVerifier,
-            includeDiagnosticsDuration: false,
         };
         return new TestSession(opts);
     }
@@ -405,7 +404,6 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 logger: nullLogger(),
                 canUseEvents: true,
                 incrementalVerifier,
-                includeDiagnosticsDuration: false,
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
         }
@@ -453,7 +451,6 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 logger: createHasErrorMessageLogger(),
                 canUseEvents: true,
                 incrementalVerifier,
-                includeDiagnosticsDuration: false,
             });
             this.addProtocolHandler(this.customHandler, () => {
                 return { response: undefined, responseRequired: true };

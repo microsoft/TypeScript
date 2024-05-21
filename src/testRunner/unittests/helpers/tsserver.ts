@@ -122,7 +122,6 @@ export class TestSession extends ts.server.Session {
             incrementalVerifier,
             typesMapLocation: customTypesMap.path,
             typingsInstaller,
-            includeDiagnosticsDuration: false,
             ...opts,
         });
         if (typingsInstaller) typingsInstaller.session = this;

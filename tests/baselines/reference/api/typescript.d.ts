@@ -3378,7 +3378,6 @@ declare namespace ts {
             serverMode?: LanguageServiceMode;
             throttleWaitMilliseconds?: number;
             noGetErrOnBackgroundUpdate?: boolean;
-            includeDiagnosticsDuration?: boolean;
             globalPlugins?: readonly string[];
             pluginProbeLocations?: readonly string[];
             allowLocalPluginLoads?: boolean;
@@ -3401,7 +3400,6 @@ declare namespace ts {
             private suppressDiagnosticEvents?;
             private eventHandler;
             private readonly noGetErrOnBackgroundUpdate?;
-            private includeDiagnosticsDuration;
             private semanticCheckPerformance;
             private diagnosticsTime;
             constructor(opts: SessionOptions);
