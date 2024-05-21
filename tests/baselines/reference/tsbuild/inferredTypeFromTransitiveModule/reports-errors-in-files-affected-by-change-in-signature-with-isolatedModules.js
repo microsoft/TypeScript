@@ -78,12 +78,12 @@ bar("hello");
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:14 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/obj/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/obj/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:16 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -308,12 +308,12 @@ export default foo()(function foobar(): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:30 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:31 AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
 
-[[90m12:00:32 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/lazyIndex.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
 
@@ -503,12 +503,12 @@ export default foo()(function foobar(param: string): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:37 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:38 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:39 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -666,12 +666,12 @@ export default foo()(function foobar(): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:48 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:49 AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
 
-[[90m12:00:50 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/lazyIndex.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
 
@@ -855,12 +855,12 @@ bar();
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:55 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:56 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:57 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

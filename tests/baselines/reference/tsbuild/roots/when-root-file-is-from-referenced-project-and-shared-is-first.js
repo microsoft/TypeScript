@@ -104,13 +104,13 @@ declare const console: { log(msg: any): void; };
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:00:23 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output file 'projects/shared/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output file 'projects/shared/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:25 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/package.json' does not exist.
@@ -143,9 +143,9 @@ projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/random.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90m12:00:37 AM[0m] Project 'projects/server/tsconfig.json' is out of date because output file 'projects/server/dist/server/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because output file 'projects/server/dist/server/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:38 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/dist/package.json' does not exist.
@@ -493,13 +493,13 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:00:47 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:00:48 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/random.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/random.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:00:49 AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/server/src/server.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/server/src/server.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -518,13 +518,13 @@ export const x = 10;
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:00:51 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:00:52 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output 'projects/shared/dist/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output 'projects/shared/dist/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
 
-[[90m12:00:53 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/package.json' does not exist.
@@ -557,9 +557,9 @@ projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/random.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90m12:00:59 AM[0m] Project 'projects/server/tsconfig.json' is out of date because output 'projects/server/dist/server/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because output 'projects/server/dist/server/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
 
-[[90m12:01:00 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/dist/package.json' does not exist.
@@ -870,13 +870,13 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:04 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:05 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:01:06 AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -890,13 +890,13 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:08 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:09 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because buildinfo file 'projects/shared/dist/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is out of date because buildinfo file 'projects/shared/dist/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
 
-[[90m12:01:10 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/package.json' does not exist.
@@ -920,9 +920,9 @@ projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90m12:01:14 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
 
-[[90m12:01:15 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/dist/package.json' does not exist.
@@ -1168,13 +1168,13 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:19 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:20 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:01:21 AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/server/dist/server/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

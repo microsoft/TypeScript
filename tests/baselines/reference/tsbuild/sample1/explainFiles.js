@@ -98,14 +98,14 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --explainFiles --v
-[[90m12:00:22 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:23 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -115,9 +115,9 @@ core/index.ts
   Matched by default include pattern '**/*'
 core/some_decl.d.ts
   Matched by default include pattern '**/*'
-[[90m12:00:34 AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:35 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -129,9 +129,9 @@ core/anotherModule.d.ts
   File is output of project reference source 'core/anotherModule.ts'
 logic/index.ts
   Matched by default include pattern '**/*'
-[[90m12:00:42 AM[0m] Project 'tests/tsconfig.json' is out of date because output file 'tests/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output file 'tests/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:43 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -522,14 +522,14 @@ export class someClass { }
 
 Output::
 /a/lib/tsc --b tests --explainFiles --v
-[[90m12:00:50 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:51 AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/index.ts'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/index.ts'
 
-[[90m12:00:52 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -539,9 +539,9 @@ core/index.ts
   Matched by default include pattern '**/*'
 core/some_decl.d.ts
   Matched by default include pattern '**/*'
-[[90m12:00:59 AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'core'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output 'logic/tsconfig.tsbuildinfo' is older than input 'core'
 
-[[90m12:01:00 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -553,9 +553,9 @@ core/anotherModule.d.ts
   File is output of project reference source 'core/anotherModule.ts'
 logic/index.ts
   Matched by default include pattern '**/*'
-[[90m12:01:06 AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/tsconfig.tsbuildinfo' is older than input 'core'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is out of date because output 'tests/tsconfig.tsbuildinfo' is older than input 'core'
 
-[[90m12:01:07 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -905,14 +905,14 @@ class someClass2 { }
 
 Output::
 /a/lib/tsc --b tests --explainFiles --v
-[[90m12:01:13 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:01:14 AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/index.ts'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/index.ts'
 
-[[90m12:01:15 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -922,13 +922,13 @@ core/index.ts
   Matched by default include pattern '**/*'
 core/some_decl.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:21 AM[0m] Project 'logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:22 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:25 AM[0m] Project 'tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:26 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -1054,16 +1054,16 @@ Input::
 
 Output::
 /a/lib/tsc --b tests --explainFiles --v
-[[90m12:01:29 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:01:30 AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/index.ts' is older than output 'core/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/index.ts' is older than output 'core/tsconfig.tsbuildinfo'
 
-[[90m12:01:31 AM[0m] Project 'logic/tsconfig.json' is up to date because newest input 'logic/index.ts' is older than output 'logic/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is up to date because newest input 'logic/index.ts' is older than output 'logic/tsconfig.tsbuildinfo'
 
-[[90m12:01:32 AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

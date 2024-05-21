@@ -89,12 +89,12 @@ export { a } from 'a';
 
 Output::
 /lib/tsc -b packages/a --verbose --traceResolution --explainFiles
-[[90m12:00:22 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
 
-[[90m12:00:23 AM[0m] Project 'packages/a/tsconfig.json' is out of date because output file 'packages/a/types/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/a/tsconfig.json' is out of date because output file 'packages/a/types/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/src/projects/project/packages/a/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/projects/project/packages/a/tsconfig.json'...
 
 Found 'package.json' at '/src/projects/project/packages/a/package.json'.
 File '/src/projects/project/packages/a/test/package.json' does not exist.
@@ -229,15 +229,15 @@ Input::
 
 Output::
 /lib/tsc -b packages/b --verbose --traceResolution --explainFiles
-[[90m12:00:32 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
     * packages/b/tsconfig.json
 
-[[90m12:00:33 AM[0m] Project 'packages/a/tsconfig.json' is up to date because newest input 'packages/a/test/index.js' is older than output 'packages/a/types/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'packages/a/tsconfig.json' is up to date because newest input 'packages/a/test/index.js' is older than output 'packages/a/types/tsconfig.tsbuildinfo'
 
-[[90m12:00:34 AM[0m] Project 'packages/b/tsconfig.json' is out of date because output 'packages/b/index.js' is older than input 'packages/b/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output 'packages/b/index.js' is older than input 'packages/b/tsconfig.json'
 
-[[90m12:00:35 AM[0m] Building project '/src/projects/project/packages/b/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/projects/project/packages/b/tsconfig.json'...
 
 Found 'package.json' at '/src/projects/project/packages/b/package.json'.
 ======== Resolving module 'a' from '/src/projects/project/packages/b/index.js'. ========

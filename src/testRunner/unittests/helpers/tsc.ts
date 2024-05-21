@@ -13,6 +13,7 @@ import {
     ReadableBuildInfo,
     ReadableProgramBuildInfoFileInfo,
     ReadableProgramMultiFileEmitBuildInfo,
+    sanitizeSysOutput,
     toPathWithSystem,
     tscBaselineName,
 } from "./baseline.js";
@@ -88,7 +89,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
 Output::
-${sys.output.join("")}
+${sys.output.map(sanitizeSysOutput).join("")}
 
 ${patch ? vfs.formatPatch(patch) : ""}`,
         };

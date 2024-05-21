@@ -40,12 +40,12 @@ import { b } from "./b";export const d = b;
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:12 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:13 AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:14 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -188,12 +188,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --sourceMap
-[[90m12:00:19 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:20 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:21 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -341,12 +341,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:27 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:28 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:29 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -489,12 +489,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration
-[[90m12:00:34 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:35 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:36 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -625,12 +625,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90m12:00:41 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:42 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:43 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -766,10 +766,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:49 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:50 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/d.ts' is older than output 'src/outFile.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -785,12 +785,12 @@ export const a = 10;const aLocal = 100;
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:00:52 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:53 AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/outFile.tsbuildinfo' is older than input 'src/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output 'src/outFile.tsbuildinfo' is older than input 'src/project/a.ts'
 
-[[90m12:00:54 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -933,12 +933,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90m12:00:59 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:01 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -1058,10 +1058,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:01:07 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:08 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
@@ -1074,12 +1074,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --inlineSourceMap
-[[90m12:01:09 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:10 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:11 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -1224,12 +1224,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --sourceMap
-[[90m12:01:16 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:17 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:18 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -1377,12 +1377,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose
-[[90m12:01:24 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:25 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:26 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -1525,12 +1525,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90m12:01:31 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:32 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:33 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: [
@@ -1650,10 +1650,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/project --verbose --declaration --declarationMap
-[[90m12:01:39 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:01:40 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/a.ts' is older than output 'src/outFile.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

@@ -65,17 +65,17 @@ import { b } from "b"; export const g = b;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:00:19 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:20 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -245,15 +245,15 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:00:28 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:29 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/outFile.tsbuildinfo'
 
-[[90m12:00:30 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:31 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -305,17 +305,17 @@ export const a = 10;const aLocal = 10;const aa = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:00:33 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:34 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
-[[90m12:00:35 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:40 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:41 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -474,17 +474,17 @@ export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:00:43 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:44 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
-[[90m12:00:45 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:50 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:00:51 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -655,17 +655,17 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:00:52 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:53 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:54 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:59 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -848,15 +848,15 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:01:01 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:02 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/outFile.tsbuildinfo'
 
-[[90m12:01:03 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:04 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -908,17 +908,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:01:06 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:07 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:01:08 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:14 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:15 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -1106,17 +1106,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:01:17 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:18 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:01:19 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:24 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:25 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -1275,17 +1275,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
-[[90m12:01:27 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:28 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/outFile.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:01:29 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:34 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:35 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -1460,17 +1460,17 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:01:37 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:38 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:01:39 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:45 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
 
-[[90m12:01:46 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
