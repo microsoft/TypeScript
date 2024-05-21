@@ -1542,8 +1542,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         onSuccessfullyResolvedSymbol,
     });
 
-    var inFullCheckAfterPartial = false;
-
     var resolveNameForSymbolSuggestion = createNameResolver({
         compilerOptions,
         requireSymbol,
@@ -46742,7 +46740,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSourceElementWorker(node: Node): void {
-        if (inFullCheckAfterPartial && getNodeCheckFlags(node) & NodeCheckFlags.PartiallyTypeChecked) {
+        if (getNodeCheckFlags(node) & NodeCheckFlags.PartiallyTypeChecked) {
             return;
         }
 
@@ -47186,7 +47184,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             clear(potentialUnusedRenamedBindingElementsInTypes);
 
             if (links.flags & NodeCheckFlags.PartiallyTypeChecked) {
-                inFullCheckAfterPartial = true;
                 potentialThisCollisions = links.potentialThisCollisions!;
                 potentialNewTargetCollisions = links.potentialNewTargetCollisions!;
                 potentialWeakMapSetCollisions = links.potentialWeakMapSetCollisions!;
@@ -47242,7 +47239,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             links.flags |= NodeCheckFlags.TypeChecked;
-            inFullCheckAfterPartial = false;
         }
     }
 
