@@ -17305,7 +17305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (includes & TypeFlags.AnyOrUnknown) {
                 return includes & TypeFlags.Any ?
                     includes & TypeFlags.IncludesWildcard ? wildcardType :
-                    includes & TypeFlags.IncludesError ? errorType : anyType :
+                        includes & TypeFlags.IncludesError ? errorType : anyType :
                     unknownType;
             }
             if (includes & TypeFlags.Undefined) {
