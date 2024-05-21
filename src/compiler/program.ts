@@ -68,6 +68,7 @@ import {
     EmitHost,
     emitModuleKindIsNonNodeESM,
     EmitOnly,
+    emitResolverSkipsTypeChecking,
     EmitResult,
     emptyArray,
     ensureTrailingDirectorySeparator,
@@ -2874,7 +2875,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const emitResolver = typeChecker.getEmitResolver(
             options.outFile ? undefined : sourceFile,
             cancellationToken,
-            forceDtsEmit,
+            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit),
         );
 
         performance.mark("beforeEmit");
