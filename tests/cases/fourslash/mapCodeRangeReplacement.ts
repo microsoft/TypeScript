@@ -29,4 +29,4 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges()[0], "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");

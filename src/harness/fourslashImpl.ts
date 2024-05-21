@@ -4512,16 +4512,42 @@ export class TestState {
     }
 
     public baselineMapCode(
-        { fileName, pos }: Range,
+        ranges: Range[],
         changesFilename: string,
     ): void {
         const changes = this.getFileContent(changesFilename);
-        const beforeContents = this.getFileContent(fileName);
-        const before = beforeContents.slice(0, pos) + "[||]" + beforeContents.slice(pos);
+        let fileName: string | undefined;
+        const focusLocations = ranges.map(({ fileName: fn, pos, end }) => {
+            if (!fileName) {
+                fileName = fn;
+            }
+            return [{ start: pos, length: end - pos }];
+        });
+        if (!fileName) {
+            throw new Error("No ranges passed in, or something went wrong.");
+        }
+        let before = this.getFileContent(fileName);
+        focusLocations.sort((a, b) => a[0].start - b[0].start);
+        for (const subLoc of focusLocations) {
+            for (const { start, length } of subLoc) {
+                let offset = 0;
+                for (const sl2 of focusLocations) {
+                    for (const { start: s2, length: l2 } of sl2) {
+                        if (s2 < start) {
+                            offset += 4;
+                            if ((s2 + l2) > start) {
+                                offset -= 2;
+                            }
+                        }
+                    }
+                }
+                before = before.slice(0, start + offset) + "[|" + before.slice(start + offset, start + offset + length) + "|]" + before.slice(start + offset + length);
+            }
+        }
         const edits = this.languageService.mapCode(
             fileName,
             [changes],
-            [[{ start: pos, length: 1 }]],
+            focusLocations,
             this.formatCodeSettings,
             {},
         );

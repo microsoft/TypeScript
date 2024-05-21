@@ -466,7 +466,7 @@ declare namespace FourSlashInterface {
                 copiedFrom?: { file: string, range: { pos: number, end: number }[] };
             }
         }): void;
-        baselineMapCode(range: Range, changesFilename?: string): void;
+        baselineMapCode(ranges: Range[], changesFilename?: string): void;
     }
     class edit {
         caretPosition(): Marker;
