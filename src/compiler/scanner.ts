@@ -2522,24 +2522,23 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (!isIdentifierPart(ch, languageVersion)) {
                         break;
                     }
-                    const size = charSize(ch);
                     if (reportErrors) {
-                        const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
+                        const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
                         if (flag === undefined) {
-                            error(Diagnostics.Unknown_regular_expression_flag, pos, size);
+                            error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
                         }
                         else if (regExpFlags & flag) {
-                            error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
+                            error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
                         }
                         else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
-                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, size);
+                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, 1);
                         }
                         else {
                             regExpFlags |= flag;
-                            checkRegularExpressionFlagAvailability(flag, size);
+                            checkRegularExpressionFlagAvailable(flag, pos);
                         }
                     }
-                    pos += size;
+                    pos++;
                 }
                 if (reportErrors) {
                     scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
@@ -2795,26 +2794,25 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
             while (true) {
-                const ch = codePointChecked(pos);
+                const ch = charCodeChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
-                const size = charSize(ch);
-                const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
+                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
                 if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, pos, size);
+                    error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
                 }
                 else if (currFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
+                    error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
                 }
                 else if (!(flag & RegularExpressionFlags.Modifiers)) {
-                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, size);
+                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
                 }
                 else {
                     currFlags |= flag;
-                    checkRegularExpressionFlagAvailability(flag, size);
+                    checkRegularExpressionFlagAvailable(flag, pos);
                 }
-                pos += size;
+                pos++;
             }
             return currFlags;
         }
@@ -3527,10 +3525,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         });
     }
 
-    function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, size: number) {
+    function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
         const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
         if (availableFrom && languageVersion < availableFrom) {
-            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
+            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
         }
     }
 
