@@ -544,6 +544,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -556,6 +557,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -713,6 +715,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -725,6 +728,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 7: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -864,6 +868,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 8: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -876,6 +881,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1023,6 +1029,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1035,6 +1042,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 11: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1171,6 +1179,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 12: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1183,6 +1192,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 13: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1437,6 +1447,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 14: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1449,6 +1460,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 15: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1709,6 +1721,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 16: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1721,6 +1734,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 17: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2023,6 +2037,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 18: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2035,6 +2050,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 19: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2282,6 +2298,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 20: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2294,6 +2311,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 21: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2451,6 +2469,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 22: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2463,6 +2482,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 23: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2602,6 +2622,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 24: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2614,6 +2635,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 25: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2761,6 +2783,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 26: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2773,6 +2796,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 27: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

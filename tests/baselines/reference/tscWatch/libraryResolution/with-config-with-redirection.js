@@ -680,6 +680,7 @@ Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
 2: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1134,6 +1135,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1468,6 +1470,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
@@ -1814,6 +1817,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1826,6 +1830,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 7: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2274,6 +2279,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/project1/tsconfig.json
@@ -2503,6 +2509,7 @@ Before running Timeout callback:: count: 2
 10: timerToUpdateProgram
 11: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/project1/tsconfig.json
@@ -2920,6 +2927,7 @@ Before running Timeout callback:: count: 2
 12: timerToUpdateProgram
 13: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -3329,6 +3337,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 14: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -3341,6 +3350,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 15: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

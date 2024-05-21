@@ -67,17 +67,17 @@ export const Other = 0;
 
 Output::
 /lib/tsc --b /src/src/main/tsconfig.main.json --verbose
-[[90m12:00:19 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.other.json
     * src/src/main/tsconfig.main.json
 
-[[90m12:00:20 AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/tsconfig.other.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/tsconfig.other.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/src/other/tsconfig.other.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/other/tsconfig.other.json'...
 
-[[90m12:00:28 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
 
-[[90m12:00:29 AM[0m] Building project '/src/src/main/tsconfig.main.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/main/tsconfig.main.json'...
 
 exitCode:: ExitStatus.Success
 
