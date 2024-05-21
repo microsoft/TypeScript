@@ -6885,6 +6885,10 @@
         "category": "Error",
         "code": 8039
     },
+    "JavaScript syntax can not be used inside of a TS comment": {
+        "category": "Error",
+        "code": 8040
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",

@@ -2,8 +2,8 @@ import {
     append,
     arraysEqual,
     binarySearch,
-    BlockCommentDelimiterPositions, // BUILDLESS: added
-    BlockCommentDelimiterType, // BUILDLESS: added
+    BlockCommentDelimiterPositions,
+    BlockCommentDelimiterType,
     CharacterCodes,
     CommentDirective,
     CommentDirectiveType,
@@ -35,7 +35,7 @@ import {
     SyntaxKind,
     TextRange,
     TokenFlags,
-    TsCommentScannerState, // BUILDLESS: added
+    TsCommentScannerState,
 } from "./_namespaces/ts.js";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
@@ -131,7 +131,6 @@ export interface Scanner {
     tryScan<T>(callback: () => T): T;
 }
 
-// BUILDLESS: <added>
 export interface TsCommentPosition {
     open: number;
     colonPos: number;
@@ -162,7 +161,6 @@ export interface TsCommentScanner {
     scanUntilNextSignificantChar(max: number): boolean;
     scanUntilAtChar(char: string | string[], max: number): void;
     scanUntilPastChar(char: string | string[], max: number): void;
-    getBlockCommentDelimiters(): Map<number, BlockCommentDelimiterType>;
     getTSCommentPositions(): TsCommentPosition[];
 }
 
@@ -170,7 +168,6 @@ export interface TsSyntaxTracker {
     skipWhitespaceThenMarkRangeAsTS(start: number, end: number): void;
     getSyntaxRanges(): Generator<SyntaxRange>
 }
-// BUILDLESS: </added>
 
 /** @internal */
 export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
@@ -724,7 +721,6 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                 }
                 if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                     pos += 2;
-                    // BUILDLESS: <added>
                     let isTsComment = false;
                     while (pos < text.length) {
                         if (text.charCodeAt(pos) === CharacterCodes.space) {
@@ -764,7 +760,6 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                             pos += 3;
                         }
                     }
-                    // BUILDLESS: </added>
                     while (pos < text.length) {
                         if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                             pos += 2;
@@ -800,6 +795,10 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                 if (canConsumeStar) {
                     pos++;
                     canConsumeStar = false;
+                    continue;
+                }
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
                     continue;
                 }
                 break;
@@ -966,7 +965,6 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
                         }
                     }
                     else {
-                        // BUILDLESS: <added>
                         let isTsComment = false;
                         while (pos < text.length) {
                             if (text.charCodeAt(pos) === CharacterCodes.space) {
@@ -1005,7 +1003,6 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
                                 pos += 3;
                             }
                         }
-                        // BUILDLESS: </added>
                         while (pos < text.length) {
                             if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                                 pos += 2;
@@ -2087,6 +2084,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.CloseParenToken;
                 case CharacterCodes.asterisk:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                        pos += 2;
+                        // Unset the "enteringTSComment" bit.
+                        // It may be set in the case where we entered and exited a TS comment without
+                        // the comment actually having any body, like this: `/*:: */`.
+                        // In this case, we just want to skip over it as if the comment wasn't there.
+                        tokenFlags &= ~TokenFlags.enteringTSComment;
+                        continue;
+                    }
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                     }
@@ -2165,7 +2171,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         pos += 2;
                         const isJSDoc = charCodeUnchecked(pos) === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) !== CharacterCodes.slash;
 
-                        // BUILDLESS: <added>
                         let isTsComment = false;
                         while (pos < end) {
                             if (text.charCodeAt(pos) === CharacterCodes.space) {
@@ -2206,7 +2211,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 pos += 3;
                             }
                         }
-                        // BUILDLESS: </added>
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
@@ -4085,7 +4089,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 }
 
-// BUILDLESS: <added>
 export function createTSCommentScanner(
     { text }: SourceFileLike,
     _pos?: number,
@@ -4107,7 +4110,6 @@ export function createTSCommentScanner(
          * (with some exceptions for tracking information that's needed for code transformations)
          */
         clone() {
-            // console.log(`CLONING SCANNER - expect duplicate scans past this point.`) // BUILDLESS: DEBUG: comment-scan
             return createTSCommentScanner({ text }, pos, state, _delimiterPositions);
         },
         /**
@@ -4123,8 +4125,7 @@ export function createTSCommentScanner(
          * @returns true if the just-scanned node was inside a TS comment, otherwise returns false.
          *          Also returns false when given a node that couldn't be scanned, because the scanner already passed that point.
          */
-        scanThroughLeafNode(node: { kind: SyntaxKind, pos: number, end: number }): boolean {
-            // console.log(`SCAN ${SyntaxKind[(node as any).kind]} from:${pos} to-node-start:${node.pos} hard-limit-at-node-end:${node.end}${node.end < pos ? ' FAIL' : ''}`); // BUILDLESS: DEBUG: comment-scan
+        scanThroughLeafNode(node: { pos: number, end: number }): boolean {
             if (node.end < pos) return false;
             commentScan(text, pos, node.pos, /*stopOnSignificantText*/ false, onCommentDelimiter);
             commentScan(text, node.pos, node.end, /*stopOnSignificantText*/ true, onCommentDelimiter);
@@ -4141,7 +4142,6 @@ export function createTSCommentScanner(
          *          Also returns false when nothing could be scanned, because the scanner already passed that point.
          */
         scanTo(end: number): boolean {
-            // console.log(`SCAN to ${end}.${end < pos ? ' FAIL' : ''}`) // BUILDLESS: DEBUG: comment-scan
             if (end < pos) return false;
             const significantTextAt = commentScan(text, pos, end, /*stopOnSignificantText*/ true, onCommentDelimiter);
             let allInTSComment = state === TsCommentScannerState.inTSBlockComment;
@@ -4160,7 +4160,6 @@ export function createTSCommentScanner(
          *         Otherwise, returns false. Also returns false when nothing could be scanned, because the scanner already passed that point.
          */
         scanUntilNextSignificantChar(max: number) {
-            // console.log(`SCAN UNTIL NEXT SIGNIFICANT CHAR (max: ${max})${max < pos ? ' FAIL' : ''}`); // BUILDLESS: DEBUG: comment-scan
             if (max < pos) return false;
             commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter);
             return state === TsCommentScannerState.inTSBlockComment;
@@ -4170,7 +4169,6 @@ export function createTSCommentScanner(
          * @param max Mostly a failsafe - if something goes wrong, we'll stop jumping at this point.
          */
         scanUntilAtChar(char: string | string[], max: number) {
-            // console.log(`SCAN UNTIL AT ${JSON.stringify(char)}, (max: ${max})}`); // BUILDLESS: DEBUG: comment-scan
             const charList: string[] = Array.isArray(char) ? char : [char];
             while (pos < max) {
                 commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter)
@@ -4183,7 +4181,6 @@ export function createTSCommentScanner(
          * @param max Mostly a failsafe - if something goes wrong, we'll stop jumping at this point.
          */
         scanUntilPastChar(char: string | string[], max: number) {
-            // console.log(`SCAN UNTIL PAST ${JSON.stringify(char)}, (max: ${max})}`); // BUILDLESS: DEBUG: comment-scan
             const charList: string[] = Array.isArray(char) ? char : [char];
             while (pos < max) {
                 commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter)
@@ -4194,9 +4191,6 @@ export function createTSCommentScanner(
                 }
                 pos++;
             }
-        },
-        getBlockCommentDelimiters(): Map<number, BlockCommentDelimiterType> {
-            return delimiterPositions;
         },
         /**
          * Returns all TS-comment pairs in the file.
@@ -4274,12 +4268,10 @@ export function createTSSyntaxTracker({ text }: SourceFileLike): TsSyntaxTracker
          */
         skipWhitespaceThenMarkRangeAsTS(start: number, end: number) {
             // Skip past whitespace/comments
-            // console.log('(iterating as part of mark-range-as-ts - this does not alter a scanner instance)'); // BUILDLESS: DEBUG: comment-scan
             const realStart = commentScan(text, start, end, /*stopOnSignificantText*/ true);
             if (start < realStart) {
                 whitespaceSyntaxRanges.push({ start, end: realStart, type: SyntaxRangeType.whitespace });
             }
-            // console.log(`Mark TypeScript range - from ${realStart} to ${end} (original start: ${start})`); // BUILDLESS: DEBUG: comment-scan
             if (realStart < end) {
                 tsSyntaxRanges.push({ start: realStart, end, type: SyntaxRangeType.typeScript });
             }
@@ -4351,12 +4343,10 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
         if (pos >= end) {
             return pos;
         }
-        // console.log(`  char-scan ${JSON.stringify(text[pos])} (at ${pos})${pos >= end ? ' (past soft limit)' : ''}`) // BUILDLESS: DEBUG: comment-scan
 
         if (pos === 0) {
             // Special handling for shebang
             if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
-                // console.log('  she-bang skip'); // BUILDLESS: DEBUG: comment-scan
                 pos = scanShebangTrivia(text, pos);
                 Debug.assertLessThan(pos, end);
                 continue;
@@ -4395,7 +4385,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
             case CharacterCodes.asterisk:
                 if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                     onCommentDelimiter?.(pos, BlockCommentDelimiterType.close)
-                    // console.log('  closing comment skip'); // BUILDLESS: DEBUG: comment-scan
                     pos += 2;
                     continue;
                 }
@@ -4414,7 +4403,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
                         }
                         pos++;
                     }
-                    // console.log('  single line comment skip'); // BUILDLESS: DEBUG: comment-scan
                     continue;
                 }
                 // Multi-line comment
@@ -4452,7 +4440,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
                                     : BlockCommentDelimiterType.doubleColonForOpenTsComment
                             );
                             pos += colonCount;
-                            // console.log('  ts opening comment skip'); // BUILDLESS: DEBUG: comment-scan
                             continue;
                         }
                         else { // `/*::: ... */`
@@ -4463,7 +4450,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
                     }
 
                     onCommentDelimiter?.(saveStartPos, BlockCommentDelimiterType.openNonTsComment)
-                    // console.log('  non-ts block comment skip'); // BUILDLESS: DEBUG: comment-scan
                     while (pos < end) {
                         const ch = text.charCodeAt(pos);
 
@@ -4489,7 +4475,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
         }
     }
 }
-// BUILDLESS: </added>
 
 /** @internal */
 function codePointAt(s: string, i: number): number {

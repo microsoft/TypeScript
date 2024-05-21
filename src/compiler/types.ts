@@ -2812,6 +2812,7 @@ export const enum TokenFlags {
     ContainsLeadingZero = 1 << 13,      // e.g. `0888`
     /** @internal */
     ContainsInvalidSeparator = 1 << 14, // e.g. `0_1`
+    enteringTSComment = 1 << 15,        // This bit is set if, just before this token, we entered a TS comment.
     /** @internal */
     BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
     /** @internal */
@@ -9933,8 +9934,6 @@ export const enum ListFormat {
     JSDocComment = MultiLine | AsteriskDelimited,
 }
 
-// BUILDLESS: <added>
-
 export const enum BlockCommentDelimiterType {
     openNonTsComment, // A `/*` not followed by colons
     openTsCommentWithoutColons, // Just the `/*` part of `/*:` or `/*::`.
@@ -9953,7 +9952,6 @@ export const enum TsCommentScannerState {
     inBlockComment,
     inTSBlockComment,
 }
-// BUILDLESS: </added>
 
 /** @internal */
 export const enum PragmaKindFlags {
