@@ -5945,8 +5945,8 @@ declare namespace ts {
         getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
-        /** The first time this is called without `nodesToCheck`, it will return global diagnostics (no location). */
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): readonly Diagnostic[];
+        /** The first time this is called, it will return global diagnostics (no location). */
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         /**
@@ -9986,10 +9986,6 @@ declare namespace ts {
          * @param fileName A path to the file you want semantic diagnostics for
          */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
-        /**
-         * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
-         */
-        getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
         /**
          * Gets suggestion diagnostics for a specific file. These diagnostics tend to
          * proactively suggest refactors, as opposed to diagnostics that indicate

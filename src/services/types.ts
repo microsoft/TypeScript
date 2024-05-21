@@ -496,6 +496,7 @@ export interface LanguageService {
 
     /**
      * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
+     * @internal
      */
     getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
 
