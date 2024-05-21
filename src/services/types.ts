@@ -683,7 +683,7 @@ export interface LanguageService {
 
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
- /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): readonly FileTextChanges[];
+    /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): readonly FileTextChanges[];
 
     dispose(): void;
     getPasteEdits(

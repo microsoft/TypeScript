@@ -2343,7 +2343,7 @@ export interface InlayHintsResponse extends Response {
     body?: InlayHintItem[];
 }
 
-export interface MapCodeRequestArgs  extends FileRequestArgs {
+export interface MapCodeRequestArgs extends FileRequestArgs {
     /**
      * The files and changes to try and apply/map.
      */
