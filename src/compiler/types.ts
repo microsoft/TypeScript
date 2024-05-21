@@ -6185,6 +6185,8 @@ export const enum TypeFlags {
     StringMapping   = 1 << 28,  // Uppercase/Lowercase type
     /** @internal */
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
+    /** @internal */
+    Reserved2       = 1 << 30,  // Used by union/intersection type construction
 
     /** @internal */
     AnyOrUnknown = Any | Unknown,
@@ -6246,6 +6248,8 @@ export const enum TypeFlags {
     IncludesInstantiable = Substitution,
     /** @internal */
     IncludesConstrainedTypeVariable = Reserved1,
+    /** @internal */
+    IncludesError = Reserved2,
     /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }

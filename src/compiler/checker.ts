@@ -17052,6 +17052,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
             if (flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) includes |= TypeFlags.IncludesConstrainedTypeVariable;
             if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+            if (isErrorType(type)) includes |= TypeFlags.IncludesError;
             if (!strictNullChecks && flags & TypeFlags.Nullable) {
                 if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
             }
@@ -17303,7 +17304,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (unionReduction !== UnionReduction.None) {
             if (includes & TypeFlags.AnyOrUnknown) {
                 return includes & TypeFlags.Any ?
-                    includes & TypeFlags.IncludesWildcard ? wildcardType : anyType :
+                    includes & TypeFlags.IncludesWildcard ? wildcardType :
+                    includes & TypeFlags.IncludesError ? errorType : anyType :
                     unknownType;
             }
             if (includes & TypeFlags.Undefined) {
@@ -17445,6 +17447,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             if (flags & TypeFlags.AnyOrUnknown) {
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+                if (isErrorType(type)) includes |= TypeFlags.IncludesError;
             }
             else if (strictNullChecks || !(flags & TypeFlags.Nullable)) {
                 if (type === missingType) {
@@ -17637,7 +17640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return neverType;
         }
         if (includes & TypeFlags.Any) {
-            return includes & TypeFlags.IncludesWildcard ? wildcardType : anyType;
+            return includes & TypeFlags.IncludesWildcard ? wildcardType : includes & TypeFlags.IncludesError ? errorType : anyType;
         }
         if (!strictNullChecks && includes & TypeFlags.Nullable) {
             return includes & TypeFlags.IncludesEmptyObject ? neverType : includes & TypeFlags.Undefined ? undefinedType : nullType;
