@@ -50,6 +50,7 @@ import {
     getOptionsNameMap,
     getOwnKeys,
     getRelativePathFromDirectory,
+    getSourceFileOfNode,
     getTsBuildInfoEmitOutputFilePath,
     handleNoEmitOptions,
     HostForComputeHash,
@@ -76,6 +77,7 @@ import {
     SignatureInfo,
     skipAlias,
     skipTypeChecking,
+    some,
     SourceFile,
     sourceFileMayBeEmitted,
     SourceMapEmitResult,
@@ -886,7 +888,13 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
     // If exported const enum, we need to ensure that js files are emitted as well since the const enum value changed
     const invalidateJsFiles = !!affectedFile.symbol?.exports && !!forEachEntry(
         affectedFile.symbol.exports,
-        exported => (skipAlias(exported, state.program!.getTypeChecker()).flags & SymbolFlags.ConstEnum) !== 0,
+        exported => {
+            if ((exported.flags & SymbolFlags.ConstEnum) !== 0) return true;
+            const aliased = skipAlias(exported, state.program!.getTypeChecker());
+            if (aliased === exported) return false;
+            return (aliased.flags & SymbolFlags.ConstEnum) !== 0 &&
+                some(aliased.declarations, d => getSourceFileOfNode(d) === affectedFile);
+        },
     );
     // Go through files that reference affected file and handle dts emit and semantic diagnostics for them and their references
     state.referencedMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath => {
