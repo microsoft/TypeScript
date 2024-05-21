@@ -320,6 +320,7 @@ import {
     toPath as ts_toPath,
     trace,
     tracing,
+    tryCast,
     TsCommentPosition,
     TsCommentScanner,
     TsConfigSourceFile,
