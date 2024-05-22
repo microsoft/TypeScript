@@ -479,9 +479,10 @@ if (publicContents.includes("@internal")) {
 const buffer = fs.readFileSync(getPath());
 const formatter = createFromBuffer(buffer);
 formatter.setConfig({
-    newLineKind: "lf",
     indentWidth: 4,
     lineWidth: 1000,
+    newLineKind: "auto",
+    useTabs: false,
 }, {
     quoteStyle: "preferDouble",
 });
