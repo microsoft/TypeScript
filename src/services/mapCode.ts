@@ -28,7 +28,6 @@ import {
     Node,
     NodeArray,
     or,
-    ScriptTarget,
     some,
     SourceFile,
     Statement,
