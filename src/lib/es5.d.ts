@@ -1605,9 +1605,21 @@ type Extract<T, U> = T extends U ? T : never;
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 /**
- * Exclude null and undefined from T
+ * Exclude null and undefined from T, or from specific properties K if provided.
  */
-type NonNullable<T> = T & {};
+type NonNullable<T, K extends keyof T = keyof T> =
+  keyof T extends K
+    ? T & {}
+    : Omit<T, K> & {
+        [P in K]-?: NonNullable<T[P]> 
+      };
+
+/**
+ * Construct a type with the properties of T, where keys K are non-nullable
+ */
+type NonNullableProperties<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 
 /**
  * Obtain the parameters of a function type in a tuple
