@@ -4520,6 +4520,15 @@ export class TestState {
             return [{ start: pos, length: end - pos }];
         });
         let before = this.getFileContent(fileName);
+        const edits = this.languageService.mapCode(
+            fileName,
+            // We trim the leading whitespace stuff just so our test cases can be more readable.
+            changes,
+            focusLocations,
+            this.formatCodeSettings,
+            {},
+        );
+        this.applyChanges(edits);
         focusLocations.sort((a, b) => a[0].start - b[0].start);
         for (const subLoc of focusLocations) {
             for (const { start, length } of subLoc) {
@@ -4537,15 +4546,6 @@ export class TestState {
                 before = before.slice(0, start + offset) + "[|" + before.slice(start + offset, start + offset + length) + "|]" + before.slice(start + offset + length);
             }
         }
-        const edits = this.languageService.mapCode(
-            fileName,
-            // We trim the leading whitespace stuff just so our test cases can be more readable.
-            changes,
-            focusLocations,
-            this.formatCodeSettings,
-            {},
-        );
-        this.applyChanges(edits);
         const after = this.getFileContent(fileName);
         const baseline = `
 // === ORIGINAL ===
