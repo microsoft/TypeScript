@@ -789,6 +789,8 @@ export class SessionClient implements LanguageService {
         });
     }
 
+    mapCode = notImplemented;
+
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
             ? this.createFileLocationRequestArgs(fileName, positionOrRange)
