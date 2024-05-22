@@ -12,6 +12,7 @@ type BookWithAuthor = Book & { author: Author };
 
 declare const authorPromise: Promise<Result<Author, "NOT_FOUND_AUTHOR">>;
 declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">;
+declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
 
 async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
     // Without yield*, the type of test1 is
@@ -22,6 +23,9 @@ async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookW
     //    Author | BookWithAuthor
     // But this codepath has no way to produce BookWithAuthor
     const test2 = yield* await authorPromise.then(mapper)
+
+    const x1 = yield* g();
+    const x2: number = yield* g();
 
     return null! as BookWithAuthor;
 }

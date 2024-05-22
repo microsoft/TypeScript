@@ -48,6 +48,10 @@ declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "N
 >result : Result<T, "NOT_FOUND_AUTHOR">
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                       
+
 async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
 >f : () => AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown>
 >  : ^^^^^^                                                                              
@@ -90,6 +94,26 @@ async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookW
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
 >       : ^ ^^      ^^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const x1 = yield* g();
+>x1 : unknown
+>   : ^^^^^^^
+>yield* g() : unknown
+>           : ^^^^^^^
+>g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", unknown, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const x2: number = yield* g();
+>x2 : number
+>   : ^^^^^^
+>yield* g() : number
+>           : ^^^^^^
+>g() : AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", number, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => AsyncGenerator<T, U, V>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return null! as BookWithAuthor;
 >null! as BookWithAuthor : BookWithAuthor
