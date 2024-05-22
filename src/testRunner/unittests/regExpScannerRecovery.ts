@@ -1,6 +1,6 @@
 import * as ts from "../_namespaces/ts.js";
 
-describe("unittests:: regExpParserRecovery", () => {
+describe("unittests:: regExpScannerRecovery", () => {
     const testCases = [
         "/",
         "/[]",
@@ -16,7 +16,7 @@ describe("unittests:: regExpParserRecovery", () => {
         "/{[]}",
         "/([])",
         "/[)}({]",
-        "/({[)}]})",
+        "/({[]})",
         "/\\[",
         "/\\{",
         "/\\(",
@@ -42,27 +42,27 @@ describe("unittests:: regExpParserRecovery", () => {
         "/[\\}]",
         "/(\\})",
         "/{\\}}",
-        "/({[\\]})]})",
+        "/({[\\])]})",
     ];
     const whiteSpaceSequences = [
         "",
         "  ",
-        "\t\v\r\n",
-        "\u3000\u2028",
+        "\t\f",
+        "\u3000\u2003",
     ];
-    it("stops parsing unterminated regexes at correct position", () => {
-        ts.forEach(testCases, testCase => {
-            ts.forEach(whiteSpaceSequences, whiteSpaces => {
-                const testCaseWithWhiteSpaces = testCase + whiteSpaces;
-                const sources = [
-                    `const regex = ${testCaseWithWhiteSpaces};`,
-                    `(${testCaseWithWhiteSpaces});`,
-                    `([${testCaseWithWhiteSpaces}]);`,
-                    `({prop: ${testCaseWithWhiteSpaces}});`,
-                    `({prop: ([(${testCaseWithWhiteSpaces})])});`,
-                    `({[(${testCaseWithWhiteSpaces}).source]: 42});`,
-                ];
-                ts.forEach(sources, source => {
+    for (const testCase of testCases) {
+        for (const whiteSpaces of whiteSpaceSequences) {
+            const testCaseWithWhiteSpaces = testCase + whiteSpaces;
+            const sources = [
+                `const regex = ${testCaseWithWhiteSpaces};`,
+                `(${testCaseWithWhiteSpaces});`,
+                `([${testCaseWithWhiteSpaces}]);`,
+                `({prop: ${testCaseWithWhiteSpaces}});`,
+                `({prop: ([(${testCaseWithWhiteSpaces})])});`,
+                `({[(${testCaseWithWhiteSpaces}).source]: 42});`,
+            ];
+            for (const source of sources) {
+                it("stops parsing unterminated regexes at correct position: " + JSON.stringify(source), () => {
                     const { parseDiagnostics } = ts.createLanguageServiceSourceFile(
                         /*fileName*/ "",
                         ts.ScriptSnapshot.fromString(source),
@@ -75,7 +75,7 @@ describe("unittests:: regExpParserRecovery", () => {
                     assert.equal(diagnostic.start, source.indexOf("/"), "Diagnostic should start at where the regex starts");
                     assert.equal(diagnostic.length, testCase.length, "Diagnostic should end at where the regex ends");
                 });
-            });
-        });
-    });
+            }
+        }
+    }
 });
