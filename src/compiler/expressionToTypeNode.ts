@@ -14,10 +14,12 @@ import {
     Expression,
     forEachReturnStatement,
     FunctionExpression,
+    FunctionFlags,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getFunctionFlags,
     getJSDocTypeAssertionType,
     getStrictOptionValue,
     HasInferredType,
@@ -469,6 +471,8 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
     function typeFromSingleReturnExpression(declaration: FunctionLikeDeclaration | undefined, context: SyntacticTypeNodeBuilderContext): boolean | undefined {
         let candidateExpr: Expression | undefined;
         if (declaration && !nodeIsMissing(declaration.body)) {
+            if (getFunctionFlags(declaration) & FunctionFlags.AsyncGenerator) return undefined;
+
             const body = declaration.body;
             if (body && isBlock(body)) {
                 forEachReturnStatement(body, s => {
