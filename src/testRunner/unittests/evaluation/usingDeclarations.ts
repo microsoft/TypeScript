@@ -351,8 +351,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
-        assert.strictEqual(output[4].error, "dispose error");
-        assert.strictEqual(output[4].suppressed, "body error");
+        assert.strictEqual((output[4] as any).error, "dispose error");
+        assert.strictEqual((output[4] as any).suppressed, "body error");
         assert.deepEqual(output.slice(5), [
             "after try",
         ]);
