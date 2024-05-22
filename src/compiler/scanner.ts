@@ -3478,6 +3478,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         forEach(groupNameReferences, reference => {
             if (!groupSpecifiers?.has(reference.name)) {
                 error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
+                if (groupSpecifiers) {
+                    const suggestion = getSpellingSuggestion(reference.name, groupSpecifiers, identity);
+                    if (suggestion) {
+                        error(Diagnostics.Did_you_mean_0, reference.pos, reference.end - reference.pos, suggestion);
+                    }
+                }
             }
         });
         forEach(decimalEscapes, escape => {
