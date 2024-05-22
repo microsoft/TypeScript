@@ -394,20 +394,43 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
 interface SkipErrors {
     semantic?: true;
     suggestion?: true;
+    regionSemantic?: false;
 }
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
-    for (let i = 0; i < files.length; i++) {
+    // Files with region will be checked first.
+    const fileSkips = files
+        .map((_file, i) => skip?.[i])
+        .sort((a, b) => {
+            if (a?.regionSemantic === false && b?.regionSemantic === undefined) return -1;
+            if (b?.regionSemantic === false && a?.regionSemantic === undefined) return 1;
+            return 0;
+        });
+    for (const fileSkip of fileSkips) {
+        // Run syntax check for next file
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
-        if (files[i].ranges) {
+        if (fileSkip?.regionSemantic === false) {
+            // Run only region semantic check at first
             session.host.runQueuedImmediateCallbacks();
-            session.host.runQueuedTimeoutCallbacks();
+            continue;
         }
-        if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
-        if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
+        // Run semantic check
+        if (!fileSkip?.semantic) session.host.runQueuedImmediateCallbacks();
+        // Run suggestion check
+        if (!fileSkip?.suggestion) session.host.runQueuedImmediateCallbacks();
+    }
+    for (const fileSkip of fileSkips) {
+        if (fileSkip?.regionSemantic === false) {
+            session.host.runQueuedTimeoutCallbacks();
+            // Run semantic check
+            if (!fileSkip?.semantic) session.host.runQueuedImmediateCallbacks();
+            // Run suggestion check
+            if (!fileSkip?.suggestion) session.host.runQueuedImmediateCallbacks();
+        }
+        else break;
     }
 }
 

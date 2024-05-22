@@ -7,7 +7,7 @@ import {
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: regionDiagnostics", () => {
-    it("diagnostics for select nodes", () => {
+    it("diagnostics for select nodes in a single file", () => {
         const file1 = {
             path: "/a/b/app.ts",
             content: `function foo(x: number, y: string): number {
@@ -32,8 +32,93 @@ foo(10, 50);`,
                 file: file1.path,
                 ranges: [{ startLine: 6, startOffset: 1, endLine: 7, endOffset: 13 }],
             }],
+            skip: [
+                { regionSemantic: false },
+            ],
         });
 
-        baselineTsserverLogs("regionDiagnostics", "diagnostics for select nodes", session);
+        baselineTsserverLogs("regionDiagnostics", "diagnostics for select nodes in a single file", session);
+    });
+
+    it("diagnostics for select nodes and whole file for multiple files", () => {
+        const file1 = {
+            path: "/a/b/app.ts",
+            content: `
+function add(x: number, y: string): number {
+    return x + y;
+}
+
+add(10, 50);
+`,
+        };
+        const file2 = {
+            path: "/a/b/app2.ts",
+            content: `
+function booleanNoop(b: boolean): void {
+    b;
+    return;
+}
+
+booleanNoop("not a boolean");
+`,
+        };
+        const file3 = {
+            path: "/a/b/app3.ts",
+            content: `
+function stringId(x: string): string {
+    return x;
+}
+
+stringId("ok");
+
+stringId(1000);
+`,
+        };
+
+        const file4 = {
+            path: "/a/b/app4.ts",
+            content: `
+function numberId(x: number): number {
+    return x;
+}
+
+numberId(1000);
+`,
+        };
+
+        const files = [file1, file2, file3, file4];
+        const host = createServerHost(files);
+        const session = new TestSession(host);
+
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                openFiles: files.map(f => ({ file: f.path, fileContent: f.content })),
+            },
+        });
+
+        verifyGetErrRequest({
+            session,
+            files: [
+                {
+                    file: file1.path,
+                    ranges: [{ startLine: 6, startOffset: 1, endLine: 6, endOffset: 13 }], // `add(10, 50);`
+                },
+                file2.path,
+                {
+                    file: file3.path,
+                    ranges: [{ startLine: 6, startOffset: 1, endLine: 6, endOffset: 16 }], // `stringId("ok");`
+                },
+                file4.path,
+            ],
+            skip: [
+                { regionSemantic: false },
+                undefined,
+                { regionSemantic: false },
+                undefined,
+            ],
+        });
+
+        baselineTsserverLogs("regionDiagnostics", "diagnostics for select nodes and whole file for multiple files", session);
     });
 });
