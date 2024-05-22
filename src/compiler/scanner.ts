@@ -2474,28 +2474,29 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             const isUnterminated = !!(tokenFlags & TokenFlags.Unterminated);
             const endOfBody = p - (isUnterminated ? 0 : 1);
             let regExpFlags = RegularExpressionFlags.None;
-            while (p < end) {
-                const ch = charCodeUnchecked(p);
-                if (!isIdentifierPart(ch, languageVersion)) {
+            while (true) {
+                const ch = codePointChecked(p);
+                if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
+                const size = charSize(ch);
                 if (reportErrors) {
-                    const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                    const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
                     if (flag === undefined) {
-                        error(Diagnostics.Unknown_regular_expression_flag, p, 1);
+                        error(Diagnostics.Unknown_regular_expression_flag, p, size);
                     }
                     else if (regExpFlags & flag) {
-                        error(Diagnostics.Duplicate_regular_expression_flag, p, 1);
+                        error(Diagnostics.Duplicate_regular_expression_flag, p, size);
                     }
                     else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
-                        error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, p, 1);
+                        error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, p, size);
                     }
                     else {
                         regExpFlags |= flag;
-                        checkRegularExpressionFlagAvailable(flag, p);
+                        checkRegularExpressionFlagAvailability(flag, p, size);
                     }
                 }
-                p++;
+                p += size;
             }
             pos = p;
             if (reportErrors) {
@@ -2763,25 +2764,26 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
             while (true) {
-                const ch = charCodeChecked(pos);
+                const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
-                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                const size = charSize(ch);
+                const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
                 if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                 }
                 else if (currFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
                 }
                 else if (!(flag & RegularExpressionFlags.Modifiers)) {
-                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
+                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, size);
                 }
                 else {
                     currFlags |= flag;
-                    checkRegularExpressionFlagAvailable(flag, pos);
+                    checkRegularExpressionFlagAvailability(flag, pos, size);
                 }
-                pos++;
+                pos += size;
             }
             return currFlags;
         }
@@ -3494,10 +3496,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         });
     }
 
-    function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+    function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, pos: number, size: number) {
         const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
         if (availableFrom && languageVersion < availableFrom) {
-            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
         }
     }
 
