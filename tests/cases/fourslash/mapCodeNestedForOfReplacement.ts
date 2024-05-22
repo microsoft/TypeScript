@@ -1,11 +1,5 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges.ts
-//// for (const x of [1, 2, 3]) {
-////   console.log("goodbye");
-////   console.log("world");
-//// }
-////
 // @Filename: /index.ts
 //// function foo() {
 ////     for (const x of [1, 2, 3]) [||]{
@@ -16,4 +10,11 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), [
+`
+for (const x of [1, 2, 3]) {
+  console.log("goodbye");
+  console.log("world");
+}
+`
+]);

@@ -12,6 +12,7 @@ function foo() {
 }
 
 // === INCOMING CHANGES ===
+
 if (x === y) {
   console.log("goodbye");
   console.log("world");

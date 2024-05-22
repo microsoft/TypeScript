@@ -1,10 +1,5 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges.ts
-//// quux() {
-////     return 4;
-//// }
-////
 // @Filename: /index.ts
 //// class MyClass {[||]
 ////     x = 1;
@@ -20,4 +15,10 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), [
+`
+quux() {
+    return 4;
+}
+`
+]);

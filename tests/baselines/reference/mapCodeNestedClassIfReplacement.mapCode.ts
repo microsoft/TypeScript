@@ -17,6 +17,7 @@ class MyClass {
 }
 
 // === INCOMING CHANGES ===
+
 if (true) {
     return "hello";
 }

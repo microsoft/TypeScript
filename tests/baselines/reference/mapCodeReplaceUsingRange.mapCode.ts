@@ -9,6 +9,7 @@ function bar() {
 }|]
 
 // === INCOMING CHANGES ===
+
 function foo() {
     return 3;
 }

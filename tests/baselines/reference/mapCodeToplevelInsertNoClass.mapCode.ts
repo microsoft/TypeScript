@@ -8,6 +8,7 @@ function bar() {
     return 2;
 }
 // === INCOMING CHANGES ===
+
 baz() {
     return 3;
 }

@@ -1,10 +1,5 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges.ts
-//// bar() {
-////     return 'hello';
-//// }
-////
 // @Filename: /index.ts
 //// class MyClass {
 ////     x = 1;
@@ -20,4 +15,10 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), [
+`
+bar() {
+    return 'hello';
+}
+`
+]);

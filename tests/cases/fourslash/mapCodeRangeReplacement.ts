@@ -1,14 +1,5 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges.ts
-//// if (foo == bar) {
-////     console.log("huh");
-//// }
-////
-//// function baz() {
-////     return 'baz';
-//// }
-////
 // @Filename: /index.ts
 //// function foo() {
 ////     return 1;
@@ -29,4 +20,14 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), [
+`
+if (foo == bar) {
+    console.log("huh");
+}
+
+function baz() {
+    return 'baz';
+}
+`
+]);

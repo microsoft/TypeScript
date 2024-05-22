@@ -4513,9 +4513,8 @@ export class TestState {
 
     public baselineMapCode(
         ranges: Range[],
-        changesFilename: string,
+        changes: string[] = [],
     ): void {
-        const changes = this.getFileContent(changesFilename);
         let fileName: string | undefined;
         const focusLocations = ranges.map(({ fileName: fn, pos, end }) => {
             if (!fileName) {
@@ -4546,7 +4545,8 @@ export class TestState {
         }
         const edits = this.languageService.mapCode(
             fileName,
-            [changes],
+            // We trim the leading whitespace stuff just so our test cases can be more readable.
+            changes,
             focusLocations,
             this.formatCodeSettings,
             {},

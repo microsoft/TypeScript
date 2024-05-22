@@ -30,6 +30,7 @@ function baz() {
 }
 
 // === INCOMING CHANGES ===
+
 if (x === y) {
     return x + y;
 }

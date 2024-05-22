@@ -12,6 +12,7 @@ class MyClass {[||]
 }
 
 // === INCOMING CHANGES ===
+
 x = 3;
 bar() {
     return 'hello';

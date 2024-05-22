@@ -15,6 +15,7 @@ class MyClass {
 }
 
 // === INCOMING CHANGES ===
+
 bar() {
     return 'hello';
 }

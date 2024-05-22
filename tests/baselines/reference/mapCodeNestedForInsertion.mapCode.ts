@@ -12,6 +12,7 @@ function foo() {
 }
 
 // === INCOMING CHANGES ===
+
 for (let j = 0; j < 10; j++) {
   console.log("goodbye");
   console.log("world");

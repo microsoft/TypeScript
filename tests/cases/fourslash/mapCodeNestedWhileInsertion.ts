@@ -1,11 +1,5 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges.ts
-//// while (y === x) {
-////   console.log("goodbye");
-////   console.log("world");
-//// }
-////
 // @Filename: /index.ts
 //// function foo() {
 ////     const x: number = 1;
@@ -18,4 +12,11 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), "/incomingChanges.ts");
+verify.baselineMapCode(test.ranges(), [
+`
+while (y === x) {
+  console.log("goodbye");
+  console.log("world");
+}
+`
+]);

@@ -5,6 +5,7 @@ class MyClass {[||]
 }
 
 // === INCOMING CHANGES ===
+
 if (false) {
     return "hello";
 }

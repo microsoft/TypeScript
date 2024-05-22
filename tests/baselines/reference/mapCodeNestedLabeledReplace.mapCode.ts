@@ -13,6 +13,7 @@ function foo() {
 }
 
 // === INCOMING CHANGES ===
+
 myLabel: if (y === x) {
   console.log("goodbye");
   console.log("world");

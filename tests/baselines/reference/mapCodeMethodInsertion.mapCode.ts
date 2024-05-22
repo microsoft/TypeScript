@@ -15,6 +15,7 @@ class MyClass {[||]
 }
 
 // === INCOMING CHANGES ===
+
 quux() {
     return 4;
 }
