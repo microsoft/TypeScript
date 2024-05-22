@@ -12,7 +12,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 x = 3;
 bar() {

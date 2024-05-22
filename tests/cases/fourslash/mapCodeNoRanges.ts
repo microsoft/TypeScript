@@ -9,7 +9,7 @@
 //// }
 ////
 
-verify.baselineMapCode([], [
+verify.baselineMapCode([[]], [
 `
 function baz() {
     return 3;

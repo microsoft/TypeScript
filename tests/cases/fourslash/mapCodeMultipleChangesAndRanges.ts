@@ -17,7 +17,8 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+const [r0, r1, r2] = test.ranges();
+verify.baselineMapCode([[r0], [r2, r1]], [
 `
 if (x === y) {
   console.log("goodbye");

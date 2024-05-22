@@ -9,7 +9,7 @@
 //// }|]
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 function foo() {
     return 3;

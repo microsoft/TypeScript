@@ -17,7 +17,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 if (false) {
     return "hello";

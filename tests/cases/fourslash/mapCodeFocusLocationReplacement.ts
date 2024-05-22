@@ -30,7 +30,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 if (x === y) {
     return x + y;

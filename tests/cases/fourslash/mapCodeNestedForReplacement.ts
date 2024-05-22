@@ -10,7 +10,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 for (let x = 0; x < 10; x++) {
   console.log("goodbye");

@@ -13,7 +13,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 myLabel: if (y === x) {
   console.log("goodbye");

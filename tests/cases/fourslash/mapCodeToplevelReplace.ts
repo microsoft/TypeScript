@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /index.ts
+// @Filename: /topLevelReplace.ts
 //// function foo() {
 ////     return 1;
 //// }[||]
@@ -9,7 +9,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 function foo() {
     return 3;

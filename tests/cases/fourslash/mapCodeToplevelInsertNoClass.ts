@@ -8,7 +8,7 @@
 ////     return 2;
 //// }
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 baz() {
     return 3;

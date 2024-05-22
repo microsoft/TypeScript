@@ -52,7 +52,7 @@ export function mapCode(
     return textChanges.ChangeTracker.with(
         { host, formatContext, preferences },
         changeTracker => {
-            const parsed = contents.map(parse);
+            const parsed = contents.map(c => parse(sourceFile, c));
             const flattenedLocations = focusLocations && flatten(focusLocations);
             for (const nodes of parsed) {
                 placeNodeGroup(
@@ -70,7 +70,7 @@ export function mapCode(
  * Tries to parse something into either "top-level" statements, or into blocks
  * of class-context definitions.
  */
-function parse(content: string): NodeArray<Node> {
+function parse(sourceFile: SourceFile, content: string): NodeArray<Node> {
     // We're going to speculatively parse different kinds of contexts to see
     // which one makes the most sense, and grab the NodeArray from there. Do
     // this as lazily as possible.
@@ -80,8 +80,9 @@ function parse(content: string): NodeArray<Node> {
                 createSourceFile(
                     "__mapcode_content_nodes.ts",
                     content,
-                    ScriptTarget.Latest,
+                    sourceFile.languageVersion,
                     /*setParentNodes*/ true,
+                    sourceFile.scriptKind,
                 ),
             body: (sf: SourceFile) => sf.statements,
         },
@@ -90,8 +91,9 @@ function parse(content: string): NodeArray<Node> {
                 createSourceFile(
                     "__mapcode_class_content_nodes.ts",
                     `class __class {\n${content}\n}`,
-                    ScriptTarget.Latest,
+                    sourceFile.languageVersion,
                     /*setParentNodes*/ true,
+                    sourceFile.scriptKind,
                 ),
             body: (cw: SourceFile) => (cw.statements[0] as ClassLikeDeclaration).members,
         },

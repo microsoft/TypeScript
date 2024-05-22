@@ -4512,13 +4512,15 @@ export class TestState {
     }
 
     public baselineMapCode(
-        ranges: Range[],
+        ranges: Range[][],
         changes: string[] = [],
     ): void {
         const fileName = this.activeFile.fileName;
-        const focusLocations = ranges.map(({ pos, end }) => {
-            return [{ start: pos, length: end - pos }];
-        });
+        const focusLocations = ranges.map(r =>
+            r.map(({ pos, end }) => {
+                return { start: pos, length: end - pos };
+            })
+        );
         let before = this.getFileContent(fileName);
         const edits = this.languageService.mapCode(
             fileName,
@@ -4529,6 +4531,9 @@ export class TestState {
             {},
         );
         this.applyChanges(edits);
+        focusLocations.forEach(r => {
+            r.sort((a, b) => a.start - b.start);
+        })
         focusLocations.sort((a, b) => a[0].start - b[0].start);
         for (const subLoc of focusLocations) {
             for (const { start, length } of subLoc) {

@@ -20,7 +20,7 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges(), [
+verify.baselineMapCode([test.ranges()], [
 `
 if (foo == bar) {
     console.log("huh");
