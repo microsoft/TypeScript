@@ -1351,38 +1351,27 @@ export class Session<TMessage = string> implements EventSender {
         const seq = this.changeSeq;
         const followMs = Math.min(ms, 200);
 
-        const filesFullCheck: (PendingErrorCheck & { project: Project; })[] = [];
         let index = 0;
-        const goNextAllCheck = () => {
+        const goNext = () => {
             index++;
             if (checkList.length > index) {
                 return next.delay("checkOne", followMs, checkOne);
             }
-            if (filesFullCheck.length) {
-                index = 0;
-                return next.delay("checkFullOne", followMs, checkFull);
-            }
-        };
-        const goNextSemanticCheck = () => {
-            index++;
-            if (filesFullCheck.length > index) {
-                return next.delay("checkFullOne", followMs, checkFull);
-            }
         };
 
-        const doSemanticCheck = (fileName: NormalizedPath, project: Project, goToNext: () => void) => {
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project) => {
             this.semanticCheck(fileName, project);
             if (this.changeSeq !== seq) {
                 return;
             }
 
             if (this.getPreferences(fileName).disableSuggestions) {
-                goToNext();
+                goNext();
                 return;
             }
             next.immediate("suggestionCheck", () => {
                 this.suggestionCheck(fileName, project);
-                goToNext();
+                goNext();
             });
         };
 
@@ -1409,7 +1398,7 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNextAllCheck();
+                goNext();
                 return;
             }
 
@@ -1417,25 +1406,18 @@ export class Session<TMessage = string> implements EventSender {
                 return next.immediate("regionSemanticCheck", () => {
                     const didRegionCheck = this.regionSemanticCheck(fileName, project, ranges);
                     if (didRegionCheck) {
-                        filesFullCheck.push({ fileName, project });
-                        goNextAllCheck();
+                        if (this.changeSeq !== seq) {
+                            return;
+                        }
+                        next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
                     }
-                    else { // If we opted out of region check, do semantic check as normal
-                        doSemanticCheck(fileName, project, goNextAllCheck);
+                    else {
+                        doSemanticCheck(fileName, project);
                     }
                 });
             }
 
-            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextAllCheck));
-        };
-
-        const checkFull = () => {
-            if (this.changeSeq !== seq) {
-                return;
-            }
-
-            const { fileName, project } = filesFullCheck[index];
-            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project, goNextSemanticCheck));
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {

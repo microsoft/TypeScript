@@ -292,199 +292,13 @@ Info seq  [hh:mm:ss:mss] event:
         "duration": *
       }
     }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-2: checkOne *new*
-
-Before running Timeout callback:: count: 1
-2: checkOne
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-2: regionSemanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-2: regionSemanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "regionSemanticDiag",
-      "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "spans": [
-          {
-            "start": {
-              "line": 4,
-              "offset": 2
-            },
-            "end": {
-              "line": 6,
-              "offset": 16
-            }
-          }
-        ],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-3: checkOne *new*
-
-Before running Timeout callback:: count: 1
-3: checkOne
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/app2.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-3: semanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-3: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "semanticDiag",
-      "body": {
-        "file": "/a/b/app2.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 7,
-              "offset": 13
-            },
-            "end": {
-              "line": 7,
-              "offset": 28
-            },
-            "text": "Argument of type 'string' is not assignable to parameter of type 'boolean'.",
-            "code": 2345,
-            "category": "error"
-          }
-        ],
-        "duration": *
-      }
-    }
 After running Immedidate callback:: count: 1
 
 Immedidate callback:: count: 1
-4: suggestionCheck *new*
+2: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
-4: suggestionCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "suggestionDiag",
-      "body": {
-        "file": "/a/b/app2.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-4: checkOne *new*
-
-Before running Timeout callback:: count: 1
-4: checkOne
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-5: semanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-5: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "semanticDiag",
-      "body": {
-        "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 1
-
-Immedidate callback:: count: 1
-6: suggestionCheck *new*
-
-Before running Immedidate callback:: count: 1
-6: suggestionCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "suggestionDiag",
-      "body": {
-        "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-5: checkFullOne *new*
-
-Before running Timeout callback:: count: 1
-5: checkFullOne
-
-After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-7: semanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-7: semanticCheck
+2: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -527,10 +341,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 1
 
 Immedidate callback:: count: 1
-8: suggestionCheck *new*
+3: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
-8: suggestionCheck
+3: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -546,18 +360,60 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Timeout callback:: count: 1
-6: checkFullOne *new*
+2: checkOne *new*
 
 Before running Timeout callback:: count: 1
-6: checkFullOne
+2: checkOne
 
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
 After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
-9: semanticCheck *new*
+4: regionSemanticCheck *new*
 
 Before running Immedidate callback:: count: 1
-9: semanticCheck
+4: regionSemanticCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "regionSemanticDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [],
+        "spans": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 2
+            },
+            "end": {
+              "line": 6,
+              "offset": 16
+            }
+          }
+        ],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 1
+
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
+Before running Immedidate callback:: count: 1
+5: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -587,6 +443,134 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 1
 
 Immedidate callback:: count: 1
+6: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+6: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 0
+
+Timeout callback:: count: 1
+3: checkOne *new*
+
+Before running Timeout callback:: count: 1
+3: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/app2.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+7: semanticCheck *new*
+
+Before running Immedidate callback:: count: 1
+7: semanticCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/app2.ts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 7,
+              "offset": 13
+            },
+            "end": {
+              "line": 7,
+              "offset": 28
+            },
+            "text": "Argument of type 'string' is not assignable to parameter of type 'boolean'.",
+            "code": 2345,
+            "category": "error"
+          }
+        ],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 1
+
+Immedidate callback:: count: 1
+8: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+8: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/app2.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 0
+
+Timeout callback:: count: 1
+4: checkOne *new*
+
+Before running Timeout callback:: count: 1
+4: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/app4.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+9: semanticCheck *new*
+
+Before running Immedidate callback:: count: 1
+9: semanticCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/app4.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 1
+
+Immedidate callback:: count: 1
 10: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
@@ -598,7 +582,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "suggestionDiag",
       "body": {
-        "file": "/a/b/app3.ts",
+        "file": "/a/b/app4.ts",
         "diagnostics": [],
         "duration": *
       }

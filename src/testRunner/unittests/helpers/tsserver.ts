@@ -413,24 +413,13 @@ function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErro
         // Run syntax check for next file
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
         if (fileSkip?.regionSemantic === false) {
-            // Run only region semantic check at first
+            // Run region check
             session.host.runQueuedImmediateCallbacks();
-            continue;
         }
         // Run semantic check
         if (!fileSkip?.semantic) session.host.runQueuedImmediateCallbacks();
         // Run suggestion check
         if (!fileSkip?.suggestion) session.host.runQueuedImmediateCallbacks();
-    }
-    for (const fileSkip of fileSkips) {
-        if (fileSkip?.regionSemantic === false) {
-            session.host.runQueuedTimeoutCallbacks();
-            // Run semantic check
-            if (!fileSkip?.semantic) session.host.runQueuedImmediateCallbacks();
-            // Run suggestion check
-            if (!fileSkip?.suggestion) session.host.runQueuedImmediateCallbacks();
-        }
-        else break;
     }
 }
 

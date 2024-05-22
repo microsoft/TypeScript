@@ -153,15 +153,7 @@ Info seq  [hh:mm:ss:mss] event:
         "duration": *
       }
     }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-2: checkFullOne *new*
-
-Before running Timeout callback:: count: 1
-2: checkFullOne
-
-After running Timeout callback:: count: 0
+After running Immedidate callback:: count: 1
 
 Immedidate callback:: count: 1
 2: semanticCheck *new*
