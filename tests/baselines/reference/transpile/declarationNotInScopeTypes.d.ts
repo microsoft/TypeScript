@@ -37,6 +37,7 @@ variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be use
         return {} as typeof y;
                             ~
 !!! error TS9038: Type containing private name 'y' can't be used with --isolatedDeclarations.
+!!! related TS9031 variables.ts:6:17: Add a return type to the function declaration.
     }
     
     export function three() {
@@ -44,4 +45,5 @@ variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be use
         return {} as Z;
                      ~
 !!! error TS9038: Type containing private name 'Z' can't be used with --isolatedDeclarations.
+!!! related TS9031 variables.ts:11:17: Add a return type to the function declaration.
     }

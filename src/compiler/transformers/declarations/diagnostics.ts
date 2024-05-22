@@ -26,6 +26,7 @@ import {
     findAncestor,
     FunctionDeclaration,
     FunctionExpression,
+    FunctionLikeDeclaration,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
     getNameOfDeclaration,
@@ -46,6 +47,7 @@ import {
     isExportAssignment,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
+    isFunctionLikeDeclaration,
     isGetAccessor,
     isHeritageClause,
     isImportEqualsDeclaration,
@@ -60,6 +62,7 @@ import {
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertySignature,
+    isReturnStatement,
     isSetAccessor,
     isStatement,
     isStatic,
@@ -702,8 +705,15 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
     }
 
     function findNearestDeclaration(node: Node) {
-        const result = findAncestor(node, n => isExportAssignment(n) || (isStatement(n) ? "quit" : isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n)));
-        return result as VariableDeclaration | PropertyDeclaration | ParameterDeclaration | ExportAssignment | undefined;
+        const result = findAncestor(node, n => isExportAssignment(n) || isStatement(n) || isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n));
+        if (!result) return undefined;
+
+        if (isExportAssignment(result)) return result;
+
+        if (isReturnStatement(result)) {
+            return findAncestor(result, (n): n is Exclude<FunctionLikeDeclaration, ConstructorDeclaration> => isFunctionLikeDeclaration(n) && !isConstructorDeclaration(n));
+        }
+        return (isStatement(result) ? undefined : result) as VariableDeclaration | PropertyDeclaration | ParameterDeclaration | ExportAssignment | undefined;
     }
 
     function createAccessorTypeError(node: GetAccessorDeclaration | SetAccessorDeclaration) {
@@ -720,31 +730,27 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
         }
         return diag;
     }
-    function createObjectLiteralError(node: ShorthandPropertyAssignment | SpreadAssignment | ComputedPropertyName) {
-        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+    function addParentDeclarationRelatedInfo(node: Node, diag: DiagnosticWithLocation) {
         const parentDeclaration = findNearestDeclaration(node);
         if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
         }
+        return diag;
+    }
+    function createObjectLiteralError(node: ShorthandPropertyAssignment | SpreadAssignment | ComputedPropertyName) {
+        const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
+        addParentDeclarationRelatedInfo(node, diag);
         return diag;
     }
     function createArrayLiteralError(node: ArrayLiteralExpression | SpreadElement) {
         const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
-        const parentDeclaration = findNearestDeclaration(node);
-        if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
-            addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
-        }
+        addParentDeclarationRelatedInfo(node, diag);
         return diag;
     }
     function createReturnTypeError(node: FunctionDeclaration | FunctionExpression | ArrowFunction | MethodDeclaration | ConstructSignatureDeclaration) {
         const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
-        const parentDeclaration = findNearestDeclaration(node);
-        if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
-            addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
-        }
+        addParentDeclarationRelatedInfo(node, diag);
         addRelatedInfo(diag, createDiagnosticForNode(node, relatedSuggestionByDeclarationKind[node.kind]));
         return diag;
     }
@@ -777,14 +783,17 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
         return createExpressionError(node, Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations);
     }
     function createEntityInTypeNodeError(node: EntityNameOrEntityNameExpression) {
-        return createDiagnosticForNode(node, Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations, getTextOfNode(node, /*includeTrivia*/ false));
+        const diag = createDiagnosticForNode(node, Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations, getTextOfNode(node, /*includeTrivia*/ false));
+        addParentDeclarationRelatedInfo(node, diag);
+        return diag;
     }
     function createExpressionError(node: Expression, diagnosticMessage?: DiagnosticMessage) {
         const parentDeclaration = findNearestDeclaration(node);
         let diag: DiagnosticWithLocation;
         if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             const parent = findAncestor(node.parent, n => isExportAssignment(n) || (isStatement(n) ? "quit" : !isParenthesizedExpression(n) && !isTypeAssertionExpression(n) && !isAsExpression(n)));
+
             if (parentDeclaration === parent) {
                 diag = createDiagnosticForNode(node, diagnosticMessage ?? errorByDeclarationKind[parentDeclaration.kind]);
                 addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
