@@ -104,8 +104,7 @@ function changeToTestServerHostWithTimeoutLogging(host: TestServerHostTrackingWr
         log: s => baseline.push(s),
         logs: baseline,
     };
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
     return host;
 }
 

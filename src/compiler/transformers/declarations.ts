@@ -139,6 +139,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -995,16 +996,20 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
-            if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
+            if (hasDynamicName(input)) {
                 if (
                     isolatedDeclarations
-                    // Classes usually elide properties with computed names that are not of a literal type
+                    // Classes and object literals usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-                    && isClassDeclaration(input.parent)
-                    && isEntityNameExpression(input.name.expression)
-                    // If the symbol is not accessible we get another TS error no need to add to that
-                    && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
-                    && !resolver.isNonNarrowedBindableName(input.name)
+                    && (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent))
+                ) {
+                    context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
+                }
+                if (
+                    isolatedDeclarations
+                    // Type declarations just need to double-check that the input computed name is an entity name expression
+                    && (isInterfaceDeclaration(input.parent) || isTypeLiteralNode(input.parent))
+                    && !isEntityNameExpression(input.name.expression)
                 ) {
                     context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }

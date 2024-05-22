@@ -97,14 +97,14 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --v
-[[90m12:00:24 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:26 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/core/anotherModule.ts' not found.
   The file is in the program because:
@@ -115,13 +115,13 @@ Output::
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-[[90m12:00:30 AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:00:31 AM[0m] Skipping build of project '/user/username/projects/sample1/logic/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/logic/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
-[[90m12:00:32 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:00:33 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
 
 Found 1 error.

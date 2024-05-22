@@ -7014,9 +7014,13 @@
         "category": "Error",
         "code": 9037
     },
-    "Type containing private name '{0}' can't be used with --isolatedDeclarations.": {
+    "Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9038
+    },
+    "Type containing private name '{0}' can't be used with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9039
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",

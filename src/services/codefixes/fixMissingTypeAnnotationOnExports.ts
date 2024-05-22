@@ -122,6 +122,7 @@ const errorCodes = [
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations.code,
+    Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations.code,
     Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations.code,
     Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations.code,

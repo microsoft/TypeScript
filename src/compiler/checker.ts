@@ -1504,7 +1504,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var syntacticNodeBuilder = createSyntacticTypeNodeBuilder(compilerOptions, {
         isEntityNameVisible,
         isExpandoFunctionDeclaration,
-        isNonNarrowedBindableName,
         getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
         requiresAddingImplicitUndefined,
         isUndefinedIdentifierExpression(node: Identifier) {
@@ -2428,10 +2427,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return visitEachChild(node, markAsSynthetic, /*context*/ undefined);
     }
 
-    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
+    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, skipDiagnostics?: boolean) {
         // Ensure we have all the type information in place for this file so that all the
         // emitter questions of this resolver will return the right information.
-        getDiagnostics(sourceFile, cancellationToken);
+        if (!skipDiagnostics) getDiagnostics(sourceFile, cancellationToken);
         return emitResolver;
     }
 
@@ -5862,9 +5861,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return { accessibility: SymbolAccessibility.Accessible };
         }
 
+        if (!symbol) {
+            return {
+                accessibility: SymbolAccessibility.NotResolved,
+                errorSymbolName: getTextOfNode(firstIdentifier),
+                errorNode: firstIdentifier,
+            };
+        }
         // Verify if the symbol is accessible
-        return (symbol && hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)) || {
-            accessibility: SymbolAccessibility.NotResolved,
+        return hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible) || {
+            accessibility: SymbolAccessibility.NotAccessible,
             errorSymbolName: getTextOfNode(firstIdentifier),
             errorNode: firstIdentifier,
         };
@@ -49117,25 +49123,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
-    function isNonNarrowedBindableName(node: ComputedPropertyName) {
-        if (!hasBindableName(node.parent)) {
-            return false;
-        }
-
-        const expression = node.expression;
-        if (!isEntityNameExpression(expression)) {
-            return true;
-        }
-
-        const type = getTypeOfExpression(expression);
-        const symbol = getSymbolAtLocation(expression);
-        if (!symbol) {
-            return false;
-        }
-        // Ensure not type narrowing
-        const declaredType = getTypeOfSymbol(symbol);
-        return declaredType === type;
-    }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
         const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
@@ -49261,7 +49248,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return node && getExternalModuleFileFromDeclaration(node);
             },
             isLiteralConstDeclaration,
-            isNonNarrowedBindableName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);

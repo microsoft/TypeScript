@@ -5,6 +5,12 @@ import { jsonToReadableText } from "../helpers.js";
 import { TscCompileSystem } from "./tsc.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
+export function sanitizeSysOutput(output: string) {
+    return output
+        .replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+        .replace(/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s(A|P)M/g, "HH:MM:SS AM");
+}
+
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {
     cb: ts.ExecuteCommandLineCallbacks;

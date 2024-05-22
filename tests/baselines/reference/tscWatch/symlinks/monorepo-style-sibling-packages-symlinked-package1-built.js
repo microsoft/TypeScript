@@ -523,6 +523,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -535,6 +536,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

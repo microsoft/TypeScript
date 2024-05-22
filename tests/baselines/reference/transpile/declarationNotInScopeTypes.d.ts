@@ -22,8 +22,8 @@ export {};
 
 
 //// [Diagnostics reported]
-variables.ts(8,25): error TS9038: Type containing private name 'y' can't be used with --isolatedDeclarations.
-variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be used with --isolatedDeclarations.
+variables.ts(8,25): error TS9039: Type containing private name 'y' can't be used with --isolatedDeclarations.
+variables.ts(13,18): error TS9039: Type containing private name 'Z' can't be used with --isolatedDeclarations.
 
 
 ==== variables.ts (2 errors) ====
@@ -36,7 +36,7 @@ variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be use
         const y = "";
         return {} as typeof y;
                             ~
-!!! error TS9038: Type containing private name 'y' can't be used with --isolatedDeclarations.
+!!! error TS9039: Type containing private name 'y' can't be used with --isolatedDeclarations.
 !!! related TS9031 variables.ts:6:17: Add a return type to the function declaration.
     }
     
@@ -44,6 +44,6 @@ variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be use
         type Z = string;
         return {} as Z;
                      ~
-!!! error TS9038: Type containing private name 'Z' can't be used with --isolatedDeclarations.
+!!! error TS9039: Type containing private name 'Z' can't be used with --isolatedDeclarations.
 !!! related TS9031 variables.ts:11:17: Add a return type to the function declaration.
     }

@@ -74,17 +74,17 @@ export function fn4() {
 
 Output::
 /lib/tsc --b /src/packages/pkg2/tsconfig.json --verbose
-[[90m12:00:16 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/packages/pkg1/tsconfig.json
     * src/packages/pkg2/tsconfig.json
 
-[[90m12:00:17 AM[0m] Project 'src/packages/pkg1/tsconfig.json' is out of date because output file 'src/packages/pkg1/lib/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/packages/pkg1/tsconfig.json' is out of date because output file 'src/packages/pkg1/lib/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:18 AM[0m] Building project '/src/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/packages/pkg1/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
