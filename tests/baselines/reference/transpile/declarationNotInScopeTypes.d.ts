@@ -22,8 +22,8 @@ export {};
 
 
 //// [Diagnostics reported]
-variables.ts(8,25): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
-variables.ts(13,18): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+variables.ts(8,25): error TS9038: Type containing private name 'y' can't be used with --isolatedDeclarations.
+variables.ts(13,18): error TS9038: Type containing private name 'Z' can't be used with --isolatedDeclarations.
 
 
 ==== variables.ts (2 errors) ====
@@ -36,12 +36,12 @@ variables.ts(13,18): error TS9013: Expression type can't be inferred with --isol
         const y = "";
         return {} as typeof y;
                             ~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! error TS9038: Type containing private name 'y' can't be used with --isolatedDeclarations.
     }
     
     export function three() {
         type Z = string;
         return {} as Z;
                      ~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! error TS9038: Type containing private name 'Z' can't be used with --isolatedDeclarations.
     }
