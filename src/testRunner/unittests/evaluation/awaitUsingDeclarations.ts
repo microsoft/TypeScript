@@ -1871,7 +1871,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         assert.deepEqual(output, [
             "dispose",
             "interleave",
-            "catch"
+            "catch",
         ]);
     });
 });
