@@ -2,8 +2,8 @@
 
 === genericTypeWithCallableMembers2.ts ===
 function foo1<T extends { (): string; }>(f: T) {
->foo1 : <T extends () => string>(f: T) => string
->     : ^ ^^^^^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^
+>foo1 : <T extends { (): string; }>(f: T) => string
+>     : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^^^
 >f : T
 >  : ^
 
@@ -15,8 +15,8 @@ function foo1<T extends { (): string; }>(f: T) {
 }
  
 function foo2<T extends { new (): string; }>(f: T) {
->foo2 : <T extends new () => string>(f: T) => string
->     : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^
+>foo2 : <T extends { new (): string; }>(f: T) => string
+>     : ^ ^^^^^^^^^                   ^^ ^^ ^^^^^^^^^^^
 >f : T
 >  : ^
 

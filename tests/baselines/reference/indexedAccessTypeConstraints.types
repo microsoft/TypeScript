@@ -15,7 +15,7 @@ type Data<T> = {
 
     get: <K extends keyof T>(prop: K) => T[K];
 >get : <K extends keyof T>(prop: K) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^^    ^^ ^^^^^    
+>    : ^ ^^^^^^^^^       ^^    ^^ ^^^^^    
 >prop : K
 >     : ^
 
@@ -107,7 +107,7 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 
 function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 >foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^ ^^ ^^            ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^               ^^ ^^ ^^ ^^            ^^^^^^^^^
 >content : C
 >        : ^
 >x : C

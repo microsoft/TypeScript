@@ -3,7 +3,7 @@
 === computedPropertyNames8_ES6.ts ===
 function f<T, U extends string>() {
 >f : <T, U extends string>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^      ^^^^^^^^^^^
 
     var t: T;
 >t : T

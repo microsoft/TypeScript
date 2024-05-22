@@ -98,27 +98,27 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --verbose
-[[90m12:00:23 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:25 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:00:35 AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because output file 'logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:36 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 [96mlogic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/user/username/projects/sample1/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:40 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
 
-[[90m12:00:41 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
 
 
 Found 1 error.
@@ -364,25 +364,25 @@ Input::
 
 Output::
 /a/lib/tsc --b tests --verbose
-[[90m12:00:42 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:43 AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
 
-[[90m12:00:44 AM[0m] Project 'logic/tsconfig.json' is out of date because buildinfo file 'logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is out of date because buildinfo file 'logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:45 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 [96mlogic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/user/username/projects/sample1/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:46 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'logic' has errors
 
-[[90m12:00:47 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/logic' has errors
 
 
 Found 1 error.

@@ -45,7 +45,7 @@ const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 
 function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : T
 >    : ^
 >key : K
@@ -72,7 +72,7 @@ const val = set(obj, 'str', '');
 >set(obj, 'str', '') : string
 >                    : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'str' : "str"
@@ -87,7 +87,7 @@ const valB = set(obj, 'num', '');
 >set(obj, 'num', '') : number
 >                    : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'num' : "num"
@@ -103,7 +103,7 @@ const valC = set(obj, sym, sym);
 >set(obj, sym, sym) : symbol
 >                   : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >sym : unique symbol
@@ -119,7 +119,7 @@ const valD = set(obj, num, num);
 >set(obj, num, num) : 0
 >                   : ^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >num : 0

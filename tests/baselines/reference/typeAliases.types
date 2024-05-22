@@ -163,8 +163,8 @@ var x13_2: T13
 >      : ^^^
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
->      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^    
+>foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
+>      : ^  ^^^^^^^^^   ^^^^^^^^^^^^^   ^^  ^^  ^^  ^^   ^^^^^    
 >t1 : T1
 >   : ^^
 >t2 : I13
@@ -173,8 +173,8 @@ declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 foo13(x13_1, x13_2);
 >foo13(x13_1, x13_2) : void
 >                    : ^^^^
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
->      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^^^^^
+>foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
+>      : ^  ^^^^^^^^^   ^^^^^^^^^^^^^   ^^  ^^  ^^  ^^   ^^^^^^^^^
 >x13_1 : I13
 >      : ^^^
 >x13_2 : I13
@@ -183,8 +183,8 @@ foo13(x13_1, x13_2);
 foo13(x13_2, x13_1);
 >foo13(x13_2, x13_1) : void
 >                    : ^^^^
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
->      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^^^^^
+>foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
+>      : ^  ^^^^^^^^^   ^^^^^^^^^^^^^   ^^  ^^  ^^  ^^   ^^^^^^^^^
 >x13_2 : I13
 >      : ^^^
 >x13_1 : I13

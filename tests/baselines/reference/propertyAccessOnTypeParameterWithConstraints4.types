@@ -100,7 +100,7 @@ var r2b = i.foo['notHere']();
 
 var a: {
 >a : <T extends Date>() => T
->  : ^ ^^^^^^^^^^^^^^^^^^^^ 
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 
     <T extends Date>(): T;
 }
@@ -114,7 +114,7 @@ var r3: string = a().notHere();
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^    ^^^^^^^^
 >notHere : any
 >        : ^^^
 
@@ -128,7 +128,7 @@ var r3b: string = a()['notHere']();
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^    ^^^^^^^^
 >'notHere' : "notHere"
 >          : ^^^^^^^^^
 
@@ -136,13 +136,13 @@ var b = {
 >b : any
 >  : ^^^
 >{    foo: <T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    },    bar: b.foo().notHere()} : { foo: <T extends Date>(x: T) => T; bar: any; }
->                                                                                                                                                            : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
+>                                                                                                                                                            : ^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 
     foo: <T extends Date>(x: T): T => {
 >foo : <T extends Date>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
->                                                                                                                      : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>                                                                                                                      : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 

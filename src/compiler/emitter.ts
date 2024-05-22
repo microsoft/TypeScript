@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AccessorDeclaration,
     ArrayBindingPattern,
@@ -420,8 +420,8 @@ import {
     writeCommentRange,
     writeFile,
     YieldExpression,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 const brackets = createBracketsMap();
 
@@ -718,6 +718,11 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 }
 
 /** @internal */
+export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined) {
+    return !!forceDtsEmit && !!emitOnly;
+}
+
+/** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
 export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -848,7 +853,11 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if ((emitOnly && !getEmitDeclarations(compilerOptions)) || compilerOptions.noCheck) {
+        if (
+            (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+            compilerOptions.noCheck ||
+            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit)
+        ) {
             // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
             // Do that here when emitting only dts files
             filesForEmit.forEach(collectLinkedAliases);
@@ -1114,7 +1123,6 @@ export const notImplementedResolver: EmitResolver = {
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
     isLiteralConstDeclaration: notImplemented,
-    isNonNarrowedBindableName: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
     isBindingCapturedByNode: notImplemented,
@@ -2125,13 +2133,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitComputedPropertyName(node: ComputedPropertyName) {
-        const savedPrivateNameTempFlags = privateNameTempFlags;
-        const savedReservedMemberNames = reservedPrivateNames;
-        popPrivateNameGenerationScope();
         writePunctuation("[");
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfComputedPropertyName);
         writePunctuation("]");
-        pushPrivateNameGenerationScope(savedPrivateNameTempFlags, savedReservedMemberNames);
     }
 
     //
@@ -2198,15 +2202,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitMethodSignature(node: MethodSignature) {
-        pushNameGenerationScope(node);
         emitModifierList(node, node.modifiers);
         emit(node.name);
         emit(node.questionToken);
-        emitTypeParameters(node, node.typeParameters);
-        emitParameters(node, node.parameters);
-        emitTypeAnnotation(node.type);
-        writeTrailingSemicolon();
-        popNameGenerationScope(node);
+        emitSignatureAndBody(node, emitSignatureHead, emitEmptyFunctionBody);
     }
 
     function emitMethodDeclaration(node: MethodDeclaration) {
@@ -2214,18 +2213,20 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emit(node.asteriskToken);
         emit(node.name);
         emit(node.questionToken);
-        emitSignatureAndBody(node, emitSignatureHead);
+        emitSignatureAndBody(node, emitSignatureHead, emitFunctionBody);
     }
 
     function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
         writeKeyword("static");
+        pushNameGenerationScope(node);
         emitBlockFunctionBody(node.body);
+        popNameGenerationScope(node);
     }
 
     function emitConstructor(node: ConstructorDeclaration) {
         emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("constructor");
-        emitSignatureAndBody(node, emitSignatureHead);
+        emitSignatureAndBody(node, emitSignatureHead, emitFunctionBody);
     }
 
     function emitAccessorDeclaration(node: AccessorDeclaration) {
@@ -2234,27 +2235,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitTokenWithComment(token, pos, writeKeyword, node);
         writeSpace();
         emit(node.name);
-        emitSignatureAndBody(node, emitSignatureHead);
+        emitSignatureAndBody(node, emitSignatureHead, emitFunctionBody);
     }
 
     function emitCallSignature(node: CallSignatureDeclaration) {
-        pushNameGenerationScope(node);
-        emitTypeParameters(node, node.typeParameters);
-        emitParameters(node, node.parameters);
-        emitTypeAnnotation(node.type);
-        writeTrailingSemicolon();
-        popNameGenerationScope(node);
+        emitSignatureAndBody(node, emitSignatureHead, emitEmptyFunctionBody);
     }
 
     function emitConstructSignature(node: ConstructSignatureDeclaration) {
-        pushNameGenerationScope(node);
         writeKeyword("new");
         writeSpace();
-        emitTypeParameters(node, node.typeParameters);
-        emitParameters(node, node.parameters);
-        emitTypeAnnotation(node.type);
-        writeTrailingSemicolon();
-        popNameGenerationScope(node);
+        emitSignatureAndBody(node, emitSignatureHead, emitEmptyFunctionBody);
     }
 
     function emitIndexSignature(node: IndexSignatureDeclaration) {
@@ -2297,14 +2288,19 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitFunctionType(node: FunctionTypeNode) {
-        pushNameGenerationScope(node);
+        emitSignatureAndBody(node, emitFunctionTypeHead, emitFunctionTypeBody);
+    }
+
+    function emitFunctionTypeHead(node: FunctionTypeNode | ConstructorTypeNode) {
         emitTypeParameters(node, node.typeParameters);
         emitParametersForArrow(node, node.parameters);
         writeSpace();
         writePunctuation("=>");
+    }
+
+    function emitFunctionTypeBody(node: FunctionTypeNode | ConstructorTypeNode) {
         writeSpace();
         emit(node.type);
-        popNameGenerationScope(node);
     }
 
     function emitJSDocFunctionType(node: JSDocFunctionType) {
@@ -2330,17 +2326,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitConstructorType(node: ConstructorTypeNode) {
-        pushNameGenerationScope(node);
         emitModifierList(node, node.modifiers);
         writeKeyword("new");
         writeSpace();
-        emitTypeParameters(node, node.typeParameters);
-        emitParameters(node, node.parameters);
-        writeSpace();
-        writePunctuation("=>");
-        writeSpace();
-        emit(node.type);
-        popNameGenerationScope(node);
+        emitSignatureAndBody(node, emitFunctionTypeHead, emitFunctionTypeBody);
     }
 
     function emitTypeQuery(node: TypeQueryNode) {
@@ -2351,16 +2340,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTypeLiteral(node: TypeLiteralNode) {
-        // Type literals don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
+        forEach(node.members, generateMemberNames);
 
         writePunctuation("{");
         const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
         emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
         writePunctuation("}");
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitArrayType(node: ArrayTypeNode) {
@@ -2569,9 +2557,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
-        // Object literals don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
         forEach(node.properties, generateMemberNames);
 
         const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
@@ -2587,7 +2573,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             decreaseIndent();
         }
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -2714,7 +2700,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitArrowFunction(node: ArrowFunction) {
         emitModifierList(node, node.modifiers);
-        emitSignatureAndBody(node, emitArrowFunctionHead);
+        emitSignatureAndBody(node, emitArrowFunctionHead, emitArrowFunctionBody);
     }
 
     function emitArrowFunctionHead(node: ArrowFunction) {
@@ -2723,6 +2709,16 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitTypeAnnotation(node.type);
         writeSpace();
         emit(node.equalsGreaterThanToken);
+    }
+
+    function emitArrowFunctionBody(node: ArrowFunction) {
+        if (isBlock(node.body)) {
+            emitBlockFunctionBody(node.body);
+        }
+        else {
+            writeSpace();
+            emitExpression(node.body, parenthesizer.parenthesizeConciseBodyOfArrowFunction);
+        }
     }
 
     function emitDeleteExpression(node: DeleteExpression) {
@@ -3305,40 +3301,38 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emit(node.asteriskToken);
         writeSpace();
         emitIdentifierName(node.name);
-        emitSignatureAndBody(node, emitSignatureHead);
+        emitSignatureAndBody(node, emitSignatureHead, emitFunctionBody);
     }
 
-    function emitSignatureAndBody<T extends FunctionLikeDeclaration>(node: T, emitSignatureHead: (node: T) => void) {
+    function emitSignatureAndBody<T extends SignatureDeclaration>(node: T, emitSignatureHead: (node: T) => void, emitBody: (node: T) => void) {
+        const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+        if (indentedFlag) {
+            increaseIndent();
+        }
+
+        pushNameGenerationScope(node);
+        forEach(node.parameters, generateNames);
+        emitSignatureHead(node);
+        emitBody(node);
+        popNameGenerationScope(node);
+
+        if (indentedFlag) {
+            decreaseIndent();
+        }
+    }
+
+    function emitFunctionBody<T extends Exclude<FunctionLikeDeclaration, ArrowFunction>>(node: T) {
         const body = node.body;
         if (body) {
-            if (isBlock(body)) {
-                const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
-                if (indentedFlag) {
-                    increaseIndent();
-                }
-
-                pushNameGenerationScope(node);
-                forEach(node.parameters, generateNames);
-                generateNames(node.body);
-
-                emitSignatureHead(node);
-                emitBlockFunctionBody(body);
-                popNameGenerationScope(node);
-
-                if (indentedFlag) {
-                    decreaseIndent();
-                }
-            }
-            else {
-                emitSignatureHead(node);
-                writeSpace();
-                emitExpression(body, parenthesizer.parenthesizeConciseBodyOfArrowFunction);
-            }
+            emitBlockFunctionBody(body);
         }
         else {
-            emitSignatureHead(node);
             writeTrailingSemicolon();
         }
+    }
+
+    function emitEmptyFunctionBody(_node: SignatureDeclaration) {
+        writeTrailingSemicolon();
     }
 
     function emitSignatureHead(node: SignatureDeclaration) {
@@ -3388,6 +3382,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitBlockFunctionBody(body: Block) {
+        generateNames(body);
         onBeforeEmitNode?.(body);
         writeSpace();
         writePunctuation("{");
@@ -3428,10 +3423,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
-
-        forEach(node.members, generateMemberNames);
-
         emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         emitTokenWithComment(SyntaxKind.ClassKeyword, moveRangePastModifiers(node).pos, writeKeyword, node);
         if (node.name) {
@@ -3446,24 +3437,22 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         emitTypeParameters(node, node.typeParameters);
         emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
-
         writeSpace();
         writePunctuation("{");
+
+        pushNameGenerationScope(node);
+        forEach(node.members, generateMemberNames);
         emitList(node, node.members, ListFormat.ClassMembers);
+        popNameGenerationScope(node);
+
         writePunctuation("}");
 
         if (indentedFlag) {
             decreaseIndent();
         }
-
-        popPrivateNameGenerationScope();
     }
 
     function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-        // Interfaces don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
-
         emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("interface");
         writeSpace();
@@ -3472,10 +3461,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
         writeSpace();
         writePunctuation("{");
-        emitList(node, node.members, ListFormat.InterfaceMembers);
-        writePunctuation("}");
 
-        popPrivateNameGenerationScope();
+        pushNameGenerationScope(node);
+        forEach(node.members, generateMemberNames);
+        emitList(node, node.members, ListFormat.InterfaceMembers);
+        popNameGenerationScope(node);
+
+        writePunctuation("}");
     }
 
     function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
@@ -4488,7 +4480,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitList(parentNode, parameters, ListFormat.Parameters);
     }
 
-    function canEmitSimpleArrowHead(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
+    function canEmitSimpleArrowHead(parentNode: FunctionTypeNode | ConstructorTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
         const parameter = singleOrUndefined(parameters);
         return parameter
             && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
@@ -4504,7 +4496,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             && isIdentifier(parameter.name); // parameter name must be identifier
     }
 
-    function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
+    function emitParametersForArrow(parentNode: FunctionTypeNode | ConstructorTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
         if (canEmitSimpleArrowHead(parentNode, parameters)) {
             emitList(parentNode, parameters, ListFormat.Parameters & ~ListFormat.Parenthesis);
         }
@@ -5172,9 +5164,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Push a new name generation scope.
      */
     function pushNameGenerationScope(node: Node | undefined) {
+        privateNameTempFlagsStack.push(privateNameTempFlags);
+        privateNameTempFlags = TempFlags.Auto;
+        reservedPrivateNamesStack.push(reservedPrivateNames);
+
         if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
             return;
         }
+
         tempFlagsStack.push(tempFlags);
         tempFlags = TempFlags.Auto;
         formattedNameTempFlagsStack.push(formattedNameTempFlags);
@@ -5186,9 +5183,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Pop the current name generation scope.
      */
     function popNameGenerationScope(node: Node | undefined) {
+        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
+        reservedPrivateNames = reservedPrivateNamesStack.pop();
+
         if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
             return;
         }
+
         tempFlags = tempFlagsStack.pop()!;
         formattedNameTempFlags = formattedNameTempFlagsStack.pop();
         reservedNames = reservedNamesStack.pop();
@@ -5199,24 +5200,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             reservedNames = new Set();
         }
         reservedNames.add(name);
-    }
-
-    /**
-     * Push a new member name generation scope.
-     */
-    function pushPrivateNameGenerationScope(newPrivateNameTempFlags: TempFlags, newReservedMemberNames: Set<string> | undefined) {
-        privateNameTempFlagsStack.push(privateNameTempFlags);
-        privateNameTempFlags = newPrivateNameTempFlags;
-        reservedPrivateNamesStack.push(reservedNames);
-        reservedPrivateNames = newReservedMemberNames;
-    }
-
-    /**
-     * Pop the current member name generation scope.
-     */
-    function popPrivateNameGenerationScope() {
-        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
-        reservedPrivateNames = reservedPrivateNamesStack.pop();
     }
 
     function reservePrivateNameInNestedScopes(name: string) {
@@ -5318,7 +5301,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 generateNameIfNeeded((node as NamedDeclaration).name);
@@ -5372,7 +5357,30 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function isReservedName(name: string, privateName: boolean): boolean {
-        return privateName ? !!reservedPrivateNames?.has(name) : !!reservedNames?.has(name);
+        let set: Set<string> | undefined;
+        let stack: (Set<string> | undefined)[];
+        if (privateName) {
+            set = reservedPrivateNames;
+            stack = reservedPrivateNamesStack;
+        }
+        else {
+            set = reservedNames;
+            stack = reservedNamesStack;
+        }
+
+        if (set?.has(name)) {
+            return true;
+        }
+        for (let i = stack.length - 1; i >= 0; i--) {
+            if (set === stack[i]) {
+                continue;
+            }
+            set = stack[i];
+            if (set?.has(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

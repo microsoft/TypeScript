@@ -455,11 +455,11 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --dry
-[[90m12:00:42 AM[0m] Project '/user/username/projects/sample1/core/tsconfig.json' is up to date
+[[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/core/tsconfig.json' is up to date
 
-[[90m12:00:43 AM[0m] Project '/user/username/projects/sample1/logic/tsconfig.json' is up to date
+[[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/logic/tsconfig.json' is up to date
 
-[[90m12:00:44 AM[0m] Project '/user/username/projects/sample1/tests/tsconfig.json' is up to date
+[[90mHH:MM:SS AM[0m] Project '/user/username/projects/sample1/tests/tsconfig.json' is up to date
 
 exitCode:: ExitStatus.Success
 

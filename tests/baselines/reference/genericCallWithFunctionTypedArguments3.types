@@ -42,8 +42,8 @@ var r = foo4(a); // T is {} (candidates boolean and string), U is any (candidate
 >  : ^^^ ^^       ^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 var b: {
->b : { <T>(x: boolean): T; <T_1>(x: T_1): any; }
->  : ^^^ ^^ ^^       ^^^ ^^^   ^^ ^^   ^^^   ^^^
+>b : { <T>(x: boolean): T; <T>(x: T): any; }
+>  : ^^^ ^^ ^^       ^^^ ^^^ ^^ ^^ ^^^   ^^^
 
     <T>(x: boolean): T;
 >x : boolean
@@ -59,6 +59,6 @@ var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates a
 >foo4(b) : any
 >foo4 : <T, U>(cb: (x: T) => U) => U
 >     : ^ ^^ ^^  ^^           ^^^^^^
->b : { <T>(x: boolean): T; <T_1>(x: T_1): any; }
->  : ^^^^^^ ^^       ^^^^^^^   ^^ ^^   ^^^^^^^^^
+>b : { <T>(x: boolean): T; <T>(x: T): any; }
+>  : ^^^^^^ ^^       ^^^^^^^ ^^ ^^ ^^^^^^^^^
 

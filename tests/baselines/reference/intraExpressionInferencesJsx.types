@@ -94,9 +94,9 @@ type AnimatedViewProps<T extends Animations> = {
 
 const Component = <T extends Animations>({
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 ><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->                                                                               : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
+>                                                                               : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations,
 >animations : T
@@ -114,7 +114,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                    : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; }; }
@@ -166,7 +166,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                                                                                      : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
@@ -234,7 +234,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                                                                                           : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^          ^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }

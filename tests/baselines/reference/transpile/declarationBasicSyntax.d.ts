@@ -77,9 +77,10 @@ export {};
 
 //// [Diagnostics reported]
 class.ts(1,7): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+class.ts(11,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 
 
-==== class.ts (1 errors) ====
+==== class.ts (2 errors) ====
     const i = Symbol();
           ~
 !!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
@@ -94,6 +95,8 @@ class.ts(1,7): error TS9010: Variable must have an explicit type annotation with
         private g: string;
         ["h"]: string;
         [i]: string;
+        ~~~
+!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
     }
     
     export abstract class Baz {

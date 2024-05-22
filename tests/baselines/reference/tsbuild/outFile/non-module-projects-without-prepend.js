@@ -132,22 +132,22 @@ c.doSomething();
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:24 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:26 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:42 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:43 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:55 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:56 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

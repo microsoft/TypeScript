@@ -295,7 +295,7 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1
@@ -1289,7 +1289,7 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
         : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
         : "linkplain";
     const name = link.name ? entityNameToString(link.name) : "";
-    const space = link.name && link.text.startsWith("://") ? "" : " ";
+    const space = link.name && (link.text === "" || link.text.startsWith("://")) ? "" : " ";
     return `{@${kind} ${name}${space}${link.text}}`;
 }
 
@@ -2356,7 +2356,8 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableDeclaration
         || kind === SyntaxKind.JSDocTypedefTag
         || kind === SyntaxKind.JSDocCallbackTag
-        || kind === SyntaxKind.JSDocPropertyTag;
+        || kind === SyntaxKind.JSDocPropertyTag
+        || kind === SyntaxKind.NamedTupleMember;
 }
 
 function isDeclarationStatementKind(kind: SyntaxKind) {

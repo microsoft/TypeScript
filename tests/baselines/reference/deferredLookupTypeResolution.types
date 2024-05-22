@@ -38,7 +38,7 @@ type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
 
 declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
 >f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
->   : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^                      
+>   : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^                      
 >a : A
 >  : ^
 >b : B
@@ -46,7 +46,7 @@ declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A |
 
 function f2<A extends string>(a: A) {
 >f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
 >  : ^
 
@@ -54,7 +54,7 @@ function f2<A extends string>(a: A) {
 >f1(a, 'x') : { [P in A | "x"]: any; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : <A_1 extends string, B extends string>(a: A_1, b: B) => { [P in A_1 | B]: any; }
->   : ^   ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
 >  : ^
 >'x' : "x"
@@ -71,7 +71,7 @@ function f3(x: 'a' | 'b') {
 >f2(x) : { a: any; b: any; x: any; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 }

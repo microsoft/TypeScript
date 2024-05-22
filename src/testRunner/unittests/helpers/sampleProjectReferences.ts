@@ -1,15 +1,15 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
     getProjectConfigWithNodeNext,
-} from "./contents";
-import { loadProjectFromFiles } from "./vfs";
+} from "./contents.js";
+import { loadProjectFromFiles } from "./vfs.js";
 import {
     createServerHost,
     createWatchedSystem,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({

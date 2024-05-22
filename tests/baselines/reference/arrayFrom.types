@@ -63,12 +63,12 @@ const result1: A[] = Array.from(inputA);
 >        : ^^^
 >Array.from(inputA) : A[]
 >                   : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputA : A[]
 >       : ^^^
 
@@ -77,12 +77,12 @@ const result2: A[] = Array.from(inputA.values());
 >        : ^^^
 >Array.from(inputA.values()) : A[]
 >                            : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputA.values() : IterableIterator<A>
 >                : ^^^^^^^^^^^^^^^^^^^
 >inputA.values : () => IterableIterator<A>
@@ -97,12 +97,12 @@ const result3: B[] = Array.from(inputA.values()); // expect error
 >        : ^^^
 >Array.from(inputA.values()) : A[]
 >                            : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputA.values() : IterableIterator<A>
 >                : ^^^^^^^^^^^^^^^^^^^
 >inputA.values : () => IterableIterator<A>
@@ -117,12 +117,12 @@ const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
 >        : ^^^
 >Array.from(inputB, ({ b }): A => ({ a: b })) : A[]
 >                                             : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputB : B[]
 >       : ^^^
 >({ b }): A => ({ a: b }) : ({ b }: B) => A
@@ -143,12 +143,12 @@ const result5: A[] = Array.from(inputALike);
 >        : ^^^
 >Array.from(inputALike) : A[]
 >                       : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputALike : ArrayLike<A>
 >           : ^^^^^^^^^^^^
 
@@ -157,12 +157,12 @@ const result6: B[] = Array.from(inputALike); // expect error
 >        : ^^^
 >Array.from(inputALike) : A[]
 >                       : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputALike : ArrayLike<A>
 >           : ^^^^^^^^^^^^
 
@@ -171,12 +171,12 @@ const result7: B[] = Array.from(inputALike, ({ a }): B => ({ b: a }));
 >        : ^^^
 >Array.from(inputALike, ({ a }): B => ({ b: a })) : B[]
 >                                                 : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputALike : ArrayLike<A>
 >           : ^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
@@ -197,12 +197,12 @@ const result8: A[] = Array.from(inputARand);
 >        : ^^^
 >Array.from(inputARand) : A[]
 >                       : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputARand : ArrayLike<A> | Iterable<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -211,12 +211,12 @@ const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >        : ^^^
 >Array.from(inputARand, ({ a }): B => ({ b: a })) : B[]
 >                                                 : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputARand : ArrayLike<A> | Iterable<A>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
@@ -237,12 +237,12 @@ const result10: A[] = Array.from(new Set<A>());
 >         : ^^^
 >Array.from(new Set<A>()) : A[]
 >                         : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >new Set<A>() : Set<A>
 >             : ^^^^^^
 >Set : SetConstructor
@@ -253,12 +253,12 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 >         : ^^^
 >Array.from(inputASet, ({ a }): B => ({ b: a })) : B[]
 >                                                : ^^^
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
 >inputASet : Set<A>
 >          : ^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B

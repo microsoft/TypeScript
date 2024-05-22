@@ -55,7 +55,7 @@ function f1<T>(x: T, y: NonNullable<T>) {
 
 function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
 >f2 : <T extends string | undefined>(x: T, y: NonNullable<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>   : ^ ^^^^^^^^^                  ^^ ^^ ^^ ^^              ^^^^^^^^^
 >x : T
 >  : ^
 >y : NonNullable<T>
@@ -117,7 +117,7 @@ function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
 
 function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
 >f4 : <T extends { x: string | undefined; }>(x: T["x"], y: NonNullable<T["x"]>) => void
->   : ^ ^^^^^^^^^^^^^^                  ^^^^^ ^^      ^^ ^^                   ^^^^^^^^^
+>   : ^ ^^^^^^^^^                          ^^ ^^      ^^ ^^                   ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >x : T["x"]
@@ -212,7 +212,7 @@ type T15 = Extract<Options, { q: "a" }>;  // never
 
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^                     
+>   : ^ ^^^^^^^^^       ^^ ^^^^^^^^^      ^^ ^^ ^^^^^                     
 >p : K
 >  : ^
 >k : K
@@ -224,7 +224,7 @@ let x0 = f5("a");  // { k: "a", a: number }
 >f5("a") : { k: "a"; a: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
->   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^       ^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
@@ -619,8 +619,8 @@ type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T exte
 >      : ^^^^^
 
 function zeroOf<T extends number | string | boolean>(value: T) {
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^         
+>zeroOf : <T extends number | string | boolean>(value: T) => ZeroOf<T>
+>       : ^ ^^^^^^^^^                         ^^     ^^ ^^^^^         
 >value : T
 >      : ^
 
@@ -659,7 +659,7 @@ function zeroOf<T extends number | string | boolean>(value: T) {
 
 function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T) {
 >f20 : <T extends string>(n: number, b: boolean, x: number | boolean, y: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^       ^^ ^^                ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^      ^^ ^^       ^^ ^^                ^^ ^^ ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >b : boolean
@@ -672,63 +672,63 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
     zeroOf(5);  // 0
 >zeroOf(5) : 0
 >          : ^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >5 : 5
 >  : ^
 
     zeroOf("hello");  // ""
 >zeroOf("hello") : ""
 >                : ^^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >"hello" : "hello"
 >        : ^^^^^^^
 
     zeroOf(true);  // false
 >zeroOf(true) : false
 >             : ^^^^^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >true : true
 >     : ^^^^
 
     zeroOf(n);  // 0
 >zeroOf(n) : 0
 >          : ^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >n : number
 >  : ^^^^^^
 
     zeroOf(b);  // False
 >zeroOf(b) : false
 >          : ^^^^^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >b : boolean
 >  : ^^^^^^^
 
     zeroOf(x);  // 0 | false
 >zeroOf(x) : false | 0
 >          : ^^^^^^^^^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 
     zeroOf(y);  // ZeroOf<T>
 >zeroOf(y) : ZeroOf<T>
 >          : ^^^^^^^^^
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
+>       : ^   ^^^^^^^^^                         ^^     ^^   ^^^^^           
 >y : T
 >  : ^
 }
 
 function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
->f21 : <T extends string | number>(x: T, y: ZeroOf<T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^         ^^^^^^^^^
+>f21 : <T extends number | string>(x: T, y: ZeroOf<T>) => void
+>    : ^ ^^^^^^^^^               ^^ ^^ ^^ ^^         ^^^^^^^^^
 >x : T
 >  : ^
 >y : ZeroOf<T>
@@ -1048,7 +1048,7 @@ function f22<T>(x: T extends (infer U)[] ? U[] : never) {
 
 function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
 >f23 : <T extends string[]>(x: T extends (infer U)[] ? U[] : never) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^                                   ^^^^^^^^^
 >x : T extends (infer U)[] ? U[] : never
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,9 +1,9 @@
-import * as compiler from "./_namespaces/compiler";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as compiler from "./_namespaces/compiler.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
 const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");

@@ -258,8 +258,8 @@ type StepState<T = Record<string, unknown>> = T & {
 };
 
 function canPickStepContinue<T extends QuickPickStep>(
->canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
+>canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
+>                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
 
   _step: T,
 >_step : T
@@ -281,7 +281,7 @@ function canPickStepContinue<T extends QuickPickStep>(
 
 function createPickStep<T extends QuickPickItem>(
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^                
+>               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^                
 
   step: QuickPickStep<T>
 >step : QuickPickStep<T>
@@ -294,8 +294,8 @@ function createPickStep<T extends QuickPickItem>(
 }
 
 function* showStep<
->showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^   ^^^^^     ^^     ^^        ^^       ^^^^^                                  
+>showStep : <State extends PartialStepState & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
+>         : ^     ^^^^^^^^^                                 ^^       ^^^^^^^^^                                             ^^     ^^     ^^        ^^       ^^^^^                                  
 
   State extends PartialStepState & { repo: any },
 >repo : any
@@ -319,7 +319,7 @@ function* showStep<
 >createPickStep<QuickPickItem>({    title: "",    placeholder: "",  }) : QuickPickStep<QuickPickItem>
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^^^^^^^^^^^^^^^^^
 >{    title: "",    placeholder: "",  } : { title: string; placeholder: string; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -350,8 +350,8 @@ function* showStep<
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >canPickStepContinue(step, state, selection) : boolean
 >                                            : ^^^^^^^
->canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
+>                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >step : QuickPickStep<QuickPickItem>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State

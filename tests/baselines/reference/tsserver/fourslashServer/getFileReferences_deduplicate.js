@@ -106,6 +106,17 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.build.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -154,6 +165,41 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/tsconfig.build.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/tsconfig.build.json",
+        "diagnostics": [
+          {
+            "text": "File '/index.ts' is not under 'rootDir' '/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Part of 'files' list in tsconfig.json",
+            "code": 6059,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "offset": 97
+                  },
+                  "end": {
+                    "line": 1,
+                    "offset": 107
+                  },
+                  "file": "/tsconfig.build.json"
+                },
+                "message": "File is matched by 'files' list specified here.",
+                "category": "message",
+                "code": 1410
+              }
+            ]
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.test.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -200,52 +246,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/tsconfig.test.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.build.json",
-        "diagnostics": [
-          {
-            "text": "File '/index.ts' is not under 'rootDir' '/src'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Part of 'files' list in tsconfig.json",
-            "code": 6059,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 1,
-                    "offset": 97
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 107
-                  },
-                  "file": "/tsconfig.build.json"
-                },
-                "message": "File is matched by 'files' list specified here.",
-                "category": "message",
-                "code": 1410
-              }
-            ]
-          }
-        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:

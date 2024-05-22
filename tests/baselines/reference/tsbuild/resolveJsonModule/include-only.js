@@ -46,12 +46,12 @@ export default hello.hello
 
 Output::
 /lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/src/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6307: [0mFile '/src/src/hello.json' is not listed within the file list of project '/src/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 

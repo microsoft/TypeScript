@@ -4,6 +4,7 @@
 /// <reference types="JqUeRy" />
 $.x;
 >$.x : any
+>    : ^^^
 >$ : { x: any; }
 >  : ^^^^^^^^^^^
 >x : any
@@ -14,4 +15,5 @@ declare var $: { x: any };
 >$ : { x: any; }
 >  : ^^^^^   ^^^
 >x : any
+>  : ^^^
 

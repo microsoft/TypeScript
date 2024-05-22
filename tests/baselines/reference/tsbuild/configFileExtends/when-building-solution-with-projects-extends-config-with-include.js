@@ -79,21 +79,21 @@ export const b: Unrestricted = 1;
 
 Output::
 /lib/tsc --b /src/tsconfig.json --v --listFiles
-[[90m12:00:16 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/shared/tsconfig.json
     * src/webpack/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:17 AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/target-tsc-build/shared/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/target-tsc-build/shared/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:18 AM[0m] Building project '/src/shared/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/shared/tsconfig.json'...
 
 /lib/lib.d.ts
 /src/shared/index.ts
 /src/shared/typings-base/globals.d.ts
-[[90m12:00:26 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 /lib/lib.d.ts
 /src/webpack/index.ts

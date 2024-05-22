@@ -49,7 +49,7 @@ declare const ab: Action;
 
 declare function f<T extends { type: string | symbol }>(action: T, blah: { [K in T['type']]: (p: K) => void }): any;
 >f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
->  : ^ ^^^^^^^^^^^^^^^^^               ^^^^^      ^^ ^^    ^^                                     ^^^^^   
+>  : ^ ^^^^^^^^^                          ^^      ^^ ^^    ^^                                     ^^^^^   
 >type : string | symbol
 >     : ^^^^^^^^^^^^^^^
 >action : T
@@ -62,7 +62,7 @@ declare function f<T extends { type: string | symbol }>(action: T, blah: { [K in
 f(ab, {
 >f(ab, {    [A]: ap => { ap.description },    [B]: bp => { bp.description },}) : any
 >f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^    ^^                                     ^^^^^^^^
+>  : ^ ^^^^^^^^^                          ^^      ^^ ^^    ^^                                     ^^^^^^^^
 >ab : Action
 >   : ^^^^^^
 >{    [A]: ap => { ap.description },    [B]: bp => { bp.description },} : { [A]: (ap: unique symbol) => void; [B]: (bp: unique symbol) => void; }

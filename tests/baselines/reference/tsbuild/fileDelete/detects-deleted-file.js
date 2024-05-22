@@ -57,13 +57,13 @@ export function main() {
 
 Output::
 /lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
-[[90m12:00:13 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
 
-[[90m12:00:14 AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/child/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/child/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:15 AM[0m] Building project '/src/child/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
 File '/src/child/package.json' does not exist.
 File '/src/package.json' does not exist.
@@ -85,9 +85,9 @@ src/child/child2.ts
   Matched by default include pattern '**/*'
 src/child/child.ts
   Matched by default include pattern '**/*'
-[[90m12:00:23 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/main/tsconfig.json'...
 
 File '/src/main/package.json' does not exist.
 File '/src/package.json' does not exist according to earlier cached lookups.
@@ -314,13 +314,13 @@ Input::
 
 Output::
 /lib/tsc --b /src/main/tsconfig.json -v --traceResolution --explainFiles
-[[90m12:00:33 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
     * src/main/tsconfig.json
 
-[[90m12:00:34 AM[0m] Project 'src/child/tsconfig.json' is out of date because buildinfo file 'src/child/tsconfig.tsbuildinfo' indicates that file 'src/child/child2.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because buildinfo file 'src/child/tsconfig.tsbuildinfo' indicates that file 'src/child/child2.ts' was root file of compilation but not any more.
 
-[[90m12:00:35 AM[0m] Building project '/src/child/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
 File '/src/child/package.json' does not exist.
 File '/src/package.json' does not exist.
@@ -348,9 +348,9 @@ lib/lib.d.ts
   Default library for target 'es5'
 src/child/child.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
 
-[[90m12:00:40 AM[0m] Skipping build of project '/src/main/tsconfig.json' because its dependency '/src/child' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/src/main/tsconfig.json' because its dependency '/src/child' has errors
 
 
 Found 1 error.

@@ -61,7 +61,7 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum UsingKind {
     None,

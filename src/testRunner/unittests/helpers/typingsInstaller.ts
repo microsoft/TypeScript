@@ -1,15 +1,15 @@
 import {
     LoggerWithInMemoryLogs,
     nowString,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { stringifyIndented } from "../../_namespaces/ts.server";
-import { jsonToReadableText } from "../helpers";
-import { TestSession } from "./tsserver";
+} from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { stringifyIndented } from "../../_namespaces/ts.server.js";
+import { jsonToReadableText } from "../helpers.js";
+import { TestSession } from "./tsserver.js";
 import {
     File,
     TestServerHost,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export const customTypesMap = {
     path: "/typesMap.json" as ts.Path,

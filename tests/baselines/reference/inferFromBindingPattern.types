@@ -3,15 +3,15 @@
 === inferFromBindingPattern.ts ===
 declare function f1<T extends string>(): T;
 >f1 : <T extends string>() => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^ 
+>   : ^ ^^^^^^^^^      ^^^^^^^ 
 
 declare function f2<T extends string>(): [T];
 >f2 : <T extends string>() => [T]
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^   
+>   : ^ ^^^^^^^^^      ^^^^^^^   
 
 declare function f3<T extends string>(): { x: T };
 >f3 : <T extends string>() => { x: T; }
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^         
+>   : ^ ^^^^^^^^^      ^^^^^^^         
 >x : T
 >  : ^
 
@@ -21,7 +21,7 @@ let x1 = f1();         // string
 >f1() : string
 >     : ^^^^^^
 >f1 : <T extends string>() => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^
 
 let [x2] = f2();       // string
 >x2 : string
@@ -29,7 +29,7 @@ let [x2] = f2();       // string
 >f2() : [string]
 >     : ^^^^^^^^
 >f2 : <T extends string>() => [T]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^^^
 
 let { x: x3 } = f3();  // string
 >x : any
@@ -39,7 +39,7 @@ let { x: x3 } = f3();  // string
 >f3() : { x: string; }
 >     : ^^^^^^^^^^^^^^
 >f3 : <T extends string>() => { x: T; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
 
 // Repro from #30379
 

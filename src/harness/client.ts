@@ -48,6 +48,8 @@ import {
     notImplemented,
     OrganizeImportsArgs,
     OutliningSpan,
+    PasteEdits,
+    PasteEditsArgs,
     PatternMatchKind,
     Program,
     QuickInfo,
@@ -74,8 +76,8 @@ import {
     TodoComment,
     TodoCommentDescriptor,
     UserPreferences,
-} from "./_namespaces/ts";
-import { protocol } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
@@ -1008,6 +1010,26 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    getPasteEdits(
+        { targetFile, pastedText, pasteLocations, copiedFrom }: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        this.setFormattingOptions(formatOptions);
+        const args: protocol.GetPasteEditsRequestArgs = {
+            file: targetFile,
+            pastedText,
+            pasteLocations: pasteLocations.map(range => ({ start: this.positionToOneBasedLineOffset(targetFile, range.pos), end: this.positionToOneBasedLineOffset(targetFile, range.end) })),
+            copiedFrom: copiedFrom ? { file: copiedFrom.file, spans: copiedFrom.range.map(range => ({ start: this.positionToOneBasedLineOffset(copiedFrom.file, range.pos), end: this.positionToOneBasedLineOffset(copiedFrom.file, range.end) })) } : undefined,
+        };
+        const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
+        const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
+        if (!response.body) {
+            return { edits: [] };
+        }
+        const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
+        return { edits, fixId: response.body.fixId };
     }
 
     getProgram(): Program {

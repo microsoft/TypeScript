@@ -32,8 +32,8 @@ function from<T>(enumerator: Enumerator<T>): Query<T>;
 >           : ^^^^^^^^^^^^^
 
 function from(arg: any): any {
->from : { <T>(array: T[]): Query<T>; <T_1>(enumerator: Enumerator<T_1>): Query<T_1>; }
->     : ^^^ ^^     ^^   ^^^^^^^^^^^^^^   ^^          ^^               ^^^^^^^^^^^^^^^^
+>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>     : ^^^ ^^     ^^   ^^^^^^^^^^^^^^ ^^          ^^             ^^^^^^^^^^^^^^
 >arg : any
 
     return undefined;

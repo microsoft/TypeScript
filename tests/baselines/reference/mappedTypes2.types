@@ -3,7 +3,7 @@
 === mappedTypes2.ts ===
 function verifyLibTypes<T, K extends keyof T, U>() {
 >verifyLibTypes : <T, K extends keyof T, U>() => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^^^^
 
     var x1: Partial<T>;
 >x1 : Partial<T>
@@ -83,7 +83,7 @@ declare function freeze<T>(obj: T): Readonly<T>;
 
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 >pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
->     : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^    ^^   ^^^^^          
+>     : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^^^^    ^^   ^^^^^          
 >obj : T
 >    : ^
 >keys : K[]
@@ -91,7 +91,7 @@ declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 
 declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
 >mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
->          : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^   ^^            ^^ ^^           ^^^^^            
+>          : ^ ^^^^^^^^^      ^^ ^^ ^^   ^^            ^^ ^^           ^^^^^            
 >obj : Record<K, T>
 >    : ^^^^^^^^^^^^
 >f : (x: T) => U
@@ -268,7 +268,7 @@ function f3(shape: Shape) {
 >pick(shape, "name", "location") : Pick<Shape, "name" | "location">
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
->     : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^    ^^   ^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^^^^    ^^   ^^^^^^^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"name" : "name"
@@ -305,7 +305,7 @@ function f4() {
 >mapObject(rec, s => s.length) : Record<"foo" | "bar" | "baz", number>
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
->          : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^   ^^            ^^ ^^           ^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^      ^^ ^^ ^^   ^^            ^^ ^^           ^^^^^^^^^^^^^^^^^
 >rec : { foo: string; bar: string; baz: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s => s.length : (s: string) => number

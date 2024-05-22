@@ -1,9 +1,9 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     createPrinter,
     createTextWriter,
     memoize,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TypeWriterTypeResult {
     line: number;

@@ -73,22 +73,22 @@ console.log(foo);
 
 Output::
 /lib/tsc --b src/tsconfig.json --verbose --explainFiles
-[[90m12:00:13 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:14 AM[0m] Project 'src/strings/tsconfig.json' is out of date because output file 'src/strings/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/strings/tsconfig.json' is out of date because output file 'src/strings/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:15 AM[0m] Building project '/src/strings/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/strings/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/strings/foo.json
   Matched by include pattern 'foo.json' in 'src/strings/tsconfig.json'
-[[90m12:00:19 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/main/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/main/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -242,14 +242,14 @@ Input::
 
 Output::
 /lib/tsc --b src/tsconfig.json --verbose --explainFiles
-[[90m12:00:26 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than output 'src/strings/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than output 'src/strings/tsconfig.tsbuildinfo'
 
-[[90m12:00:28 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than output 'src/main/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than output 'src/main/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

@@ -26,7 +26,6 @@ import {
     isBlock,
     isConstTypeReference,
     isDeclarationReadonly,
-    isEntityNameExpression,
     isGetAccessor,
     isIdentifier,
     isJSDocTypeAssertion,
@@ -55,7 +54,6 @@ import {
     PropertySignature,
     SetAccessorDeclaration,
     SignatureDeclaration,
-    SymbolAccessibility,
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
@@ -64,7 +62,7 @@ import {
     TypeParameterDeclaration,
     UnionTypeNode,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolver: SyntacticTypeNodeBuilderResolver) {
@@ -351,7 +349,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             }
             else if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
                 const expression = prop.name.expression;
-                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false) && !isEntityNameExpression(expression)) {
+                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
                     context.tracker.reportInferenceFallback(prop.name);
                     result = false;
                 }
@@ -367,17 +365,6 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             Debug.assert(!isShorthandPropertyAssignment(prop) && !isSpreadAssignment(prop));
 
             const name = prop.name;
-            if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (!resolver.isNonNarrowedBindableName(prop.name)) {
-                    context.tracker.reportInferenceFallback(prop.name);
-                }
-                else if (isEntityNameExpression(prop.name.expression)) {
-                    const visibilityResult = resolver.isEntityNameVisible(prop.name.expression, context.enclosingDeclaration!, /*shouldComputeAliasToMakeVisible*/ false);
-                    if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
-                        context.tracker.reportInferenceFallback(prop.name);
-                    }
-                }
-            }
             switch (prop.kind) {
                 case SyntaxKind.MethodDeclaration:
                     canInferObjectLiteral = !!typeFromObjectLiteralMethod(prop, name, context) && canInferObjectLiteral;

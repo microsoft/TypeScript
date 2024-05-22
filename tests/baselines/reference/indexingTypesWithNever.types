@@ -56,7 +56,7 @@ const result3 = genericFn1({ c: "ctest", d: "dtest" });
 
 declare function genericFn2<T extends { [ind: string]: string }>(
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^        
+>           : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^        
 >ind : string
 >    : ^^^^^^
 
@@ -73,7 +73,7 @@ const result4 = genericFn2({ e: "etest", f: "ftest" });
 >genericFn2({ e: "etest", f: "ftest" }) : never
 >                                       : ^^^^^
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^^^^^^^^^
 >{ e: "etest", f: "ftest" } : { e: string; f: string; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : string
@@ -87,7 +87,7 @@ const result4 = genericFn2({ e: "etest", f: "ftest" });
 
 declare function genericFn3<
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^ ^^ ^^ ^^^^^        
+>           : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^   ^^ ^^ ^^ ^^ ^^ ^^^^^        
 
   T extends { [K in keyof T]: T[K] },
   U extends keyof T,
@@ -107,7 +107,7 @@ const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' w
 >genericFn3({ g: "gtest", h: "htest" }, "g", "h") : never
 >                                                 : ^^^^^
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^       ^^ ^^^^^^^^^       ^^   ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^
 >{ g: "gtest", h: "htest" } : { g: string; h: string; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : string

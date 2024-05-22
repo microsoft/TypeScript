@@ -1,19 +1,19 @@
-import { incrementalVerifier } from "../../../harness/incrementalUtils";
-import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger.js";
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import { FileRangesRequestArgs } from "../../../server/protocol";
-import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "./solutionBuilder";
+} from "../../../harness/tsserverLogger.js";
+import { FileRangesRequestArgs } from "../../../server/protocol.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { ensureErrorFreeBuild } from "./solutionBuilder.js";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
     TestTypingsInstallerOptions,
-} from "./typingsInstaller";
+} from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -21,10 +21,9 @@ import {
     FileOrFolderOrSymLink,
     libFile,
     SerializeOutputOrder,
-    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
@@ -57,20 +56,10 @@ export function patchHostTimeouts(
         return host;
     }
 
-    const originalSetTime = host.setTime;
-
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
-    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.setTime = setTime;
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
-
-    function setTime(time: number) {
-        logger.log(`Host is moving to new time`);
-        return originalSetTime.call(host, time);
-    }
 
     function baselineHost(title: string) {
         logger.log(title);

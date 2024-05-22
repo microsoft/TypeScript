@@ -18,8 +18,8 @@ import {
     Symbol,
     SymbolFlags,
     TypeChecker,
-} from "../_namespaces/ts";
-import { addImportsForMovedSymbols } from "./moveToFile";
+} from "../_namespaces/ts.js";
+import { addImportsForMovedSymbols } from "./moveToFile.js";
 /**
  * Returned by refactor functions when some error message needs to be surfaced to users.
  *

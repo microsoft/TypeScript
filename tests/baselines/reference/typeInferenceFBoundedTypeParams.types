@@ -44,7 +44,7 @@ function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r
 
 function append<a, b extends a>(values: a[], value: b): a[] {
 >append : <a, b extends a>(values: a[], value: b) => a[]
->       : ^ ^^ ^^^^^^^^^^^^      ^^   ^^     ^^ ^^^^^   
+>       : ^ ^^ ^^^^^^^^^ ^^      ^^   ^^     ^^ ^^^^^   
 >values : a[]
 >       : ^^^
 >value : b
@@ -99,7 +99,7 @@ fold(
 >append(        result,        ["", ""]    ) : [string, string][]
 >                                            : ^^^^^^^^^^^^^^^^^^
 >append : <a, b extends a>(values: a[], value: b) => a[]
->       : ^ ^^ ^^^^^^^^^^^^      ^^   ^^     ^^ ^^^^^^^^
+>       : ^ ^^ ^^^^^^^^^ ^^      ^^   ^^     ^^ ^^^^^^^^
 
         result,
 >result : [string, string][]

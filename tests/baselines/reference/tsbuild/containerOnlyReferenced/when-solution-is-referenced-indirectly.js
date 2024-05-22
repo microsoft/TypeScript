@@ -71,31 +71,31 @@ export const d = 10;
 
 Output::
 /lib/tsc --b /src/project4 --verbose --explainFiles
-[[90m12:00:20 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
     * src/project3/tsconfig.json
     * src/project4/tsconfig.json
 
-[[90m12:00:21 AM[0m] Project 'src/project2/tsconfig.json' is out of date because output file 'src/project2/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/tsconfig.json' is out of date because output file 'src/project2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:22 AM[0m] Building project '/src/project2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project2/src/b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:28 AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:29 AM[0m] Building project '/src/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
-[[90m12:00:35 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:36 AM[0m] Building project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -307,27 +307,27 @@ export const cc = 10;
 
 Output::
 /lib/tsc --b /src/project4 --verbose --explainFiles
-[[90m12:00:43 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
     * src/project3/tsconfig.json
     * src/project4/tsconfig.json
 
-[[90m12:00:44 AM[0m] Project 'src/project2/tsconfig.json' is up to date because newest input 'src/project2/src/b.ts' is older than output 'src/project2/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project2/tsconfig.json' is up to date because newest input 'src/project2/src/b.ts' is older than output 'src/project2/tsconfig.tsbuildinfo'
 
-[[90m12:00:45 AM[0m] Project 'src/project3/tsconfig.json' is out of date because output 'src/project3/tsconfig.tsbuildinfo' is older than input 'src/project3/src/c.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project3/tsconfig.json' is out of date because output 'src/project3/tsconfig.tsbuildinfo' is older than input 'src/project3/src/c.ts'
 
-[[90m12:00:46 AM[0m] Building project '/src/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
-[[90m12:00:52 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
+[[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
 
-[[90m12:00:53 AM[0m] Building project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
-[[90m12:00:54 AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
