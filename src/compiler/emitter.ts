@@ -1114,7 +1114,6 @@ export const notImplementedResolver: EmitResolver = {
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
     isLiteralConstDeclaration: notImplemented,
-    isNonNarrowedBindableName: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
     isBindingCapturedByNode: notImplemented,

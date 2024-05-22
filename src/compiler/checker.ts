@@ -1504,7 +1504,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var syntacticNodeBuilder = createSyntacticTypeNodeBuilder(compilerOptions, {
         isEntityNameVisible,
         isExpandoFunctionDeclaration,
-        isNonNarrowedBindableName,
         getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
         requiresAddingImplicitUndefined,
         isUndefinedIdentifierExpression(node: Identifier) {
@@ -49111,25 +49110,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
-    function isNonNarrowedBindableName(node: ComputedPropertyName) {
-        if (!hasBindableName(node.parent)) {
-            return false;
-        }
-
-        const expression = node.expression;
-        if (!isEntityNameExpression(expression)) {
-            return true;
-        }
-
-        const type = getTypeOfExpression(expression);
-        const symbol = getSymbolAtLocation(expression);
-        if (!symbol) {
-            return false;
-        }
-        // Ensure not type narrowing
-        const declaredType = getTypeOfSymbol(symbol);
-        return declaredType === type;
-    }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
         const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
@@ -49255,7 +49235,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return node && getExternalModuleFileFromDeclaration(node);
             },
             isLiteralConstDeclaration,
-            isNonNarrowedBindableName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);

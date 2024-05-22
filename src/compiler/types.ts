@@ -5752,7 +5752,6 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
-    isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
@@ -10288,7 +10287,6 @@ export interface SyntacticTypeNodeBuilderContext {
 /** @internal */
 export interface SyntacticTypeNodeBuilderResolver {
     isUndefinedIdentifierExpression(name: Identifier): boolean;
-    isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
