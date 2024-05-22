@@ -65,6 +65,7 @@ import {
     isSpreadAssignment,
     isSpreadElement,
     isStatement,
+    isTypeNode,
     isValueSignatureDeclaration,
     isVariableDeclaration,
     ModifierFlags,
@@ -131,6 +132,7 @@ const errorCodes = [
     Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
     Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_supported_with_isolatedDeclarations.code,
+    Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations.code,
     Diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit.code,
 ];
 
@@ -351,7 +353,7 @@ function withContext<T>(
             return undefined;
         }
         // No support for typeof in extends clauses
-        if (isExpressionTarget && findAncestor(targetNode, isHeritageClause)) {
+        if (isExpressionTarget && (findAncestor(targetNode, isHeritageClause) || findAncestor(targetNode, isTypeNode))) {
             return undefined;
         }
         // Can't inline type spread elements. Whatever you do isolated declarations will not infer from them

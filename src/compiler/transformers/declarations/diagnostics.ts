@@ -19,6 +19,7 @@ import {
     DiagnosticWithLocation,
     ElementAccessExpression,
     EmitResolver,
+    EntityNameOrEntityNameExpression,
     ExportAssignment,
     Expression,
     ExpressionWithTypeArguments,
@@ -40,6 +41,8 @@ import {
     isConstructorDeclaration,
     isConstructSignatureDeclaration,
     isElementAccessExpression,
+    isEntityName,
+    isEntityNameExpression,
     isExportAssignment,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
@@ -53,6 +56,7 @@ import {
     isParameter,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
+    isPartOfTypeNode,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertySignature,
@@ -62,6 +66,7 @@ import {
     isTypeAliasDeclaration,
     isTypeAssertionExpression,
     isTypeParameterDeclaration,
+    isTypeQueryNode,
     isVariableDeclaration,
     JSDocCallbackTag,
     JSDocEnumTag,
@@ -658,6 +663,9 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
         if (heritageClause) {
             return createDiagnosticForNode(node, Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations);
         }
+        if ((isPartOfTypeNode(node) || isTypeQueryNode(node.parent)) && (isEntityName(node) || isEntityNameExpression(node))) {
+            return createEntityInTypeNodeError(node);
+        }
         Debug.type<WithIsolatedDeclarationDiagnostic>(node);
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
@@ -767,6 +775,9 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver) {
     }
     function createClassExpressionError(node: Expression) {
         return createExpressionError(node, Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations);
+    }
+    function createEntityInTypeNodeError(node: EntityNameOrEntityNameExpression) {
+        return createDiagnosticForNode(node, Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations, getTextOfNode(node, /*includeTrivia*/ false));
     }
     function createExpressionError(node: Expression, diagnosticMessage?: DiagnosticMessage) {
         const parentDeclaration = findNearestDeclaration(node);

@@ -6079,6 +6079,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return result;
                 }
             }
+            context.tracker.reportInferenceFallback(existing);
             return undefined;
         }
 
@@ -8295,6 +8296,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // If the symbol is found both in declaration scope and in current scope then it shoudl point to the same reference
                     (symAtLocation && sym && !getSymbolIfSameReference(getExportSymbolOfValueSymbolIfExported(symAtLocation), sym))
                 ) {
+                    // In isolated declaration we will not do rest parameter expansion so there is no need to report on these.
+                    if (symAtLocation !== unknownSymbol) {
+                        context.tracker.reportInferenceFallback(node);
+                    }
                     introducesError = true;
                     return { introducesError, node, sym };
                 }
@@ -8315,6 +8320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !isDeclarationName(node) &&
                     isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible
                 ) {
+                    context.tracker.reportInferenceFallback(node);
                     introducesError = true;
                 }
                 else {
