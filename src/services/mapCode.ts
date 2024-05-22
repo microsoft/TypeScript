@@ -3,7 +3,6 @@ import {
     ClassElement,
     ClassLikeDeclaration,
     createSourceFile,
-    emptyArray,
     FileTextChanges,
     find,
     findAncestor,

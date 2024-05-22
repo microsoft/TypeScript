@@ -4515,16 +4515,10 @@ export class TestState {
         ranges: Range[],
         changes: string[] = [],
     ): void {
-        let fileName: string | undefined;
-        const focusLocations = ranges.map(({ fileName: fn, pos, end }) => {
-            if (!fileName) {
-                fileName = fn;
-            }
+        const fileName = this.activeFile.fileName;
+        const focusLocations = ranges.map(({ pos, end }) => {
             return [{ start: pos, length: end - pos }];
         });
-        if (!fileName) {
-            throw new Error("No ranges passed in, or something went wrong.");
-        }
         let before = this.getFileContent(fileName);
         focusLocations.sort((a, b) => a[0].start - b[0].start);
         for (const subLoc of focusLocations) {
@@ -4557,7 +4551,7 @@ export class TestState {
 // === ORIGINAL ===
 ${before}
 // === INCOMING CHANGES ===
-${changes}
+${changes.join("\n// ---\n")}
 // === MAPPED ===
 ${after}`;
         this.baseline("mapCode", baseline, ".mapCode.ts");
