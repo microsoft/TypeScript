@@ -212,20 +212,6 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
-    export interface TextChange {
-        span: TextSpan;
-        newText: string;
-    }
-    export interface FileTextChanges {
-        fileName: string;
-        textChanges: readonly TextChange[];
-        isNewFile?: boolean;
-    }
-    export interface MapCodeDocumentMapping {
-        fileName?: string;
-        focusLocations?: TextSpan[][];
-        contents: string[];
-    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];

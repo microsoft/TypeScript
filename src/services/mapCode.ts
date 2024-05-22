@@ -50,27 +50,21 @@ export function mapCode(
     formatContext: formatting.FormatContext,
     preferences: UserPreferences,
 ): FileTextChanges[] {
-    try {
-        return textChanges.ChangeTracker.with(
-            { host, formatContext, preferences },
-            changeTracker => {
-                const parsed = contents.map(parse);
-                const flattenedLocations = focusLocations && flatten(focusLocations);
-                for (const nodes of parsed) {
-                    placeNodeGroup(
-                        sourceFile,
-                        changeTracker,
-                        nodes,
-                        flattenedLocations,
-                    );
-                }
-            },
-        );
-    }
-    catch (e) {
-        host.error?.(`mapCode: ${e}`);
-        return emptyArray;
-    }
+    return textChanges.ChangeTracker.with(
+        { host, formatContext, preferences },
+        changeTracker => {
+            const parsed = contents.map(parse);
+            const flattenedLocations = focusLocations && flatten(focusLocations);
+            for (const nodes of parsed) {
+                placeNodeGroup(
+                    sourceFile,
+                    changeTracker,
+                    nodes,
+                    flattenedLocations,
+                );
+            }
+        },
+    );
 }
 
 /**
