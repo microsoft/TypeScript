@@ -121,4 +121,95 @@ numberId(1000);
 
         baselineTsserverLogs("regionDiagnostics", "diagnostics for select nodes and whole file for multiple files", session);
     });
+
+    describe("diagnostics for select nodes when files have suggestion diagnostics", () => {
+        const config = {
+            path: "/tsconfig.json",
+            content: `
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+    }
+}
+`,
+        };
+        const indexFile = {
+            path: "/index.ts",
+            content: `
+import add = require("./other.js");
+
+add(3, "a");
+
+add(1, 2);
+`,
+        };
+        const otherFile = {
+            path: "/other.ts",
+            content: `
+function add(a: number, b: number) {
+    return a + b
+}
+
+export = add;
+`,
+        };
+
+        it("region has suggestion diagnostics", () => {
+            const files = [config, indexFile, otherFile];
+            const host = createServerHost(files);
+            const session = new TestSession(host);
+
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    openFiles: [{ file: indexFile.path, fileContent: indexFile.content }],
+                },
+            });
+
+            verifyGetErrRequest({
+                session,
+                files: [
+                    {
+                        file: indexFile.path,
+                        // `import add = require("./other.js"); add(3, "a");`
+                        ranges: [{ startLine: 2, startOffset: 1, endLine: 4, endOffset: 13 }],
+                    },
+                ],
+                skip: [
+                    { regionSemantic: false },
+                ],
+            });
+
+            baselineTsserverLogs("regionDiagnostics", "region has suggestion", session);
+        });
+
+        it("region does not have suggestion diagnostics", () => {
+            const files = [config, indexFile, otherFile];
+            const host = createServerHost(files);
+            const session = new TestSession(host);
+
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    openFiles: [{ file: indexFile.path, fileContent: indexFile.content }],
+                },
+            });
+
+            verifyGetErrRequest({
+                session,
+                files: [
+                    {
+                        file: indexFile.path,
+                        // `add(3, "a"); add(1, 2);`
+                        ranges: [{ startLine: 4, startOffset: 1, endLine: 6, endOffset: 11 }],
+                    },
+                ],
+                skip: [
+                    { regionSemantic: false },
+                ],
+            });
+
+            baselineTsserverLogs("regionDiagnostics", "region does not have suggestion", session);
+        });
+    });
 });
