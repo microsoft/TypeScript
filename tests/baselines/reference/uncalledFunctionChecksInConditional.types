@@ -36,10 +36,10 @@ if (isFoo || isFoo()) {
 >                 : ^^^^^^^^^^^^^
 >isFoo : () => boolean
 >      : ^^^^^^^^^^^^^
->isFoo() : boolean
->        : ^^^^^^^
->isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>isFoo() : any
+>        : ^^^
+>isFoo : never
+>      : ^^^^^
 
     // error on isFoo
 }

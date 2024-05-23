@@ -2,6 +2,8 @@ uncalledFunctionChecksInConditional.ts(5,5): error TS2774: This condition will a
 uncalledFunctionChecksInConditional.ts(9,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional.ts(9,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional.ts(13,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(13,14): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
 uncalledFunctionChecksInConditional.ts(32,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional.ts(36,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional.ts(40,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
@@ -9,7 +11,7 @@ uncalledFunctionChecksInConditional.ts(44,16): error TS2774: This condition will
 uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== uncalledFunctionChecksInConditional.ts (9 errors) ====
+==== uncalledFunctionChecksInConditional.ts (10 errors) ====
     declare function isFoo(): boolean;
     declare function isBar(): boolean;
     declare const isUndefinedFoo: (() => boolean) | undefined;
@@ -31,6 +33,9 @@ uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will
     if (isFoo || isFoo()) {
         ~~~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+                 ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'never' has no call signatures.
         // error on isFoo
     }
     
