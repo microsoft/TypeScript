@@ -72,7 +72,7 @@ class Bar<T extends string> {
 >Bar.instance.push(this) : number
 >                        : ^^^^^^
 >Bar.instance.push : (...items: Bar<string>[]) => number
->                  : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^     ^^^^^^^^^^^^^^^^^^^^      
 >Bar.instance : Bar<string>[]
 >             : ^^^^^^^^^^^^^
 >Bar : typeof Bar
@@ -80,7 +80,7 @@ class Bar<T extends string> {
 >instance : Bar<string>[]
 >         : ^^^^^^^^^^^^^
 >push : (...items: Bar<string>[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^      
 >this : this
 >     : ^^^^
   }

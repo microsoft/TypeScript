@@ -3,7 +3,7 @@
 === /mod2.ts ===
 import {foo} from "./mod1";
 >foo : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 export const bar = foo();
 >bar : Lib
@@ -11,7 +11,7 @@ export const bar = foo();
 >foo() : Lib
 >      : ^^^
 >foo : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 === /types/lib/index.d.ts ===
 interface Lib { x }

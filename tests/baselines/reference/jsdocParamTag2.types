@@ -142,11 +142,11 @@ function good9({ a }) {
 >console.log(arguments, a) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >arguments : IArguments
 >          : ^^^^^^^^^^
 >a : string

@@ -105,21 +105,21 @@ if (foo.print !== undefined) foo.print();
 >foo.print !== undefined : boolean
 >                        : ^^^^^^^
 >foo.print : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >foo : IFoo
 >    : ^^^^
 >print : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >undefined : undefined
 >          : ^^^^^^^^^
 >foo.print() : void
 >            : ^^^^
 >foo.print : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >foo : IFoo
 >    : ^^^^
 >print : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 
 interface i1 { M: () => void; };
 >M : () => void

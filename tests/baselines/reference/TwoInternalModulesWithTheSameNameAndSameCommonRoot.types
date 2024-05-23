@@ -97,13 +97,13 @@ var o: { x: number; y: number };
 
 var o: A.Point;
 >o : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >A : any
 >  : ^^^
 
 var o = A.Origin;
 >o : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >A.Origin : A.Point
 >         : ^^^^^^^
 >A : typeof A
@@ -113,7 +113,7 @@ var o = A.Origin;
 
 var o = A.Utils.mirror(o);
 >o : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >A.Utils.mirror(o) : { x: number; y: number; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
@@ -127,7 +127,7 @@ var o = A.Utils.mirror(o);
 >mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
 >       : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 
 var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
@@ -143,7 +143,7 @@ var p: { tl: A.Point; br: A.Point };
 
 var p: A.Utils.Plane;
 >p : { tl: A.Point; br: A.Point; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^       ^^^
 >A : any
 >  : ^^^
 >Utils : any
@@ -151,7 +151,7 @@ var p: A.Utils.Plane;
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >p : { tl: A.Point; br: A.Point; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^       ^^^
 >new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
 >                                     : ^^^^^^^^^^^^^
 >A.Utils.Plane : typeof A.Utils.Plane
@@ -165,7 +165,7 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >Plane : typeof A.Utils.Plane
 >      : ^^^^^^^^^^^^^^^^^^^^
 >o : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

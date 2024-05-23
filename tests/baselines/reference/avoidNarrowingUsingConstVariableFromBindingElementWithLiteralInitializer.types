@@ -18,8 +18,8 @@ export function test(arg: { index?: number }) {
 >      : ^^^^^^
 >0 : 0
 >  : ^
->arg : { index?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : { index?: number; }
+>    : ^^^^^^^^^^      ^^^
 
   if (foo[index] === "a") {
 >foo[index] === "a" : boolean

@@ -106,12 +106,12 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b core --verbose
-[[90m12:00:26 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/index.js
@@ -245,12 +245,12 @@ Input::
 
 Output::
 /a/lib/tsc --b core --verbose
-[[90m12:00:35 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
-[[90m12:00:36 AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/tsconfig.json'
 
-[[90m12:00:37 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/index.js

@@ -23,7 +23,7 @@ const a = f(<K extends string>(_: K) => _ => ({}));  // <K extends string>(_: K)
 >f(<K extends string>(_: K) => _ => ({})) : <K extends string>(_: K) => <G>(_: G) => {}
 >                                         : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^
 >f : <F extends (...args: any[]) => <G>(x: G) => void>(_: F) => F
->  : ^ ^^^^^^^^^                                     ^^ ^^ ^^^^^^
+>  : ^ ^^^^^^^^^                                     ^^ ^^ ^^^^^ 
 ><K extends string>(_: K) => _ => ({}) : <K extends string>(_: K) => <G>(_: G) => {}
 >                                      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^
 >_ : K

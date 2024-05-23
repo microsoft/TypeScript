@@ -39,6 +39,8 @@
         "!**/.gitattributes"
     ],
     "devDependencies": {
+        "@dprint/formatter": "^0.3.0",
+        "@dprint/typescript": "0.90.5",
         "@esfx/canceltoken": "^1.0.0",
         "@octokit/rest": "^20.1.1",
         "@types/chai": "^4.3.16",

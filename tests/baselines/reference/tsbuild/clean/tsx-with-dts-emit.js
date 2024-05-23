@@ -33,12 +33,12 @@ export const x = 10;
 
 Output::
 /lib/tsc --b src/project -v --explainFiles
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/src/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/src/main.js' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -66,10 +66,10 @@ Input::
 
 Output::
 /lib/tsc --b src/project -v --explainFiles
-[[90m12:00:15 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:16 AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/src/main.tsx' is older than output 'src/project/src/main.js'
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is up to date because newest input 'src/project/src/main.tsx' is older than output 'src/project/src/main.js'
 
 exitCode:: ExitStatus.Success
 

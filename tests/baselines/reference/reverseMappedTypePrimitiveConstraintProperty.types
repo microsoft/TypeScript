@@ -23,7 +23,7 @@ const result = test({
 >test({  prop: "foo", // this one should not widen to string  nested: {    nestedProp: "bar",  },  extra: "baz",}) : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }
 >                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends { prop: string; nested: { nestedProp: string; }; }>(obj: { [K in keyof T]: T[K]; }) => T
->     : ^ ^^^^^^^^^                                                  ^^   ^^                         ^^^^^^
+>     : ^ ^^^^^^^^^                                                  ^^   ^^                         ^^^^^ 
 >{  prop: "foo", // this one should not widen to string  nested: {    nestedProp: "bar",  },  extra: "baz",} : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }
 >                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -47,13 +47,13 @@ function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
 >a.x : T
 >    : ^
 >a : { x: T; y: U; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 >x : T
 >  : ^
 >a.y : U
 >    : ^
 >a : { x: T; y: U; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 >y : U
 >  : ^
 }
@@ -121,7 +121,7 @@ function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
 >a.y : U
 >    : ^
 >a : { x: T; y: U; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^ ^^^
 >y : U
 >  : ^
 }

@@ -9,13 +9,13 @@ var c: {
 
     func4?(x: number): number;
 >func4 : { (x: number): number; (s: string): string; }
->      : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     func4(s: string): string; // error, mismatched optionality
 >func4 : { (x: number): number; (s: string): string; }
->      : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -40,13 +40,13 @@ var c2: {
 
     func4<T>(x: T): number;
 >func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
->      : ^^^ ^^ ^^ ^^^      ^^^   ^^ ^^   ^^^^^^^^^^^^
+>      : ^^^ ^^ ^^ ^^^      ^^^   ^^ ^^   ^^^      ^^^
 >x : T
 >  : ^
 
     func4? <T>(s: T): string; // error, mismatched optionality
 >func4 : { <T_1>(x: T_1): number; <T>(s: T): string; }
->      : ^^^   ^^ ^^   ^^^^^^^^^^^^ ^^ ^^ ^^^      ^^^
+>      : ^^^   ^^ ^^   ^^^      ^^^ ^^ ^^ ^^^      ^^^
 >s : T
 >  : ^
 

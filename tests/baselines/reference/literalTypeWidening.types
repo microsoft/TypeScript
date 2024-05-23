@@ -360,7 +360,7 @@ function f6(cond: boolean) {
 >widening('a') : "a"
 >              : ^^^
 >widening : <T>(x: T) => T
->         : ^ ^^ ^^ ^^^^^^
+>         : ^ ^^ ^^ ^^^^^ 
 >'a' : "a"
 >    : ^^^
 
@@ -370,7 +370,7 @@ function f6(cond: boolean) {
 >widening(10) : 10
 >             : ^^
 >widening : <T>(x: T) => T
->         : ^ ^^ ^^ ^^^^^^
+>         : ^ ^^ ^^ ^^^^^ 
 >10 : 10
 >   : ^^
 
@@ -380,7 +380,7 @@ function f6(cond: boolean) {
 >widening(cond ? 'a' : 10) : "a" | 10
 >                          : ^^^^^^^^
 >widening : <T>(x: T) => T
->         : ^ ^^ ^^ ^^^^^^
+>         : ^ ^^ ^^ ^^^^^ 
 >cond ? 'a' : 10 : "a" | 10
 >                : ^^^^^^^^
 >cond : boolean
@@ -396,7 +396,7 @@ function f6(cond: boolean) {
 >nonWidening('a') : "a"
 >                 : ^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >'a' : "a"
 >    : ^^^
 
@@ -406,7 +406,7 @@ function f6(cond: boolean) {
 >nonWidening(10) : 10
 >                : ^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >10 : 10
 >   : ^^
 
@@ -416,7 +416,7 @@ function f6(cond: boolean) {
 >nonWidening(cond ? 'a' : 10) : "a" | 10
 >                             : ^^^^^^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >cond ? 'a' : 10 : "a" | 10
 >                : ^^^^^^^^
 >cond : boolean
@@ -463,8 +463,8 @@ function isSuccess<T>(result: Result<T>): result is T {
 >                   : ^^^^^^^
 >isFailure(result) : boolean
 >                  : ^^^^^^^
->isFailure : <T_1>(result: Result<T_1>) => result is "FAILURE"
->          : ^   ^^      ^^           ^^^^^^^^^^^^^^^^^^^^^^^^
+>isFailure : <T_1>(result: Result<T_1>) => result is FAILURE
+>          : ^   ^^      ^^           ^^^^^                 
 >result : Result<T>
 >       : ^^^^^^^^^
 }
@@ -505,13 +505,13 @@ let result = doWork<number>();
 >doWork<number>() : Result<number>
 >                 : ^^^^^^^^^^^^^^
 >doWork : <T>() => Result<T>
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^         
 
 if (isSuccess(result)) {
 >isSuccess(result) : boolean
 >                  : ^^^^^^^
 >isSuccess : <T>(result: Result<T>) => result is T
->          : ^ ^^      ^^         ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^         ^^^^^           
 >result : Result<number>
 >       : ^^^^^^^^^^^^^^
 
@@ -519,7 +519,7 @@ if (isSuccess(result)) {
 >increment(result) : number
 >                  : ^^^^^^
 >increment : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >result : number
 >       : ^^^^^^
 }
@@ -542,7 +542,7 @@ let x = onMouseOver();
 >onMouseOver() : TestEvent
 >              : ^^^^^^^^^
 >onMouseOver : () => TestEvent
->            : ^^^^^^^^^^^^^^^
+>            : ^^^^^^         
 
 // Repro from #23649
 
@@ -568,11 +568,11 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 >keys.forEach(key => result[key] = true) : void
 >                                        : ^^^^
 >keys.forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >keys : K[]
 >     : ^^^
 >forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >key => result[key] = true : (key: K) => boolean
 >                          : ^   ^^^^^^^^^^^^^^^
 >key : K
@@ -605,11 +605,11 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >Object.keys(obj) : string[]
 >                 : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^      ^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^        
 >obj : Record<K, V>
 >    : ^^^^^^^^^^^^
 }
@@ -625,8 +625,8 @@ const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Set : <K extends string>(...keys: K[]) => Record<K, true>
->    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^^^^^^^^^^^^^^^^
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
+>    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^                           
 >'fr' : "fr"
 >     : ^^^^
 >'en' : "en"
@@ -660,11 +660,11 @@ const arr: Obj[] = langCodes.map(code => ({ code }))
 >langCodes.map(code => ({ code })) : { code: "fr" | "en" | "es" | "it" | "nl"; }[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >langCodes.map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >code => ({ code }) : (code: "fr" | "en" | "es" | "it" | "nl") => { code: "fr" | "en" | "es" | "it" | "nl"; }
 >                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >code : "fr" | "en" | "es" | "it" | "nl"
@@ -731,7 +731,7 @@ const a = f(E.A);
 >f(E.A) : E.A
 >       : ^^^
 >f : <T>(x: T) => NonNullable<T>
->  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^              
 >E.A : E.A
 >    : ^^^
 >E : typeof E

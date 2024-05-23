@@ -31,13 +31,13 @@ f1();  // Error
 >f1() : void
 >     : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^    ^^     ^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^    
 
 f1(x => str(x));
 >f1(x => str(x)) : void
 >                : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^    ^^     ^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^    
 >x => str(x) : (x: string) => void
 >            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
@@ -45,7 +45,7 @@ f1(x => str(x));
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -53,7 +53,7 @@ f1(x => num(x), x => str(x));
 >f1(x => num(x), x => str(x)) : void
 >                             : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^    ^^     ^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^    
 >x => num(x) : (x: number) => void
 >            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
@@ -61,7 +61,7 @@ f1(x => num(x), x => str(x));
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
@@ -71,7 +71,7 @@ f1(x => num(x), x => str(x));
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -79,7 +79,7 @@ f1(x => num(x), x => num(x), x => str(x));
 >f1(x => num(x), x => num(x), x => str(x)) : void
 >                                          : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^    ^^     ^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^    
 >x => num(x) : (x: number) => void
 >            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
@@ -87,7 +87,7 @@ f1(x => num(x), x => num(x), x => str(x));
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => num(x) : (x: number) => void
@@ -97,7 +97,7 @@ f1(x => num(x), x => num(x), x => str(x));
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
@@ -107,7 +107,7 @@ f1(x => num(x), x => num(x), x => str(x));
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -129,7 +129,7 @@ const a1: Funcs = [x => str(x)];
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -145,7 +145,7 @@ const a2: Funcs = [x => num(x), x => str(x)];
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
@@ -155,7 +155,7 @@ const a2: Funcs = [x => num(x), x => str(x)];
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -171,7 +171,7 @@ const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => num(x) : (x: number) => void
@@ -181,7 +181,7 @@ const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
@@ -191,7 +191,7 @@ const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -233,13 +233,13 @@ export function createSelector<S extends SelectorTuple<ExampleState>>(...selecto
 >console.log(selectors) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >selectors : [...selectors: S, f: (x: any) => any]
->          : ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^   ^
 }
 
 createSelector(
@@ -296,7 +296,7 @@ example(
 >example(    x => x.foo,  // Error    x => x.bar,  // Error    x => x.baz,) : void
 >                                                                           : ^^^^
 >example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
->        : ^^^^    ^^                                              ^^^^^^^^^
+>        : ^^^^    ^^                                              ^^^^^    
 
     x => x.foo,  // Error
 >x => x.foo : (x: number) => any
@@ -352,7 +352,7 @@ test(a => a, b => b, c => c);
 >test(a => a, b => b, c => c) : void
 >                             : ^^^^
 >test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
->     : ^^^^    ^^                                                     ^^^^^^^^^
+>     : ^^^^    ^^                                                     ^^^^^    
 >a => a : (a: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number

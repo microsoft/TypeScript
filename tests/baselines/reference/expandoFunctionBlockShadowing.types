@@ -11,11 +11,11 @@ if (Math.random()) {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
   const X: { test?: any } = {};
 >X : { test?: any; }
@@ -29,7 +29,7 @@ if (Math.random()) {
 >           : ^
 >X.test : any
 >X : { test?: any; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^   ^^^
 >test : any
 >     : ^^^
 >1 : 1
@@ -62,11 +62,11 @@ if (Math.random()) {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
   const Y = function Y() {}
 >Y : { (): void; test: number; }

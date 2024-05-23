@@ -49,7 +49,7 @@ class C<U extends A, T extends U> {
 >x['foo']() : string
 >           : ^^^^^^
 >x['foo'] : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >x : T
 >  : ^
 >'foo' : "foo"
@@ -63,11 +63,11 @@ class C<U extends A, T extends U> {
 >x.foo() : string
 >        : ^^^^^^
 >x.foo : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >x : T
 >  : ^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
 
     g(x: U) {
@@ -83,7 +83,7 @@ class C<U extends A, T extends U> {
 >x['foo']() : string
 >           : ^^^^^^
 >x['foo'] : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >x : U
 >  : ^
 >'foo' : "foo"
@@ -97,11 +97,11 @@ class C<U extends A, T extends U> {
 >x.foo() : string
 >        : ^^^^^^
 >x.foo : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >x : U
 >  : ^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
 }
 
@@ -156,7 +156,7 @@ var r2 = i.foo.foo();
 >i.foo.foo() : string
 >            : ^^^^^^
 >i.foo.foo : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >i.foo : B
 >      : ^
 >i : I<A, B>
@@ -164,7 +164,7 @@ var r2 = i.foo.foo();
 >foo : B
 >    : ^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var r2b = i.foo['foo']();
 >r2b : string
@@ -172,7 +172,7 @@ var r2b = i.foo['foo']();
 >i.foo['foo']() : string
 >               : ^^^^^^
 >i.foo['foo'] : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >i.foo : B
 >      : ^
 >i : I<A, B>
@@ -197,13 +197,13 @@ var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constrai
 >a().foo() : string
 >          : ^^^^^^
 >a().foo : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >a() : A
 >    : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^ ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^ ^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var r3b = a()['foo']();
 >r3b : string
@@ -211,11 +211,11 @@ var r3b = a()['foo']();
 >a()['foo']() : string
 >             : ^^^^^^
 >a()['foo'] : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >a() : A
 >    : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^ ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^ ^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -226,17 +226,17 @@ var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred 
 >a(new B()).foo() : string
 >                 : ^^^^^^
 >a(new B()).foo : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >a(new B()) : B
 >           : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^ ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^ ^^^
 >new B() : B
 >        : ^
 >B : typeof B
 >  : ^^^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferred as B, which has a foo
 >r3d : string
@@ -244,11 +244,11 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 >a(new B())['foo']() : string
 >                    : ^^^^^^
 >a(new B())['foo'] : () => string
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >a(new B()) : B
 >           : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^ ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^ ^^^
 >new B() : B
 >        : ^
 >B : typeof B
@@ -277,7 +277,7 @@ var b = {
 >x['foo']() : string
 >           : ^^^^^^
 >x['foo'] : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >x : T
 >  : ^
 >'foo' : "foo"
@@ -291,11 +291,11 @@ var b = {
 >x.foo() : string
 >        : ^^^^^^
 >x.foo : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >x : T
 >  : ^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
 }
 

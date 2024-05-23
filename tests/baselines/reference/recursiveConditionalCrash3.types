@@ -186,11 +186,11 @@ export type Expand<T extends object, K extends AllKeys<T, N> = never, N extends 
  */
 let y1: Expand<X>
 >y1 : { id: string; name: string; user: string; role: string; roles: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let y2: Expand<X, 'user.role.user.role'>
 >y2 : { id: string; name: string; user: { id: string; role: { id: string; user: { id: string; role: string; note: string; }; x: string; }; note: string; }; role: string; roles: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 /**
@@ -234,5 +234,5 @@ type UseQueryOptions4<T , K  > = ExpandResult<T,K>
  */
 let t: UseQueryOptions<X, 'role.user.role'>
 >t : { id: string; name: string; user: string; role: { id: string; user: { id: string; role: { id: string; user: string; x: string; }; note: string; }; x: string; }; roles: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
 

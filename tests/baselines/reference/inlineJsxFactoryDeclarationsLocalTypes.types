@@ -94,7 +94,7 @@ export function predom(): predom.JSX.Element;
 /** @jsx predom */
 import { predom } from "./renderer2"
 >predom : () => predom.JSX.Element
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                  
 
 export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
@@ -120,13 +120,13 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >props.x : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >props.y : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
 >  : ^^^^^^
 >props.x + props.y : number
@@ -134,13 +134,13 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >props.x : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >props.y : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
 >  : ^^^^^^
 >this.props.children : any
@@ -162,7 +162,7 @@ export class MyClass implements predom.JSX.Element {
 >predom.JSX : any
 >           : ^^^
 >predom : () => predom.JSX.Element
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                  
 >JSX : any
 >    : ^^^
 
@@ -198,21 +198,21 @@ export class MyClass implements predom.JSX.Element {
 >this.props.x : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >this.props.y : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
 >  : ^^^^^^
 >this.props.x + this.props.y : number
@@ -220,21 +220,21 @@ export class MyClass implements predom.JSX.Element {
 >this.props.x : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
 >  : ^^^^^^
 >this.props.y : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >y : number
 >  : ^^^^^^
 
@@ -242,11 +242,11 @@ export class MyClass implements predom.JSX.Element {
 >this.props.children : predom.JSX.Element[]
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >children : predom.JSX.Element[]
 >         : ^^^^^^^^^^^^^^^^^^^^
 
@@ -309,7 +309,7 @@ export default <h></h>
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => dom.JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^               
 
 import prerendered, {MySFC, MyClass, tree} from "./component";
 >prerendered : import("renderer2").predom.JSX.Element
@@ -363,13 +363,13 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >props.x : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >props.y : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
 >props.x + props.y : number
@@ -377,19 +377,19 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >props.x : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >props.y : number
 >        : ^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
 >props.children : dom.JSX.Element[]
 >               : ^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >children : dom.JSX.Element[]
 >         : ^^^^^^^^^^^^^^^^^
 >p : any
@@ -401,7 +401,7 @@ class DOMClass implements dom.JSX.Element {
 >dom.JSX : any
 >        : ^^^
 >dom : () => dom.JSX.Element
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^               
 >JSX : any
 >    : ^^^
 
@@ -435,21 +435,21 @@ class DOMClass implements dom.JSX.Element {
 >this.props.x : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >this.props.y : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
 >this.props.x + this.props.y : number
@@ -457,31 +457,31 @@ class DOMClass implements dom.JSX.Element {
 >this.props.x : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number
 >  : ^^^^^^
 >this.props.y : number
 >             : ^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
 >this.props.children : dom.JSX.Element[]
 >                    : ^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >children : dom.JSX.Element[]
 >         : ^^^^^^^^^^^^^^^^^
 >p : any

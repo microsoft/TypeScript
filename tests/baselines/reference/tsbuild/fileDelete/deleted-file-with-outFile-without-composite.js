@@ -39,12 +39,12 @@ export function child2() {
 
 Output::
 /lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.js' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/child/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
 File '/src/child/package.json' does not exist.
 File '/src/package.json' does not exist.
@@ -95,10 +95,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
-[[90m12:00:15 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
-[[90m12:00:16 AM[0m] Project 'src/child/tsconfig.json' is up to date because newest input 'src/child/child.ts' is older than output 'src/childResult.js'
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is up to date because newest input 'src/child/child.ts' is older than output 'src/childResult.js'
 
 exitCode:: ExitStatus.Success
 

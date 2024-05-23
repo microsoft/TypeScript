@@ -17,7 +17,7 @@ foo_({x: 1, y: 'foo'});
 >foo_({x: 1, y: 'foo'}) : { x: 1; }
 >                       : ^^^^^^^^^
 >foo_ : <T extends XNumber_>(props: { [K in keyof T & keyof XNumber_]: T[K]; }) => T
->     : ^ ^^^^^^^^^        ^^     ^^                                          ^^^^^^
+>     : ^ ^^^^^^^^^        ^^     ^^                                          ^^^^^ 
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >x : 1

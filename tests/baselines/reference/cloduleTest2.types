@@ -95,11 +95,11 @@ module T3 {
 >r.foo() : void
 >        : ^^^^
 >r.foo : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >r : m3d
 >  : ^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
     r.bar(); // error
 >r.bar() : any
@@ -152,11 +152,11 @@ module T4 {
 >r.foo() : void
 >        : ^^^^
 >r.foo : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >r : m3d
 >  : ^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
     r.bar(); // error
 >r.bar() : any

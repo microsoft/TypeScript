@@ -37,7 +37,7 @@ window.customElements.define("my-html5-element", mod.HTML5Element);
 >window.customElements.define("my-html5-element", mod.HTML5Element) : void
 >                                                                   : ^^^^
 >window.customElements.define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
->                             : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^^^^^
+>                             : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
 >window.customElements : CustomElementRegistry
 >                      : ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
@@ -45,7 +45,7 @@ window.customElements.define("my-html5-element", mod.HTML5Element);
 >customElements : CustomElementRegistry
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
->       : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^^^^^
+>       : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
 >"my-html5-element" : "my-html5-element"
 >                   : ^^^^^^^^^^^^^^^^^^
 >mod.HTML5Element : any
@@ -71,7 +71,7 @@ if (document !== mod.default) {
 >document.body.appendChild(mod.blogPost) : any
 >                                        : ^^^
 >document.body.appendChild : <T extends Node>(node: T) => T
->                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
+>                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
 >document.body : HTMLElement
 >              : ^^^^^^^^^^^
 >document : Document
@@ -79,7 +79,7 @@ if (document !== mod.default) {
 >body : HTMLElement
 >     : ^^^^^^^^^^^
 >appendChild : <T extends Node>(node: T) => T
->            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
+>            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
 >mod.blogPost : any
 >             : ^^^
 >mod : any

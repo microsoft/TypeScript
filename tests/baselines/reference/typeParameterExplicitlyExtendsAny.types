@@ -19,11 +19,11 @@ function fee<T>() {
 
     t.toString; // ok
 >t.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >t : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function fee2<T extends any>() {
@@ -44,11 +44,11 @@ function fee2<T extends any>() {
 
     t.toString; // ok
 >t.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >t : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function f<T extends any>(x: T) {

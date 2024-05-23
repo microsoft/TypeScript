@@ -48,7 +48,7 @@ const { foo, ...rest } = obj
 >foo : string
 >    : ^^^^^^
 >rest : { baz: string; quux: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >obj : Readonly<ObjType>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -58,7 +58,7 @@ delete rest.baz
 >rest.baz : string
 >         : ^^^^^^
 >rest : { baz: string; quux: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >baz : string
 >    : ^^^^^^
 

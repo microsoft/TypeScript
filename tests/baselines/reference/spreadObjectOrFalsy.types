@@ -130,17 +130,17 @@ class Foo<T extends string> {
 >this.hasData() : boolean
 >               : ^^^^^^^
 >this.hasData : () => this is DatafulFoo<T>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >this : this
 >     : ^^^^
 >hasData : () => this is DatafulFoo<T>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                     
 
             this.data.toLocaleLowerCase();
 >this.data.toLocaleLowerCase() : string
 >                              : ^^^^^^
 >this.data.toLocaleLowerCase : (locales?: string | string[]) => string
->                            : ^       ^^^                 ^^^^^^^^^^^
+>                            : ^       ^^^                 ^^^^^      
 >this.data : T
 >          : ^
 >this : this & DatafulFoo<T>
@@ -148,7 +148,7 @@ class Foo<T extends string> {
 >data : T
 >     : ^
 >toLocaleLowerCase : (locales?: string | string[]) => string
->                  : ^       ^^^                 ^^^^^^^^^^^
+>                  : ^       ^^^                 ^^^^^      
         }
     }
     hasData(): this is DatafulFoo<T> {

@@ -54,7 +54,7 @@ function* g4() {
 >noop() : void
 >       : ^^^^
 >noop : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
     noop(), yield, noop(); // ok, result is unused
 >noop(), yield, noop() : void
@@ -64,13 +64,13 @@ function* g4() {
 >noop() : void
 >       : ^^^^
 >noop : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >yield : any
 >      : ^^^
 >noop() : void
 >       : ^^^^
 >noop : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
     (yield); // ok, result is unused
 >(yield) : any
@@ -90,11 +90,11 @@ function* g4() {
 >noop() : void
 >       : ^^^^
 >noop : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 >noop() : void
 >       : ^^^^
 >noop : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
     for(yield; false; yield); // ok, results are unused
 >yield : any
@@ -121,7 +121,7 @@ function* g5() {
 >f(yield) : void
 >         : ^^^^
 >f : <T>(value: T) => void
->  : ^ ^^     ^^ ^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^    
 >yield : any
 >      : ^^^
 }
@@ -134,7 +134,7 @@ function* g6() {
 >f<string>(yield) : void
 >                 : ^^^^
 >f : <T>(value: T) => void
->  : ^ ^^     ^^ ^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^    
 >yield : any
 >      : ^^^
 }

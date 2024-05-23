@@ -23,7 +23,7 @@ function fx1(x: string | number | undefined) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^              
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -43,7 +43,7 @@ function fx2<T>(x: T | undefined) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^              
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ function fx3<T extends string | number>(x: T) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^              
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -97,13 +97,13 @@ function fx4(obj: { b: number }) {
 >isA(obj) : boolean
 >         : ^^^^^^^
 >isA : (obj: unknown) => obj is { a: false; } | { b: 0; }
->    : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^       ^^^^^                                
 >obj : { b: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
         obj;  // { b: 0 }
 >obj : { b: 0; }
->    : ^^^^^^^^^
+>    : ^^^^^ ^^^
     }
 }
 
@@ -169,7 +169,7 @@ function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 >isXSorY(obj) : boolean
 >             : ^^^^^^^
 >isXSorY : (obj: unknown) => obj is XS | Y
->        : ^   ^^       ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^       ^^^^^             
 >obj : X | YS
 >    : ^^^^^^
 
@@ -196,7 +196,7 @@ function fx10(s: string | undefined) {
 >isEmptyStrOrUndefined(s) : boolean
 >                         : ^^^^^^^
 >isEmptyStrOrUndefined : (mixed: any) => mixed is "" | undefined
->                      : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^   ^^^^^                       
 >s : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -239,7 +239,7 @@ f1(v1);
 >f1(v1) : void
 >       : ^^^^
 >f1 : (x: any) => asserts x is number | undefined
->   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^                               
 >v1 : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -260,7 +260,7 @@ f2(v2);
 >f2(v2) : void
 >       : ^^^^
 >f2 : (x: any) => asserts x is 6 | undefined
->   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^                          
 >v2 : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -322,7 +322,7 @@ const TEST_CASES = [
 >isEmptyString(value) : boolean
 >                     : ^^^^^^^
 >isEmptyString : (value: string) => value is ""
->              : ^     ^^      ^^^^^^^^^^^^^^^^
+>              : ^     ^^      ^^^^^           
 >value : string
 >      : ^^^^^^
 
@@ -339,7 +339,7 @@ const TEST_CASES = [
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
 >isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
->                   : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^                         ^^^^^                              
 >value : string
 >      : ^^^^^^
 
@@ -363,7 +363,7 @@ const TEST_CASES = [
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
 >isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
->                   : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^                         ^^^^^                              
 >value : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -387,7 +387,7 @@ const TEST_CASES = [
 >isZero(value) : boolean
 >              : ^^^^^^^
 >isZero : (value: number) => value is 0
->       : ^     ^^      ^^^^^^^^^^^^^^^
+>       : ^     ^^      ^^^^^          
 >value : number
 >      : ^^^^^^
 
@@ -404,7 +404,7 @@ const TEST_CASES = [
 >isMaybeZero(value) : boolean
 >                   : ^^^^^^^
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                         ^^^^^                             
 >value : number
 >      : ^^^^^^
 
@@ -428,7 +428,7 @@ const TEST_CASES = [
 >isMaybeZero(value) : boolean
 >                   : ^^^^^^^
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                         ^^^^^                             
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -452,7 +452,7 @@ const TEST_CASES = [
 >isEmptyArray(value) : boolean
 >                    : ^^^^^^^
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^ ^^     ^^   ^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^   ^^^^^           
 >value : string[]
 >      : ^^^^^^^^
 
@@ -469,7 +469,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^                      ^^^^^                              
 >value : string[]
 >      : ^^^^^^^^
 
@@ -493,7 +493,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^                      ^^^^^                              
 >value : string[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 
@@ -552,7 +552,7 @@ if (isEmpty(test)) {
 >isEmpty(test) : boolean
 >              : ^^^^^^^
 >isEmpty : (value: string | EmptyString) => value is EmptyString
->        : ^     ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                    ^^^^^                    
 >test : string | null | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -578,7 +578,7 @@ function test1(foo: number | string | boolean) {
 >assert<1 | string>(foo) : void
 >                        : ^^^^
 >assert : <T>(value: any) => asserts value is T
->       : ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^     ^^   ^^^^^                  
 >foo : string | number | boolean
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -689,8 +689,8 @@ function test3(x: unknown) {
 	if (check1(x)) {
 >check1(x) : boolean
 >          : ^^^^^^^
->check1 : (x: unknown) => x is string | 0
->       : ^ ^^       ^^^^^^^^^^^^^^^^^^^^
+>check1 : (x: unknown) => x is (string | 0)
+>       : ^ ^^       ^^^^^                 
 >x : unknown
 >  : ^^^^^^^
 
@@ -701,8 +701,8 @@ function test3(x: unknown) {
 		if (check2(x)) {
 >check2(x) : boolean
 >          : ^^^^^^^
->check2 : (x: unknown) => x is 0 | "hello"
->       : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^
+>check2 : (x: unknown) => x is ("hello" | 0)
+>       : ^ ^^       ^^^^^                  
 >x : string | 0
 >  : ^^^^^^^^^^
 
@@ -731,7 +731,7 @@ function f1x(obj: (string | number)[] | null) {
 >assertRelationIsNullOrStringArray(obj) : void
 >                                       : ^^^^
 >assertRelationIsNullOrStringArray : (v: (string | number)[] | null) => asserts v is string[] | null
->                                  : ^ ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^ ^^                          ^^^^^                            
 >obj : (string | number)[] | null
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -780,7 +780,7 @@ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 >isMyDiscriminatedUnion(working) : boolean
 >                                : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^                            
 >working : unknown
 >        : ^^^^^^^
 >working.type === 'A' : boolean
@@ -796,7 +796,7 @@ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 >working.aProp : number
 >              : ^^^^^^
 >working : { type: "A"; aProp: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
 
@@ -808,7 +808,7 @@ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 >isMyDiscriminatedUnion(broken) : boolean
 >                               : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^                            
 >broken : Record<string, any> | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >broken.type === 'A' : boolean
@@ -824,7 +824,7 @@ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 >broken.aProp : number
 >             : ^^^^^^
 >broken : { type: "A"; aProp: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
 
@@ -836,7 +836,7 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >isMyDiscriminatedUnion(workingAgain) : boolean
 >                                     : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^                            
 >workingAgain : unknown
 >             : ^^^^^^^
 >workingAgain.type === 'A' : boolean
@@ -852,7 +852,7 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >workingAgain.aProp : number
 >                   : ^^^^^^
 >workingAgain : { type: "A"; aProp: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^   ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
 
@@ -908,7 +908,7 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
 >value.variant : 1 | 2
 >              : ^^^^^
 >value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
 >1 : 1
@@ -918,7 +918,7 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
     }
     return value;
 >value : { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 
 function example2(value: Union): { type: 'a'; variant: 2 } | null {
@@ -953,7 +953,7 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 >value.type : "a"
 >           : ^^^
 >value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >type : "a"
 >     : ^^^
 >'a' : "a"
@@ -963,7 +963,7 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 >value.variant : 1 | 2
 >              : ^^^^^
 >value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
 >1 : 1
@@ -973,7 +973,7 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
     }
     return value;
 >value : { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 
 function example3(value: Union): { type: 'a'; variant: 2 } | null {
@@ -1006,7 +1006,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 >value.type : "a"
 >           : ^^^
 >value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >type : "a"
 >     : ^^^
 >value.variant === 1 : boolean
@@ -1014,7 +1014,7 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
 >value.variant : 1 | 2
 >              : ^^^^^
 >value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^^^^^ ^^^
 >variant : 1 | 2
 >        : ^^^^^
 >1 : 1
@@ -1024,6 +1024,6 @@ function example3(value: Union): { type: 'a'; variant: 2 } | null {
     }
     return value;
 >value : { type: "a"; variant: 2; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^^^^^^^ ^^^
 }
 

@@ -4,6 +4,7 @@ import {
     WatchUtils,
 } from "../../../harness/watchUtils.js";
 import {
+    append,
     arrayFrom,
     clear,
     clone,
@@ -46,6 +47,7 @@ import {
 } from "../../_namespaces/ts.js";
 import { typingsInstaller } from "../../_namespaces/ts.server.js";
 import { timeIncrements } from "../../_namespaces/vfs.js";
+import { sanitizeSysOutput } from "./baseline.js";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -456,6 +458,17 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     setTime(time: number) {
         this.time = time;
+    }
+
+    switchToBaseliningInvoke(logger: StateLogger, serializeOutputOrder: SerializeOutputOrder) {
+        const originalSetTime = this.setTime;
+        this.setTime = time => {
+            logger.log(`Host is moving to new time`);
+            return originalSetTime.call(this, time);
+        };
+        this.timeoutCallbacks.switchToBaseliningInvoke(logger, serializeOutputOrder);
+        this.immediateCallbacks.switchToBaseliningInvoke(logger, serializeOutputOrder);
+        this.pendingInstalls.switchToBaseliningInvoke(logger, serializeOutputOrder);
     }
 
     private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
@@ -1180,11 +1193,7 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
 function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
     let baselinedOutput: string[] | undefined;
     for (let i = start; i < end; i++) {
-        (baselinedOutput ||= []).push(
-            output[i]
-                .replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-                .replace(/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]\s(A|P)M/g, "HH:MM:SS AM"),
-        );
+        baselinedOutput = append(baselinedOutput, sanitizeSysOutput(output[i]));
     }
     if (baselinedOutput) baseline.push(baselinedOutput.join(""));
 }

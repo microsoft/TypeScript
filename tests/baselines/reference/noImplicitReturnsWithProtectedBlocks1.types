@@ -20,14 +20,14 @@ function main1() : number {
 >get() : number
 >      : ^^^^^^
 >get : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
     finally {
         log("in finally");
 >log("in finally") : void
 >                  : ^^^^
 >log : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >"in finally" : "in finally"
 >             : ^^^^^^^^^^^^
     }

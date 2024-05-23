@@ -244,6 +244,7 @@ Before running Timeout callback:: count: 2
 2: timerToUpdateProgram
 4: timerToUpdateChildWatches
 
+Host is moving to new time
 After running Timeout callback:: count: 2
 Output::
 Synchronizing program
@@ -421,6 +422,7 @@ Before running Timeout callback:: count: 2
 7: timerToInvalidateFailedLookupResolutions
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -441,6 +443,7 @@ Input::
 Before running Timeout callback:: count: 1
 10: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options

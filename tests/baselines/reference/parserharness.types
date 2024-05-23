@@ -60,11 +60,11 @@ function switchToForwardSlashes(path: string) {
 >path.replace(/\\/g, "/") : string
 >                         : ^^^^^^
 >path.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->             : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>             : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >path : string
 >     : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\\/g : RegExp
 >      : ^^^^^^
 >"/" : "/"
@@ -95,11 +95,11 @@ function filePath(fullPath: string) {
 >fullPath.split("/") : string[]
 >                    : ^^^^^^^^
 >fullPath.split : (separator: string | RegExp, limit?: number) => string[]
->               : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>               : ^         ^^               ^^     ^^^      ^^^^^        
 >fullPath : string
 >         : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^        
 >"/" : "/"
 >    : ^^^
 
@@ -109,11 +109,11 @@ function filePath(fullPath: string) {
 >components.slice(0, components.length - 1) : string[]
 >                                           : ^^^^^^^^
 >components.slice : (start?: number, end?: number) => string[]
->                 : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>                 : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
 >components : string[]
 >           : ^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
 >0 : 0
 >  : ^
 >components.length - 1 : number
@@ -133,11 +133,11 @@ function filePath(fullPath: string) {
 >path.join("/") : string
 >               : ^^^^^^
 >path.join : (separator?: string) => string
->          : ^         ^^^      ^^^^^^^^^^^
+>          : ^         ^^^      ^^^^^      
 >path : string[]
 >     : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"/" : "/"
 >    : ^^^
 >"/" : "/"
@@ -192,7 +192,7 @@ if (typeof ActiveXObject === "function") {
 >eval(typescriptServiceFile) : any
 >                            : ^^^
 >eval : (x: string) => any
->     : ^ ^^      ^^^^^^^^
+>     : ^ ^^      ^^^^^   
 >typescriptServiceFile : any
 >                      : ^^^
 
@@ -278,7 +278,7 @@ module Harness {
 >Function("return this").call(null) : any
 >                                   : ^^^
 >Function("return this").call : (this: Function, thisArg: any, ...argArray: any[]) => any
->                             : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>                             : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >Function("return this") : Function
 >                        : ^^^^^^^^
 >Function : FunctionConstructor
@@ -286,7 +286,7 @@ module Harness {
 >"return this" : "return this"
 >              : ^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 
     export var usePull = false;
 >usePull : boolean
@@ -389,11 +389,11 @@ module Harness {
 >bugIds.indexOf(id) : number
 >                   : ^^^^^^
 >bugIds.indexOf : (searchElement: string, fromIndex?: number) => number
->               : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>               : ^             ^^^^^^^^^^         ^^^      ^^^^^      
 >bugIds : string[]
 >       : ^^^^^^^^
 >indexOf : (searchElement: string, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^         ^^^      ^^^^^      
 >id : string
 >   : ^^^^^^
 >0 : 0
@@ -403,11 +403,11 @@ module Harness {
 >bugIds.push(id) : number
 >                : ^^^^^^
 >bugIds.push : (...items: string[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^      
 >bugIds : string[]
 >       : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >id : string
 >   : ^^^^^^
             }
@@ -425,12 +425,12 @@ module Harness {
 >     : ^^^^^^^^^^^^^^^^
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
 >                              : ^^^^^^^^^^^^^^^^
->content.match : (regexp: string | RegExp) => RegExpMatchArray
->              : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>content.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>              : ^      ^^               ^^^^^                       
 >content : string
 >        : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/\bbug (\d+)/i : RegExp
 >               : ^^^^^^
 
@@ -442,11 +442,11 @@ module Harness {
 >bugs.forEach(bug => assert.bug(bug)) : void
 >                                     : ^^^^
 >bugs.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >bugs : RegExpMatchArray
 >     : ^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >bug => assert.bug(bug) : (bug: string) => any
 >                       : ^   ^^^^^^^^^^^^^^^^
 >bug : string
@@ -526,11 +526,11 @@ module Harness {
 >arr.forEach(n => actual = actual + '\n      ' + n.toString()) : void
 >                                                              : ^^^^
 >arr.forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->            : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>            : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr : any[]
 >    : ^^^^^
 >forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >n => actual = actual + '\n      ' + n.toString() : (n: any) => string
 >                                                 : ^ ^^^^^^^^^^^^^^^^
 >n : any
@@ -742,7 +742,7 @@ module Harness {
 >result.errors.forEach(err => {                    actual = actual + '\n     ' + err.toString();                }) : void
 >                                                                                                                  : ^^^^
 >result.errors.forEach : (callbackfn: (value: Compiler.CompilerError, index: number, array: Compiler.CompilerError[]) => void, thisArg?: any) => void
->                      : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                      : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >result.errors : Compiler.CompilerError[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >result : Compiler.CompilerResult
@@ -750,7 +750,7 @@ module Harness {
 >errors : Compiler.CompilerError[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: Compiler.CompilerError, index: number, array: Compiler.CompilerError[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >err => {                    actual = actual + '\n     ' + err.toString();                } : (err: Compiler.CompilerError) => void
 >                                                                                           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >err : Compiler.CompilerError
@@ -1202,7 +1202,7 @@ module Harness {
 >filter(arr[i]) : boolean
 >               : ^^^^^^^
 >filter : (item: any) => boolean
->       : ^    ^^   ^^^^^^^^^^^^
+>       : ^    ^^   ^^^^^       
 >arr[i] : any
 >       : ^^^
 >arr : any[]
@@ -1265,11 +1265,11 @@ module Harness {
 >content.split('\r\n') : string[]
 >                      : ^^^^^^^^
 >content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>              : ^         ^^               ^^     ^^^      ^^^^^        
 >content : string
 >        : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^        
 >'\r\n' : "\r\n"
 >       : ^^^^^^
 
@@ -1293,11 +1293,11 @@ module Harness {
 >content.split('\n') : string[]
 >                    : ^^^^^^^^
 >content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>              : ^         ^^               ^^     ^^^      ^^^^^        
 >content : string
 >        : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^        
 >'\n' : "\n"
 >     : ^^^^
         }
@@ -1319,11 +1319,11 @@ module Harness {
 >path.indexOf('tests') : number
 >                      : ^^^^^^
 >path.indexOf : (searchString: string, position?: number) => number
->             : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>             : ^            ^^      ^^        ^^^      ^^^^^      
 >path : string
 >     : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
->        : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >'tests' : "tests"
 >        : ^^^^^^^
 >0 : 0
@@ -1585,11 +1585,11 @@ module Harness {
 >loggers.push(logger) : number
 >                     : ^^^^^^
 >loggers.push : (...items: ILogger[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^      
 >loggers : ILogger[]
 >        : ^^^^^^^^^
 >push : (...items: ILogger[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >logger : ILogger
 >       : ^^^^^^^
     }
@@ -1725,7 +1725,7 @@ module Harness {
 >this.children.push(child) : number
 >                          : ^^^^^^
 >this.children.push : (...items: Runnable[]) => number
->                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^     ^^^^^^^^^^^^^^^^^      
 >this.children : Runnable[]
 >              : ^^^^^^^^^^
 >this : this
@@ -1733,7 +1733,7 @@ module Harness {
 >children : Runnable[]
 >         : ^^^^^^^^^^
 >push : (...items: Runnable[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >child : Runnable
 >      : ^^^^^^^^
         }
@@ -1765,7 +1765,7 @@ module Harness {
 >fn.length : number
 >          : ^^^^^^
 >fn : (done?: IDone) => void
->   : ^    ^^^     ^^^^^^^^^
+>   : ^    ^^^     ^^^^^    
 >length : number
 >       : ^^^^^^
 >0 : 0
@@ -1776,7 +1776,7 @@ module Harness {
 >fn() : void
 >     : ^^^^
 >fn : (done?: IDone) => void
->   : ^    ^^^     ^^^^^^^^^
+>   : ^    ^^^     ^^^^^    
 
                     done();
 >done() : void
@@ -1807,7 +1807,7 @@ module Harness {
 >fn(function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    }) : void
 >                                                                                                                                                                                                                                                     : ^^^^
 >fn : (done?: IDone) => void
->   : ^    ^^^     ^^^^^^^^^
+>   : ^    ^^^     ^^^^^    
 >function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    } : () => void
 >                                                                                                                                                                                                                                                 : ^^^^^^^^^^
 
@@ -2136,7 +2136,7 @@ module Harness {
 >Runnable.currentStack.push(this) : number
 >                                 : ^^^^^^
 >Runnable.currentStack.push : (...items: Runnable[]) => number
->                           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^     ^^^^^^^^^^^^^^^^^      
 >Runnable.currentStack : Runnable[]
 >                      : ^^^^^^^^^^
 >Runnable : typeof Runnable
@@ -2144,7 +2144,7 @@ module Harness {
 >currentStack : Runnable[]
 >             : ^^^^^^^^^^
 >push : (...items: Runnable[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >this : this
 >     : ^^^^
 
@@ -2283,16 +2283,16 @@ module Harness {
                     Runnable.currentStack.pop();
 >Runnable.currentStack.pop() : Runnable
 >                            : ^^^^^^^^
->Runnable.currentStack.pop : () => Runnable
->                          : ^^^^^^^^^^^^^^
+>Runnable.currentStack.pop : () => Runnable | undefined
+>                          : ^^^^^^^^^^^^^^            
 >Runnable.currentStack : Runnable[]
 >                      : ^^^^^^^^^^
 >Runnable : typeof Runnable
 >         : ^^^^^^^^^^^^^^^
 >currentStack : Runnable[]
 >             : ^^^^^^^^^^
->pop : () => Runnable
->    : ^^^^^^^^^^^^^^
+>pop : () => Runnable | undefined
+>    : ^^^^^^^^^^^^^^            
 
                     done()
 >done() : void
@@ -2378,7 +2378,7 @@ module Harness {
 >Runnable.currentStack.push(this) : number
 >                                 : ^^^^^^
 >Runnable.currentStack.push : (...items: Runnable[]) => number
->                           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^     ^^^^^^^^^^^^^^^^^      
 >Runnable.currentStack : Runnable[]
 >                      : ^^^^^^^^^^
 >Runnable : typeof Runnable
@@ -2386,7 +2386,7 @@ module Harness {
 >currentStack : Runnable[]
 >             : ^^^^^^^^^^
 >push : (...items: Runnable[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >this : this
 >     : ^^^^
 
@@ -2429,16 +2429,16 @@ module Harness {
                 Runnable.currentStack.pop();
 >Runnable.currentStack.pop() : Runnable
 >                            : ^^^^^^^^
->Runnable.currentStack.pop : () => Runnable
->                          : ^^^^^^^^^^^^^^
+>Runnable.currentStack.pop : () => Runnable | undefined
+>                          : ^^^^^^^^^^^^^^            
 >Runnable.currentStack : Runnable[]
 >                      : ^^^^^^^^^^
 >Runnable : typeof Runnable
 >         : ^^^^^^^^^^^^^^^
 >currentStack : Runnable[]
 >             : ^^^^^^^^^^
->pop : () => Runnable
->    : ^^^^^^^^^^^^^^
+>pop : () => Runnable | undefined
+>    : ^^^^^^^^^^^^^^            
 
                 if (e) {
 >e : any
@@ -3034,7 +3034,7 @@ module Harness {
 >now = function () {                    return TestUtilities.QueryPerformanceCounter();                } : () => number
 >                                                                                                        : ^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >function () {                    return TestUtilities.QueryPerformanceCounter();                } : () => number
 >                                                                                                  : ^^^^^^^^^^^^
 
@@ -3042,11 +3042,11 @@ module Harness {
 >TestUtilities.QueryPerformanceCounter() : number
 >                                        : ^^^^^^
 >TestUtilities.QueryPerformanceCounter : () => number
->                                      : ^^^^^^^^^^^^
+>                                      : ^^^^^^      
 >TestUtilities : typeof TestUtilities
 >              : ^^^^^^^^^^^^^^^^^^^^
 >QueryPerformanceCounter : () => number
->                        : ^^^^^^^^^^^^
+>                        : ^^^^^^      
                 }
 
                 resolution = TestUtilities.QueryPerformanceFrequency();
@@ -3057,18 +3057,18 @@ module Harness {
 >TestUtilities.QueryPerformanceFrequency() : number
 >                                          : ^^^^^^
 >TestUtilities.QueryPerformanceFrequency : () => number
->                                        : ^^^^^^^^^^^^
+>                                        : ^^^^^^      
 >TestUtilities : typeof TestUtilities
 >              : ^^^^^^^^^^^^^^^^^^^^
 >QueryPerformanceFrequency : () => number
->                          : ^^^^^^^^^^^^
+>                          : ^^^^^^      
 
             } else {
                 now = function () {
 >now = function () {                    return Date.now();                } : () => number
 >                                                                           : ^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >function () {                    return Date.now();                } : () => number
 >                                                                     : ^^^^^^^^^^^^
 
@@ -3076,11 +3076,11 @@ module Harness {
 >Date.now() : number
 >           : ^^^^^^
 >Date.now : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
                 }
 
                 resolution = 1000;
@@ -3135,11 +3135,11 @@ module Harness {
 >Clock.now() : number
 >            : ^^^^^^
 >Clock.now : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >Clock : typeof Clock
 >      : ^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
             }
 
             public end() {
@@ -3167,11 +3167,11 @@ module Harness {
 >Clock.now() : number
 >            : ^^^^^^
 >Clock.now : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >Clock : typeof Clock
 >      : ^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >this.startTime : any
 >               : ^^^
 >this : this
@@ -3209,7 +3209,7 @@ module Harness {
 >this.data.push(value) : number
 >                      : ^^^^^^
 >this.data.push : (...items: number[]) => number
->               : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^^^^^^^^^^^^^^      
 >this.data : number[]
 >          : ^^^^^^^^
 >this : this
@@ -3217,7 +3217,7 @@ module Harness {
 >data : number[]
 >     : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >value : number
 >      : ^^^^^^
             }
@@ -3506,11 +3506,11 @@ module Harness {
 >Math.pow(this.data[i] - sampleMean, 2) : number
 >                                       : ^^^^^^
 >Math.pow : (x: number, y: number) => number
->         : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >pow : (x: number, y: number) => number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >this.data[i] - sampleMean : number
 >                          : ^^^^^^
 >this.data[i] : number
@@ -3533,11 +3533,11 @@ module Harness {
 >Math.sqrt(sumOfSquares / this.data.length) : number
 >                                           : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >sumOfSquares / this.data.length : number
 >                                : ^^^^^^
 >sumOfSquares : number
@@ -3698,11 +3698,11 @@ module Harness {
 
         timeFunction = function (
 >timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^^     ^^^             ^^^^^^^^^^^^^^    
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^^     ^^^             ^^^^^    ^^^^^    
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^^^^^
+>             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^    
 >function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^^     ^^^             ^^^^^^^^^^^^^^    
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^^     ^^^             ^^^^^    ^^^^^    
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -3726,7 +3726,7 @@ module Harness {
 
             f = benchmark.bench
 >f : (bench?: { (): void; }) => void
->  : ^     ^^^             ^^^^^^^^^
+>  : ^     ^^^             ^^^^^    
 >benchmark.bench : (subBench?: () => void) => void
 >                : ^        ^^^          ^^^^^^^^^
 >benchmark : Benchmark
@@ -3768,7 +3768,7 @@ module Harness {
 >timeFunction(benchmark, description, name, f) : void
 >                                              : ^^^^
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^^^^^
+>             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^    
 >benchmark : Benchmark
 >          : ^^^^^^^^^
 >description : string
@@ -3783,15 +3783,15 @@ module Harness {
 >f.call(benchmark, subBenchmark) : any
 >                                : ^^^
 >f.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->       : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>       : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >f : (bench?: { (): void; }) => void
->  : ^     ^^^             ^^^^^^^^^
+>  : ^     ^^^             ^^^^^    
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >benchmark : Benchmark
 >          : ^^^^^^^^^
 >subBenchmark : (name: any, f: any) => void
->             : ^    ^^^^^^^ ^^^^^^^^^^^^^^
+>             : ^    ^^^^^^^ ^^^^^^^^^^    
 
             t.end();
 >t.end() : void
@@ -3838,7 +3838,7 @@ module Harness {
 >benchmarks.length : number
 >                  : ^^^^^^
 >benchmarks : (new () => Benchmark)[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^         ^^^
 >length : number
 >       : ^^^^^^
 >i++ : number
@@ -3852,9 +3852,9 @@ module Harness {
 >new benchmarks[i]() : Benchmark
 >                    : ^^^^^^^^^
 >benchmarks[i] : new () => Benchmark
->              : ^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^         
 >benchmarks : (new () => Benchmark)[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^         ^^^
 >i : number
 >  : ^^^^^^
 
@@ -3911,7 +3911,7 @@ module Harness {
 >timeFunction(b) : void
 >                : ^^^^
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
->             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^^^^^
+>             : ^         ^^         ^^           ^^^      ^^    ^^^      ^^ ^^^                               ^^^^^    
 >b : Benchmark
 >  : ^^^^^^^^^
 
@@ -4126,11 +4126,11 @@ module Harness {
 >benchmarks.push(BenchmarkClass) : number
 >                                : ^^^^^^
 >benchmarks.push : (...items: (new () => Benchmark)[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^^         ^^^^^^^^      
 >benchmarks : (new () => Benchmark)[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^         ^^^
 >push : (...items: (new () => Benchmark)[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^         ^^^^^^^^      
 >BenchmarkClass : any
 >               : ^^^
         }
@@ -4190,7 +4190,7 @@ module Harness {
 >this.lines.push(this.currentLine + str) : number
 >                                        : ^^^^^^
 >this.lines.push : (...items: string[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^^^^      
 >this.lines : string[]
 >           : ^^^^^^^^
 >this : this
@@ -4198,7 +4198,7 @@ module Harness {
 >lines : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >this.currentLine + str : string
 >                       : ^^^^^^
 >this.currentLine : string
@@ -4245,7 +4245,7 @@ module Harness {
 >this.lines.push(this.currentLine) : number
 >                                  : ^^^^^^
 >this.lines.push : (...items: string[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^^^^      
 >this.lines : string[]
 >           : ^^^^^^^^
 >this : this
@@ -4253,7 +4253,7 @@ module Harness {
 >lines : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >this.currentLine : string
 >                 : ^^^^^^
 >this : this
@@ -4474,7 +4474,7 @@ module Harness {
 >this.fileCollection.hasOwnProperty(p) : boolean
 >                                      : ^^^^^^^
 >this.fileCollection.hasOwnProperty : (v: PropertyKey) => boolean
->                                   : ^ ^^           ^^^^^^^^^^^^
+>                                   : ^ ^^           ^^^^^       
 >this.fileCollection : {}
 >                    : ^^
 >this : this
@@ -4482,7 +4482,7 @@ module Harness {
 >fileCollection : {}
 >               : ^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >p : string
 >  : ^^^^^^
 
@@ -4532,7 +4532,7 @@ module Harness {
 >current.lines.unshift('////[' + p + ']') : number
 >                                         : ^^^^^^
 >current.lines.unshift : (...items: string[]) => number
->                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^     ^^^^^^^^^^^^^^^      
 >current.lines : string[]
 >              : ^^^^^^^^
 >current : WriterAggregator
@@ -4540,7 +4540,7 @@ module Harness {
 >lines : string[]
 >      : ^^^^^^^^
 >unshift : (...items: string[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >'////[' + p + ']' : string
 >                  : ^^^^^^
 >'////[' + p : string
@@ -4556,11 +4556,11 @@ module Harness {
 >result.push({ filename: p, file: this.fileCollection[p] }) : number
 >                                                           : ^^^^^^
 >result.push : (...items: { filename: string; file: WriterAggregator; }[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^^^^^^      
 >result : { filename: string; file: WriterAggregator; }[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 >push : (...items: { filename: string; file: WriterAggregator; }[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^^^^^^      
 >{ filename: p, file: this.fileCollection[p] } : { filename: string; file: any; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >filename : string
@@ -4584,7 +4584,7 @@ module Harness {
                 }
                 return result;
 >result : { filename: string; file: WriterAggregator; }[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
             }
         }
 
@@ -4676,11 +4676,11 @@ module Harness {
 >/\.d\.ts$/.test(filename) : boolean
 >                          : ^^^^^^^
 >/\.d\.ts$/.test : (string: string) => boolean
->                : ^      ^^      ^^^^^^^^^^^^
+>                : ^      ^^      ^^^^^       
 >/\.d\.ts$/ : RegExp
 >           : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >filename : string
 >         : ^^^^^^
         }
@@ -5031,19 +5031,19 @@ module Harness {
 >Array.isArray && Array.isArray(arg) : boolean
 >                                    : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >Array.isArray(arg) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >arg : any
 >    : ^^^
 >arg instanceof Array : boolean
@@ -5267,11 +5267,11 @@ module Harness {
 >this.compilesOk(testCode) : boolean
 >                          : ^^^^^^^
 >this.compilesOk : (testCode: any) => boolean
->                : ^        ^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^       
 >this : this
 >     : ^^^^
 >compilesOk : (testCode: any) => boolean
->           : ^        ^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^       
 >testCode : string
 >         : ^^^^^^
             }
@@ -5639,11 +5639,11 @@ module Harness {
 >this.compilesOk(testCode) : boolean
 >                          : ^^^^^^^
 >this.compilesOk : (testCode: any) => boolean
->                : ^        ^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^       
 >this : this
 >     : ^^^^
 >compilesOk : (testCode: any) => boolean
->           : ^        ^^^^^^^^^^^^^^^^^
+>           : ^        ^^^^^^^^^^       
 >testCode : string
 >         : ^^^^^^
             }
@@ -6322,11 +6322,11 @@ module Harness {
 >matchingIdentifiers.push(new Type(entries[i].type, code, targetIdentifier)) : number
 >                                                                            : ^^^^^^
 >matchingIdentifiers.push : (...items: Type[]) => number
->                         : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^^^^^^^      
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
 >push : (...items: Type[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^      
 >new Type(entries[i].type, code, targetIdentifier) : Type
 >                                                  : ^^^^
 >Type : typeof Type
@@ -6484,11 +6484,11 @@ module Harness {
 >matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
 >                                                                                                                                                        : ^^^^^^^
 >matchingIdentifiers.some : (predicate: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
->                         : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>                         : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
 >some : (predicate: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
->     : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>     : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : (value: Type) => boolean
 >                                                                                                                              : ^     ^^^^^^^^^^^^^^^^^^
 >value : Type
@@ -6550,11 +6550,11 @@ module Harness {
 >matchingIdentifiers.push(foundValue) : number
 >                                     : ^^^^^^
 >matchingIdentifiers.push : (...items: Type[]) => number
->                         : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^^^^^^^      
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
 >push : (...items: Type[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^      
 >foundValue : Type
 >           : ^^^^
                                 }
@@ -6646,11 +6646,11 @@ module Harness {
 >matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type)) : boolean
 >                                                                                                                                                        : ^^^^^^^
 >matchingIdentifiers.some : (predicate: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
->                         : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>                         : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
 >some : (predicate: (value: Type, index: number, array: Type[]) => unknown, thisArg?: any) => boolean
->     : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>     : ^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^       
 >value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type) : (value: Type) => boolean
 >                                                                                                                              : ^     ^^^^^^^^^^^^^^^^^^
 >value : Type
@@ -6712,11 +6712,11 @@ module Harness {
 >matchingIdentifiers.push(foundValue) : number
 >                                     : ^^^^^^
 >matchingIdentifiers.push : (...items: Type[]) => number
->                         : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^^^^^^^      
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
 >push : (...items: Type[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^      
 >foundValue : Type
 >           : ^^^^
                                         }
@@ -7488,25 +7488,25 @@ module Harness {
             try {
                 if (compilationContext && compilationContext.preCompile) {
 >compilationContext && compilationContext.preCompile : () => void
->                                                    : ^^^^^^^^^^
+>                                                    : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >compilationContext.preCompile : () => void
->                              : ^^^^^^^^^^
+>                              : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >preCompile : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 
                     compilationContext.preCompile();
 >compilationContext.preCompile() : void
 >                                : ^^^^
 >compilationContext.preCompile : () => void
->                              : ^^^^^^^^^^
+>                              : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >preCompile : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
                 }
 
                 addUnit(code, unitName, false, false, references);
@@ -7666,11 +7666,11 @@ module Harness {
 >fn.indexOf('.d.ts') : number
 >                    : ^^^^^^
 >fn.indexOf : (searchString: string, position?: number) => number
->           : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>           : ^            ^^      ^^        ^^^      ^^^^^      
 >fn : string
 >   : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
->        : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >'.d.ts' : ".d.ts"
 >        : ^^^^^^^
 >0 : 0
@@ -7710,7 +7710,7 @@ module Harness {
 >writer.lines.join('\n') : string
 >                        : ^^^^^^
 >writer.lines.join : (separator?: string) => string
->                  : ^         ^^^      ^^^^^^^^^^^
+>                  : ^         ^^^      ^^^^^      
 >writer.lines : string[]
 >             : ^^^^^^^^
 >writer : WriterAggregator
@@ -7718,7 +7718,7 @@ module Harness {
 >lines : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >'\n' : "\n"
 >     : ^^^^
 
@@ -7819,25 +7819,25 @@ module Harness {
 
                 if (compilationContext && compilationContext.postCompile) {
 >compilationContext && compilationContext.postCompile : () => void
->                                                     : ^^^^^^^^^^
+>                                                     : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >compilationContext.postCompile : () => void
->                               : ^^^^^^^^^^
+>                               : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >postCompile : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 
                     compilationContext.postCompile();
 >compilationContext.postCompile() : void
 >                                 : ^^^^
 >compilationContext.postCompile : () => void
->                               : ^^^^^^^^^^
+>                               : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >postCompile : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
                 }
 
                 var uName = unitName || '0.ts';
@@ -7904,15 +7904,15 @@ module Harness {
 >fileResults.forEach(v => lines = lines.concat(v.file.lines)) : void
 >                                                             : ^^^^
 >fileResults.forEach : (callbackfn: (value: { filename: string; file: WriterAggregator; }, index: number, array: { filename: string; file: WriterAggregator; }[]) => void, thisArg?: any) => void
->                    : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                    : ^          ^^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >fileResults : { filename: string; file: WriterAggregator; }[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 >forEach : (callbackfn: (value: { filename: string; file: WriterAggregator; }, index: number, array: { filename: string; file: WriterAggregator; }[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >v => lines = lines.concat(v.file.lines) : (v: { filename: string; file: WriterAggregator; }) => any[]
->                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^ ^^^^^^^^^^^^^^      ^^^^^^^^                ^^^^^^^^^^^^^
 >v : { filename: string; file: WriterAggregator; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^^^^^^                ^^^
 >lines = lines.concat(v.file.lines) : any[]
 >                                   : ^^^^^
 >lines : any[]
@@ -7920,17 +7920,17 @@ module Harness {
 >lines.concat(v.file.lines) : any[]
 >                           : ^^^^^
 >lines.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->             : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >lines : any[]
 >      : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >v.file.lines : string[]
 >             : ^^^^^^^^
 >v.file : WriterAggregator
 >       : ^^^^^^^^^^^^^^^^
 >v : { filename: string; file: WriterAggregator; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^^^^^^                ^^^
 >file : WriterAggregator
 >     : ^^^^^^^^^^^^^^^^
 >lines : string[]
@@ -7948,11 +7948,11 @@ module Harness {
 >lines.join("\n") : string
 >                 : ^^^^^^
 >lines.join : (separator?: string) => string
->           : ^         ^^^      ^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^      
 >lines : any[]
 >      : ^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >"\n" : "\n"
 >     : ^^^^
 
@@ -8012,7 +8012,7 @@ module Harness {
 >this.errors.push(new CompilerError(err.filename, 0, 0, err.message)) : number
 >                                                                     : ^^^^^^
 >this.errors.push : (...items: CompilerError[]) => number
->                 : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >this.errors : CompilerError[]
 >            : ^^^^^^^^^^^^^^^
 >this : this
@@ -8020,7 +8020,7 @@ module Harness {
 >errors : CompilerError[]
 >       : ^^^^^^^^^^^^^^^
 >push : (...items: CompilerError[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >new CompilerError(err.filename, 0, 0, err.message) : CompilerError
 >                                                   : ^^^^^^^^^^^^^
 >CompilerError : typeof CompilerError
@@ -8048,16 +8048,16 @@ module Harness {
 >      : ^^^^^^^^^^^^^^^^
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
 >                                                                         : ^^^^^^^^^^^^^^^^
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
->                    : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
+>                    : ^      ^^               ^^^^^                       
 >errorLines[i] : string
 >              : ^^^^^^
 >errorLines : string[]
 >           : ^^^^^^^^
 >i : number
 >  : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
 >                                                    : ^^^^^^
 
@@ -8069,7 +8069,7 @@ module Harness {
 >this.errors.push(new CompilerError(match[1], parseFloat(match[2]), parseFloat(match[3]), match[4])) : number
 >                                                                                                    : ^^^^^^
 >this.errors.push : (...items: CompilerError[]) => number
->                 : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >this.errors : CompilerError[]
 >            : ^^^^^^^^^^^^^^^
 >this : this
@@ -8077,7 +8077,7 @@ module Harness {
 >errors : CompilerError[]
 >       : ^^^^^^^^^^^^^^^
 >push : (...items: CompilerError[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^      
 >new CompilerError(match[1], parseFloat(match[2]), parseFloat(match[3]), match[4]) : CompilerError
 >                                                                                  : ^^^^^^^^^^^^^
 >CompilerError : typeof CompilerError
@@ -8091,7 +8091,7 @@ module Harness {
 >parseFloat(match[2]) : number
 >                     : ^^^^^^
 >parseFloat : (string: string) => number
->           : ^      ^^      ^^^^^^^^^^^
+>           : ^      ^^      ^^^^^      
 >match[2] : string
 >         : ^^^^^^
 >match : RegExpMatchArray
@@ -8101,7 +8101,7 @@ module Harness {
 >parseFloat(match[3]) : number
 >                     : ^^^^^^
 >parseFloat : (string: string) => number
->           : ^      ^^      ^^^^^^^^^^^
+>           : ^      ^^      ^^^^^      
 >match[3] : string
 >         : ^^^^^^
 >match : RegExpMatchArray
@@ -8764,12 +8764,12 @@ module Harness {
 >                         : ^^^^^^
 >path.match(/[^\/]*$/) : RegExpMatchArray
 >                      : ^^^^^^^^^^^^^^^^
->path.match : (regexp: string | RegExp) => RegExpMatchArray
->           : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>           : ^      ^^               ^^^^^                       
 >path : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
@@ -8795,9 +8795,9 @@ module Harness {
 >filename : string
 >         : ^^^^^^
 >callback : (res: CompilerResult) => void
->         : ^   ^^              ^^^^^^^^^
+>         : ^   ^^              ^^^^^    
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 >context : CompilationContext
 >        : ^^^^^^^^^^^^^^^^^^
 >references : TypeScript.IFileReference[]
@@ -8931,13 +8931,13 @@ module Harness {
 
             if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 
                 settingsCallback(compiler.settings);
 >settingsCallback(compiler.settings) : void
 >                                    : ^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 >compiler.settings : any
 >                  : ^^^
 >compiler : TypeScript.TypeScriptCompiler
@@ -8980,7 +8980,7 @@ module Harness {
 >filename : string
 >         : ^^^^^^
 >callback : (res: CompilerResult) => void
->         : ^   ^^              ^^^^^^^^^
+>         : ^   ^^              ^^^^^    
 >context : CompilationContext
 >        : ^^^^^^^^^^^^^^^^^^
 >references : TypeScript.IFileReference[]
@@ -8991,7 +8991,7 @@ module Harness {
                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 
                     compiler.settings = oldCompilerSettings;
 >compiler.settings = oldCompilerSettings : any
@@ -9073,8 +9073,8 @@ module Harness {
 >                                                          : ^^^^^^
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
 >                                                       : ^^^^^^^^^^^^^^^^
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
->                                            : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
+>                                            : ^      ^^               ^^^^^                       
 >switchToForwardSlashes(lastUnit.name) : string
 >                                      : ^^^^^^
 >switchToForwardSlashes : (path: string) => string
@@ -9085,8 +9085,8 @@ module Harness {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
@@ -9098,11 +9098,11 @@ module Harness {
 >units.slice(0, units.length - 1) : TestCaseParser.TestUnitData[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >units.slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
->            : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >units : TestCaseParser.TestUnitData[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >0 : 0
 >  : ^
 >units.length - 1 : number
@@ -9122,7 +9122,7 @@ module Harness {
 >Harness.Compiler.defineCompilationContextForTest(unitName, dependencies) : CompilationContext
 >                                                                         : ^^^^^^^^^^^^^^^^^^
 >Harness.Compiler.defineCompilationContextForTest : (filename: string, dependencies: TestCaseParser.TestUnitData[]) => CompilationContext
->                                                 : ^        ^^      ^^            ^^                             ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^        ^^      ^^            ^^                             ^^^^^                  
 >Harness.Compiler : typeof Compiler
 >                 : ^^^^^^^^^^^^^^^
 >Harness : typeof Harness
@@ -9130,7 +9130,7 @@ module Harness {
 >Compiler : typeof Compiler
 >         : ^^^^^^^^^^^^^^^
 >defineCompilationContextForTest : (filename: string, dependencies: TestCaseParser.TestUnitData[]) => CompilationContext
->                                : ^        ^^      ^^            ^^                             ^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^        ^^      ^^            ^^                             ^^^^^                  
 >unitName : string
 >         : ^^^^^^
 >dependencies : TestCaseParser.TestUnitData[]
@@ -9150,9 +9150,9 @@ module Harness {
 >unitName : string
 >         : ^^^^^^
 >callback : (res: Compiler.CompilerResult) => void
->         : ^   ^^                       ^^^^^^^^^
+>         : ^   ^^                       ^^^^^    
 >settingsCallback : () => void
->                 : ^^^^^^^^^^
+>                 : ^^^^^^    
 >compilationContext : CompilationContext
 >                   : ^^^^^^^^^^^^^^^^^^
 >lastUnit.references : TypeScript.IFileReference[]
@@ -9249,11 +9249,11 @@ module Harness {
 >context.preCompile() : void
 >                     : ^^^^
 >context.preCompile : () => void
->                   : ^^^^^^^^^^
+>                   : ^^^^^^    
 >context : CompilationContext
 >        : ^^^^^^^^^^^^^^^^^^
 >preCompile : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
             }
 
             var isDeclareFile = Harness.Compiler.isDeclareFile(unitName);
@@ -9301,11 +9301,11 @@ module Harness {
 >scripts.push(addUnit(code, uName, false, isDeclareFile, references)) : number
 >                                                                     : ^^^^^^
 >scripts.push : (...items: TypeScript.Script[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >scripts : TypeScript.Script[]
 >        : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: TypeScript.Script[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >addUnit(code, uName, false, isDeclareFile, references) : TypeScript.Script
 >                                                       : ^^^^^^^^^^^^^^^^^
 >addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
@@ -9409,30 +9409,30 @@ module Harness {
 >context.postCompile() : void
 >                      : ^^^^
 >context.postCompile : () => void
->                    : ^^^^^^^^^^
+>                    : ^^^^^^    
 >context : CompilationContext
 >        : ^^^^^^^^^^^^^^^^^^
 >postCompile : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
             }
 
             callback(new CompilerResult(stdout.toArray(), errors, scripts));
 >callback(new CompilerResult(stdout.toArray(), errors, scripts)) : void
 >                                                                : ^^^^
 >callback : (res: Compiler.CompilerResult) => void
->         : ^   ^^                       ^^^^^^^^^
+>         : ^   ^^                       ^^^^^    
 >new CompilerResult(stdout.toArray(), errors, scripts) : CompilerResult
 >                                                      : ^^^^^^^^^^^^^^
 >CompilerResult : typeof CompilerResult
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >stdout.toArray() : { filename: string; file: WriterAggregator; }[]
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 >stdout.toArray : () => { filename: string; file: WriterAggregator; }[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^                                               
 >stdout : EmitterIOHost
 >       : ^^^^^^^^^^^^^
 >toArray : () => { filename: string; file: WriterAggregator; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                                               
 >errors : any
 >       : ^^^
 >scripts : TypeScript.Script[]
@@ -9485,11 +9485,11 @@ module Harness {
 >dependencies.forEach(dep => {                        addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));                        addedFiles.push(dep.name);                    }) : void
 >                                                                                                                                                                                                              : ^^^^
 >dependencies.forEach : (callbackfn: (value: TestCaseParser.TestUnitData, index: number, array: TestCaseParser.TestUnitData[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >dependencies : TestCaseParser.TestUnitData[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: TestCaseParser.TestUnitData, index: number, array: TestCaseParser.TestUnitData[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >dep => {                        addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));                        addedFiles.push(dep.name);                    } : (dep: TestCaseParser.TestUnitData) => void
 >                                                                                                                                                                                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dep : TestCaseParser.TestUnitData
@@ -9537,11 +9537,11 @@ module Harness {
 >addedFiles.push(dep.name) : number
 >                          : ^^^^^^
 >addedFiles.push : (...items: any[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^      
 >addedFiles : any[]
 >           : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >dep.name : string
 >         : ^^^^^^
 >dep : TestCaseParser.TestUnitData
@@ -9561,11 +9561,11 @@ module Harness {
 >addedFiles.forEach(file => {                        updateUnit('', file);                    }) : void
 >                                                                                                : ^^^^
 >addedFiles.forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->                   : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                   : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >addedFiles : any[]
 >           : ^^^^^
 >forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >file => {                        updateUnit('', file);                    } : (file: any) => void
 >                                                                            : ^    ^^^^^^^^^^^^^^
 >file : any
@@ -9726,11 +9726,11 @@ module Harness {
 >opts.push({ flag: match[1], value: match[2] }) : number
 >                                               : ^^^^^^
 >opts.push : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >opts : any[]
 >     : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >{ flag: match[1], value: match[2] } : { flag: any; value: any; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >flag : any
@@ -9775,7 +9775,7 @@ module Harness {
 >extractCompilerSettings(code) : CompilerSetting[]
 >                              : ^^^^^^^^^^^^^^^^^
 >extractCompilerSettings : (content: string) => CompilerSetting[]
->                        : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^       ^^      ^^^^^                 
 >code : string
 >     : ^^^^^^
 
@@ -9855,11 +9855,11 @@ module Harness {
 >/[\/]{3}\s*<reference path/.test(line) : boolean
 >                                       : ^^^^^^^
 >/[\/]{3}\s*<reference path/.test : (string: string) => boolean
->                                 : ^      ^^      ^^^^^^^^^^^^
+>                                 : ^      ^^      ^^^^^       
 >/[\/]{3}\s*<reference path/ : RegExp
 >                            : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >line : string
 >     : ^^^^^^
 
@@ -9887,12 +9887,12 @@ module Harness {
 >      : ^^^^^^^^^^^^^^^^
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
 >                                                    : ^^^^^^^^^^^^^^^^
->line.match : (regexp: string | RegExp) => RegExpMatchArray
->           : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>line.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>           : ^      ^^               ^^^^^                       
 >line : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
 >                                        : ^^^^^^
 
@@ -9952,11 +9952,11 @@ module Harness {
 >refs.push(ref) : number
 >               : ^^^^^^
 >refs.push : (...items: TypeScript.IFileReference[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >refs : TypeScript.IFileReference[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >push : (...items: TypeScript.IFileReference[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >ref : { minChar: number; limChar: number; startLine: number; startCol: number; path: string; isResident: boolean; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                     }
@@ -9983,11 +9983,11 @@ module Harness {
 >fileMetadataNames.indexOf(testMetaData[1].toLowerCase()) : number
 >                                                         : ^^^^^^
 >fileMetadataNames.indexOf : (searchElement: string, fromIndex?: number) => number
->                          : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>                          : ^             ^^^^^^^^^^         ^^^      ^^^^^      
 >fileMetadataNames : string[]
 >                  : ^^^^^^^^
 >indexOf : (searchElement: string, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^         ^^^      ^^^^^      
 >testMetaData[1].toLowerCase() : any
 >                              : ^^^
 >testMetaData[1].toLowerCase : any
@@ -10035,11 +10035,11 @@ module Harness {
 >fileMetadataNames.join(', ') : string
 >                             : ^^^^^^
 >fileMetadataNames.join : (separator?: string) => string
->                       : ^         ^^^      ^^^^^^^^^^^
+>                       : ^         ^^^      ^^^^^      
 >fileMetadataNames : string[]
 >                  : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >', ' : ", "
 >     : ^^^^
 
@@ -10123,11 +10123,11 @@ module Harness {
 >files.push(newTestFile) : number
 >                        : ^^^^^^
 >files.push : (...items: TestUnitData[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^      
 >files : TestUnitData[]
 >      : ^^^^^^^^^^^^^^
 >push : (...items: TestUnitData[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^      
 >newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -10294,11 +10294,11 @@ module Harness {
 >files.push(newTestFile) : number
 >                        : ^^^^^^
 >files.push : (...items: TestUnitData[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^      
 >files : TestUnitData[]
 >      : ^^^^^^^^^^^^^^
 >push : (...items: TestUnitData[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^      
 >newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -10371,11 +10371,11 @@ module Harness {
 >this.editRanges = [] : undefined[]
 >                     : ^^^^^^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -10431,7 +10431,7 @@ module Harness {
 >this.content.substring(0, minChar) : string
 >                                   : ^^^^^^
 >this.content.substring : (start: number, end?: number) => string
->                       : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>                       : ^     ^^      ^^   ^^^      ^^^^^      
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -10439,7 +10439,7 @@ module Harness {
 >content : string
 >        : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 >minChar : number
@@ -10457,7 +10457,7 @@ module Harness {
 >this.content.substring(limChar) : string
 >                                : ^^^^^^
 >this.content.substring : (start: number, end?: number) => string
->                       : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>                       : ^     ^^      ^^   ^^^      ^^^^^      
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -10465,7 +10465,7 @@ module Harness {
 >content : string
 >        : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >limChar : number
 >        : ^^^^^^
 
@@ -10494,15 +10494,15 @@ module Harness {
 >this.editRanges.push({                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            }) : number
 >                                                                                                                                                                                                  : ^^^^^^
 >this.editRanges.push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
->                     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^      
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^      
 >{                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            } : { length: number; editRange: any; }
 >                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -10560,11 +10560,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 >this.maxScriptVersions : number
@@ -10576,17 +10576,17 @@ module Harness {
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  ^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  ^^^
 >0 : 0
 >  : ^
 >this.maxScriptVersions - this.editRanges.length : number
@@ -10600,11 +10600,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
             }
@@ -10653,11 +10653,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 >(this.version - version) : number
@@ -10689,11 +10689,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -10715,19 +10715,19 @@ module Harness {
 
             var entries = this.editRanges.slice(initialEditRangeIndex);
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^  
 >initialEditRangeIndex : number
 >                      : ^^^^^^
 
@@ -10741,21 +10741,21 @@ module Harness {
 >entries.map(x => x.editRange.minChar) : any[]
 >                                      : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.editRange.minChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
->                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.editRange.minChar : any
 >                    : ^^^
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -10771,11 +10771,11 @@ module Harness {
 >Math.min(prev, current) : number
 >                        : ^^^^^^
 >Math.min : (...values: number[]) => number
->         : ^^^^      ^^        ^^^^^^^^^^^
+>         : ^^^^      ^^        ^^^^^      
 >Math : Math
 >     : ^^^^
 >min : (...values: number[]) => number
->    : ^^^^      ^^        ^^^^^^^^^^^
+>    : ^^^^      ^^        ^^^^^      
 >prev : any
 >     : ^^^
 >current : any
@@ -10791,21 +10791,21 @@ module Harness {
 >entries.map(x => x.length - x.editRange.limChar) : number[]
 >                                                 : ^^^^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.length - x.editRange.limChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => number
->                                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.length - x.editRange.limChar : number
 >                               : ^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >length : number
 >       : ^^^^^^
 >x.editRange.limChar : any
@@ -10813,7 +10813,7 @@ module Harness {
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >limChar : any
@@ -10829,11 +10829,11 @@ module Harness {
 >Math.min(prev, current) : number
 >                        : ^^^^^^
 >Math.min : (...values: number[]) => number
->         : ^^^^      ^^        ^^^^^^^^^^^
+>         : ^^^^      ^^        ^^^^^      
 >Math : Math
 >     : ^^^^
 >min : (...values: number[]) => number
->    : ^^^^      ^^        ^^^^^^^^^^^
+>    : ^^^^      ^^        ^^^^^      
 >prev : number
 >     : ^^^^^^
 >current : number
@@ -10849,21 +10849,21 @@ module Harness {
 >entries.map(x => x.editRange.delta) : any[]
 >                                    : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.editRange.delta : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
->                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.editRange.delta : any
 >                  : ^^^
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >delta : any
@@ -10899,9 +10899,9 @@ module Harness {
 >entries[0].length : number
 >                  : ^^^^^^
 >entries[0] : { length: number; editRange: TypeScript.ScriptEditRange; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >0 : 0
 >  : ^
 >length : number
@@ -11039,7 +11039,7 @@ module Harness {
 >this.scripts.push(script) : number
 >                          : ^^^^^^
 >this.scripts.push : (...items: ScriptInfo[]) => number
->                  : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >this.scripts : ScriptInfo[]
 >             : ^^^^^^^^^^^^
 >this : this
@@ -11047,7 +11047,7 @@ module Harness {
 >scripts : ScriptInfo[]
 >        : ^^^^^^^^^^^^
 >push : (...items: ScriptInfo[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^      
 >script : ScriptInfo
 >       : ^^^^^^^^^^
         }
@@ -11362,7 +11362,7 @@ module Harness {
 >this.scripts[scriptIndex].content.substring(start, end) : string
 >                                                        : ^^^^^^
 >this.scripts[scriptIndex].content.substring : (start: number, end?: number) => string
->                                            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>                                            : ^     ^^      ^^   ^^^      ^^^^^      
 >this.scripts[scriptIndex].content : string
 >                                  : ^^^^^^
 >this.scripts[scriptIndex] : ScriptInfo
@@ -11378,7 +11378,7 @@ module Harness {
 >content : string
 >        : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >start : number
 >      : ^^^^^^
 >end : number
@@ -11495,7 +11495,7 @@ module Harness {
 >this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : TypeScript.ScriptEditRange
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
->                                                   : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^       ^^      ^^^^^                          
 >this.scripts[scriptIndex] : ScriptInfo
 >                          : ^^^^^^^^^^
 >this.scripts : ScriptInfo[]
@@ -11507,7 +11507,7 @@ module Harness {
 >scriptIndex : number
 >            : ^^^^^^
 >getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
->                         : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^      ^^^^^                          
 >scriptVersion : number
 >              : ^^^^^^
 
@@ -11721,11 +11721,11 @@ module Harness {
 >this.parseSourceText(fileName, sourceText) : TypeScript.Script
 >                                           : ^^^^^^^^^^^^^^^^^
 >this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                     : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^        ^^      ^^          ^^                      ^^^^^                 
 >this : this
 >     : ^^^^
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^      ^^          ^^                      ^^^^^                 
 >fileName : string
 >         : ^^^^^^
 >sourceText : any
@@ -12003,11 +12003,11 @@ module Harness {
 >this.applyEdits(script, edits) : string
 >                               : ^^^^^^
 >this.applyEdits : (content: string, edits: Services.TextEdit[]) => string
->                : ^       ^^      ^^     ^^                   ^^^^^^^^^^^
+>                : ^       ^^      ^^     ^^                   ^^^^^      
 >this : this
 >     : ^^^^
 >applyEdits : (content: string, edits: Services.TextEdit[]) => string
->           : ^       ^^      ^^     ^^                   ^^^^^^^^^^^
+>           : ^       ^^      ^^     ^^                   ^^^^^      
 >script : any
 >       : ^^^
 >edits : Services.TextEdit[]
@@ -12078,11 +12078,11 @@ module Harness {
 >this.normalizeEdits(edits) : Services.TextEdit[]
 >                           : ^^^^^^^^^^^^^^^^^^^
 >this.normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
->                    : ^     ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^                   ^^^^^                   
 >this : this
 >     : ^^^^
 >normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
->               : ^     ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^                   ^^^^^                   
 >edits : Services.TextEdit[]
 >      : ^^^^^^^^^^^^^^^^^^^
 
@@ -12126,11 +12126,11 @@ module Harness {
 >result.substring(0, edit.minChar) : string
 >                                  : ^^^^^^
 >result.substring : (start: number, end?: number) => string
->                 : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>                 : ^     ^^      ^^   ^^^      ^^^^^      
 >result : string
 >       : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 >edit.minChar : any
@@ -12156,11 +12156,11 @@ module Harness {
 >result.substring(edit.limChar) : string
 >                               : ^^^^^^
 >result.substring : (start: number, end?: number) => string
->                 : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>                 : ^     ^^      ^^   ^^^      ^^^^^      
 >result : string
 >       : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >edit.limChar : any
 >             : ^^^
 >edit : Services.TextEdit
@@ -12252,11 +12252,11 @@ module Harness {
 >result.push({ edit: edits[i], index: i }) : number
 >                                          : ^^^^^^
 >result.push : (...items: any[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^      
 >result : any[]
 >       : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >{ edit: edits[i], index: i } : { edit: Services.TextEdit; index: number; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >edit : Services.TextEdit
@@ -12279,25 +12279,25 @@ module Harness {
 
             var temp = mapEdits(edits).sort(function (a, b) {
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: Services.TextEdit; index: number; }[]
->                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                               : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits).sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->                     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits) : { edit: Services.TextEdit; index: number; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
->         : ^     ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^                   ^^^^^                                             
 >edits : Services.TextEdit[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number
->                                                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                         : ^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 
                 var result = a.edit.minChar - b.edit.minChar;
 >result : number
@@ -12309,7 +12309,7 @@ module Harness {
 >a.edit : Services.TextEdit
 >       : ^^^^^^^^^^^^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >edit : Services.TextEdit
 >     : ^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -12319,7 +12319,7 @@ module Harness {
 >b.edit : Services.TextEdit
 >       : ^^^^^^^^^^^^^^^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >edit : Services.TextEdit
 >     : ^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -12343,13 +12343,13 @@ module Harness {
 >a.index : number
 >        : ^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >index : number
 >      : ^^^^^^
 >b.index : number
 >        : ^^^^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >index : number
 >      : ^^^^^^
 
@@ -12379,7 +12379,7 @@ module Harness {
 >temp.length : number
 >            : ^^^^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -12389,9 +12389,9 @@ module Harness {
 >temp[current].edit : Services.TextEdit
 >                   : ^^^^^^^^^^^^^^^^^
 >temp[current] : { edit: Services.TextEdit; index: number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >current : number
 >        : ^^^^^^
 >edit : Services.TextEdit
@@ -12406,7 +12406,7 @@ module Harness {
 >temp.length : number
 >            : ^^^^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -12414,11 +12414,11 @@ module Harness {
 >result.push(currentEdit) : number
 >                         : ^^^^^^
 >result.push : (...items: Services.TextEdit[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >result : Services.TextEdit[]
 >       : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: Services.TextEdit[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >currentEdit : Services.TextEdit
 >            : ^^^^^^^^^^^^^^^^^
 
@@ -12436,9 +12436,9 @@ module Harness {
 >temp[next].edit : Services.TextEdit
 >                : ^^^^^^^^^^^^^^^^^
 >temp[next] : { edit: Services.TextEdit; index: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >next : number
 >     : ^^^^^^
 >edit : Services.TextEdit
@@ -12475,11 +12475,11 @@ module Harness {
 >result.push(currentEdit) : number
 >                         : ^^^^^^
 >result.push : (...items: Services.TextEdit[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >result : Services.TextEdit[]
 >       : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: Services.TextEdit[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >currentEdit : Services.TextEdit
 >            : ^^^^^^^^^^^^^^^^^
 
@@ -12550,11 +12550,11 @@ module Harness {
 >JSON.stringify({ usePullLanguageService: usePull }) : string
 >                                                    : ^^^^^^
 >JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
->               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
 >JSON : JSON
 >     : ^^^^
 >stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
->          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
 >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >usePullLanguageService : boolean
@@ -12583,7 +12583,7 @@ module Harness {
 >description : string
 >            : ^^^^^^
 >block : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 
         if (Runnable.currentStack.length === 0) {
 >Runnable.currentStack.length === 0 : boolean
@@ -12605,7 +12605,7 @@ module Harness {
 >Runnable.currentStack.push(currentRun) : number
 >                                       : ^^^^^^
 >Runnable.currentStack.push : (...items: Runnable[]) => number
->                           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^     ^^^^^^^^^^^^^^^^^      
 >Runnable.currentStack : Runnable[]
 >                      : ^^^^^^^^^^
 >Runnable : typeof Runnable
@@ -12613,7 +12613,7 @@ module Harness {
 >currentStack : Runnable[]
 >             : ^^^^^^^^^^
 >push : (...items: Runnable[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >currentRun : Run
 >           : ^^^
         }
@@ -12622,7 +12622,7 @@ module Harness {
 >Runnable.currentStack[Runnable.currentStack.length - 1].addChild(newScenario) : void
 >                                                                              : ^^^^
 >Runnable.currentStack[Runnable.currentStack.length - 1].addChild : (child: Runnable) => void
->                                                                 : ^     ^^        ^^^^^^^^^
+>                                                                 : ^     ^^        ^^^^^    
 >Runnable.currentStack[Runnable.currentStack.length - 1] : Runnable
 >                                                        : ^^^^^^^^
 >Runnable.currentStack : Runnable[]
@@ -12646,7 +12646,7 @@ module Harness {
 >1 : 1
 >  : ^
 >addChild : (child: Runnable) => void
->         : ^     ^^        ^^^^^^^^^
+>         : ^     ^^        ^^^^^    
 >newScenario : Scenario
 >            : ^^^^^^^^
     }
@@ -12668,13 +12668,13 @@ module Harness {
 >description : string
 >            : ^^^^^^
 >block : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 
         Runnable.currentStack[Runnable.currentStack.length - 1].addChild(testCase);
 >Runnable.currentStack[Runnable.currentStack.length - 1].addChild(testCase) : void
 >                                                                           : ^^^^
 >Runnable.currentStack[Runnable.currentStack.length - 1].addChild : (child: Runnable) => void
->                                                                 : ^     ^^        ^^^^^^^^^
+>                                                                 : ^     ^^        ^^^^^    
 >Runnable.currentStack[Runnable.currentStack.length - 1] : Runnable
 >                                                        : ^^^^^^^^
 >Runnable.currentStack : Runnable[]
@@ -12698,7 +12698,7 @@ module Harness {
 >1 : 1
 >  : ^
 >addChild : (child: Runnable) => void
->         : ^     ^^        ^^^^^^^^^
+>         : ^     ^^        ^^^^^    
 >testCase : TestCase
 >         : ^^^^^^^^
     }
@@ -12801,18 +12801,18 @@ module Harness {
 >                         : ^^^^^^
 >path.match(/[^\/]*$/) : RegExpMatchArray
 >                      : ^^^^^^^^^^^^^^^^
->path.match : (regexp: string | RegExp) => RegExpMatchArray
->           : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>           : ^      ^^               ^^^^^                       
 >path : string
 >     : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
+>      : ^      ^^               ^^^^^                       
 >/[^\/]*$/ : RegExp
 >          : ^^^^^^
 >0 : 0
 >  : ^
 >callback : (error: Error, result: any) => void
->         : ^     ^^     ^^      ^^   ^^^^^^^^^
+>         : ^     ^^     ^^      ^^   ^^^^^    
         }
 
         export function runJSString(code: string, callback: (error: Error, result: any) => void ) {
@@ -12884,7 +12884,7 @@ module Harness {
 >eval(code) : any
 >           : ^^^
 >eval : (x: string) => any
->     : ^ ^^      ^^^^^^^^
+>     : ^ ^^      ^^^^^   
 >code : string
 >     : ^^^^^^
 
@@ -12923,7 +12923,7 @@ module Harness {
 >callback(null, res) : void
 >                    : ^^^^
 >callback : (error: Error, result: any) => void
->         : ^     ^^     ^^      ^^   ^^^^^^^^^
+>         : ^     ^^     ^^      ^^   ^^^^^    
 >res : any
 >    : ^^^
 
@@ -12966,7 +12966,7 @@ module Harness {
 >callback(e, null) : void
 >                  : ^^^^
 >callback : (error: Error, result: any) => void
->         : ^     ^^     ^^      ^^   ^^^^^^^^^
+>         : ^     ^^     ^^      ^^   ^^^^^    
 >e : any
 >  : ^^^
             }
@@ -13016,7 +13016,7 @@ module Harness {
 >code : string
 >     : ^^^^^^
 >callback : (error: Error, result: any) => void
->         : ^     ^^     ^^      ^^   ^^^^^^^^^
+>         : ^     ^^     ^^      ^^   ^^^^^    
 
             });
         }
@@ -13392,11 +13392,11 @@ module Harness {
 >reportContent.replace(htmlTrailer, '') : string
 >                                       : ^^^^^^
 >reportContent.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                      : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                      : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >reportContent : string
 >              : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >htmlTrailer : string
 >            : ^^^^^^
 >'' : ""
@@ -13505,7 +13505,7 @@ module Harness {
 >generateContent() : string
 >                  : ^^^^^^
 >generateContent : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 
             if (actual === undefined) {
 >actual === undefined : boolean
@@ -13664,11 +13664,11 @@ module Harness {
 >expected.replace(/\r\n?/g, '\n') : string
 >                                 : ^^^^^^
 >expected.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                 : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                 : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >expected : string
 >         : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
 >'\n' : "\n"
@@ -13682,11 +13682,11 @@ module Harness {
 >actual.replace(/\r\n?/g, '\n') : string
 >                               : ^^^^^^
 >actual.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->               : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>               : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >actual : string
 >       : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
 >'\n' : "\n"
@@ -13828,7 +13828,7 @@ module Harness {
 >prepareBaselineReport() : string
 >                        : ^^^^^^
 >prepareBaselineReport : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 
                 reportContentSoFar = reportContentSoFar + header + '<div class="code">' + diff.mergedHtml + '</div>' + trailer + htmlTrailer;
 >reportContentSoFar = reportContentSoFar + header + '<div class="code">' + diff.mergedHtml + '</div>' + trailer + htmlTrailer : string
@@ -13944,11 +13944,11 @@ module Harness {
 >generateActual(actualFilename, generateContent) : string
 >                                                : ^^^^^^
 >generateActual : (actualFilename: string, generateContent: () => string) => string
->               : ^              ^^      ^^               ^^            ^^^^^^^^^^^
+>               : ^              ^^      ^^               ^^            ^^^^^      
 >actualFilename : string
 >               : ^^^^^^
 >generateContent : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 
                 var comparison = compareToBaseline(actual, relativeFilename, opts);
 >comparison : { expected: string; actual: string; }
@@ -14021,11 +14021,11 @@ module Harness {
 >generateActual(actualFilename, generateContent) : string
 >                                                : ^^^^^^
 >generateActual : (actualFilename: string, generateContent: () => string) => string
->               : ^              ^^      ^^               ^^            ^^^^^^^^^^^
+>               : ^              ^^      ^^               ^^            ^^^^^      
 >actualFilename : string
 >               : ^^^^^^
 >generateContent : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 
                     });
 

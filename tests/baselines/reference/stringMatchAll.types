@@ -6,12 +6,12 @@ const matches = "matchAll".matchAll(/\w/g);
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"matchAll".matchAll(/\w/g) : IterableIterator<RegExpExecArray>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"matchAll".matchAll : (regexp: RegExp) => IterableIterator<RegExpExecArray>
->                    : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"matchAll".matchAll : (regexp: RegExp) => IterableIterator<RegExpExecArray, BuiltinIteratorReturn>
+>                    : ^      ^^      ^^^^^                                                        
 >"matchAll" : "matchAll"
 >           : ^^^^^^^^^^
->matchAll : (regexp: RegExp) => IterableIterator<RegExpExecArray>
->         : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matchAll : (regexp: RegExp) => IterableIterator<RegExpExecArray, BuiltinIteratorReturn>
+>         : ^      ^^      ^^^^^                                                        
 >/\w/g : RegExp
 >      : ^^^^^^
 

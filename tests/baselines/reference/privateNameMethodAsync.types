@@ -15,11 +15,11 @@ const C = class {
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >42 : 42
 >   : ^^
 
@@ -55,7 +55,7 @@ const C = class {
 >this.#baz().next() : IteratorResult<number, void>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz().next : (...args: [] | [unknown]) => IteratorResult<number, void>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^^ 
 >this.#baz() : Generator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz : () => Generator<number, void, unknown>
@@ -63,7 +63,7 @@ const C = class {
 >this : this
 >     : ^^^^
 >next : (...args: [] | [unknown]) => IteratorResult<number, void>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^^ 
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -81,7 +81,7 @@ const C = class {
 >this.#qux().next() : Promise<IteratorResult<number, void>>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux().next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^  ^^^^  
 >this.#qux() : AsyncGenerator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux : () => AsyncGenerator<number, void, unknown>
@@ -89,7 +89,7 @@ const C = class {
 >this : this
 >     : ^^^^
 >next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^  ^^^^  
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -115,11 +115,11 @@ const C = class {
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >42 : 42
 >   : ^^
     }
@@ -129,7 +129,7 @@ new C().foo().then(console.log);
 >new C().foo().then(console.log) : Promise<void>
 >                                : ^^^^^^^^^^^^^
 >new C().foo().then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >new C().foo() : Promise<number>
 >              : ^^^^^^^^^^^^^^^
 >new C().foo : () => Promise<number>
@@ -141,11 +141,11 @@ new C().foo().then(console.log);
 >foo : () => Promise<number>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
