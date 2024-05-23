@@ -283,6 +283,7 @@ import {
     SemanticClassificationFormat,
     setNodeChildren,
     setObjectAllocator,
+    shouldIncludeBindAndCheckDiagnostics,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -291,6 +292,7 @@ import {
     SignatureHelpItemsOptions,
     SignatureKind,
     singleElementArray,
+    skipTypeChecking,
     SmartSelectionRange,
     some,
     SortedArray,
@@ -2059,14 +2061,23 @@ export function createLanguageService(
     function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined {
         synchronizeHostData();
 
-        const targetSourceFile = getValidSourceFile(fileName);
+        const sourceFile = getValidSourceFile(fileName);
 
-        const nodes = getNodesForRanges(targetSourceFile, ranges);
+        const options = program.getCompilerOptions();
+        // This is an optimization to avoid computing the nodes in the range if we will not type check this file.
+        if (
+            skipTypeChecking(sourceFile, options, program) ||
+            !shouldIncludeBindAndCheckDiagnostics(sourceFile, options)
+        ) {
+            return undefined;
+        }
+
+        const nodes = getNodesForRanges(sourceFile, ranges);
         if (!nodes) {
             return undefined;
         }
         const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
-        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
+        const semanticDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken, nodes);
         return {
             diagnostics: semanticDiagnostics.slice(),
             spans: checkedSpans,

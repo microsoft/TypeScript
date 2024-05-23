@@ -1319,7 +1319,7 @@ export class Session<TMessage = string> implements EventSender {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
             const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
             if (kind === "semanticDiag") {
-                this.semanticCheckPerformance?.set(file, duration);
+                this.semanticCheckPerformance.set(file, duration);
             }
 
             const body: protocol.DiagnosticEventBody = {

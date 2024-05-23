@@ -291,6 +291,7 @@ import {
     ScriptTarget,
     setParent,
     setParentRecursive,
+    shouldIncludeBindAndCheckDiagnostics,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -3033,16 +3034,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             Debug.assert(!!sourceFile.bindDiagnostics);
 
             const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
-            const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
             const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
-            const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
+            const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
 
-            // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
-            // - plain JS: .js files with no // ts-check and checkJs: undefined
-            // - check JS: .js files with either // ts-check or checkJs: true
-            // - external: files that are added by plugins
-            const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+            const includeBindAndCheckDiagnostics = shouldIncludeBindAndCheckDiagnostics(sourceFile, options);
             let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
             let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken, nodesToCheck) : emptyArray;
             if (isPlainJs) {
@@ -3050,7 +3045,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, !!nodesToCheck, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(
+                sourceFile,
+                includeBindAndCheckDiagnostics && !isPlainJs,
+                !!nodesToCheck,
+                bindDiagnostics,
+                checkDiagnostics,
+                isCheckJs ? sourceFile.jsDocDiagnostics : undefined,
+            );
         });
     }
 
