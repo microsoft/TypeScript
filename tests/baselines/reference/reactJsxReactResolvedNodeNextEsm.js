@@ -13,6 +13,7 @@ export const a = <div></div>;
     "main": "",
     "types": "index.d.ts",
     "exports": {
+        ".": "./index.d.ts",
         "./*.js": "./*.js",
         "./*": "./*.js"
     }

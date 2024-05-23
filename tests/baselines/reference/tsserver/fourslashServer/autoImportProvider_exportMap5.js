@@ -154,13 +154,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"nodenext\"\n  }\n}"
+	/node_modules/@types/dependency/lib/index.d.ts Text-1 "export declare function fooFromIndex(): void;"
 
 
 	lib.d.ts
@@ -171,6 +173,9 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
+	node_modules/@types/dependency/lib/index.d.ts
+	  Entry point for implicit type library 'dependency' with packageId '@types/dependency/lib/index.d.ts@1.0.0'
+	  File is ECMAScript module because 'node_modules/@types/dependency/package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
@@ -179,7 +184,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -196,6 +201,7 @@ watchedFiles::
 /node_modules/@types/dependency/lib/index.d.ts: *new*
   {"pollingInterval":500}
 /node_modules/@types/dependency/lib/package.json: *new*
+  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /node_modules/@types/dependency/package.json: *new*
   {"pollingInterval":2000}
@@ -238,8 +244,9 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /node_modules/@types/dependency/lib/index.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
 /src/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -265,7 +272,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -284,6 +291,7 @@ watchedFiles::
 /node_modules/@types/dependency/lib/index.d.ts:
   {"pollingInterval":500}
 /node_modules/@types/dependency/lib/package.json:
+  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
@@ -328,8 +336,9 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /node_modules/@types/dependency/lib/index.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
 /src/foo.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -1141,6 +1150,7 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/@types/dependency/lib/package.json:
   {"pollingInterval":2000}
+  {"pollingInterval":2000}
   {"pollingInterval":2000} *new*
 /node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
@@ -1187,8 +1197,9 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /node_modules/@types/dependency/lib/index.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
 /node_modules/@types/dependency/lib/lol.d.ts *new*
     version: Text-1
     containingProjects: 1

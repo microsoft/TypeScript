@@ -5,7 +5,8 @@
 // @Filename: /tsconfig.json
 //// {
 ////   "compilerOptions": {
-////     "module": "nodenext"
+////     "module": "nodenext",
+////     "types": []
 ////   }
 //// }
 
