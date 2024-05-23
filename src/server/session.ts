@@ -1318,7 +1318,7 @@ export class Session<TMessage = string> implements EventSender {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
             const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
-            if (kind === "semanticDiag") {
+            if (kind === "semanticDiag" && !this.shouldDoRegionCheck(file)) {
                 this.semanticCheckPerformance.set(file, duration);
             }
 
