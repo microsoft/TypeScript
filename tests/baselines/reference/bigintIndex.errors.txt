@@ -1,5 +1,5 @@
 a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
+a.ts(8,11): error TS1537: A bigint literal may not be used as an index.
 a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
 a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
 b.ts(2,12): error TS1536: A bigint literal may not be used as a property name.
@@ -21,7 +21,7 @@ c.ts(3,9): error TS1537: A bigint literal may not be used as an index.
     num = arr["1"];
     num = arr[1n]; // should error
               ~~
-!!! error TS2538: Type '1n' cannot be used as an index type.
+!!! error TS1537: A bigint literal may not be used as an index.
     
     let key: keyof any; // should be type "string | number | symbol"
     key = 123;

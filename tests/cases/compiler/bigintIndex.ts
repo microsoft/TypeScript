@@ -9,6 +9,7 @@ const arr: number[] = [1, 2, 3];
 let num: number = arr[1];
 num = arr["1"];
 num = arr[1n]; // should error
+num = [1, 2, 3][1n]; // should error
 
 let key: keyof any; // should be type "string | number | symbol"
 key = 123;
