@@ -2,10 +2,11 @@ a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'nu
 a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
 a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
 a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
-b.ts(2,12): error TS18057: A bigint literal may not be used as a property name.
+b.ts(2,12): error TS1536: A bigint literal may not be used as a property name.
 b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-b.ts(5,5): error TS18057: A bigint literal may not be used as a property name.
+b.ts(5,5): error TS1536: A bigint literal may not be used as a property name.
+c.ts(3,9): error TS1537: A bigint literal may not be used as an index.
 
 
 ==== a.ts (4 errors) ====
@@ -45,7 +46,7 @@ b.ts(5,5): error TS18057: A bigint literal may not be used as a property name.
     // BigInt cannot be used as an object literal property
     const a = {1n: 123};
                ~~
-!!! error TS18057: A bigint literal may not be used as a property name.
+!!! error TS1536: A bigint literal may not be used as a property name.
     const b = {[1n]: 456};
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
@@ -54,5 +55,14 @@ b.ts(5,5): error TS18057: A bigint literal may not be used as a property name.
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     { ({1n: 123}); };
         ~~
-!!! error TS18057: A bigint literal may not be used as a property name.
+!!! error TS1536: A bigint literal may not be used as a property name.
+    
+==== c.ts (1 errors) ====
+    const crr = [1, 2, 3] as const;
+    
+    const { 0n: f } = crr; // bigint should give an index error
+            ~~
+!!! error TS1537: A bigint literal may not be used as an index.
+    const { 0: d } = crr;
+    const { "0": e } = crr;
     
