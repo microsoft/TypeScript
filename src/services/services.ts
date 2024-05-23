@@ -2064,10 +2064,12 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
 
         const options = program.getCompilerOptions();
-        // This is an optimization to avoid computing the nodes in the range if we will not type check this file.
+        // This is an optimization to avoid computing the nodes in the range if either
+        // we will skip semantic diagnostics for this file or if we already semantic diagnostics for it.
         if (
             skipTypeChecking(sourceFile, options, program) ||
-            !shouldIncludeBindAndCheckDiagnostics(sourceFile, options)
+            !shouldIncludeBindAndCheckDiagnostics(sourceFile, options) ||
+            program.getCachedSemanticDiagnostics(sourceFile)
         ) {
             return undefined;
         }
