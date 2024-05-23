@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_es2022.ts] ////
+
+=== arbitraryModuleNamespaceIdentifiers_es2022.ts ===
+const someValue = "someValue";
+>someValue : Symbol(someValue, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 0, 5))
+
+type someType = "someType";
+>someType : Symbol(someType, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 0, 30))
+
+export { someValue as "<X>" };
+>someValue : Symbol(someValue, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 0, 5))
+>"<X>" : Symbol(valueZ["<X>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 3, 8))
+
+import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>valueX : Symbol(valueX, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 4, 8))
+
+if (valueX !== "someValue") throw "should be someValue";
+>valueX : Symbol(valueX, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 4, 8))
+
+export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>"<Y>" : Symbol(valueZ["<Y>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 7, 8))
+
+import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>valueY : Symbol(valueY, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 8, 8))
+
+if (valueY !== "someValue") throw "should be someValue";
+>valueY : Symbol(valueY, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 8, 8))
+
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>"<Z>" : Symbol(valueZ["<Z>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 11, 6))
+
+import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 12, 8))
+
+if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+>valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 12, 8))
+>"<X>" : Symbol(valueZ["<X>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 3, 8))
+
+if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+>valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 12, 8))
+>"<Y>" : Symbol(valueZ["<Y>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 7, 8))
+
+if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+>valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 12, 8))
+>"<Z>" : Symbol(valueZ["<Z>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 11, 6))
+>valueZ : Symbol(valueZ, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 12, 8))
+
+export { type someType as "<A>" };
+>someType : Symbol(someType, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 0, 30))
+>"<A>" : Symbol(valueZ["<A>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 17, 8))
+
+import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>typeA : Symbol(typeA, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 18, 8))
+
+const importTest: typeA = "expect error about someType";
+>importTest : Symbol(importTest, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 19, 5))
+>typeA : Symbol(typeA, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 18, 8))
+
+export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>"<B>" : Symbol(valueZ["<B>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 21, 8))
+
+import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>typeB : Symbol(typeB, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 22, 8))
+
+const reimportTest: typeB = "expect error about someType";
+>reimportTest : Symbol(reimportTest, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 23, 5))
+>typeB : Symbol(typeB, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 22, 8))
+
+export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>"<C>" : Symbol(valueZ["<C>"], Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 25, 11))
+
+import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_es2022";
+>typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 26, 8))
+
+export type otherType = "otherType";
+>otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 26, 83))
+
+const importStarTestA: typeC.otherType = "expect error about otherType";
+>importStarTestA : Symbol(importStarTestA, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 28, 5))
+>typeC : Symbol(typeC, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 26, 8))
+>otherType : Symbol(valueZ.otherType, Decl(arbitraryModuleNamespaceIdentifiers_es2022.ts, 26, 83))
+

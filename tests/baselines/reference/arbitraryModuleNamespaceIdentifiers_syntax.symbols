@@ -1,0 +1,98 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_syntax.ts] ////
+
+=== values.ts ===
+// Valid
+export const foo = 123;
+>foo : Symbol(foo, Decl(values.ts, 1, 12))
+
+export { foo as "valid 1" };
+>foo : Symbol(foo, Decl(values.ts, 1, 12))
+>"valid 1" : Symbol("valid 1", Decl(values.ts, 2, 8))
+
+import { "valid 1" as bar } from "./values";
+>bar : Symbol(bar, Decl(values.ts, 3, 8))
+
+export { "valid 1" as "valid 2" } from "./values";
+>"valid 2" : Symbol("valid 2", Decl(values.ts, 4, 8))
+
+export { foo as "valid 3" } from "./values";
+>foo : Symbol(foo, Decl(values.ts, 1, 12))
+>"valid 3" : Symbol("valid 3", Decl(values.ts, 5, 8))
+
+export * as "valid 4" from "./values";
+>"valid 4" : Symbol("valid 4", Decl(values.ts, 6, 6))
+
+// Invalid
+import { "invalid 1" } from "./values";
+> : Symbol((Missing), Decl(values.ts, 9, 8))
+
+import { foo as "invalid 2" } from "./values";
+>foo : Symbol(foo, Decl(values.ts, 1, 12))
+>"invalid 2" : Symbol("invalid 2", Decl(values.ts, 10, 8))
+
+export { "invalid 3" as baz };
+>baz : Symbol(baz, Decl(values.ts, 11, 8))
+
+=== types1.ts ===
+// Valid
+export type foo = 123;
+>foo : Symbol(foo, Decl(types1.ts, 0, 0))
+
+export type { foo as "valid 1" };
+>foo : Symbol(foo, Decl(types1.ts, 0, 0))
+>"valid 1" : Symbol("valid 1", Decl(types1.ts, 2, 13))
+
+import type { "valid 1" as bar } from "./types1";
+>bar : Symbol(bar, Decl(types1.ts, 3, 13))
+
+export type { "valid 1" as "valid 2" } from "./types1";
+>"valid 2" : Symbol("valid 2", Decl(types1.ts, 4, 13))
+
+export type { foo as "valid 3" } from "./types1";
+>foo : Symbol(foo, Decl(types1.ts, 0, 0))
+>"valid 3" : Symbol("valid 3", Decl(types1.ts, 5, 13))
+
+export type * as "valid 4" from "./types1";
+>"valid 4" : Symbol("valid 4", Decl(types1.ts, 6, 11))
+
+// Invalid
+import type { "invalid 1" } from "./types1";
+> : Symbol((Missing), Decl(types1.ts, 9, 13))
+
+import type { foo as "invalid 2" } from "./types1";
+>foo : Symbol(foo, Decl(types1.ts, 0, 0))
+>"invalid 2" : Symbol("invalid 2", Decl(types1.ts, 10, 13))
+
+export type { "invalid 3" as baz };
+>baz : Symbol(baz, Decl(types1.ts, 11, 13))
+
+=== types2.ts ===
+// Valid
+export type foo = 123;
+>foo : Symbol(foo, Decl(types2.ts, 0, 0))
+
+export { type foo as "valid 1" };
+>foo : Symbol(foo, Decl(types2.ts, 0, 0))
+>"valid 1" : Symbol("valid 1", Decl(types2.ts, 2, 8))
+
+import { type "valid 1" as bar } from "./types2";
+>bar : Symbol(bar, Decl(types2.ts, 3, 8))
+
+export { type "valid 1" as "valid 2" } from "./types2";
+>"valid 2" : Symbol("valid 2", Decl(types2.ts, 4, 8))
+
+export { type foo as "valid 3" } from "./types2";
+>foo : Symbol(foo, Decl(types2.ts, 0, 0))
+>"valid 3" : Symbol("valid 3", Decl(types2.ts, 5, 8))
+
+// Invalid
+import { type "invalid 1" } from "./types2";
+> : Symbol((Missing), Decl(types2.ts, 8, 8))
+
+import { type foo as "invalid 2" } from "./types2";
+>foo : Symbol(foo, Decl(types2.ts, 0, 0))
+>"invalid 2" : Symbol("invalid 2", Decl(types2.ts, 9, 8))
+
+export { type "invalid 3" as baz };
+>baz : Symbol(baz, Decl(types2.ts, 10, 8))
+

@@ -1,0 +1,33 @@
+//@module: CommonJS
+//@target: ES2022
+//@declaration: true
+
+const someValue = "someValue";
+type someType = "someType";
+
+export { someValue as "<X>" };
+import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+if (valueX !== "someValue") throw "should be someValue";
+
+export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+if (valueY !== "someValue") throw "should be someValue";
+
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+
+export { type someType as "<A>" };
+import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+const importTest: typeA = "expect error about someType";
+
+export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+const reimportTest: typeB = "expect error about someType";
+
+export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_commonjs";
+export type otherType = "otherType";
+const importStarTestA: typeC.otherType = "expect error about otherType";

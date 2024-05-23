@@ -42,7 +42,6 @@ import {
     ImportEqualsDeclaration,
     ImportSpecifier,
     InitializedPropertyDeclaration,
-    InternalSymbolName,
     isAutoAccessorPropertyDeclaration,
     isBindingPattern,
     isClassStaticBlockDeclaration,
@@ -68,6 +67,9 @@ import {
     map,
     MethodDeclaration,
     ModifierFlags,
+    ModuleExportName,
+    moduleExportNameIsDefault,
+    moduleExportNameTextUnescaped,
     NamedExportBindings,
     NamedImportBindings,
     NamespaceExport,
@@ -104,7 +106,7 @@ export interface ExternalModuleInfo {
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
-    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
+    exportedNames: ModuleExportName[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
     exportedFunctions: FunctionDeclaration[] | undefined; // all of the top-level exported function declarations
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
@@ -117,9 +119,7 @@ function containsDefaultReference(node: NamedImportBindings | NamedExportBinding
 }
 
 function isNamedDefaultReference(e: ImportSpecifier | ExportSpecifier): boolean {
-    return e.propertyName !== undefined ?
-        e.propertyName.escapedText === InternalSymbolName.Default :
-        e.name.escapedText === InternalSymbolName.Default;
+    return moduleExportNameIsDefault(e.propertyName || e.name);
 }
 
 /** @internal */
@@ -174,7 +174,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportSpecifiers = new IdentifierNameMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
-    let exportedNames: Identifier[] | undefined;
+    let exportedNames: ModuleExportName[] | undefined;
     let exportedFunctions: FunctionDeclaration[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
@@ -223,9 +223,10 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         }
                         else {
                             const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
-                            if (!uniqueExports.get(idText(name))) {
+                            const nameText = moduleExportNameTextUnescaped(name);
+                            if (!uniqueExports.get(nameText)) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                                uniqueExports.set(idText(name), true);
+                                uniqueExports.set(nameText, true);
                                 exportedNames = append(exportedNames, name);
                             }
                             // we use the same helpers for `export * as ns` as we do for `import * as ns`
@@ -307,27 +308,30 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
-            if (!uniqueExports.get(idText(specifier.name))) {
+            const specifierNameText = moduleExportNameTextUnescaped(specifier.name);
+            if (!uniqueExports.get(specifierNameText)) {
                 const name = specifier.propertyName || specifier.name;
-                if (!node.moduleSpecifier) {
-                    exportSpecifiers.add(name, specifier);
+                if (name.kind !== SyntaxKind.StringLiteral) {
+                    if (!node.moduleSpecifier) {
+                        exportSpecifiers.add(name, specifier);
+                    }
+
+                    const decl = resolver.getReferencedImportDeclaration(name)
+                        || resolver.getReferencedValueDeclaration(name);
+
+                    if (decl) {
+                        multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                    }
                 }
 
-                const decl = resolver.getReferencedImportDeclaration(name)
-                    || resolver.getReferencedValueDeclaration(name);
-
-                if (decl) {
-                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
-                }
-
-                uniqueExports.set(idText(specifier.name), true);
+                uniqueExports.set(specifierNameText, true);
                 exportedNames = append(exportedNames, specifier.name);
             }
         }
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: ModuleExportName[] | undefined, exportedBindings: Identifier[][]) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {

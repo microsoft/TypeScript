@@ -257,6 +257,7 @@ import {
     modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
     ModuleKind,
     Mutable,
     NamedExportBindings,
@@ -2910,6 +2911,9 @@ namespace Parser {
                 // That means we're in something like `import { from "mod"`. Stop here can give better error message.
                 if (token() === SyntaxKind.FromKeyword && lookAhead(nextTokenIsStringLiteral)) {
                     return false;
+                }
+                if (token() === SyntaxKind.StringLiteral) {
+                    return true; // For "arbitrary module namespace identifiers"
                 }
                 return tokenIsIdentifierOrKeyword(token());
             case ParsingContext.JsxAttributes:
@@ -8509,6 +8513,10 @@ namespace Parser {
         return finishNode(factory.createNamespaceImport(name), pos);
     }
 
+    function parseModuleExportName(parseName: () => Identifier): ModuleExportName {
+        return token() === SyntaxKind.StringLiteral ? parseLiteralNode() as StringLiteral : parseName();
+    }
+
     function parseNamedImportsOrExports(kind: SyntaxKind.NamedImports): NamedImports;
     function parseNamedImportsOrExports(kind: SyntaxKind.NamedExports): NamedExports;
     function parseNamedImportsOrExports(kind: SyntaxKind): NamedImportsOrExports {
@@ -8541,18 +8549,18 @@ namespace Parser {
         const pos = getNodePos();
         // ImportSpecifier:
         //   BindingIdentifier
-        //   IdentifierName as BindingIdentifier
+        //   ModuleExportName as BindingIdentifier
         // ExportSpecifier:
-        //   IdentifierName
-        //   IdentifierName as IdentifierName
+        //   ModuleExportName
+        //   ModuleExportName as ModuleExportName
         let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
         let checkIdentifierStart = scanner.getTokenStart();
         let checkIdentifierEnd = scanner.getTokenEnd();
         let isTypeOnly = false;
-        let propertyName: Identifier | undefined;
+        let propertyName: ModuleExportName | undefined;
         let canParseAsKeyword = true;
-        let name = parseIdentifierName();
-        if (name.escapedText === "type") {
+        let name = parseModuleExportName(parseIdentifierName);
+        if (name.kind === SyntaxKind.Identifier && name.escapedText === "type") {
             // If the first token of an import specifier is 'type', there are a lot of possibilities,
             // especially if we see 'as' afterwards:
             //
@@ -8592,6 +8600,11 @@ namespace Parser {
                     name = firstAs;
                 }
             }
+            else if (token() === SyntaxKind.StringLiteral) {
+                // { type "something" as ... }
+                isTypeOnly = true;
+                name = parseLiteralNode() as StringLiteral;
+            }
             else if (tokenIsIdentifierOrKeyword(token())) {
                 // { type something ...? }
                 isTypeOnly = true;
@@ -8599,16 +8612,16 @@ namespace Parser {
             }
         }
 
-        if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
+        if ((kind === SyntaxKind.ImportSpecifier && name.kind === SyntaxKind.StringLiteral) || (canParseAsKeyword && token() === SyntaxKind.AsKeyword)) {
             propertyName = name;
             parseExpected(SyntaxKind.AsKeyword);
-            name = parseNameWithKeywordCheck();
+            name = parseModuleExportName(parseNameWithKeywordCheck);
         }
         if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
             parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
         }
         const node = kind === SyntaxKind.ImportSpecifier
-            ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
+            ? factory.createImportSpecifier(isTypeOnly, propertyName, name as Identifier)
             : factory.createExportSpecifier(isTypeOnly, propertyName, name);
         return finishNode(node, pos);
 
@@ -8621,7 +8634,7 @@ namespace Parser {
     }
 
     function parseNamespaceExport(pos: number): NamespaceExport {
-        return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
+        return finishNode(factory.createNamespaceExport(parseModuleExportName(parseIdentifierName)), pos);
     }
 
     function parseExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportDeclaration {
@@ -8653,6 +8666,28 @@ namespace Parser {
         if (moduleSpecifier && (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
             attributes = parseImportAttributes(currentToken);
         }
+
+        // String literals are only allowed in the export specifiers if there's
+        // a module present:
+        //
+        //   // Valid:
+        //   export { "x" } from "foo";
+        //   export { "x" as y } from "foo";
+        //   export { x as "y" };
+        //
+        //   // Invalid:
+        //   export { "x" };
+        //   export { "x" as y };
+        //
+        if (exportClause && exportClause.kind === SyntaxKind.NamedExports && !moduleSpecifier) {
+            for (const element of exportClause.elements) {
+                const name = element.propertyName || element.name;
+                if (name.kind === SyntaxKind.StringLiteral) {
+                    parseErrorAt(skipTrivia(sourceText, name.pos), name.end, Diagnostics.Identifier_expected);
+                }
+            }
+        }
+
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, attributes);

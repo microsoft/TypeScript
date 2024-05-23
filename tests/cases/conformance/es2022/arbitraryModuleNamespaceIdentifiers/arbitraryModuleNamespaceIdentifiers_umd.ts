@@ -1,0 +1,33 @@
+//@module: UMD
+//@target: ES2022
+//@declaration: true
+
+const someValue = "someValue";
+type someType = "someType";
+
+export { someValue as "<X>" };
+import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_umd";
+if (valueX !== "someValue") throw "should be someValue";
+
+export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_umd";
+import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_umd";
+if (valueY !== "someValue") throw "should be someValue";
+
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_umd";
+import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_umd";
+if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+
+export { type someType as "<A>" };
+import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_umd";
+const importTest: typeA = "expect error about someType";
+
+export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_umd";
+import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_umd";
+const reimportTest: typeB = "expect error about someType";
+
+export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_umd";
+import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_umd";
+export type otherType = "otherType";
+const importStarTestA: typeC.otherType = "expect error about otherType";

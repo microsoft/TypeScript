@@ -1,0 +1,70 @@
+types1.ts(10,15): error TS2305: Module '"./types1"' has no exported member '"invalid 1"'.
+types1.ts(10,27): error TS1005: 'as' expected.
+types1.ts(12,15): error TS1003: Identifier expected.
+types2.ts(9,15): error TS2305: Module '"./types2"' has no exported member '"invalid 1"'.
+types2.ts(9,27): error TS1005: 'as' expected.
+types2.ts(11,15): error TS1003: Identifier expected.
+values.ts(10,10): error TS2305: Module '"./values"' has no exported member '"invalid 1"'.
+values.ts(10,22): error TS1005: 'as' expected.
+values.ts(12,10): error TS1003: Identifier expected.
+
+
+==== values.ts (3 errors) ====
+    // Valid
+    export const foo = 123;
+    export { foo as "valid 1" };
+    import { "valid 1" as bar } from "./values";
+    export { "valid 1" as "valid 2" } from "./values";
+    export { foo as "valid 3" } from "./values";
+    export * as "valid 4" from "./values";
+    
+    // Invalid
+    import { "invalid 1" } from "./values";
+             ~~~~~~~~~~~
+!!! error TS2305: Module '"./values"' has no exported member '"invalid 1"'.
+                         ~
+!!! error TS1005: 'as' expected.
+    import { foo as "invalid 2" } from "./values";
+    export { "invalid 3" as baz };
+             ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== types1.ts (3 errors) ====
+    // Valid
+    export type foo = 123;
+    export type { foo as "valid 1" };
+    import type { "valid 1" as bar } from "./types1";
+    export type { "valid 1" as "valid 2" } from "./types1";
+    export type { foo as "valid 3" } from "./types1";
+    export type * as "valid 4" from "./types1";
+    
+    // Invalid
+    import type { "invalid 1" } from "./types1";
+                  ~~~~~~~~~~~
+!!! error TS2305: Module '"./types1"' has no exported member '"invalid 1"'.
+                              ~
+!!! error TS1005: 'as' expected.
+    import type { foo as "invalid 2" } from "./types1";
+    export type { "invalid 3" as baz };
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== types2.ts (3 errors) ====
+    // Valid
+    export type foo = 123;
+    export { type foo as "valid 1" };
+    import { type "valid 1" as bar } from "./types2";
+    export { type "valid 1" as "valid 2" } from "./types2";
+    export { type foo as "valid 3" } from "./types2";
+    
+    // Invalid
+    import { type "invalid 1" } from "./types2";
+                  ~~~~~~~~~~~
+!!! error TS2305: Module '"./types2"' has no exported member '"invalid 1"'.
+                              ~
+!!! error TS1005: 'as' expected.
+    import { type foo as "invalid 2" } from "./types2";
+    export { type "invalid 3" as baz };
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
