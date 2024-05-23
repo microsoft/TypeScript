@@ -37,6 +37,7 @@ export { }
 {
   "compilerOptions": {
     "outDir": "./dev-build",
+    "incremental": true,
     "noEmitOnError": true
   }
 }
@@ -44,7 +45,14 @@ export { }
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -61,8 +69,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -174,7 +182,14 @@ Input::
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -191,8 +206,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -220,7 +235,14 @@ const a = {
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -229,8 +251,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -365,7 +387,12 @@ Input::
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/main.ts' is older than output 'dev-build/tsconfig.tsbuildinfo'
+
 exitCode:: ExitStatus.Success
 
 
