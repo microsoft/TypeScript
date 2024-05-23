@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts] ////
+h//// [tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts] ////
 
 === global.d.ts ===
 declare global {
@@ -55,9 +55,9 @@ console.log("hello");
 
 React.createRef;
 >React.createRef : () => any
->                : ^^^^^^^^^
->React : typeof React
->      : ^^^^^^^^^^^^
+>                : ^^^^^^   
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
 >          : ^^^^^^   
 

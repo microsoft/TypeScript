@@ -3,13 +3,13 @@
 === main.ts ===
 import {Row} from '.'
 >Row : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 Row();
 >Row() : void
 >      : ^^^^
 >Row : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === ./a.d.ts ===
 import '.'
