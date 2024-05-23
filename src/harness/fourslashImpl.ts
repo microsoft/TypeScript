@@ -2352,7 +2352,7 @@ export class TestState {
     }
 
     public baselineSyntacticAndSemanticDiagnostics() {
-        const files = ts.filter(this.getCompilerTestFiles(), f => !ts.endsWith(f.unitName, ".json"));
+        const files = ts.filter(this.getCompilerTestFiles(), f => !ts.endsWith(f.unitName, ".json") && !!this.languageService.getProgram()!.getSourceFile(f.unitName));
         const result = this.getSyntacticDiagnosticBaselineText(files)
             + Harness.IO.newLine()
             + Harness.IO.newLine()

@@ -1,0 +1,46 @@
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics for file '/tests/cases/fourslash/typeRootsPrimarySecondaryLookupConsistency.ts':
+
+
+==== /node_modules/@types/inside-at-types/main.d.mts (0 errors) ====
+    export {};
+    declare global {
+      var exportsInsideAtTypes: any;
+    }
+==== /node_modules/outside-at-types/main.d.mts (0 errors) ====
+    export {};
+    declare global {
+      var exportsOutsideAtTypes: any;
+    }
+==== /index.ts (0 errors) ====
+    typesFieldInsideAtTypes;  // Error
+    typesFieldOutsideAtTypes; // Error
+    
+    exportsInsideAtTypes;
+    exportsOutsideAtTypes;
+
+Semantic Diagnostics for file '/tests/cases/fourslash/typeRootsPrimarySecondaryLookupConsistency.ts':
+/index.ts(1,1): error TS2304: Cannot find name 'typesFieldInsideAtTypes'.
+/index.ts(2,1): error TS2304: Cannot find name 'typesFieldOutsideAtTypes'.
+
+
+==== /node_modules/@types/inside-at-types/main.d.mts (0 errors) ====
+    export {};
+    declare global {
+      var exportsInsideAtTypes: any;
+    }
+==== /node_modules/outside-at-types/main.d.mts (0 errors) ====
+    export {};
+    declare global {
+      var exportsOutsideAtTypes: any;
+    }
+==== /index.ts (2 errors) ====
+    typesFieldInsideAtTypes;  // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'typesFieldInsideAtTypes'.
+    typesFieldOutsideAtTypes; // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'typesFieldOutsideAtTypes'.
+    
+    exportsInsideAtTypes;
+    exportsOutsideAtTypes;

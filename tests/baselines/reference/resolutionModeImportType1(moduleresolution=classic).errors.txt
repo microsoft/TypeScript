@@ -1,14 +1,8 @@
-error TS2688: Cannot find type definition file for 'foo'.
-  The file is in the program because:
-    Entry point for implicit type library 'foo'
 /app.ts(1,30): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 /app.ts(2,29): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 /app.ts(3,30): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-!!! error TS2688: Cannot find type definition file for 'foo'.
-!!! error TS2688:   The file is in the program because:
-!!! error TS2688:     Entry point for implicit type library 'foo'
 ==== /node_modules/@types/foo/package.json (0 errors) ====
     {
       "name": "@types/foo",

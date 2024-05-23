@@ -6,8 +6,8 @@ typesCache;
 >           : ^^^^^^
 
 mangledAtTypesCache;
->mangledAtTypesCache : number
->                    : ^^^^^^
+>mangledAtTypesCache : any
+>                    : ^^^
 
 nodeModulesCache;
 >nodeModulesCache : number
@@ -18,12 +18,12 @@ mangledNodeModules;
 >                   : ^^^
 
 atTypesCache;
->atTypesCache : any
->             : ^^^
+>atTypesCache : number
+>             : ^^^^^^
 
 mangledAtTypesCache;
->mangledAtTypesCache : number
->                    : ^^^^^^
+>mangledAtTypesCache : any
+>                    : ^^^
 
 === /types/@scoped/typescache/index.d.ts ===
 declare const typesCache: number;
@@ -35,8 +35,8 @@ declare const nodeModulesCache: number;
 >nodeModulesCache : number
 >                 : ^^^^^^
 
-=== /node_modules/@types/mangled__attypescache/index.d.ts ===
-declare const mangledAtTypesCache: number;
->mangledAtTypesCache : number
->                    : ^^^^^^
+=== /node_modules/@types/@scoped/attypescache/index.d.ts ===
+declare const atTypesCache: number;
+>atTypesCache : number
+>             : ^^^^^^
 

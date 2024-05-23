@@ -579,19 +579,13 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
 
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];
-    // Allow type reference directives to opt into `exports` resolution in any resolution mode
-    // when a `resolution-mode` override is present.
-    let features = getNodeResolutionFeatures(options);
-    if (resolutionMode !== undefined) {
-        features |= NodeResolutionFeatures.AllFeatures;
-    }
+
+    let features = NodeResolutionFeatures.AllFeatures;
     const moduleResolution = getEmitModuleResolutionKind(options);
     if (resolutionMode === ModuleKind.ESNext && (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)) {
         features |= NodeResolutionFeatures.EsmMode;
     }
-    const conditions = (features & NodeResolutionFeatures.Exports)
-        ? getConditions(options, resolutionMode)
-        : [];
+    const conditions = getConditions(options, resolutionMode);
     const diagnostics: Diagnostic[] = [];
     const moduleResolutionState: ModuleResolutionState = {
         compilerOptions: options,
@@ -677,7 +671,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
                     }
                 }
                 return resolvedTypeScriptOnly(
-                    loadNodeModuleFromDirectory(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState),
+                    loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, typeReferenceDirectiveName, typeRoot, directoryExists, moduleResolutionState, /*cache*/ undefined, redirectedReference, /*disableFileLookup*/ true),
                 );
             });
         }
@@ -3051,7 +3045,7 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
     }
 }
 
-function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
+function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, disableFileLookup?: boolean): Resolved | undefined {
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
@@ -3066,7 +3060,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             !hasProperty((rootPackageInfo = getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state))?.contents.packageJsonContent ?? emptyArray, "exports")
         )
     ) {
-        const fromFile = loadModuleFromFile(extensions, candidate, !nodeModulesDirectoryExists, state);
+        const fromFile = !disableFileLookup && loadModuleFromFile(extensions, candidate, !nodeModulesDirectoryExists, state);
         if (fromFile) {
             return noPackageId(fromFile);
         }
@@ -3083,7 +3077,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     }
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
-        let pathAndExtension = (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
+        let pathAndExtension = (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && !disableFileLookup && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
             loadNodeModuleFromDirectoryWorker(
                 extensions,
                 candidate,

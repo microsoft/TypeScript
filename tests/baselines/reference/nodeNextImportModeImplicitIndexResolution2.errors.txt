@@ -1,7 +1,13 @@
+error TS2688: Cannot find type definition file for 'dedent4'.
+  The file is in the program because:
+    Entry point for implicit type library 'dedent4'
 /index.cts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
 /index.mts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
 
 
+!!! error TS2688: Cannot find type definition file for 'dedent4'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point for implicit type library 'dedent4'
 ==== /node_modules/@types/dedent/package.json (0 errors) ====
     { "name": "@types/dedent", "version": "1.0.0", "main": "" }
     

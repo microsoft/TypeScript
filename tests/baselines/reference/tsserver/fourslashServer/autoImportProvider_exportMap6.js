@@ -113,8 +113,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/lib/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -122,7 +122,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/src/foo.ts Text-1 "fooFrom"
-	/node_modules/dependency/lib/index.d.ts Text-1 "export declare function fooFromIndex(): void"
+	/node_modules/@types/dependency/lib/index.d.ts Text-1 "export declare function fooFromAtTypesIndex(): void;"
 
 
 	lib.decorators.d.ts
@@ -136,9 +136,9 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	src/foo.ts
 	  Matched by default include pattern '**/*'
 	  File is ECMAScript module because 'package.json' has field "type" with value "module"
-	node_modules/dependency/lib/index.d.ts
-	  Entry point for implicit type library 'dependency' with packageId 'dependency/lib/index.d.ts@1.0.0'
-	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
+	node_modules/@types/dependency/lib/index.d.ts
+	  Entry point for implicit type library 'dependency' with packageId '@types/dependency/lib/index.d.ts@1.0.0'
+	  File is ECMAScript module because 'node_modules/@types/dependency/package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -163,13 +163,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/dependency/lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"nodenext\"\n  }\n}"
+	/node_modules/@types/dependency/lib/index.d.ts Text-1 "export declare function fooFromAtTypesIndex(): void;"
 
 
 	lib.d.ts
@@ -180,6 +182,9 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
+	node_modules/@types/dependency/lib/index.d.ts
+	  Entry point for implicit type library 'dependency' with packageId '@types/dependency/lib/index.d.ts@1.0.0'
+	  File is ECMAScript module because 'node_modules/@types/dependency/package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
@@ -188,7 +193,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -202,12 +207,13 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /node_modules/@types/dependency/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/node_modules/dependency/lib/index.d.ts: *new*
-  {"pollingInterval":500}
-/node_modules/dependency/lib/package.json: *new*
   {"pollingInterval":2000}
 /package.json: *new*
   {"pollingInterval":250}
@@ -245,10 +251,11 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
-/node_modules/dependency/lib/index.d.ts *new*
+/node_modules/@types/dependency/lib/index.d.ts *new*
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
 /src/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -274,7 +281,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (4)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -290,12 +297,13 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/node_modules/dependency/lib/index.d.ts:
-  {"pollingInterval":500}
-/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
 /package.json:
   {"pollingInterval":250}
@@ -335,10 +343,11 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
-/node_modules/dependency/lib/index.d.ts
+/node_modules/@types/dependency/lib/index.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
 /src/foo.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -384,16 +393,21 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/node_modules/dependency/lib/index.d.ts Text-1 "export declare function fooFromIndex(): void"
 	/node_modules/dependency/lib/lol.d.ts Text-1 "export declare function fooFromLol(): void"
 
 
+	node_modules/dependency/lib/index.d.ts
+	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 	node_modules/dependency/lib/lol.d.ts
 	  Root file specified for compilation
 	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
@@ -404,7 +418,7 @@ Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 2 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 3 module specifiers, plus 0 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1079,7 +1093,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "fooFromIndex",
+            "name": "fooFromAtTypesIndex",
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
@@ -1092,10 +1106,32 @@ Info seq  [hh:mm:ss:mss] response:
               }
             ],
             "data": {
+              "exportName": "fooFromAtTypesIndex",
+              "exportMapKey": "19 * fooFromAtTypesIndex ",
+              "moduleSpecifier": "dependency",
+              "fileName": "/node_modules/@types/dependency/lib/index.d.ts"
+            }
+          },
+          {
+            "name": "fooFromIndex",
+            "kind": "function",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dependency",
+            "sourceDisplay": [
+              {
+                "text": "dependency",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
               "exportName": "fooFromIndex",
               "exportMapKey": "12 * fooFromIndex ",
               "moduleSpecifier": "dependency",
-              "fileName": "/node_modules/dependency/lib/index.d.ts"
+              "fileName": "/node_modules/dependency/lib/index.d.ts",
+              "isPackageJsonImport": true
             }
           },
           {
@@ -1143,16 +1179,20 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/node_modules/@types/dependency/lib/index.d.ts:
+  {"pollingInterval":500}
+/node_modules/@types/dependency/lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":2000}
-/node_modules/dependency/lib/index.d.ts:
+/node_modules/dependency/lib/index.d.ts: *new*
   {"pollingInterval":500}
 /node_modules/dependency/lib/lol.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/dependency/lib/package.json:
+/node_modules/dependency/lib/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /package.json:
   {"pollingInterval":250}
 /tsconfig.json:
@@ -1192,10 +1232,15 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
-/node_modules/dependency/lib/index.d.ts
+/node_modules/@types/dependency/lib/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/dependency/lib/index.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /dev/null/autoImportProviderProject1*
 /node_modules/dependency/lib/lol.d.ts *new*
     version: Text-1
     containingProjects: 1
