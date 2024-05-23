@@ -42,7 +42,7 @@ Cls.prototype.topLevelComment = function (t, v) {
 >topLevelComment : any
 >                : ^^^
 >function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
->                               : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^
+>                               : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
 >  : ^
 >v : V

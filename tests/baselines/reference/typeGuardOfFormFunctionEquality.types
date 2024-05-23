@@ -19,7 +19,7 @@ switch (isString1(0, "")) {
 >isString1(0, "") : boolean
 >                 : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
 >  : ^
 >"" : ""
@@ -29,7 +29,7 @@ switch (isString1(0, "")) {
 >isString2("") : boolean
 >              : ^^^^^^^
 >isString2 : (a: Object) => a is string
->          : ^ ^^      ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^           
 >"" : ""
 >   : ^^
 
@@ -44,7 +44,7 @@ var x = isString1(0, "") === isString2("");
 >isString1(0, "") : boolean
 >                 : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
 >  : ^
 >"" : ""
@@ -52,7 +52,7 @@ var x = isString1(0, "") === isString2("");
 >isString2("") : boolean
 >              : ^^^^^^^
 >isString2 : (a: Object) => a is string
->          : ^ ^^      ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^           
 >"" : ""
 >   : ^^
 
@@ -70,7 +70,7 @@ function isString3(a: number, b: number, c: Object): c is string {
 >isString1(0, c) : boolean
 >                : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
 >  : ^
 >c : Object

@@ -10,7 +10,7 @@ declare function dec<T>(target: T): T;
 export
 @dec
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
 class C {
 >C : C

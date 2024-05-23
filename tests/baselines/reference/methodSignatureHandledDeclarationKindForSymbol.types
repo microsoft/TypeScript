@@ -10,7 +10,7 @@ interface Foo {
 interface Foo {
     bold: string;
 >bold : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 }
 
 

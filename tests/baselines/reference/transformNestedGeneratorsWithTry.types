@@ -26,11 +26,11 @@ async function a(): Bluebird<void> {
 >Bluebird.resolve() : Promise<void>
 >                   : ^^^^^^^^^^^^^
 >Bluebird.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Bluebird : PromiseConstructor
 >         : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 
       } catch (error) { }
 >error : any
@@ -43,7 +43,7 @@ async function a(): Bluebird<void> {
 >b() : Bluebird<void>
 >    : ^^^^^^^^^^^^^^
 >b : () => Bluebird<void>
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^              
 
   } catch (error) { }
 >error : any

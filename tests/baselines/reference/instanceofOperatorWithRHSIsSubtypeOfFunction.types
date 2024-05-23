@@ -47,7 +47,7 @@ var r3 = x instanceof f3;
 >                : ^^^^^^^
 >x : any
 >f3 : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
 var r4 = x instanceof f4;
 >r4 : boolean
@@ -56,7 +56,7 @@ var r4 = x instanceof f4;
 >                : ^^^^^^^
 >x : any
 >f4 : new () => number
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^      
 
 var r5 = x instanceof null;
 >r5 : boolean

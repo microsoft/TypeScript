@@ -27,11 +27,11 @@ function f1(a?: boolean): void {
 >console.log(a) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >a : false
 >  : ^^^^^
     }
@@ -40,7 +40,7 @@ f1(false);
 >f1(false) : void
 >          : ^^^^
 >f1 : (a?: boolean) => void
->   : ^ ^^^       ^^^^^^^^^
+>   : ^ ^^^       ^^^^^    
 >false : false
 >      : ^^^^^
 
@@ -75,11 +75,11 @@ function f2() {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : 0
 >  : ^
     }

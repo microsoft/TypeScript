@@ -160,7 +160,7 @@ var ResultIsNumber9 = -foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber10 = -A.foo();
 >ResultIsNumber10 : number
@@ -215,7 +215,7 @@ var ResultIsNumber11 = -(NUMBER - NUMBER);
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 -objA.a;
 >-objA.a : number

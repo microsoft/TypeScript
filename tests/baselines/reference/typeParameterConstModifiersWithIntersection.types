@@ -33,7 +33,7 @@ const result = test({
 >test({  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,}) : { readonly produceThing: { type: "foo"; }; readonly useIt: { readonly type: "foo"; }; readonly extra: 10; }
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
->     : ^  ^^^^^^^^^                 ^^^^^^^^       ^^^^^^^^^          ^^      ^^                               ^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^                 ^^^^^^^^       ^^^^^^^^^          ^^      ^^                               ^^^^^       
 >{  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,} : { produceThing: { type: "foo"; }; useIt: { type: "foo"; }; extra: 10; }
 >                                                                                        : ^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

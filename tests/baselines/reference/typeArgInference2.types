@@ -19,7 +19,7 @@ var z1 = foo(null);                   // any
 >z1 : any
 >foo(null) : any
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 
 var z2 = foo();                       // Item
 >z2 : Item
@@ -27,7 +27,7 @@ var z2 = foo();                       // Item
 >foo() : Item
 >      : ^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 
 var z3 = foo({ name: null });         // { name: any }
 >z3 : { name: any; }
@@ -35,7 +35,7 @@ var z3 = foo({ name: null });         // { name: any }
 >foo({ name: null }) : { name: any; }
 >                    : ^^^^^^^^^^^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 >{ name: null } : { name: null; }
 >               : ^^^^^^^^^^^^^^^
 >name : null
@@ -47,7 +47,7 @@ var z4 = foo({ name: "abc" });        // { name: string }
 >foo({ name: "abc" }) : { name: string; }
 >                     : ^^^^^^^^^^^^^^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 >{ name: "abc" } : { name: string; }
 >                : ^^^^^^^^^^^^^^^^^
 >name : string
@@ -61,7 +61,7 @@ var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
 >foo({ name: "abc", a: 5 }) : { name: string; a: number; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 >{ name: "abc", a: 5 } : { name: string; a: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -79,7 +79,7 @@ var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
 >foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 >{ name: "abc", a: 5 } : { name: string; a: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string

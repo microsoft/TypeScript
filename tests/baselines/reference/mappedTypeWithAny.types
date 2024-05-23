@@ -154,7 +154,7 @@ let abc: any[] = stringifyArray(void 0 as any);
 >stringifyArray(void 0 as any) : string[]
 >                              : ^^^^^^^^
 >stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
->               : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^              ^^   ^^ ^^^^^                                     
 >void 0 as any : any
 >              : ^^^
 >void 0 : undefined
@@ -174,7 +174,7 @@ let def: [any, any] = stringifyPair(void 0 as any);
 >stringifyPair(void 0 as any) : string[]
 >                             : ^^^^^^^^
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
->              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^                                     
 >void 0 as any : any
 >              : ^^^
 >void 0 : undefined

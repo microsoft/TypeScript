@@ -15,7 +15,7 @@ var foo:(a:number)=>number = function(a){return a}; foo = function(b){return b};
 >foo = function(b){return b} : (b: number) => number
 >                            : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : (a: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >function(b){return b} : (b: number) => number
 >                      : ^ ^^^^^^^^^^^^^^^^^^^
 >b : number

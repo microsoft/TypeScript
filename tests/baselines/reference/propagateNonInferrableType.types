@@ -15,13 +15,13 @@ wrapResolver(resolver() || []);
 >wrapResolver(resolver() || []) : void
 >                               : ^^^^
 >wrapResolver : <T>(resolverFunction: () => void) => void
->             : ^^^^                ^^          ^^^^^^^^^
+>             : ^^^^                ^^          ^^^^^    
 >resolver() || [] : () => void
->                 : ^^^^^^^^^^
+>                 : ^^^^^^    
 >resolver() : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >resolver : <T>() => () => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^          
 >[] : never[]
 >   : ^^^^^^^
 

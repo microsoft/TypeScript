@@ -11,11 +11,11 @@ class C {
 >Object.defineProperty(this, "_prop", { value: {} }) : this
 >                                                    : ^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >this : this
 >     : ^^^^
 >"_prop" : "_prop"
@@ -31,11 +31,11 @@ class C {
 >Object.defineProperty(this._prop, "num", { value: 12 }) : any
 >                                                        : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >this._prop : any
 >           : ^^^
 >this : this

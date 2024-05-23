@@ -84,7 +84,7 @@ export class Test extends WithTags(FooItem) {}
 >WithTags(FooItem) : WithTags<typeof FooItem>.(Anonymous class) & FooItem
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
->         : ^ ^^^^^^^^^                    ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^                    ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 >FooItem : typeof FooItem
 >        : ^^^^^^^^^^^^^^
 
@@ -100,19 +100,19 @@ Test.getTags()
 >Test.getTags() : void
 >               : ^^^^
 >Test.getTags : () => void
->             : ^^^^^^^^^^
+>             : ^^^^^^    
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 >getTags : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 test.tags();
 >test.tags() : void
 >            : ^^^^
 >test.tags : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >test : Test
 >     : ^^^^
 >tags : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 

@@ -12,16 +12,16 @@ declare module TypeScript {
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T>(): IIndexable<T>; <T_1>(): IIndexable<T_1>; }
->                       : ^^^ ^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^^^^             ^^^   ^^^^^               ^^^
 
     interface IHashTable<T> {
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
->           : ^^^^^^        ^^^^^^^^^^^^^^^^^
+>           : ^^^^^^        ^^^^^^        ^^^
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^
+>    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -29,7 +29,7 @@ declare module TypeScript {
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^
+>            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -37,7 +37,7 @@ declare module TypeScript {
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
->    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^
+>    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^    ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -51,7 +51,7 @@ declare module TypeScript {
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^
+>      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -65,7 +65,7 @@ declare module TypeScript {
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^
+>     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -79,11 +79,11 @@ declare module TypeScript {
 
         count(): number;
 >count : { (): number; (): number; }
->      : ^^^^^^      ^^^^^^^^^^^^^^^
+>      : ^^^^^^      ^^^^^^      ^^^
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
->       : ^^^   ^^      ^^^ ^^^   ^^      ^^^^^^^
+>       : ^^^   ^^      ^^^ ^^^   ^^      ^^^ ^^^
 >key : string
 >    : ^^^^^^
     }
@@ -264,16 +264,16 @@ declare module TypeScript {
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T_1>(): IIndexable<T_1>; <T>(): IIndexable<T>; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             ^^^
+>                       : ^^^   ^^^^^               ^^^ ^^^^^             ^^^
 
     interface IHashTable<T> {
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
->           : ^^^^^^^^^^^^^^^^^^^^        ^^^
+>           : ^^^^^^        ^^^^^^        ^^^
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->    : ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^   ^^      ^^    ^^ ^^^       ^^^
+>    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -281,7 +281,7 @@ declare module TypeScript {
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->            : ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^   ^^      ^^    ^^ ^^^       ^^^
+>            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -289,7 +289,7 @@ declare module TypeScript {
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
->    : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^  ^^                                           ^^       ^^   ^^^    ^^^
+>    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^    ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -303,7 +303,7 @@ declare module TypeScript {
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->      : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^  ^^                                           ^^       ^^   ^^^       ^^^
+>      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -317,7 +317,7 @@ declare module TypeScript {
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->     : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^  ^^                                           ^^       ^^   ^^^       ^^^
+>     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
 >   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
@@ -331,11 +331,11 @@ declare module TypeScript {
 
         count(): number;
 >count : { (): number; (): number; }
->      : ^^^^^^^^^^^^^^^^^^      ^^^
+>      : ^^^^^^      ^^^^^^      ^^^
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
->       : ^^^   ^^      ^^^^^^^   ^^      ^^^ ^^^
+>       : ^^^   ^^      ^^^ ^^^   ^^      ^^^ ^^^
 >key : string
 >    : ^^^^^^
     }

@@ -76,7 +76,7 @@ lf.Transaction.prototype.begin = function(scope) {};
 >begin : any
 >      : ^^^
 >function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
->                   : ^     ^^                      ^^^^^^^^^^^^^^
+>                   : ^     ^^                      ^^^^^         
 >scope : lf.schema.Table[]
 >      : ^^^^^^^^^^^^^^^^^
 

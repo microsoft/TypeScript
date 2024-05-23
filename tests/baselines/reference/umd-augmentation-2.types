@@ -25,11 +25,11 @@ let magnitude = Math2d.getLength(v);
 >Math2d.getLength(v) : number
 >                    : ^^^^^^
 >Math2d.getLength : (p: Math2d.Vector) => number
->                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^^      
 >Math2d : typeof Math2d
 >       : ^^^^^^^^^^^^^
 >getLength : (p: Math2d.Vector) => number
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^      
 >v : Math2d.Vector
 >  : ^^^^^^^^^^^^^
 

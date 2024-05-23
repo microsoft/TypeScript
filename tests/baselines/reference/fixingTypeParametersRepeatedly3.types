@@ -31,7 +31,7 @@ var result = foo(derived, d => d.toBase());
 >foo(derived, d => d.toBase()) : Derived
 >                              : ^^^^^^^
 >foo : <T>(x: T, func: (p: T) => T) => T
->    : ^ ^^ ^^ ^^    ^^           ^^^^^^
+>    : ^ ^^ ^^ ^^    ^^           ^^^^^ 
 >derived : Derived
 >        : ^^^^^^^
 >d => d.toBase() : (d: Derived) => Base
@@ -41,17 +41,17 @@ var result = foo(derived, d => d.toBase());
 >d.toBase() : Base
 >           : ^^^^
 >d.toBase : () => Base
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >d : Derived
 >  : ^^^^^^^
 >toBase : () => Base
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
 // bar should type check just like foo.
 // result2 should have the same type as result
 declare function bar<T>(x: T, func: (p: T) => T): T;
 >bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
->    : ^^^ ^^ ^^ ^^    ^^           ^^^ ^^^   ^^ ^^   ^^    ^^               ^^^^^^^^^
+>    : ^^^ ^^ ^^ ^^    ^^           ^^^ ^^^   ^^ ^^   ^^    ^^               ^^^   ^^^
 >x : T
 >  : ^
 >func : (p: T) => T
@@ -61,7 +61,7 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 
 declare function bar<T>(x: T, func: (p: T) => T): T;
 >bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T>(x: T, func: (p: T) => T): T; }
->    : ^^^   ^^ ^^   ^^    ^^               ^^^^^^^^^ ^^ ^^ ^^    ^^           ^^^ ^^^
+>    : ^^^   ^^ ^^   ^^    ^^               ^^^   ^^^ ^^ ^^ ^^    ^^           ^^^ ^^^
 >x : T
 >  : ^
 >func : (p: T) => T
@@ -75,7 +75,7 @@ var result2 = bar(derived, d => d.toBase());
 >bar(derived, d => d.toBase()) : Base
 >                              : ^^^^
 >bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
->    : ^^^ ^^ ^^ ^^    ^^           ^^^^^^^ ^^ ^^ ^^    ^^           ^^^^^^^
+>    : ^^^ ^^ ^^ ^^    ^^           ^^^ ^^^ ^^ ^^ ^^    ^^           ^^^ ^^^
 >derived : Derived
 >        : ^^^^^^^
 >d => d.toBase() : (d: Derived) => Base
@@ -85,9 +85,9 @@ var result2 = bar(derived, d => d.toBase());
 >d.toBase() : Base
 >           : ^^^^
 >d.toBase : () => Base
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >d : Derived
 >  : ^^^^^^^
 >toBase : () => Base
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 

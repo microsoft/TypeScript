@@ -33,7 +33,7 @@ export class Foo {
 >this.foo.slice() : string
 >                 : ^^^^^^
 >this.foo.slice : (start?: number, end?: number) => string
->               : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>               : ^     ^^^      ^^   ^^^      ^^^^^      
 >this.foo : string
 >         : ^^^^^^
 >this : this
@@ -41,7 +41,7 @@ export class Foo {
 >foo : string
 >    : ^^^^^^
 >slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
     }
     m() {
 >m : () => void
@@ -86,7 +86,7 @@ function C() {
 >this.x.toString() : string
 >                  : ^^^^^^
 >this.x.toString : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >this.x : () => void
 >       : ^^^^^^^^^^
 >this : this
@@ -94,6 +94,6 @@ function C() {
 >x : () => void
 >  : ^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 

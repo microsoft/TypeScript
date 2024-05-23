@@ -31,7 +31,7 @@ export const a = f<Stuff> `
 >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
 >                                                                                                            : ^^^^
 >f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
->  : ^ ^^    ^^                    ^^^^^         ^^                    ^^^^^^^^^
+>  : ^ ^^    ^^                    ^^^^^         ^^                    ^^^^^    
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 >                                                                                                   : ^^^^^^
 
@@ -104,7 +104,7 @@ export const b = g<Stuff, number, string, boolean> `
 >g<Stuff, number, string, boolean> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string | number | boolean
 >                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->  : ^     ^^ ^^ ^^ ^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^^^^^^^^^^
+>  : ^     ^^ ^^ ^^ ^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^         
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 >                                                                                                   : ^^^^^^
 
@@ -175,21 +175,21 @@ export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
 >obj["prop"]<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->            : ^ ^^    ^^                    ^^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
->    : ^^^^^^^^^ ^^    ^^                    ^^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^                                                                              ^^^
 >"prop" : "prop"
 >       : ^^^^^^
 >`${(input) => ({ ...input })}` : string
 >                               : ^^^^^^
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
->                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^
 >input : Stuff
 >      : ^^^^^
 >({ ...input }) : { x: number; y: string; z: boolean; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^^^       ^^^
 >{ ...input } : { x: number; y: string; z: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^      ^^^^^      ^^^^^       ^^^
 >input : Stuff
 >      : ^^^^^
 
@@ -237,21 +237,21 @@ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
 >obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->         : ^ ^^    ^^                    ^^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
->    : ^^^^^^^^^ ^^    ^^                    ^^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^                                                                              ^^^
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->     : ^ ^^    ^^                    ^^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >`${(input) => ({ ...input })}` : string
 >                               : ^^^^^^
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
->                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^       ^^^
 >input : Stuff
 >      : ^^^^^
 >({ ...input }) : { x: number; y: string; z: boolean; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^^^       ^^^
 >{ ...input } : { x: number; y: string; z: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^      ^^^^^      ^^^^^       ^^^
 >input : Stuff
 >      : ^^^^^
 

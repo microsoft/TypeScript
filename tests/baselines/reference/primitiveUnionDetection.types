@@ -23,7 +23,7 @@ const result = getInterfaceFromString({ type: 'two' });
 >getInterfaceFromString({ type: 'two' }) : "two"
 >                                        : ^^^^^
 >getInterfaceFromString : <T extends Kind>(options?: { type?: T; } & { type?: Kind; }) => T
->                       : ^ ^^^^^^^^^    ^^       ^^^                                ^^^^^^
+>                       : ^ ^^^^^^^^^    ^^       ^^^                                ^^^^^ 
 >{ type: 'two' } : { type: "two"; }
 >                : ^^^^^^^^^^^^^^^^
 >type : "two"

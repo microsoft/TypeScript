@@ -75,7 +75,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1('hello') : string
 >              : ^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -85,7 +85,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1('*hello*') : "hello"
 >                : ^^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >'*hello*' : "*hello*"
 >          : ^^^^^^^^^
 
@@ -95,7 +95,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1('**hello**') : "*hello*"
 >                  : ^^^^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >'**hello**' : "**hello**"
 >            : ^^^^^^^^^^^
 
@@ -105,7 +105,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1(`*${s}*` as const) : string
 >                        : ^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >`*${s}*` as const : `*${string}*`
 >                  : ^^^^^^^^^^^^^
 >`*${s}*` : `*${string}*`
@@ -119,7 +119,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1(`*${n}*` as const) : `${number}`
 >                        : ^^^^^^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >`*${n}*` as const : `*${number}*`
 >                  : ^^^^^^^^^^^^^
 >`*${n}*` : `*${number}*`
@@ -133,7 +133,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1(`*${b}*` as const) : "false" | "true"
 >                        : ^^^^^^^^^^^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >`*${b}*` as const : "*false*" | "*true*"
 >                  : ^^^^^^^^^^^^^^^^^^^^
 >`*${b}*` : "*false*" | "*true*"
@@ -147,7 +147,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1(`*${t}*` as const) : T
 >                        : ^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >`*${t}*` as const : `*${T}*`
 >                  : ^^^^^^^^
 >`*${t}*` : `*${T}*`
@@ -161,7 +161,7 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >foo1(`**${s}**` as const) : `*${string}*`
 >                          : ^^^^^^^^^^^^^
 >foo1 : <V extends string>(arg: `*${V}*`) => V
->     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^        ^^^^^ 
 >`**${s}**` as const : `**${string}**`
 >                    : ^^^^^^^^^^^^^^^
 >`**${s}**` : `**${string}**`
@@ -606,7 +606,7 @@ chain("a");
 >chain("a") : void
 >           : ^^^^
 >chain : <F extends keyof Schema>(field: F | `${F}.${F}`) => void
->      : ^ ^^^^^^^^^            ^^     ^^               ^^^^^^^^^
+>      : ^ ^^^^^^^^^            ^^     ^^               ^^^^^    
 >"a" : "a"
 >    : ^^^
 
@@ -770,7 +770,7 @@ function reducer(action: Action) {
 >action.type : "FOO_SUCCESS"
 >            : ^^^^^^^^^^^^^
 >action : { type: `${string}_SUCCESS`; response: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^                   ^^^^^^^^^^^^      ^^^
 >type : "FOO_SUCCESS"
 >     : ^^^^^^^^^^^^^
 
@@ -778,7 +778,7 @@ function reducer(action: Action) {
 >action.response : string
 >                : ^^^^^^
 >action : { type: `${string}_SUCCESS`; response: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^                   ^^^^^^^^^^^^      ^^^
 >response : string
 >         : ^^^^^^
     }
@@ -806,7 +806,7 @@ noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
 >noSpread([`1.${'2'}.3`, `1.${'2'}.4`]) : "1.2.3" | "1.2.4"
 >                                       : ^^^^^^^^^^^^^^^^^
 >noSpread : <P extends DotString>(args: P[]) => P
->         : ^ ^^^^^^^^^         ^^    ^^   ^^^^^^
+>         : ^ ^^^^^^^^^         ^^    ^^   ^^^^^ 
 >[`1.${'2'}.3`, `1.${'2'}.4`] : ("1.2.3" | "1.2.4")[]
 >                             : ^^^^^^^^^^^^^^^^^^^^^
 >`1.${'2'}.3` : "1.2.3"
@@ -822,7 +822,7 @@ noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
 >noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]) : `1.${string}.3` | `1.${string}.4`
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >noSpread : <P extends DotString>(args: P[]) => P
->         : ^ ^^^^^^^^^         ^^    ^^   ^^^^^^
+>         : ^ ^^^^^^^^^         ^^    ^^   ^^^^^ 
 >[`1.${'2' as string}.3`, `1.${'2' as string}.4`] : (`1.${string}.3` | `1.${string}.4`)[]
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`1.${'2' as string}.3` : `1.${string}.3`
@@ -842,7 +842,7 @@ spread(`1.${'2'}.3`, `1.${'2'}.4`);
 >spread(`1.${'2'}.3`, `1.${'2'}.4`) : "1.2.3" | "1.2.4"
 >                                   : ^^^^^^^^^^^^^^^^^
 >spread : <P extends DotString>(...args: P[]) => P
->       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^^
+>       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^ 
 >`1.${'2'}.3` : "1.2.3"
 >             : ^^^^^^^
 >'2' : "2"
@@ -856,7 +856,7 @@ spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 >spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`) : `1.${string}.3` | `1.${string}.4`
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >spread : <P extends DotString>(...args: P[]) => P
->       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^^
+>       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^ 
 >`1.${'2' as string}.3` : `1.${string}.3`
 >                       : ^^^^^^^^^^^^^^^
 >'2' as string : string
@@ -886,7 +886,7 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^
 >spread : <P extends DotString>(...args: P[]) => P
->       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^^
+>       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^ 
 >`1.${t}.3` : `1.${T}.3`
 >           : ^^^^^^^^^^
 >t : T
@@ -900,7 +900,7 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >spread(`1.${u}.3`, `1.${u}.4`) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >spread : <P extends DotString>(...args: P[]) => P
->       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^^
+>       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^ 
 >`1.${u}.3` : `1.${Uppercase<T>}.3`
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >u : Uppercase<T>
@@ -914,7 +914,7 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >spread(u1, u2) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >spread : <P extends DotString>(...args: P[]) => P
->       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^^
+>       : ^ ^^^^^^^^^         ^^^^^    ^^   ^^^^^ 
 >u1 : `1.${Uppercase<T>}.3`
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >u2 : `1.${Uppercase<T>}.4`

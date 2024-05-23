@@ -31,11 +31,11 @@ export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${m
 >console.log(`Got message "${msg}"`) : void
 >                                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >`Got message "${msg}"` : string
 >                       : ^^^^^^
 >msg : string

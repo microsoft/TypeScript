@@ -143,7 +143,7 @@ export function syncStoreProp<
 >hasOwnProperty(props, key) : boolean
 >                           : ^^^^^^^
 >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
->               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^         ^^      ^^ ^^    ^^           ^^^^^               
 >props : P
 >      : ^
 >key : string | number | symbol
@@ -169,11 +169,11 @@ export function syncStoreProp<
 >store.setState(key, value) : void
 >                           : ^^^^
 >store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
 >store : Store<S>
 >      : ^^^^^^^^
 >setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
 >key : K
 >    : ^
 >value : P[K] & ({} | null)
@@ -191,11 +191,11 @@ export function syncStoreProp<
 >store.setState(key, value) : void
 >                           : ^^^^
 >store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
 >store : Store<S>
 >      : ^^^^^^^^
 >setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^     ^^^^^^^^^^^^^    
 >key : K
 >    : ^
 >value : P[K] & ({} | null)

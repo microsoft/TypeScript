@@ -15,7 +15,7 @@ const Foo = Obj({ foo: Num })
 >Obj({ foo: Num }) : Obj<{ [_: string]: Runtype<any>; }>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Obj : <O extends { [_: string]: Runtype<any>; }>(fields: O) => Obj<O>
->    : ^ ^^^^^^^^^                              ^^      ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^      ^^ ^^^^^      
 >{ foo: Num } : { foo: Num; }
 >             : ^^^^^^^^^^^^^
 >foo : Num

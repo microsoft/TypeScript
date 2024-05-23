@@ -33,11 +33,11 @@ switch (tmp.get('t')) {
 >tmp.get('t') : "A" | "B"
 >             : ^^^^^^^^^
 >tmp.get : (<K extends "t">(k: K) => A[K]) | (<K extends "t">(k: K) => B[K])
->        : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^ ^
 >tmp : Test<A> | Test<B>
 >    : ^^^^^^^^^^^^^^^^^
 >get : (<K extends "t">(k: K) => A[K]) | (<K extends "t">(k: K) => B[K])
->    : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^ ^ ^
 >'t' : "t"
 >    : ^^^
 
@@ -74,11 +74,11 @@ arr.map((a: number | string, index: number) => {
 >arr.map((a: number | string, index: number) => {     return index}) : number[]
 >                                                                    : ^^^^^^^^
 >arr.map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
->        : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  ^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  ^
 >arr : number[] | string[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
->    : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>    : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  ^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  ^
 >(a: number | string, index: number) => {     return index} : (a: number | string, index: number) => number
 >                                                           : ^ ^^               ^^     ^^      ^^^^^^^^^^^
 >a : string | number
@@ -123,11 +123,11 @@ arr.forEach((a: number | string, index: number) => {
 >arr.forEach((a: number | string, index: number) => {     return index}) : void
 >                                                                        : ^^^^
 >arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
->            : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>            : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
 >arr : number[] | string[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
->        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
 >(a: number | string, index: number) => {     return index} : (a: number | string, index: number) => number
 >                                                           : ^ ^^               ^^     ^^      ^^^^^^^^^^^
 >a : string | number
@@ -145,11 +145,11 @@ arr1.map((a: number, index: number) => {
 >arr1.map((a: number, index: number) => {     return index}) : number[]
 >                                                            : ^^^^^^^^
 >arr1.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->         : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>         : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >arr1 : number[]
 >     : ^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >(a: number, index: number) => {     return index} : (a: number, index: number) => number
 >                                                  : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : number
@@ -195,11 +195,11 @@ arr1.forEach((a: number, index: number) => {
 >arr1.forEach((a: number, index: number) => {     return index}) : void
 >                                                                : ^^^^
 >arr1.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr1 : number[]
 >     : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(a: number, index: number) => {     return index} : (a: number, index: number) => number
 >                                                  : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : number
@@ -216,11 +216,11 @@ arr2.map((a:  string, index: number) => {
 >arr2.map((a:  string, index: number) => {     return index}) : number[]
 >                                                             : ^^^^^^^^
 >arr2.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->         : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>         : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >arr2 : string[]
 >     : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >(a:  string, index: number) => {     return index} : (a: string, index: number) => number
 >                                                   : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : string
@@ -264,11 +264,11 @@ arr2.forEach((a: string, index: number) => {
 >arr2.forEach((a: string, index: number) => {     return index}) : void
 >                                                                : ^^^^
 >arr2.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr2 : string[]
 >     : ^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(a: string, index: number) => {     return index} : (a: string, index: number) => number
 >                                                  : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : string
@@ -323,17 +323,17 @@ a.doThing().then((result: Bar | Baz) => {
 >a.doThing().then((result: Bar | Baz) => {	// whatever}) : Promise<void>
 >                                                        : ^^^^^^^^^^^^^
 >a.doThing().then : (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^
 >a.doThing() : Promise<Bar> | Promise<Baz>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.doThing : (() => Promise<Bar>) | (() => Promise<Baz>)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^        ^^^ ^^^^^^^^^^^        ^^^ ^
 >a : Bar | Baz
 >  : ^^^^^^^^^
 >doThing : (() => Promise<Bar>) | (() => Promise<Baz>)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^        ^^^ ^^^^^^^^^^^        ^^^ ^
 >then : (<TResult1 = Baz, TResult2 = never>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1 = Bar, TResult2 = never>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^
 >(result: Bar | Baz) => {	// whatever} : (result: Bar | Baz) => void
 >                                      : ^      ^^         ^^^^^^^^^
 >result : Bar | Baz

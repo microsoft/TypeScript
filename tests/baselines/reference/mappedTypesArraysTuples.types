@@ -135,7 +135,7 @@ let y10 = unboxify(x10);
 >unboxify(x10) : [number, string, ...boolean[]]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
->         : ^ ^^ ^^           ^^^^^^
+>         : ^ ^^ ^^           ^^^^^ 
 >x10 : [Box<number>, Box<string>, ...Box<boolean>[]]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,7 +149,7 @@ let y11 = unboxify(x11);
 >unboxify(x11) : number[]
 >              : ^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
->         : ^ ^^ ^^           ^^^^^^
+>         : ^ ^^ ^^           ^^^^^ 
 >x11 : Box<number>[]
 >    : ^^^^^^^^^^^^^
 
@@ -167,9 +167,9 @@ let y12 = unboxify(x12);
 >unboxify(x12) : { a: number; b: string[]; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T>(x: Boxified<T>) => T
->         : ^ ^^ ^^           ^^^^^^
+>         : ^ ^^ ^^           ^^^^^ 
 >x12 : { a: Box<number>; b: Box<string[]>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^           ^^^^^             ^^^
 
 declare function nonpartial<T>(x: Partial<T>): T;
 >nonpartial : <T>(x: Partial<T>) => T
@@ -187,7 +187,7 @@ let y20 = nonpartial(x20);
 >nonpartial(x20) : [number, string, ...boolean[]]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonpartial : <T>(x: Partial<T>) => T
->           : ^ ^^ ^^          ^^^^^^
+>           : ^ ^^ ^^          ^^^^^ 
 >x20 : [number | undefined, (string | undefined)?, ...boolean[]]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -201,7 +201,7 @@ let y21 = nonpartial(x21);
 >nonpartial(x21) : number[]
 >                : ^^^^^^^^
 >nonpartial : <T>(x: Partial<T>) => T
->           : ^ ^^ ^^          ^^^^^^
+>           : ^ ^^ ^^          ^^^^^ 
 >x21 : (number | undefined)[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -215,13 +215,13 @@ declare let x22: { a: number | undefined, b?: string[] };
 
 let y22 = nonpartial(x22);
 >y22 : { a: number; b: string[]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^        ^^^
 >nonpartial(x22) : { a: number; b: string[]; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^        ^^^
 >nonpartial : <T>(x: Partial<T>) => T
->           : ^ ^^ ^^          ^^^^^^
->x22 : { a: number | undefined; b?: string[] | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^          ^^^^^ 
+>x22 : { a: number | undefined; b?: string[]; }
+>    : ^^^^^                  ^^^^^^        ^^^
 
 type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >__Awaited : __Awaited<T>
@@ -255,7 +255,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a) : Promise<[number]>
 >       : ^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
 >  : ^^^^^^
 
@@ -265,7 +265,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b) : Promise<[number, number]>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -277,7 +277,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b, c) : Promise<[number, number, string[]]>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -291,7 +291,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b, c, d) : Promise<[number, number, string[], string[]]>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -314,11 +314,11 @@ function f2<T extends any[]>(a: Boxified<T>) {
 >a.pop() : Box<any> | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^
 >a.pop : () => Box<any> | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^            
 >a : Boxified<T>
 >  : ^^^^^^^^^^^
 >pop : () => Box<any> | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^            
 
     let y: Box<any>[] = a.concat(a);
 >y : Box<any>[]
@@ -326,11 +326,11 @@ function f2<T extends any[]>(a: Boxified<T>) {
 >a.concat(a) : Box<any>[]
 >            : ^^^^^^^^^^
 >a.concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
->         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >a : Boxified<T>
 >  : ^^^^^^^^^^^
 >concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >a : Boxified<T>
 >  : ^^^^^^^^^^^
 }
@@ -381,11 +381,11 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 >acceptArray(mapArray(arr)) : void
 >                           : ^^^^
 >acceptArray : (arr: any[]) => void
->            : ^   ^^     ^^^^^^^^^
+>            : ^   ^^     ^^^^^    
 >mapArray(arr) : Mapped<T>
 >              : ^^^^^^^^^
 >mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
->         : ^   ^^^^^^^^^     ^^   ^^   ^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^     ^^   ^^   ^^^^^           
 >arr : T
 >    : ^
 }

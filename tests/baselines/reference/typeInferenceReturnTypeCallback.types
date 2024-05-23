@@ -43,11 +43,11 @@ class Cons<T> implements IList<T>{
 >this.foldRight(new Nil<U>(), (t, acc) => {            return new Cons<U>();        }) : Nil<U>
 >                                                                                      : ^^^^^^
 >this.foldRight : <E>(z: E, f: (t: T, acc: E) => E) => E
->               : ^ ^^ ^^ ^^ ^^                   ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^                   ^^^^^ 
 >this : this
 >     : ^^^^
 >foldRight : <E>(z: E, f: (t: T, acc: E) => E) => E
->          : ^ ^^ ^^ ^^ ^^                   ^^^^^^
+>          : ^ ^^ ^^ ^^ ^^                   ^^^^^ 
 >new Nil<U>() : Nil<U>
 >             : ^^^^^^
 >Nil : typeof Nil

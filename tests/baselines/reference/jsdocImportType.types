@@ -22,7 +22,7 @@ const D = require("./mod1");
 >require("./mod1") : typeof D
 >                  : ^^^^^^^^
 >require : (name: string) => any
->        : ^    ^^      ^^^^^^^^
+>        : ^    ^^      ^^^^^   
 >"./mod1" : "./mod1"
 >         : ^^^^^^^^
 

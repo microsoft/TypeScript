@@ -29,11 +29,11 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 >Object.assign(param1, { otherProperty: 3 }) : T & { otherProperty: number; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
->              : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>              : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^       ^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
->       : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>       : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^       ^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >param1 : T
 >       : ^
 >{ otherProperty: 3 } : { otherProperty: number; }
@@ -45,11 +45,11 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 
     mySecondFunction(newParam)
 >mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
 >mySecondFunction : <T_1 extends { commonProperty: number; otherProperty: number; }>(newParam: T_1) => T_1
 >                 : ^   ^^^^^^^^^                                                  ^^        ^^   ^^^^^^^^
 >newParam : (FirstInterface | SecondInterface) & { otherProperty: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 }
 
 const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {

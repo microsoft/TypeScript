@@ -17,7 +17,7 @@ const result1 = test1(["foo", 42]);
 >test1(["foo", 42]) : [string, number]
 >                   : ^^^^^^^^^^^^^^^^
 >test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
->      : ^ ^^   ^^                         ^^^^^^
+>      : ^ ^^   ^^                         ^^^^^ 
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -39,7 +39,7 @@ const result2 = test2(["foo", 42]);
 >test2(["foo", 42]) : [string, number]
 >                   : ^^^^^^^^^^^^^^^^
 >test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
->      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^^
+>      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -69,7 +69,7 @@ const created1 = create([() => 1, [() => ""]]);
 >create([() => 1, [() => ""]]) : [number, [string]]
 >                              : ^^^^^^^^^^^^^^^^^^
 >create : <T extends Schema>(definition: Definition<T>) => T
->       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^^
+>       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^ 
 >[() => 1, [() => ""]] : [() => number, [() => string]]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => 1 : () => number
@@ -89,7 +89,7 @@ const created2 = create({
 >create({  a: () => 1,  b: [() => ""],}) : { a: number; b: [string]; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T extends Schema>(definition: Definition<T>) => T
->       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^^
+>       : ^ ^^^^^^^^^      ^^          ^^             ^^^^^ 
 >{  a: () => 1,  b: [() => ""],} : { a: () => number; b: [() => string]; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -151,7 +151,7 @@ const result4 = test4({
 >test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
 >                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
->      : ^ ^^^^^^^^^                        ^^   ^^                                                                                        ^^^^^^
+>      : ^ ^^^^^^^^^                        ^^   ^^                                                                                        ^^^^^ 
 >{  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },} : { alwaysStrict: { dependencies: ["foo", "bar"]; }; allowUnusedLabels: { dependencies: ["baz", "qwe"]; }; }
 >                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

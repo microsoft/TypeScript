@@ -257,11 +257,11 @@ module TypeScript {
 >this.select(this.result, b) : Symbol
 >                            : ^^^^^^
 >this.select : (a: Symbol, b: Symbol) => Symbol
->            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^ ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >select : (a: Symbol, b: Symbol) => Symbol
->       : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^      ^^^^^      
 >this.result : Symbol
 >            : ^^^^^^
 >this : this
@@ -283,11 +283,11 @@ module TypeScript {
 >this.stop(this.result) : boolean
 >                       : ^^^^^^^
 >this.stop : (s: Symbol) => boolean
->          : ^ ^^      ^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^       
 >this : this
 >     : ^^^^
 >stop : (s: Symbol) => boolean
->     : ^ ^^      ^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^       
 >this.result : Symbol
 >            : ^^^^^^
 >this : this
@@ -456,7 +456,7 @@ module TypeScript {
 >context.modDeclChain.push(moduleDecl) : number
 >                                      : ^^^^^^
 >context.modDeclChain.push : (...items: ModuleDeclaration[]) => number
->                          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >context.modDeclChain : ModuleDeclaration[]
 >                     : ^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
@@ -464,7 +464,7 @@ module TypeScript {
 >modDeclChain : ModuleDeclaration[]
 >             : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: ModuleDeclaration[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >moduleDecl : ModuleDeclaration
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -3761,16 +3761,16 @@ module TypeScript {
                 context.modDeclChain.pop();
 >context.modDeclChain.pop() : ModuleDeclaration
 >                           : ^^^^^^^^^^^^^^^^^
->context.modDeclChain.pop : () => ModuleDeclaration
->                         : ^^^^^^^^^^^^^^^^^^^^^^^
+>context.modDeclChain.pop : () => ModuleDeclaration | undefined
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^            
 >context.modDeclChain : ModuleDeclaration[]
 >                     : ^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
 >modDeclChain : ModuleDeclaration[]
 >             : ^^^^^^^^^^^^^^^^^^^
->pop : () => ModuleDeclaration
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>pop : () => ModuleDeclaration | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^            
 
                 if (context.modDeclChain.length >= 1) {
 >context.modDeclChain.length >= 1 : boolean

@@ -527,11 +527,11 @@ var r8 = i.foo5(d1, d2); // Derived
 >i.foo5(d1, d2) : Derived
 >               : ^^^^^^^
 >i.foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->       : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^^
+>       : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^ 
 >i : I<Base, Derived>
 >  : ^^^^^^^^^^^^^^^^
 >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->     : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^ 
 >d1 : Derived
 >   : ^^^^^^^
 >d2 : Derived2
@@ -543,11 +543,11 @@ var r8b = i.foo5(d2, d2); // Derived2
 >i.foo5(d2, d2) : Derived2
 >               : ^^^^^^^^
 >i.foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->       : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^^
+>       : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^ 
 >i : I<Base, Derived>
 >  : ^^^^^^^^^^^^^^^^
 >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->     : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^ 
 >d2 : Derived2
 >   : ^^^^^^^^
 >d2 : Derived2
@@ -559,11 +559,11 @@ var r9 = i.foo6(); // Derived
 >i.foo6() : Derived
 >         : ^^^^^^^
 >i.foo6 : <T extends Derived, U extends Derived2>() => T
->       : ^^^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^^^^
+>       : ^ ^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^^^ 
 >i : I<Base, Derived>
 >  : ^^^^^^^^^^^^^^^^
 >foo6 : <T extends Derived, U extends Derived2>() => T
->     : ^^^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^^^^
+>     : ^ ^^^^^^^^^       ^^^^^^^^^^^^        ^^^^^^^ 
 
 var r10 = i.foo7(d1); // Base
 >r10 : Base
@@ -571,11 +571,11 @@ var r10 = i.foo7(d1); // Base
 >i.foo7(d1) : Base
 >           : ^^^^
 >i.foo7 : <T extends Base, U extends Derived>(u: U) => T
->       : ^^^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^ ^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^ ^^^^^ 
 >i : I<Base, Derived>
 >  : ^^^^^^^^^^^^^^^^
 >foo7 : <T extends Base, U extends Derived>(u: U) => T
->     : ^^^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^ ^^^^^^
+>     : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^ ^^^^^ 
 >d1 : Derived
 >   : ^^^^^^^
 
@@ -585,9 +585,9 @@ var r11 = i.foo8(); // Base
 >i.foo8() : Base
 >         : ^^^^
 >i.foo8 : <T extends Base, U extends Derived>() => T
->       : ^^^^^^^^^^^    ^^^^^^^^^^^^       ^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^^^^^^^^^^^       ^^^^^^^ 
 >i : I<Base, Derived>
 >  : ^^^^^^^^^^^^^^^^
 >foo8 : <T extends Base, U extends Derived>() => T
->     : ^^^^^^^^^^^    ^^^^^^^^^^^^       ^^^^^^^^
+>     : ^ ^^^^^^^^^    ^^^^^^^^^^^^       ^^^^^^^ 
 
