@@ -53,6 +53,24 @@ num = arr[1n]; // should error
 >1n : 1n
 >   : ^^
 
+num = [1, 2, 3][1n]; // should error
+>num = [1, 2, 3][1n] : any
+>                    : ^^^
+>num : number
+>    : ^^^^^^
+>[1, 2, 3][1n] : any
+>              : ^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>1n : 1n
+>   : ^^
+
 let key: keyof any; // should be type "string | number | symbol"
 >key : string | number | symbol
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
