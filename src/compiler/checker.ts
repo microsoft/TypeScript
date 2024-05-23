@@ -48984,6 +48984,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSingleReturnExpression(declaration: SignatureDeclaration | undefined): Expression | undefined {
         let candidateExpr: Expression | undefined;
         if (declaration && !nodeIsMissing((declaration as FunctionLikeDeclaration).body)) {
+            if (getFunctionFlags(declaration) & FunctionFlags.AsyncGenerator) return undefined;
             const body = (declaration as FunctionLikeDeclaration).body;
             if (body && isBlock(body)) {
                 forEachReturnStatement(body, s => {
