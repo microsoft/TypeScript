@@ -5,11 +5,11 @@ interface fnSigs {
     //functions signatures can be optional
     fn(): void;
 >fn : { (): void; (): void; }
->   : ^^^^^^    ^^^^^^^^^^^^^
+>   : ^^^^^^    ^^^^^^    ^^^
 
     fn?(): void; //err
 >fn : { (): void; (): void; }
->   : ^^^^^^^^^^^^^^^^    ^^^
+>   : ^^^^^^    ^^^^^^    ^^^
 
     fn2?(): void;
 >fn2 : () => void

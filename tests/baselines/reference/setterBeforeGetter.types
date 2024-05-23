@@ -14,7 +14,7 @@ class Foo {
     // should not be an error to order them this way
     set bar(thing: { a: string; }) {
 >bar : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >thing : { a: string; }
 >      : ^^^^^      ^^^
 >a : string
@@ -22,15 +22,15 @@ class Foo {
 
         this._bar = thing;
 >this._bar = thing : { a: string; }
->                  : ^^^^^^^^^^^^^^
+>                  : ^^^^^      ^^^
 >this._bar : { a: string; }
->          : ^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^
 >this : this
 >     : ^^^^
 >_bar : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >thing : { a: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
     }
     get bar(): { a: string; } {
 >bar : { a: string; }
@@ -40,11 +40,11 @@ class Foo {
 
         return this._bar;
 >this._bar : { a: string; }
->          : ^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^
 >this : this
 >     : ^^^^
 >_bar : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
     }
 }
 

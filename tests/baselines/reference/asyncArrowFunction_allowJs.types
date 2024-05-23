@@ -5,9 +5,9 @@
 /** @type {function(): string} */
 const a = () => 0
 >a : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >() => 0 : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >0 : 0
 >  : ^
 
@@ -15,9 +15,9 @@ const a = () => 0
 /** @type {function(): string} */
 const b = async () => 0
 >b : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >async () => 0 : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >0 : 0
 >  : ^
 
@@ -25,9 +25,9 @@ const b = async () => 0
 /** @type {function(): string} */
 const c = async () => {
 >c : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >async () => {	return 0} : () => string
->                        : ^^^^^^^^^^^^
+>                        : ^^^^^^      
 
 	return 0
 >0 : 0
@@ -38,9 +38,9 @@ const c = async () => {
 /** @type {function(): string} */
 const d = async () => {
 >d : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >async () => {	return ""} : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 
 	return ""
 >"" : ""
@@ -50,18 +50,18 @@ const d = async () => {
 /** @type {function(function(): string): void} */
 const f = (p) => {}
 >f : (arg0: () => string) => void
->  : ^^^^^^^^^^^^^      ^^^^^^^^^
+>  : ^^^^^^^^^^^^^      ^^^^^    
 >(p) => {} : (p: () => string) => void
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^      ^^^^^    
 >p : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
 // Error (good)
 f(async () => {
 >f(async () => {	return 0}) : void
 >                           : ^^^^
 >f : (arg0: () => string) => void
->  : ^^^^^^^^^^^^^      ^^^^^^^^^
+>  : ^^^^^^^^^^^^^      ^^^^^    
 >async () => {	return 0} : () => Promise<number>
 >                        : ^^^^^^^^^^^^^^^^^^^^^
 

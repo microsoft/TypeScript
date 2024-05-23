@@ -124,11 +124,11 @@ class Foo {
 >BaseCollection : typeof BaseCollection
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >Derived.createEmpty : () => Derived
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >createEmpty : () => Derived
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
     }
 }
 

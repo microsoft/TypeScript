@@ -34,30 +34,30 @@ declare namespace React {
 export { };
 React.createRef;
 >React.createRef : () => any
->                : ^^^^^^^^^
+>                : ^^^^^^   
 >React : typeof import("module")
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
->          : ^^^^^^^^^
+>          : ^^^^^^   
 
 === emits.ts ===
 console.log("hello");
 >console.log("hello") : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
 >        : ^^^^^^^
 
 React.createRef;
 >React.createRef : () => any
 >                : ^^^^^^^^^
->React : typeof import("module")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof React
+>      : ^^^^^^^^^^^^
 >createRef : () => any
->          : ^^^^^^^^^
+>          : ^^^^^^   
 

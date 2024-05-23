@@ -27,21 +27,21 @@ function incrementIdx(max: number) {
 >Math.floor(Math.random() * max) : number
 >                                : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >Math.random() * max : number
 >                    : ^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >max : number
 >    : ^^^^^^
 

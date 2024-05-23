@@ -24,7 +24,7 @@ options1[`foo`] = false;
 >options1[`foo`] : boolean
 >                : ^^^^^^^
 >options1 : { prop: number; } & { [k: string]: boolean; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo` : "foo"
 >      : ^^^^^
 >false : false
@@ -36,7 +36,7 @@ options1[`foo/${path}`] = false;
 >options1[`foo/${path}`] : boolean
 >                        : ^^^^^^^
 >options1 : { prop: number; } & { [k: string]: boolean; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo/${path}` : `foo/${Path}`
 >              : ^^^^^^^^^^^^^
 >path : Path
@@ -56,7 +56,7 @@ options1[lowercasePath] = false;
 >options1[lowercasePath] : boolean
 >                        : ^^^^^^^
 >options1 : { prop: number; } & { [k: string]: boolean; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lowercasePath : `foo/${Lowercase<Path>}`
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false

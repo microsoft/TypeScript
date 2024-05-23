@@ -8,9 +8,9 @@ var lol;
 
 const obj = {
 >obj : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
->    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^      ^^^
+>    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^      ^^^
 >{  /** @type {string|undefined} */  bar: 42,  /** @type {function(number): number} */  method1(n1) {      return "42";  },  /** @type {function(number): number} */  method2: (n1) => "lol",  /** @type {function(number): number} */  arrowFunc: (num="0") => num + 42,  /** @type {string} */  lol} : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
->                                                                                                                                                                                                                                                                                                      : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^      ^^^
+>                                                                                                                                                                                                                                                                                                      : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^      ^^^
 
   /** @type {string|undefined} */
   bar: 42,
@@ -79,11 +79,11 @@ var s = obj.method1(0);
 >obj.method1(0) : number
 >               : ^^^^^^
 >obj.method1 : (arg0: number) => number
->            : ^^^^^^^      ^^^^^^^^^^^
+>            : ^^^^^^^      ^^^^^      
 >obj : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^      ^^^
 >method1 : (arg0: number) => number
->        : ^^^^^^^      ^^^^^^^^^^^
+>        : ^^^^^^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -94,11 +94,11 @@ var s1 = obj.method2("0");
 >obj.method2("0") : number
 >                 : ^^^^^^
 >obj.method2 : (arg0: number) => number
->            : ^^^^^^^      ^^^^^^^^^^^
+>            : ^^^^^^^      ^^^^^      
 >obj : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^^^^^      ^^^
 >method2 : (arg0: number) => number
->        : ^^^^^^^      ^^^^^^^^^^^
+>        : ^^^^^^^      ^^^^^      
 >"0" : "0"
 >    : ^^^
 

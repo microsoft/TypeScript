@@ -5,7 +5,7 @@
 /** @param {function(...[*])} callback */
 function g(callback) {
 >g : (callback: (...args: [any][]) => any) => void
->  : ^        ^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^
+>  : ^        ^^^^^^    ^^ ^^^ ^^^^^^^^^^^^^^^^^^^
 >callback : (...arg0: [any][]) => any
 >         : ^^^^^^^^^^ ^^^ ^^^^^^^^^^
 
@@ -34,11 +34,11 @@ function g(callback) {
  */
 var stringFromCharCode = String.fromCharCode;
 >stringFromCharCode : (...arg0: number[]) => string
->                   : ^^^^^^^^^^      ^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^      ^^^^^^^      
 >String.fromCharCode : (...codes: number[]) => string
->                    : ^^^^     ^^        ^^^^^^^^^^^
+>                    : ^^^^     ^^        ^^^^^      
 >String : StringConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
->             : ^^^^     ^^        ^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^      
 

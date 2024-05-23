@@ -25,7 +25,7 @@ function decorateA<O extends any>(fn: (first: {value: typeof val}) => O) {
 >fn({value: val}) : O
 >                 : ^
 >fn : (first: { value: typeof val; }) => O
->   : ^     ^^                      ^^^^^^
+>   : ^     ^^                      ^^^^^ 
 >{value: val} : { value: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -39,9 +39,9 @@ let a = decorateA(({value}) => 5)
 >decorateA(({value}) => 5) : () => number
 >                          : ^^^^^^^^^^^^
 >decorateA : <O extends unknown>(fn: (first: { value: typeof val; }) => O) => () => O
->          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                    ^^^^^^^^^^^^
->({value}) => 5 : ({ value }: { value: number; }) => number
->               : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                    ^^^^^^^^^^^ 
+>({value}) => 5 : ({ value }: { value: typeof val; }) => number
+>               : ^         ^^^^^^^^^^^          ^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >5 : 5
@@ -63,7 +63,7 @@ function decorateB<O extends any>(fn: (first: typeof val) => O) {
 >fn(val) : O
 >        : ^
 >fn : (first: typeof val) => O
->   : ^     ^^          ^^^^^^
+>   : ^     ^^          ^^^^^ 
 >val : number
 >    : ^^^^^^
 }
@@ -73,7 +73,7 @@ let b = decorateB((value) => 5)
 >decorateB((value) => 5) : () => number
 >                        : ^^^^^^^^^^^^
 >decorateB : <O extends unknown>(fn: (first: typeof val) => O) => () => O
->          : ^ ^^^^^^^^^^^^^^^^^^  ^^                        ^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^  ^^                        ^^^^^^^^^^^ 
 >(value) => 5 : (value: number) => number
 >             : ^     ^^^^^^^^^^^^^^^^^^^
 >value : number
@@ -97,7 +97,7 @@ function decorateC<O extends any>(fn: (first: {value: number}) => O) {
 >fn({value: val}) : O
 >                 : ^
 >fn : (first: { value: number; }) => O
->   : ^     ^^                  ^^^^^^
+>   : ^     ^^                  ^^^^^ 
 >{value: val} : { value: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -111,9 +111,9 @@ let c = decorateC(({value}) => 5)
 >decorateC(({value}) => 5) : () => number
 >                          : ^^^^^^^^^^^^
 >decorateC : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
->          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                ^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                ^^^^^^^^^^^ 
 >({value}) => 5 : ({ value }: { value: number; }) => number
->               : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^         ^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >5 : 5
@@ -141,7 +141,7 @@ function decorateD<O extends any>(fn: (first: First) => O) {
 >fn({value: val}) : O
 >                 : ^
 >fn : (first: First) => O
->   : ^     ^^     ^^^^^^
+>   : ^     ^^     ^^^^^ 
 >{value: val} : { value: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -155,7 +155,7 @@ let d = decorateD(({value}) => 5)
 >decorateD(({value}) => 5) : () => number
 >                          : ^^^^^^^^^^^^
 >decorateD : <O extends unknown>(fn: (first: First) => O) => () => O
->          : ^ ^^^^^^^^^^^^^^^^^^  ^^                   ^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^  ^^                   ^^^^^^^^^^^ 
 >({value}) => 5 : ({ value }: First) => number
 >               : ^         ^^^^^^^^^^^^^^^^^^
 >value : number

@@ -53,7 +53,7 @@ function wat(shape: Shape) {
 >shape.radius : number
 >             : ^^^^^^
 >shape : { kind: "circle"; radius: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^        ^^^^^^^^^^      ^^^
 >radius : number
 >       : ^^^^^^
 >2 : 2
@@ -78,7 +78,7 @@ function wat(shape: Shape) {
 >shape.kind : "square"
 >           : ^^^^^^^^
 >shape : { kind: "square"; sideLength: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^        ^^^^^^^^^^^^^^      ^^^
 >kind : "square"
 >     : ^^^^^^^^
 >"circle" : "circle"
@@ -110,7 +110,7 @@ function wat(shape: Shape) {
 >shape.kind : "square"
 >           : ^^^^^^^^
 >shape : { kind: "square"; sideLength: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^        ^^^^^^^^^^^^^^      ^^^
 >kind : "square"
 >     : ^^^^^^^^
 >"circle" : "circle"

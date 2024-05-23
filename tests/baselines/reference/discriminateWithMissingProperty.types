@@ -38,7 +38,7 @@ foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
 >foo({ mode: "numeric", data: new Uint8Array([30]) }) : void
 >                                                     : ^^^^
 >foo : (arg: Arg) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >{ mode: "numeric", data: new Uint8Array([30]) } : { mode: "numeric"; data: Uint8Array; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mode : "numeric"

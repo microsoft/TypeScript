@@ -26,7 +26,7 @@ function tryCatch() {
 >isFooError(err) : boolean
 >                : ^^^^^^^
 >isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
->           : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^   ^^^^^                                 ^^^   
 >err : any
 >    : ^^^
 
@@ -36,7 +36,7 @@ function tryCatch() {
 >err.dontPanic : () => any
 >              : ^^^^^^^^^
 >err : { type: "foo"; dontPanic(): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >dontPanic : () => any
 >          : ^^^^^^^^^
 
@@ -46,7 +46,7 @@ function tryCatch() {
 >err.doPanic : any
 >            : ^^^
 >err : { type: "foo"; dontPanic(): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >doPanic : any
 >        : ^^^
         }

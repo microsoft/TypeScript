@@ -673,6 +673,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -685,6 +686,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1132,6 +1134,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1460,6 +1463,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
@@ -1803,6 +1807,7 @@ Before running Timeout callback:: count: 2
 7: timerToUpdateProgram
 8: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -2227,6 +2232,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading config file: /home/src/projects/project1/tsconfig.json
@@ -2836,6 +2842,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 13: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -2848,6 +2855,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 14: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -3274,6 +3282,7 @@ Before running Timeout callback:: count: 2
 15: timerToUpdateProgram
 16: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

@@ -86,11 +86,11 @@ paired.map((c1) => c1.count);
 >paired.map((c1) => c1.count) : any[]
 >                             : ^^^^^
 >paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >paired : any[]
 >       : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >(c1) => c1.count : (c1: any) => any
 >                 : ^  ^^^^^^^^^^^^^
 >c1 : any
@@ -104,11 +104,11 @@ paired.map(function (c2) { return c2.count; });
 >paired.map(function (c2) { return c2.count; }) : any[]
 >                                               : ^^^^^
 >paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >paired : any[]
 >       : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >function (c2) { return c2.count; } : (c2: any) => any
 >                                   : ^  ^^^^^^^^^^^^^
 >c2 : any

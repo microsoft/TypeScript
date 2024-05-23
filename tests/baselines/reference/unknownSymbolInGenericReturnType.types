@@ -11,7 +11,7 @@ class Linq {
 >values : T[]
 >       : ^^^
 >func : (v: T) => A
->     : ^ ^^ ^^^^^^
+>     : ^ ^^ ^^^^^ 
 >v : T
 >  : ^
 
@@ -61,7 +61,7 @@ class Linq {
 >func(values[i]) : A
 >                : ^
 >func : (v: T) => A
->     : ^ ^^ ^^^^^^
+>     : ^ ^^ ^^^^^ 
 >values[i] : T
 >          : ^
 >values : T[]

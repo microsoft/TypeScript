@@ -52,8 +52,8 @@ var f: {
 >  : ^^^^^^^^
 
 var f2: {
->f2 : { new <T>(x: string): C; new <T_1>(x: number): C; }
->   : ^^^^^^^^^^ ^^      ^^^ ^^^^^^^^^^^^ ^^      ^^^ ^^^
+>f2 : { new <T>(x: string): C; new <T>(x: number): C; }
+>   : ^^^^^^^^^^ ^^      ^^^ ^^^^^^^^^^ ^^      ^^^ ^^^
 
     new<T>(x: string): C;
 >x : string
@@ -68,8 +68,8 @@ var f2: {
 >  : ^^^^^^^^
 
 var f3: {
->f3 : { new <T>(x: string): D<T>; new <T_1>(x: number): D<T_1>; }
->   : ^^^^^^^ ^^ ^^      ^^^    ^^^^^^^   ^^ ^^      ^^^      ^^^
+>f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }
+>   : ^^^^^^^ ^^ ^^      ^^^    ^^^^^^^ ^^ ^^      ^^^    ^^^
 
     new<T>(x: string): D<T>;
 >x : string

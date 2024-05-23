@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import { Compiler } from "./harnessIO";
+import * as ts from "./_namespaces/ts.js";
+import { Compiler } from "./harnessIO.js";
 
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 

@@ -79,7 +79,7 @@ declare function EF1(a:number, b:number):number;
 
 function EF1(a,b) { return a+b; }
 >EF1 : (a: number, b: number) => number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : any
 >  : ^^^
 >b : any
@@ -97,7 +97,7 @@ var x = EF1(1,2);
 >EF1(1,2) : number
 >         : ^^^^^^
 >EF1 : (a: number, b: number) => number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 >2 : 2
@@ -129,7 +129,7 @@ Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
 >                                                                                         : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >Point.prototype.add : (dx: number, dy: number) => Point
->                    : ^  ^^      ^^  ^^      ^^^^^^^^^^
+>                    : ^  ^^      ^^  ^^      ^^^^^     
 >Point.prototype : Point
 >                : ^^^^^
 >Point : typeof Point
@@ -137,7 +137,7 @@ Point.prototype.add = function(dx, dy) {
 >prototype : Point
 >          : ^^^^^
 >add : (dx: number, dy: number) => Point
->    : ^  ^^      ^^  ^^      ^^^^^^^^^^
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
 >                                                                   : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number

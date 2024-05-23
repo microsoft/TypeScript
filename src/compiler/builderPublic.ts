@@ -16,7 +16,7 @@ import {
     SavedBuildProgramEmitState,
     SourceFile,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 

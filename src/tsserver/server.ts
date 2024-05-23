@@ -1,6 +1,6 @@
-import * as ts from "../typescript/typescript";
-import { StartInput } from "./common";
-import { initializeNodeSystem } from "./nodeServer";
+import * as ts from "../typescript/typescript.js";
+import { StartInput } from "./common.js";
+import { initializeNodeSystem } from "./nodeServer.js";
 
 function findArgumentStringArray(argName: string): readonly string[] {
     const arg = ts.server.findArgument(argName);

@@ -107,13 +107,13 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "name": "Move to a new file",
-          "description": "Move to a new file",
+          "name": "Move to file",
+          "description": "Move to file",
           "actions": [
             {
-              "name": "Move to a new file",
-              "description": "Move to a new file",
-              "kind": "refactor.move.newFile",
+              "name": "Move to file",
+              "description": "Move to file",
+              "kind": "refactor.move.file",
               "range": {
                 "start": {
                   "line": 1,
@@ -128,13 +128,13 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to file",
-          "description": "Move to file",
+          "name": "Move to a new file",
+          "description": "Move to a new file",
           "actions": [
             {
-              "name": "Move to file",
-              "description": "Move to file",
-              "kind": "refactor.move.file",
+              "name": "Move to a new file",
+              "description": "Move to a new file",
+              "kind": "refactor.move.newFile",
               "range": {
                 "start": {
                   "line": 1,

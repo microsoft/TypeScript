@@ -9,9 +9,9 @@ s.toString();
 >s.toString() : string
 >             : ^^^^^^
 >s.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >s : symbol
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 

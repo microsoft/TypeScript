@@ -1,0 +1,714 @@
+//// [tests/cases/compiler/declarationEmitHigherOrderRetainedGenerics.ts] ////
+
+=== declarationEmitHigherOrderRetainedGenerics.ts ===
+export interface TypeLambda {
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+
+    readonly In: unknown
+>In : Symbol(TypeLambda.In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 29))
+
+    readonly Out2: unknown
+>Out2 : Symbol(TypeLambda.Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 1, 24))
+
+    readonly Out1: unknown
+>Out1 : Symbol(TypeLambda.Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 2, 26))
+
+    readonly Target: unknown
+>Target : Symbol(TypeLambda.Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 3, 26))
+}
+export namespace Types {
+>Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+
+    export type Invariant<A> = (_: A) => A
+>Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 26))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 26))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 26))
+
+    export type Covariant<A> = (_: never) => A
+>Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 26))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 26))
+
+    export type Contravariant<A> = (_: A) => void
+>Contravariant : Symbol(Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 9, 30))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 9, 36))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 9, 30))
+}
+
+export declare const URI: unique symbol;
+>URI : Symbol(URI, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 20))
+
+export interface TypeClass<F extends TypeLambda> {
+>TypeClass : Symbol(TypeClass, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 40))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 27))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+
+    readonly [URI]?: F
+>[URI] : Symbol(TypeClass[URI], Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 50))
+>URI : Symbol(URI, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 20))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 13, 27))
+}
+
+export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
+>Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 15, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>TypeClass : Symbol(TypeClass, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 12, 40))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+
+    readonly imap: {
+>imap : Symbol(Invariant.imap, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 71))
+
+        <A, B>(
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 11))
+
+            to: (a: A) => B,
+>to : Symbol(to, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 15))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 20, 17))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 11))
+
+            from: (b: B) => A
+>from : Symbol(from, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 20, 28))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 21, 19))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 11))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
+
+        ): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 12))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 14))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 17))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 21))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 12))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 14))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 17))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 9))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 12))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 14))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 22, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 19, 11))
+
+        <R, O, E, A, B>(
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 14))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 20))
+
+            self: Kind<F, R, O, E, A>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 24))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 14))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 17))
+
+            to: (a: A) => B,
+>to : Symbol(to, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 24, 38))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 25, 17))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 20))
+
+            from: (b: B) => A
+>from : Symbol(from, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 25, 28))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 26, 19))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 20))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 17))
+
+        ): Kind<F, R, O, E, B>
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 17, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 14))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 23, 20))
+    }
+}
+
+export interface Covariant<F extends TypeLambda> extends Invariant<F> {
+>Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 29, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 15, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+
+    readonly map: {
+>map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+
+        <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 9))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 11))
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 15))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 19))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 9))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 11))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 33))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 35))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 38))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 42))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 33))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 35))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 38))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 9))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 33))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 35))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 38))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 33, 11))
+
+        <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 14))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 20))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 24))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 14))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 17))
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 50))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 55))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 20))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 27))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 9))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 11))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 14))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 34, 20))
+    }
+}
+
+
+export type Kind<F extends TypeLambda, In, Out2, Out1, Target> = F extends {
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 17))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 38))
+>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 42))
+>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 48))
+>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 54))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 17))
+
+    readonly type: unknown
+>type : Symbol(type, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 76))
+
+} ? (F & {
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 17))
+
+    readonly In: In
+>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 41, 10))
+>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 38))
+
+    readonly Out2: Out2
+>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 42, 19))
+>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 42))
+
+    readonly Out1: Out1
+>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 43, 23))
+>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 48))
+
+    readonly Target: Target
+>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 44, 23))
+>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 54))
+
+})["type"]
+    : {
+        readonly F: F
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 47, 7))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 17))
+
+        readonly In: Types.Contravariant<In>
+>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 48, 21))
+>Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+>Contravariant : Symbol(Types.Contravariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 8, 46))
+>In : Symbol(In, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 38))
+
+        readonly Out2: Types.Covariant<Out2>
+>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 49, 44))
+>Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+>Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+>Out2 : Symbol(Out2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 42))
+
+        readonly Out1: Types.Covariant<Out1>
+>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 50, 44))
+>Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+>Covariant : Symbol(Types.Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 7, 42))
+>Out1 : Symbol(Out1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 48))
+
+        readonly Target: Types.Invariant<Target>
+>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 51, 44))
+>Types : Symbol(Types, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 5, 1))
+>Invariant : Symbol(Types.Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 6, 24))
+>Target : Symbol(Target, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 39, 54))
+    }
+
+export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
+>SemiProduct : Symbol(SemiProduct, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 53, 5))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>Invariant : Symbol(Invariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 15, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+
+    readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
+>product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 23))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 26))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 30))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 34))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 37))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 41))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 45))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 49))
+
+        self: Kind<F, R1, O1, E1, A>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 53))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 23))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 26))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 30))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 34))
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 57, 37))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 37))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 41))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 45))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 49))
+
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 23))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 37))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 26))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 41))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 30))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 45))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 34))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 56, 49))
+
+    readonly productMany: <R, O, E, A>(
+>productMany : Symbol(SemiProduct.productMany, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 59, 51))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+
+        self: Kind<F, R, O, E, A>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 39))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+
+        collection: Iterable<Kind<F, R, O, E, A>>
+>collection : Symbol(collection, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 62, 34))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+
+    ) => Kind<F, R, O, E, [A, ...Array<A>]>
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 29))
+>R : Symbol(R, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 27))
+>O : Symbol(O, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 29))
+>E : Symbol(E, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 32))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 61, 35))
+}
+export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> { }
+>SemiApplicative : Symbol(SemiApplicative, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 65, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 66, 33))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>SemiProduct : Symbol(SemiProduct, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 53, 5))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 66, 33))
+>Covariant : Symbol(Covariant, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 29, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 66, 33))
+
+
+export const SK = <A, B>(_: A, b: B): B => b;
+>SK : Symbol(SK, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 12))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 19))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 21))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 25))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 19))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 30))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 21))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 21))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 30))
+
+export declare const dual: {
+>dual : Symbol(dual, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 71, 20))
+
+    <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+>DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 5))
+>args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+>args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 71))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        arity: Parameters<DataFirst>["length"],
+>arity : Symbol(arity, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 100))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+
+        body: DataFirst
+>body : Symbol(body, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 73, 47))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+
+    ): DataLast & DataFirst
+>DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 5))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 72, 51))
+
+    <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+>DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 5))
+>args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 51))
+>args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 71))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        isDataFirst: (args: IArguments) => boolean,
+>isDataFirst : Symbol(isDataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 100))
+>args : Symbol(args, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 22))
+>IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+        body: DataFirst
+>body : Symbol(body, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 77, 51))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 51))
+
+    ): DataLast & DataFirst
+>DataLast : Symbol(DataLast, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 5))
+>DataFirst : Symbol(DataFirst, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 76, 51))
+
+};
+
+export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>): {
+>zipWith : Symbol(zipWith, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 12))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>SemiApplicative : Symbol(SemiApplicative, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 65, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+
+    <R2, O2, E2, B, A, C>(
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 8))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 12))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 16))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 19))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 22))
+
+        that: Kind<F, R2, O2, E2, B>,
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 26))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 8))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 12))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 16))
+
+        f: (a: A, b: B) => C
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 84, 37))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 85, 12))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 19))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 85, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 16))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 22))
+
+    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 11))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 15))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 20))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 11))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 15))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 19))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 8))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 11))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 12))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 86, 15))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 83, 22))
+
+    <R1, O1, E1, A, R2, O2, E2, B, C>(
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 5))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 8))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 12))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 16))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 19))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 23))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 27))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 31))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 34))
+
+        self: Kind<F, R1, O1, E1, A>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 38))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 5))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 8))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 12))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 16))
+
+        that: Kind<F, R2, O2, E2, B>,
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 88, 37))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 19))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 23))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 27))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 31))
+
+        f: (a: A, b: B) => C
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 89, 37))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 90, 12))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 16))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 90, 17))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 31))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 34))
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 5))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 19))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 8))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 23))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 12))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 27))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 87, 34))
+
+} =>
+    dual(
+>dual : Symbol(dual, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 71, 20))
+
+        3,
+        <R1, O1, E1, A, R2, O2, E2, B, C>(
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 9))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 12))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 20))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 23))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 27))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 35))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))
+
+            self: Kind<F, R1, O1, E1, A>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 42))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 9))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 12))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 20))
+
+            that: Kind<F, R2, O2, E2, B>,
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 96, 41))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 23))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 27))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 35))
+
+            f: (a: A, b: B) => C
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 97, 41))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 98, 16))
+>A : Symbol(A, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 20))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 98, 21))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 35))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))
+
+        ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 9))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 23))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 12))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 27))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 16))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 31))
+>C : Symbol(C, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 38))
+>F.map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>map : Symbol(Covariant.map, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 31, 71))
+>F.product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 24), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 46))
+>product : Symbol(SemiProduct.product, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 55, 73))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 95, 42))
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 96, 41))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 83))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 85))
+>f : Symbol(f, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 97, 41))
+>a : Symbol(a, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 83))
+>b : Symbol(b, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 99, 85))
+
+    );
+
+
+export const zipRight = <F extends TypeLambda>(F: SemiApplicative<F>): {
+>zipRight : Symbol(zipRight, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 12))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>TypeLambda : Symbol(TypeLambda, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 0, 0))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>SemiApplicative : Symbol(SemiApplicative, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 65, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+
+    <R2, O2, E2, B>(
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 8))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 12))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 16))
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 20))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 8))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 12))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 16))
+
+    ): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 11))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 15))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 19))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 23))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 11))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 15))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 19))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 8))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 5))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 8))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 11))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 12))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 106, 15))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 104, 16))
+
+    <R1, O1, E1, _, R2, O2, E2, B>(
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 5))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 8))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 12))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 16))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 19))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 23))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 27))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 31))
+
+        self: Kind<F, R1, O1, E1, _>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 35))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 5))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 8))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 12))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 16))
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 108, 37))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 19))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 23))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 27))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 31))
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 5))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 19))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 8))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 23))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 12))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 27))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 107, 31))
+
+} =>
+    dual(2, <R1, O1, E1, _, R2, O2, E2, B>(
+>dual : Symbol(dual, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 71, 20))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 13))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 16))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 20))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 24))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 27))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 31))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 35))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 39))
+
+        self: Kind<F, R1, O1, E1, _>,
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 43))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 13))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 16))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 20))
+>_ : Symbol(_, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 24))
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 113, 37))
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 27))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 31))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 35))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 39))
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK));
+>Kind : Symbol(Kind, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 36, 1))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>R1 : Symbol(R1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 13))
+>R2 : Symbol(R2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 27))
+>O1 : Symbol(O1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 16))
+>O2 : Symbol(O2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 31))
+>E1 : Symbol(E1, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 20))
+>E2 : Symbol(E2, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 35))
+>B : Symbol(B, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 39))
+>zipWith : Symbol(zipWith, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 82, 12))
+>F : Symbol(F, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 25), Decl(declarationEmitHigherOrderRetainedGenerics.ts, 103, 47))
+>self : Symbol(self, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 112, 43))
+>that : Symbol(that, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 113, 37))
+>SK : Symbol(SK, Decl(declarationEmitHigherOrderRetainedGenerics.ts, 69, 12))
+

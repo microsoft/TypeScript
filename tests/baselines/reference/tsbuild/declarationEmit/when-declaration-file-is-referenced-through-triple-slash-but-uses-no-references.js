@@ -119,12 +119,12 @@ export function getVar(): keyof typeof variable {
 
 Output::
 /lib/tsc --b /src/solution/tsconfig.json --verbose
-[[90m12:00:21 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/solution/tsconfig.json
 
-[[90m12:00:22 AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:23 AM[0m] Building project '/src/solution/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/solution/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

@@ -129,7 +129,7 @@ var b: { x: number; z?: number };
 // returns typeof a
 function f9() {
 >f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^      ^^^^^^      ^^^
 
     if (true) {
 >true : true
@@ -137,19 +137,19 @@ function f9() {
 
         return a;
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
     } else {
         return b;
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
     }
 }
 
 // returns typeof b
 function f10() {
 >f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^      ^^^^^^      ^^^
 
     if (true) {
 >true : true
@@ -157,12 +157,12 @@ function f10() {
 
         return b;
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
     } else {
         return a;
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
     }
 }
 

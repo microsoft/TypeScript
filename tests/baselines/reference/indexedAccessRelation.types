@@ -9,7 +9,7 @@ class Component<S> {
 
     setState<K extends keyof S>(state: Pick<S, K>) {}
 >setState : <K extends keyof S>(state: Pick<S, K>) => void
->         : ^ ^^^^^^^^^^^^^^^^^^     ^^          ^^^^^^^^^
+>         : ^ ^^^^^^^^^       ^^     ^^          ^^^^^^^^^
 >state : Pick<S, K>
 >      : ^^^^^^^^^^
 }

@@ -3,7 +3,7 @@
 === decoratorOnImportEquals2_1.ts ===
 @dec
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
 import lib = require('./decoratorOnImportEquals2_0');
 >lib : typeof lib

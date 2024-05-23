@@ -48,7 +48,7 @@ const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
 
 function f1<T extends string>() {
 >f1 : <T extends string>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^^^^
 
     const x1: MappedModel<T> = 42;  // Error
 >x1 : MappedModel<T>

@@ -52,11 +52,11 @@ module TypeScript {
 >diagnosticWriter.Alert(output) : void
 >                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
->                       : ^      ^^      ^^^^^^^^^
+>                       : ^      ^^      ^^^^^    
 >diagnosticWriter : IDiagnosticWriter
 >                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
->      : ^      ^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^    
 >output : string
 >       : ^^^^^^
             }
@@ -223,7 +223,7 @@ module TypeScript {
 >this.logger.information() : boolean
 >                          : ^^^^^^^
 >this.logger.information : () => boolean
->                        : ^^^^^^^^^^^^^
+>                        : ^^^^^^       
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -231,7 +231,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >information : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 
             this._debug = this.logger.debug();
 >this._debug = this.logger.debug() : boolean
@@ -245,7 +245,7 @@ module TypeScript {
 >this.logger.debug() : boolean
 >                    : ^^^^^^^
 >this.logger.debug : () => boolean
->                  : ^^^^^^^^^^^^^
+>                  : ^^^^^^       
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -253,7 +253,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >debug : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
             this._warning = this.logger.warning();
 >this._warning = this.logger.warning() : boolean
@@ -267,7 +267,7 @@ module TypeScript {
 >this.logger.warning() : boolean
 >                      : ^^^^^^^
 >this.logger.warning : () => boolean
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -275,7 +275,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >warning : () => boolean
->        : ^^^^^^^^^^^^^
+>        : ^^^^^^       
 
             this._error = this.logger.error();
 >this._error = this.logger.error() : boolean
@@ -289,7 +289,7 @@ module TypeScript {
 >this.logger.error() : boolean
 >                    : ^^^^^^^
 >this.logger.error : () => boolean
->                  : ^^^^^^^^^^^^^
+>                  : ^^^^^^       
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -297,7 +297,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >error : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
             this._fatal = this.logger.fatal();
 >this._fatal = this.logger.fatal() : boolean
@@ -311,7 +311,7 @@ module TypeScript {
 >this.logger.fatal() : boolean
 >                    : ^^^^^^^
 >this.logger.fatal : () => boolean
->                  : ^^^^^^^^^^^^^
+>                  : ^^^^^^       
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -319,7 +319,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >fatal : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
         }
 
 
@@ -383,7 +383,7 @@ module TypeScript {
 >this.logger.log(s) : void
 >                   : ^^^^
 >this.logger.log : (s: string) => void
->                : ^ ^^      ^^^^^^^^^
+>                : ^ ^^      ^^^^^    
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -391,7 +391,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >log : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
         }
@@ -447,7 +447,7 @@ module TypeScript {
 >this.logContents.push(s) : number
 >                         : ^^^^^^
 >this.logContents.push : (...items: any[]) => number
->                      : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^     ^^^^^^^^^^^^      
 >this.logContents : any[]
 >                 : ^^^^^
 >this : this
@@ -455,7 +455,7 @@ module TypeScript {
 >logContents : any[]
 >            : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >s : string
 >  : ^^^^^^
         }
@@ -487,7 +487,7 @@ module TypeScript {
 >func() : any
 >       : ^^^
 >func : () => any
->     : ^^^^^^^^^
+>     : ^^^^^^   
 
         var end = +new Date();
 >end : number
@@ -503,11 +503,11 @@ module TypeScript {
 >logger.log(funcDescription + " completed in " + (end - start) + " msec") : void
 >                                                                         : ^^^^
 >logger.log : (s: string) => void
->           : ^ ^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^    
 >logger : ILogger
 >       : ^^^^^^^
 >log : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >funcDescription + " completed in " + (end - start) + " msec" : string
 >                                                             : ^^^^^^
 >funcDescription + " completed in " + (end - start) : string
@@ -562,11 +562,11 @@ module TypeScript {
 >value.charCodeAt(index) : number
 >                        : ^^^^^^
 >value.charCodeAt : (index: number) => number
->                 : ^     ^^      ^^^^^^^^^^^
+>                 : ^     ^^      ^^^^^      
 >value : string
 >      : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >index : number
 >      : ^^^^^^
 
@@ -687,11 +687,11 @@ module TypeScript {
 >value.charAt(index) : string
 >                    : ^^^^^^
 >value.charAt : (pos: number) => string
->             : ^   ^^      ^^^^^^^^^^^
+>             : ^   ^^      ^^^^^      
 >value : string
 >      : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >index : number
 >      : ^^^^^^
             }

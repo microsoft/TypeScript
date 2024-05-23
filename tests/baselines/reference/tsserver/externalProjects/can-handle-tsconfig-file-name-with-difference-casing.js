@@ -129,6 +129,23 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/A/B/tsconfig.json",
+        "configFile": "/A/B/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "No inputs were found in config file '/A/B/tsconfig.json'. Specified 'include' paths were '[]' and 'exclude' paths were '[]'.",
+            "code": 18003,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/A/B/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
