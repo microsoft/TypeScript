@@ -301,7 +301,7 @@ function bar() { }
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":"-9218003498-export declare function foo(): void;\nexport declare function fooBar(): void;\n","impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"9819159940-export function foo() { }export function fooBar() { }","signature":"-9218003498-export declare function foo(): void;\nexport declare function fooBar(): void;\n","impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -359,14 +359,9 @@ function bar() { }
       "declaration": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts"
-    ],
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1088
+  "size": 1051
 }
 

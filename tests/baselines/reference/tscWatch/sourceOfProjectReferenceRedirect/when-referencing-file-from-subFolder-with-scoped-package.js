@@ -83,7 +83,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"4646078106-export function foo() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1},{"version":"-20350237855-import { foo } from '@issue/b/lib/foo';\nimport { bar } from '@issue/b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"4646078106-export function foo() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1},{"version":"-20350237855-import { foo } from '@issue/b/lib/foo';\nimport { bar } from '@issue/b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -158,16 +158,10 @@ export {};
         "../b/src/bar/foo.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "./src/test.ts",
-      "../b/src/bar/foo.ts",
-      "../b/src/foo.ts"
-    ],
     "latestChangedDtsFile": "./lib/test.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1101
+  "size": 1062
 }
 
 

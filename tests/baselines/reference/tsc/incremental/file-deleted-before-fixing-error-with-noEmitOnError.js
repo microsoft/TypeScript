@@ -71,7 +71,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../file1.ts","../file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1},{"version":"-7804761415-export class D { }","impliedFormat":1}],"root":[2,3],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]],3],"affectedFilesPendingEmit":[2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../file1.ts","../file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1},{"version":"-7804761415-export class D { }","impliedFormat":1}],"root":[2,3],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"affectedFilesPendingEmit":[2,3]},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -128,7 +128,6 @@ Shape signatures in builder refreshed for::
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
       [
         "../file1.ts",
         [
@@ -140,8 +139,7 @@ Shape signatures in builder refreshed for::
             "messageText": "Type '\"hello\"' is not assignable to type '30'."
           }
         ]
-      ],
-      "../file2.ts"
+      ]
     ],
     "affectedFilesPendingEmit": [
       [
@@ -155,7 +153,7 @@ Shape signatures in builder refreshed for::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1023
+  "size": 1019
 }
 
 
@@ -197,7 +195,7 @@ No shapes updated in the builder::
 
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../file1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1}],"root":[2],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"affectedFilesPendingEmit":[2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../file1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1}],"root":[2],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"affectedFilesPendingEmit":[2]},"version":"FakeTSVersion"}
 
 //// [/src/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -240,7 +238,6 @@ No shapes updated in the builder::
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
       [
         "../file1.ts",
         [
@@ -262,6 +259,6 @@ No shapes updated in the builder::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 940
+  "size": 938
 }
 

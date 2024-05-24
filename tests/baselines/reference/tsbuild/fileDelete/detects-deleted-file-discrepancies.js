@@ -27,7 +27,6 @@ CleanBuild:
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./child.ts",
         [
@@ -72,7 +71,6 @@ IncrementalBuild:
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./child.ts",
         [

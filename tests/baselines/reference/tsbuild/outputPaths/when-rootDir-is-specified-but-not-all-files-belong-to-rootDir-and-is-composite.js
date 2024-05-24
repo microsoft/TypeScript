@@ -174,7 +174,7 @@ exports.x = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-4885977236-export type t = string;","signature":"-6618426122-export type t = string;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"latestChangedDtsFile":"./types/type.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-4885977236-export type t = string;","signature":"-6618426122-export type t = string;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./types/type.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -233,10 +233,24 @@ exports.x = 10;
       "rootDir": "./src"
     },
     "referencedMap": {},
+    "semanticDiagnosticsPerFile": [
+      [
+        "../lib/lib.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "./src/index.ts",
+        "not cached or not changed"
+      ],
+      [
+        "./types/type.ts",
+        "not cached or not changed"
+      ]
+    ],
     "latestChangedDtsFile": "./types/type.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1000
+  "size": 1037
 }
 
 //// [/src/types/type.d.ts]

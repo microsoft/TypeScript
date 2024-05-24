@@ -62,7 +62,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-11268290852-export const y: 10 = 20;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '20' is not assignable to type '10'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-11268290852-export const y: 10 = 20;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"semanticDiagnosticsPerFile":[[3,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '20' is not assignable to type '10'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -120,8 +120,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
       [
         "./b.ts",
         [
@@ -151,7 +149,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
     ]
   },
   "version": "FakeTSVersion",
-  "size": 964
+  "size": 960
 }
 
 
@@ -235,7 +233,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"affectedFilesPendingEmit":[[2,1],[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -294,11 +292,6 @@ CreatingProgramWith::
       "noEmitOnError": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts"
-    ],
     "affectedFilesPendingEmit": [
       [
         [
@@ -316,7 +309,7 @@ CreatingProgramWith::
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 982
+  "size": 945
 }
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -369,7 +362,7 @@ Change:: Emit all files
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"referencedMap":[],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -428,15 +421,10 @@ Input::
       "noEmitOnError": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts"
-    ],
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 941
+  "size": 904
 }
 
 //// [/user/username/projects/myproject/a.js]

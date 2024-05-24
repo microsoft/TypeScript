@@ -420,7 +420,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n","impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n","impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"referencedMap":[],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -478,15 +478,10 @@ Output::
       "declaration": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts"
-    ],
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 957
+  "size": 920
 }
 
 //// [/user/username/projects/myproject/a.js]

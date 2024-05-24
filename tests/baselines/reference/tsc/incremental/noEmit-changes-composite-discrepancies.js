@@ -68,12 +68,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -165,12 +159,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -259,12 +247,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -356,12 +338,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -450,8 +426,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -474,7 +448,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -497,7 +470,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -589,8 +561,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -613,7 +583,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -636,7 +605,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -739,12 +707,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -836,12 +798,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -930,12 +886,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1027,12 +977,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1121,8 +1065,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -1145,7 +1087,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -1168,7 +1109,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1260,8 +1200,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -1284,7 +1222,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -1307,7 +1244,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1396,8 +1332,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -1420,7 +1354,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -1443,7 +1376,6 @@ CleanBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1535,8 +1467,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
       [
         "./src/directuse.ts",
         [
@@ -1559,7 +1489,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/indirectclass.ts",
       [
         "./src/indirectuse.ts",
         [
@@ -1582,7 +1511,6 @@ IncrementalBuild:
           }
         ]
       ],
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1671,12 +1599,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1768,12 +1690,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1876,12 +1792,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -1973,12 +1883,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -2067,12 +1971,6 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
@@ -2164,12 +2062,6 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [

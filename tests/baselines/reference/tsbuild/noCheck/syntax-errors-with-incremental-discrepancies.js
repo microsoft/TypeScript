@@ -28,7 +28,6 @@ CleanBuild:
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
       [
         "./a.ts",
         [
@@ -71,11 +70,7 @@ IncrementalBuild:
       "emitDeclarationOnly": true,
       "noCheck": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
-      "./a.ts"
-    ]
+    "referencedMap": {}
   },
   "version": "FakeTSVersion"
 }
@@ -109,7 +104,6 @@ CleanBuild:
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
       [
         "./a.ts",
         [
@@ -152,11 +146,7 @@ IncrementalBuild:
       "emitDeclarationOnly": true,
       "noCheck": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
-      "./a.ts"
-    ]
+    "referencedMap": {}
   },
   "version": "FakeTSVersion"
 }

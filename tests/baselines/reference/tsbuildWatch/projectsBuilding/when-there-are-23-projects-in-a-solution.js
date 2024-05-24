@@ -569,7 +569,7 @@ export declare const pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10197922616-export const pkg0 = 0;","signature":"-4821832606-export declare const pkg0 = 0;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10197922616-export const pkg0 = 0;","signature":"-4821832606-export declare const pkg0 = 0;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -611,14 +611,10 @@ export declare const pkg0 = 0;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg1/index.js]
@@ -633,7 +629,7 @@ export declare const pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10158787190-export const pkg1 = 1;","signature":"-3530363548-export declare const pkg1 = 1;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10158787190-export const pkg1 = 1;","signature":"-3530363548-export declare const pkg1 = 1;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -675,14 +671,10 @@ export declare const pkg1 = 1;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg2/index.js]
@@ -697,7 +689,7 @@ export declare const pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14414619060-export const pkg2 = 2;","signature":"-6533861786-export declare const pkg2 = 2;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14414619060-export const pkg2 = 2;","signature":"-6533861786-export declare const pkg2 = 2;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -739,14 +731,10 @@ export declare const pkg2 = 2;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg3/index.js]
@@ -761,7 +749,7 @@ export declare const pkg3 = 3;
 
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14375483634-export const pkg3 = 3;","signature":"-5242392728-export declare const pkg3 = 3;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14375483634-export const pkg3 = 3;","signature":"-5242392728-export declare const pkg3 = 3;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -803,14 +791,10 @@ export declare const pkg3 = 3;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg4/index.js]
@@ -825,7 +809,7 @@ export declare const pkg4 = 4;
 
 
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14336348208-export const pkg4 = 4;","signature":"-3950923670-export declare const pkg4 = 4;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14336348208-export const pkg4 = 4;","signature":"-3950923670-export declare const pkg4 = 4;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -867,14 +851,10 @@ export declare const pkg4 = 4;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg5/index.js]
@@ -889,7 +869,7 @@ export declare const pkg5 = 5;
 
 
 //// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14297212782-export const pkg5 = 5;","signature":"-2659454612-export declare const pkg5 = 5;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14297212782-export const pkg5 = 5;","signature":"-2659454612-export declare const pkg5 = 5;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -931,14 +911,10 @@ export declare const pkg5 = 5;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg6/index.js]
@@ -953,7 +929,7 @@ export declare const pkg6 = 6;
 
 
 //// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14258077356-export const pkg6 = 6;","signature":"-5662952850-export declare const pkg6 = 6;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14258077356-export const pkg6 = 6;","signature":"-5662952850-export declare const pkg6 = 6;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -995,14 +971,10 @@ export declare const pkg6 = 6;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg7/index.js]
@@ -1017,7 +989,7 @@ export declare const pkg7 = 7;
 
 
 //// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14218941930-export const pkg7 = 7;","signature":"-4371483792-export declare const pkg7 = 7;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14218941930-export const pkg7 = 7;","signature":"-4371483792-export declare const pkg7 = 7;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1059,14 +1031,10 @@ export declare const pkg7 = 7;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg8/index.js]
@@ -1081,7 +1049,7 @@ export declare const pkg8 = 8;
 
 
 //// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14179806504-export const pkg8 = 8;","signature":"-3080014734-export declare const pkg8 = 8;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14179806504-export const pkg8 = 8;","signature":"-3080014734-export declare const pkg8 = 8;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1123,14 +1091,10 @@ export declare const pkg8 = 8;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg9/index.js]
@@ -1145,7 +1109,7 @@ export declare const pkg9 = 9;
 
 
 //// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14140671078-export const pkg9 = 9;","signature":"-6083512972-export declare const pkg9 = 9;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14140671078-export const pkg9 = 9;","signature":"-6083512972-export declare const pkg9 = 9;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1187,14 +1151,10 @@ export declare const pkg9 = 9;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 788
+  "size": 753
 }
 
 //// [/user/username/projects/myproject/pkg10/index.js]
@@ -1209,7 +1169,7 @@ export declare const pkg10 = 10;
 
 
 //// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9585933846-export const pkg10 = 10;","signature":"-3553269308-export declare const pkg10 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9585933846-export const pkg10 = 10;","signature":"-3553269308-export declare const pkg10 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1251,14 +1211,10 @@ export declare const pkg10 = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 791
+  "size": 756
 }
 
 //// [/user/username/projects/myproject/pkg11/index.js]
@@ -1273,7 +1229,7 @@ export declare const pkg11 = 11;
 
 
 //// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8294465844-export const pkg11 = 11;","signature":"410469094-export declare const pkg11 = 11;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8294465844-export const pkg11 = 11;","signature":"410469094-export declare const pkg11 = 11;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1315,14 +1271,10 @@ export declare const pkg11 = 11;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 789
+  "size": 754
 }
 
 //// [/user/username/projects/myproject/pkg12/index.js]
@@ -1337,7 +1289,7 @@ export declare const pkg12 = 12;
 
 
 //// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7002997842-export const pkg12 = 12;","signature":"-4215727096-export declare const pkg12 = 12;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7002997842-export const pkg12 = 12;","signature":"-4215727096-export declare const pkg12 = 12;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1379,14 +1331,10 @@ export declare const pkg12 = 12;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 791
+  "size": 756
 }
 
 //// [/user/username/projects/myproject/pkg13/index.js]
@@ -1401,7 +1349,7 @@ export declare const pkg13 = 13;
 
 
 //// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10006497136-export const pkg13 = 13;","signature":"-4546955990-export declare const pkg13 = 13;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10006497136-export const pkg13 = 13;","signature":"-4546955990-export declare const pkg13 = 13;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1443,14 +1391,10 @@ export declare const pkg13 = 13;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg14/index.js]
@@ -1465,7 +1409,7 @@ export declare const pkg14 = 14;
 
 
 //// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8715029134-export const pkg14 = 14;","signature":"-583217588-export declare const pkg14 = 14;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8715029134-export const pkg14 = 14;","signature":"-583217588-export declare const pkg14 = 14;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1507,14 +1451,10 @@ export declare const pkg14 = 14;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 790
+  "size": 755
 }
 
 //// [/user/username/projects/myproject/pkg15/index.js]
@@ -1529,7 +1469,7 @@ export declare const pkg15 = 15;
 
 
 //// [/user/username/projects/myproject/pkg15/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7423561132-export const pkg15 = 15;","signature":"-5209413778-export declare const pkg15 = 15;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7423561132-export const pkg15 = 15;","signature":"-5209413778-export declare const pkg15 = 15;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg15/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1571,14 +1511,10 @@ export declare const pkg15 = 15;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 791
+  "size": 756
 }
 
 //// [/user/username/projects/myproject/pkg16/index.js]
@@ -1593,7 +1529,7 @@ export declare const pkg16 = 16;
 
 
 //// [/user/username/projects/myproject/pkg16/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6132093130-export const pkg16 = 16;","signature":"-1245675376-export declare const pkg16 = 16;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-6132093130-export const pkg16 = 16;","signature":"-1245675376-export declare const pkg16 = 16;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg16/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1635,14 +1571,10 @@ export declare const pkg16 = 16;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 791
+  "size": 756
 }
 
 //// [/user/username/projects/myproject/pkg17/index.js]
@@ -1657,7 +1589,7 @@ export declare const pkg17 = 17;
 
 
 //// [/user/username/projects/myproject/pkg17/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17725527016-export const pkg17 = 17;","signature":"-1576904270-export declare const pkg17 = 17;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17725527016-export const pkg17 = 17;","signature":"-1576904270-export declare const pkg17 = 17;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg17/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1699,14 +1631,10 @@ export declare const pkg17 = 17;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg18/index.js]
@@ -1721,7 +1649,7 @@ export declare const pkg18 = 18;
 
 
 //// [/user/username/projects/myproject/pkg18/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-16434059014-export const pkg18 = 18;","signature":"-1908133164-export declare const pkg18 = 18;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-16434059014-export const pkg18 = 18;","signature":"-1908133164-export declare const pkg18 = 18;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg18/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1763,14 +1691,10 @@ export declare const pkg18 = 18;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg19/index.js]
@@ -1785,7 +1709,7 @@ export declare const pkg19 = 19;
 
 
 //// [/user/username/projects/myproject/pkg19/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15142591012-export const pkg19 = 19;","signature":"-2239362058-export declare const pkg19 = 19;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15142591012-export const pkg19 = 19;","signature":"-2239362058-export declare const pkg19 = 19;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg19/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1827,14 +1751,10 @@ export declare const pkg19 = 19;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg20/index.js]
@@ -1849,7 +1769,7 @@ export declare const pkg20 = 20;
 
 
 //// [/user/username/projects/myproject/pkg20/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14212130036-export const pkg20 = 20;","signature":"-5893888218-export declare const pkg20 = 20;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14212130036-export const pkg20 = 20;","signature":"-5893888218-export declare const pkg20 = 20;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg20/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1891,14 +1811,10 @@ export declare const pkg20 = 20;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg21/index.js]
@@ -1913,7 +1829,7 @@ export declare const pkg21 = 21;
 
 
 //// [/user/username/projects/myproject/pkg21/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17215629330-export const pkg21 = 21;","signature":"-6225117112-export declare const pkg21 = 21;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17215629330-export const pkg21 = 21;","signature":"-6225117112-export declare const pkg21 = 21;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg21/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1955,14 +1871,10 @@ export declare const pkg21 = 21;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 //// [/user/username/projects/myproject/pkg22/index.js]
@@ -1977,7 +1889,7 @@ export declare const pkg22 = 22;
 
 
 //// [/user/username/projects/myproject/pkg22/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15924161328-export const pkg22 = 22;","signature":"-6556346006-export declare const pkg22 = 22;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15924161328-export const pkg22 = 22;","signature":"-6556346006-export declare const pkg22 = 22;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg22/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2019,14 +1931,10 @@ export declare const pkg22 = 22;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 792
+  "size": 757
 }
 
 
@@ -2845,7 +2753,7 @@ var someConst2 = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7839887915-export const pkg0 = 0;const someConst2 = 10;","signature":"-4821832606-export declare const pkg0 = 0;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7839887915-export const pkg0 = 0;const someConst2 = 10;","signature":"-4821832606-export declare const pkg0 = 0;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2887,14 +2795,10 @@ var someConst2 = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 809
+  "size": 774
 }
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
@@ -2989,7 +2893,7 @@ export declare const someConst = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -3031,14 +2935,10 @@ export declare const someConst = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 874
+  "size": 839
 }
 
 
@@ -3738,7 +3638,7 @@ export declare const someConst3 = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"10857255042-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"10857255042-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -3780,14 +3680,10 @@ export declare const someConst3 = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 944
+  "size": 909
 }
 
 
@@ -4172,7 +4068,7 @@ var someConst4 = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"27277091473-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"27277091473-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -4214,14 +4110,10 @@ var someConst4 = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 966
+  "size": 931
 }
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
@@ -4445,7 +4337,7 @@ export declare const someConst5 = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14710086947-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;export const someConst5 = 10;","signature":"4956132399-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\nexport declare const someConst5 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14710086947-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;export const someConst5 = 10;","signature":"4956132399-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\nexport declare const someConst5 = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -4487,14 +4379,10 @@ export declare const someConst5 = 10;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1032
+  "size": 997
 }
 
 

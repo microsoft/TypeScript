@@ -60,6 +60,7 @@ import {
     isNumber,
     isString,
     map,
+    mapDefinedIterator,
     maybeBind,
     noop,
     notImplemented,
@@ -983,7 +984,12 @@ export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: a
 /** @internal */
 export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any; };
 /** @internal */
-export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
+export type ProgramBuildInfoDiagnostic =
+    | ProgramBuildInfoFileId // File is not in changedSet and still doesnt have cached diagnostics
+    | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]]; // Diagnostics for file
+/** @internal */
+export type ProgramBuildInfoEmitDiagnostic = [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]]; // Diagnostics for the file
+
 /**
  * fileId if pending emit is same as what compilerOptions suggest
  * [fileId] if pending emit is only dts file emit
@@ -1036,7 +1042,7 @@ export interface ProgramMultiFileEmitBuildInfo {
     fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
     referencedMap: ProgramBuildInfoReferencedMap | undefined;
     semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
-    emitDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
+    emitDiagnosticsPerFile: ProgramBuildInfoEmitDiagnostic[] | undefined;
     affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
     changeFileSet: readonly ProgramBuildInfoFileId[] | undefined;
     emitSignatures: readonly ProgramBuildInfoEmitSignature[] | undefined;
@@ -1165,7 +1171,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         ]);
     }
 
-    const semanticDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics(state.semanticDiagnosticsPerFile);
+    const semanticDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics();
     let affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
     if (state.affectedFilesPendingEmit?.size) {
         const fullEmitForOptions = getBuilderFileEmit(state.compilerOptions);
@@ -1193,7 +1199,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             changeFileSet = append(changeFileSet, toFileId(path));
         }
     }
-    const emitDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics(state.emitDiagnosticsPerFile);
+    const emitDiagnosticsPerFile = convertToProgramBuildInfoEmitDiagnostics();
     const program: ProgramMultiFileEmitBuildInfo = {
         fileNames,
         fileInfos,
@@ -1303,21 +1309,32 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         return value;
     }
 
-    function convertToProgramBuildInfoDiagnostics(diagnostics: Map<Path, readonly Diagnostic[]> | undefined) {
+    function convertToProgramBuildInfoDiagnostics() {
         let result: ProgramBuildInfoDiagnostic[] | undefined;
-        if (diagnostics) {
-            for (const key of arrayFrom(diagnostics.keys()).sort(compareStringsCaseSensitive)) {
-                const value = diagnostics.get(key)!;
-                result = append(
-                    result,
-                    value.length ?
-                        [
-                            toFileId(key),
-                            convertToReusableDiagnostics(value, key),
-                        ] :
-                        toFileId(key),
-                );
+        state.fileInfos.forEach((_value, key) => {
+            const value = state.semanticDiagnosticsPerFile?.get(key);
+            if (!value) {
+                if (!state.changedFilesSet.has(key)) result = append(result, toFileId(key));
             }
+            else if (value.length) {
+                result = append(result, [
+                    toFileId(key),
+                    convertToReusableDiagnostics(value, key),
+                ]);
+            }
+        });
+        return result;
+    }
+
+    function convertToProgramBuildInfoEmitDiagnostics() {
+        let result: ProgramBuildInfoEmitDiagnostic[] | undefined;
+        if (!state.emitDiagnosticsPerFile?.size) return result;
+        for (const key of arrayFrom(state.emitDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
+            const value = state.emitDiagnosticsPerFile.get(key)!;
+            result = append(result, [
+                toFileId(key),
+                convertToReusableDiagnostics(value, key),
+            ]);
         }
         return result;
     }
@@ -1887,16 +1904,17 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
                 );
             }
         });
+        const changedFilesSet = new Set(map(program.changeFileSet, toFilePath));
         const fullEmitForOptions = program.affectedFilesPendingEmit ? getBuilderFileEmit(program.options || {}) : undefined;
         state = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
             referencedMap: toManyToManyPathMap(program.referencedMap),
-            semanticDiagnosticsPerFile: toPerFileDiagnostics(program.semanticDiagnosticsPerFile),
-            emitDiagnosticsPerFile: toPerFileDiagnostics(program.emitDiagnosticsPerFile),
+            semanticDiagnosticsPerFile: toPerFileSemanticDiagnostics(program.semanticDiagnosticsPerFile, fileInfos, changedFilesSet),
+            emitDiagnosticsPerFile: toPerFileEmitDiagnostics(program.emitDiagnosticsPerFile),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), value => toBuilderFileEmit(value, fullEmitForOptions!)),
-            changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
+            changedFilesSet,
             latestChangedDtsFile,
             emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
         };
@@ -1954,8 +1972,26 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
         return map;
     }
 
-    function toPerFileDiagnostics(diagnostics: readonly ProgramBuildInfoDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
-        return diagnostics && arrayToMap(diagnostics, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]);
+    function toPerFileSemanticDiagnostics(
+        diagnostics: readonly ProgramBuildInfoDiagnostic[] | undefined,
+        fileInfos: Map<Path, BuilderState.FileInfo>,
+        changedFilesSet: Set<Path>,
+    ): Map<Path, readonly ReusableDiagnostic[]> | undefined {
+        const semanticDiagnostics = new Map<Path, readonly ReusableDiagnostic[]>(
+            mapDefinedIterator(
+                fileInfos.keys(),
+                key => !changedFilesSet.has(key) ? [key, emptyArray] : undefined,
+            ),
+        );
+        diagnostics?.forEach(value => {
+            if (isNumber(value)) semanticDiagnostics.delete(toFilePath(value));
+            else semanticDiagnostics.set(toFilePath(value[0]), value[1]);
+        });
+        return semanticDiagnostics.size ? semanticDiagnostics : undefined;
+    }
+
+    function toPerFileEmitDiagnostics(diagnostics: readonly ProgramBuildInfoEmitDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
+        return diagnostics && arrayToMap(diagnostics, value => toFilePath(value[0]), value => value[1]);
     }
 }
 

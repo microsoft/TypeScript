@@ -118,7 +118,7 @@ exports.A = A;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -160,18 +160,14 @@ exports.A = A;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts"
-    ],
     "latestChangedDtsFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 850
+  "size": 815
 }
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"start":16,"length":3,"messageText":"Cannot find module 'a' or its corresponding type declarations.","category":1,"code":2307}]]],"affectedFilesPendingEmit":[2],"emitSignatures":[2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[[2,[{"start":16,"length":3,"messageText":"Cannot find module 'a' or its corresponding type declarations.","category":1,"code":2307}]]],"affectedFilesPendingEmit":[2],"emitSignatures":[2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -213,7 +209,6 @@ exports.A = A;
     },
     "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
       [
         "./b.ts",
         [
@@ -238,6 +233,6 @@ exports.A = A;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 973
+  "size": 971
 }
 

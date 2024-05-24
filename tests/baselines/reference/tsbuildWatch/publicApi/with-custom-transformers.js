@@ -113,7 +113,7 @@ export declare function f2(): void;
 
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -154,10 +154,6 @@ export declare function f2(): void;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "emitSignatures": [
       [
         "./index.ts",
@@ -167,7 +163,7 @@ export declare function f2(): void;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 987
+  "size": 952
 }
 
 //// [/user/username/projects/myproject/webpack/index.js]
@@ -204,7 +200,7 @@ export declare function f22(): void;
 
 
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -245,10 +241,6 @@ export declare function f22(): void;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "emitSignatures": [
       [
         "./index.ts",
@@ -258,7 +250,7 @@ export declare function f22(): void;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 994
+  "size": 959
 }
 
 
@@ -409,7 +401,7 @@ export declare function f2(): void;
 
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14127205977-export function fooBar() {}export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","signature":"1966424426-export declare function fooBar(): void;\nexport declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14127205977-export function fooBar() {}export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","signature":"1966424426-export declare function fooBar(): void;\nexport declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -451,14 +443,10 @@ export declare function f2(): void;
       "composite": true
     },
     "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./index.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1044
+  "size": 1009
 }
 
 
