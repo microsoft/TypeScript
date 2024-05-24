@@ -104,7 +104,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,11 +146,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
       "composite": true,
       "outDir": "./"
     },
-    "referencedMap": {},
     "latestChangedDtsFile": "./src/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 986
+  "size": 967
 }
 
 //// [/src/packages/pkg2/lib/src/index.d.ts]

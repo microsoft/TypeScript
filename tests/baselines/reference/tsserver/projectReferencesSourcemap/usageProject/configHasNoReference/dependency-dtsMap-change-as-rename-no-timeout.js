@@ -88,7 +88,7 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"referencedMap":[],"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -131,11 +131,10 @@ export declare function fn5(): void;
       "declarationDir": "../decls",
       "declarationMap": true
     },
-    "referencedMap": {},
     "latestChangedDtsFile": "../decls/FnS.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1078
+  "size": 1059
 }
 
 //// [/user/username/projects/myproject/main/main.js]

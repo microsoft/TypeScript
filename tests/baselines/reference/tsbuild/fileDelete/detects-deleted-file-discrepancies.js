@@ -25,7 +25,6 @@ CleanBuild:
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./child.ts",
@@ -69,7 +68,6 @@ IncrementalBuild:
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./child.ts",

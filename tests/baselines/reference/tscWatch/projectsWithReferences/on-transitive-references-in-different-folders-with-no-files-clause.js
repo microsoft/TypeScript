@@ -91,7 +91,7 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -132,11 +132,10 @@ export declare class A {
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 744
+  "size": 725
 }
 
 //// [/user/username/projects/transitiveReferences/b/index.js]

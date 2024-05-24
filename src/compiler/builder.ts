@@ -1164,7 +1164,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
     });
 
     let referencedMap: ProgramBuildInfoReferencedMap | undefined;
-    if (state.referencedMap) {
+    if (state.referencedMap?.size()) {
         referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
             toFileId(key),
             toFileIdListId(state.referencedMap!.getValues(key)!),
@@ -1909,7 +1909,7 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
         state = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-            referencedMap: toManyToManyPathMap(program.referencedMap),
+            referencedMap: toManyToManyPathMap(program.referencedMap, program.options ?? {}),
             semanticDiagnosticsPerFile: toPerFileSemanticDiagnostics(program.semanticDiagnosticsPerFile, fileInfos, changedFilesSet),
             emitDiagnosticsPerFile: toPerFileEmitDiagnostics(program.emitDiagnosticsPerFile),
             hasReusableDiagnostic: true,
@@ -1962,12 +1962,9 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
         return filePathsSetList![fileIdsListId - 1];
     }
 
-    function toManyToManyPathMap(referenceMap: ProgramBuildInfoReferencedMap | undefined): BuilderState.ManyToManyPathMap | undefined {
-        if (!referenceMap) {
-            return undefined;
-        }
-
-        const map = BuilderState.createManyToManyPathMap();
+    function toManyToManyPathMap(referenceMap: ProgramBuildInfoReferencedMap | undefined, options: CompilerOptions): BuilderState.ManyToManyPathMap | undefined {
+        const map = BuilderState.createReferencedMap(options);
+        if (!map || !referenceMap) return map;
         referenceMap.forEach(([fileId, fileIdListId]) => map.set(toFilePath(fileId), toFilePathsSet(fileIdListId)));
         return map;
     }

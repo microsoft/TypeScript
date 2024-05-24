@@ -179,7 +179,7 @@ console.log(foo_json_1.foo);
 }
 
 //// [/src/strings/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"referencedMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},"-6280880055-{\n  \"foo\": \"bar baz\"\n}"],"root":[2],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1}},"version":"FakeTSVersion"}
 
 //// [/src/strings/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -218,11 +218,10 @@ console.log(foo_json_1.foo);
       "rootDir": "..",
       "strict": true,
       "target": 1
-    },
-    "referencedMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 774
+  "size": 755
 }
 
 

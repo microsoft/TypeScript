@@ -51,7 +51,7 @@ exports.App = App;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","impliedFormat":1}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"referencedMap":[],"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"messageText":"Cannot find module 'react/jsx-runtime' or its corresponding type declarations.","category":1,"code":2307}]]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","impliedFormat":1}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"messageText":"Cannot find module 'react/jsx-runtime' or its corresponding type declarations.","category":1,"code":2307}]]]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -93,7 +93,6 @@ exports.App = App;
       "jsxImportSource": "react",
       "module": 1
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./index.tsx",
@@ -110,7 +109,7 @@ exports.App = App;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 972
+  "size": 953
 }
 
 

@@ -96,7 +96,7 @@ exports.y = "world";
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./file1.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./file4.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./file1.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -178,11 +178,10 @@ exports.y = "world";
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "latestChangedDtsFile": "./file4.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1283
+  "size": 1264
 }
 
 
@@ -207,7 +206,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true},"referencedMap":[],"latestChangedDtsFile":"./file4.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./file2.ts","./file3.ts","./file4.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true},"latestChangedDtsFile":"./file4.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -277,10 +276,9 @@ exitCode:: ExitStatus.Success
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "latestChangedDtsFile": "./file4.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1133
+  "size": 1114
 }
 

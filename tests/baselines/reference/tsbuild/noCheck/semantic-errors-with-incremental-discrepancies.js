@@ -26,7 +26,6 @@ CleanBuild:
       "declaration": true,
       "emitDeclarationOnly": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./a.ts",
@@ -69,8 +68,7 @@ IncrementalBuild:
       "declaration": true,
       "emitDeclarationOnly": true,
       "noCheck": true
-    },
-    "referencedMap": {}
+    }
   },
   "version": "FakeTSVersion"
 }
@@ -102,7 +100,6 @@ CleanBuild:
       "declaration": true,
       "emitDeclarationOnly": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./a.ts",
@@ -145,8 +142,7 @@ IncrementalBuild:
       "declaration": true,
       "emitDeclarationOnly": true,
       "noCheck": true
-    },
-    "referencedMap": {}
+    }
   },
   "version": "FakeTSVersion"
 }

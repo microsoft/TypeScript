@@ -39,7 +39,6 @@ CleanBuild:
       "declarationMap": true,
       "noEmitOnError": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./a.ts",
@@ -97,7 +96,6 @@ IncrementalBuild:
       "declarationMap": true,
       "noEmitOnError": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "./a.ts",

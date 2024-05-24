@@ -75,7 +75,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/reference/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9543969340-import * as mod_0 from \"../primary/a\"","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9543969340-import * as mod_0 from \"../primary/a\"","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -117,7 +117,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
       "composite": true,
       "outDir": "./"
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
       [
         "../../lib/lib.d.ts",
@@ -131,6 +130,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 860
+  "size": 841
 }
 
