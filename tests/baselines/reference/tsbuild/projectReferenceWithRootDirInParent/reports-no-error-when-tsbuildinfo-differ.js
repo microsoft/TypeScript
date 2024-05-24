@@ -238,3 +238,22 @@ exports.Other = 0;
   "size": 832
 }
 
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/src/main/tsconfig.main.json --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/src/other/tsconfig.other.json
+    * src/src/main/tsconfig.main.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/src/other/tsconfig.other.json' is up to date because newest input 'src/src/other/other.ts' is older than output 'src/dist/tsconfig.other.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/src/main/tsconfig.main.json' is up to date because newest input 'src/src/main/b.ts' is older than output 'src/dist/tsconfig.main.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
+

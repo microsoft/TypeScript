@@ -4,6 +4,7 @@ Input::
 {
   "compilerOptions": {
     "outDir": "./dev-build",
+    "incremental": true,
     "noEmitOnError": true
   }
 }
@@ -42,7 +43,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -b -w -verbose --incremental
+/a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -197,9 +198,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -254,9 +255,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -416,9 +417,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -590,9 +591,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -649,9 +650,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -796,9 +797,9 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
+  "incremental": true,
   "noEmitOnError": true,
   "watch": true,
-  "incremental": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
