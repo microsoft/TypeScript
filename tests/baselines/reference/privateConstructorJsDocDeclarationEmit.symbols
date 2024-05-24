@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/salsa/privateConstructorJsDocDeclarationEmit.ts] ////
+
+=== privateConstructorJsDocDeclarationEmit.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateConstructorJsDocDeclarationEmit.js, 0, 0))
+
+    /**
+     * @private
+     */
+    constructor() { }
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 5, 1))
+
+    constructor() { }
+}
+
+class Baz extends Bar {
+>Baz : Symbol(Baz, Decl(privateConstructorJsDocDeclarationEmit.js, 9, 1))
+>Bar : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 5, 1))
+
+    /**
+     * @private
+     */
+    constructor() {
+        super()
+>super : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 5, 1))
+    }
+}
+

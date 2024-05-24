@@ -29,5 +29,7 @@
 /** @private */
 declare function C(): void;
 declare class C {
+    /** @private */
+    private constructor();
     x: number;
 }
