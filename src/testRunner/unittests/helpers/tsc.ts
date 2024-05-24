@@ -12,6 +12,7 @@ import {
     isReadableProgramBundleEmitBuildInfo,
     ReadableBuildInfo,
     ReadableProgramBuildInfoFileInfo,
+    ReadableProgramBundleEmitBuildInfo,
     ReadableProgramMultiFileEmitBuildInfo,
     sanitizeSysOutput,
     toPathWithSystem,
@@ -335,26 +336,44 @@ function verifyTscEditDiscrepancies({
                         expectedIndex++;
                     });
                 }
-                if (incrementalReadableBuildInfo?.program?.emitDiagnosticsPerFile) {
-                    incrementalReadableBuildInfo.program.emitDiagnosticsPerFile.forEach(([actualFileOrArray]) => {
-                        const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
-                        if (
-                            !ts.find(
-                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile,
-                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
-                            ) && !ts.find(
-                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
-                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
-                            )
-                        ) {
-                            addBaseline(
-                                `Incremental build contains ${actualFile} file has errors, clean build does not have errors or does not mark is as pending emit: ${outputFile}::`,
-                                `Incremental buildInfoText:: ${incrementalBuildText}`,
-                                `Clean buildInfoText:: ${cleanBuildText}`,
-                            );
-                        }
-                    });
+            }
+            else {
+                ts.Debug.assert(isReadableProgramBundleEmitBuildInfo(cleanReadableBuildInfo?.program));
+                // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                if (incrementalReadableBuildInfo?.program?.pendingEmit) {
+                    if (cleanReadableBuildInfo?.program?.pendingEmit === undefined) {
+                        addBaseline(
+                            `Incremental build contains pendingEmit, clean build does not have it: ${outputFile}::`,
+                            `Incremental buildInfoText:: ${incrementalBuildText}`,
+                            `Clean buildInfoText:: ${cleanBuildText}`,
+                        );
+                    }
                 }
+            }
+            if (incrementalReadableBuildInfo?.program?.emitDiagnosticsPerFile) {
+                incrementalReadableBuildInfo.program.emitDiagnosticsPerFile.forEach(([actualFileOrArray]) => {
+                    const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
+                    if (
+                        // Does not have emit diagnostics in clean buildInfo
+                        !ts.find(
+                            cleanReadableBuildInfo!.program!.emitDiagnosticsPerFile,
+                            ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                        ) &&
+                        // Is not marked as affectedFilesPendingEmit in clean buildInfo
+                        (!ts.find(
+                            (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
+                            ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                        )) &&
+                        // Program emit is not pending in clean buildInfo
+                        !(cleanReadableBuildInfo!.program! as ReadableProgramBundleEmitBuildInfo).pendingEmit
+                    ) {
+                        addBaseline(
+                            `Incremental build contains ${actualFile} file has errors, clean build does not have errors or does not mark is as pending emit: ${outputFile}::`,
+                            `Incremental buildInfoText:: ${incrementalBuildText}`,
+                            `Clean buildInfoText:: ${cleanBuildText}`,
+                        );
+                    }
+                });
             }
         }
     }
@@ -443,6 +462,7 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
                 // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
                 options: { ...readableBuildInfo.program.options, noEmit: undefined },
                 affectedFilesPendingEmit: undefined,
+                pendingEmit: undefined,
                 emitDiagnosticsPerFile: undefined,
                 latestChangedDtsFile: readableBuildInfo.program.latestChangedDtsFile ? "FakeFileName" : undefined,
             },

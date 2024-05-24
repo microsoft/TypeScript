@@ -44,6 +44,82 @@ Output::
 
 
 
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-8089124208-export const x: string = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"pendingEmit":false},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../a/lib/lib.d.ts",
+      "./myproject/main.ts",
+      "./myproject/other.ts"
+    ],
+    "fileInfos": {
+      "../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "./myproject/main.ts": {
+        "original": {
+          "version": "-8089124208-export const x: string = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-8089124208-export const x: string = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./myproject/other.ts": {
+        "original": {
+          "version": "-13729955264-export const y = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./myproject/main.ts"
+      ],
+      [
+        3,
+        "./myproject/other.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 2,
+      "noEmitOnError": true,
+      "outFile": "./outFile.js"
+    },
+    "semanticDiagnosticsPerFile": [
+      [
+        "./myproject/main.ts",
+        [
+          {
+            "start": 13,
+            "length": 1,
+            "code": 2322,
+            "category": 1,
+            "messageText": "Type 'number' is not assignable to type 'string'."
+          }
+        ]
+      ]
+    ],
+    "pendingEmit": [
+      "Js | Dts",
+      false
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 939
+}
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -86,7 +162,10 @@ Program files::
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+/user/username/projects/myproject/other.ts
 
 No shapes updated in the builder::
 
@@ -131,17 +210,8 @@ Output::
 
 
 
-//// [/user/username/projects/outFile.d.ts]
-declare module "main" {
-    export const x = 10;
-}
-declare module "other" {
-    export const y = 10;
-}
-
-
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":1},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -194,11 +264,24 @@ declare module "other" {
       "outFile": "./outFile.js"
     },
     "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
-    "latestChangedDtsFile": "./outFile.d.ts"
+    "latestChangedDtsFile": "./outFile.d.ts",
+    "pendingEmit": [
+      "Js",
+      1
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 942
+  "size": 958
 }
+
+//// [/user/username/projects/outFile.d.ts]
+declare module "main" {
+    export const x = 10;
+}
+declare module "other" {
+    export const y = 10;
+}
+
 
 
 PolledWatches::
@@ -242,7 +325,10 @@ Program files::
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+/user/username/projects/myproject/other.ts
 
 No shapes updated in the builder::
 

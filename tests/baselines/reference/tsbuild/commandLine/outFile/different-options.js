@@ -68,7 +68,12 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
 
@@ -235,7 +240,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -390,7 +395,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -575,7 +580,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -717,7 +722,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -889,7 +894,12 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
 
@@ -1006,12 +1016,12 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 
-Change:: with emitDeclarationOnly should not emit anything
+Change:: with declaration should not emit anything
 Input::
 
 
 Output::
-/lib/tsc --b /src/project --verbose --emitDeclarationOnly
+/lib/tsc --b /src/project --verbose --declaration
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -1057,7 +1067,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1210,7 +1220,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 

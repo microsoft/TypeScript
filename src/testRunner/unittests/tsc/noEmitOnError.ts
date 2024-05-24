@@ -124,6 +124,10 @@ const a: string = 10;`,
                 caption: "error and enable declarationMap",
                 edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                discrepancyExplanation: () => [
+                    `Clean build does not emit any file so will not have outSignature`,
+                    `Incremental build has outSignature from before`,
+                ],
             },
             {
                 caption: "fix error declarationMap",

@@ -74,10 +74,10 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         "declaration": true,`,
                         ),
                     caption: "reports syntax errors after change to config file",
-                    discrepancyExplanation: !outFile ? () => [
+                    discrepancyExplanation: () => [
                         "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
                         "Clean build has declaration option in tsbuildinfo",
-                    ] : undefined,
+                    ],
                 },
                 {
                     edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),

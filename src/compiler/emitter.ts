@@ -453,17 +453,17 @@ export function forEachEmittedFile<T>(
 ) {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
-    if (options.outFile) {
-        if (sourceFiles.length) {
-            const bundle = factory.createBundle(sourceFiles);
-            const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
-            if (result) {
-                return result;
+    if (!onlyBuildInfo) {
+        if (options.outFile) {
+            if (sourceFiles.length) {
+                const bundle = factory.createBundle(sourceFiles);
+                const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
+                if (result) {
+                    return result;
+                }
             }
         }
-    }
-    else {
-        if (!onlyBuildInfo) {
+        else {
             for (const sourceFile of sourceFiles) {
                 const result = action(getOutputPathsFor(sourceFile, host, forceDtsEmit), sourceFile);
                 if (result) {
@@ -471,10 +471,10 @@ export function forEachEmittedFile<T>(
                 }
             }
         }
-        if (includeBuildInfo) {
-            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-            if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
-        }
+    }
+    if (includeBuildInfo) {
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
+        if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
     }
 }
 
@@ -506,8 +506,7 @@ export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths:
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
     const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
     const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-    const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-    return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
+    return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
 }
 
 /** @internal */
@@ -526,7 +525,7 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
         const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
+        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
     }
 }
 
@@ -601,12 +600,11 @@ function createAddOutput() {
 }
 
 function getSingleOutputFileNames(configFile: ParsedCommandLine, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
-    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
     addOutput(jsFilePath);
     addOutput(sourceMapFilePath);
     addOutput(declarationFilePath);
     addOutput(declarationMapPath);
-    addOutput(buildInfoPath);
 }
 
 function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
@@ -679,8 +677,8 @@ export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: 
         for (const inputFileName of configFile.fileNames) {
             getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput, getCommonSourceDirectory);
         }
-        addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
     }
+    addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
     return getOutputs();
 }
 
@@ -726,7 +724,16 @@ export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | und
 
 /** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+export function emitFiles(
+    resolver: EmitResolver,
+    host: EmitHost,
+    targetSourceFile: SourceFile | undefined,
+    { scriptTransformers, declarationTransformers }: EmitTransformers,
+    emitOnly: boolean | EmitOnly | undefined,
+    onlyBuildInfo: boolean,
+    forceDtsEmit?: boolean,
+    skipBuildInfo?: boolean,
+): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -748,7 +755,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         getSourceFilesToEmit(host, targetSourceFile, forceDtsEmit),
         forceDtsEmit,
         onlyBuildInfo,
-        !targetSourceFile,
+        !targetSourceFile && !skipBuildInfo,
     );
     exit();
 
@@ -775,7 +782,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
     function emitBuildInfo(buildInfoPath: string | undefined) {
         // Write build information if applicable
-        if (!buildInfoPath || targetSourceFile || emitSkipped) return;
+        if (!buildInfoPath || targetSourceFile) return;
         if (host.isEmitBlocked(buildInfoPath)) {
             emitSkipped = true;
             return;
