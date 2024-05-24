@@ -2470,10 +2470,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 else if (
                     ch === CharacterCodes.openParen
-                    && charCodeUnchecked(p + 1) === CharacterCodes.question
-                    && charCodeUnchecked(p + 2) === CharacterCodes.lessThan
-                    && charCodeUnchecked(p + 3) !== CharacterCodes.equals
-                    && charCodeUnchecked(p + 3) !== CharacterCodes.exclamation
+                    && charCodeChecked(p + 1) === CharacterCodes.question
+                    && charCodeChecked(p + 2) === CharacterCodes.lessThan
+                    && charCodeChecked(p + 3) !== CharacterCodes.equals
+                    && charCodeChecked(p + 3) !== CharacterCodes.exclamation
                 ) {
                     namedCaptureGroups = true;
                 }
@@ -2535,7 +2535,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         /** Grammar parameter */
         var unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
 
-        // Annex B treats any unicode mode as the strict syntax.
+        // Regular expressions are checked more strictly when either in 'u' or 'v' mode, or
+        // when not using the looser interpretation of the syntax from ECMA-262 Annex B.
         var anyUnicodeModeOrNonAnnexB = unicodeMode || !annexB;
 
         /** @see {scanClassSetExpression} */
@@ -2699,7 +2700,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     break;
                                 }
                             }
-                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || text.charCodeAt(pos) === CharacterCodes.closeBrace)) {
+                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || charCodeChecked(pos) === CharacterCodes.closeBrace)) {
                                 error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                             }
                         }
@@ -3501,9 +3502,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
         });
         forEach(decimalEscapes, escape => {
-            // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
-            // either a LegacyOctalEscapeSequence or IdentityEscape
-            if (anyUnicodeModeOrNonAnnexB && escape.value > numberOfCapturingGroups) {
+            // Although a DecimalEscape with a value greater than the number of capturing groups
+            // is treated as either a LegacyOctalEscapeSequence or an IdentityEscape in Annex B,
+            // an error is nevertheless reported since it's most likely a mistake.
+            if (escape.value > numberOfCapturingGroups) {
                 if (numberOfCapturingGroups) {
                     error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                 }
