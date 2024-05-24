@@ -66,3 +66,33 @@ const res3 = fn3()(() => res3);
 >res3 : (a: unknown) => void
 >     : ^ ^^^^^^^^^^^^^^^^^^
 
+// https://github.com/microsoft/TypeScript/issues/58616
+
+function foo(arg: Parameters<typeof bar>[0]) {
+>foo : (arg: Parameters<typeof bar>[0]) => string
+>    : ^   ^^                         ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>bar : (arg: string) => string
+>    : ^   ^^      ^^^^^^^^^^^
+
+    return arg;
+>arg : string
+>    : ^^^^^^
+}
+
+function bar(arg: string) {
+>bar : (arg: string) => string
+>    : ^   ^^      ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return foo(arg);
+>foo(arg) : string
+>         : ^^^^^^
+>foo : (arg: Parameters<typeof bar>[0]) => string
+>    : ^   ^^                         ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+}
+
