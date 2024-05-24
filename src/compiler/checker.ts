@@ -31974,7 +31974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             scanner.setScriptTarget(sourceFile.languageVersion);
             scanner.setLanguageVariant(sourceFile.languageVariant);
             scanner.setOnError((message, length, arg0) => {
-                // emulate `parseErrorAtPosition` from parser.ts
+                // For providing spelling suggestions
                 const start = scanner!.getTokenEnd();
                 if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
                     const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
