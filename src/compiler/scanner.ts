@@ -997,6 +997,19 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
     return true;
 }
 
+const enum EscapeSequenceScanningFlags {
+    String = 1 << 0,
+    ReportErrors = 1 << 1,
+
+    RegularExpression = 1 << 2,
+    AnnexB = 1 << 3,
+    AnyUnicodeMode = 1 << 4,
+    AtomEscape = 1 << 5,
+
+    ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
+    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+}
+
 const enum ClassSetExpressionType {
     Unknown,
     ClassUnion,
@@ -1416,7 +1429,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
             if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                 result += text.substring(start, pos);
-                result += scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ true, /*isRegularExpression*/ false);
+                result += scanEscapeSequence(EscapeSequenceScanningFlags.String | EscapeSequenceScanningFlags.ReportErrors);
                 start = pos;
                 continue;
             }
@@ -1474,7 +1487,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // Escape character
             if (currChar === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
-                contents += scanEscapeSequence(shouldEmitInvalidEscapeError, /*isRegularExpression*/ false);
+                contents += scanEscapeSequence(EscapeSequenceScanningFlags.String | (shouldEmitInvalidEscapeError ? EscapeSequenceScanningFlags.ReportErrors : 0));
                 start = pos;
                 continue;
             }
@@ -1517,7 +1530,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     //     | [0-3] [0-7] [0-7]?
     //     | [4-7] [0-7]
     // NonOctalDecimalEscapeSequence ::= [89]
-    function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean | "annex-b"): string {
+    function scanEscapeSequence(flags: EscapeSequenceScanningFlags): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1554,9 +1567,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 // '\47'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape) && ch !== CharacterCodes._0) {
+                        error(Diagnostics.Octal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class_If_this_was_intended_as_an_escape_sequence_use_the_syntax_0_instead, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    }
+                    else {
+                        error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    }
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);
@@ -1564,8 +1582,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes._9:
                 // the invalid '\8' and '\9'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
-                    error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape)) {
+                        error(Diagnostics.Decimal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class, start, pos - start);
+                    }
+                    else {
+                        error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                    }
                     return String.fromCharCode(ch);
                 }
                 return text.substring(start, pos);
@@ -1587,18 +1610,18 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return '"';
             case CharacterCodes.u:
                 if (
-                    (!isRegularExpression || shouldEmitInvalidEscapeError) &&
+                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
                     pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
                 ) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!isRegularExpression || shouldEmitInvalidEscapeError);
+                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1608,7 +1631,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const escapedValue = parseInt(text.substring(start + 2, pos), 16);
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
-                    isRegularExpression && shouldEmitInvalidEscapeError && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
                     pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in any Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
@@ -1635,7 +1658,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 for (; pos < start + 4; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1656,7 +1679,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.paragraphSeparator:
                 return "";
             default:
-                if (isRegularExpression === true && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
+                if (
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode
+                    || flags & EscapeSequenceScanningFlags.RegularExpression
+                        && !(flags & EscapeSequenceScanningFlags.AnnexB)
+                        && isIdentifierPart(ch, languageVersion)
+                ) {
                     error(Diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, pos - 2, 2);
                 }
                 return String.fromCharCode(ch);
@@ -2934,7 +2962,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return String.fromCharCode(ch);
                 default:
                     pos--;
-                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ anyUnicodeMode, /*isRegularExpression*/ anyUnicodeModeOrNonAnnexB || "annex-b");
+                    return scanEscapeSequence(
+                        EscapeSequenceScanningFlags.RegularExpression
+                            | (annexB ? EscapeSequenceScanningFlags.AnnexB : 0)
+                            | (anyUnicodeMode ? EscapeSequenceScanningFlags.AnyUnicodeMode : 0)
+                            | (atomEscape ? EscapeSequenceScanningFlags.AtomEscape : 0),
+                    );
             }
         }
 
@@ -3540,7 +3573,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                 }
                 else {
-                    error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
+                    error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_no_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos);
                 }
             }
         });
