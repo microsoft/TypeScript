@@ -123,7 +123,6 @@ import {
     ModifierFlags,
     ModuleExportName,
     moduleExportNameIsDefault,
-    moduleExportNameTextUnescaped,
     ModuleKind,
     NamespaceImport,
     Node,

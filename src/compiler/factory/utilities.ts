@@ -131,7 +131,6 @@ import {
     MinusToken,
     Modifier,
     ModifiersArray,
-    moduleExportNameTextUnescaped,
     ModuleKind,
     ModuleName,
     MultiplicativeOperator,

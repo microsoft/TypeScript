@@ -870,7 +870,6 @@ import {
     ModuleSpecifierResolutionHost,
     Mutable,
     NamedDeclaration,
-    NamedExportBindings,
     NamedExports,
     NamedImportsOrExports,
     NamedTupleMember,
