@@ -53,7 +53,7 @@ export function assertNodeTagName<
 >assertIsElement(node) : boolean
 >                      : ^^^^^^^
 >assertIsElement : (node: Node | null) => node is Element
->                : ^    ^^           ^^^^^^^^^^^^^^^^^^^^
+>                : ^    ^^           ^^^^^               
 >node : Node | null
 >     : ^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ export function assertNodeTagName<
 >node.tagName.toLowerCase() : string
 >                           : ^^^^^^
 >node.tagName.toLowerCase : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >node.tagName : string
 >             : ^^^^^^
 >node : Element
@@ -71,7 +71,7 @@ export function assertNodeTagName<
 >tagName : string
 >        : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
          return nodeTagName === tagName;
 >nodeTagName === tagName : boolean
@@ -106,7 +106,7 @@ export function assertNodeProperty<
 >assertNodeTagName(node, tagName) : boolean
 >                                 : ^^^^^^^
 >assertNodeTagName : <T_1 extends keyof ElementTagNameMap, U extends ElementTagNameMap[T_1]>(node: Node | null, tagName: T_1) => node is U
->                  : ^   ^^^^^^^^^                       ^^^^^^^^^^^^                      ^^    ^^           ^^       ^^   ^^^^^^^^^^^^^^
+>                  : ^   ^^^^^^^^^                       ^^ ^^^^^^^^^                      ^^    ^^           ^^       ^^   ^^^^^         
 >node : Node | null
 >     : ^^^^^^^^^^^
 >tagName : T

@@ -369,7 +369,7 @@ if (x instanceof ctor) {
 >x instanceof ctor : boolean
 >                  : ^^^^^^^
 >x : (() => void) | null
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^
 >ctor : Function
 >     : ^^^^^^^^
 
@@ -377,7 +377,7 @@ if (x instanceof ctor) {
 >x() : void
 >    : ^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 }
 
 // Repro from #27550 (based on uglify code)

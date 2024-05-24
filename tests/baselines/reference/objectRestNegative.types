@@ -39,11 +39,11 @@ let notAssignable: { a: string };
 >{ b, ...notAssignable } = o : { a: number; b: string; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b, ...notAssignable } : { a: string; b: string; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^      ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
 >notAssignable : { a: string; }
->              : ^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -52,7 +52,7 @@ function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 >stillMustBeLast : ({ ...mustBeLast, a }: { a: number; b: string; }) => void
 >                : ^                    ^^                         ^^^^^    
 >mustBeLast : { b: string; }
->           : ^^^^^^^^^^^^^^
+>           : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -103,13 +103,13 @@ let rest: { b: string }
 >rest.b : string
 >       : ^^^^^^
 >rest : { b: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 >rest.b : string
 >       : ^^^^^^
 >rest : { b: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 >o : { a: number; b: string; }

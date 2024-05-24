@@ -41,11 +41,11 @@ function f10({ kind, payload }: Action) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -59,11 +59,11 @@ function f10({ kind, payload }: Action) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -93,11 +93,11 @@ function f11(action: Action) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -111,11 +111,11 @@ function f11(action: Action) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -139,11 +139,11 @@ function f12({ kind, payload }: Action) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
             break;
         case 'B':
@@ -154,11 +154,11 @@ function f12({ kind, payload }: Action) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
             break;
         default:
@@ -189,11 +189,11 @@ function f13<T extends Action>({ kind, payload }: T) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -207,11 +207,11 @@ function f13<T extends Action>({ kind, payload }: T) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -241,11 +241,11 @@ function f14<T extends Action>(t: T) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -259,11 +259,11 @@ function f14<T extends Action>(t: T) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -307,11 +307,11 @@ function f20({ kind, payload }: Action2) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -325,11 +325,11 @@ function f20({ kind, payload }: Action2) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
         }
     }
 }
@@ -364,11 +364,11 @@ function f21(action: Action2) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -382,11 +382,11 @@ function f21(action: Action2) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
         }
     }
 }
@@ -425,11 +425,11 @@ function f22(action: Action2) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -443,11 +443,11 @@ function f22(action: Action2) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
         }
     }
 }
@@ -476,11 +476,11 @@ function f23({ kind, payload }: Action2) {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
                 break;
             case 'B':
@@ -491,11 +491,11 @@ function f23({ kind, payload }: Action2) {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
                 break;
             default:
@@ -617,11 +617,11 @@ function f40(...[kind, data]: Args) {
 >data.toFixed() : string
 >               : ^^^^^^
 >data.toFixed : (fractionDigits?: number) => string
->             : ^              ^^^      ^^^^^^^^^^^
+>             : ^              ^^^      ^^^^^      
 >data : number
 >     : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -635,11 +635,11 @@ function f40(...[kind, data]: Args) {
 >data.toUpperCase() : string
 >                   : ^^^^^^
 >data.toUpperCase : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >data : string
 >     : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -699,7 +699,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValue<T>(value) : void
 >                     : ^^^^
 >printValue : <T_1>(t: T_1) => void
->           : ^   ^^ ^^   ^^^^^^^^^
+>           : ^   ^^ ^^   ^^^^^    
 >value : T
 >      : ^
     }
@@ -708,7 +708,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValueList<T>(value) : void
 >                         : ^^^^
 >printValueList : <T_1>(t: Array<T_1>) => void
->               : ^   ^^ ^^          ^^^^^^^^^
+>               : ^   ^^ ^^          ^^^^^    
 >value : T[]
 >      : ^^^
     }
@@ -746,7 +746,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 >type : "add" | "remove"
 >     : ^^^^^^^^^^^^^^^^
 >payload : { toAdd: number; } | { toRemove: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^
 
     switch (type) {
 >type : "add" | "remove"
@@ -764,7 +764,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 >payload.toAdd : number
 >              : ^^^^^^
 >payload : { toAdd: number; }
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^
 >toAdd : number
 >      : ^^^^^^
 
@@ -780,7 +780,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 >payload.toRemove : number
 >                 : ^^^^^^
 >payload : { toRemove: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^      ^^^
 >toRemove : number
 >         : ^^^^^^
     }
@@ -800,11 +800,11 @@ const { value, done } = it.next();
 >it.next() : IteratorResult<number, any>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >it.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
 >it : Iterator<number, any, undefined>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
 
 if (!done) {
 >!done : boolean
@@ -831,7 +831,7 @@ f50((kind, data) => {
 >f50((kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }}) : void
 >                                                                                                                                  : ^^^^
 >f50 : (cb: (...args: Args) => void) => void
->    : ^  ^^                       ^^^^^^^^^
+>    : ^  ^^                       ^^^^^    
 >(kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }} : (kind: "A" | "B", data: string | number) => void
 >                                                                                                                             : ^    ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "A" | "B"
@@ -851,11 +851,11 @@ f50((kind, data) => {
 >data.toFixed() : string
 >               : ^^^^^^
 >data.toFixed : (fractionDigits?: number) => string
->             : ^              ^^^      ^^^^^^^^^^^
+>             : ^              ^^^      ^^^^^      
 >data : number
 >     : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -869,11 +869,11 @@ f50((kind, data) => {
 >data.toUpperCase() : string
 >                   : ^^^^^^
 >data.toUpperCase : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >data : string
 >     : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 });
 
@@ -901,11 +901,11 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -919,11 +919,11 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 };
 
@@ -951,11 +951,11 @@ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     else {
         payload;  // undefined
@@ -978,7 +978,7 @@ readFile('hello', (err, data) => {
 >readFile('hello', (err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }}) : void
 >                                                                                                                        : ^^^^
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
->         : ^    ^^      ^^        ^^                                                                               ^^^^^^^^^
+>         : ^    ^^      ^^        ^^                                                                               ^^^^^    
 >'hello' : "hello"
 >        : ^^^^^^^
 >(err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }} : (err: Error | null, data: unknown[] | undefined) => void
@@ -1031,11 +1031,11 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >args : ReducerArgs
 >     : ^^^^^^^^^^^
 >(op, args) => {    switch (op) {        case "add":            console.log(args.a + args.b);            break;        case "concat":            console.log(args.firstArr.concat(args.secondArr));            break;    }} : (op: "add" | "concat", args: { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }) => void
->                                                                                                                                                                                                                           : ^  ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                           : ^  ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^^^^^^^^^^
 >op : "add" | "concat"
 >   : ^^^^^^^^^^^^^^^^
 >args : { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 
     switch (op) {
 >op : "add" | "concat"
@@ -1049,23 +1049,23 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >console.log(args.a + args.b) : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >args.a + args.b : number
 >                : ^^^^^^
 >args.a : number
 >       : ^^^^^^
 >args : { a: number; b: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >args.b : number
 >       : ^^^^^^
 >args : { a: number; b: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 
@@ -1078,27 +1078,27 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >console.log(args.firstArr.concat(args.secondArr)) : void
 >                                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >args.firstArr.concat(args.secondArr) : any[]
 >                                     : ^^^^^
 >args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >args.firstArr : any[]
 >              : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 >firstArr : any[]
 >         : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >args.secondArr : any[]
 >               : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^     ^^^^^^^^^^^^^     ^^^
 >secondArr : any[]
 >          : ^^^^^
 
@@ -1110,7 +1110,7 @@ reducer("add", { a: 1, b: 3 });
 >reducer("add", { a: 1, b: 3 }) : void
 >                               : ^^^^
 >reducer : (...args: ReducerArgs) => void
->        : ^^^^    ^^           ^^^^^^^^^
+>        : ^^^^    ^^           ^^^^^    
 >"add" : "add"
 >      : ^^^^^
 >{ a: 1, b: 3 } : { a: number; b: number; }
@@ -1128,7 +1128,7 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] }) : void
 >                                                           : ^^^^
 >reducer : (...args: ReducerArgs) => void
->        : ^^^^    ^^           ^^^^^^^^^
+>        : ^^^^    ^^           ^^^^^    
 >"concat" : "concat"
 >         : ^^^^^^^^
 >{ firstArr: [1, 2], secondArr: [3, 4] } : { firstArr: number[]; secondArr: number[]; }
@@ -1177,15 +1177,15 @@ let fooM: FooMethod = {
 >fooM : FooMethod
 >     : ^^^^^^^^^
 >{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
->                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^
 
   method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1199,7 +1199,7 @@ let fooM: FooMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >123 : 123
 >    : ^^^
 
@@ -1208,7 +1208,7 @@ let fooM: FooMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1240,15 +1240,15 @@ let fooAsyncM: FooAsyncMethod = {
 >fooAsyncM : FooAsyncMethod
 >          : ^^^^^^^^^^^^^^
 >{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
->                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^
 
   async method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1262,7 +1262,7 @@ let fooAsyncM: FooAsyncMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >123 : 123
 >    : ^^^
 
@@ -1271,7 +1271,7 @@ let fooAsyncM: FooAsyncMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1303,15 +1303,15 @@ let fooGenM: FooGenMethod = {
 >fooGenM : FooGenMethod
 >        : ^^^^^^^^^^^^
 >{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
->                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1325,7 +1325,7 @@ let fooGenM: FooGenMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >123 : 123
 >    : ^^^
 
@@ -1334,7 +1334,7 @@ let fooGenM: FooGenMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1366,15 +1366,15 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >fooAsyncGenM : FooAsyncGenMethod
 >             : ^^^^^^^^^^^^^^^^^
 >{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
->                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   async *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^^^^    ^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1388,7 +1388,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >123 : 123
 >    : ^^^
 
@@ -1397,7 +1397,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1434,11 +1434,11 @@ const f60: Func = (kind, payload) => {
 >payload.toFixed() : string
 >                  : ^^^^^^
 >payload.toFixed : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >payload : number
 >        : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     if (kind === "b") {
 >kind === "b" : boolean
@@ -1452,11 +1452,11 @@ const f60: Func = (kind, payload) => {
 >payload.toUpperCase() : string
 >                      : ^^^^^^
 >payload.toUpperCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >payload : string
 >        : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 };
 
@@ -1632,7 +1632,7 @@ function fa2(x: { guard: true, value: number } | { guard: false, value: string }
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
 >x : { guard: true; value: number; } | { guard: false; value: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^
 
     if (guard) {
 >guard : boolean
@@ -1741,11 +1741,11 @@ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconne
 >bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
 >                                                                                                                                           : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^^^^^
+>       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^^^^^
+>   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
@@ -1757,11 +1757,11 @@ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconne
 >console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : void
 >                                                                                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}` : string
 >                                                                                 : ^^^^^^
 >shard : number
@@ -1789,11 +1789,11 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
 >                                                                                                   : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^^^^^
+>       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^^^^^
+>   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void
@@ -1803,11 +1803,11 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >console.log(`${event.code} ${event.wasClean} ${event.reason}`) : void
 >                                                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >`${event.code} ${event.wasClean} ${event.reason}` : string
 >                                                  : ^^^^^^
 >event.code : number
@@ -1953,11 +1953,11 @@ function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     x = 1;
 >x = 1 : 1
@@ -1993,11 +1993,11 @@ function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     y = 2;
 >y = 2 : 2
@@ -2039,11 +2039,11 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     y = 2;
 >y = 2 : 2

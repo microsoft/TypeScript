@@ -16,11 +16,11 @@ const result = apply.toFixed()
 >apply.toFixed() : string
 >                : ^^^^^^
 >apply.toFixed : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >apply : number
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 === moduleExportAliasDuplicateAlias.js ===
 exports.apply = undefined;
@@ -91,7 +91,7 @@ var OK = exports.apply.toUpperCase()
 >exports.apply.toUpperCase() : string
 >                            : ^^^^^^
 >exports.apply.toUpperCase : () => string
->                          : ^^^^^^^^^^^^
+>                          : ^^^^^^      
 >exports.apply : "ok"
 >              : ^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
@@ -99,7 +99,7 @@ var OK = exports.apply.toUpperCase()
 >apply : "ok"
 >      : ^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 exports.apply = 1
 >exports.apply = 1 : 1

@@ -12,13 +12,13 @@ interface Deriver extends Base {
     // shouldn't need to redeclare the string overload
     addEventListener(x: 'bar'): string;
 >addEventListener : { (x: "bar"): string; (x: "foo"): string; }
->                 : ^^^ ^^     ^^^      ^^^ ^^     ^^^^^^^^^^^^
+>                 : ^^^ ^^     ^^^      ^^^ ^^     ^^^      ^^^
 >x : "bar"
 >  : ^^^^^
 
     addEventListener(x: 'foo'): string;
 >addEventListener : { (x: "bar"): string; (x: "foo"): string; }
->                 : ^^^ ^^     ^^^^^^^^^^^^ ^^     ^^^      ^^^
+>                 : ^^^ ^^     ^^^      ^^^ ^^     ^^^      ^^^
 >x : "foo"
 >  : ^^^^^
 }

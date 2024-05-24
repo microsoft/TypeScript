@@ -20,11 +20,11 @@ class C<T extends Date> {
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : T
 >  : ^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
 
     h() {
@@ -39,11 +39,11 @@ class C<T extends Date> {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : T
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
     }
 }
 
@@ -63,11 +63,11 @@ class C2<T extends Date, U extends Date> {
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : U
 >  : ^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
 
     h() {
@@ -82,11 +82,11 @@ class C2<T extends Date, U extends Date> {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : U
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
     }
 }
 //class C2<T extends Date, U extends T> {

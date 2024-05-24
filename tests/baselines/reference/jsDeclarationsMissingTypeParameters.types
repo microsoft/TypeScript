@@ -15,7 +15,7 @@ function x(y) { }
  */
 function y(func) { return; }
 >y : (func: (arg0: any[]) => any) => void
->  : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (arg0: any[]) => any
 >     : ^^^^^^^^^^^^^^^^^^^^
 

@@ -42,7 +42,7 @@ function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
 >g(elemofM) : void
 >           : ^^^^
 >g : <T>(value?: T) => void
->  : ^ ^^     ^^^ ^^^^^^^^^
+>  : ^ ^^     ^^^ ^^^^^    
 >elemofM : MyMap<M>[keyof M]
 >        : ^^^^^^^^^^^^^^^^^
 }
@@ -63,18 +63,18 @@ function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
 >q1 : MyMap<M>[keyof M]
 >   : ^^^^^^^^^^^^^^^^^
 >z : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     const q2: MyMap<M>[keyof M] | undefined = z;
 >q2 : MyMap<M>[keyof M] | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     const q3: MyMap<M>[keyof M] | string = z;
 >q3 : string | MyMap<M>[keyof M]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 }
 

@@ -209,7 +209,7 @@ function foo4<U extends string>(x: Uppercase<U>) {
 >foo3(x) : U
 >        : ^
 >foo3 : <T extends string>(x: Uppercase<T>) => T
->     : ^ ^^^^^^^^^      ^^ ^^            ^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^            ^^^^^ 
 >x : Uppercase<U>
 >  : ^^^^^^^^^^^^
 }

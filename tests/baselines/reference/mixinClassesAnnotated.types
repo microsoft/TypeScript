@@ -159,21 +159,21 @@ const Thing1 = Tagged(Derived);
 >Tagged(Derived) : Constructor<Tagged> & typeof Derived
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^                       
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
 const Thing2 = Tagged(Printable(Derived));
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Tagged(Printable(Derived)) : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^                       
 >Printable(Derived) : Constructor<Printable> & { message: string; } & typeof Derived
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^                                                 
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
@@ -181,7 +181,7 @@ Thing2.message;
 >Thing2.message : string
 >               : ^^^^^^
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >message : string
 >        : ^^^^^^
 
@@ -230,7 +230,7 @@ function f2() {
 >new Thing2(1, 2, 3) : Tagged & Printable & Derived
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -258,11 +258,11 @@ function f2() {
 >thing.print() : void
 >              : ^^^^
 >thing.print : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 >thing : Tagged & Printable & Derived
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >print : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 }
 
 class Thing3 extends Thing2 {
@@ -279,7 +279,7 @@ class Thing3 extends Thing2 {
 >super(10, 20, 30) : void
 >                  : ^^^^
 >super : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -307,11 +307,11 @@ class Thing3 extends Thing2 {
 >this.print() : void
 >             : ^^^^
 >this.print : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >this : this
 >     : ^^^^
 >print : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
     }
 }
 

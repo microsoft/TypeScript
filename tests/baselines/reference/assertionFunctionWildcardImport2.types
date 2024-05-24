@@ -34,7 +34,7 @@ function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
 export {
     isNonNullable
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
->              : ^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^ ^^^^^                             
 
 };
 
@@ -53,11 +53,11 @@ function test(obj: string | null): void {
 >asserts.isNonNullable(obj) : void
 >                           : ^^^^
 >asserts.isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
->                      : ^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^   ^^ ^^^^^                             
 >asserts : typeof asserts
 >        : ^^^^^^^^^^^^^^
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
->              : ^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^   ^^ ^^^^^                             
 >obj : string | null
 >    : ^^^^^^^^^^^^^
 
@@ -65,10 +65,10 @@ function test(obj: string | null): void {
 >obj.trim() : string
 >           : ^^^^^^
 >obj.trim : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >obj : string
 >    : ^^^^^^
 >trim : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 }
 

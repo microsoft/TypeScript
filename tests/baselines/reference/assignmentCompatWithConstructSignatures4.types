@@ -194,19 +194,19 @@ module Errors {
 
         a2 = b2; // ok
 >a2 = b2 : new <T, U>(x: T) => U[]
->        : ^^^^^ ^^^^^ ^^ ^^^^^^^^
+>        : ^^^^^ ^^ ^^ ^^ ^^^^^   
 >a2 : new (x: number) => string[]
->   : ^^^^^ ^^      ^^^^^^^^^^^^^
+>   : ^^^^^ ^^      ^^^^^        
 >b2 : new <T, U>(x: T) => U[]
->   : ^^^^^ ^^^^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^ ^^^^^   
 
         b2 = a2; // ok
 >b2 = a2 : new (x: number) => string[]
->        : ^^^^^ ^^      ^^^^^^^^^^^^^
+>        : ^^^^^ ^^      ^^^^^        
 >b2 : new <T, U>(x: T) => U[]
->   : ^^^^^ ^^^^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^ ^^^^^   
 >a2 : new (x: number) => string[]
->   : ^^^^^ ^^      ^^^^^^^^^^^^^
+>   : ^^^^^ ^^      ^^^^^        
 
         var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
@@ -220,19 +220,19 @@ module Errors {
 
         a7 = b7; // ok
 >a7 = b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->        : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^^^^^^^^^^^        ^^ ^^             ^^^^^^ ^^ ^^^^^^
+>        : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^             ^^^^^           
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
->   : ^^^^^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^
+>   : ^^^^^ ^^                      ^^^^^                     
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^^^^^^^^^^^        ^^ ^^             ^^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^             ^^^^^           
 
         b7 = a7; // ok
 >b7 = a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
->        : ^^^^^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^
+>        : ^^^^^ ^^                      ^^^^^                     
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^^^^^^^^^^^        ^^ ^^             ^^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^             ^^^^^           
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
->   : ^^^^^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^
+>   : ^^^^^ ^^                      ^^^^^                     
 
         var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
@@ -252,19 +252,19 @@ module Errors {
 
         a8 = b8; // error, type mismatch
 >a8 = b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->        : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^^
+>        : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^           
 >a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->   : ^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^^^^^^^^
+>   : ^^^^^ ^^                      ^^ ^^                       ^^^^^                    
 >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^           
 
         b8 = a8; // error
 >b8 = a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->        : ^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^^^^^^^^
+>        : ^^^^^ ^^                      ^^ ^^                       ^^^^^                    
 >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^           
 >a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->   : ^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^^^^^^^^
+>   : ^^^^^ ^^                      ^^ ^^                       ^^^^^                    
 
         
         var b10: new <T extends Derived>(...x: T[]) => T; 
@@ -275,19 +275,19 @@ module Errors {
 
         a10 = b10; // ok
 >a10 = b10 : new <T extends Derived>(...x: T[]) => T
->          : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^^
+>          : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
 >a10 : new (...x: Base[]) => Base
->    : ^^^^^^^^ ^^      ^^^^^^^^^
+>    : ^^^^^^^^ ^^      ^^^^^    
 >b10 : new <T extends Derived>(...x: T[]) => T
->    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^^
+>    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
 
         b10 = a10; // ok
 >b10 = a10 : new (...x: Base[]) => Base
->          : ^^^^^^^^ ^^      ^^^^^^^^^
+>          : ^^^^^^^^ ^^      ^^^^^    
 >b10 : new <T extends Derived>(...x: T[]) => T
->    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^^
+>    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
 >a10 : new (...x: Base[]) => Base
->    : ^^^^^^^^ ^^      ^^^^^^^^^
+>    : ^^^^^^^^ ^^      ^^^^^    
 
         var b11: new <T extends Derived>(x: T, y: T) => T; 
 >b11 : new <T extends Derived>(x: T, y: T) => T
@@ -299,19 +299,19 @@ module Errors {
 
         a11 = b11; // ok
 >a11 = b11 : new <T extends Derived>(x: T, y: T) => T
->          : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^
+>          : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^ 
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->    : ^^^^^ ^^                ^^ ^^                             ^^^^^^^^^
+>    : ^^^^^ ^^                ^^ ^^                             ^^^^^    
 >b11 : new <T extends Derived>(x: T, y: T) => T
->    : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^
+>    : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^ 
 
         b11 = a11; // ok
 >b11 = a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->          : ^^^^^ ^^                ^^ ^^                             ^^^^^^^^^
+>          : ^^^^^ ^^                ^^ ^^                             ^^^^^    
 >b11 : new <T extends Derived>(x: T, y: T) => T
->    : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^
+>    : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^ 
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->    : ^^^^^ ^^                ^^ ^^                             ^^^^^^^^^
+>    : ^^^^^ ^^                ^^ ^^                             ^^^^^    
 
         var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
@@ -323,19 +323,19 @@ module Errors {
 
         a12 = b12; // ok
 >a12 = b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
->          : ^^^^^^^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^^
->a12 : new (x: Array<Base>, y: Array<Derived2>) => Derived[]
->    : ^^^^^ ^^           ^^ ^^               ^^^^^^^^^^^^^^
+>          : ^^^^^ ^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^ 
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>    : ^^^^^ ^^           ^^ ^^               ^^^^^              
 >b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
->    : ^^^^^^^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^^
+>    : ^^^^^ ^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^ 
 
         b12 = a12; // ok
->b12 = a12 : new (x: Array<Base>, y: Array<Derived2>) => Derived[]
->          : ^^^^^ ^^           ^^ ^^               ^^^^^^^^^^^^^^
+>b12 = a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>          : ^^^^^ ^^           ^^ ^^               ^^^^^              
 >b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
->    : ^^^^^^^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^^
->a12 : new (x: Array<Base>, y: Array<Derived2>) => Derived[]
->    : ^^^^^ ^^           ^^ ^^               ^^^^^^^^^^^^^^
+>    : ^^^^^ ^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^ 
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>    : ^^^^^ ^^           ^^ ^^               ^^^^^              
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
 >b15 : new <T>(x: { a: T; b: T; }) => T
@@ -349,19 +349,19 @@ module Errors {
 
         a15 = b15; // ok
 >a15 = b15 : new <T>(x: { a: T; b: T; }) => T
->          : ^^^^^ ^^ ^^               ^^^^^^
+>          : ^^^^^ ^^ ^^               ^^^^^ 
 >a15 : new (x: { a: string; b: number; }) => number
->    : ^^^^^ ^^                         ^^^^^^^^^^^
+>    : ^^^^^ ^^                         ^^^^^      
 >b15 : new <T>(x: { a: T; b: T; }) => T
->    : ^^^^^ ^^ ^^               ^^^^^^
+>    : ^^^^^ ^^ ^^               ^^^^^ 
 
         b15 = a15; // ok
 >b15 = a15 : new (x: { a: string; b: number; }) => number
->          : ^^^^^ ^^                         ^^^^^^^^^^^
+>          : ^^^^^ ^^                         ^^^^^      
 >b15 : new <T>(x: { a: T; b: T; }) => T
->    : ^^^^^ ^^ ^^               ^^^^^^
+>    : ^^^^^ ^^ ^^               ^^^^^ 
 >a15 : new (x: { a: string; b: number; }) => number
->    : ^^^^^ ^^                         ^^^^^^^^^^^
+>    : ^^^^^ ^^                         ^^^^^      
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
@@ -375,19 +375,19 @@ module Errors {
 
         a15 = b15a; // ok
 >a15 = b15a : new <T extends Base>(x: { a: T; b: T; }) => number
->           : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^
+>           : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^      
 >a15 : new (x: { a: string; b: number; }) => number
->    : ^^^^^ ^^                         ^^^^^^^^^^^
+>    : ^^^^^ ^^                         ^^^^^      
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
->     : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^
+>     : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^      
 
         b15a = a15; // ok
 >b15a = a15 : new (x: { a: string; b: number; }) => number
->           : ^^^^^ ^^                         ^^^^^^^^^^^
+>           : ^^^^^ ^^                         ^^^^^      
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
->     : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^^^^^^^
+>     : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^      
 >a15 : new (x: { a: string; b: number; }) => number
->    : ^^^^^ ^^                         ^^^^^^^^^^^
+>    : ^^^^^ ^^                         ^^^^^      
 
         var b16: new <T>(x: (a: T) => T) => T[];
 >b16 : new <T>(x: (a: T) => T) => T[]
@@ -399,19 +399,19 @@ module Errors {
 
         a16 = b16; // error
 >a16 = b16 : new <T>(x: (a: T) => T) => T[]
->          : ^^^^^ ^^ ^^           ^^^^^^^^
+>          : ^^^^^ ^^ ^^           ^^^^^   
 >a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
->    : ^^^^^^^ ^^                                                      ^^^^^^^^^^^^^^^^^^ ^^                                                          ^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^                                                      ^^^        ^^^^^^^ ^^                                                          ^^^         ^^^
 >b16 : new <T>(x: (a: T) => T) => T[]
->    : ^^^^^ ^^ ^^           ^^^^^^^^
+>    : ^^^^^ ^^ ^^           ^^^^^   
 
         b16 = a16; // error
 >b16 = a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
->          : ^^^^^^^ ^^                                                      ^^^^^^^^^^^^^^^^^^ ^^                                                          ^^^^^^^^^^^^^^^
+>          : ^^^^^^^ ^^                                                      ^^^        ^^^^^^^ ^^                                                          ^^^         ^^^
 >b16 : new <T>(x: (a: T) => T) => T[]
->    : ^^^^^ ^^ ^^           ^^^^^^^^
+>    : ^^^^^ ^^ ^^           ^^^^^   
 >a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
->    : ^^^^^^^ ^^                                                      ^^^^^^^^^^^^^^^^^^ ^^                                                          ^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^                                                      ^^^        ^^^^^^^ ^^                                                          ^^^         ^^^
 
         var b17: new <T>(x: (a: T) => T) => any[];
 >b17 : new <T>(x: (a: T) => T) => any[]
@@ -423,19 +423,19 @@ module Errors {
 
         a17 = b17; // error
 >a17 = b17 : new <T>(x: (a: T) => T) => any[]
->          : ^^^^^ ^^ ^^           ^^^^^^^^^^
+>          : ^^^^^ ^^ ^^           ^^^^^     
 >a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
->    : ^^^^^^^ ^^                                                                    ^^^^^^^^^^^^^^^ ^^                                                                     ^^^^^^^^^^^
+>    : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
 >b17 : new <T>(x: (a: T) => T) => any[]
->    : ^^^^^ ^^ ^^           ^^^^^^^^^^
+>    : ^^^^^ ^^ ^^           ^^^^^     
 
         b17 = a17; // error
 >b17 = a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
->          : ^^^^^^^ ^^                                                                    ^^^^^^^^^^^^^^^ ^^                                                                     ^^^^^^^^^^^
+>          : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
 >b17 : new <T>(x: (a: T) => T) => any[]
->    : ^^^^^ ^^ ^^           ^^^^^^^^^^
+>    : ^^^^^ ^^ ^^           ^^^^^     
 >a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
->    : ^^^^^^^ ^^                                                                    ^^^^^^^^^^^^^^^ ^^                                                                     ^^^^^^^^^^^
+>    : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
     }
 
     module WithGenericSignaturesInBaseType {
@@ -457,19 +457,19 @@ module Errors {
 
         a2 = b2; // ok
 >a2 = b2 : new <T>(x: T) => string[]
->        : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>        : ^^^^^ ^^ ^^ ^^^^^        
 >a2 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^   
 >b2 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^        
 
         b2 = a2; // ok
 >b2 = a2 : new <T>(x: T) => T[]
->        : ^^^^^ ^^ ^^ ^^^^^^^^
+>        : ^^^^^ ^^ ^^ ^^^^^   
 >b2 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^        
 >a2 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^   
 
         // target type has generic call signature
         var a3: new <T>(x: T) => string[];
@@ -486,18 +486,18 @@ module Errors {
 
         a3 = b3; // ok
 >a3 = b3 : new <T>(x: T) => T[]
->        : ^^^^^ ^^ ^^ ^^^^^^^^
+>        : ^^^^^ ^^ ^^ ^^^^^   
 >a3 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^        
 >b3 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^   
 
         b3 = a3; // ok
 >b3 = a3 : new <T>(x: T) => string[]
->        : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>        : ^^^^^ ^^ ^^ ^^^^^        
 >b3 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^   
 >a3 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^^^^^^^^^
+>   : ^^^^^ ^^ ^^ ^^^^^        
     }
 }

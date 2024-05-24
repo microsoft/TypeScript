@@ -70,11 +70,11 @@ console.log(nImported);
 >console.log(nImported) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >nImported : "nImported"
 >          : ^^^^^^^^^^^
 

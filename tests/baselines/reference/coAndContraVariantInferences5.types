@@ -24,9 +24,9 @@ function f(
 >select({        options,        onChange,    }) : void
 >                                                : ^^^^
 >select : <KeyT extends string>(props: SelectProps<KeyT>) => void
->       : ^    ^^^^^^^^^      ^^     ^^                 ^^^^^^^^^
+>       : ^    ^^^^^^^^^      ^^     ^^                 ^^^^^    
 >{        options,        onChange,    } : { options: SelectOptions<Thing>; onChange: (status: Thing | null) => void; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^            ^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^            ^^^^^    ^^^
 
         options,
 >options : SelectOptions<Thing>
@@ -34,7 +34,7 @@ function f(
 
         onChange,
 >onChange : (status: Thing | null) => void
->         : ^      ^^            ^^^^^^^^^
+>         : ^      ^^            ^^^^^    
 
     });
 }

@@ -23,9 +23,9 @@
 >delete /*2*/ Array.toString : boolean
 >                            : ^^^^^^^
 >Array.toString : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 

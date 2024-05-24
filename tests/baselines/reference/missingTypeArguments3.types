@@ -12,7 +12,7 @@ declare module linq {
 
         GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
 >GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey_1, TElement>(keySelector: (element: T) => TKey_1, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey_1, TElement>>; }
->        : ^^^    ^^           ^^                    ^^^                             ^^^      ^^        ^^           ^^                      ^^               ^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^    ^^           ^^                    ^^^                             ^^^      ^^        ^^           ^^                      ^^               ^^                        ^^^                                      ^^^
 >keySelector : (element: T) => TKey
 >            : ^       ^^ ^^^^^    
 >element : T
@@ -20,7 +20,7 @@ declare module linq {
 
         GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
 >GroupBy : { <TKey_1>(keySelector: (element: T) => TKey_1): Enumerable<Grouping<TKey_1, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
->        : ^^^      ^^           ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^           ^^                    ^^               ^^                        ^^^                                    ^^^
+>        : ^^^      ^^           ^^                      ^^^                               ^^^    ^^        ^^           ^^                    ^^               ^^                        ^^^                                    ^^^
 >keySelector : (element: T) => TKey
 >            : ^       ^^ ^^^^^    
 >element : T

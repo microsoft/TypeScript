@@ -149,11 +149,11 @@ module MsPortalFx.ViewModels {
 >console.log(value1) : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value1 : ReExportedEnum.Cancel
 >       : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -171,11 +171,11 @@ module MsPortalFx.ViewModels {
 >console.log(value2) : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value2 : DialogButtons.OKCancel
 >       : ^^^^^^^^^^^^^^^^^^^^^^
         }

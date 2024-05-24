@@ -38,7 +38,7 @@ export function wu<CP extends { o: object }>(CC: F<CP>) {
 >g(CC) : string
 >      : ^^^^^^
 >g : (C: F<unknown>) => string
->  : ^ ^^          ^^^^^^^^^^^
+>  : ^ ^^          ^^^^^      
 >CC : F<CP>
 >   : ^^^^^
 

@@ -24,7 +24,7 @@ module ImmediatelyFix {
 >x(null) : T
 >        : ^
 >x : (a: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
         }
     }
 
@@ -106,7 +106,7 @@ module ImmediatelyFix {
 >x(null) : T
 >        : ^
 >x : (a: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
         }
     }
 
@@ -177,7 +177,7 @@ module WithCandidates {
 >cb(x) : U
 >      : ^
 >cb : (a: T) => U
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
         }
@@ -267,7 +267,7 @@ module WithCandidates {
 >cb(x) : U
 >      : ^
 >cb : (a: T) => U
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
         }
@@ -341,7 +341,7 @@ module WithCandidates {
 >cb(x) : U
 >      : ^
 >cb : (a: T) => U
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
         }

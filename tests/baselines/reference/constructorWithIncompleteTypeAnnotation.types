@@ -72,11 +72,11 @@ module TypeScriptAllInOne {
 >bfs.VARIABLES() : number
 >                : ^^^^^^
 >bfs.VARIABLES : () => number
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >bfs : BasicFeatures
 >    : ^^^^^^^^^^^^^
 >VARIABLES : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 
                 if (retValue != 0 ^=  {
 >retValue != 0 : boolean
@@ -455,27 +455,27 @@ module TypeScriptAllInOne {
 >float.toString() : string
 >                 : ^^^^^^
 >float.toString : (radix?: number) => string
->               : ^     ^^^      ^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^      
 >float : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >float2.toString() : string
 >                  : ^^^^^^
 >float2.toString : (radix?: number) => string
->                : ^     ^^^      ^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^      
 >float2 : number
 >       : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >reg.toString() : string
 >               : ^^^^^^
 >reg.toString : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >reg : RegExp
 >    : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >weekday : Weekdays.Monday
@@ -859,11 +859,11 @@ module TypeScriptAllInOne {
 >xx.Foo() : bool
 >         : ^^^^
 >xx.Foo : () => bool
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >xx : IF
 >   : ^^
 >Foo : () => bool
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >0 : 0
 >  : ^
 >1 : 1

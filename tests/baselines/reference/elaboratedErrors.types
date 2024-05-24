@@ -9,19 +9,19 @@ interface FileSystem {
 
 function fn(s: WorkerFS): void;
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
->   : ^^^ ^^        ^^^    ^^^ ^^          ^^^^^^^^^^
+>   : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >s : WorkerFS
 >  : ^^^^^^^^
 
 function fn(s: FileSystem): void;
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
->   : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^    ^^^
+>   : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >s : FileSystem
 >  : ^^^^^^^^^^
 
 function fn(s: FileSystem|WorkerFS) { }
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
->   : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
+>   : ^^^ ^^        ^^^    ^^^ ^^          ^^^    ^^^
 >s : FileSystem | WorkerFS
 >  : ^^^^^^^^^^^^^^^^^^^^^
 

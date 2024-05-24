@@ -62,13 +62,13 @@ class C5 {
 
   static m(a): void;
 >m : { (a: any): void; (): void; }
->  : ^^^ ^^^^^^^^    ^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 >a : any
 >  : ^^^
 
   static m(): void;
 >m : { (a: any): void; (): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^    ^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 }
 
 // merged with namespace, static methods
@@ -90,13 +90,13 @@ class C7 {
 
   static m(a): void;
 >m : { (a: any): void; (): void; }
->  : ^^^ ^^^^^^^^    ^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 >a : any
 >  : ^^^
 
   static m(): void;
 >m : { (a: any): void; (): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^    ^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 }
 namespace C7 {
 }
@@ -108,13 +108,13 @@ class C8 {
 
   static m(a): void;
 >m : { (a: any): void; (a: any, b: any): void; }
->  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 
   static m(a, b): void;
 >m : { (a: any): void; (a: any, b: any): void; }
->  : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^    ^^^
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 >b : any
@@ -162,7 +162,7 @@ namespace N10 {
 
   export function m(a): void;
 >m : { (a: any): void; (a: any): void; }
->  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 }
@@ -172,7 +172,7 @@ namespace N10 {
 
   export function m(a): void { }
 >m : { (a: any): void; (a: any): void; }
->  : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^    ^^^
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 }
@@ -184,17 +184,17 @@ namespace N12 {
 
   export function m(a): void;
 >m : { (a: any): void; (): void; (a: any): void; }
->  : ^^^ ^^^^^^^^    ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 
   export function m(): void;
 >m : { (a: any): void; (): void; (a: any): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^    ^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 
   export function m(a?): void { }
 >m : { (a: any): void; (): void; (a: any): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 }
@@ -204,7 +204,7 @@ namespace N12 {
 
   export function m(a): void { }
 >m : { (a: any): void; (): void; (a: any): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^    ^^^
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 }

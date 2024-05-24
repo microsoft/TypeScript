@@ -10,11 +10,11 @@ if (Array.isArray(maybeArray)) {
 >Array.isArray(maybeArray) : boolean
 >                          : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >maybeArray : number | number[]
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -31,9 +31,9 @@ else {
 >maybeArray.toFixed() : string
 >                     : ^^^^^^
 >maybeArray.toFixed : (fractionDigits?: number) => string
->                   : ^              ^^^      ^^^^^^^^^^^
+>                   : ^              ^^^      ^^^^^      
 >maybeArray : number
 >           : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 }

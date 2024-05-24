@@ -158,17 +158,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -274,9 +274,9 @@ function foo10(x: typeof a); // ok
 >foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
 >      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 
 function foo10(x: any) { }
 >foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
@@ -346,9 +346,9 @@ function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
 >      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 
 function foo13(x: any) { }
 >foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }

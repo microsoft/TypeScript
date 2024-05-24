@@ -11,7 +11,7 @@ export interface A {
 >x : () => typeof $
 >  : ^^^^^^        
 >$ : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 }
 
 === /ref.d.ts ===

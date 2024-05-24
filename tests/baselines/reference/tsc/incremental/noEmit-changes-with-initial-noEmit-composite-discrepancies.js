@@ -68,17 +68,10 @@ CleanBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -166,17 +159,10 @@ IncrementalBuild:
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/class.ts",
-      "./src/directuse.ts",
-      "./src/indirectclass.ts",
-      "./src/indirectuse.ts",
-      "./src/nochangefile.ts",
       [
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",

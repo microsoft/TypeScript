@@ -39,8 +39,8 @@ class B extends CreateMixin(Context, A) {
 >  : ^
 >CreateMixin(Context, A) : A & { context: Context; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
->            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
+>            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^                                                            
 >Context : typeof Context
 >        : ^^^^^^^^^^^^^^
 >A : typeof A
@@ -56,8 +56,8 @@ class C extends CreateMixin(Context, A) {
 >  : ^
 >CreateMixin(Context, A) : A & { context: Context; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
->            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
+>            : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^       ^^ ^^    ^^ ^^^^^                                                            
 >Context : typeof Context
 >        : ^^^^^^^^^^^^^^
 >A : typeof A

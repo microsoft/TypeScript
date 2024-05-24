@@ -31,7 +31,7 @@ function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r
 >fold(result, value) : r
 >                    : ^
 >fold : (result: r, value: a) => r
->     : ^      ^^ ^^     ^^ ^^^^^^
+>     : ^      ^^ ^^     ^^ ^^^^^ 
 >result : r
 >       : ^
 >value : a
@@ -54,11 +54,11 @@ function append<a, b extends a>(values: a[], value: b): a[] {
 >values.push(value) : number
 >                   : ^^^^^^
 >values.push : (...items: a[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^      
 >values : a[]
 >       : ^^^
 >push : (...items: a[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^      
 >value : b
 >      : ^
 
@@ -71,7 +71,7 @@ fold(
 >fold(    [1, 2, 3],    [] as [string, string][],    (result, value) => append(        result,        ["", ""]    )) : [string, string][]
 >                                                                                                                    : ^^^^^^^^^^^^^^^^^^
 >fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
->     : ^ ^^ ^^      ^^   ^^      ^^ ^^    ^^                          ^^^^^^
+>     : ^ ^^ ^^      ^^   ^^      ^^ ^^    ^^                          ^^^^^ 
 
     [1, 2, 3],
 >[1, 2, 3] : number[]
@@ -99,7 +99,7 @@ fold(
 >append(        result,        ["", ""]    ) : [string, string][]
 >                                            : ^^^^^^^^^^^^^^^^^^
 >append : <a, b extends a>(values: a[], value: b) => a[]
->       : ^ ^^ ^^^^^^^^^ ^^      ^^   ^^     ^^ ^^^^^^^^
+>       : ^ ^^ ^^^^^^^^^ ^^      ^^   ^^     ^^ ^^^^^   
 
         result,
 >result : [string, string][]

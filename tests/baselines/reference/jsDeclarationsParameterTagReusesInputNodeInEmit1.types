@@ -65,10 +65,10 @@ const couldntThinkOfAny = {}
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 const test = (base) => {
->test : (base: InstanceType<BaseFactory["Base"]>) => Base
->     : ^    ^^                                 ^^^^^^^^^
->(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => Base
->                             : ^    ^^                                 ^^^^^^^^^
+>test : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
+>     : ^    ^^                                 ^^^^^                                 
+>(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
+>                             : ^    ^^                                 ^^^^^                                 
 >base : Base
 >     : ^^^^
 

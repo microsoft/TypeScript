@@ -8,7 +8,7 @@ function sayHello(somebody) {
 >sayHello : (somebody: <T>(m: boolean) => string) => string
 >         : ^        ^^       ^^^^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: boolean) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -16,7 +16,7 @@ function sayHello(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: boolean) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^      
 }
 
 === index2.js ===
@@ -27,7 +27,7 @@ function sayHello2(somebody) {
 >sayHello2 : (somebody: <T>(m: void) => string) => string
 >          : ^        ^^       ^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: void) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -35,7 +35,7 @@ function sayHello2(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: void) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^      
 }
 
 
@@ -47,7 +47,7 @@ function sayHello3(somebody) {
 >sayHello3 : (somebody: <T>(m: undefined) => string) => string
 >          : ^        ^^       ^^^^^^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: undefined) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -55,7 +55,7 @@ function sayHello3(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: undefined) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^^^      
 }
 
 
@@ -67,7 +67,7 @@ function sayHello4(somebody) {
 >sayHello4 : (somebody: <T>(m: Function) => string) => string
 >          : ^        ^^       ^^^^^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: Function) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -75,7 +75,7 @@ function sayHello4(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: Function) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^^^      
 }
 
 
@@ -87,7 +87,7 @@ function sayHello5(somebody) {
 >sayHello5 : (somebody: <T>(m: string) => string) => string
 >          : ^        ^^       ^^^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: string) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -95,7 +95,7 @@ function sayHello5(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: string) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^      
 }
 
 
@@ -107,7 +107,7 @@ function sayHello6(somebody) {
 >sayHello6 : (somebody: <T>(m: number) => string) => string
 >          : ^        ^^       ^^^^^^           ^^^^^^^^^^^
 >somebody : <T>(m: number) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -115,7 +115,7 @@ function sayHello6(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: number) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^^^^      
 }
 
 
@@ -127,7 +127,7 @@ function sayHello7(somebody) {
 >sayHello7 : (somebody: <T>(m: any) => string) => string
 >          : ^        ^^       ^^^           ^^^^^^^^^^^
 >somebody : <T>(m: any) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
@@ -135,7 +135,7 @@ function sayHello7(somebody) {
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
 >somebody : <T>(m: any) => string
->         : ^^^^ ^^^^^^^^^^^^^^^^
+>         : ^^^^ ^^^^^^^^^^      
 }
 
 === index8.js ===

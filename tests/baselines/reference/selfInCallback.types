@@ -19,7 +19,7 @@ class C {
 >cb() : void
 >     : ^^^^
 >cb : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
 	public doit() {
 >doit : () => void

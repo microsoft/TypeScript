@@ -17,11 +17,11 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >a.toExponential() : string
 >                  : ^^^^^^
 >a.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >(b) => b.toFixed() : (b: number) => string
 >                   : ^ ^^^^^^^^^^^^^^^^^^^
 >b : number
@@ -29,11 +29,11 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >b.toFixed() : string
 >            : ^^^^^^
 >b.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 class A {
 >A : A

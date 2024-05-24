@@ -47,11 +47,11 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >x.comparer(y) : number
 >              : ^^^^^^
 >x.comparer : (other: T) => number
->           : ^     ^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^      
 >x : T
 >  : ^
 >comparer : (other: T) => number
->         : ^     ^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^      
 >y : T
 >  : ^
 }
@@ -102,7 +102,7 @@ var c = compare<ComparableString>(a, b);
 >compare<ComparableString>(a, b) : number
 >                                : ^^^^^^
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->        : ^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>        : ^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^      
 >a : ComparableString
 >  : ^^^^^^^^^^^^^^^^
 >b : ComparableString

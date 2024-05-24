@@ -62,7 +62,7 @@
     
     const t_hgs: T_HasGetSet = null as any;
 >t_hgs : { get foo(): number; set foo(v: number | string); }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^               ^^^^
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >null as any : any
 
     t_hgs.foo = "32";
@@ -71,7 +71,7 @@
 >t_hgs.foo : string | number
 >          : ^^^^^^^^^^^^^^^
 >t_hgs : { get foo(): number; set foo(v: number | string); }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^               ^^^^
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
 >"32" : "32"
@@ -83,7 +83,7 @@
 >t_hgs.foo : number
 >          : ^^^^^^
 >t_hgs : { get foo(): number; set foo(v: number | string); }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^               ^^^^
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >foo : number
 >    : ^^^^^^
 }

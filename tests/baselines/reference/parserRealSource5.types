@@ -252,7 +252,7 @@ module TypeScript {
 >this.outfile.WriteLine(this.builder) : void
 >                                     : ^^^^
 >this.outfile.WriteLine : (s: string) => void
->                       : ^ ^^      ^^^^^^^^^
+>                       : ^ ^^      ^^^^^    
 >this.outfile : ITextWriter
 >             : ^^^^^^^^^^^
 >this : this
@@ -260,7 +260,7 @@ module TypeScript {
 >outfile : ITextWriter
 >        : ^^^^^^^^^^^
 >WriteLine : (s: string) => void
->          : ^ ^^      ^^^^^^^^^
+>          : ^ ^^      ^^^^^    
 >this.builder : string
 >             : ^^^^^^
 >this : this

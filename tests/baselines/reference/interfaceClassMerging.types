@@ -41,11 +41,11 @@ class Foo {
 >this.method(0) : string
 >               : ^^^^^^
 >this.method : (a: number) => string
->            : ^ ^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >method : (a: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >0 : 0
 >  : ^
     }
@@ -98,11 +98,11 @@ bar.optionalMethod(1);
 >bar.optionalMethod(1) : string
 >                      : ^^^^^^
 >bar.optionalMethod : (a: number) => string
->                   : ^ ^^      ^^^^^^^^^^^
+>                   : ^ ^^      ^^^^^      
 >bar : Bar
 >    : ^^^
 >optionalMethod : (a: number) => string
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 
@@ -134,11 +134,11 @@ bar.additionalMethod(2);
 >bar.additionalMethod(2) : string
 >                        : ^^^^^^
 >bar.additionalMethod : (a: number) => string
->                     : ^ ^^      ^^^^^^^^^^^
+>                     : ^ ^^      ^^^^^      
 >bar : Bar
 >    : ^^^
 >additionalMethod : (a: number) => string
->                 : ^ ^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^      
 >2 : 2
 >  : ^
 
@@ -170,17 +170,17 @@ var obj: {
 
 bar = obj;
 >bar = obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
->          : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>          : ^^^^^^^^^ ^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >bar : Bar
 >    : ^^^
 >obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
->    : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^^^^^^^ ^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 
 obj = bar;
 >obj = bar : Bar
 >          : ^^^
 >obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
->    : ^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^^^^^^^ ^^      ^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >bar : Bar
 >    : ^^^
 

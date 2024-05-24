@@ -41,7 +41,7 @@ interface Collection<K, V> {
     // these seem necessary to push it over the top for memory usage
     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^^^^^^^
+>       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -59,7 +59,7 @@ interface Collection<K, V> {
 
     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^^^^^^^ ^^       ^^                                                     ^^^ ^^^
+>       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R
@@ -325,7 +325,7 @@ declare module Immutable {
 
     update(index: number, notSetValue: T, updater: (value: T) => T): this;
 >update : { (index: number, notSetValue: T, updater: (value: T) => T): this; (index: number, updater: (value: T) => T): this; <R>(updater: (value: this) => R): R; }
->       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^    ^^^     ^^      ^^       ^^               ^^^^^^^^^^ ^^       ^^                  ^^^^^^^
+>       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^    ^^^     ^^      ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >index : number
 >      : ^^^^^^
 >notSetValue : T
@@ -337,7 +337,7 @@ declare module Immutable {
 
     update(index: number, updater: (value: T) => T): this;
 >update : { (index: number, notSetValue: T, updater: (value: T) => T): this; (index: number, updater: (value: T) => T): this; <R>(updater: (value: this) => R): R; }
->       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^^^^^^^^     ^^      ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^^^^^
+>       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^    ^^^     ^^      ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >index : number
 >      : ^^^^^^
 >updater : (value: T) => T
@@ -347,7 +347,7 @@ declare module Immutable {
 
     update<R>(updater: (value: this) => R): R;
 >update : { (index: number, notSetValue: T, updater: (value: T) => T): this; (index: number, updater: (value: T) => T): this; <R>(updater: (value: this) => R): R; }
->       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^^^^^^^^     ^^      ^^       ^^               ^^^^^^^^^^ ^^       ^^                  ^^^ ^^^
+>       : ^^^     ^^      ^^           ^^ ^^       ^^               ^^^    ^^^     ^^      ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >updater : (value: this) => R
 >        : ^     ^^    ^^^^^ 
 >value : this
@@ -430,7 +430,7 @@ declare module Immutable {
 
     updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
 >updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
->         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^^^^^^^^
+>         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^    ^^^
 >keyPath : Iterable<any>
 >        : ^^^^^^^^^^^^^
 >notSetValue : any
@@ -442,7 +442,7 @@ declare module Immutable {
 
     updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
 >updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
->         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^^^^^^^^       ^^             ^^       ^^                   ^^^    ^^^
+>         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^    ^^^
 >keyPath : Iterable<any>
 >        : ^^^^^^^^^^^^^
 >updater : (value: any) => any
@@ -520,7 +520,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^       ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^       ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -534,7 +534,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^       ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -633,7 +633,7 @@ declare module Immutable {
 
     update(key: K, notSetValue: V, updater: (value: V) => V): this;
 >update : { (key: K, notSetValue: V, updater: (value: V) => V): this; (key: K, updater: (value: V) => V): this; <R>(updater: (value: this) => R): R; }
->       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^    ^^^   ^^ ^^       ^^               ^^^^^^^^^^ ^^       ^^                  ^^^^^^^
+>       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^    ^^^   ^^ ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >key : K
 >    : ^
 >notSetValue : V
@@ -645,7 +645,7 @@ declare module Immutable {
 
     update(key: K, updater: (value: V) => V): this;
 >update : { (key: K, notSetValue: V, updater: (value: V) => V): this; (key: K, updater: (value: V) => V): this; <R>(updater: (value: this) => R): R; }
->       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^^^^^^^^   ^^ ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^^^^^
+>       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^    ^^^   ^^ ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >key : K
 >    : ^
 >updater : (value: V) => V
@@ -655,7 +655,7 @@ declare module Immutable {
 
     update<R>(updater: (value: this) => R): R;
 >update : { (key: K, notSetValue: V, updater: (value: V) => V): this; (key: K, updater: (value: V) => V): this; <R>(updater: (value: this) => R): R; }
->       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^^^^^^^^   ^^ ^^       ^^               ^^^^^^^^^^ ^^       ^^                  ^^^ ^^^
+>       : ^^^   ^^ ^^           ^^ ^^       ^^               ^^^    ^^^   ^^ ^^       ^^               ^^^    ^^^ ^^       ^^                  ^^^ ^^^
 >updater : (value: this) => R
 >        : ^     ^^    ^^^^^ 
 >value : this
@@ -732,7 +732,7 @@ declare module Immutable {
 
     updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
 >updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
->         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^^^^^^^^
+>         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^    ^^^
 >keyPath : Iterable<any>
 >        : ^^^^^^^^^^^^^
 >notSetValue : any
@@ -744,7 +744,7 @@ declare module Immutable {
 
     updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
 >updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
->         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^^^^^^^^       ^^             ^^       ^^                   ^^^    ^^^
+>         : ^^^       ^^             ^^           ^^   ^^       ^^                   ^^^    ^^^       ^^             ^^       ^^                   ^^^    ^^^
 >keyPath : Iterable<any>
 >        : ^^^^^^^^^^^^^
 >updater : (value: any) => any
@@ -787,14 +787,14 @@ declare module Immutable {
 
     // Sequence algorithms
     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Map<string | K, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^                   ^^^ ^^^^^           ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Map<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                   ^^^ ^^^^^           ^^                            ^^^                      ^^^
 >collections : Iterable<[KC, VC]>[]
 >            : ^^^^^^^^^^^^^^^^^^^^
 
     concat<C>(...collections: Array<{[key: string]: C}>): Map<K | string, V | C>;
 >concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Map<K | string, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^           ^^                            ^^^                      ^^^
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                   ^^^ ^^^^^           ^^                            ^^^                      ^^^
 >collections : { [key: string]: C; }[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -858,7 +858,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -872,7 +872,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -925,14 +925,14 @@ declare module Immutable {
   export interface OrderedMap<K, V> extends Map<K, V> {
     // Sequence algorithms
     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): OrderedMap<string | K, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^                          ^^^ ^^^^^           ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): OrderedMap<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                          ^^^ ^^^^^           ^^                            ^^^                             ^^^
 >collections : Iterable<[KC, VC]>[]
 >            : ^^^^^^^^^^^^^^^^^^^^
 
     concat<C>(...collections: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
 >concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): OrderedMap<K | string, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^           ^^                            ^^^                             ^^^
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                          ^^^ ^^^^^           ^^                            ^^^                             ^^^
 >collections : { [key: string]: C; }[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -996,7 +996,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -1010,7 +1010,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -1040,13 +1040,13 @@ declare module Immutable {
 
     function fromKeys<T>(iter: Collection<T, any>): Set<T>;
 >fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: { [key: string]: any; }): Set<string>; }
->         : ^^^ ^^    ^^                  ^^^      ^^^   ^^                       ^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^    ^^                  ^^^      ^^^   ^^                       ^^^           ^^^
 >iter : Collection<T, any>
 >     : ^^^^^^^^^^^^^^^^^^
 
     function fromKeys(obj: {[key: string]: any}): Set<string>;
 >fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: { [key: string]: any; }): Set<string>; }
->         : ^^^ ^^    ^^                  ^^^^^^^^^^^^   ^^                       ^^^           ^^^
+>         : ^^^ ^^    ^^                  ^^^      ^^^   ^^                       ^^^           ^^^
 >obj : { [key: string]: any; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -1183,7 +1183,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^      ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^      ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -1197,7 +1197,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^      ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -1227,13 +1227,13 @@ declare module Immutable {
 
     function fromKeys<T>(iter: Collection<T, any>): OrderedSet<T>;
 >fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: { [key: string]: any; }): OrderedSet<string>; }
->         : ^^^ ^^    ^^                  ^^^             ^^^   ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^    ^^                  ^^^             ^^^   ^^                       ^^^                  ^^^
 >iter : Collection<T, any>
 >     : ^^^^^^^^^^^^^^^^^^
 
     function fromKeys(obj: {[key: string]: any}): OrderedSet<string>;
 >fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: { [key: string]: any; }): OrderedSet<string>; }
->         : ^^^ ^^    ^^                  ^^^^^^^^^^^^^^^^^^^   ^^                       ^^^                  ^^^
+>         : ^^^ ^^    ^^                  ^^^             ^^^   ^^                       ^^^                  ^^^
 >obj : { [key: string]: any; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -1291,7 +1291,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^             ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^             ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -1305,7 +1305,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^             ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -1325,7 +1325,7 @@ declare module Immutable {
 
     zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>;
 >zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
->        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^             ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^^^^^^^^^^^^^^^^^^^   ^^      ^^                           ^^^^^           ^^                           ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^             ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^               ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
 >zipper : (value: T, otherValue: U) => Z
 >       : ^     ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -1337,7 +1337,7 @@ declare module Immutable {
 
     zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>;
 >zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): OrderedSet<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
->        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^             ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^               ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^             ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
 >zipper : (value: T, otherValue: U, thirdValue: V) => Z
 >       : ^     ^^ ^^          ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -1353,7 +1353,7 @@ declare module Immutable {
 
     zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
 >zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): OrderedSet<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>; }
->        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^^^^^^^^^^^^^^^^^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                         ^^^^^           ^^                           ^^^             ^^^
+>        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^               ^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^               ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^             ^^^
 >zipper : (...any: Array<any>) => Z
 >       : ^^^^   ^^          ^^^^^ 
 >any : any[]
@@ -1491,7 +1491,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^      ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^      ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -1505,7 +1505,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^      ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -1812,16 +1812,16 @@ declare module Immutable {
 
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Keyed<string, V_1>; <K_1, V_1>(): Keyed<K_1, V_1>; (): Keyed<any, any>; }
->      : ^^^ ^^ ^^          ^^                ^^^               ^^^   ^^   ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K_1, V_1>(): Seq.Keyed<K_1, V_1>; (): Seq.Keyed<any, any>; }
+>      : ^^^ ^^ ^^          ^^                ^^^               ^^^   ^^   ^^                       ^^^                      ^^^   ^^   ^^^^^                   ^^^^^^                   ^^^
 >collection : Iterable<[K, V]>
 >           : ^^^^^^^^^^^^^^^^
 >Seq : any
 >    : ^^^
 
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V_1>(): Keyed<K, V_1>; (): Keyed<any, any>; }
->      : ^^^ ^^   ^^          ^^                  ^^^^^^^^^^^^^^^^^^^ ^^   ^^                     ^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Seq.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V_1>(): Seq.Keyed<K, V_1>; (): Seq.Keyed<any, any>; }
+>      : ^^^ ^^   ^^          ^^                  ^^^                 ^^^ ^^   ^^                     ^^^                    ^^^ ^^   ^^^^^                 ^^^^^^                   ^^^
 >obj : { [key: string]: V; }
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -1830,14 +1830,14 @@ declare module Immutable {
 >    : ^^^
 
     export function Keyed<K, V>(): Seq.Keyed<K, V>;
->Keyed : { <K_1, V_1>(collection: Iterable<[K_1, V_1]>): Keyed<K_1, V_1>; <V_1>(obj: { [key: string]: V_1; }): Keyed<string, V_1>; <K, V>(): Seq.Keyed<K, V>; (): Keyed<any, any>; }
->      : ^^^   ^^   ^^          ^^                    ^^^^^^^^^^^^^^^^^^^^^   ^^   ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^
+>Keyed : { <K_1, V_1>(collection: Iterable<[K_1, V_1]>): Seq.Keyed<K_1, V_1>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>      : ^^^   ^^   ^^          ^^                    ^^^                   ^^^   ^^   ^^                       ^^^                      ^^^ ^^ ^^^^^               ^^^^^^                   ^^^
 >Seq : any
 >    : ^^^
 
     export function Keyed(): Seq.Keyed<any, any>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Seq.Keyed<any, any>; }
->      : ^^^ ^^ ^^          ^^                ^^^^^^^^^^^^^^^^^ ^^   ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
+>      : ^^^ ^^ ^^          ^^                ^^^               ^^^ ^^   ^^                     ^^^                    ^^^ ^^ ^^^^^               ^^^^^^                   ^^^
 >Seq : any
 >    : ^^^
 
@@ -1860,16 +1860,16 @@ declare module Immutable {
 >      : ^^^^^^    
 
       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Keyed<string | K, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^                         ^^^ ^^^^^           ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Seq.Keyed<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                         ^^^ ^^^^^           ^^                            ^^^                            ^^^
 >collections : Iterable<[KC, VC]>[]
 >            : ^^^^^^^^^^^^^^^^^^^^
 >Seq : any
 >    : ^^^
 
       concat<C>(...collections: Array<{[key: string]: C}>): Seq.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Seq.Keyed<K | string, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^           ^^                            ^^^                            ^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Seq.Keyed<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                         ^^^ ^^^^^           ^^                            ^^^                            ^^^
 >collections : { [key: string]: C; }[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -1943,7 +1943,7 @@ declare module Immutable {
 
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^               ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^               ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -1958,8 +1958,8 @@ declare module Immutable {
 >    : ^^^
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^               ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2061,7 +2061,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^              ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^              ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -2076,8 +2076,8 @@ declare module Immutable {
 >    : ^^^
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^              ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -2179,7 +2179,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^          ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^          ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -2194,8 +2194,8 @@ declare module Immutable {
 >    : ^^^
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^          ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -2307,7 +2307,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -2321,7 +2321,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2371,16 +2371,16 @@ declare module Immutable {
 
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
->Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Keyed<string, V_1>; }
->      : ^^^ ^^ ^^          ^^                ^^^                      ^^^   ^^   ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^
+>Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Collection.Keyed<string, V_1>; }
+>      : ^^^ ^^ ^^          ^^                ^^^                      ^^^   ^^   ^^                       ^^^                             ^^^
 >collection : Iterable<[K, V]>
 >           : ^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
 
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
->      : ^^^ ^^   ^^          ^^                  ^^^^^^^^^^^^^^^^^^^ ^^   ^^                     ^^^                           ^^^
+>Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Collection.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
+>      : ^^^ ^^   ^^          ^^                  ^^^                        ^^^ ^^   ^^                     ^^^                           ^^^
 >obj : { [key: string]: V; }
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -2411,16 +2411,16 @@ declare module Immutable {
 >     : ^^^^^^    
 
       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Keyed<string | K, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^                                ^^^ ^^^^^           ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Collection.Keyed<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                                ^^^ ^^^^^           ^^                            ^^^                                   ^^^
 >collections : Iterable<[KC, VC]>[]
 >            : ^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
 
       concat<C>(...collections: Array<{[key: string]: C}>): Collection.Keyed<K | string, V | C>;
->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Collection.Keyed<K | string, V | C>; }
->       : ^^^  ^^  ^^^^^           ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^           ^^                            ^^^                                   ^^^
+>concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Collection.Keyed<K | string, V | C>; }
+>       : ^^^  ^^  ^^^^^           ^^                         ^^^                                ^^^ ^^^^^           ^^                            ^^^                                   ^^^
 >collections : { [key: string]: C; }[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -2494,7 +2494,7 @@ declare module Immutable {
 
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                      ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                      ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -2509,8 +2509,8 @@ declare module Immutable {
 >           : ^^^
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                      ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2552,8 +2552,8 @@ declare module Immutable {
 
       // Reading values
       get<NSV>(index: number, notSetValue: NSV): T | NSV;
->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T; }
->    : ^^^   ^^     ^^      ^^           ^^   ^^^       ^^^     ^^      ^^^^^^^
+>get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
+>    : ^^^   ^^     ^^      ^^           ^^   ^^^       ^^^     ^^      ^^^             ^^^
 >index : number
 >      : ^^^^^^
 >notSetValue : NSV
@@ -2561,7 +2561,7 @@ declare module Immutable {
 
       get(index: number): T | undefined;
 >get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
->    : ^^^   ^^     ^^      ^^           ^^   ^^^^^^^^^^^^^     ^^      ^^^             ^^^
+>    : ^^^   ^^     ^^      ^^           ^^   ^^^       ^^^     ^^      ^^^             ^^^
 >index : number
 >      : ^^^^^^
 
@@ -2610,8 +2610,8 @@ declare module Immutable {
 >           : ^^^
 
       zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>;
->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): Indexed<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Indexed<Z_1>; }
->        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^                     ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^^^^^^^^^^^^^^^^   ^^      ^^                           ^^^^^           ^^                           ^^^^^^^^^^^^^^^^^^
+>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
+>        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^                     ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^                       ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
 >zipper : (value: T, otherValue: U) => Z
 >       : ^     ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -2624,8 +2624,8 @@ declare module Immutable {
 >           : ^^^
 
       zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>;
->zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): Indexed<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Indexed<Z_1>; }
->        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^                     ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^^^^^^^^^^^^^^^^
+>zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): Collection.Indexed<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
+>        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^                       ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^                     ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
 >zipper : (value: T, otherValue: U, thirdValue: V) => Z
 >       : ^     ^^ ^^          ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -2642,8 +2642,8 @@ declare module Immutable {
 >           : ^^^
 
       zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>;
->zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): Indexed<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
->        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^^^^^^^^^^^^^^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^^^^^^^^^^^^^^^^ ^^      ^^                         ^^^^^           ^^                           ^^^                     ^^^
+>zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): Collection.Indexed<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
+>        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^                       ^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^                       ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^                     ^^^
 >zipper : (...any: Array<any>) => Z
 >       : ^^^^   ^^          ^^^^^ 
 >any : any[]
@@ -2737,7 +2737,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^                     ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^                     ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -2752,8 +2752,8 @@ declare module Immutable {
 >           : ^^^
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^                     ^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -2842,7 +2842,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^                 ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^                 ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -2857,8 +2857,8 @@ declare module Immutable {
 >           : ^^^
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^                 ^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -2919,8 +2919,8 @@ declare module Immutable {
 
     // Reading values
     get<NSV>(key: K, notSetValue: NSV): V | NSV;
->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V; }
->    : ^^^   ^^   ^^ ^^           ^^   ^^^       ^^^   ^^ ^^^^^^^
+>get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
+>    : ^^^   ^^   ^^ ^^           ^^   ^^^       ^^^   ^^ ^^^             ^^^
 >key : K
 >    : ^
 >notSetValue : NSV
@@ -2928,7 +2928,7 @@ declare module Immutable {
 
     get(key: K): V | undefined;
 >get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
->    : ^^^   ^^   ^^ ^^           ^^   ^^^^^^^^^^^^^   ^^ ^^^             ^^^
+>    : ^^^   ^^   ^^ ^^           ^^   ^^^       ^^^   ^^ ^^^             ^^^
 >key : K
 >    : ^
 
@@ -3102,7 +3102,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -3116,7 +3116,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -3311,13 +3311,13 @@ declare module Immutable {
 
     flatten(depth?: number): Collection<any, any>;
 >flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
->        : ^^^     ^^^      ^^^                    ^^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^     ^^^      ^^^                    ^^^       ^^^       ^^^                    ^^^
 >depth : number
 >      : ^^^^^^
 
     flatten(shallow?: boolean): Collection<any, any>;
 >flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
->        : ^^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^       ^^^                    ^^^
+>        : ^^^     ^^^      ^^^                    ^^^       ^^^       ^^^                    ^^^
 >shallow : boolean
 >        : ^^^^^^^
 
@@ -3338,7 +3338,7 @@ declare module Immutable {
     // Reducing a value
     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^^^^^^^
+>       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -3356,7 +3356,7 @@ declare module Immutable {
 
     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^^^^^^^ ^^       ^^                                                     ^^^ ^^^
+>       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R
@@ -3370,7 +3370,7 @@ declare module Immutable {
 
     reduceRight<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->            : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^^^^^^^
+>            : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -3388,7 +3388,7 @@ declare module Immutable {
 
     reduceRight<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduceRight : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->            : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^^^^^^^ ^^       ^^                                                     ^^^ ^^^
+>            : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R
@@ -3440,11 +3440,11 @@ declare module Immutable {
 
     count(): number;
 >count : { (): number; (predicate: (value: V, key: K, iter: this) => boolean, context?: any): number; }
->      : ^^^^^^      ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^^^
+>      : ^^^^^^      ^^^         ^^                                         ^^       ^^^   ^^^      ^^^
 
     count(predicate: (value: V, key: K, iter: this) => boolean, context?: any): number;
 >count : { (): number; (predicate: (value: V, key: K, iter: this) => boolean, context?: any): number; }
->      : ^^^^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^      ^^^
+>      : ^^^^^^      ^^^         ^^                                         ^^       ^^^   ^^^      ^^^
 >predicate : (value: V, key: K, iter: this) => boolean
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^       
 >value : V

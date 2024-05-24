@@ -14,11 +14,11 @@ if (Math.random()) {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     𐊧 = "hello";
 >𐊧 = "hello" : "hello"
