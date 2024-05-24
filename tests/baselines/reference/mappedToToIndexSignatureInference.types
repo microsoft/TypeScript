@@ -17,7 +17,7 @@ fn(a);
 >fn(a) : object
 >      : ^^^^^^
 >fn : <K extends string, V>(object: { [Key in K]: V; }) => object
->   : ^ ^^^^^^^^^      ^^ ^^      ^^                  ^^^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^      ^^                  ^^^^^      
 >a : { [index: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -47,7 +47,7 @@ let x: E[] = enumValues(E);
 >enumValues(E) : E[]
 >              : ^^^
 >enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
->           : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^            ^^^^^^^^
+>           : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^            ^^^^^   
 >E : typeof E
 >  : ^^^^^^^^
 

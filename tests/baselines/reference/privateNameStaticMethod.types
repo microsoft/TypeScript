@@ -20,7 +20,7 @@ class A1 {
 >A1.#method("") : string
 >               : ^^^^^^
 >A1.#method : (param: string) => string
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
 >   : ^^^^^^^^^
 >"" : ""
@@ -30,7 +30,7 @@ class A1 {
 >A1.#method(1) : string
 >              : ^^^^^^
 >A1.#method : (param: string) => string
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
 >   : ^^^^^^^^^
 >1 : 1
@@ -40,7 +40,7 @@ class A1 {
 >A1.#method() : string
 >             : ^^^^^^
 >A1.#method : (param: string) => string
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
 >   : ^^^^^^^^^
 

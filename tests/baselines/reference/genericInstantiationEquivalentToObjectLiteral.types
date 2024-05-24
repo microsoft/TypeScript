@@ -21,17 +21,17 @@ var y: { first: string; second: number; }
 
 x = y;
 >x = y : { first: string; second: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >x : Pair<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^
 >y : { first: string; second: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 
 y = x;
 >y = x : Pair<string, number>
 >      : ^^^^^^^^^^^^^^^^^^^^
 >y : { first: string; second: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >x : Pair<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ f(y);
 >f : <T, U>(x: Pair<T, U>) => any
 >  : ^ ^^ ^^ ^^          ^^^^^^^^
 >y : { first: string; second: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 
 f2(x);
 >f2(x) : any
@@ -77,5 +77,5 @@ f2(y);
 >f2 : <T, U>(x: { first: T; second: U; }) => any
 >   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >y : { first: string; second: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 

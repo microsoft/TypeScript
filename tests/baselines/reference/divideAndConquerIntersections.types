@@ -166,11 +166,11 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 >console.log("Matching", filter) : void
 >                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Matching" : "Matching"
 >           : ^^^^^^^^^^
 >filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
@@ -259,11 +259,11 @@ class EventHub<U extends Update> {
 >console.log("Adding", middleware.length, "generic handlers") : void
 >                                                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Adding" : "Adding"
 >         : ^^^^^^^^
 >middleware.length : number
@@ -297,11 +297,11 @@ class EventHub<U extends Update> {
 >console.log("Adding", middleware.length, "handlers for", filter) : void
 >                                                                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Adding" : "Adding"
 >         : ^^^^^^^^
 >middleware.length : number

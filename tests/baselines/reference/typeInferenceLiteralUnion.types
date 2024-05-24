@@ -87,8 +87,8 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->extent : <T extends Numeric>(array: Array<T | Primitive>) => [Primitive | T, Primitive | T] | [undefined, undefined]
->       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
+>       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^                                                       
 >[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new NumCoercible(10) : NumCoercible

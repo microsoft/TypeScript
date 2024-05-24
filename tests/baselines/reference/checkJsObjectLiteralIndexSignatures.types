@@ -9,11 +9,11 @@ let n = Math.random();
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 let s = `${n}`;
 >s : string
@@ -39,7 +39,7 @@ numericIndex[n].toFixed();
 >numericIndex[n].toFixed() : string
 >                          : ^^^^^^
 >numericIndex[n].toFixed : (fractionDigits?: number) => string
->                        : ^              ^^^      ^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^      
 >numericIndex[n] : number
 >                : ^^^^^^
 >numericIndex : { [x: number]: number; }
@@ -47,7 +47,7 @@ numericIndex[n].toFixed();
 >n : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 const stringIndex = { [s]: 1 };
 >stringIndex : { [x: string]: number; }
@@ -65,7 +65,7 @@ stringIndex[s].toFixed();
 >stringIndex[s].toFixed() : string
 >                         : ^^^^^^
 >stringIndex[s].toFixed : (fractionDigits?: number) => string
->                       : ^              ^^^      ^^^^^^^^^^^
+>                       : ^              ^^^      ^^^^^      
 >stringIndex[s] : number
 >               : ^^^^^^
 >stringIndex : { [x: string]: number; }
@@ -73,6 +73,6 @@ stringIndex[s].toFixed();
 >s : string
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 

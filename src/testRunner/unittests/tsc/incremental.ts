@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
-import * as vfs from "../../_namespaces/vfs.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     compilerOptionsToConfigJson,
@@ -27,7 +27,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -48,7 +48,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -85,7 +85,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -115,7 +115,7 @@ describe("unittests:: tsc:: incremental::", () => {
     });
 
     describe("with noEmitOnError", () => {
-        let projFs: vfs.FileSystem;
+        let projFs: FileSystem;
         before(() => {
             projFs = getFsForNoEmitOnError();
         });
@@ -275,25 +275,25 @@ const a: string = 10;`,
 
             function fs() {
                 return loadProjectFromFiles({
-                    "/src/project/src/class.ts": Utils.dedent`
+                    "/src/project/src/class.ts": dedent`
                             export class classC {
                                 prop = 1;
                             }`,
-                    "/src/project/src/indirectClass.ts": Utils.dedent`
+                    "/src/project/src/indirectClass.ts": dedent`
                             import { classC } from './class';
                             export class indirectClass {
                                 classC = new classC();
                             }`,
-                    "/src/project/src/directUse.ts": Utils.dedent`
+                    "/src/project/src/directUse.ts": dedent`
                             import { indirectClass } from './indirectClass';
                             new indirectClass().classC.prop;`,
-                    "/src/project/src/indirectUse.ts": Utils.dedent`
+                    "/src/project/src/indirectUse.ts": dedent`
                             import { indirectClass } from './indirectClass';
                             new indirectClass().classC.prop;`,
-                    "/src/project/src/noChangeFile.ts": Utils.dedent`
+                    "/src/project/src/noChangeFile.ts": dedent`
                             export function writeLog(s: string) {
                             }`,
-                    "/src/project/src/noChangeFileWithEmitSpecificError.ts": Utils.dedent`
+                    "/src/project/src/noChangeFileWithEmitSpecificError.ts": dedent`
                             function someFunc(arguments: boolean, ...rest: any[]) {
                             }`,
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions }),
@@ -307,12 +307,12 @@ const a: string = 10;`,
         subScenario: `when global file is added, the signatures are updated`,
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/src/main.ts": Utils.dedent`
+                "/src/project/src/main.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function main() { }
                 `,
-                "/src/project/src/anotherFileWithSameReferenes.ts": Utils.dedent`
+                "/src/project/src/anotherFileWithSameReferenes.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function anotherFileWithSameReferenes() { }
@@ -495,7 +495,7 @@ declare global {
                         module: "esnext",
                     },
                 }),
-                "/src/project/index.tsx": Utils.dedent`
+                "/src/project/index.tsx": dedent`
                     declare namespace JSX {
                         interface ElementChildrenAttribute { children: {}; }
                         interface IntrinsicElements { div: {} }
@@ -518,7 +518,7 @@ declare global {
         subScenario: "ts file with no-default-lib that augments the global scope",
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/src/main.ts": Utils.dedent`
+                "/src/project/src/main.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="esnext" />
 
@@ -529,7 +529,7 @@ declare global {
 
                     export {};
                 `,
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "ESNext",
@@ -590,12 +590,12 @@ console.log(a);`,
             fs: () =>
                 loadProjectFromFiles({
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
-                    "/src/project/main.ts": Utils.dedent`
+                    "/src/project/main.ts": dedent`
                         import MessageablePerson from './MessageablePerson.js';
                         function logMessage( person: MessageablePerson ) {
                             console.log( person.message );
                         }`,
-                    "/src/project/MessageablePerson.ts": Utils.dedent`
+                    "/src/project/MessageablePerson.ts": dedent`
                         const Messageable = () => {
                             return class MessageableClass {
                                 public message = 'hello';
@@ -609,7 +609,7 @@ console.log(a);`,
                 appendText(
                     fs,
                     "/lib/lib.d.ts",
-                    Utils.dedent`
+                    dedent`
                     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,
                 ),
@@ -922,12 +922,12 @@ console.log(a);`,
                     },
                     include: ["src"],
                 }),
-                "/src/project/src/box.ts": Utils.dedent`
+                "/src/project/src/box.ts": dedent`
                     export interface Box<T> {
                         unbox(): T
                     }
                 `,
-                "/src/project/src/bug.js": Utils.dedent`
+                "/src/project/src/bug.js": dedent`
                     import * as B from "./box.js"
                     import * as W from "./wrap.js"
 
@@ -947,7 +947,7 @@ console.log(a);`,
 
                     export const bug = wrap({ n: box(1) });
                 `,
-                "/src/project/src/wrap.ts": Utils.dedent`
+                "/src/project/src/wrap.ts": dedent`
                     export type Wrap<C> = {
                         [K in keyof C]: { wrapped: C[K] }
                     }
@@ -974,14 +974,14 @@ console.log(a);`,
                         skipDefaultLibCheck: true,
                     },
                 }),
-                "/src/project/index.ts": Utils.dedent`
+                "/src/project/index.ts": dedent`
                     import ky from 'ky';
                     export const api = ky.extend({});
                 `,
                 "/src/project/package.json": jsonToReadableText({
                     type: "module",
                 }),
-                "/src/project/node_modules/ky/distribution/index.d.ts": Utils.dedent`
+                "/src/project/node_modules/ky/distribution/index.d.ts": dedent`
                    type KyInstance = {
                         extend(options: Record<string,unknown>): KyInstance;
                     }
@@ -1002,5 +1002,80 @@ console.log(a);`,
                 commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
             },
         ],
+    });
+
+    describe("with const enums", () => {
+        enum AliasType {
+            None = "",
+            SameFile = "aliased ",
+            DifferentFile = "aliased in different file ",
+        }
+        function fileWithEnum(withAlias: AliasType) {
+            return withAlias !== AliasType.DifferentFile ? "/src/project/b.d.ts" : "/src/project/worker.d.ts";
+        }
+        function verify(withAlias: AliasType, preserveConstEnums: boolean) {
+            verifyTsc({
+                scenario: "incremental",
+                subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
+                commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
+                fs: () =>
+                    loadProjectFromFiles({
+                        "/src/project/a.ts": dedent`
+                            import {A} from "./c"
+                            let a = A.ONE
+                        `,
+                        "/src/project/b.d.ts": withAlias === AliasType.SameFile ?
+                            dedent`
+                                declare const enum AWorker {
+                                    ONE = 1
+                                }
+                                export { AWorker as A };
+                            ` :
+                            withAlias === AliasType.DifferentFile ?
+                            dedent`
+                                export { AWorker as A } from "./worker";
+                            ` :
+                            dedent`
+                                export const enum A {
+                                    ONE = 1
+                                }
+                            `,
+                        "/src/project/c.ts": dedent`
+                            import {A} from "./b"
+                            let b = A.ONE
+                            export {A}
+                        `,
+                        "/src/project/worker.d.ts": dedent`
+                            export const enum AWorker {
+                                ONE = 1
+                            }
+                        `,
+                    }),
+                edits: [
+                    {
+                        caption: "change enum value",
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "1", "2"),
+                    },
+                    {
+                        caption: "change enum value again",
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "2", "3"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing = 10;"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts again",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing2 = 10;"),
+                    },
+                ],
+            });
+        }
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ true);
     });
 });

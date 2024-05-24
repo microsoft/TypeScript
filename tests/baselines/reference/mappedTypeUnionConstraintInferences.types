@@ -71,7 +71,7 @@ export let b = doSomething_Expected({ prop: "test" });
 >doSomething_Expected({ prop: "test" }) : { prop?: string; }
 >                                       : ^^^^^^^^^^^^^^^^^^
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
->                     : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                                                                               
 >{ prop: "test" } : { prop: string; }
 >                 : ^^^^^^^^^^^^^^^^^
 >prop : string

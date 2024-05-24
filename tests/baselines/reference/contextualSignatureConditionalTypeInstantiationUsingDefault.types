@@ -59,19 +59,19 @@ createMachine({}, (ev) => {
 >createMachine({}, (ev) => {  ev.type; // should be `string`}) : void
 >                                                              : ^^^^
 >createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
->              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^^^^^
+>              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^    
 >{} : {}
 >   : ^^
 >(ev) => {  ev.type; // should be `string`} : (ev: { type: string; }) => void
->                                           : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^  ^^^^^^^^^^      ^^^^^^^^^^^^
 >ev : { type: string; }
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^      ^^^
 
   ev.type; // should be `string`
 >ev.type : string
 >        : ^^^^^^
 >ev : { type: string; }
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^      ^^^
 >type : string
 >     : ^^^^^^
 

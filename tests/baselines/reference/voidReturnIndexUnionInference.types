@@ -19,13 +19,13 @@ export function safeInvoke<A1, R>(
 ): R | undefined {
     if (func) {
 >func : ((arg1: A1) => R) | null | undefined
->     : ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^    ^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
         return func(arg1);
 >func(arg1) : R
 >           : ^
 >func : (arg1: A1) => R
->     : ^    ^^  ^^^^^^
+>     : ^    ^^  ^^^^^ 
 >arg1 : A1
 >     : ^^
 
@@ -60,13 +60,13 @@ function bad<P extends Props>(props: Readonly<P>) {
 >safeInvoke(props.onFoo, "blah") : boolean | undefined
 >                                : ^^^^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^^^^^^^^^^^^^^
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 >props.onFoo : ((value: string) => boolean) | undefined
->            : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 >onFoo : ((value: string) => boolean) | undefined
->      : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >"blah" : "blah"
 >       : ^^^^^^
 
@@ -76,13 +76,13 @@ function bad<P extends Props>(props: Readonly<P>) {
 >safeInvoke(props.onBar, "blah") : void | undefined
 >                                : ^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^^^^^^^^^^^^^^
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 >props.onBar : ((value: string) => void) | undefined
->            : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 >onBar : ((value: string) => void) | undefined
->      : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >"blah" : "blah"
 >       : ^^^^^^
 }

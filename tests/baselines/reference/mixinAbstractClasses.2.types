@@ -45,11 +45,11 @@ abstract class AbstractBase {
 
 const MixedBase = Mixin(AbstractBase);
 >MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^     ^
 >Mixin(AbstractBase) : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^     ^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^                                                   
 >AbstractBase : typeof AbstractBase
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -66,5 +66,5 @@ new MixedBase();
 >new MixedBase() : any
 >                : ^^^
 >MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^     ^
 

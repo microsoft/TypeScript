@@ -19,7 +19,7 @@ if (x['o'] === false) {
 >x['o'] : boolean
 >       : ^^^^^^^
 >x : { o: boolean; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^       ^^^
 >'o' : "o"
 >    : ^^^
 >false : false
@@ -31,7 +31,7 @@ if (x['o'] === false) {
 >x['o'] : boolean
 >       : ^^^^^^^
 >x : { o: boolean; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^       ^^^
 >'o' : "o"
 >    : ^^^
 >true : true

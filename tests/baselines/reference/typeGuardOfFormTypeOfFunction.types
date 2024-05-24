@@ -100,7 +100,7 @@ function f5(x: { s: string }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
@@ -122,13 +122,13 @@ function f6(x: () => string) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >"function" : "function"
 >           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
     }
 }
 
@@ -144,13 +144,13 @@ function f10(x: string | (() => string)) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | (() => string)
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^      ^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
     }
     else {
         x;  // string
@@ -173,18 +173,18 @@ function f11(x: { s: string } | (() => string)) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | (() => string)
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^      ^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
     }
     else {
         x;  // { s: string }
 >x : { s: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
 }
 
@@ -204,7 +204,7 @@ function f12(x: { s: string } | { n: number }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | { n: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
@@ -215,7 +215,7 @@ function f12(x: { s: string } | { n: number }) {
     else {
         x;  // { s: string } | { n: number }
 >x : { s: string; } | { n: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
     }
 }
 
@@ -258,11 +258,11 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
             item.call(obj);
 >item.call(obj) : any
 >item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >item : T[K] & Function
 >     : ^^^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >obj : T
 >    : ^
     }
@@ -286,17 +286,17 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
 >typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >reducer : Record<keyof S, () => void> | (() => void)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 >'function' : "function"
 >           : ^^^^^^^^^^
 
         rootReducer = reducer;
 >rootReducer = reducer : () => void
->                      : ^^^^^^^^^^
+>                      : ^^^^^^    
 >rootReducer : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 >reducer : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
     }
 }
 

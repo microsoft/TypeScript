@@ -87,7 +87,7 @@ function f3<T extends E>(v: T | { x: string }) {
 >v instanceof E : boolean
 >               : ^^^^^^^
 >v : T | { x: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -104,7 +104,7 @@ function f3<T extends E>(v: T | { x: string }) {
 >x : string
 >  : ^^^^^^
 >v : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
 }
 

@@ -17,11 +17,11 @@ const buffer2 = buffer.transfer();
 >buffer.transfer() : ArrayBuffer
 >                  : ^^^^^^^^^^^
 >buffer.transfer : (newByteLength?: number) => ArrayBuffer
->                : ^             ^^^      ^^^^^^^^^^^^^^^^
+>                : ^             ^^^      ^^^^^           
 >buffer : ArrayBuffer
 >       : ^^^^^^^^^^^
 >transfer : (newByteLength?: number) => ArrayBuffer
->         : ^             ^^^      ^^^^^^^^^^^^^^^^
+>         : ^             ^^^      ^^^^^           
 
 buffer.detached;
 >buffer.detached : boolean

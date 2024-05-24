@@ -192,11 +192,11 @@ condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 >condString.toUpperCase ? exprBoolean1 : exprBoolean2 : boolean
 >                                                     : ^^^^^^^
 >condString.toUpperCase : () => string
->                       : ^^^^^^^^^^^^
+>                       : ^^^^^^      
 >condString : string
 >           : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >exprBoolean1 : boolean
 >             : ^^^^^^^
 >exprBoolean2 : boolean
@@ -407,11 +407,11 @@ var resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 >condString.toUpperCase ? exprBoolean1 : exprBoolean2 : boolean
 >                                                     : ^^^^^^^
 >condString.toUpperCase : () => string
->                       : ^^^^^^^^^^^^
+>                       : ^^^^^^      
 >condString : string
 >           : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >exprBoolean1 : boolean
 >             : ^^^^^^^
 >exprBoolean2 : boolean
@@ -483,11 +483,11 @@ var resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolea
 >condString.toUpperCase ? exprString1 : exprBoolean1 : string | boolean
 >                                                    : ^^^^^^^^^^^^^^^^
 >condString.toUpperCase : () => string
->                       : ^^^^^^^^^^^^
+>                       : ^^^^^^      
 >condString : string
 >           : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >exprString1 : string
 >            : ^^^^^^
 >exprBoolean1 : boolean

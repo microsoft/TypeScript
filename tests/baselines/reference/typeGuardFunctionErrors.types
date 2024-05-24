@@ -168,7 +168,7 @@ if (isB(b)) {
 >isB(b) : boolean
 >       : ^^^^^^^
 >isB : (p1: any) => p1 is B
->    : ^  ^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^       
 >b : B
 >  : ^
 
@@ -186,7 +186,7 @@ if (funA(0, a)) {
 >funA(0, a) : boolean
 >           : ^^^^^^^
 >funA : (p1: any, p2: any) => p1 is B
->     : ^  ^^   ^^  ^^   ^^^^^^^^^^^^
+>     : ^  ^^   ^^  ^^   ^^^^^       
 >0 : 0
 >  : ^
 >a : A
@@ -234,7 +234,7 @@ acceptingDifferentSignatureTypeGuardFunction(isC);
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
 >                                             : ^  ^^     ^^^            ^^^^^^^^
 >isC : (p1: any) => p1 is C
->    : ^  ^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^       
 
 // Boolean not assignable to type guard
 var assign1: (p1, p2) => p1 is A;
@@ -249,7 +249,7 @@ assign1 = function(p1, p2): boolean {
 >assign1 = function(p1, p2): boolean {    return true;} : (p1: any, p2: any) => boolean
 >                                                       : ^  ^^^^^^^  ^^^^^^^^^^       
 >assign1 : (p1: any, p2: any) => p1 is A
->        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >function(p1, p2): boolean {    return true;} : (p1: any, p2: any) => boolean
 >                                             : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
@@ -276,7 +276,7 @@ assign2 = function(p1, p2): p2 is A {
 >assign2 = function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
 >                                                       : ^  ^^^^^^^  ^^^^^^^^^^       
 >assign2 : (p1: any, p2: any) => p1 is A
->        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
 >                                             : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
@@ -303,7 +303,7 @@ assign3 = function(p1, p2, p3): p1 is A {
 >assign3 = function(p1, p2, p3): p1 is A {    return true;} : (p1: any, p2: any, p3: any) => p1 is A
 >                                                           : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >assign3 : (p1: any, p2: any) => p1 is A
->        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >function(p1, p2, p3): p1 is A {    return true;} : (p1: any, p2: any, p3: any) => p1 is A
 >                                                 : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
@@ -484,7 +484,7 @@ if (hasMissingParameter()) {
 >hasMissingParameter() : boolean
 >                      : ^^^^^^^
 >hasMissingParameter : () => x is A
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 
     x.propA;
 >x.propA : number

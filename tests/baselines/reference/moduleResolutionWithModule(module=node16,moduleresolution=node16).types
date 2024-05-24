@@ -14,9 +14,9 @@ p.thing();
 >p.thing() : void
 >          : ^^^^
 >p.thing : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >p : typeof p
 >  : ^^^^^^^^
 >thing : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 

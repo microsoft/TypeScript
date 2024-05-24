@@ -43,7 +43,7 @@ const { Provider, useUsername, useAge, useStore } = createStore({
 >createStore({  username: "Aral",  age: 31}) : StoreUtils<{ username: string; age: number; }>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
->            : ^     ^^^^^^^^^                     ^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^                     ^^     ^^     ^^^^^                 
 >{  username: "Aral",  age: 31} : { username: string; age: number; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

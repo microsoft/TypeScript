@@ -125,7 +125,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 >isNumClass(entry) : boolean
 >                  : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >entry : Entries[EntryId]
 >      : ^^^^^^^^^^^^^^^^
 
@@ -213,7 +213,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >isNumClass(item) : boolean
 >                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >item : Slices[SliceId][SliceKey]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -279,7 +279,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >isNumClass(item) : boolean
 >                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >item : Slices[SliceId][SliceKey]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -337,17 +337,17 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >isBuilderProgram(program) : boolean
 >                          : ^^^^^^^
 >isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
->                 : ^   ^^^^^^^^^              ^^       ^^             ^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^^^              ^^       ^^             ^^^^^              
 >program : Program | T
 >        : ^^^^^^^^^^^
 >program.getProgram() : Program
 >                     : ^^^^^^^
 >program.getProgram : () => Program
->                   : ^^^^^^^^^^^^^
+>                   : ^^^^^^       
 >program : T
 >        : ^
 >getProgram : () => Program
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^       
 >program : Program
 >        : ^^^^^^^
 }

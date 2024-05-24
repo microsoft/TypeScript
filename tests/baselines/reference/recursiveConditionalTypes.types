@@ -189,7 +189,7 @@ f23(['a', 'b', 'c']);  // string
 >f23(['a', 'b', 'c']) : string
 >                     : ^^^^^^
 >f23 : <T>(t: TupleOf<T, 3>) => T
->    : ^ ^^ ^^             ^^^^^^
+>    : ^ ^^ ^^             ^^^^^ 
 >['a', 'b', 'c'] : [string, string, string]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -263,15 +263,15 @@ declare let b4: { value: { value: { value: typeof b4 }}};
 >value : { value: typeof b4; }
 >      : ^^^^^^^^^         ^^^
 >value : { value: { value: { value: typeof b4; }; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
->b4 : { value: { value: { value: any; }; }; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^                                 ^^^
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>   : ^^^^^^^^^                                 ^^^
 
 unbox(b1);  // string
 >unbox(b1) : string
 >          : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
 >b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -279,7 +279,7 @@ unbox(b2);  // string
 >unbox(b2) : string
 >          : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
 >b2 : T6
 >   : ^^
 
@@ -287,7 +287,7 @@ unbox(b3);  // InfBox<string>
 >unbox(b3) : InfBox<string>
 >          : ^^^^^^^^^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
 >b3 : InfBox<string>
 >   : ^^^^^^^^^^^^^^
 
@@ -295,7 +295,7 @@ unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // numbe
 >unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}}) : number
 >                                                                      : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
 >{ value: { value: { value: { value: { value: { value: 5 }}}}}} : { value: { value: { value: { value: { value: { value: number; }; }; }; }; }; }
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { value: { value: { value: { value: { value: number; }; }; }; }; }
@@ -324,18 +324,18 @@ unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // numbe
 >  : ^
 
 unbox(b4);  // { value: { value: typeof b4 }}
->unbox(b4) : { value: { value: { value: any; }; }; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unbox(b4) : { value: { value: typeof b4; }; }
+>          : ^^^^^^^^^                     ^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
->b4 : { value: { value: { value: any; }; }; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>   : ^^^^^^^^^                                 ^^^
 
 unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
 >unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^   ^^         ^^^^^^
+>      : ^ ^^   ^^         ^^^^^ 
 >{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { value: { readonly value: { readonly value: any; }; }; }
@@ -379,7 +379,7 @@ foo(z);  // string
 >foo(z) : string
 >       : ^^^^^^
 >foo : <T>(x: Box1<Box1<T>>) => T
->    : ^ ^^ ^^             ^^^^^^
+>    : ^ ^^ ^^             ^^^^^ 
 >z : Box2<Box2<string>>
 >  : ^^^^^^^^^^^^^^^^^^
 

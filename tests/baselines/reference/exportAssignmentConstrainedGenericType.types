@@ -7,9 +7,9 @@ import foo = require("./foo_0");
 
 var x = new foo(true); // Should error
 >x : foo<{ a: string; b: number; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^^^      ^^^^
 >new foo(true) : foo<{ a: string; b: number; }>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^      ^^^^^      ^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >true : true

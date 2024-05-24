@@ -47,7 +47,7 @@ let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak objec
 >c : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >wrong : { a: { y: string; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^              ^^^
 
 function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 >foo : <T extends object>(x: { a?: string; }, y: T & { a: boolean; }) => void
@@ -63,11 +63,11 @@ function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 
   x = y;  // Mismatched property in source intersection
 >x = y : T & { a: boolean; }
->      : ^^^^^^^^^^^^^^^^^^^
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^       ^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >y : T & { a: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^       ^^^
 }
 
 // Repro from #36637

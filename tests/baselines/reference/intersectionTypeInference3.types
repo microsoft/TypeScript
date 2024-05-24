@@ -37,27 +37,27 @@ const c1 = Array.from(a).concat(Array.from(b));
 >Array.from(a).concat(Array.from(b)) : A[]
 >                                    : ^^^
 >Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
->                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Array.from(a) : A[]
 >              : ^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >a : Set<A>
 >  : ^^^^^^
 >concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Array.from(b) : A[]
 >              : ^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >b : Set<A>
 >  : ^^^^^^
 
@@ -73,5 +73,5 @@ const c2: ReadonlyArray<A> = from();
 >from() : A[]
 >       : ^^^
 >from : <T>() => T[]
->     : ^^^^^^^^^^^^
+>     : ^ ^^^^^^^   
 

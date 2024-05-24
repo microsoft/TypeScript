@@ -1,6 +1,7 @@
 import {
     addRange,
     AffectedFileResult,
+    append,
     arrayFrom,
     arrayToMap,
     BuilderProgram,
@@ -49,6 +50,7 @@ import {
     getOptionsNameMap,
     getOwnKeys,
     getRelativePathFromDirectory,
+    getSourceFileOfNode,
     getTsBuildInfoEmitOutputFilePath,
     handleNoEmitOptions,
     HostForComputeHash,
@@ -73,10 +75,13 @@ import {
     sameMap,
     SemanticDiagnosticsBuilderProgram,
     SignatureInfo,
+    skipAlias,
     skipTypeChecking,
+    some,
     SourceFile,
     sourceFileMayBeEmitted,
     SourceMapEmitResult,
+    SymbolFlags,
     toPath,
     tryAddToSet,
     WriteFileCallback,
@@ -761,6 +766,7 @@ function handleDtsMayChangeOfAffectedFile(
 function handleDtsMayChangeOf(
     state: BuilderProgramState,
     path: Path,
+    invalidateJsFiles: boolean,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): void {
@@ -784,7 +790,10 @@ function handleDtsMayChangeOf(
                 /*useFileVersionAsSignature*/ true,
             );
             // If not dts emit, nothing more to do
-            if (getEmitDeclarations(state.compilerOptions)) {
+            if (invalidateJsFiles) {
+                addToAffectedFilesPendingEmit(state, path, getBuilderFileEmit(state.compilerOptions));
+            }
+            else if (getEmitDeclarations(state.compilerOptions)) {
                 addToAffectedFilesPendingEmit(state, path, state.compilerOptions.declarationMap ? BuilderFileEmit.AllDts : BuilderFileEmit.Dts);
             }
         }
@@ -813,6 +822,7 @@ function isChangedSignature(state: BuilderProgramState, path: Path) {
 function handleDtsMayChangeOfGlobalScope(
     state: BuilderProgramState,
     filePath: Path,
+    invalidateJsFiles: boolean,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): boolean {
@@ -823,6 +833,7 @@ function handleDtsMayChangeOfGlobalScope(
             handleDtsMayChangeOf(
                 state,
                 file.resolvedPath,
+                invalidateJsFiles,
                 cancellationToken,
                 host,
             )
@@ -855,8 +866,16 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
             const currentPath = queue.pop()!;
             if (!seenFileNamesMap.has(currentPath)) {
                 seenFileNamesMap.set(currentPath, true);
-                if (handleDtsMayChangeOfGlobalScope(state, currentPath, cancellationToken, host)) return;
-                handleDtsMayChangeOf(state, currentPath, cancellationToken, host);
+                if (
+                    handleDtsMayChangeOfGlobalScope(
+                        state,
+                        currentPath,
+                        /*invalidateJsFiles*/ false,
+                        cancellationToken,
+                        host,
+                    )
+                ) return;
+                handleDtsMayChangeOf(state, currentPath, /*invalidateJsFiles*/ false, cancellationToken, host);
                 if (isChangedSignature(state, currentPath)) {
                     const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                     queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
@@ -866,14 +885,26 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
     }
 
     const seenFileAndExportsOfFile = new Set<string>();
+    // If exported const enum, we need to ensure that js files are emitted as well since the const enum value changed
+    const invalidateJsFiles = !!affectedFile.symbol?.exports && !!forEachEntry(
+        affectedFile.symbol.exports,
+        exported => {
+            if ((exported.flags & SymbolFlags.ConstEnum) !== 0) return true;
+            const aliased = skipAlias(exported, state.program!.getTypeChecker());
+            if (aliased === exported) return false;
+            return (aliased.flags & SymbolFlags.ConstEnum) !== 0 &&
+                some(aliased.declarations, d => getSourceFileOfNode(d) === affectedFile);
+        },
+    );
     // Go through files that reference affected file and handle dts emit and semantic diagnostics for them and their references
     state.referencedMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath => {
-        if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, cancellationToken, host)) return true;
+        if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, invalidateJsFiles, cancellationToken, host)) return true;
         const references = state.referencedMap!.getKeys(exportedFromPath);
         return references && forEachKey(references, filePath =>
             handleDtsMayChangeOfFileAndExportsOfFile(
                 state,
                 filePath,
+                invalidateJsFiles,
                 seenFileAndExportsOfFile,
                 cancellationToken,
                 host,
@@ -888,20 +919,22 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
 function handleDtsMayChangeOfFileAndExportsOfFile(
     state: BuilderProgramState,
     filePath: Path,
+    invalidateJsFiles: boolean,
     seenFileAndExportsOfFile: Set<string>,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): boolean | undefined {
     if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) return undefined;
 
-    if (handleDtsMayChangeOfGlobalScope(state, filePath, cancellationToken, host)) return true;
-    handleDtsMayChangeOf(state, filePath, cancellationToken, host);
+    if (handleDtsMayChangeOfGlobalScope(state, filePath, invalidateJsFiles, cancellationToken, host)) return true;
+    handleDtsMayChangeOf(state, filePath, invalidateJsFiles, cancellationToken, host);
 
     // Remove the diagnostics of files that import this file and handle all its exports too
     state.referencedMap!.getKeys(filePath)?.forEach(referencingFilePath =>
         handleDtsMayChangeOfFileAndExportsOfFile(
             state,
             referencingFilePath,
+            invalidateJsFiles,
             seenFileAndExportsOfFile,
             cancellationToken,
             host,
@@ -990,10 +1023,13 @@ export type ProgramBuildInfoRootStartEnd = [start: ProgramBuildInfoFileId, end: 
  */
 export type ProgramBuildInfoRoot = ProgramBuildInfoRootStartEnd | ProgramBuildInfoFileId;
 /** @internal */
+export type ProgramBuildInfoResolvedRoot = [resolved: ProgramBuildInfoFileId, root: ProgramBuildInfoFileId];
+/** @internal */
 export interface ProgramMultiFileEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramMultiFileEmitBuildInfoFileInfo[];
     root: readonly ProgramBuildInfoRoot[];
+    resolvedRoot: readonly ProgramBuildInfoResolvedRoot[] | undefined;
     options: CompilerOptions | undefined;
     fileIdsList: readonly (readonly ProgramBuildInfoFileId[])[] | undefined;
     referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -1023,6 +1059,7 @@ export interface ProgramBundleEmitBuildInfo {
     fileNames: readonly string[];
     fileInfos: readonly ProgramBundleEmitBuildInfoFileInfo[];
     root: readonly ProgramBuildInfoRoot[];
+    resolvedRoot: readonly ProgramBuildInfoResolvedRoot[] | undefined;
     options: CompilerOptions | undefined;
     outSignature: EmitSignature | undefined;
     latestChangedDtsFile: string | undefined;
@@ -1047,6 +1084,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+    const rootFileNames = new Set(state.program!.getRootFileNames().map(f => toPath(f, currentDirectory, state.program!.getCanonicalFileName)));
     const root: ProgramBuildInfoRoot[] = [];
     if (state.compilerOptions.outFile) {
         // Copy all fileInfo, version and impliedFormat
@@ -1063,6 +1101,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             fileNames,
             fileInfos,
             root,
+            resolvedRoot: toResolvedRoot(),
             options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
             outSignature: state.outSignature,
             latestChangedDtsFile,
@@ -1090,7 +1129,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
                 const emitSignature = state.emitSignatures?.get(key);
                 if (emitSignature !== actualSignature) {
-                    (emitSignatures ||= []).push(
+                    emitSignatures = append(
+                        emitSignatures,
                         emitSignature === undefined ?
                             fileId : // There is no emit, encode as false
                             // fileId, signature: emptyArray if signature only differs in dtsMap option than our own compilerOptions otherwise EmitSignature
@@ -1133,7 +1173,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
                 const file = state.program!.getSourceFileByPath(path);
                 if (!file || !sourceFileMayBeEmitted(file, state.program!)) continue;
                 const fileId = toFileId(path), pendingEmit = state.affectedFilesPendingEmit.get(path)!;
-                (affectedFilesPendingEmit ||= []).push(
+                affectedFilesPendingEmit = append(
+                    affectedFilesPendingEmit,
                     pendingEmit === fullEmitForOptions ?
                         fileId : // Pending full emit per options
                         pendingEmit === BuilderFileEmit.Dts ?
@@ -1147,7 +1188,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
     let changeFileSet: ProgramBuildInfoFileId[] | undefined;
     if (state.changedFilesSet.size) {
         for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
-            (changeFileSet ||= []).push(toFileId(path));
+            changeFileSet = append(changeFileSet, toFileId(path));
         }
     }
     const emitDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics(state.emitDiagnosticsPerFile);
@@ -1155,6 +1196,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         fileNames,
         fileInfos,
         root,
+        resolvedRoot: toResolvedRoot(),
         options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions),
         fileIdsList,
         referencedMap,
@@ -1189,8 +1231,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         const key = fileIds.join();
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
-            (fileIdsList ||= []).push(fileIds);
-            (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
+            fileIdsList = append(fileIdsList, fileIds);
+            (fileNamesToFileIdListId ??= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
         }
         return fileIdListId;
     }
@@ -1212,6 +1254,17 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         // Convert lastButOne as [lastButOne, fileId]
         root[root.length - 2] = [lastButOne, fileId];
         return root.length = root.length - 1;
+    }
+
+    function toResolvedRoot(): ProgramBuildInfoResolvedRoot[] | undefined {
+        let result: ProgramBuildInfoResolvedRoot[] | undefined;
+        rootFileNames.forEach(path => {
+            const file = state.program!.getSourceFileByPath(path);
+            if (file && path !== file.resolvedPath) {
+                result = append(result, [toFileId(file.resolvedPath), toFileId(path)]);
+            }
+        });
+        return result;
     }
 
     /**
@@ -1253,7 +1306,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         if (diagnostics) {
             for (const key of arrayFrom(diagnostics.keys()).sort(compareStringsCaseSensitive)) {
                 const value = diagnostics.get(key)!;
-                (result ||= []).push(
+                result = append(
+                    result,
                     value.length ?
                         [
                             toFileId(key),
@@ -1909,7 +1963,9 @@ export function getBuildInfoFileVersionMap(
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();
     let rootIndex = 0;
-    const roots: Path[] = [];
+    // Root name to resolved
+    const roots = new Map<Path, Path | undefined>();
+    const resolvedRoots = new Map(program.resolvedRoot);
     program.fileInfos.forEach((fileInfo, index) => {
         const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
         const version = isString(fileInfo) ? fileInfo : fileInfo.version;
@@ -1919,17 +1975,27 @@ export function getBuildInfoFileVersionMap(
             const fileId = (index + 1) as ProgramBuildInfoFileId;
             if (isArray(current)) {
                 if (current[0] <= fileId && fileId <= current[1]) {
-                    roots.push(path);
+                    addRoot(fileId, path);
                     if (current[1] === fileId) rootIndex++;
                 }
             }
             else if (current === fileId) {
-                roots.push(path);
+                addRoot(fileId, path);
                 rootIndex++;
             }
         }
     });
     return { fileInfos, roots };
+
+    function addRoot(fileId: ProgramBuildInfoFileId, path: Path) {
+        const root = resolvedRoots.get(fileId);
+        if (root) {
+            roots.set(toPath(program.fileNames[root - 1], buildInfoDirectory, getCanonicalFileName), path);
+        }
+        else {
+            roots.set(path, undefined);
+        }
+    }
 }
 
 /** @internal */

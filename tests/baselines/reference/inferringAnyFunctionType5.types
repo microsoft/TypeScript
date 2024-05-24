@@ -22,7 +22,7 @@ var v = f({ q: x => x });
 >f({ q: x => x }) : { q: (x: number) => number; }
 >                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends { q: (p1: number) => number; }>(p: T) => T
->  : ^ ^^^^^^^^^                              ^^ ^^ ^^^^^^
+>  : ^ ^^^^^^^^^                              ^^ ^^ ^^^^^ 
 >{ q: x => x } : { q: (x: number) => number; }
 >              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >q : (x: number) => number

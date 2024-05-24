@@ -161,8 +161,8 @@ function referencedInInferredType({ name: alias }: Named) {
 >      : ^^^^^^
 
     return null! as Named2
->null! as Named2 : { name: string; }
->                : ^^^^^^^^^^^^^^^^^
+>null! as Named2 : { name: typeof alias; }
+>                : ^^^^^^^^            ^^^
 >null! : null
 >      : ^^^^
 }
@@ -247,11 +247,11 @@ class NotReferencedClass {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
     }
@@ -267,11 +267,11 @@ class NotReferencedClass {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
     }
@@ -291,11 +291,11 @@ class ReferencedInCodeClas {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
 	}
@@ -311,11 +311,11 @@ class ReferencedInCodeClas {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
     }
@@ -331,11 +331,11 @@ class ReferencedInCodeClas {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
     }
@@ -359,11 +359,11 @@ class ReferencedInSignartureClass {
 >console.log(alias) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >alias : string
 >      : ^^^^^^
 	}

@@ -138,11 +138,11 @@ module Foo.Bar {
 >greeters.push(new Greeter(restGreetings[i])) : number
 >                                             : ^^^^^^
 >greeters.push : (...items: Greeter[]) => number
->              : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^^^^^^^^^^^^^^^      
 >greeters : Greeter[]
 >         : ^^^^^^^^^
 >push : (...items: Greeter[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >new Greeter(restGreetings[i]) : Greeter
 >                              : ^^^^^^^
 >Greeter : typeof Greeter

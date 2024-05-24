@@ -35,7 +35,7 @@ function x3(a: any, cb: (x: number) => number) {
 >cb(a) : number
 >      : ^^^^^^
 >cb : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >a : any
 >  : ^^^
 }

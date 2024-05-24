@@ -23,7 +23,7 @@ function func1() {
 >func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^                                             
 >{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : ("aa" | "bb")[]
@@ -47,7 +47,7 @@ function func1() {
 >func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^                                             
 >{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : ("aa" | "bb")[]
@@ -78,7 +78,7 @@ function func2() {
 >func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^                                             
 >{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : ("aa" | "bb")[]
@@ -113,7 +113,7 @@ function func3() {
 >func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
->     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^              ^^^^^                                             
 >{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : ("aa" | "bb")[]

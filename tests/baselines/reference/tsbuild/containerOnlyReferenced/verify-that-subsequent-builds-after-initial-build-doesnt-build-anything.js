@@ -95,24 +95,24 @@ export const x = 10;
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/folder/tsconfig.json
     * src/src/folder2/tsconfig.json
     * src/src/tsconfig.json
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/src/folder/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/folder/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/src/folder2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/folder2/tsconfig.json'...
 
-[[90m12:00:33 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:34 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -317,18 +317,18 @@ Input::
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:40 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/folder/tsconfig.json
     * src/src/folder2/tsconfig.json
     * src/src/tsconfig.json
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:41 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than output 'src/src/folder/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than output 'src/src/folder/tsconfig.tsbuildinfo'
 
-[[90m12:00:42 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than output 'src/src/folder2/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than output 'src/src/folder2/tsconfig.tsbuildinfo'
 
-[[90m12:00:43 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

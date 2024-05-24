@@ -144,15 +144,15 @@ export function createZoo(): Array<Dog> {
 
 Output::
 /a/lib/tsc --b --verbose
-[[90m12:00:25 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:26 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 [96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
@@ -205,13 +205,13 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:33 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:00:34 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
 
-[[90m12:00:35 AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
+[[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
 
-[[90m12:00:36 AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
 
 
 Found 7 errors.

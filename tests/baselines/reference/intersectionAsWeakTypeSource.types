@@ -67,7 +67,7 @@ const wrapped = create({ first: { view: 0, styleMedia: "???" } });
 >create({ first: { view: 0, styleMedia: "???" } }) : { first: Brand<{ view: number; styleMedia: string; }>; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]>; }
->       : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^                                
 >{ first: { view: 0, styleMedia: "???" } } : { first: { view: number; styleMedia: string; }; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >first : { view: number; styleMedia: string; }

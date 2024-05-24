@@ -61,9 +61,9 @@ export type Obj = {
 
 export const processedInternally1 = wrappedTest1({} as Obj, "a");
 >processedInternally1 : { readonly foo: string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^      ^^^
 >wrappedTest1({} as Obj, "a") : { readonly foo: string; }
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^^^^^^^^^^^^^^^^      ^^^
 >wrappedTest1 : <T, K extends string>(obj: T, k: K) => Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never
 >             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} as Obj : Obj

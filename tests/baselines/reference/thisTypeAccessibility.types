@@ -95,7 +95,7 @@ MyClass.prototype.extension1 = function (this: MyClass, p: number) {
 >MyClass.prototype.extension1 = function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
 >                                                                                                                                                                                   : ^    ^^       ^^ ^^      ^^^^^^^^^
 >MyClass.prototype.extension1 : (p: number) => void
->                             : ^ ^^      ^^^^^^^^^
+>                             : ^ ^^      ^^^^^    
 >MyClass.prototype : MyClass
 >                  : ^^^^^^^
 >MyClass : typeof MyClass
@@ -103,7 +103,7 @@ MyClass.prototype.extension1 = function (this: MyClass, p: number) {
 >prototype : MyClass
 >          : ^^^^^^^
 >extension1 : (p: number) => void
->           : ^ ^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^    
 >function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
 >                                                                                                                                                    : ^    ^^       ^^ ^^      ^^^^^^^^^
 >this : MyClass
@@ -188,7 +188,7 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 >MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
 >                                                                                                                                                                                                : ^ ^^^^^^^^^       ^^    ^^ ^^ ^^      ^^^^^^^^^
 >MyClass.prototype.extension2 : (p: number) => void
->                             : ^ ^^      ^^^^^^^^^
+>                             : ^ ^^      ^^^^^    
 >MyClass.prototype : MyClass
 >                  : ^^^^^^^
 >MyClass : typeof MyClass
@@ -196,7 +196,7 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 >prototype : MyClass
 >          : ^^^^^^^
 >extension2 : (p: number) => void
->           : ^ ^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^    
 >function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(this: T, p: number) => void
 >                                                                                                                                                                 : ^ ^^^^^^^^^       ^^    ^^ ^^ ^^      ^^^^^^^^^
 >this : T
@@ -362,7 +362,7 @@ MyClass.prototype.extension3 = extension3;
 >MyClass.prototype.extension3 = extension3 : <T extends MyClass>(this: T, p: number) => void
 >                                          : ^ ^^^^^^^^^       ^^    ^^ ^^ ^^      ^^^^^^^^^
 >MyClass.prototype.extension3 : (p: number) => void
->                             : ^ ^^      ^^^^^^^^^
+>                             : ^ ^^      ^^^^^    
 >MyClass.prototype : MyClass
 >                  : ^^^^^^^
 >MyClass : typeof MyClass
@@ -370,7 +370,7 @@ MyClass.prototype.extension3 = extension3;
 >prototype : MyClass
 >          : ^^^^^^^
 >extension3 : (p: number) => void
->           : ^ ^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^    
 >extension3 : <T extends MyClass>(this: T, p: number) => void
 >           : ^ ^^^^^^^^^       ^^    ^^ ^^ ^^      ^^^^^^^^^
 

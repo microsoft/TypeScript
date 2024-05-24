@@ -20,7 +20,7 @@ forceMatch({
 >forceMatch({  [testD()]: "d",}) : void
 >                                : ^^^^
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
->           : ^ ^^       ^^                          ^^^^^^^^^
+>           : ^ ^^       ^^                          ^^^^^    
 >{  [testD()]: "d",} : { d: "d"; }
 >                    : ^^^^^^^^^^^
 
@@ -30,7 +30,7 @@ forceMatch({
 >testD() : "d"
 >        : ^^^
 >testD : () => "d"
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >"d" : "d"
 >    : ^^^
 
@@ -54,7 +54,7 @@ forceMatch2({
 >forceMatch2({  [testD()]: ({ key }) => {},}) : void
 >                                             : ^^^^
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
->            : ^ ^^       ^^                                                       ^^^^^^^^^
+>            : ^ ^^       ^^                                                       ^^^^^    
 >{  [testD()]: ({ key }) => {},} : { d: ({ key }: { key: "d"; }) => void; }
 >                                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -64,7 +64,7 @@ forceMatch2({
 >testD() : "d"
 >        : ^^^
 >testD : () => "d"
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >({ key }) => {} : ({ key }: { key: "d"; }) => void
 >                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "d"
@@ -135,7 +135,7 @@ const unexpectedlyFailingExample: Mapped = {
 >propSelector('bar') : "bar"
 >                    : ^^^^^
 >propSelector : <propName extends string>(propName: propName) => propName
->             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^^^^^^^^^
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >'bar' : "bar"
 >      : ^^^^^
 >(arg) => 51345 : (arg: number) => number

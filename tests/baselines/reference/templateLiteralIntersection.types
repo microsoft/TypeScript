@@ -68,7 +68,7 @@ type MixD<T extends string> =
 
 type OriginD = `${MixD<A & { foo: string }> & { foo: string }}`;
 >OriginD : "a" & { foo: string; } & { foo: string; } & { foo: string; }
->        : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>        : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
 >foo : string

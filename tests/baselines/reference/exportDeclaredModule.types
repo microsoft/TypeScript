@@ -11,11 +11,11 @@ var x: number = foo1.b();
 >foo1.b() : number
 >         : ^^^^^^
 >foo1.b : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >foo1 : typeof foo1
 >     : ^^^^^^^^^^^
 >b : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
 === foo1.ts ===
 declare module M1 {

@@ -1253,7 +1253,7 @@ if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
 >isBigInt(zeroOrBigOne) : bigint
 >                       : ^^^^^^
 >isBigInt : (x: 0n | 1n) => bigint
->         : ^ ^^       ^^^^^^^^^^^
+>         : ^ ^^       ^^^^^      
 >zeroOrBigOne : 1n
 >             : ^^
 
@@ -1261,7 +1261,7 @@ else isNumber(zeroOrBigOne);
 >isNumber(zeroOrBigOne) : number
 >                       : ^^^^^^
 >isNumber : (x: 0 | 1) => number
->         : ^ ^^     ^^^^^^^^^^^
+>         : ^ ^^     ^^^^^      
 >zeroOrBigOne : 0
 >             : ^
 

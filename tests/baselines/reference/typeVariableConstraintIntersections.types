@@ -154,7 +154,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -166,7 +166,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -178,7 +178,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isC(x) : boolean
 >       : ^^^^^^^
 >isC : (x: any) => x is "c"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -192,13 +192,13 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "a" | "b"
 >  : ^^^^^^^^^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "b"
 >  : ^^^
 
@@ -216,13 +216,13 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "a" | "b"
 >  : ^^^^^^^^^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^ ^^   ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^        
 >x : "b"
 >  : ^^^
 
@@ -344,7 +344,7 @@ function handleOption<K extends Options['kind']>(option: Options & { kind: K }):
 >option.kind : K
 >            : ^
 >option : Options & { kind: K; }
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
 >kind : K
 >     : ^
 
@@ -364,7 +364,7 @@ function handleOption<K extends Options['kind']>(option: Options & { kind: K }):
 >handler : OptionHandlers[K]
 >        : ^^^^^^^^^^^^^^^^^
 >option : Options & { kind: K; }
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
 
 };
 

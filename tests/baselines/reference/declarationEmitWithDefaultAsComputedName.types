@@ -23,7 +23,7 @@ export default createExperiment({
 >createExperiment({    name: "foo"}) : Experiment<"foo">
 >                                    : ^^^^^^^^^^^^^^^^^
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
->                 : ^    ^^^^^^^^^      ^^       ^^                ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^    ^^^^^^^^^      ^^       ^^                ^^^^^                
 >{    name: "foo"} : { name: "foo"; }
 >                  : ^^^^^^^^^^^^^^^^
 

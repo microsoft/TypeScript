@@ -35,11 +35,11 @@ cases(fn(opts => { }));
 >cases(fn(opts => { })) : void
 >                       : ^^^^
 >cases : (tester: Tester) => void
->      : ^      ^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^    
 >fn(opts => { }) : Mock<[opts: any]>
 >                : ^^^^^^^^^^^^^^^^^
 >fn : <Y extends any[]>(implementation?: (...args: Y) => any) => Mock<Y>
->   : ^ ^^^^^^^^^     ^^              ^^^                   ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^     ^^              ^^^                   ^^^^^       
 >opts => { } : (opts: any) => void
 >            : ^    ^^^^^^^^^^^^^^
 >opts : any

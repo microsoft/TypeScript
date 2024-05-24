@@ -451,6 +451,7 @@ Before running Timeout callback:: count: 2
 3: timerToInvalidateFailedLookupResolutions
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -464,6 +465,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options
@@ -821,6 +823,7 @@ Before running Timeout callback:: count: 2
 8: timerToInvalidateFailedLookupResolutions
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -834,6 +837,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options

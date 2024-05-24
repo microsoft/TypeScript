@@ -55,11 +55,11 @@ cbThing(type => {
 >Date.now() : number
 >           : ^^^^^^
 >Date.now : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         type,
 >type : string
@@ -76,11 +76,11 @@ const Thing = Object.freeze({
 >Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ a: "thing"; b: "chill"; }>
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
->              : ^^^ ^^^^^^^^^        ^^ ^^ ^^^^^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
->       : ^^^ ^^^^^^^^^        ^^ ^^ ^^^^^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >{    a: "thing",    b: "chill"} : { a: "thing"; b: "chill"; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -138,7 +138,7 @@ function cbThing(x) {}
 >cbThing : (x: (x: Thing) => void) => void
 >        : ^ ^^                  ^^^^^^^^^
 >x : (x: Thing) => void
->  : ^ ^^     ^^^^^^^^^
+>  : ^ ^^     ^^^^^    
 
 exports.cbThing = cbThing;
 >exports.cbThing = cbThing : (x: (x: Thing) => void) => void

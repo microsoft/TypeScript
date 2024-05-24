@@ -120,7 +120,7 @@ class C {
 >foo(this) : string
 >          : ^^^^^^
 >foo : (x: A) => string
->    : ^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^      
 >this : this
 >     : ^^^^
 }

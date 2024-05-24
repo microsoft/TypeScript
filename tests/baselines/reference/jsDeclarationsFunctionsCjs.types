@@ -104,7 +104,7 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
 >                                                                       : ^ ^^      ^^ ^^      ^^^^^      
 >module.exports.d : (a: number, b: number) => string
->                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^ ^^      ^^^^^      
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -112,11 +112,11 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >d : (a: number, b: number) => string
->  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^      
 >function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
->                                                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>                                                    : ^ ^^      ^^ ^^      ^^^^^      
 >d : (a: number, b: number) => string
->  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : number
@@ -133,7 +133,7 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >module.exports.e = function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
 >                                                                       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >module.exports.e : <T, U>(a: T, b: U) => T & U
->                 : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -141,11 +141,11 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >e : <T, U>(a: T, b: U) => T & U
->  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
->                                                    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>                                                    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >e : <T, U>(a: T, b: U) => T & U
->  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >a : T
 >  : ^
 >b : U
@@ -216,7 +216,7 @@ function g(a, b) {
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >  : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >b : { y: { (): void; cat: string; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -226,7 +226,7 @@ function g(a, b) {
 >a.x : string
 >    : ^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 >b.y() : void
@@ -263,7 +263,7 @@ function hh(a, b) {
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
 >   : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >b : { y: { (): void; cat: string; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -273,7 +273,7 @@ function hh(a, b) {
 >a.x : string
 >    : ^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 >b.y() : void
