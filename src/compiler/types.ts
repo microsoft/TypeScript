@@ -6139,6 +6139,8 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    requestedExternalEmitHelpers?: ExternalEmitHelpers; // External emit helpers already requested for this node.
+    externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
 }
 
 /** @internal */

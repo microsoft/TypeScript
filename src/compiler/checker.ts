@@ -1462,8 +1462,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var cancellationToken: CancellationToken | undefined;
 
     var requestedExternalEmitHelperNames = new Set<string>();
-    var requestedExternalEmitHelpers: ExternalEmitHelpers;
-    var externalHelpersModule: Symbol;
     var scanner: Scanner | undefined;
 
     var Symbol = objectAllocator.getSymbolConstructor();
@@ -49508,12 +49506,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
-        if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
-            const sourceFile = getSourceFileOfNode(location);
-            if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
+        const sourceFile = getSourceFileOfNode(location);
+        if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
+            const links = getNodeLinks(sourceFile);
+            links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
+            if ((links.requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
                 const helpersModule = resolveHelpersModule(sourceFile, location);
                 if (helpersModule !== unknownSymbol) {
-                    const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
+                    const uncheckedHelpers = helpers & ~links.requestedExternalEmitHelpers;
                     for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
                         if (uncheckedHelpers & helper) {
                             for (const name of getHelperNames(helper)) {
@@ -49543,7 +49543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                requestedExternalEmitHelpers |= helpers;
+                links.requestedExternalEmitHelpers |= helpers;
             }
         }
     }
@@ -49606,10 +49606,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function resolveHelpersModule(file: SourceFile, errorNode: Node) {
-        if (!externalHelpersModule) {
-            externalHelpersModule = resolveExternalModule(getImportHelpersImportSpecifier(file), externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
+        const links = getNodeLinks(file);
+        if (!links.externalHelpersModule) {
+            links.externalHelpersModule = resolveExternalModule(getImportHelpersImportSpecifier(file), externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
         }
-        return externalHelpersModule;
+        return links.externalHelpersModule;
     }
 
     // GRAMMAR CHECKING

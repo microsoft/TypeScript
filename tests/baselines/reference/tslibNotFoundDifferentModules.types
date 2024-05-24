@@ -29,7 +29,9 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
 >          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
+>        : ^^^
 >_arguments : any
+>           : ^^^
 >P : Function
 >  : ^^^^^^^^
 >generator : Function
