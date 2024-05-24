@@ -1,4 +1,4 @@
-h//// [tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts] ////
+//// [tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts] ////
 
 === global.d.ts ===
 declare global {
