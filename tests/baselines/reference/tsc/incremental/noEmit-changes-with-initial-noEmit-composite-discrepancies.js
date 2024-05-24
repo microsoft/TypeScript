@@ -78,7 +78,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -176,7 +175,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",

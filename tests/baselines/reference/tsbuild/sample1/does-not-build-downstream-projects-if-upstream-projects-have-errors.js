@@ -249,7 +249,7 @@ function multiply(a, b) { return a * b; }
 }
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-11192027815-import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.muitply();\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n","impliedFormat":1}],"root":[4],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,[4,[{"file":"./index.ts","start":85,"length":7,"code":2339,"category":1,"messageText":"Property 'muitply' does not exist on type 'typeof import(\"/user/username/projects/sample1/core/index\")'."}]]],"affectedFilesPendingEmit":[4],"emitSignatures":[4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-11192027815-import * as c from '../core/index';\nexport function getSecondsInDay() {\n    return c.muitply();\n}\nimport * as mod from '../core/anotherModule';\nexport const m = mod;\n","impliedFormat":1}],"root":[4],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,[4,[{"start":85,"length":7,"code":2339,"category":1,"messageText":"Property 'muitply' does not exist on type 'typeof import(\"/user/username/projects/sample1/core/index\")'."}]]],"affectedFilesPendingEmit":[4],"emitSignatures":[4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -332,7 +332,6 @@ function multiply(a, b) { return a * b; }
         "./index.ts",
         [
           {
-            "file": "./index.ts",
             "start": 85,
             "length": 7,
             "code": 2339,
@@ -353,7 +352,7 @@ function multiply(a, b) { return a * b; }
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1615
+  "size": 1595
 }
 
 

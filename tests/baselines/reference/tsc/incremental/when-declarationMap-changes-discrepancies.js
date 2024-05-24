@@ -46,7 +46,6 @@ CleanBuild:
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 1,
             "code": 2322,
@@ -107,7 +106,6 @@ IncrementalBuild:
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 1,
             "code": 2322,

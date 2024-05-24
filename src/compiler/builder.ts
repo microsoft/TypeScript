@@ -102,7 +102,7 @@ export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation
 export interface ReusableDiagnosticRelatedInformation {
     category: DiagnosticCategory;
     code: number;
-    file: string | undefined;
+    file: string | undefined | false;
     start: number | undefined;
     length: number | undefined;
     messageText: string | ReusableDiagnosticMessageChain;
@@ -384,7 +384,7 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
                 (state.emitDiagnosticsPerFile ??= new Map()).set(
                     sourceFilePath,
                     oldState!.hasReusableDiagnostic ?
-                        convertToDiagnostics(emitDiagnostics as readonly ReusableDiagnostic[], newProgram) :
+                        convertToDiagnostics(emitDiagnostics as readonly ReusableDiagnostic[], sourceFilePath, newProgram) :
                         repopulateDiagnostics(emitDiagnostics as readonly Diagnostic[], newProgram),
                 );
             }
@@ -399,7 +399,7 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
                     state.semanticDiagnosticsPerFile!.set(
                         sourceFilePath,
                         oldState!.hasReusableDiagnostic ?
-                            convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram) :
+                            convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], sourceFilePath, newProgram) :
                             repopulateDiagnostics(diagnostics as readonly Diagnostic[], newProgram),
                     );
                     (state.semanticDiagnosticsFromOldState ??= new Set()).add(sourceFilePath);
@@ -516,11 +516,11 @@ function convertOrRepopulateDiagnosticMessageChainArray<T extends DiagnosticMess
     return sameMap(array, chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo));
 }
 
-function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
+function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], diagnosticFilePath: Path, newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return emptyArray;
     let buildInfoDirectory: string | undefined;
     return diagnostics.map(diagnostic => {
-        const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPathInBuildInfoDirectory);
+        const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, diagnosticFilePath, newProgram, toPathInBuildInfoDirectory);
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
         result.reportsDeprecated = diagnostic.reportDeprecated;
         result.source = diagnostic.source;
@@ -528,7 +528,7 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
         const { relatedInformation } = diagnostic;
         result.relatedInformation = relatedInformation ?
             relatedInformation.length ?
-                relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPathInBuildInfoDirectory)) :
+                relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, diagnosticFilePath, newProgram, toPathInBuildInfoDirectory)) :
                 [] :
             undefined;
         return result;
@@ -540,9 +540,11 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
     }
 }
 
-function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
+function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, diagnosticFilePath: Path, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
     const { file } = diagnostic;
-    const sourceFile = file ? newProgram.getSourceFileByPath(toPath(file)) : undefined;
+    const sourceFile = file !== false ?
+        newProgram.getSourceFileByPath(file ? toPath(file) : diagnosticFilePath) :
+        undefined;
     return {
         ...diagnostic,
         file: sourceFile,
@@ -1311,7 +1313,7 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
                     value.length ?
                         [
                             toFileId(key),
-                            convertToReusableDiagnostics(value),
+                            convertToReusableDiagnostics(value, key),
                         ] :
                         toFileId(key),
                 );
@@ -1320,10 +1322,10 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         return result;
     }
 
-    function convertToReusableDiagnostics(diagnostics: readonly Diagnostic[]): readonly ReusableDiagnostic[] {
+    function convertToReusableDiagnostics(diagnostics: readonly Diagnostic[], diagnosticFilePath: Path): readonly ReusableDiagnostic[] {
         Debug.assert(!!diagnostics.length);
         return diagnostics.map(diagnostic => {
-            const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic);
+            const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic, diagnosticFilePath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportDeprecated = diagnostic.reportsDeprecated;
             result.source = diagnostic.source;
@@ -1331,18 +1333,22 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
-                    relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r)) :
+                    relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r, diagnosticFilePath)) :
                     [] :
                 undefined;
             return result;
         });
     }
 
-    function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation): ReusableDiagnosticRelatedInformation {
+    function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation, diagnosticFilePath: Path): ReusableDiagnosticRelatedInformation {
         const { file } = diagnostic;
         return {
             ...diagnostic,
-            file: file ? relativeToBuildInfo(file.resolvedPath) : undefined,
+            file: file ?
+                file.resolvedPath === diagnosticFilePath ?
+                    undefined :
+                    relativeToBuildInfo(file.resolvedPath) :
+                false,
             messageText: isString(diagnostic.messageText) ? diagnostic.messageText : convertToReusableDiagnosticMessageChain(diagnostic.messageText),
         };
     }

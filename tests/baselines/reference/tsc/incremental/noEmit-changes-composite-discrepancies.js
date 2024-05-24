@@ -78,7 +78,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -176,7 +175,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -271,7 +269,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -369,7 +366,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -460,7 +456,6 @@ CleanBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -484,7 +479,6 @@ CleanBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -508,7 +502,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -602,7 +595,6 @@ IncrementalBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -626,7 +618,6 @@ IncrementalBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -650,7 +641,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -759,7 +749,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -857,7 +846,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -952,7 +940,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1050,7 +1037,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1141,7 +1127,6 @@ CleanBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1165,7 +1150,6 @@ CleanBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1189,7 +1173,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1283,7 +1266,6 @@ IncrementalBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1307,7 +1289,6 @@ IncrementalBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1331,7 +1312,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1422,7 +1402,6 @@ CleanBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1446,7 +1425,6 @@ CleanBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1470,7 +1448,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1564,7 +1541,6 @@ IncrementalBuild:
         "./src/directuse.ts",
         [
           {
-            "file": "./src/directuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1588,7 +1564,6 @@ IncrementalBuild:
         "./src/indirectuse.ts",
         [
           {
-            "file": "./src/indirectuse.ts",
             "start": 76,
             "length": 4,
             "code": 2551,
@@ -1612,7 +1587,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1707,7 +1681,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1805,7 +1778,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -1914,7 +1886,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -2012,7 +1983,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -2107,7 +2077,6 @@ CleanBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
@@ -2205,7 +2174,6 @@ IncrementalBuild:
         "./src/nochangefilewithemitspecificerror.ts",
         [
           {
-            "file": "./src/nochangefilewithemitspecificerror.ts",
             "start": 18,
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",

@@ -33,7 +33,6 @@ CleanBuild:
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 3,
             "code": 2322,
@@ -115,7 +114,6 @@ CleanBuild:
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 3,
             "code": 2322,
