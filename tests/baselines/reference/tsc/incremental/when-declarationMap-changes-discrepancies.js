@@ -39,14 +39,11 @@ CleanBuild:
       "declarationMap": true,
       "noEmitOnError": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 1,
             "code": 2322,
@@ -54,8 +51,7 @@ CleanBuild:
             "messageText": "Type '10' is not assignable to type '20'."
           }
         ]
-      ],
-      "./b.ts"
+      ]
     ],
     "emitSignatures": [
       "./a.ts",
@@ -100,14 +96,11 @@ IncrementalBuild:
       "declarationMap": true,
       "noEmitOnError": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 6,
             "length": 1,
             "code": 2322,
@@ -115,8 +108,7 @@ IncrementalBuild:
             "messageText": "Type '10' is not assignable to type '20'."
           }
         ]
-      ],
-      "./b.ts"
+      ]
     ],
     "emitSignatures": [
       [

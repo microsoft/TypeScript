@@ -135,7 +135,7 @@ export * from "./session";
 
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -202,15 +202,10 @@ export * from "./session";
         "../../src/pure/session.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../src/pure/index.ts",
-      "../../src/pure/session.ts"
-    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1115
+  "size": 1078
 }
 
 //// [/user/username/projects/reexport/out/main/index.js]
@@ -365,7 +360,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -431,15 +426,10 @@ export interface Session {
         "../../src/pure/session.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../src/pure/index.ts",
-      "../../src/pure/session.ts"
-    ],
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1037
+  "size": 1000
 }
 
 
@@ -563,7 +553,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -630,15 +620,10 @@ export interface Session {
         "../../src/pure/session.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../src/pure/index.ts",
-      "../../src/pure/session.ts"
-    ],
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1117
+  "size": 1080
 }
 
 
