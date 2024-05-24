@@ -136,11 +136,12 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
     }
 }
 
-export type ReadableProgramBuildInfoDiagnostic = [string, "not cached or not changed"] | [string, readonly ts.ReusableDiagnostic[]];
-export type ReadableProgramBuildInfoEmitDiagnostic = [string, readonly ts.ReusableDiagnostic[]];
+export type ReadableProgramBuildInfoDiagnosticOfFile = [file: string, diagnostics: readonly ts.ReusableDiagnostic[]];
+export type ReadableProgramBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableProgramBuildInfoDiagnosticOfFile;
+export type ReadableProgramBuildInfoEmitDiagnostic = ReadableProgramBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
-export type ReadableProgramBuildInfoEmitSignature = string | [string, ts.EmitSignature | []];
+export type ReadableProgramBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];
 export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impliedFormat"> & {
     impliedFormat: string | undefined;
     original: T | undefined;

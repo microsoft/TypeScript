@@ -984,11 +984,13 @@ export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: a
 /** @internal */
 export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any; };
 /** @internal */
+export type ProgramBuildInfoDiagnosticOfFile = [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
+/** @internal */
 export type ProgramBuildInfoDiagnostic =
     | ProgramBuildInfoFileId // File is not in changedSet and still doesnt have cached diagnostics
-    | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]]; // Diagnostics for file
+    | ProgramBuildInfoDiagnosticOfFile; // Diagnostics for file
 /** @internal */
-export type ProgramBuildInfoEmitDiagnostic = [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]]; // Diagnostics for the file
+export type ProgramBuildInfoEmitDiagnostic = ProgramBuildInfoDiagnosticOfFile; // Diagnostics for the file
 
 /**
  * fileId if pending emit is same as what compilerOptions suggest
