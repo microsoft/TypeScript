@@ -994,7 +994,10 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
-    // Maps a file name to duration in milliseconds of semantic checking
+    /**
+     * Maps a file path to duration in milliseconds of full semantic checking.
+     * Used for deciding whether to do a region semantic check.
+     */
     private semanticCheckPerformance: Map<NormalizedPath, number>;
 
     private diagnosticsTime: [number, number] | undefined;
@@ -1303,8 +1306,9 @@ export class Session<TMessage = string> implements EventSender {
     // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
     /** @internal */
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.getLineCount();
         const perf = this.semanticCheckPerformance.get(file);
-        return !!perf && perf > 1000;
+        return !!(lineCount && lineCount > 500 && (!perf || perf > 200));
     }
 
     /** @internal */

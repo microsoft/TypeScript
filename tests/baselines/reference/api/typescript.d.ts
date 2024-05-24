@@ -2720,6 +2720,7 @@ declare namespace ts {
             lineOffsetToPosition(line: number, offset: number): number;
             positionToLineOffset(position: number): protocol.Location;
             isJavaScript(): boolean;
+            getLineCount(): number;
         }
         interface InstallPackageOptionsWithProject extends InstallPackageOptions {
             projectName: string;
@@ -3428,6 +3429,10 @@ declare namespace ts {
             private suppressDiagnosticEvents?;
             private eventHandler;
             private readonly noGetErrOnBackgroundUpdate?;
+            /**
+             * Maps a file path to duration in milliseconds of full semantic checking.
+             * Used for deciding whether to do a region semantic check.
+             */
             private semanticCheckPerformance;
             private diagnosticsTime;
             constructor(opts: SessionOptions);

@@ -734,6 +734,10 @@ export class ScriptInfo {
             this.sourceMapFilePath = undefined;
         }
     }
+
+    getLineCount(): number {
+        return this.textStorage.getLineInfo().getLineCount();
+    }
 }
 
 function failIfInvalidPosition(position: number) {
