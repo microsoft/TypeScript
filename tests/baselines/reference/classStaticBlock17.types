@@ -54,7 +54,7 @@ class A {
 >friendA = {      getX(obj) { return obj.#x },      setX(obj, value) { obj.#x = value }    } : { getX(obj: A): number; setX(obj: A, value: number): void; }
 >                                                                                            : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^     ^^^^^^^^^^^^^^^^^^
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
->        : ^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >{      getX(obj) { return obj.#x },      setX(obj, value) { obj.#x = value }    } : { getX(obj: A): number; setX(obj: A, value: number): void; }
 >                                                                                  : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^     ^^^^^^^^^^^^^^^^^^
 
@@ -102,11 +102,11 @@ class B {
 >friendA.getX(a) : number
 >                : ^^^^^^
 >friendA.getX : (o: A) => number
->             : ^ ^^ ^^^^^^^^^^^
+>             : ^ ^^ ^^^^^      
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
->        : ^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >getX : (o: A) => number
->     : ^ ^^ ^^^^^^^^^^^
+>     : ^ ^^ ^^^^^      
 >a : A
 >  : ^
 
@@ -114,11 +114,11 @@ class B {
 >friendA.setX(a, x + 1) : void
 >                       : ^^^^
 >friendA.setX : (o: A, v: number) => void
->             : ^ ^^ ^^ ^^      ^^^^^^^^^
+>             : ^ ^^ ^^ ^^      ^^^^^    
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
->        : ^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >setX : (o: A, v: number) => void
->     : ^ ^^ ^^ ^^      ^^^^^^^^^
+>     : ^ ^^ ^^ ^^      ^^^^^    
 >a : A
 >  : ^
 >x + 1 : number

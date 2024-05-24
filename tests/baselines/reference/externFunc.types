@@ -3,7 +3,7 @@
 === externFunc.ts ===
 declare function parseInt(s:string):number;
 >parseInt : { (string: string, radix?: number): number; (s: string): number; }
->         : ^^^      ^^      ^^     ^^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>         : ^^^      ^^      ^^     ^^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -11,7 +11,7 @@ parseInt("2");
 >parseInt("2") : number
 >              : ^^^^^^
 >parseInt : { (string: string, radix?: number): number; (s: string): number; }
->         : ^^^      ^^      ^^     ^^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>         : ^^^      ^^      ^^     ^^^      ^^^      ^^^ ^^      ^^^      ^^^
 >"2" : "2"
 >    : ^^^
 

@@ -6,13 +6,13 @@
 interface A {
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^ ^^    ^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^ ^^    ^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : string
 >  : ^^^^^^
 }
@@ -20,7 +20,7 @@ interface A {
 interface A {
     foo(x: Date): Date;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^    ^^^    ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^    ^^^    ^^^
 >x : Date
 >  : ^^^^
 }
@@ -28,13 +28,13 @@ interface A {
 interface B<T> {
     foo(x: T): number;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
->    : ^^^ ^^ ^^^      ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^^ ^^    ^^^^^^^^^^^^
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : T
 >  : ^
 
     foo(x: string): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
->    : ^^^ ^^ ^^^^^^^^^^^^ ^^      ^^^      ^^^ ^^ ^^^^^^^^^^ ^^    ^^^^^^^^^^^^
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : string
 >  : ^^^^^^
 }
@@ -42,13 +42,13 @@ interface B<T> {
 interface B<T> {
     foo(x: T): Date;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
->    : ^^^ ^^ ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^    ^^^ ^^    ^^^^^^^^^^^^
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : T
 >  : ^
 
     foo(x: Date): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
->    : ^^^ ^^ ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^^ ^^    ^^^      ^^^
+>    : ^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^    ^^^ ^^    ^^^      ^^^
 >x : Date
 >  : ^^^^
 }
@@ -63,11 +63,11 @@ var r = b.foo(true); // returns Date
 >b.foo(true) : Date
 >            : ^^^^
 >b.foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
->      : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^    ^^^ ^^    ^^^      ^^^
 >b : B<boolean>
 >  : ^^^^^^^^^^
 >foo : { (x: boolean): number; (x: string): string; (x: boolean): Date; (x: Date): string; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^    ^^^ ^^    ^^^      ^^^
 >true : true
 >     : ^^^^
 
@@ -75,7 +75,7 @@ var r = b.foo(true); // returns Date
 interface C<T, U> {
     foo(x: T, y: U): string;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : T
 >  : ^
 >y : U
@@ -83,7 +83,7 @@ interface C<T, U> {
 
     foo(x: string, y: string): number;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->    : ^^^ ^^ ^^ ^^ ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : string
 >  : ^^^^^^
 >y : string
@@ -93,7 +93,7 @@ interface C<T, U> {
 interface C<T, U> {
     foo<W>(x: W, y: W): W;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->    : ^^^ ^^ ^^ ^^ ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
+>    : ^^^ ^^ ^^ ^^ ^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : W
 >  : ^
 >y : W
@@ -110,11 +110,11 @@ var r2 = c.foo(1, 2); // number
 >c.foo(1, 2) : 1 | 2
 >            : ^^^^^
 >c.foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->      : ^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^^^^ ^^^^^ ^^^^^^^^^^
 >c : C<boolean, Date>
 >  : ^^^^^^^^^^^^^^^^
 >foo : { (x: boolean, y: Date): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->    : ^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^ ^^      ^^ ^^      ^^^      ^^^^^^ ^^^^^ ^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -132,7 +132,7 @@ interface D<T, U> {
 
     foo<A>(x: A, y: A): U;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
->    : ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : A
 >  : ^
 >y : A
@@ -142,7 +142,7 @@ interface D<T, U> {
 interface D<T, U> {
     foo<W>(x: W, y: W): T;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
->    : ^^^ ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^ ^^ ^^^ ^^^
 >x : W
 >  : ^
 >y : W

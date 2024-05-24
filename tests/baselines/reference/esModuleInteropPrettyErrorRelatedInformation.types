@@ -8,12 +8,12 @@ declare function foo(): void;
 declare namespace foo {}
 export = foo;
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === index.ts ===
 import * as foo from "./foo";
 >foo : { default: () => void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^    ^^^
 
 function invoke(f: () => void) { f(); }
 >invoke : (f: () => void) => void
@@ -23,7 +23,7 @@ function invoke(f: () => void) { f(); }
 >f() : void
 >    : ^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 invoke(foo);
 >invoke(foo) : void
@@ -31,5 +31,5 @@ invoke(foo);
 >invoke : (f: () => void) => void
 >       : ^ ^^          ^^^^^^^^^
 >foo : { default: () => void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^    ^^^
 

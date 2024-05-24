@@ -14,7 +14,7 @@ function f({ show: showRename = v => v }: Show) {}
 >show : any
 >     : ^^^
 >showRename : (x: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -26,7 +26,7 @@ function f2({ "show": showRename = v => v }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
 >   : ^                      ^^    ^^^^^^^^^
 >showRename : (x: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -40,7 +40,7 @@ function f3({ ["show"]: showRename = v => v }: Show) {}
 >"show" : "show"
 >       : ^^^^^^
 >showRename : (x: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -82,7 +82,7 @@ let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentit
 >stringIdentity : any
 >               : ^^^
 >id : (s: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >arg => arg.length : (arg: string) => number
 >                  : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string

@@ -55,7 +55,7 @@ x3.a *= value;
 >x3.a : number
 >     : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >value : any
@@ -65,7 +65,7 @@ x3.a += value;
 >x3.a : number
 >     : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >value : any
@@ -76,7 +76,7 @@ x3['a'] *= value;
 >x3['a'] : number
 >        : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any
@@ -86,7 +86,7 @@ x3['a'] += value;
 >x3['a'] : number
 >        : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any
@@ -141,7 +141,7 @@ function fn2(x4: number) {
 >x3.a : number
 >     : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >value : any
@@ -153,7 +153,7 @@ function fn2(x4: number) {
 >x3.a : number
 >     : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >value : any
@@ -166,7 +166,7 @@ function fn2(x4: number) {
 >x3['a'] : number
 >        : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any
@@ -178,7 +178,7 @@ function fn2(x4: number) {
 >x3['a'] : number
 >        : ^^^^^^
 >x3 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >'a' : "a"
 >    : ^^^
 >value : any

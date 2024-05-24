@@ -29,19 +29,19 @@ if (foo.every(isString)) {
 >foo.every(isString) : boolean
 >                    : ^^^^^^^
 >foo.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >foo : (string | number)[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >isString : (x: unknown) => x is string
->         : ^ ^^       ^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^           
 
   foo[0].slice(0);
 >foo[0].slice(0) : string
 >                : ^^^^^^
 >foo[0].slice : (start?: number, end?: number) => string
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^   ^^^      ^^^^^      
 >foo[0] : string
 >       : ^^^^^^
 >foo : string[]
@@ -49,7 +49,7 @@ if (foo.every(isString)) {
 >0 : 0
 >  : ^
 >slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 }

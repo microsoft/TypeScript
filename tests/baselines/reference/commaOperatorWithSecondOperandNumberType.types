@@ -176,11 +176,11 @@ STRING.trim(), NUMBER = 1;
 >STRING.trim() : string
 >              : ^^^^^^
 >STRING.trim : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >STRING : string
 >       : ^^^^^^
 >trim : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 >NUMBER = 1 : 1
 >           : ^
 >NUMBER : number
@@ -267,11 +267,11 @@ var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >STRING.trim() : string
 >              : ^^^^^^
 >STRING.trim : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >STRING : string
 >       : ^^^^^^
 >trim : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 >NUMBER = 1 : 1
 >           : ^
 >NUMBER : number

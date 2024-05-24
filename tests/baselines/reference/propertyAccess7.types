@@ -9,9 +9,9 @@ foo.toUpperCase();
 >foo.toUpperCase() : string
 >                  : ^^^^^^
 >foo.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >foo : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

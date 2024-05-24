@@ -32,5 +32,5 @@ export default getInterR();
 >getInterR() : RequireInterface
 >            : ^^^^^^^^^^^^^^^^
 >getInterR : () => RequireInterface
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^                
 

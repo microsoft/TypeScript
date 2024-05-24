@@ -20,17 +20,17 @@ var a: { new (x: number): void };
 
 t = a;
 >t = a : new (x: number) => void
->      : ^^^^^ ^^      ^^^^^^^^^
+>      : ^^^^^ ^^      ^^^^^    
 >t : T
 >  : ^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 
 a = t;
 >a = t : T
 >      : ^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >t : T
 >  : ^
 
@@ -59,27 +59,27 @@ t = s;
 
 t = a2;
 >t = a2 : new (x: number) => string
->       : ^^^^^ ^^      ^^^^^^^^^^^
+>       : ^^^^^ ^^      ^^^^^      
 >t : T
 >  : ^
 >a2 : new (x: number) => string
->   : ^^^^^ ^^      ^^^^^^^^^^^
+>   : ^^^^^ ^^      ^^^^^      
 
 a = s;
 >a = s : S
 >      : ^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >s : S
 >  : ^
 
 a = a2;
 >a = a2 : new (x: number) => string
->       : ^^^^^ ^^      ^^^^^^^^^^^
+>       : ^^^^^ ^^      ^^^^^      
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >a2 : new (x: number) => string
->   : ^^^^^ ^^      ^^^^^^^^^^^
+>   : ^^^^^ ^^      ^^^^^      
 
 interface S2 {
     (x: string): void;
@@ -107,11 +107,11 @@ t = s2;
 
 t = a3;
 >t = a3 : (x: string) => void
->       : ^ ^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^    
 >t : T
 >  : ^
 >a3 : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 t = (x: string) => 1;
 >t = (x: string) => 1 : (x: string) => number
@@ -141,23 +141,23 @@ a = s2;
 >a = s2 : S2
 >       : ^^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >s2 : S2
 >   : ^^
 
 a = a3;
 >a = a3 : (x: string) => void
->       : ^ ^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^    
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >a3 : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 a = (x: string) => 1;
 >a = (x: string) => 1 : (x: string) => number
 >                     : ^ ^^      ^^^^^^^^^^^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >(x: string) => 1 : (x: string) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : string
@@ -169,7 +169,7 @@ a = function (x: string) { return ''; }
 >a = function (x: string) { return ''; } : (x: string) => string
 >                                        : ^ ^^      ^^^^^^^^^^^
 >a : new (x: number) => void
->  : ^^^^^ ^^      ^^^^^^^^^
+>  : ^^^^^ ^^      ^^^^^    
 >function (x: string) { return ''; } : (x: string) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >x : string

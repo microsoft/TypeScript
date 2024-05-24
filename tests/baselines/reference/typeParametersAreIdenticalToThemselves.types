@@ -149,19 +149,19 @@ class C<T> {
 
     foo4<T extends Date>(x: T);
 >foo4 : { <T extends Date>(x: T): any; <T_1 extends Date>(x: T_1): any; }
->     : ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>     : ^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
 >foo4 : { <T_1 extends Date>(x: T_1): any; <T extends Date>(x: T): any; }
->     : ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>     : ^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
     foo4<T extends Date>(x: T) { }
 >foo4 : { <T_1 extends Date>(x: T_1): any; <T_1 extends Date>(x: T_1): any; }
->     : ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>     : ^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
 }
@@ -274,13 +274,13 @@ interface I<T> {
 
     foo4<T extends Date>(x: T);
 >foo4 : { <T extends Date>(x: T): any; <T_1 extends Date>(x: T_1): any; }
->     : ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>     : ^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
 >foo4 : { <T_1 extends Date>(x: T_1): any; <T extends Date>(x: T): any; }
->     : ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>     : ^^^   ^^^^^^^^^    ^^ ^^   ^^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 }

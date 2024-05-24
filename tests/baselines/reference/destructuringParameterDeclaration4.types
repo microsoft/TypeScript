@@ -173,7 +173,7 @@ class C {
 // Rest parameter with generic
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^^^^ ^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 
@@ -181,7 +181,7 @@ foo1(1, 2, "string", E1.a, E.b);  // Error
 >foo1(1, 2, "string", E1.a, E.b) : void
 >                                : ^^^^
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^^^^ ^^   ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

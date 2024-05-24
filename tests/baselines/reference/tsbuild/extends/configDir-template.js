@@ -102,12 +102,12 @@ declare const console: { log(msg: any): void; };
 
 Output::
 /lib/tsc -b /home/src/projects/myproject --explainFiles --v
-[[90m12:00:27 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:28 AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/main.js' does not exist
 
-[[90m12:00:29 AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
 File '/home/src/projects/myproject/package.json' does not exist.
 File '/home/src/projects/package.json' does not exist.

@@ -101,11 +101,11 @@ export function HereIsTheError() {
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -144,11 +144,11 @@ ComponentWithUnion({
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 

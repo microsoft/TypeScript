@@ -23,7 +23,7 @@ import * as _whatever from "p2";
 
 import { getA } from "typescript-fsa";
 >getA : () => import("/cache/typescript-fsa/index").A
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 export const a = getA();
 >a : import("/cache/typescript-fsa/index").A
@@ -31,7 +31,7 @@ export const a = getA();
 >getA() : import("/cache/typescript-fsa/index").A
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA : () => import("/cache/typescript-fsa/index").A
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;

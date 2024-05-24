@@ -3,7 +3,7 @@
 === functionOverloads43.ts ===
 function foo(bar: { a:number }[]): number;
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->    : ^^^   ^^                ^^^      ^^^   ^^                ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
 >bar : { a: number; }[]
 >    : ^^^^^      ^^^^^
 >a : number
@@ -11,7 +11,7 @@ function foo(bar: { a:number }[]): number;
 
 function foo(bar: { a:string }[]): string;
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^                ^^^      ^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
 >bar : { a: string; }[]
 >    : ^^^^^      ^^^^^
 >a : string
@@ -19,21 +19,21 @@ function foo(bar: { a:string }[]): string;
 
 function foo([x]: { a:number | string }[]): string | number {
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^                ^^^^^^^^^^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 
     if (x) {
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 
         return x.a;
 >x.a : string | number
 >    : ^^^^^^^^^^^^^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
     }
@@ -49,7 +49,7 @@ var x = foo([{a: "str"}]);
 >foo([{a: "str"}]) : string
 >                  : ^^^^^^
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^                ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
 >[{a: "str"}] : { a: string; }[]
 >             : ^^^^^^^^^^^^^^^^
 >{a: "str"} : { a: string; }
@@ -65,7 +65,7 @@ var y = foo([{a: 100}]);
 >foo([{a: 100}]) : number
 >                : ^^^^^^
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^                ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
 >[{a: 100}] : { a: number; }[]
 >           : ^^^^^^^^^^^^^^^^
 >{a: 100} : { a: number; }

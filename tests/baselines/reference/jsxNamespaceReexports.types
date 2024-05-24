@@ -20,7 +20,7 @@ namespace JSX {
 
 export { createElement, JSX };
 >createElement : (element: string, props: any, ...children: any[]) => any
->              : ^       ^^      ^^     ^^   ^^^^^        ^^     ^^^^^^^^
+>              : ^       ^^      ^^     ^^   ^^^^^        ^^     ^^^^^   
 >JSX : any
 >    : ^^^
 

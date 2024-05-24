@@ -12,12 +12,12 @@ let result = re.exec("2015-01-02");
 >       : ^^^^^^^^^^^^^^^
 >re.exec("2015-01-02") : RegExpExecArray
 >                      : ^^^^^^^^^^^^^^^
->re.exec : (string: string) => RegExpExecArray
->        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
+>re.exec : (string: string) => RegExpExecArray | null
+>        : ^      ^^      ^^^^^                      
 >re : RegExp
 >   : ^^^^^^
->exec : (string: string) => RegExpExecArray
->     : ^      ^^      ^^^^^^^^^^^^^^^^^^^^
+>exec : (string: string) => RegExpExecArray | null
+>     : ^      ^^      ^^^^^                      
 >"2015-01-02" : "2015-01-02"
 >             : ^^^^^^^^^^^^
 
@@ -114,12 +114,12 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >                            : ^^^^^^^^^^^^^^^^
 >"foo".match(/(?<bar>foo)/) : RegExpMatchArray
 >                           : ^^^^^^^^^^^^^^^^
->"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray; }
->            : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^
+>"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>            : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >"foo" : "foo"
 >      : ^^^^^
->match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray; }
->      : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/(?<bar>foo)/ : RegExp
 >              : ^^^^^^
 >groups : { [key: string]: string; }

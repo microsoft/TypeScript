@@ -14,8 +14,8 @@ declare global {
 >global : Symbol(global, Decl(bar.d.ts, 2, 13))
 
     const foo: typeof foo;
->foo : Symbol(foo, Decl(foo.d.ts, 7, 13), Decl(bar.d.ts, 5, 9))
->foo : Symbol(foo, Decl(foo.d.ts, 7, 13), Decl(bar.d.ts, 5, 9))
+>foo : Symbol(foo, Decl(bar.d.ts, 5, 9))
+>foo : Symbol(foo, Decl(bar.d.ts, 5, 9))
 }
 
 === foo.d.ts ===

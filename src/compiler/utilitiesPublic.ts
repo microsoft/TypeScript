@@ -1253,7 +1253,7 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
         : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
         : "linkplain";
     const name = link.name ? entityNameToString(link.name) : "";
-    const space = link.name && link.text.startsWith("://") ? "" : " ";
+    const space = link.name && (link.text === "" || link.text.startsWith("://")) ? "" : " ";
     return `{@${kind} ${name}${space}${link.text}}`;
 }
 
