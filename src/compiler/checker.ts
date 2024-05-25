@@ -18365,17 +18365,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (accessNode) {
             const indexNode = getIndexNodeForAccessExpression(accessNode);
-            if (indexNode.kind === SyntaxKind.BigIntLiteral) {
-                error(indexNode, Diagnostics.A_bigint_literal_may_not_be_used_as_an_index);
-            }
-            else if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+            if (indexNode.kind !== SyntaxKind.BigIntLiteral && indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                 error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (indexType as StringLiteralType | NumberLiteralType).value, typeToString(objectType));
             }
             else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
                 error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
             }
             else {
-                error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
+                const typeString = indexNode.kind === SyntaxKind.BigIntLiteral ? `bigint literal`: typeToString(indexType);
+                error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeString);
             }
         }
         if (isTypeAny(indexType)) {
