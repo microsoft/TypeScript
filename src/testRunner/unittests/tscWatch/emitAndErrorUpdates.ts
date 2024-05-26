@@ -1,15 +1,14 @@
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "../helpers/contents";
-import { getFsContentsForNoEmitOnError } from "../helpers/noEmitOnError";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
@@ -348,50 +347,6 @@ export class Data2 {
                 "yes circular import/exports",
                 [lib2Data, lib2Data2],
             );
-        });
-    });
-
-    describe("with noEmitOnError", () => {
-        function change(caption: string, content: string): TscWatchCompileChange {
-            return {
-                caption,
-                edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
-                // build project
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            };
-        }
-        const noChange: TscWatchCompileChange = {
-            caption: "No change",
-            edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
-            // build project
-            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        };
-        verifyEmitAndErrorUpdates({
-            subScenario: "with noEmitOnError",
-            currentDirectory: `/user/username/projects/noEmitOnError`,
-            files: getFsContentsForNoEmitOnError,
-            changes: [
-                noChange,
-                change(
-                    "Fix Syntax error",
-                    `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                ),
-                change(
-                    "Semantic Error",
-                    `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                ),
-                noChange,
-                change(
-                    "Fix Semantic Error",
-                    `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                ),
-                noChange,
-            ],
         });
     });
 });

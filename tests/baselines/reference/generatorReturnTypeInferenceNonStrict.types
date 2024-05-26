@@ -122,11 +122,11 @@ function* g103() { // Generator<never, 1 | 2, unknown>
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >1 : 1
 >  : ^
 
@@ -181,13 +181,13 @@ function* g202() { // Generator<1 | 2, void, never>
 
 declare function f1(x: string): void;
 >f1 : { (x: string): void; (x: number): void; }
->   : ^^^ ^^      ^^^    ^^^ ^^      ^^^^^^^^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >x : string
 >  : ^^^^^^
 
 declare function f1(x: number): void;
 >f1 : { (x: string): void; (x: number): void; }
->   : ^^^ ^^      ^^^^^^^^^^ ^^      ^^^    ^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >x : number
 >  : ^^^^^^
 
@@ -201,7 +201,7 @@ function* g203() { // Generator<number, void, string>
 >f1(yield 1) : void
 >            : ^^^^
 >f1 : { (x: string): void; (x: number): void; }
->   : ^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^
+>   : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >yield 1 : any
 >        : ^^^
 >1 : 1
@@ -224,7 +224,7 @@ function* g204() { // Generator<number, void, any>
 >f2(yield 1) : any
 >            : ^^^
 >f2 : <T>(x: T) => T
->   : ^ ^^ ^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^ 
 >yield 1 : any
 >        : ^^^
 >1 : 1
@@ -293,11 +293,11 @@ function* g305() { // Generator<1 | 2, "a" | "b", unknown>
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >yield 1 : any
 >        : ^^^
 >1 : 1
@@ -313,11 +313,11 @@ function* g305() { // Generator<1 | 2, "a" | "b", unknown>
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >"a" : "a"
 >    : ^^^
 

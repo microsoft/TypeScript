@@ -24,7 +24,7 @@ class Gen<T> extends base<T>() {}  // Error, T not in scope
 >Gen : Gen<T>
 >    : ^^^^^^
 >base<T>() : base<T>.Base
->          :      ^ ^^^^^
+>          : ^^^^^^^^^^^^
 >base : <T>() => typeof Base
 >     : ^^^^^^^^^^^^^^^^^^^^
 

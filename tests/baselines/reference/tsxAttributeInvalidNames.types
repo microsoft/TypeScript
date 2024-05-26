@@ -56,6 +56,6 @@ declare module JSX {
 >     : ^^^
 >32 : 32
 >   : ^^
->/>; : RegExp
->    : ^^^^^^
+>/> : RegExp
+>   : ^^^^^^
 

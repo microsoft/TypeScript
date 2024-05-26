@@ -23,7 +23,7 @@ function f() {
 >capture : () => IArguments
 >        : ^^^^^^^^^^^^^^^^
 >() => arguments : () => IArguments
->                :                 
+>                : ^^^^^^^^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 

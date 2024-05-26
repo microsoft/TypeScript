@@ -91,7 +91,7 @@ import {
     Type,
     TypeChecker,
     TypeParameter,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const enum InvocationKind {
     Call,

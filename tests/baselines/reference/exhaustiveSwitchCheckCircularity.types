@@ -51,7 +51,7 @@ function f() {
 >isNever(foo) : boolean
 >             : ^^^^^^^
 >isNever : (n: never) => boolean
->        : ^ ^^     ^^^^^^^^^^^^
+>        : ^ ^^     ^^^^^       
 >foo : "bbb"
 >    : ^^^^^
 
@@ -109,7 +109,7 @@ function functionC(): void {
 >functionB(key) : string
 >               : ^^^^^^
 >functionB : (key: string) => string
->          : ^   ^^      ^^^^^^^^^^^
+>          : ^   ^^      ^^^^^      
 >key : string
 >    : ^^^^^^
     }

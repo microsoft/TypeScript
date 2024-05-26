@@ -24,7 +24,7 @@ function foo<T>(a: (x: T) => T, b: (x: T) => T) {
 
     return r;
 >r : (x: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 //var r1 = foo((x: number) => 1, (x: string) => ''); // error
@@ -32,9 +32,9 @@ var r1b = foo((x) => 1, (x) => ''); // {} => {}
 >r1b : (x: unknown) => unknown
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo((x) => 1, (x) => '') : (x: unknown) => unknown
->                         :                        
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x) => 1 : (x: unknown) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : unknown
@@ -52,9 +52,9 @@ var r2 = foo((x: Object) => null, (x: string) => ''); // Object => Object
 >r2 : (x: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >foo((x: Object) => null, (x: string) => '') : (x: any) => any
->                                            :                
+>                                            : ^ ^^^^^^^^^^^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: Object) => null : (x: Object) => any
 >                    : ^ ^^      ^^^^^^^^
 >x : Object
@@ -70,9 +70,9 @@ var r3 = foo((x: number) => 1, (x: Object) => null); // number => number
 >r3 : (x: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >foo((x: number) => 1, (x: Object) => null) : (x: any) => any
->                                           :                
+>                                           : ^ ^^^^^^^^^^^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -88,9 +88,9 @@ var r3ii = foo((x: number) => 1, (x: number) => 1); // number => number
 >r3ii : (x: number) => number
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >foo((x: number) => 1, (x: number) => 1) : (x: number) => number
->                                        :                      
+>                                        : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -122,51 +122,51 @@ var b: { x: number; z?: number; };
 
 var r4 = foo((x: typeof a) => a, (x: typeof b) => b); // typeof a => typeof a
 >r4 : (x: { x: number; y?: number; }) => { x: number; y?: number; }
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^           
+>   : ^ ^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^^^^      ^^^
 >foo((x: typeof a) => a, (x: typeof b) => b) : (x: { x: number; y?: number; }) => { x: number; y?: number; }
->                                            :                   ^                              ^           
+>                                            : ^ ^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^^^^      ^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
->                   : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^        ^^^^^^^^^^      ^^^^^^      ^^^
 >x : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
->                   : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^        ^^^^^^^^^^      ^^^^^^      ^^^
 >x : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
 var r5 = foo((x: typeof b) => b, (x: typeof a) => a); // typeof b => typeof b
 >r5 : (x: { x: number; z?: number; }) => { x: number; z?: number; }
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^           
+>   : ^ ^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^^^^      ^^^
 >foo((x: typeof b) => b, (x: typeof a) => a) : (x: { x: number; z?: number; }) => { x: number; z?: number; }
->                                            :                   ^                              ^           
+>                                            : ^ ^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^      ^^^^^^      ^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
->                   : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^        ^^^^^^^^^^      ^^^^^^      ^^^
 >x : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
->                   : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^        ^^^^^^^^^^      ^^^^^^      ^^^
 >x : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
 function other<T>(x: T) {
 >other : <T>(x: T) => void
@@ -178,9 +178,9 @@ function other<T>(x: T) {
 >r6 : (x: T) => T
 >   : ^ ^^^^^^^^^
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->                              :            
+>                              : ^ ^^^^^^^^^
 >foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^   
 >(a: T) => a : (a: T) => T
 >            : ^ ^^ ^^^^^^
 >a : T
@@ -198,9 +198,9 @@ function other<T>(x: T) {
 >r6b : (x: unknown) => unknown
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo((a) => a, (b) => b) : (x: unknown) => unknown
->                        :                        
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^   
 >(a) => a : (a: unknown) => unknown
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
@@ -217,7 +217,7 @@ function other<T>(x: T) {
 
 function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->       : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -225,9 +225,9 @@ function other2<T extends Date>(x: T) {
 >r7 : (x: T) => T
 >   : ^ ^^^^^^^^^
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->                              :            
+>                              : ^ ^^^^^^^^^
 >foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^   
 >(a: T) => a : (a: T) => T
 >            : ^ ^^ ^^^^^^
 >a : T
@@ -245,9 +245,9 @@ function other2<T extends Date>(x: T) {
 >r7b : (x: unknown) => unknown
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo((a) => a, (b) => b) : (x: unknown) => unknown
->                        :                        
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^   
 >(a) => a : (a: unknown) => unknown
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^
 >a : unknown
@@ -276,7 +276,7 @@ function other2<T extends Date>(x: T) {
 
 function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->     : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -294,12 +294,12 @@ function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 
     return r;
 >r : (x: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -307,9 +307,9 @@ function other3<T extends RegExp>(x: T) {
 >r8 : (x: Date) => Date
 >   : ^ ^^^^^^^^^^^^^^^
 >foo2((a: Date) => a, (b: Date) => b) : (x: Date) => Date
->                                     :                  
+>                                     : ^ ^^^^^^^^^^^^^^^
 >foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->     : ^   ^^^^^^^^^^^^^^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>     : ^   ^^^^^^^^^    ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^   
 >(a: Date) => a : (a: Date) => Date
 >               : ^ ^^    ^^^^^^^^^
 >a : Date

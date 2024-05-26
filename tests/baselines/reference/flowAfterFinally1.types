@@ -21,7 +21,7 @@ openFile()
 >openFile() : void
 >           : ^^^^
 >openFile : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 try {
   result = someOperation()
@@ -30,16 +30,16 @@ try {
 >result : {}
 >       : ^^
 >someOperation() : {}
->                :   
+>                : ^^
 >someOperation : () => {}
->              : ^^^^^^^^
+>              : ^^^^^^  
 
 } finally {
   closeFile()
 >closeFile() : void
 >            : ^^^^
 >closeFile : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 }
 
 result // should not error here

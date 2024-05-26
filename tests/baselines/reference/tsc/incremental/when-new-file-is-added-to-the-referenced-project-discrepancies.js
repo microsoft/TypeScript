@@ -32,6 +32,20 @@ CleanBuild:
       "composite": true,
       "module": 0
     },
+    "semanticDiagnosticsPerFile": [
+      [
+        "../../../lib/lib.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "../project1/class1.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "./class2.ts",
+        "not cached or not changed"
+      ]
+    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -66,11 +80,6 @@ IncrementalBuild:
       "composite": true,
       "module": 0
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../project1/class1.d.ts",
-      "./class2.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -109,6 +118,20 @@ CleanBuild:
       "composite": true,
       "module": 0
     },
+    "semanticDiagnosticsPerFile": [
+      [
+        "../../../lib/lib.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "../project1/class1.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "./class2.ts",
+        "not cached or not changed"
+      ]
+    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -144,7 +167,14 @@ IncrementalBuild:
       "module": 0
     },
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts"
+      [
+        "../project1/class1.d.ts",
+        "not cached or not changed"
+      ],
+      [
+        "./class2.ts",
+        "not cached or not changed"
+      ]
     ],
     "latestChangedDtsFile": "FakeFileName"
   },

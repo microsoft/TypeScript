@@ -30,7 +30,7 @@ declare class Component<P, S>  {
 
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
->         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^^^^^^^^
+>         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^    ^^^
 >f : (prevState: S, props: P) => S
 >  : ^         ^^ ^^     ^^ ^^^^^ 
 >prevState : S
@@ -42,7 +42,7 @@ declare class Component<P, S>  {
 
 	setState(state: S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
->         : ^^^ ^^                             ^^        ^^^         ^^^^^^^^^^     ^^ ^^        ^^^         ^^^    ^^^
+>         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^    ^^^
 >state : S
 >      : ^
 >callback : () => any

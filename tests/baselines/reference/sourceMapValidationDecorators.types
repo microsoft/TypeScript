@@ -61,13 +61,13 @@ declare function ParameterDecorator2(x: number): (target: Object, key: string | 
 
 @ClassDecorator1
 >ClassDecorator1 : (target: Function) => void
->                : ^      ^^        ^^^^^^^^^
+>                : ^      ^^        ^^^^^    
 
 @ClassDecorator2(10)
 >ClassDecorator2(10) : (target: Function) => void
->                    : ^      ^^        ^^^^^^^^^
+>                    : ^      ^^        ^^^^^    
 >ClassDecorator2 : (x: number) => (target: Function) => void
->                : ^ ^^      ^^^^^^      ^^        ^^^^^^^^^
+>                : ^ ^^      ^^^^^                          
 >10 : 10
 >   : ^^
 
@@ -78,13 +78,13 @@ class Greeter {
     constructor(
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(20) 
 >ParameterDecorator2(20) : (target: Object, key: string | symbol, paramIndex: number) => void
->                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^ ^^      ^^^^^                                                                  
 >20 : 20
 >   : ^^
 
@@ -94,13 +94,13 @@ class Greeter {
       
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(30) 
 >ParameterDecorator2(30) : (target: Object, key: string | symbol, paramIndex: number) => void
->                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^ ^^      ^^^^^                                                                  
 >30 : 30
 >   : ^^
 
@@ -111,13 +111,13 @@ class Greeter {
     
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(40)
 >PropertyDecorator2(40) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^ ^^      ^^^^^                                                                               
 >40 : 40
 >   : ^^
 
@@ -144,13 +144,13 @@ class Greeter {
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(50)
 >PropertyDecorator2(50) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^ ^^      ^^^^^                                                                               
 >50 : 50
 >   : ^^
 
@@ -160,13 +160,13 @@ class Greeter {
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(60)
 >PropertyDecorator2(60) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^ ^^      ^^^^^                                                                               
 >60 : 60
 >   : ^^
 
@@ -182,13 +182,13 @@ class Greeter {
 
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(70) 
 >ParameterDecorator2(70) : (target: Object, key: string | symbol, paramIndex: number) => void
->                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^ ^^      ^^^^^                                                                  
 >70 : 70
 >   : ^^
 
@@ -207,13 +207,13 @@ class Greeter {
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(80)
 >PropertyDecorator2(80) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->                   : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^^^^^
+>                   : ^ ^^      ^^^^^                                                                               
 >80 : 80
 >   : ^^
 
@@ -236,13 +236,13 @@ class Greeter {
 
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(90) 
 >ParameterDecorator2(90) : (target: Object, key: string | symbol, paramIndex: number) => void
->                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
->                    : ^ ^^      ^^^^^^      ^^      ^^   ^^               ^^          ^^      ^^^^^^^^^
+>                    : ^ ^^      ^^^^^                                                                  
 >90 : 90
 >   : ^^
 

@@ -5,7 +5,7 @@ var f1 = () => {
 >f1 : () => void
 >   : ^^^^^^^^^^
 >() => {    this.age = 10} : () => void
->                          :           
+>                          : ^^^^^^^^^^
 
     this.age = 10
 >this.age = 10 : 10
@@ -25,7 +25,7 @@ var f2 = (x: string) => {
 >f2 : (x: string) => void
 >   : ^ ^^      ^^^^^^^^^
 >(x: string) => {    this.name = x} : (x: string) => void
->                                   :                    
+>                                   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

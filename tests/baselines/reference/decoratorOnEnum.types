@@ -9,7 +9,7 @@ declare function dec<T>(target: T): T;
 
 @dec
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
 enum E {
 >E : E

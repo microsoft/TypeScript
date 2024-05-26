@@ -26,11 +26,11 @@ class C1 extends B {
 >super.x() : string
 >          : ^^^^^^
 >super.x : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >super : B
 >      : ^
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         super();
 >super() : void
@@ -54,10 +54,10 @@ class C2 extends B {
 >super.x() : string
 >          : ^^^^^^
 >super.x : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >super : B
 >      : ^
 >x : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
     }
 }

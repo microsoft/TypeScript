@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/declarationEmitAnyComputedPropertyInClass.ts] ////
+
+=== ambient.d.ts ===
+declare module "abcdefgh";
+>"abcdefgh" : Symbol("abcdefgh", Decl(ambient.d.ts, 0, 0))
+
+=== main.ts ===
+import Test from "abcdefgh";
+>Test : Symbol(Test, Decl(main.ts, 0, 6))
+
+export class C {
+>C : Symbol(C, Decl(main.ts, 0, 28))
+
+    [Test.someKey]() {};
+>[Test.someKey] : Symbol(C[Test.someKey], Decl(main.ts, 2, 16))
+>Test : Symbol(Test, Decl(main.ts, 0, 6))
+}
+

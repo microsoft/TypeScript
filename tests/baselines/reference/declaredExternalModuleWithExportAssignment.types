@@ -42,6 +42,6 @@ declare module 'connect' {
     };
     export = server;
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 }
 

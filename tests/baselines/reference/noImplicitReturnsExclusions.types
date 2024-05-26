@@ -208,7 +208,7 @@ declare class HistoryItem {
 interface Thenable<T> {
   then<TResult>(
 >then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
->     : ^^^       ^^           ^^^                                         ^^          ^^^                                            ^^^                 ^^^         ^^           ^^^                                             ^^          ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^       ^^           ^^^                                         ^^          ^^^                                            ^^^                 ^^^         ^^           ^^^                                             ^^          ^^^                     ^^^                   ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
@@ -225,7 +225,7 @@ interface Thenable<T> {
   ): Thenable<TResult>;
   then<TResult>(
 >then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
->     : ^^^         ^^           ^^^                                             ^^          ^^^                                                ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^           ^^^                                         ^^          ^^^                     ^^^                 ^^^
+>     : ^^^         ^^           ^^^                                             ^^          ^^^                                                ^^^                   ^^^       ^^           ^^^                                         ^^          ^^^                     ^^^                 ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
@@ -280,7 +280,7 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }}) : void
 >                                                                                                                                                                                                                                      : ^^^^
 >registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
->                : ^       ^^      ^^        ^^                       ^^       ^^^   ^^^^^^^^^
+>                : ^       ^^      ^^        ^^                       ^^       ^^^   ^^^^^    
 >"_references-view.showHistoryItem" : "_references-view.showHistoryItem"
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<unknown>
@@ -300,21 +300,21 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>
 >                                                       : ^^^^^^^^^^^^^^^^^
 >executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
->               : ^^^^^^^^^^^^^^       ^^      ^^^^^    ^^     ^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^       ^^      ^^^^^    ^^     ^^^^^           
 >"vscode.open" : "vscode.open"
 >              : ^^^^^^^^^^^^^
 >item.input.location.uri : string
 >                        : ^^^^^^
 >item.input.location : { uri: string; }
->                    : ^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^      ^^^
 >item.input : { location: { uri: string; }; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^                ^^^
 >item : HistoryItem
 >     : ^^^^^^^^^^^
 >input : { location: { uri: string; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^                ^^^
 >location : { uri: string; }
->         : ^^^^^^^^^^^^^^^^
+>         : ^^^^^^^      ^^^
 >uri : string
 >    : ^^^^^^
   }

@@ -46,7 +46,7 @@ function f(x: ?number, y: Array.<number>) {
 }
 function hof(ctor: function(new: number, string)) {
 >hof : (ctor: new (arg1: string) => number) => number
->    : ^    ^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^
+>    : ^    ^^^^^^^    ^^      ^^^^^      ^^^^^^^^^^^
 >ctor : new (arg1: string) => number
 >     : ^^^^^^^^^^^      ^^^^^^^^^^^
 >new : number
@@ -62,7 +62,7 @@ function hof(ctor: function(new: number, string)) {
 }
 function hof2(f: function(this: number, string): string) {
 >hof2 : (f: (this: number, arg1: string) => string) => string
->     : ^ ^^^^^^^^^      ^^^^^^^^      ^^^^^      ^^^^^^^^^^^
+>     : ^ ^^^    ^^      ^^    ^^      ^^^^^      ^^^^^^^^^^^
 >f : (this: number, arg1: string) => string
 >  : ^    ^^      ^^^^^^^^      ^^^^^      
 >this : number
@@ -72,7 +72,7 @@ function hof2(f: function(this: number, string): string) {
 >f(12, 'hullo') : string
 >               : ^^^^^^
 >f : (this: number, arg1: string) => string
->  : ^    ^^      ^^^^^^^^      ^^^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^      ^^^^^      
 >12 : 12
 >   : ^^
 >'hullo' : "hullo"

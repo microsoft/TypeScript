@@ -1,4 +1,13 @@
-import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers.js";
+import {
+    CompletionKind,
+    createCompletionDetails,
+    createCompletionDetailsForSymbol,
+    getCompletionEntriesFromSymbols,
+    getPropertiesForObjectExpression,
+    Log,
+    SortText,
+} from "./_namespaces/ts.Completions.js";
 import {
     addToSeen,
     altDirectorySeparator,
@@ -148,16 +157,7 @@ import {
     UserPreferences,
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
-} from "./_namespaces/ts";
-import {
-    CompletionKind,
-    createCompletionDetails,
-    createCompletionDetailsForSymbol,
-    getCompletionEntriesFromSymbols,
-    getPropertiesForObjectExpression,
-    Log,
-    SortText,
-} from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;
@@ -972,7 +972,7 @@ function getCompletionEntriesForNonRelativeModules(
                         const packageJson = readJson(packageFile, host);
                         const exports = (packageJson as any).exports;
                         if (exports) {
-                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-restricted-syntax
                                 return; // null exports or entrypoint only, no sub-modules available
                             }
                             const keys = getOwnKeys(exports);
@@ -1264,7 +1264,7 @@ function isPathRelativeToScript(path: string) {
  *
  * /// <reference path="fragment"
  */
-const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
+const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\x03"]*)$/;
 
 const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 

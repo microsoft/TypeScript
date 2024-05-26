@@ -96,11 +96,11 @@ function foo1(
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -156,11 +156,11 @@ function foo2(
 >console.log(secondaryB) : void
 >                        : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >secondaryB : string
 >           : ^^^^^^
 }
@@ -168,7 +168,7 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >foo3 : ({ skills }?: Robot) => void
 >     : ^          ^^^     ^^^^^^^^^
 >skills : { primary?: string; secondary?: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
@@ -186,15 +186,15 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >console.log(skills.primary) : void
 >                            : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >skills.primary : string
 >               : ^^^^^^
 >skills : { primary?: string; secondary?: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >primary : string
 >        : ^^^^^^
 }

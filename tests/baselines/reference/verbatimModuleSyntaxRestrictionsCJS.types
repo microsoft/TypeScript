@@ -7,7 +7,7 @@ declare function esmy(): void;
 
 export default esmy;
 >esmy : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 export declare function funciton(): void;
 >funciton : () => void
@@ -30,7 +30,7 @@ declare module "ambient" {
 === /main.ts ===
 import esmy from "./decl"; // error
 >esmy : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 import * as esmy2 from "./decl"; // error
 >esmy2 : typeof esmy2
@@ -38,11 +38,11 @@ import * as esmy2 from "./decl"; // error
 
 import { funciton } from "./decl"; // error
 >funciton : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 import type { funciton as funciton2 } from "./decl"; // ok I guess?
 >funciton : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >funciton2 : any
 >          : ^^^
 
@@ -134,5 +134,5 @@ import type esmy from "./decl";
 
 export default esmy; // error
 >esmy : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 

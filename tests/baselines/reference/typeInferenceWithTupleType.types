@@ -24,7 +24,7 @@ var combineResult = combine("string", 10);
 >combine("string", 10) : [string, number]
 >                      : ^^^^^^^^^^^^^^^^
 >combine : <T, U>(x: T, y: U) => [T, U]
->        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >"string" : "string"
 >         : ^^^^^^^^
 >10 : 10
@@ -118,11 +118,11 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >zipResult.push([array1[i], array2[i]]) : number
 >                                       : ^^^^^^
 >zipResult.push : (...items: [T, U][]) => number
->               : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^^^^^^^^^^^^^^      
 >zipResult : [[T, U]]
 >          : ^^^^^^^^
 >push : (...items: [T, U][]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >[array1[i], array2[i]] : [T, U]
 >                       : ^^^^^^
 >array1[i] : T
@@ -149,7 +149,7 @@ var zipResult = zip(["foo", "bar"], [5, 6]);
 >zip(["foo", "bar"], [5, 6]) : [[string, number]]
 >                            : ^^^^^^^^^^^^^^^^^^
 >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
->    : ^ ^^ ^^      ^^   ^^      ^^   ^^^^^^^^^^^^^
+>    : ^ ^^ ^^      ^^   ^^      ^^   ^^^^^        
 >["foo", "bar"] : string[]
 >               : ^^^^^^^^
 >"foo" : "foo"
@@ -213,7 +213,7 @@ expected = f1(undefined as ["a"[], "b"[]]);
 >f1(undefined as ["a"[], "b"[]]) : "a"
 >                                : ^^^
 >f1 : <T1, T2>(values: [T1[], T2[]]) => T1
->   : ^  ^^  ^^      ^^            ^^^^^^^
+>   : ^  ^^  ^^      ^^            ^^^^^  
 >undefined as ["a"[], "b"[]] : ["a"[], "b"[]]
 >                            : ^^^^^^^^^^^^^^
 >undefined : undefined
@@ -227,7 +227,7 @@ expected = f2(undefined as ["a"[], "b"[]]);
 >f2(undefined as ["a"[], "b"[]]) : "a"
 >                                : ^^^
 >f2 : <T1, T2>(values: readonly [T1[], T2[]]) => T1
->   : ^  ^^  ^^      ^^                     ^^^^^^^
+>   : ^  ^^  ^^      ^^                     ^^^^^  
 >undefined as ["a"[], "b"[]] : ["a"[], "b"[]]
 >                            : ^^^^^^^^^^^^^^
 >undefined : undefined

@@ -21,7 +21,7 @@ class Foo {
 >x.a : number
 >    : ^^^^^^
 >x : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
     }
@@ -65,7 +65,7 @@ let x = c.doThing({a: 12});
 >x : { b: number; }
 >  : ^^^^^^^^^^^^^^
 >c.doThing({a: 12}) : { b: number; }
->                   :               
+>                   : ^^^^^^^^^^^^^^
 >c.doThing : (x: { a: number; }) => { b: number; }
 >          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >c : Foo

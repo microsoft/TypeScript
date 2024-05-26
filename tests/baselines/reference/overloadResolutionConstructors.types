@@ -437,11 +437,11 @@ var s = new fn5((n) => n.substr(0));
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

@@ -102,7 +102,7 @@ import {
     SyntaxKind,
     TransformationContext,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.

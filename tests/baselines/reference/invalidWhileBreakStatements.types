@@ -30,7 +30,7 @@ while (true){
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {        break TWO;    } : () => void
->                               :           
+>                               : ^^^^^^^^^^
 
         break TWO;
 >TWO : any
@@ -50,7 +50,7 @@ while (true) {
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () {        break THREE;    } : () => void
->                                       :           
+>                                       : ^^^^^^^^^^
 
         break THREE;
 >THREE : any

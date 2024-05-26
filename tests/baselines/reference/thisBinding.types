@@ -60,7 +60,7 @@ module M {
 >f : (x: I) => void
 >  : ^ ^^ ^^^^^^^^^
 >this.f : (x: I) => void
->       :               
+>       : ^ ^^ ^^^^^^^^^
 >this : this
 >     : ^^^^
 >f : (x: I) => void

@@ -23,13 +23,13 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 import {
     getLogLevel,
     StartInput,
     StartSessionOptions,
-} from "./common";
+} from "./common.js";
 
 interface LogOptions {
     file?: string;
@@ -243,7 +243,7 @@ export function initializeNodeSystem(): StartInput {
         protected write(s: string, _type: ts.server.Msg) {
             if (this.fd >= 0) {
                 const buf = Buffer.from(s);
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {

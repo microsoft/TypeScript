@@ -7,7 +7,7 @@ class C</**docComment for type parameter*/ T> {
 
     method</**docComment of method type parameter */ U extends T>(a: U) {
 >method : <U extends T>(a: U) => void
->       : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }
@@ -20,7 +20,7 @@ class C</**docComment for type parameter*/ T> {
 
     private privatemethod</**docComment of method type parameter */ U extends T>(a: U) {
 >privatemethod : <U extends T>(a: U) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>              : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
     }

@@ -20,7 +20,7 @@ import self = require("recursiveExportAssignmentAndFindAliasedType7_moduleD");
 
 var selfVar = self;
 >selfVar : any
->self : error
+>self : any
 
 export = selfVar;
 >selfVar : any

@@ -20,7 +20,7 @@ for (const i of obj?.arr ?? []) { }
 >obj?.arr : any[]
 >         : ^^^^^
 >obj : { arr: any[]; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^^^     ^^^
 >arr : any[]
 >    : ^^^^^
 >[] : never[]

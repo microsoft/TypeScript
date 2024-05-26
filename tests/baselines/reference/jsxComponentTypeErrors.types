@@ -41,7 +41,7 @@ FunctionComponent.useThis = function() {
 >useThis : () => JSX.Element
 >        : ^^^^^^^^^^^^^^^^^
 >function() {  return <this type="foo" />;} : () => JSX.Element
->                                           :                  
+>                                           : ^^^^^^^^^^^^^^^^^
 
   return <this type="foo" />;
 ><this type="foo" /> : JSX.Element
@@ -71,11 +71,11 @@ const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >FunctionComponent : typeof FunctionComponent
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassComponent : typeof ClassComponent
@@ -119,7 +119,7 @@ const obj = {
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  MemberFunctionComponent() {    return {};  },  MemberClassComponent: class {},} : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
->                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   MemberFunctionComponent() {
 >MemberFunctionComponent : () => {}
