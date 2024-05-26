@@ -26904,10 +26904,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const resolvedElements = node.elements.map(el => getContextFreeTypeOfExpression(el));
         for (const type of unionType.types) {
             if (!isTupleType(type)) continue;
-            const unionElements = getElementTypes(type);
-            if (unionElements.length !== resolvedElements.length) continue;
             const typesMatch = resolvedElements.every(
-                (el, ndx) => isTypeAssignableTo(el, unionElements[ndx]),
+                (el, ndx) => {
+                    const elType = getContextualTypeForElementExpression(type, ndx);
+                    return elType && isTypeAssignableTo(el, elType);
+                },
             );
             if (typesMatch) return type;
         }
@@ -31422,7 +31423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
             }
             else if (contextFlags && contextFlags & ContextFlags.Completions && isUnion && isArrayLiteralExpression(node)) {
-                return discriminateContextualTypeByElements(node, apparentType as UnionType);
+                return discriminateContextualTypeByElements(node, instantiatedType as UnionType);
             }
             else {
                 return apparentType;
