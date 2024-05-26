@@ -295,13 +295,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "isRest": false
               }
             ],
-            "documentation": [],
-            "tags": [
+            "documentation": [
               {
-                "name": "type",
-                "text": "{FooHandler} callback"
+                "text": "- A kind of magic",
+                "kind": "text"
               }
-            ]
+            ],
+            "tags": []
           }
         ],
         "applicableSpan": {
@@ -484,13 +484,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "isRest": false
               }
             ],
-            "documentation": [],
-            "tags": [
+            "documentation": [
               {
-                "name": "type",
-                "text": "{FooHandler} callback"
+                "text": "- A kind of magic",
+                "kind": "text"
               }
-            ]
+            ],
+            "tags": []
           }
         ],
         "applicableSpan": {
@@ -673,13 +673,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "isRest": false
               }
             ],
-            "documentation": [],
-            "tags": [
+            "documentation": [
               {
-                "name": "type",
-                "text": "{FooHandler} callback"
+                "text": "- A kind of magic",
+                "kind": "text"
               }
-            ]
+            ],
+            "tags": []
           }
         ],
         "applicableSpan": {
