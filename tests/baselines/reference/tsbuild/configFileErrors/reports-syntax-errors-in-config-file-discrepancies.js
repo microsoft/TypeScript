@@ -34,7 +34,6 @@ CleanBuild:
       "composite": true,
       "declaration": true
     },
-    "referencedMap": {},
     "changeFileSet": [
       "../lib/lib.d.ts",
       "./a.ts",
@@ -74,7 +73,6 @@ IncrementalBuild:
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "changeFileSet": [
       "../lib/lib.d.ts",
       "./a.ts",

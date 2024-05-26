@@ -6116,7 +6116,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return result;
                 }
             }
-            context.tracker.reportInferenceFallback(existing);
             return undefined;
         }
 
@@ -8217,6 +8216,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function serializeTypeForDeclaration(context: NodeBuilderContext, declaration: Declaration | undefined, type: Type, symbol: Symbol) {
             const addUndefined = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
             const enclosingDeclaration = context.enclosingDeclaration;
+            const oldFlags = context.flags;
+            if (declaration && hasInferredType(declaration) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
+            }
+            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             if (enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
                 const declWithExistingAnnotation = declaration && getNonlocalEffectiveTypeAnnotationNode(declaration)
                     ? declaration
@@ -8226,11 +8230,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                     const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
+                        context.flags = oldFlags;
                         return result;
                     }
                 }
             }
-            const oldFlags = context.flags;
             if (
                 type.flags & TypeFlags.UniqueESSymbol &&
                 type.symbol === symbol && (!context.enclosingDeclaration || some(symbol.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)))
@@ -8241,10 +8245,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const decl = declaration ?? symbol.valueDeclaration ?? symbol.declarations?.[0];
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
-            if (decl && hasInferredType(decl) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
-                syntacticNodeBuilder.serializeTypeOfDeclaration(decl, context);
-            }
-            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
@@ -31974,7 +31974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             scanner.setScriptTarget(sourceFile.languageVersion);
             scanner.setLanguageVariant(sourceFile.languageVariant);
             scanner.setOnError((message, length, arg0) => {
-                // emulate `parseErrorAtPosition` from parser.ts
+                // For providing spelling suggestions
                 const start = scanner!.getTokenEnd();
                 if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
                     const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
