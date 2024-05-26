@@ -1,0 +1,6 @@
+lib.es2022.d.ts(--,--): error TS2727: Cannot find lib definition for 'es2022.sharedmemory'. Did you mean 'es2020.sharedmemory'?
+
+
+==== libCompileChecks.ts (0 errors) ====
+    // This test is effectively the 'lib check' for all our .d.ts files because we use skipLibCheck
+    // as false everywhere.
