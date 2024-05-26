@@ -1,3 +1,5 @@
+/// <reference lib="es2015.symbol.wellknown" />
+
 interface WeakRef<T extends WeakKey> {
     readonly [Symbol.toStringTag]: "WeakRef";
 

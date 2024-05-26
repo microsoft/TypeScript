@@ -1,5 +1,5 @@
 // @target: esnext
-// @lib: es2024
+// @lib: es2023,es2024.sharedmemory
 // @noemit: true
 // @strict: true
 
