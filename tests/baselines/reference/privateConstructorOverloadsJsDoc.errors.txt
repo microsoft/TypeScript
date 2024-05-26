@@ -1,0 +1,34 @@
+privateConstructorOverloadsJsDoc.js(23,1): error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
+privateConstructorOverloadsJsDoc.js(24,1): error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
+
+
+==== privateConstructorOverloadsJsDoc.js (2 errors) ====
+    class C {
+      /**
+       * @private
+       * @overload
+       * @param x {string}
+       * @param y {string}
+       */
+    
+      /**
+       * @private
+       * @overload
+       * @param x {number}
+       * @param y {number}
+       */
+    
+      /**
+       * @private
+       * @param {...any} args
+       */
+      constructor(...args) {}
+    }
+    
+    new C('foo', 'bar');
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
+    new C(1, 2);
+    ~~~~~~~~~~~
+!!! error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
+    

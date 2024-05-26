@@ -4372,6 +4372,9 @@ export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDoc
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
+    if (isJSDocSignature(hostNode) && isJSDoc(hostNode.parent.parent)) {
+        return hostNode.parent.parent.tags || emptyArray;
+    }
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
     if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {

@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/salsa/privateConstructorOverloadsJsDoc.ts] ////
+
+=== privateConstructorOverloadsJsDoc.js ===
+class C {
+>C : Symbol(C, Decl(privateConstructorOverloadsJsDoc.js, 0, 0))
+
+  /**
+   * @private
+   * @overload
+   * @param x {string}
+   * @param y {string}
+   */
+
+  /**
+   * @private
+   * @overload
+   * @param x {number}
+   * @param y {number}
+   */
+
+  /**
+   * @private
+   * @param {...any} args
+   */
+  constructor(...args) {}
+>args : Symbol(args, Decl(privateConstructorOverloadsJsDoc.js, 19, 14))
+}
+
+new C('foo', 'bar');
+>C : Symbol(C, Decl(privateConstructorOverloadsJsDoc.js, 0, 0))
+
+new C(1, 2);
+>C : Symbol(C, Decl(privateConstructorOverloadsJsDoc.js, 0, 0))
+
