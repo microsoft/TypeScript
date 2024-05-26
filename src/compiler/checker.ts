@@ -589,6 +589,7 @@ import {
     isIntrinsicJsxName,
     isInTypeQuery,
     isIterationStatement,
+    isJSDoc,
     isJSDocAllType,
     isJSDocAugmentsTag,
     isJSDocCallbackTag,
@@ -1105,7 +1106,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isJSDoc,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
