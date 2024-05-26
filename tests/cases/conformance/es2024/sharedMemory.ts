@@ -1,5 +1,5 @@
 // @target: esnext
-// @lib: es2022
+// @lib: es2024
 // @noemit: true
 // @strict: true
 

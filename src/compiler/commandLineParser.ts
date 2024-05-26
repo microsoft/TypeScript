@@ -218,7 +218,6 @@ const libEntries: [string, string][] = [
     ["es2022.error", "lib.es2022.error.d.ts"],
     ["es2022.intl", "lib.es2022.intl.d.ts"],
     ["es2022.object", "lib.es2022.object.d.ts"],
-    ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
