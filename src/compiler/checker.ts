@@ -23832,7 +23832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             findMostOverlappyType(source, target);
     }
 
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
+    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String | number])[], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
         const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
         for (const [getDiscriminatingType, propertyName] of discriminators) {
@@ -23842,7 +23842,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
+                    const targetType = typeof propertyName === "number"
+                        ? getContextualTypeForElementExpression(types[i], propertyName)
+                        : getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
@@ -31388,7 +31390,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Create a discriminator for each element in the list
             const discriminators = map(
                 node.elements,
-                (e, ndx) => [() => getContextFreeTypeOfExpression(e), "" + ndx as __String] as const,
+                (e, ndx) => [() => getContextFreeTypeOfExpression(e), ndx] as const,
             );
             discriminatedType = discriminateTypeByDiscriminableItems(
                 contextualType,
