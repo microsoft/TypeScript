@@ -43,7 +43,7 @@ export function temp(): string;
 
 /a/lib/tsc.js -w -extendedDiagnostics
 Output::
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Config file
@@ -59,13 +59,18 @@ ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modul
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
-[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Wild card directory
@@ -82,8 +87,14 @@ var bar_1 = require("bar");
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

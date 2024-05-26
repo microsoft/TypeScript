@@ -24,12 +24,14 @@ import {
     ImportSpecifier,
     isExportSpecifier,
     isImportDeclaration,
+    isJSDocImportTag,
     isPropertyAccessExpression,
     isPropertyAccessOrQualifiedName,
     isShorthandPropertyAssignment,
     isStringLiteral,
     NamedImports,
     NamespaceImport,
+    or,
     Program,
     PropertyAccessExpression,
     QualifiedName,
@@ -110,8 +112,8 @@ function getImportConversionInfo(context: RefactorContext, considerPartialSpans 
     const { file } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
-    if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
+    const importDecl = considerPartialSpans ? findAncestor(token, or(isImportDeclaration, isJSDocImportTag)) : getParentNodeInSpan(token, file, span);
+    if (importDecl === undefined || !(isImportDeclaration(importDecl) || isJSDocImportTag(importDecl))) return { error: "Selection is not an import declaration." };
 
     const end = span.start + span.length;
     const nextToken = findNextToken(importDecl, importDecl.parent, file);
@@ -189,12 +191,13 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
     });
 
     const importDecl = toConvert.parent.parent;
-    if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
+    if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports && isImportDeclaration(importDecl)) {
         // Need to leave the namespace import alone
-        changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
+        changes.insertNodeAfter(sourceFile, importDecl, createImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
     }
     else {
-        changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
+        const defaultImportName = usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined;
+        changes.replaceNode(sourceFile, toConvert.parent, createImportClause(defaultImportName, importSpecifiers));
     }
 }
 
@@ -266,9 +269,10 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             ? factory.createIdentifier(namespaceImportName)
             : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)),
     );
-    if (neededNamedImports.size) {
+
+    if (neededNamedImports.size && isImportDeclaration(importDecl)) {
         const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
-        changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
+        changes.insertNodeAfter(sourceFile, toConvert.parent.parent, createImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }
 }
 
@@ -279,6 +283,10 @@ function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker)
     return externalModule !== exportEquals;
 }
 
-function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-    return factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*attributes*/ undefined);
+function createImport(node: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
+    return factory.createImportDeclaration(/*modifiers*/ undefined, createImportClause(defaultImportName, elements), node.moduleSpecifier, /*attributes*/ undefined);
+}
+
+function createImportClause(defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined) {
+    return factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined);
 }

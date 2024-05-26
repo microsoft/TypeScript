@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInStrings21_ES5.ts ===
 var x = "\u{67";
 >x : string
+>  : ^^^^^^
 >"\u{67" : "\\u{67"
+>        : ^^^^^^^^
 

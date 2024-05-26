@@ -15,6 +15,7 @@ interface JQueryEventObjectTest {
 
     which: number;
 >which : number
+>      : ^^^^^^
 
     metaKey: any;
 >metaKey : any

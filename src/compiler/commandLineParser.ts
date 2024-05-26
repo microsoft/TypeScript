@@ -534,6 +534,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2020: ScriptTarget.ES2020,
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
+        es2023: ScriptTarget.ES2023,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
@@ -3514,7 +3515,6 @@ export function convertJsonOption(
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);

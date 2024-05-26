@@ -1,10 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     openFilesForSession,

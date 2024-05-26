@@ -3,10 +3,13 @@
 === parserClassDeclaration22.ts ===
 class C {
 >C : C
+>  : ^
 
     "foo"();
 >"foo" : () => any
+>      : ^^^^^^^^^
 
     "bar"() { }
 >"bar" : () => void
+>      : ^^^^^^^^^^
 }

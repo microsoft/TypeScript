@@ -963,7 +963,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /src/b-link.ts 2:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
@@ -979,28 +978,6 @@ Before running Timeout callback:: count: 2
 5: /tsconfig.json
 6: *ensureProjectForOpenFiles*
 //// [/src/b-link.ts] deleted symlink
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/package.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/src/b-link.ts:
-  {}
-
-FsWatchesRecursive::
-/node_modules:
-  {}
-/src:
-  {}
 
 Timeout callback:: count: 2
 5: /tsconfig.json *new*
@@ -1029,8 +1006,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/src/b-link.ts *deleted*
+/src/b-link.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /tsconfig.json *deleted*
 /src/b.ts (Open)

@@ -115,6 +115,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/ro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Type roots
@@ -230,6 +231,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json: *new*
   {}
@@ -713,6 +716,8 @@ PolledWatches *deleted*::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}
@@ -1311,6 +1316,8 @@ PolledWatches *deleted*::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}
@@ -2259,6 +2266,8 @@ FsWatches::
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}

@@ -104,6 +104,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/node_modules/@types 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Type roots
@@ -210,22 +217,36 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/packages/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -364,6 +385,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
@@ -377,7 +401,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/proje
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
-8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
+9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text] symlink(/users/username/projects/myproject/javascript/packages/recognizers-text)
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
 export class C { method(): number; }
@@ -388,20 +412,34 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/node_modules:
   {"pollingInterval":500}
 /users/username/projects/myproject/javascript/packages/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/myproject/node_modules:
   {"pollingInterval":500}
 /users/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
@@ -426,7 +464,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 1
-8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation *new*
+9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -434,8 +472,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
-10: *ensureProjectForOpenFiles* *new*
+10: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json (Configured) *changed*
@@ -444,12 +482,14 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-10: *ensureProjectForOpenFiles*
+10: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+11: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/package.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
@@ -514,14 +554,32 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /users/username/projects/myproject/javascript/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/myproject/javascript/node_modules:
@@ -596,10 +654,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-11: checkOne *new*
+12: checkOne *new*
 
 Before running Timeout callback:: count: 1
-11: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -663,8 +721,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascrip
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 1:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-12: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-13: *ensureProjectForOpenFiles*
+13: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+14: *ensureProjectForOpenFiles*
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
 {
   "compilerOptions": {
@@ -684,8 +742,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-12: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
-13: *ensureProjectForOpenFiles* *new*
+13: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json (Configured) *changed*

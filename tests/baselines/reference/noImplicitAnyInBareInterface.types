@@ -6,7 +6,9 @@ interface Entry {
     new ();
     few() : any;
 >few : () => any
+>    : ^^^^^^   
 
     foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }

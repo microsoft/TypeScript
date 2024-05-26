@@ -49,7 +49,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/web/src/package.json' does not exist.
 File '/Users/name/projects/web/package.json' does not exist.
@@ -80,6 +80,7 @@ Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolved under condition 'types'.
@@ -107,11 +108,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
-  File is CommonJS module because 'node_modules/@types/yargs/package.json' does not have field "type"
 src/bin.ts
   Matched by default include pattern '**/*'
-  File is CommonJS module because 'package.json' was not found
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
