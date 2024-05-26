@@ -26902,23 +26902,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return propType && getConstituentTypeForKeyType(unionType, propType);
     }
 
-    function getMatchingUnionConstituentForArrayLiteral(unionType: UnionType, node: ArrayLiteralExpression) {
-        // TODO: Remove this function if it's not actually needed?
-        return undefined;
-        const resolvedElements = node.elements.map(el => getContextFreeTypeOfExpression(el));
-        for (const type of unionType.types) {
-            if (!isTupleType(type)) continue;
-            const typesMatch = resolvedElements.every(
-                (el, ndx) => {
-                    const elType = getContextualTypeForElementExpression(type, ndx);
-                    return elType && isTypeAssignableTo(el, elType);
-                },
-            );
-            if (typesMatch) return type;
-        }
-        return undefined;
-    }
-
     function isOrContainsMatchingReference(source: Node, target: Node) {
         return isMatchingReference(source, target) || containsMatchingReference(source, target);
     }
@@ -31385,19 +31368,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const cached = getCachedType(key);
         if (cached) return cached;
 
-        let discriminatedType: Type | undefined = getMatchingUnionConstituentForArrayLiteral(contextualType, node);
-        if (!discriminatedType) {
-            // Create a discriminator for each element in the list
-            const discriminators = map(
-                node.elements,
-                (e, ndx) => [() => getContextFreeTypeOfExpression(e), ndx] as const,
-            );
-            discriminatedType = discriminateTypeByDiscriminableItems(
-                contextualType,
-                discriminators,
-                isTypeAssignableTo,
-            );
-        }
+        // Create a discriminator for each element in the list
+        const discriminators = map(
+            node.elements,
+            (e, ndx) => [() => getContextFreeTypeOfExpression(e), ndx] as const,
+        );
+        const discriminatedType = discriminateTypeByDiscriminableItems(
+            contextualType,
+            discriminators,
+            isTypeAssignableTo,
+        );
 
         return setCachedType(key, discriminatedType);
     }
