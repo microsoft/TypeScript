@@ -26901,6 +26901,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getMatchingUnionConstituentForArrayLiteral(unionType: UnionType, node: ArrayLiteralExpression) {
+        // TODO: Remove this function if it's not actually needed?
+        return undefined;
         const resolvedElements = node.elements.map(el => getContextFreeTypeOfExpression(el));
         for (const type of unionType.types) {
             if (!isTupleType(type)) continue;
