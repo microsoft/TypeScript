@@ -10,25 +10,25 @@
 //// };
 
 // @Filename: values.ts
-//// import { type "/*valueImport0*/" } from "./exports";
-//// import { type "/*valueImport1*/" as valueImport1 } from "./exports";
-//// import { type "foo" as "/*valueImport2*/" } from "./exports";
-//// import { type foo, type "/*valueImport3*/" as valueImport3 } from "./exports";
+//// import { "/*valueImport0*/" } from "./exports";
+//// import { "/*valueImport1*/" as valueImport1 } from "./exports";
+//// import { foo as "/*valueImport2*/" } from "./exports";
+//// import { foo, "/*valueImport3*/" as valueImport3 } from "./exports";
 ////
-//// export { type "/*valueExport0*/" } from "./exports";
-//// export { type "/*valueExport1*/" as valueExport1 } from "./exports";
-//// export { type "foo" as "/*valueExport2*/" } from "./exports";
-//// export { type foo, type "/*valueExport3*/" } from "./exports";
+//// export { "/*valueExport0*/" } from "./exports";
+//// export { "/*valueExport1*/" as valueExport1 } from "./exports";
+//// export { foo as "/*valueExport2*/" } from "./exports";
+//// export { foo, "/*valueExport3*/" } from "./exports";
 
 // @Filename: types.ts
-//// import { "/*typeImport0*/" } from "./exports";
-//// import { "/*typeImport1*/" as typeImport1 } from "./exports";
-//// import { "foo" as "/*typeImport2*/" } from "./exports";
-//// import { foo, "/*typeImport3*/" as typeImport3 } from "./exports";
+//// import { type "/*typeImport0*/" } from "./exports";
+//// import { type "/*typeImport1*/" as typeImport1 } from "./exports";
+//// import { type foo as "/*typeImport2*/" } from "./exports";
+//// import { type foo, type "/*typeImport3*/" as typeImport3 } from "./exports";
 ////
 //// export { type "/*typeExport0*/" } from "./exports";
 //// export { type "/*typeExport1*/" as typeExport1 } from "./exports";
-//// export { type "foo" as "/*typeExport2*/" } from "./exports";
+//// export { type foo as "/*typeExport2*/" } from "./exports";
 //// export { type foo, type "/*typeExport3*/" } from "./exports";
 
 verify.completions({ marker: "valueImport0", exact: ["__some type", "__some value", "foo"] });
