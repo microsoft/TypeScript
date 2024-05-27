@@ -997,6 +997,30 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
     return true;
 }
 
+/** @internal */
+export function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += charSize(ch)) {
+        ch = codePointAt(text, i);
+        if (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion)) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
+}
+
 const enum ClassSetExpressionType {
     Unknown,
     ClassUnion,

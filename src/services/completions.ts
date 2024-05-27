@@ -75,6 +75,7 @@ import {
     formatting,
     FunctionLikeDeclaration,
     FutureSymbolExportInfo,
+    generateIdentifierForArbitraryString,
     getAllSuperTypeNodes,
     getAncestor,
     getCombinedLocalAndExportSymbolFlags,
@@ -1837,10 +1838,19 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = JSON.stringify(name);
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -5250,6 +5260,10 @@ function getCompletionEntryDisplayNameForSymbol(
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
+    }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
     }
     switch (kind) {
         case CompletionKind.MemberLike:
