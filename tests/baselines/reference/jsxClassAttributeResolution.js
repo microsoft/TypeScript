@@ -14,7 +14,7 @@ export const a = <App></App>;
 interface IntrinsicClassAttributesAlias<T> {
     ref: T
 }
-declare namespace JSX {
+export declare namespace JSX {
     type IntrinsicClassAttributes<T> = IntrinsicClassAttributesAlias<T>
 }
 //// [jsx-runtime.d.ts]

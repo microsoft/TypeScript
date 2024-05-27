@@ -16,6 +16,7 @@ import type { A } from "./a.ts"; // ok
 >  : ^
 
 import {} from "./a.ts"; // error
+import "./a.ts"; // error
 import { type A as _A } from "./a.ts"; // error
 >A : typeof A
 >  : ^^^^^^^^
@@ -40,6 +41,7 @@ import type { A } from "./a.d.ts"; // ok
 >  : ^
 
 import {} from "./a.d.ts"; // error
+import "./a.d.ts"; // error
 import { type A as _A } from "./a.d.ts"; // error
 >A : typeof A
 >  : ^^^^^^^^

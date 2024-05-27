@@ -216,14 +216,17 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
         const sourceFile = program.getSourceFile("main.ts")!;
         const typeChecker = program.getTypeChecker();
         typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ts.ImportDeclaration).moduleSpecifier);
-        assert.isEmpty(program.getSemanticDiagnostics());
+        const diagnostics = program.getSemanticDiagnostics()
+        assert.equal(diagnostics.length, 1);
+        assert.equal(diagnostics[0].code, ts.Diagnostics.File_0_is_not_a_module.code);
+        assert.equal(diagnostics[0].messageText, "File '/module.d.ts' is not a module.");
     });
 });
 
 describe("unittests:: programApi:: CompilerOptions relative paths", () => {
     it("resolves relative paths by getCurrentDirectory", () => {
         const main = new documents.TextDocument("/main.ts", 'import "module";');
-        const mod = new documents.TextDocument("/lib/module.ts", "declare const foo: any;");
+        const mod = new documents.TextDocument("/lib/module.ts", "export declare const foo: any;");
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
         const program = ts.createProgram(["./main.ts"], {
