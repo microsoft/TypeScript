@@ -5953,6 +5953,7 @@ export interface SymbolLinks {
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     accessibleChainCache?: Map<string, Symbol[] | undefined>;
     filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
+    requestedExternalEmitHelpers?: ExternalEmitHelpers; // External emit helpers already checked for this symbol.
 }
 
 // dprint-ignore
@@ -6139,6 +6140,7 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
 }
 
 /** @internal */
