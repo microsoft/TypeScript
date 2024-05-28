@@ -13,6 +13,13 @@ export {};
 async function foo(): Promise<void> {}
 async function bar(): Promise<void> {}
 
+// @filename: /package1/other.ts
+export {};
+export async function noop(): Promise<void> {}
+export function spread({ a, ...rest }: { a: number, b: number}) {
+    return { c: "c", ...rest };
+}
+
 // @filename: /package1/node_modules/tslib/package.json
 {
     "name": "tslib",

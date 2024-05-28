@@ -1,4 +1,5 @@
 /package1/index.ts(2,16): error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/package1/other.ts(3,32): error TS2343: This syntax requires an imported helper named '__rest' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 /package2/index.ts(2,16): error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
@@ -18,6 +19,15 @@
                    ~~~
 !!! error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
     async function bar(): Promise<void> {}
+    
+==== /package1/other.ts (1 errors) ====
+    export {};
+    export async function noop(): Promise<void> {}
+    export function spread({ a, ...rest }: { a: number, b: number}) {
+                                   ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__rest' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+        return { c: "c", ...rest };
+    }
     
 ==== /package2/index.ts (1 errors) ====
     export {};
