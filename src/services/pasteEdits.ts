@@ -79,7 +79,15 @@ function pasteEdits(
                 const statementsInSourceFile = copiedFrom.file.statements;
                 const startNodeIndex = findIndex(statementsInSourceFile, s => s.end > copy.pos);
                 if (startNodeIndex === -1) return undefined;
-                const endNodeIndex = findIndex(statementsInSourceFile, s => s.end >= copy.end, startNodeIndex);
+                let endNodeIndex = findIndex(statementsInSourceFile, s => s.end >= copy.end, startNodeIndex);
+                /**
+                 * [|console.log(a);
+                 * |]
+                 * console.log(b);
+                 */
+                if (endNodeIndex !== -1 && copy.end <= statementsInSourceFile[endNodeIndex].getStart()) {
+                    endNodeIndex--;
+                }
                 statements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
