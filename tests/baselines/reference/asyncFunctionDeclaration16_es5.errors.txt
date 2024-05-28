@@ -4,7 +4,7 @@
   Type 'typeof Thenable' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
     Construct signature return types 'Thenable' and 'PromiseLike<T>' are incompatible.
       The types returned by 'then(...)' are incompatible between these types.
-        Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
+        Type 'void' is not assignable to type 'PromiseLike<any>'.
 
 
 ==== /types.d.ts (0 errors) ====
@@ -66,7 +66,7 @@
 !!! error TS1065:   Type 'typeof Thenable' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
 !!! error TS1065:     Construct signature return types 'Thenable' and 'PromiseLike<T>' are incompatible.
 !!! error TS1065:       The types returned by 'then(...)' are incompatible between these types.
-!!! error TS1065:         Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
+!!! error TS1065:         Type 'void' is not assignable to type 'PromiseLike<any>'.
     const f5 = async str => {
         return str;
     }

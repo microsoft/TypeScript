@@ -195,11 +195,11 @@ declare var a: Bar | Baz;
 
 // note, you must annotate `result` for now
 a.doThing().then((result: Bar | Baz) => {
->a.doThing().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.doThing().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
 >a.doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 71, 11))
 >doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
 >result : Symbol(result, Decl(unionOfClassCalls.ts, 73, 18))
 >Bar : Symbol(Bar, Decl(unionOfClassCalls.ts, 62, 1))
 >Baz : Symbol(Baz, Decl(unionOfClassCalls.ts, 66, 1))

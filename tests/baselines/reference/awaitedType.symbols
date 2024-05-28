@@ -609,12 +609,12 @@ async function mainFindMany() {
 >const : Symbol(const)
 
   Promise.all(promises).then((results) => {
->Promise.all(promises).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Promise.all(promises).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >promises : Symbol(promises, Decl(awaitedType.ts, 231, 7))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >results : Symbol(results, Decl(awaitedType.ts, 233, 30))
 
     const first = results[0]

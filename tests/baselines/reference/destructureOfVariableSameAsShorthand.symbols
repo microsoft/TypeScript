@@ -25,9 +25,9 @@ async function main() {
 
     // These work examples as expected
     get().then((response) => {
->get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(destructureOfVariableSameAsShorthand.ts, 3, 1))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >response : Symbol(response, Decl(destructureOfVariableSameAsShorthand.ts, 9, 16))
 
         // body is never
@@ -39,9 +39,9 @@ async function main() {
 
     })
     get().then(({ data }) => {
->get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>get().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(destructureOfVariableSameAsShorthand.ts, 3, 1))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(destructureOfVariableSameAsShorthand.ts, 13, 17))
 
         // data is never

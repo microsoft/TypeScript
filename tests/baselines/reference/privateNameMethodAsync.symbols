@@ -47,11 +47,11 @@ const C = class {
 }
 
 new C().foo().then(console.log);
->new C().foo().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>new C().foo().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >new C().foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
 >C : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 5))
 >foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === inferFromGenericFunctionReturnTypes3.ts ===
 // Repros from #5487
 

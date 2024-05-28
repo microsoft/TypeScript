@@ -585,20 +585,20 @@ const testApi = {
 
     return fetch(baseUrl + 'entries')
 >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
->fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->fetch(baseUrl + 'entries')      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >baseUrl : Symbol(baseUrl, Decl(index.mts, 2, 5))
 
       .then((res) => res.json())
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >res : Symbol(res, Decl(index.mts, 17, 13))
 >res.json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
 >res : Symbol(res, Decl(index.mts, 17, 13))
 >json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
 
       .then((data) => data.entries)
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(index.mts, 18, 13))
 >data : Symbol(data, Decl(index.mts, 18, 13))
 

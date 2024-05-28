@@ -2,13 +2,13 @@
 
 === modularizeLibrary_Worker.asynciterable.ts ===
 navigator.storage.getDirectory().then(async directory => {
->navigator.storage.getDirectory().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>navigator.storage.getDirectory().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >navigator.storage.getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.webworker.d.ts, --, --))
 >navigator.storage : Symbol(NavigatorStorage.storage, Decl(lib.webworker.d.ts, --, --))
 >navigator : Symbol(navigator, Decl(lib.webworker.d.ts, --, --))
 >storage : Symbol(NavigatorStorage.storage, Decl(lib.webworker.d.ts, --, --))
 >getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.webworker.d.ts, --, --))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >directory : Symbol(directory, Decl(modularizeLibrary_Worker.asynciterable.ts, 0, 43))
 
     for await (const [key, handle] of directory) {

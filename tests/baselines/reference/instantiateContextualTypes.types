@@ -209,6 +209,7 @@ const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'
 
 createReducer(
 >createReducer(    defaultState,    handler(NON_VOID_ACTION, (state, _payload) => state),    handler(VOID_ACTION, state => state)) : any
+>                                                                                                                                  : ^^^
 >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
 >              : ^ ^^            ^^ ^^^^^              ^^                       ^^^^^   
 
@@ -376,6 +377,7 @@ class InferFunctionTypes extends Component<{children: (foo: number) => string}> 
 
 createElement(InferFunctionTypes, (foo) => "" + foo);
 >createElement(InferFunctionTypes, (foo) => "" + foo) : any
+>                                                     : ^^^
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 >              : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >InferFunctionTypes : typeof InferFunctionTypes
@@ -393,6 +395,7 @@ createElement(InferFunctionTypes, (foo) => "" + foo);
 
 createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 >createElement2(InferFunctionTypes, [(foo) => "" + foo]) : any
+>                                                        : ^^^
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 >               : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >InferFunctionTypes : typeof InferFunctionTypes
@@ -493,8 +496,8 @@ class Interesting {
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>Promise.resolve().then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -503,8 +506,8 @@ class Interesting {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -533,10 +536,10 @@ class Interesting {
 >                                                                                         : ^^^^^^               
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<string>
+>                                                    : ^^^^^^^^^^^^^^^
+>Promise.resolve().then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -545,9 +548,9 @@ class Interesting {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
->() => {			return 'ELSE';		} : () => "ELSE"
+>then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
+>() => {			return 'ELSE';		} : () => string
 >                            : ^^^^^^^^^^^^
 
 			return 'ELSE';
@@ -563,10 +566,10 @@ class Interesting {
 >                                                                                                                                        : ^^^^^^               
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"SOMETHING" | "ELSE">
->                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<string>
+>                                                                                                   : ^^^^^^^^^^^^^^^
+>Promise.resolve().then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -575,10 +578,10 @@ class Interesting {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ 
->() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
->                                                                           : ^^^^^^^^^^^^^^^^^
+>then : { <TResult2 = never>(onfulfilled?: undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<void | TResult1 | TResult2>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^           ^^^                ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^   ^^^^^^^^   ^^^^^^^^ ^^^
+>() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => string
+>                                                                           : ^^^^^^^^^^^^
 
 			if (1 < 2) {
 >1 < 2 : boolean

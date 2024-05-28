@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 1,000
+
 === inferTypes1.ts ===
 type Unpacked<T> =
 >Unpacked : Unpacked<T>
