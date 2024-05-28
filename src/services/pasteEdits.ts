@@ -1,5 +1,4 @@
 import {
-    addRange,
     findIndex,
 } from "../compiler/core.js";
 import {
@@ -11,7 +10,6 @@ import {
     TextRange,
     UserPreferences,
 } from "../compiler/types.js";
-import { getLineOfLocalPosition } from "../compiler/utilities.js";
 import {
     codefix,
     Debug,
