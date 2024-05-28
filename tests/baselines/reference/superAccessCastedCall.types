@@ -48,22 +48,22 @@ class Bar extends Foo {
 >super.bar() : void
 >            : ^^^^
 >super.bar : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >super : Foo
 >      : ^^^
 >bar : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
         (super.bar as any)();
 >(super.bar as any)() : any
 >(super.bar as any) : any
 >super.bar as any : any
 >super.bar : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >super : Foo
 >      : ^^^
 >bar : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
     }
 } 
 

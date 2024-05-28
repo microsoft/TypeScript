@@ -162,8 +162,8 @@ const { style, type } = new Intl.DisplayNames('en', { style: 'long', type: 'lang
 new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of('EUR');
 >new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of('EUR') : string
 >                                                                              : ^^^^^^
->new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of : (code: string) => string
->                                                                       : ^    ^^      ^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of : (code: string) => string | undefined
+>                                                                       : ^    ^^      ^^^^^                  
 >new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }) : Intl.DisplayNames
 >                                                                    : ^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
@@ -184,8 +184,8 @@ new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of('EUR');
 >         : ^^^^^^
 >'none' : "none"
 >       : ^^^^^^
->of : (code: string) => string
->   : ^    ^^      ^^^^^^^^^^^
+>of : (code: string) => string | undefined
+>   : ^    ^^      ^^^^^                  
 >'EUR' : "EUR"
 >      : ^^^^^
 
@@ -193,7 +193,7 @@ Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
 >Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' }) : string[]
 >                                                                            : ^^^^^^^^
 >Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -201,7 +201,7 @@ Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 >{ localeMatcher: 'best fit' } : { localeMatcher: "best fit"; }
@@ -307,7 +307,7 @@ new Intl.ListFormat('en').format([ 'foo', 'bar' ]);
 >new Intl.ListFormat('en').format([ 'foo', 'bar' ]) : string
 >                                                   : ^^^^^^
 >new Intl.ListFormat('en').format : (list: Iterable<string>) => string
->                                 : ^    ^^                ^^^^^^^^^^^
+>                                 : ^    ^^                ^^^^^      
 >new Intl.ListFormat('en') : Intl.ListFormat
 >                          : ^^^^^^^^^^^^^^^
 >Intl.ListFormat : Intl.ListFormatConstructor
@@ -319,7 +319,7 @@ new Intl.ListFormat('en').format([ 'foo', 'bar' ]);
 >'en' : "en"
 >     : ^^^^
 >format : (list: Iterable<string>) => string
->       : ^    ^^                ^^^^^^^^^^^
+>       : ^    ^^                ^^^^^      
 >[ 'foo', 'bar' ] : string[]
 >                 : ^^^^^^^^
 >'foo' : "foo"
@@ -333,7 +333,7 @@ new Intl.ListFormat('en').formatToParts(new Set<string>().values())[0];
 >new Intl.ListFormat('en').formatToParts(new Set<string>().values()) : Intl.ListFormatPart[]
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^
 >new Intl.ListFormat('en').formatToParts : (list: Iterable<string>) => Intl.ListFormatPart[]
->                                        : ^    ^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^    ^^                ^^^^^^^^^^^^^^^^^^^^^^^^  
 >new Intl.ListFormat('en') : Intl.ListFormat
 >                          : ^^^^^^^^^^^^^^^
 >Intl.ListFormat : Intl.ListFormatConstructor
@@ -345,17 +345,17 @@ new Intl.ListFormat('en').formatToParts(new Set<string>().values())[0];
 >'en' : "en"
 >     : ^^^^
 >formatToParts : (list: Iterable<string>) => Intl.ListFormatPart[]
->              : ^    ^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^                ^^^^^^^^^^^^^^^^^^^^^^^^  
 >new Set<string>().values() : IterableIterator<string>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new Set<string>().values : () => IterableIterator<string>
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^                 ^^^^^^ 
 >new Set<string>() : Set<string>
 >                  : ^^^^^^^^^^^
 >Set : SetConstructor
 >    : ^^^^^^^^^^^^^^
 >values : () => IterableIterator<string>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                 ^^^^^^ 
 >0 : 0
 >  : ^
 
@@ -363,7 +363,7 @@ Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' });
 >Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' }) : string[]
 >                                                                          : ^^^^^^^^
 >Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -371,7 +371,7 @@ Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' });
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 >{ localeMatcher: 'lookup' } : { localeMatcher: "lookup"; }
@@ -435,7 +435,7 @@ new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond';
 >new Intl.DateTimeFormat().formatToParts(10) : Intl.DateTimeFormatPart[]
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
->                                        : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -445,7 +445,7 @@ new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond';
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
->              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >10 : 10
 >   : ^^
 >0 : 0
@@ -459,7 +459,7 @@ new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
 >new Intl.DateTimeFormat().formatRange(new Date(0), new Date()) : string
 >                                                               : ^^^^^^
 >new Intl.DateTimeFormat().formatRange : (startDate: Date | number, endDate: Date | number) => string
->                                      : ^         ^^             ^^       ^^             ^^^^^^^^^^^
+>                                      : ^         ^^             ^^       ^^             ^^^^^      
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -469,7 +469,7 @@ new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >formatRange : (startDate: Date | number, endDate: Date | number) => string
->            : ^         ^^             ^^       ^^             ^^^^^^^^^^^
+>            : ^         ^^             ^^       ^^             ^^^^^      
 >new Date(0) : Date
 >            : ^^^^
 >Date : DateConstructor
@@ -489,7 +489,7 @@ new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000)[0].source;
 >new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000) : Intl.DateTimeRangeFormatPart[]
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatRangeToParts : (startDate: Date | number, endDate: Date | number) => Intl.DateTimeRangeFormatPart[]
->                                             : ^         ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^         ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -499,7 +499,7 @@ new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000)[0].source;
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >formatRangeToParts : (startDate: Date | number, endDate: Date | number) => Intl.DateTimeRangeFormatPart[]
->                   : ^         ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^         ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >1000 : 1000
 >     : ^^^^
 >1000000000 : 1000000000

@@ -54,13 +54,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -116,13 +109,6 @@ IncrementalBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -184,14 +170,6 @@ CleanBuild:
         "../../project1/src/b.d.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -251,14 +229,6 @@ IncrementalBuild:
         "../../project1/src/b.d.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -323,14 +293,6 @@ CleanBuild:
         "../../project1/src/b.d.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -390,14 +352,6 @@ IncrementalBuild:
         "../../project1/src/b.d.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../project1/src/a.d.ts",
-      "../../project1/src/b.d.ts",
-      "./e.ts",
-      "./f.ts",
-      "./g.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"

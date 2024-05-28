@@ -17,7 +17,7 @@ export declare const thing: {
         (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
         (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
     };
-    pop: () => number;
+    pop: () => number | undefined;
     push: (...items: number[]) => number;
     concat: {
         (...items: ConcatArray<number>[]): number[];
@@ -25,7 +25,7 @@ export declare const thing: {
     };
     join: (separator?: string) => string;
     reverse: () => number[];
-    shift: () => number;
+    shift: () => number | undefined;
     slice: (start?: number, end?: number) => number[];
     sort: (compareFn?: (a: number, b: number) => number) => number[];
     splice: {
@@ -57,8 +57,8 @@ export declare const thing: {
         <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U;
     };
     find: {
-        <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S;
-        (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number;
+        <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined;
+        (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined;
     };
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
@@ -67,7 +67,7 @@ export declare const thing: {
     keys: () => IterableIterator<number>;
     values: () => IterableIterator<number>;
     includes: (searchElement: number, fromIndex?: number) => boolean;
-    flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];
+    flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | ReadonlyArray<U>, thisArg?: This) => U[];
     flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
     [Symbol.iterator]: () => IterableIterator<number>;
     readonly [Symbol.unscopables]: {
@@ -125,7 +125,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this'
             (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
             (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
         };
-        pop: () => number;
+        pop: () => number | undefined;
         push: (...items: number[]) => number;
         concat: {
             (...items: ConcatArray<number>[]): number[];
@@ -133,7 +133,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this'
         };
         join: (separator?: string) => string;
         reverse: () => number[];
-        shift: () => number;
+        shift: () => number | undefined;
         slice: (start?: number, end?: number) => number[];
         sort: (compareFn?: (a: number, b: number) => number) => number[];
         splice: {
@@ -167,8 +167,8 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this'
             <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U;
         };
         find: {
-            <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S;
-            (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number;
+            <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined;
+            (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined;
         };
         findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
         fill: (value: number, start?: number, end?: number) => number[];
@@ -177,7 +177,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this'
         keys: () => IterableIterator<number>;
         values: () => IterableIterator<number>;
         includes: (searchElement: number, fromIndex?: number) => boolean;
-        flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];
+        flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | ReadonlyArray<U>, thisArg?: This) => U[];
         flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
         [Symbol.iterator]: () => IterableIterator<number>;
         readonly [Symbol.unscopables]: {

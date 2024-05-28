@@ -46,12 +46,12 @@ export default hello.hello
 
 Output::
 /lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
-[[90m12:00:12 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:13 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
 
-[[90m12:00:14 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 TSFILE: /src/dist/index.js
 lib/lib.d.ts

@@ -16,7 +16,7 @@ function f(result: unknown) {
 
     if ((result as I).always) {
 >(result as I).always : () => void
->                     : ^^^^^^^^^^
+>                     : ^^^^^^    
 >(result as I) : I
 >              : ^
 >result as I : I
@@ -24,7 +24,7 @@ function f(result: unknown) {
 >result : unknown
 >       : ^^^^^^^
 >always : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
         return result
 >result : unknown
@@ -39,7 +39,7 @@ function g(result: unknown) {
 
     if (((result as I)).always) {
 >((result as I)).always : () => void
->                       : ^^^^^^^^^^
+>                       : ^^^^^^    
 >((result as I)) : I
 >                : ^
 >(result as I) : I
@@ -49,7 +49,7 @@ function g(result: unknown) {
 >result : unknown
 >       : ^^^^^^^
 >always : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
         return result
 >result : unknown

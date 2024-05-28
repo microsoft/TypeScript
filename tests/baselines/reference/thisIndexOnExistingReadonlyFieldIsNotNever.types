@@ -58,11 +58,11 @@ class CoachMarkAnchorDecorator {
 >this.props.anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -74,7 +74,7 @@ class CoachMarkAnchorDecorator {
 >anchorRef(anchor) : void
 >                  : ^^^^
 >anchorRef : (anchor: AnchorType<P>) => void
->          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^^^^^^^^^^^^^^^^^^^    
 >anchor : AnchorType<P>
 >       : ^^^^^^^^^^^^^
                 }

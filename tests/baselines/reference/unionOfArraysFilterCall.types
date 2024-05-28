@@ -25,7 +25,7 @@ interface Buzz {
 >([] as Fizz[] | Buzz[]).filter(item => item.id < 5) : (Fizz | Buzz)[]
 >                                                    : ^^^^^^^^^^^^^^^
 >([] as Fizz[] | Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->                               : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>                               : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >                        : ^^^^^^^^^^^^^^^
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
@@ -33,7 +33,7 @@ interface Buzz {
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Fizz | Buzz
@@ -53,7 +53,7 @@ interface Buzz {
 >([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5) : (Fizz | Buzz)[]
 >                                                             : ^^^^^^^^^^^^^^^
 >([] as Fizz[] | readonly Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->                                        : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >([] as Fizz[] | readonly Buzz[]) : Fizz[] | readonly Buzz[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[] as Fizz[] | readonly Buzz[] : Fizz[] | readonly Buzz[]
@@ -61,7 +61,7 @@ interface Buzz {
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Fizz | Buzz
@@ -80,16 +80,16 @@ interface Buzz {
 ([] as Fizz[] | Buzz[]).find(item => item);
 >([] as Fizz[] | Buzz[]).find(item => item) : Fizz | Buzz
 >                                           : ^^^^^^^^^^^
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >                        : ^^^^^^^^^^^^^^^
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >                      : ^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >item => item : (item: Fizz | Buzz) => Fizz | Buzz
 >             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Fizz | Buzz
@@ -106,18 +106,18 @@ declare function isFizz(x: unknown): x is Fizz;
 ([] as Fizz[] | Buzz[]).find(isFizz);
 >([] as Fizz[] | Buzz[]).find(isFizz) : Fizz
 >                                     : ^^^^
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >                        : ^^^^^^^^^^^^^^^
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >                      : ^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >isFizz : (x: unknown) => x is Fizz
->       : ^ ^^       ^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^         
 
 declare function isBuzz(x: unknown): x is Buzz;
 >isBuzz : (x: unknown) => x is Buzz
@@ -128,24 +128,24 @@ declare function isBuzz(x: unknown): x is Buzz;
 ([] as Fizz[] | Buzz[]).find(isBuzz);
 >([] as Fizz[] | Buzz[]).find(isBuzz) : Buzz
 >                                     : ^^^^
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>                             : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >                        : ^^^^^^^^^^^^^^^
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >                      : ^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
->     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz | undefined; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz | undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^            ^^^
 >isBuzz : (x: unknown) => x is Buzz
->       : ^ ^^       ^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^         
 
 ([] as Fizz[] | Buzz[]).every(item => item.id < 5);
 >([] as Fizz[] | Buzz[]).every(item => item.id < 5) : boolean
 >                                                   : ^^^^^^^
 >([] as Fizz[] | Buzz[]).every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
->                              : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >                        : ^^^^^^^^^^^^^^^
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
@@ -153,7 +153,7 @@ declare function isBuzz(x: unknown): x is Buzz;
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Fizz | Buzz
@@ -194,7 +194,7 @@ declare function isBuzz(x: unknown): x is Buzz;
 >([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5) : (Fizz | Buzz)[]
 >                                                               : ^^^^^^^^^^^^^^^
 >([] as [Fizz] | readonly [Buzz?]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->                                         : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >([] as [Fizz] | readonly [Buzz?]) : [Fizz] | readonly [Buzz?]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] as [Fizz] | readonly [Buzz?] : [Fizz] | readonly [Buzz?]
@@ -202,7 +202,7 @@ declare function isBuzz(x: unknown): x is Buzz;
 >[] : []
 >   : ^^
 >filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
->       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^  ^^^
 >item => item?.id < 5 : (item: Fizz | Buzz) => boolean
 >                     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Fizz | Buzz

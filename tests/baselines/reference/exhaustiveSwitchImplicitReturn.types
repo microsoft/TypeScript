@@ -92,7 +92,7 @@ function foo4(bar: "a"): number {
 >foo3(bar) : number
 >          : ^^^^^^
 >foo3 : (bar: "a") => number
->     : ^   ^^   ^^^^^^^^^^^
+>     : ^   ^^   ^^^^^      
 >bar : never
 >    : ^^^^^
 }

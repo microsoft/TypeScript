@@ -46,7 +46,7 @@ function other<T>(arg: T) {
 
 function other3<T extends U, U extends Date>(arg: T) {
 >other3 : <T extends U, U extends Date>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 

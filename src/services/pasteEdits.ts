@@ -63,14 +63,6 @@ function pasteEdits(
     if (pastedText.length !== pasteLocations.length) {
         actualPastedText = pastedText.length === 1 ? pastedText : [pastedText.join("\n")];
     }
-    pasteLocations.forEach((paste, i) => {
-        changes.replaceRangeWithText(
-            targetFile,
-            { pos: paste.pos, end: paste.end },
-            actualPastedText ?
-                actualPastedText[0] : pastedText[i],
-        );
-    });
 
     const statements: Statement[] = [];
 
@@ -111,5 +103,13 @@ function pasteEdits(
             });
         }
         importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
+    });
+    pasteLocations.forEach((paste, i) => {
+        changes.replaceRangeWithText(
+            targetFile,
+            { pos: paste.pos, end: paste.end },
+            actualPastedText ?
+                actualPastedText[0] : pastedText[i],
+        );
     });
 }

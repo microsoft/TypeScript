@@ -25,11 +25,11 @@ function test<V>(value: Foo<V>): V {
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value : Foo<V>
 >      : ^^^^^^
 
@@ -49,7 +49,7 @@ test(bar);
 >test(bar) : { [x: string]: any; }
 >          : ^^^^^^^^^^^^^^^^^^^^^
 >test : <V>(value: Foo<V>) => V
->     : ^ ^^     ^^      ^^^^^^
+>     : ^ ^^     ^^      ^^^^^ 
 >bar : Bar<any>
 >    : ^^^^^^^^
 

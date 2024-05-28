@@ -86,9 +86,9 @@ import {
     isCallChain,
     isCallToHelper,
     isCatchClause,
-    isClassDeclaration,
     isClassElement,
     isClassExpression,
+    isClassLike,
     isClassNamedEvaluationHelperBlock,
     isClassStaticBlockDeclaration,
     isClassThisAssignmentBlock,
@@ -901,10 +901,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
     }
 
-    function getClassThis() {
+    function tryGetClassThis() {
         const lex = getClassLexicalEnvironment();
-        const classThis = lex.classThis ?? lex.classConstructor ?? currentClassContainer?.name;
-        return Debug.checkDefined(classThis);
+        return lex.classThis ?? lex.classConstructor ?? currentClassContainer?.name;
     }
 
     function transformAutoAccessor(node: AutoAccessorPropertyDeclaration): VisitResult<Node> {
@@ -946,7 +945,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setEmitFlags(backingField, EmitFlags.NoComments);
         setSourceMapRange(backingField, sourceMapRange);
 
-        const receiver = isStatic(node) ? getClassThis() : factory.createThis();
+        const receiver = isStatic(node) ? tryGetClassThis() ?? factory.createThis() : factory.createThis();
         const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName, receiver);
         setOriginalNode(getter, node);
         setCommentRange(getter, commentRange);
@@ -1713,7 +1712,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function getClassFacts(node: ClassLikeDeclaration) {
         let facts = ClassFacts.None;
         const original = getOriginalNode(node);
-        if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
+        if (isClassLike(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
             facts |= ClassFacts.ClassWasDecorated;
         }
         if (shouldTransformPrivateElementsOrClassStaticBlocks && (classHasClassThisAssignment(node) || classHasExplicitlyAssignedName(node))) {

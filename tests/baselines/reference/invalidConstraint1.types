@@ -3,7 +3,7 @@
 === invalidConstraint1.ts ===
 function f<T, U extends { a: T }>() {
 >f : <T, U extends { a: T; }>() => any
->  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^         ^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -15,7 +15,7 @@ f<string, { a: number }>(); // should error
 >f<string, { a: number }>() : any
 >                           : ^^^
 >f : <T, U extends { a: T; }>() => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^         ^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 

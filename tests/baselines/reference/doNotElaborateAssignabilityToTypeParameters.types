@@ -15,7 +15,7 @@ async function foo<T>(x: T): Promise<T> {
 >getXOrYadda(x) : T | Yadda
 >               : ^^^^^^^^^
 >getXOrYadda : <T_1>(x: T_1) => T_1 | Yadda
->            : ^   ^^ ^^   ^^^^^^^^^^^^^^^^
+>            : ^   ^^ ^^   ^^^^^           
 >x : T
 >  : ^
 

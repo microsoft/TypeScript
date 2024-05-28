@@ -36,7 +36,7 @@ class C {
 >C.prototype.bar = () => { } : () => void
 >                            : ^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
->                : ^ ^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
 >            : ^
 >C : typeof C
@@ -44,7 +44,7 @@ class C {
 >prototype : C
 >          : ^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >() => { } : () => void
 >          : ^^^^^^^^^^
 
@@ -52,7 +52,7 @@ class C {
 >C.prototype.bar = (x) => x : (x: number) => number
 >                           : ^ ^^^^^^^^^^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
->                : ^ ^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
 >            : ^
 >C : typeof C
@@ -60,7 +60,7 @@ class C {
 >prototype : C
 >          : ^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >(x) => x : (x: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -72,7 +72,7 @@ class C {
 >C.prototype.bar = (x: number) => 1 : (x: number) => number
 >                                   : ^ ^^      ^^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
->                : ^ ^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
 >            : ^
 >C : typeof C
@@ -80,7 +80,7 @@ class C {
 >prototype : C
 >          : ^
 >bar : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number

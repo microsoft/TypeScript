@@ -36,13 +36,13 @@ export class C {
 >this.#hello.toUpperCase() : string
 >                          : ^^^^^^
 >this.#hello.toUpperCase : () => string
->                        : ^^^^^^^^^^^^
+>                        : ^^^^^^      
 >this.#hello : string
 >            : ^^^^^^
 >this : this
 >     : ^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
     /** @param value {string} */
     set #screamingHello(value) {

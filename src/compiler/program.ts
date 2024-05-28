@@ -68,6 +68,7 @@ import {
     EmitHost,
     emitModuleKindIsNonNodeESM,
     EmitOnly,
+    emitResolverSkipsTypeChecking,
     EmitResult,
     emptyArray,
     ensureTrailingDirectorySeparator,
@@ -1058,8 +1059,7 @@ export function createModuleResolutionLoader(
 }
 
 function getTypeReferenceResolutionName<T extends FileReference | string>(entry: T) {
-    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-    return !isString(entry) ? toFileNameLowerCase(entry.fileName) : entry;
+    return !isString(entry) ? entry.fileName : entry;
 }
 
 const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
@@ -1243,11 +1243,11 @@ export function isReferenceFileLocation(location: ReferenceFileLocation | Synthe
 export function getReferencedFileLocation(program: Program, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
     const file = Debug.checkDefined(program.getSourceFileByPath(ref.file));
     const { kind, index } = ref;
-    let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined, resolutionMode: FileReference["resolutionMode"] | undefined;
+    let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined;
     switch (kind) {
         case FileIncludeKind.Import:
             const importLiteral = getModuleNameStringLiteralAt(file, index);
-            packageId = program.getResolvedModule(file, importLiteral.text, program.getModeForUsageLocation(file, importLiteral))?.resolvedModule?.packageId;
+            packageId = program.getResolvedModuleFromModuleSpecifier(importLiteral, file)?.resolvedModule?.packageId;
             if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
             pos = skipTrivia(file.text, importLiteral.pos);
             end = importLiteral.end;
@@ -1256,8 +1256,8 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             ({ pos, end } = file.referencedFiles[index]);
             break;
         case FileIncludeKind.TypeReferenceDirective:
-            ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
+            ({ pos, end } = file.typeReferenceDirectives[index]);
+            packageId = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(file.typeReferenceDirectives[index], file)?.resolvedTypeReferenceDirective?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
             ({ pos, end } = file.libReferenceDirectives[index]);
@@ -1590,7 +1590,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
     const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-    let resolvedTypeReferenceDirectives = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
     let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
     let automaticTypeDirectiveNames: string[] | undefined;
     let automaticTypeDirectiveResolutions: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
@@ -1961,7 +1960,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getInstantiationCount: () => getTypeChecker().getInstantiationCount(),
         getRelationCacheSizes: () => getTypeChecker().getRelationCacheSizes(),
         getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-        getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
         getAutomaticTypeDirectiveNames: () => automaticTypeDirectiveNames!,
         getAutomaticTypeDirectiveResolutions: () => automaticTypeDirectiveResolutions,
         isSourceFileFromExternalLibrary,
@@ -1980,6 +1978,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedModule,
         getResolvedModuleFromModuleSpecifier,
         getResolvedTypeReferenceDirective,
+        getResolvedTypeReferenceDirectiveFromTypeReferenceDirective,
         forEachResolvedModule,
         forEachResolvedTypeReferenceDirective,
         getCurrentPackagesMap: () => packageMap,
@@ -2076,14 +2075,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return resolvedModules?.get(file.path)?.get(moduleName, mode);
     }
 
-    function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined {
-        const sourceFile = getSourceFileOfNode(moduleSpecifier);
+    function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike, sourceFile?: SourceFile): ResolvedModuleWithFailedLookupLocations | undefined {
+        sourceFile ??= getSourceFileOfNode(moduleSpecifier);
         Debug.assertIsDefined(sourceFile, "`moduleSpecifier` must have a `SourceFile` ancestor. Use `program.getResolvedModule` instead to provide the containing file and resolution mode.");
         return getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
     }
 
     function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
         return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode);
+    }
+
+    function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
+        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
     }
 
     function forEachResolvedModule(
@@ -2718,7 +2721,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         files = newSourceFiles;
         fileReasons = oldProgram.getFileIncludeReasons();
         fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
-        resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
         automaticTypeDirectiveNames = oldProgram.getAutomaticTypeDirectiveNames();
         automaticTypeDirectiveResolutions = oldProgram.getAutomaticTypeDirectiveResolutions();
 
@@ -2869,18 +2871,27 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is because in the -out scenario all files need to be emitted, and therefore all
         // files need to be type checked. And the way to specify that all files need to be type
         // checked is to not pass the file to getEmitResolver.
-        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken);
+        const typeChecker = getTypeChecker();
+        const emitResolver = typeChecker.getEmitResolver(
+            options.outFile ? undefined : sourceFile,
+            cancellationToken,
+            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit),
+        );
 
         performance.mark("beforeEmit");
 
-        const emitResult = emitFiles(
-            emitResolver,
-            getEmitHost(writeFileCallback),
-            sourceFile,
-            getTransformers(options, customTransformers, emitOnly),
-            emitOnly,
-            /*onlyBuildInfo*/ false,
-            forceDtsEmit,
+        const emitResult = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            () =>
+                emitFiles(
+                    emitResolver,
+                    getEmitHost(writeFileCallback),
+                    sourceFile,
+                    getTransformers(options, customTransformers, emitOnly),
+                    emitOnly,
+                    /*onlyBuildInfo*/ false,
+                    forceDtsEmit,
+                ),
         );
 
         performance.mark("afterEmit");
@@ -3764,7 +3775,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         let redirectedPath: Path | undefined;
-        if (isReferencedFile(reason) && !useSourceOfProjectReferenceRedirect) {
+        if (!useSourceOfProjectReferenceRedirect) {
             const redirectProject = getProjectReferenceRedirectProject(fileName);
             if (redirectProject) {
                 if (redirectProject.commandLine.options.outFile) {
@@ -3990,7 +4001,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const ref = file.typeReferenceDirectives[index];
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
-            const fileName = toFileNameLowerCase(ref.fileName);
+            const fileName = ref.fileName;
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
@@ -4019,54 +4030,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         reason: FileIncludeReason,
     ): void {
         addResolutionDiagnostics(resolution);
-        // If we already found this library as a primary reference - nothing to do
-        const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode)?.resolvedTypeReferenceDirective;
-        if (previousResolution && previousResolution.primary) {
-            return;
-        }
-        let saveResolution = true;
         const { resolvedTypeReferenceDirective } = resolution;
         if (resolvedTypeReferenceDirective) {
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth++;
 
-            if (resolvedTypeReferenceDirective.primary) {
-                // resolved from the primary path
-                processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
-            }
-            else {
-                // If we already resolved to this file, it must have been a secondary reference. Check file contents
-                // for sameness and possibly issue an error
-                if (previousResolution) {
-                    // Don't bother reading the file again if it's the same file.
-                    if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
-                        const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
-                        const existingFile = getSourceFile(previousResolution.resolvedFileName!)!;
-                        if (otherFileText !== existingFile.text) {
-                            addFilePreprocessingFileExplainingDiagnostic(
-                                existingFile,
-                                reason,
-                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName!, previousResolution.resolvedFileName!],
-                            );
-                        }
-                    }
-                    // don't overwrite previous resolution result
-                    saveResolution = false;
-                }
-                else {
-                    // First resolution of this library
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason);
-                }
-            }
+            // resolved from the primary path
+            processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
 
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
         }
         else {
             addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_find_type_definition_file_for_0, [typeReferenceDirective]);
-        }
-
-        if (saveResolution) {
-            resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, resolution);
         }
     }
 

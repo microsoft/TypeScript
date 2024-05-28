@@ -11,7 +11,7 @@ Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
 >Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat().formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
->                                    : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                      : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -21,7 +21,7 @@ Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
->              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >0 : 0
 >  : ^
 >type : keyof Intl.DateTimeFormatPartTypesRegistry

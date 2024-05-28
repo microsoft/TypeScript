@@ -5,7 +5,7 @@
 
 function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }
 >foo : <T extends { [K in keyof T as `${Extract<K, string>}y`]: number; }>(foox: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                                                       ^^    ^^ ^^^^^^^^^
 >foox : T
 >     : ^
 
@@ -23,7 +23,7 @@ foo(c);
 >foo(c) : void
 >       : ^^^^
 >foo : <T extends { [K in keyof T as `${Extract<K, string>}y`]: number; }>(foox: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                                                       ^^    ^^ ^^^^^^^^^
 >c : { x: number; }
 >  : ^^^^^^^^^^^^^^
 

@@ -19,7 +19,7 @@ class Bar<T> {
 >callme(this) : Bar<any>
 >             : ^^^^^^^^
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >this : this
 >     : ^^^^
 >num : number
@@ -33,7 +33,7 @@ class Bar<T> {
 >callme(this) : Bar<any>
 >             : ^^^^^^^^
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >this : this
 >     : ^^^^
 >num : number
@@ -41,13 +41,13 @@ class Bar<T> {
 }
 declare function callme(x: Bar<any>): Bar<any>;
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
->       : ^^^ ^^        ^^^        ^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : Bar<any>
 >  : ^^^^^^^^
 
 declare function callme(x: object): string;
 >callme : { (x: Bar<any>): Bar<any>; (x: object): string; }
->       : ^^^ ^^        ^^^^^^^^^^^^^^ ^^      ^^^      ^^^
+>       : ^^^ ^^        ^^^        ^^^ ^^      ^^^      ^^^
 >x : object
 >  : ^^^^^^
 

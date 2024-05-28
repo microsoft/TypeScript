@@ -39,11 +39,11 @@ function apply(func, thisArg, ...args) {
 >  : ^
 >func.call(thisArg) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 
         case 1: return func.call(thisArg, args[0]);
@@ -51,11 +51,11 @@ function apply(func, thisArg, ...args) {
 >  : ^
 >func.call(thisArg, args[0]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 >args[0] : any
 >args : any[]
@@ -68,11 +68,11 @@ function apply(func, thisArg, ...args) {
 >  : ^
 >func.call(thisArg, args[0], args[1]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 >args[0] : any
 >args : any[]
@@ -90,11 +90,11 @@ function apply(func, thisArg, ...args) {
 >  : ^
 >func.call(thisArg, args[0], args[1], args[2]) : any
 >func.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >thisArg : any
 >args[0] : any
 >args : any[]
@@ -115,11 +115,11 @@ function apply(func, thisArg, ...args) {
     return func.apply(thisArg, args);
 >func.apply(thisArg, args) : any
 >func.apply : (this: Function, thisArg: any, argArray?: any) => any
->           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >thisArg : any
 >args : any[]
 >     : ^^^^^

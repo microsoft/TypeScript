@@ -13,7 +13,7 @@ class C<T extends Date> {
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => U
->    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : U
 >  : ^
 

@@ -75,14 +75,14 @@ declare class D3<T extends M.E> { }
 >  : ^^^
 
 declare function h<T extends C>(x: T);
->h : <T extends any>(x: T) => any
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^^^
+>h : <T extends C>(x: T) => any
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
 declare function i<T extends M.E>(x: T);
->i : <T extends any>(x: T) => any
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^^^
+>i : <T extends M.E>(x: T) => any
+>  : ^ ^^^^^^^^^   ^^ ^^ ^^^^^^^^
 >M : any
 >  : ^^^
 >x : T

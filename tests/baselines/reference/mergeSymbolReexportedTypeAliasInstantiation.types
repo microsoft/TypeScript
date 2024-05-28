@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/mergeSymbolReexportedTypeAliasInstantiation.ts] ////
+
+=== main.ts ===
+import {Row2, C} from '.'
+>Row2 : any
+>     : ^^^
+>C : any
+>  : ^^^
+
+const x: ((rowData: Row2<string>) => unknown) = (rowData: Row2<any>) => (null)
+>x : (rowData: Row2<string>) => unknown
+>  : ^       ^^            ^^^^^       
+>rowData : Row2<string>
+>        : ^^^^^^^^^^^^
+>(rowData: Row2<any>) => (null) : (rowData: Row2<any>) => any
+>                               : ^       ^^         ^^^^^^^^
+>rowData : Row2<any>
+>        : ^^^^^^^^^
+>(null) : null
+>       : ^^^^
+
+const y : C = { s: '' }
+>y : C
+>  : ^
+>{ s: '' } : { s: string; }
+>          : ^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>'' : ""
+>   : ^^
+
+=== ./a.d.ts ===
+import '.'
+declare module '.' {
+>'.' : typeof import("index")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Row2<T> = {}
+>Row2 : Row2<T>
+>     : ^^^^^^^
+
+  type C = { s : string }
+>C : C
+>  : ^
+>s : string
+>  : ^^^^^^
+}
+
+=== ./index.d.ts ===
+export type {Row2} from './common';
+>Row2 : import("common").Row2
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== ./common.d.ts ===
+
+export interface Row2 {}

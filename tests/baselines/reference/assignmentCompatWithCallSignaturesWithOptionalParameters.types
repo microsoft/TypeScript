@@ -56,7 +56,7 @@ var a: () => number;
 >a = () => 1 : () => number
 >            : ^^^^^^^^^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -66,7 +66,7 @@ var a: () => number;
 >a = (x?: number) => 1 : (x?: number) => number
 >                      : ^ ^^^      ^^^^^^^^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
 >x : number
@@ -78,7 +78,7 @@ var a: () => number;
 >a = (x: number) => 1 : (x: number) => number
 >                     : ^ ^^      ^^^^^^^^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -88,75 +88,75 @@ var a: () => number;
 
     a = b.a; // ok
 >a = b.a : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : Base
 >  : ^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     a = b.a2; // ok
 >a = b.a2 : (x?: number) => number
->         : ^ ^^^      ^^^^^^^^^^^
+>         : ^ ^^^      ^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a2 : (x?: number) => number
->     : ^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 
     a = b.a3; // error
 >a = b.a3 : (x: number) => number
->         : ^ ^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a3 : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     a = b.a4; // error
 >a = b.a4 : (x: number, y?: number) => number
->         : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^ ^^^      ^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a4 : (x: number, y?: number) => number
->     : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 
     a = b.a5; // ok
 >a = b.a5 : (x?: number, y?: number) => number
->         : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>         : ^ ^^^      ^^ ^^^      ^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a5 : (x?: number, y?: number) => number
->     : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 
     a = b.a6; // error
 >a = b.a6 : (x: number, y: number) => number
->         : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^ ^^      ^^^^^      
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >b.a6 : (x: number, y: number) => number
->     : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a6 : (x: number, y: number) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 
 var a2: (x?: number) => number; 
 >a2 : (x?: number) => number
@@ -168,7 +168,7 @@ var a2: (x?: number) => number;
 >a2 = () => 1 : () => number
 >             : ^^^^^^^^^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -178,7 +178,7 @@ var a2: (x?: number) => number;
 >a2 = (x?: number) => 1 : (x?: number) => number
 >                       : ^ ^^^      ^^^^^^^^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
 >x : number
@@ -190,7 +190,7 @@ var a2: (x?: number) => number;
 >a2 = (x: number) => 1 : (x: number) => number
 >                      : ^ ^^      ^^^^^^^^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -200,75 +200,75 @@ var a2: (x?: number) => number;
 
     a2 = b.a; // ok
 >a2 = b.a : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : Base
 >  : ^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     a2 = b.a2; // ok
 >a2 = b.a2 : (x?: number) => number
->          : ^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a2 : (x?: number) => number
->     : ^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 
     a2 = b.a3; // ok, same number of params
 >a2 = b.a3 : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a3 : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     a2 = b.a4; // ok, excess params are optional in b.a3
 >a2 = b.a4 : (x: number, y?: number) => number
->          : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^      ^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a4 : (x: number, y?: number) => number
->     : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 
     a2 = b.a5; // ok
 >a2 = b.a5 : (x?: number, y?: number) => number
->          : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^ ^^^      ^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a5 : (x?: number, y?: number) => number
->     : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 
     a2 = b.a6; // error
 >a2 = b.a6 : (x: number, y: number) => number
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^      
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 >b.a6 : (x: number, y: number) => number
->     : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a6 : (x: number, y: number) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 
 var a3: (x: number) => number; 
 >a3 : (x: number) => number
@@ -280,7 +280,7 @@ var a3: (x: number) => number;
 >a3 = () => 1 : () => number
 >             : ^^^^^^^^^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -290,7 +290,7 @@ var a3: (x: number) => number;
 >a3 = (x?: number) => 1 : (x?: number) => number
 >                       : ^ ^^^      ^^^^^^^^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
 >x : number
@@ -302,7 +302,7 @@ var a3: (x: number) => number;
 >a3 = (x: number) => 1 : (x: number) => number
 >                      : ^ ^^      ^^^^^^^^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -314,7 +314,7 @@ var a3: (x: number) => number;
 >a3 = (x: number, y: number) => 1 : (x: number, y: number) => number
 >                                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >(x: number, y: number) => 1 : (x: number, y: number) => number
 >                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -326,75 +326,75 @@ var a3: (x: number) => number;
 
     a3 = b.a; // ok
 >a3 = b.a : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : Base
 >  : ^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     a3 = b.a2; // ok
 >a3 = b.a2 : (x?: number) => number
->          : ^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a2 : (x?: number) => number
->     : ^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 
     a3 = b.a3; // ok
 >a3 = b.a3 : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a3 : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     a3 = b.a4; // ok
 >a3 = b.a4 : (x: number, y?: number) => number
->          : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^      ^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a4 : (x: number, y?: number) => number
->     : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 
     a3 = b.a5; // ok
 >a3 = b.a5 : (x?: number, y?: number) => number
->          : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^ ^^^      ^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a5 : (x?: number, y?: number) => number
->     : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 
     a3 = b.a6; // error
 >a3 = b.a6 : (x: number, y: number) => number
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^      
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >b.a6 : (x: number, y: number) => number
->     : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a6 : (x: number, y: number) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 
 var a4: (x: number, y?: number) => number;
 >a4 : (x: number, y?: number) => number
@@ -408,7 +408,7 @@ var a4: (x: number, y?: number) => number;
 >a4 = () => 1 : () => number
 >             : ^^^^^^^^^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -418,7 +418,7 @@ var a4: (x: number, y?: number) => number;
 >a4 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                                   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >x : number
@@ -432,7 +432,7 @@ var a4: (x: number, y?: number) => number;
 >a4 = (x: number) => 1 : (x: number) => number
 >                      : ^ ^^      ^^^^^^^^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -444,7 +444,7 @@ var a4: (x: number, y?: number) => number;
 >a4 = (x: number, y: number) => 1 : (x: number, y: number) => number
 >                                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >(x: number, y: number) => 1 : (x: number, y: number) => number
 >                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -456,75 +456,75 @@ var a4: (x: number, y?: number) => number;
 
     a4 = b.a; // ok
 >a4 = b.a : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : Base
 >  : ^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     a4 = b.a2; // ok
 >a4 = b.a2 : (x?: number) => number
->          : ^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a2 : (x?: number) => number
->     : ^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 
     a4 = b.a3; // ok
 >a4 = b.a3 : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a3 : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     a4 = b.a4; // ok
 >a4 = b.a4 : (x: number, y?: number) => number
->          : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^      ^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a4 : (x: number, y?: number) => number
->     : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 
     a4 = b.a5; // ok
 >a4 = b.a5 : (x?: number, y?: number) => number
->          : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^ ^^^      ^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a5 : (x?: number, y?: number) => number
->     : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 
     a4 = b.a6; // ok, same number of params
 >a4 = b.a6 : (x: number, y: number) => number
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^      
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 >b.a6 : (x: number, y: number) => number
->     : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a6 : (x: number, y: number) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 
 var a5: (x?: number, y?: number) => number;
 >a5 : (x?: number, y?: number) => number
@@ -538,7 +538,7 @@ var a5: (x?: number, y?: number) => number;
 >a5 = () => 1 : () => number
 >             : ^^^^^^^^^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -548,7 +548,7 @@ var a5: (x?: number, y?: number) => number;
 >a5 = (x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                                   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >x : number
@@ -562,7 +562,7 @@ var a5: (x?: number, y?: number) => number;
 >a5 = (x: number) => 1 : (x: number) => number
 >                      : ^ ^^      ^^^^^^^^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -574,7 +574,7 @@ var a5: (x?: number, y?: number) => number;
 >a5 = (x: number, y: number) => 1 : (x: number, y: number) => number
 >                                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >(x: number, y: number) => 1 : (x: number, y: number) => number
 >                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -586,73 +586,73 @@ var a5: (x?: number, y?: number) => number;
 
     a5 = b.a; // ok
 >a5 = b.a : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : Base
 >  : ^^^^
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     a5 = b.a2; // ok
 >a5 = b.a2 : (x?: number) => number
->          : ^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a2 : (x?: number) => number
->     : ^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a2 : (x?: number) => number
->   : ^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^      
 
     a5 = b.a3; // ok, fewer params in b.a3
 >a5 = b.a3 : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a3 : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a3 : (x: number) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
     a5 = b.a4; // ok, same number of params
 >a5 = b.a4 : (x: number, y?: number) => number
->          : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^      ^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a4 : (x: number, y?: number) => number
->     : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a4 : (x: number, y?: number) => number
->   : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^      ^^^^^      
 
     a5 = b.a5; // ok
 >a5 = b.a5 : (x?: number, y?: number) => number
->          : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^ ^^^      ^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a5 : (x?: number, y?: number) => number
->     : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>     : ^ ^^^      ^^ ^^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 
     a5 = b.a6; // ok, same number of params
 >a5 = b.a6 : (x: number, y: number) => number
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^      
 >a5 : (x?: number, y?: number) => number
->   : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
+>   : ^ ^^^      ^^ ^^^      ^^^^^      
 >b.a6 : (x: number, y: number) => number
->     : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >b : Base
 >  : ^^^^
 >a6 : (x: number, y: number) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 

@@ -11,12 +11,12 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 
     if (required) { // error
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
     }
 
     if (optional) { // ok
 >optional : (() => boolean) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^       ^^^^^^^^^^^^^
     }
 
     if (!!required) { // ok
@@ -25,14 +25,14 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >!required : false
 >          : ^^^^^
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
     }
 
     if (required()) { // ok
 >required() : boolean
 >           : ^^^^^^^
 >required : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
     }
 }
 
@@ -48,11 +48,11 @@ function onlyErrorsWhenUnusedInBody() {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 
@@ -64,11 +64,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log('test') : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'test' : "test"
 >       : ^^^^^^
     }
@@ -81,11 +81,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log(test) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >test : () => boolean
 >     : ^^^^^^^^^^^^^
     }
@@ -109,13 +109,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(() => {            test();        }) : void
 >                                                          : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >() => {            test();        } : () => void
 >                                    : ^^^^^^^^^^
 
@@ -136,13 +136,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(test => {            test();        }) : void
 >                                                            : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >test => {            test();        } : (test: () => null) => void
 >                                      : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
@@ -253,11 +253,11 @@ class Foo {
 
         if (this.maybeIsUser) { // ok
 >this.maybeIsUser : (() => boolean) | undefined
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^       ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >maybeIsUser : (() => boolean) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^       ^^^^^^^^^^^^^
         }
     }
 }
@@ -271,21 +271,21 @@ function A(stats: StatsBase<any>) {
 
     if (stats.isDirectory) { // err
 >stats.isDirectory : () => boolean
->                  : ^^^^^^^^^^^^^
+>                  : ^^^^^^       
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 >isDirectory : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 
         console.log(`[Directory] ${stats.ctime}`)
 >console.log(`[Directory] ${stats.ctime}`) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >`[Directory] ${stats.ctime}` : string
 >                             : ^^^^^^
 >stats.ctime : number
@@ -307,7 +307,7 @@ function B(a: Nested, b: Nested) {
 
     if (a.stats.isDirectory) { // err
 >a.stats.isDirectory : () => boolean
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >a.stats : StatsBase<any>
 >        : ^^^^^^^^^^^^^^
 >a : Nested
@@ -315,13 +315,13 @@ function B(a: Nested, b: Nested) {
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 >isDirectory : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 
         b.stats.isDirectory(); 
 >b.stats.isDirectory() : boolean
 >                      : ^^^^^^^
 >b.stats.isDirectory : () => boolean
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >b.stats : StatsBase<any>
 >        : ^^^^^^^^^^^^^^
 >b : Nested
@@ -329,11 +329,11 @@ function B(a: Nested, b: Nested) {
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 >isDirectory : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
     }
     if (a.stats.isDirectory) { // ok
 >a.stats.isDirectory : () => boolean
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >a.stats : StatsBase<any>
 >        : ^^^^^^^^^^^^^^
 >a : Nested
@@ -341,13 +341,13 @@ function B(a: Nested, b: Nested) {
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 >isDirectory : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
 
         a.stats.isDirectory();
 >a.stats.isDirectory() : boolean
 >                      : ^^^^^^^
 >a.stats.isDirectory : () => boolean
->                    : ^^^^^^^^^^^^^
+>                    : ^^^^^^       
 >a.stats : StatsBase<any>
 >        : ^^^^^^^^^^^^^^
 >a : Nested
@@ -355,7 +355,7 @@ function B(a: Nested, b: Nested) {
 >stats : StatsBase<any>
 >      : ^^^^^^^^^^^^^^
 >isDirectory : () => boolean
->            : ^^^^^^^^^^^^^
+>            : ^^^^^^       
     }
 } 
 

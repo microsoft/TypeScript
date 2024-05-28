@@ -53,7 +53,7 @@ module WinJS {
 
         static join(promises: { [name: string]: Promise; }): Promise;
 >join : { (promises: { [name: string]: Promise; }): Promise; (promises: Promise[]): Promise; }
->     : ^^^        ^^                            ^^^       ^^^        ^^         ^^^^^^^^^^^^^
+>     : ^^^        ^^                            ^^^       ^^^        ^^         ^^^       ^^^
 >promises : { [name: string]: Promise; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -61,7 +61,7 @@ module WinJS {
 
         static join(promises: Promise[]): Promise;
 >join : { (promises: { [name: string]: Promise; }): Promise; (promises: Promise[]): Promise; }
->     : ^^^        ^^                            ^^^^^^^^^^^^^        ^^         ^^^       ^^^
+>     : ^^^        ^^                            ^^^       ^^^        ^^         ^^^       ^^^
 >promises : Promise[]
 >         : ^^^^^^^^^
 
@@ -144,7 +144,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => TPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : V
@@ -158,7 +158,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^ ^^       ^^^                         ^^     ^^^               ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^                         ^^     ^^^               ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => TPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : V
@@ -172,7 +172,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^ ^^       ^^^               ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => U
 >        : ^     ^^ ^^^^^ 
 >value : V
@@ -186,7 +186,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^^^^^^^^^^^^^^^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^^^^^^^^^^^^^^^^^ ^^       ^^^               ^^     ^^^               ^^        ^^^                ^^^           ^^^
+>     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^               ^^        ^^^                ^^^           ^^^
 >success : (value: V) => U
 >        : ^     ^^ ^^^^^ 
 >value : V
@@ -293,7 +293,7 @@ module Services {
          */
         getRequestUrl(service: string, path?: string): string;
 >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
->              : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^^^^^^^^^^
+>              : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
 >service : string
 >        : ^^^^^^
 >path : string
@@ -301,7 +301,7 @@ module Services {
 
         getRequestUrl(service: string, path?: string, absolute?: boolean): string;
 >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
->              : ^^^       ^^      ^^    ^^^      ^^^^^^^^^^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
+>              : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
 >service : string
 >        : ^^^^^^
 >path : string
@@ -399,7 +399,7 @@ class FileService {
 >this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }) : WinJS.Promise
 >                                                                                                                                                                                          : ^^^^^^^^^^^^^
 >this.requestService.makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
->                                : ^       ^^                 ^^^^^^^^^^^^^^^^^^
+>                                : ^       ^^                 ^^^^^             
 >this.requestService : Services.IRequestService
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
@@ -407,7 +407,7 @@ class FileService {
 >requestService : Services.IRequestService
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
->            : ^       ^^                 ^^^^^^^^^^^^^^^^^^
+>            : ^       ^^                 ^^^^^             
 >{            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        } : { url: string; type: string; headers: {}; data: string; }
 >                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -417,7 +417,7 @@ class FileService {
 >this.requestService.getRequestUrl('root', path) : string
 >                                                : ^^^^^^
 >this.requestService.getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
->                                  : ^^^       ^^      ^^    ^^^      ^^^^^^^^^^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^^^^^^^^^^
+>                                  : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
 >this.requestService : Services.IRequestService
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
@@ -425,7 +425,7 @@ class FileService {
 >requestService : Services.IRequestService
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
->              : ^^^       ^^      ^^    ^^^      ^^^^^^^^^^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^^^^^^^^^^
+>              : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
 >'root' : "root"
 >       : ^^^^^^
 >path : string
@@ -499,7 +499,7 @@ class FileService {
 >WinJS.TPromise.as<Files.IUploadResult>(result) : WinJS.TPromise<Files.IUploadResult>
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WinJS.TPromise.as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
->                  : ^         ^^     ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^         ^^     ^^         ^^^^^^^^^^^^^^^^^^^           
 >WinJS.TPromise : typeof WinJS.TPromise
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >WinJS : typeof WinJS
@@ -507,7 +507,7 @@ class FileService {
 >TPromise : typeof WinJS.TPromise
 >         : ^^^^^^^^^^^^^^^^^^^^^
 >as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
->   : ^         ^^     ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^         ^^     ^^         ^^^^^^^^^^^^^^^^^^^           
 >Files : any
 >      : ^^^
 >result : IUploadResult

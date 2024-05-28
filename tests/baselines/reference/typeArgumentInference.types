@@ -129,11 +129,11 @@ someGenerics2a<string>((n) => n.substr(0));
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -189,11 +189,11 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >n.substr(t * t) : string
 >                : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >t * t : number
 >      : ^^^^^^
 >t : number
@@ -509,7 +509,7 @@ var x = someGenerics8(someGenerics7);
 >someGenerics8(someGenerics7) : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 >                             : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >someGenerics8 : <T>(n: T) => T
->              : ^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^^^^ 
 >someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 >              : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 
@@ -538,7 +538,7 @@ var a9a = someGenerics9('', 0, []);
 >someGenerics9('', 0, []) : ""
 >                         : ^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 >0 : 0
@@ -556,7 +556,7 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
 >                                                                      : ^^^^^^      ^^^^^^      ^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : number
 >  : ^^^^^^
 >b : string
@@ -576,7 +576,7 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 
 var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >b : string
@@ -607,7 +607,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
@@ -643,7 +643,7 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }
 >someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : A92
 >                                                                        : ^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
@@ -680,7 +680,7 @@ var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
 >                                            : ^^^^^^^^^^^^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >{ x: 3 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
@@ -717,7 +717,7 @@ var a = someGenerics9(7, anyVar, 4);
 >someGenerics9(7, anyVar, 4) : any
 >                            : ^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >7 : 7
 >  : ^
 >anyVar : any
@@ -736,7 +736,7 @@ var arr = someGenerics9([], null, undefined);
 >someGenerics9([], null, undefined) : any[]
 >                                   : ^^^^^
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >undefined : undefined

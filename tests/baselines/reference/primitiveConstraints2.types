@@ -7,7 +7,7 @@ class C<T> {
 
    public bar2<U extends T>(x: T, y: U): T {
 >bar2 : <U extends T>(x: T, y: U) => T
->     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U

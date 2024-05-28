@@ -27,11 +27,11 @@ class Foo {
 >console.log(_i) : void
 >                : ^^^^
 >console.log : (msg?: string) => void
->            : ^   ^^^      ^^^^^^^^^
+>            : ^   ^^^      ^^^^^    
 >console : { log(msg?: string): void; }
->        : ^^^^^^   ^^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^^      ^^^    ^^^
 >log : (msg?: string) => void
->    : ^   ^^^      ^^^^^^^^^
+>    : ^   ^^^      ^^^^^    
 >_i : string
 >   : ^^^^^^
     }

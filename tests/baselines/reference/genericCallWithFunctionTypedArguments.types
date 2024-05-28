@@ -16,7 +16,7 @@ function foo<T>(x: (a: T) => T) {
 >x(null) : T
 >        : ^
 >x : (a: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 var r = foo(<U>(x: U) => ''); // {}
@@ -75,7 +75,7 @@ function foo2<T, U>(x: T, cb: (a: T) => U) {
 >cb(x) : U
 >      : ^
 >cb : (a: T) => U
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -144,7 +144,7 @@ function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
 >cb(x) : U
 >      : ^
 >cb : (a: T) => U
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

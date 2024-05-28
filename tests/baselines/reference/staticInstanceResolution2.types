@@ -9,11 +9,11 @@ A.hasOwnProperty('foo');
 >A.hasOwnProperty('foo') : boolean
 >                        : ^^^^^^^
 >A.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >A : typeof A
 >  : ^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -27,11 +27,11 @@ B.hasOwnProperty('foo');
 >B.hasOwnProperty('foo') : boolean
 >                        : ^^^^^^^
 >B.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >B : typeof B
 >  : ^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >'foo' : "foo"
 >      : ^^^^^
 

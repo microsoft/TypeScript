@@ -46,19 +46,19 @@ function Todo(prop: { key: number, todo: string }) {
 >prop.key.toString() : string
 >                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
->                  : ^     ^^^      ^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^      
 >prop.key : number
 >         : ^^^^^^
 >prop : { key: number; todo: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >prop.todo : string
 >          : ^^^^^^
 >prop : { key: number; todo: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >todo : string
 >     : ^^^^^^
 >div : any
@@ -80,11 +80,11 @@ function TodoList({ todos }: TodoListProps) {
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
 >                                                          : ^^^^^^^^^^^^^
 >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->          : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>          : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
 >                                               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >todo : TodoProp

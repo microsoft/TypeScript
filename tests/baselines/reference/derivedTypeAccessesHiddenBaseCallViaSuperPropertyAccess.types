@@ -48,15 +48,15 @@ class Derived extends Base {
 
         var r = super.foo({ a: 1 }); // { a: number }
 >r : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >super.foo({ a: 1 }) : { a: number; }
->                    : ^^^^^^^^^^^^^^
+>                    : ^^^^^      ^^^
 >super.foo : (x: { a: number; }) => { a: number; }
->          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^              ^^^^^              
 >super : Base
 >      : ^^^^
 >foo : (x: { a: number; }) => { a: number; }
->    : ^ ^^              ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^              
 >{ a: 1 } : { a: number; }
 >         : ^^^^^^^^^^^^^^
 >a : number
@@ -66,15 +66,15 @@ class Derived extends Base {
 
         var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
 >r2 : { a: number; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >super.foo({ a: 1, b: 2 }) : { a: number; }
->                          : ^^^^^^^^^^^^^^
+>                          : ^^^^^      ^^^
 >super.foo : (x: { a: number; }) => { a: number; }
->          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^              ^^^^^              
 >super : Base
 >      : ^^^^
 >foo : (x: { a: number; }) => { a: number; }
->    : ^ ^^              ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^              
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -88,15 +88,15 @@ class Derived extends Base {
 
         var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
 >r3 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >this.foo({ a: 1, b: 2 }) : { a: number; b: number; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^      ^^^^^      ^^^
 >this.foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->         : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^                         ^^^^^                         
 >this : this
 >     : ^^^^
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->    : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                         ^^^^^                         
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number

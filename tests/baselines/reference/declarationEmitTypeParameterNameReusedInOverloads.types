@@ -29,7 +29,7 @@ export type Foo = {
 
     new (x: {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^^^^^ ^^^^^^^^^       ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
         new <T extends Derived>(a: T): T;
 >a : T
@@ -42,7 +42,7 @@ export type Foo = {
     }): any[];
     new (x: {
 >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^^^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
         new <T extends Derived2>(a: T): T;
 >a : T

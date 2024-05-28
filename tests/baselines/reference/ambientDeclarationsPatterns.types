@@ -4,7 +4,7 @@
 ///<reference path="declarations.d.ts" />
 import {foo, baz} from "foobarbaz";
 >foo : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >baz : string
 >    : ^^^^^^
 
@@ -12,7 +12,7 @@ foo(baz);
 >foo(baz) : void
 >         : ^^^^
 >foo : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >baz : string
 >    : ^^^^^^
 
@@ -24,7 +24,7 @@ foo(foos);
 >foo(foos) : void
 >          : ^^^^
 >foo : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >foos : string
 >     : ^^^^^^
 
@@ -37,7 +37,7 @@ foo(fileText);
 >foo(fileText) : void
 >              : ^^^^
 >foo : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >fileText : string
 >         : ^^^^^^
 

@@ -39,7 +39,7 @@ class Y {
 >       : ^                  ^^^          ^^      ^^^^^^^^          ^^^              ^^      ^^^^^^^^            ^^      ^^^^^^^^    ^^^^^^^^        ^^^ 
 >reason : string
 >       : ^^^^^^
->suberr : { reason: string; code: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>suberr : { reason: string | null; code: string | null; }
+>       : ^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^
 }
 

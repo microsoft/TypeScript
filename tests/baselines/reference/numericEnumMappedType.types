@@ -125,13 +125,13 @@ enum N1 { A = val(), B = val() }
 >val() : number
 >      : ^^^^^^
 >val : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >B : N1.B
 >  : ^^^^
 >val() : number
 >      : ^^^^^^
 >val : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 enum N2 { C = val(), D = val() }
 >N2 : N2
@@ -141,13 +141,13 @@ enum N2 { C = val(), D = val() }
 >val() : number
 >      : ^^^^^^
 >val : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >D : N2.D
 >  : ^^^^
 >val() : number
 >      : ^^^^^^
 >val : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 type T1 = { [K in N1 | N2]: K };
 >T1 : T1
