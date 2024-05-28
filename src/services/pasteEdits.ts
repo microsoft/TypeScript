@@ -1,6 +1,4 @@
-import {
-    findIndex,
-} from "../compiler/core.js";
+import { findIndex } from "../compiler/core.js";
 import {
     CancellationToken,
     Program,
