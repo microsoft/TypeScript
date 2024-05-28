@@ -25172,13 +25172,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function applyToReturnTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
-        const sourceTypePredicate = getTypePredicateOfSignature(source);
         const targetTypePredicate = getTypePredicateOfSignature(target);
-        if (sourceTypePredicate && targetTypePredicate && typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.type && targetTypePredicate.type) {
-            callback(sourceTypePredicate.type, targetTypePredicate.type);
+        if (targetTypePredicate) {
+            const sourceTypePredicate = getTypePredicateOfSignature(source);
+            if (sourceTypePredicate && typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.type && targetTypePredicate.type) {
+                callback(sourceTypePredicate.type, targetTypePredicate.type);
+                return;
+            }
         }
-        else {
-            callback(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+        const targetReturnType = getReturnTypeOfSignature(target);
+        if (couldContainTypeVariables(targetReturnType)) {
+            callback(getReturnTypeOfSignature(source), targetReturnType);
         }
     }
 
