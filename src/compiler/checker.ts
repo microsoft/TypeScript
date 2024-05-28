@@ -1461,7 +1461,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // they no longer need the information (for example, if the user started editing again).
     var cancellationToken: CancellationToken | undefined;
 
-    var requestedExternalEmitHelperNames = new Set<string>();
     var scanner: Scanner | undefined;
 
     var Symbol = objectAllocator.getSymbolConstructor();
@@ -49507,19 +49506,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
         const sourceFile = getSourceFileOfNode(location);
-        if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
-            const links = getNodeLinks(sourceFile);
-            links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
-            if ((links.requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
-                const helpersModule = resolveHelpersModule(sourceFile, location);
-                if (helpersModule !== unknownSymbol) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
+            const helpersModule = resolveHelpersModule(sourceFile, location);
+            if (helpersModule !== unknownSymbol) {
+                const links = getSymbolLinks(helpersModule);
+                links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
+                if ((links.requestedExternalEmitHelpers & helpers) !== helpers) {
                     const uncheckedHelpers = helpers & ~links.requestedExternalEmitHelpers;
                     for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
                         if (uncheckedHelpers & helper) {
                             for (const name of getHelperNames(helper)) {
-                                if (requestedExternalEmitHelperNames.has(name)) continue;
-                                requestedExternalEmitHelperNames.add(name);
-
                                 const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
