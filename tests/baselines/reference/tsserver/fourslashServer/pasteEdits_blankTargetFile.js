@@ -5,7 +5,9 @@ export const abc = 10;
 
 //// [/b.ts]
 import { abc } from "./a";
+
 console.log(abc);
+
 
 //// [/c.ts]
 
@@ -69,7 +71,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/c.ts SVC-1-0 ""
 	/a.ts Text-1 "export const abc = 10;"
-	/b.ts Text-1 "import { abc } from \"./a\";\nconsole.log(abc);"
+	/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n"
 
 
 	lib.d.ts
@@ -221,7 +223,22 @@ Info seq  [hh:mm:ss:mss] request:
               "offset": 1
             }
           }
-        ]
+        ],
+        "copiedFrom": {
+          "file": "b.ts",
+          "spans": [
+            {
+              "start": {
+                "line": 3,
+                "offset": 1
+              },
+              "end": {
+                "line": 3,
+                "offset": 18
+              }
+            }
+          ]
+        }
       },
       "command": "getPasteEdits"
     }
@@ -234,9 +251,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/c.ts SVC-1-1 "console.log(abc);"
 	/a.ts Text-1 "export const abc = 10;"
-	/b.ts Text-1 "import { abc } from \"./a\";\nconsole.log(abc);"
+	/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

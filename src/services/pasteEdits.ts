@@ -1,4 +1,7 @@
-import { addRange } from "../compiler/core.js";
+import {
+    addRange,
+    findIndex,
+} from "../compiler/core.js";
 import {
     CancellationToken,
     Program,
@@ -77,7 +80,11 @@ function pasteEdits(
         if (copiedFrom?.range) {
             Debug.assert(copiedFrom.range.length === pastedText.length);
             copiedFrom.range.forEach(copy => {
-                addRange(statements, copiedFrom.file.statements, getLineOfLocalPosition(copiedFrom.file, copy.pos), getLineOfLocalPosition(copiedFrom.file, copy.end) + 1);
+                const statementsInSourceFile = copiedFrom.file.statements;
+                const startNodeIndex = findIndex(statementsInSourceFile, s => s.end > copy.pos);
+                if (startNodeIndex === -1) return undefined;
+                const endNodeIndex = findIndex(statementsInSourceFile, s => s.end >= copy.end, startNodeIndex);
+                statements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
             Debug.assertIsDefined(originalProgram);
