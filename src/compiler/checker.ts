@@ -49505,41 +49505,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
-        const sourceFile = getSourceFileOfNode(location);
-        if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
-            const helpersModule = resolveHelpersModule(sourceFile, location);
-            if (helpersModule !== unknownSymbol) {
-                const links = getSymbolLinks(helpersModule);
-                links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
-                if ((links.requestedExternalEmitHelpers & helpers) !== helpers) {
-                    const uncheckedHelpers = helpers & ~links.requestedExternalEmitHelpers;
-                    for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
-                        if (uncheckedHelpers & helper) {
-                            for (const name of getHelperNames(helper)) {
-                                const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
-                                if (!symbol) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
-                                }
-                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+        if (compilerOptions.importHelpers) {
+            const sourceFile = getSourceFileOfNode(location);
+            if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
+                const helpersModule = resolveHelpersModule(sourceFile, location);
+                if (helpersModule !== unknownSymbol) {
+                    const links = getSymbolLinks(helpersModule);
+                    links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
+                    if ((links.requestedExternalEmitHelpers & helpers) !== helpers) {
+                        const uncheckedHelpers = helpers & ~links.requestedExternalEmitHelpers;
+                        for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
+                            if (uncheckedHelpers & helper) {
+                                for (const name of getHelperNames(helper)) {
+                                    const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
+                                    if (!symbol) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                     }
-                                }
-                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                    else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                                        }
                                     }
-                                }
-                                else if (helper & ExternalEmitHelpers.SpreadArray) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                    else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                        }
+                                    }
+                                    else if (helper & ExternalEmitHelpers.SpreadArray) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    links.requestedExternalEmitHelpers |= helpers;
                 }
-                links.requestedExternalEmitHelpers |= helpers;
             }
         }
     }
