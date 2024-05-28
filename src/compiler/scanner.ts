@@ -2490,7 +2490,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     inCharacterClass = false;
                 }
                 else if (
-                    ch === CharacterCodes.openParen
+                    !inCharacterClass
+                    && ch === CharacterCodes.openParen
                     && charCodeChecked(pos + 1) === CharacterCodes.question
                     && charCodeChecked(pos + 2) === CharacterCodes.lessThan
                     && charCodeChecked(pos + 3) !== CharacterCodes.equals
@@ -2877,7 +2878,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         scanGroupName(/*isReference*/ true);
                         scanExpectedChar(CharacterCodes.greaterThan);
                     }
-                    else if (namedCaptureGroups) {
+                    else if (anyUnicodeModeOrNonAnnexB || namedCaptureGroups) {
                         error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                     }
                     break;
