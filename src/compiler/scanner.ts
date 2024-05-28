@@ -2456,6 +2456,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             let namedCaptureGroups = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in any Unicode mode.
+            // This is indicated by Section 12.9.5 Regular Expression Literals of the specification,
+            // where nested character classes are not considered at all. (A `[` RegularExpressionClassChar
+            // does nothing in a RegularExpressionClass, and a `]` always closes the class.)
             // Additionally, parsing nested character classes will misinterpret regexes like `/[[]/`
             // as unterminated, consuming characters beyond the slash. (This even applies to `/[[]/v`,
             // which should be parsed as a well-terminated regex with an incomplete character class.)
