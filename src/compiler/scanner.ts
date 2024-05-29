@@ -997,6 +997,19 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
     return true;
 }
 
+const enum EscapeSequenceScanningFlags {
+    String = 1 << 0,
+    ReportErrors = 1 << 1,
+
+    RegularExpression = 1 << 2,
+    AnnexB = 1 << 3,
+    AnyUnicodeMode = 1 << 4,
+    AtomEscape = 1 << 5,
+
+    ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
+    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+}
+
 const enum ClassSetExpressionType {
     Unknown,
     ClassUnion,
@@ -1416,7 +1429,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
             if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                 result += text.substring(start, pos);
-                result += scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ true, /*isRegularExpression*/ false);
+                result += scanEscapeSequence(EscapeSequenceScanningFlags.String | EscapeSequenceScanningFlags.ReportErrors);
                 start = pos;
                 continue;
             }
@@ -1474,7 +1487,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // Escape character
             if (currChar === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
-                contents += scanEscapeSequence(shouldEmitInvalidEscapeError, /*isRegularExpression*/ false);
+                contents += scanEscapeSequence(EscapeSequenceScanningFlags.String | (shouldEmitInvalidEscapeError ? EscapeSequenceScanningFlags.ReportErrors : 0));
                 start = pos;
                 continue;
             }
@@ -1517,7 +1530,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     //     | [0-3] [0-7] [0-7]?
     //     | [4-7] [0-7]
     // NonOctalDecimalEscapeSequence ::= [89]
-    function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean | "annex-b"): string {
+    function scanEscapeSequence(flags: EscapeSequenceScanningFlags): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1554,9 +1567,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 // '\47'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    if (isRegularExpression !== "annex-b") {
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape) && ch !== CharacterCodes._0) {
+                        error(Diagnostics.Octal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class_If_this_was_intended_as_an_escape_sequence_use_the_syntax_0_instead, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    }
+                    else {
                         error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     }
                     return String.fromCharCode(code);
@@ -1566,8 +1582,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes._9:
                 // the invalid '\8' and '\9'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
-                    error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape)) {
+                        error(Diagnostics.Decimal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class, start, pos - start);
+                    }
+                    else {
+                        error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                    }
                     return String.fromCharCode(ch);
                 }
                 return text.substring(start, pos);
@@ -1589,18 +1610,18 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return '"';
             case CharacterCodes.u:
                 if (
-                    (!isRegularExpression || shouldEmitInvalidEscapeError) &&
+                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
                     pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
                 ) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!isRegularExpression || shouldEmitInvalidEscapeError);
+                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1610,7 +1631,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const escapedValue = parseInt(text.substring(start + 2, pos), 16);
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
-                    isRegularExpression && shouldEmitInvalidEscapeError && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
                     pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in any Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
@@ -1637,7 +1658,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 for (; pos < start + 4; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1658,7 +1679,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.paragraphSeparator:
                 return "";
             default:
-                if (isRegularExpression === true && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
+                if (
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode
+                    || flags & EscapeSequenceScanningFlags.RegularExpression
+                        && !(flags & EscapeSequenceScanningFlags.AnnexB)
+                        && isIdentifierPart(ch, languageVersion)
+                ) {
                     error(Diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, pos - 2, 2);
                 }
                 return String.fromCharCode(ch);
@@ -2427,8 +2453,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             const startOfRegExpBody = tokenStart + 1;
             pos = startOfRegExpBody;
             let inEscape = false;
+            let namedCaptureGroups = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in any Unicode mode.
+            // This is indicated by Section 12.9.5 Regular Expression Literals of the specification,
+            // where nested character classes are not considered at all. (A `[` RegularExpressionClassChar
+            // does nothing in a RegularExpressionClass, and a `]` always closes the class.)
             // Additionally, parsing nested character classes will misinterpret regexes like `/[[]/`
             // as unterminated, consuming characters beyond the slash. (This even applies to `/[[]/v`,
             // which should be parsed as a well-terminated regex with an incomplete character class.)
@@ -2461,6 +2491,16 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 else if (ch === CharacterCodes.closeBracket) {
                     inCharacterClass = false;
+                }
+                else if (
+                    !inCharacterClass
+                    && ch === CharacterCodes.openParen
+                    && charCodeChecked(pos + 1) === CharacterCodes.question
+                    && charCodeChecked(pos + 2) === CharacterCodes.lessThan
+                    && charCodeChecked(pos + 3) !== CharacterCodes.equals
+                    && charCodeChecked(pos + 3) !== CharacterCodes.exclamation
+                ) {
+                    namedCaptureGroups = true;
                 }
                 pos++;
             }
@@ -2542,7 +2582,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 if (reportErrors) {
                     scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
-                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true);
+                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true, namedCaptureGroups);
                     });
                 }
             }
@@ -2552,7 +2592,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token;
     }
 
-    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean) {
+    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean, namedCaptureGroups: boolean) {
         // Why var? It avoids TDZ checks in the runtime which can be costly.
         // See: https://github.com/microsoft/TypeScript/issues/52924
         /* eslint-disable no-var */
@@ -2562,10 +2602,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         /** Grammar parameter */
         var anyUnicodeMode = !!(regExpFlags & RegularExpressionFlags.AnyUnicodeMode);
 
-        if (anyUnicodeMode) {
-            // Annex B treats any unicode mode as the strict syntax.
-            annexB = false;
-        }
+        // Regular expressions are checked more strictly when either in 'u' or 'v' mode, or
+        // when not using the looser interpretation of the syntax from ECMA-262 Annex B.
+        var anyUnicodeModeOrNonAnnexB = anyUnicodeMode || !annexB;
 
         /** @see {scanClassSetExpression} */
         var mayContainStrings = false;
@@ -2661,7 +2700,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 case CharacterCodes.exclamation:
                                     pos++;
                                     // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
-                                    isPreviousTermQuantifiable = annexB;
+                                    isPreviousTermQuantifiable = !anyUnicodeModeOrNonAnnexB;
                                     break;
                                 case CharacterCodes.lessThan:
                                     const groupNameStart = pos;
@@ -2710,6 +2749,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         const digitsStart = pos;
                         scanDigits();
                         const min = tokenValue;
+                        if (!anyUnicodeModeOrNonAnnexB && !min) {
+                            isPreviousTermQuantifiable = true;
+                            break;
+                        }
                         if (charCodeChecked(pos) === CharacterCodes.comma) {
                             pos++;
                             scanDigits();
@@ -2719,26 +2762,32 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
                                 }
                                 else {
-                                    if (anyUnicodeMode) {
-                                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                    }
+                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                                     isPreviousTermQuantifiable = true;
                                     break;
                                 }
                             }
-                            if (max && Number.parseInt(min) > Number.parseInt(max)) {
+                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || charCodeChecked(pos) === CharacterCodes.closeBrace)) {
                                 error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                             }
                         }
                         else if (!min) {
-                            if (anyUnicodeMode) {
+                            if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                             }
                             isPreviousTermQuantifiable = true;
                             break;
                         }
-                        scanExpectedChar(CharacterCodes.closeBrace);
-                        pos--;
+                        if (charCodeChecked(pos) !== CharacterCodes.closeBrace) {
+                            if (anyUnicodeModeOrNonAnnexB) {
+                                error(Diagnostics._0_expected, pos, 0, String.fromCharCode(CharacterCodes.closeBrace));
+                                pos--;
+                            }
+                            else {
+                                isPreviousTermQuantifiable = true;
+                                break;
+                            }
+                        }
                     // falls through
                     case CharacterCodes.asterisk:
                     case CharacterCodes.plus:
@@ -2775,7 +2824,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     // falls through
                     case CharacterCodes.closeBracket:
                     case CharacterCodes.closeBrace:
-                        if (anyUnicodeMode || ch === CharacterCodes.closeParen) {
+                        if (anyUnicodeModeOrNonAnnexB || ch === CharacterCodes.closeParen) {
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                         }
                         pos++;
@@ -2832,7 +2881,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         scanGroupName(/*isReference*/ true);
                         scanExpectedChar(CharacterCodes.greaterThan);
                     }
-                    else if (anyUnicodeMode) {
+                    else if (anyUnicodeModeOrNonAnnexB || namedCaptureGroups) {
                         error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                     }
                     break;
@@ -2885,10 +2934,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         pos++;
                         return String.fromCharCode(ch & 0x1f);
                     }
-                    if (anyUnicodeMode) {
+                    if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
                     }
-                    else if (atomEscape && annexB) {
+                    else if (atomEscape) {
                         // Annex B treats
                         //
                         //  ExtendedAtom : `\` [lookahead = `c`]
@@ -2917,7 +2966,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return String.fromCharCode(ch);
                 default:
                     pos--;
-                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ anyUnicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
+                    return scanEscapeSequence(
+                        EscapeSequenceScanningFlags.RegularExpression
+                            | (annexB ? EscapeSequenceScanningFlags.AnnexB : 0)
+                            | (anyUnicodeMode ? EscapeSequenceScanningFlags.AnyUnicodeMode : 0)
+                            | (atomEscape ? EscapeSequenceScanningFlags.AtomEscape : 0),
+                    );
             }
         }
 
@@ -2966,12 +3020,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (isClassContentExit(ch)) {
                         return;
                     }
-                    if (!minCharacter && !annexB) {
+                    if (!minCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
                     }
                     const maxStart = pos;
                     const maxCharacter = scanClassAtom();
-                    if (!maxCharacter && !annexB) {
+                    if (!maxCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
                         continue;
                     }
@@ -3467,8 +3521,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                         }
                     }
-                    else if (anyUnicodeMode) {
+                    else if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                    }
+                    else {
+                        pos--;
+                        return false;
                     }
                     return true;
             }
@@ -3511,14 +3569,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
         });
         forEach(decimalEscapes, escape => {
-            // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
-            // either a LegacyOctalEscapeSequence or IdentityEscape
-            if (!annexB && escape.value > numberOfCapturingGroups) {
+            // Although a DecimalEscape with a value greater than the number of capturing groups
+            // is treated as either a LegacyOctalEscapeSequence or an IdentityEscape in Annex B,
+            // an error is nevertheless reported since it's most likely a mistake.
+            if (escape.value > numberOfCapturingGroups) {
                 if (numberOfCapturingGroups) {
                     error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                 }
                 else {
-                    error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
+                    error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_no_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos);
                 }
             }
         });
