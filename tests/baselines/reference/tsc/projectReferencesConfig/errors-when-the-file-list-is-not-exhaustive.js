@@ -67,7 +67,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/primary/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -130,14 +130,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
         "../b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../a.ts",
-      "../b.ts"
-    ],
     "latestChangedDtsFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 975
+  "size": 938
 }
 

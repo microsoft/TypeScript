@@ -23,7 +23,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = exports.v = void 0;
+exports.v = void 0;
+exports.bar = bar;
 var v = "str" || true;
 exports.v = v;
 function bar() {

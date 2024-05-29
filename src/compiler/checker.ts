@@ -1461,9 +1461,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // they no longer need the information (for example, if the user started editing again).
     var cancellationToken: CancellationToken | undefined;
 
-    var requestedExternalEmitHelperNames = new Set<string>();
-    var requestedExternalEmitHelpers: ExternalEmitHelpers;
-    var externalHelpersModule: Symbol;
     var scanner: Scanner | undefined;
 
     var Symbol = objectAllocator.getSymbolConstructor();
@@ -2621,7 +2618,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (resolvedTarget === unknownSymbol) {
                     return source;
                 }
-                target = cloneSymbol(resolvedTarget);
+                if (
+                    !(resolvedTarget.flags & getExcludedSymbolFlags(source.flags)) ||
+                    (source.flags | resolvedTarget.flags) & SymbolFlags.Assignment
+                ) {
+                    target = cloneSymbol(resolvedTarget);
+                }
+                else {
+                    reportMergeSymbolError(target, source);
+                    return source;
+                }
             }
             // Javascript static-property-assignment declarations always merge, even though they are also values
             if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -2657,7 +2663,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
             }
         }
-        else { // error
+        else {
+            reportMergeSymbolError(target, source);
+        }
+        return target;
+
+        function reportMergeSymbolError(target: Symbol, source: Symbol) {
             const isEitherEnum = !!(target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum);
             const isEitherBlockScoped = !!(target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable);
             const message = isEitherEnum ? Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations
@@ -2684,7 +2695,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isTargetPlainJs) addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
             }
         }
-        return target;
 
         function addDuplicateLocations(locs: Declaration[], symbol: Symbol): void {
             if (symbol.declarations) {
@@ -6103,7 +6113,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return result;
                 }
             }
-            context.tracker.reportInferenceFallback(existing);
             return undefined;
         }
 
@@ -8204,6 +8213,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function serializeTypeForDeclaration(context: NodeBuilderContext, declaration: Declaration | undefined, type: Type, symbol: Symbol) {
             const addUndefined = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
             const enclosingDeclaration = context.enclosingDeclaration;
+            const oldFlags = context.flags;
+            if (declaration && hasInferredType(declaration) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
+            }
+            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             if (enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
                 const declWithExistingAnnotation = declaration && getNonlocalEffectiveTypeAnnotationNode(declaration)
                     ? declaration
@@ -8213,11 +8227,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                     const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
+                        context.flags = oldFlags;
                         return result;
                     }
                 }
             }
-            const oldFlags = context.flags;
             if (
                 type.flags & TypeFlags.UniqueESSymbol &&
                 type.symbol === symbol && (!context.enclosingDeclaration || some(symbol.declarations, d => getSourceFileOfNode(d) === getSourceFileOfNode(context.enclosingDeclaration!)))
@@ -8228,10 +8242,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const decl = declaration ?? symbol.valueDeclaration ?? symbol.declarations?.[0];
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
-            if (decl && hasInferredType(decl) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
-                syntacticNodeBuilder.serializeTypeOfDeclaration(decl, context);
-            }
-            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
@@ -25159,13 +25169,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function applyToReturnTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
-        const sourceTypePredicate = getTypePredicateOfSignature(source);
         const targetTypePredicate = getTypePredicateOfSignature(target);
-        if (sourceTypePredicate && targetTypePredicate && typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.type && targetTypePredicate.type) {
-            callback(sourceTypePredicate.type, targetTypePredicate.type);
+        if (targetTypePredicate) {
+            const sourceTypePredicate = getTypePredicateOfSignature(source);
+            if (sourceTypePredicate && typePredicateKindsMatch(sourceTypePredicate, targetTypePredicate) && sourceTypePredicate.type && targetTypePredicate.type) {
+                callback(sourceTypePredicate.type, targetTypePredicate.type);
+                return;
+            }
         }
-        else {
-            callback(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+        const targetReturnType = getReturnTypeOfSignature(target);
+        if (couldContainTypeVariables(targetReturnType)) {
+            callback(getReturnTypeOfSignature(source), targetReturnType);
         }
     }
 
@@ -30901,9 +30915,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!node.asteriskToken && contextualReturnType.flags & TypeFlags.Union) {
                     contextualReturnType = filterType(contextualReturnType, type => !!getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsyncGenerator));
                 }
-                return node.asteriskToken
-                    ? contextualReturnType
-                    : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, isAsyncGenerator);
+                if (node.asteriskToken) {
+                    const iterationTypes = getIterationTypesOfGeneratorFunctionReturnType(contextualReturnType, isAsyncGenerator);
+                    const yieldType = iterationTypes?.yieldType ?? silentNeverType;
+                    const returnType = getContextualType(node, contextFlags) ?? silentNeverType;
+                    const nextType = iterationTypes?.nextType ?? unknownType;
+                    const generatorType = createGeneratorType(yieldType, returnType, nextType, /*isAsyncGenerator*/ false);
+                    if (isAsyncGenerator) {
+                        const asyncGeneratorType = createGeneratorType(yieldType, returnType, nextType, /*isAsyncGenerator*/ true);
+                        return getUnionType([generatorType, asyncGeneratorType]);
+                    }
+                    return generatorType;
+                }
+                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, isAsyncGenerator);
             }
         }
 
@@ -31961,7 +31985,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             scanner.setScriptTarget(sourceFile.languageVersion);
             scanner.setLanguageVariant(sourceFile.languageVariant);
             scanner.setOnError((message, length, arg0) => {
-                // emulate `parseErrorAtPosition` from parser.ts
+                // For providing spelling suggestions
                 const start = scanner!.getTokenEnd();
                 if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
                     const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
@@ -37815,7 +37839,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isGenerator) {
-            return createGeneratorReturnType(
+            return createGeneratorType(
                 yieldType || neverType,
                 returnType || fallbackReturnType,
                 nextType || getContextualIterationType(IterationTypeKind.Next, func) || unknownType,
@@ -37832,7 +37856,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
+    function createGeneratorType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
         const resolver = isAsyncGenerator ? asyncIterationTypesResolver : syncIterationTypesResolver;
         const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
         yieldType = resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || unknownType;
@@ -40634,7 +40658,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
         const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
         const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
-        const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+        const generatorInstantiation = createGeneratorType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
 
         return checkTypeAssignableTo(generatorInstantiation, returnType, errorNode);
     }
@@ -49495,42 +49519,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
-        if ((requestedExternalEmitHelpers & helpers) !== helpers && compilerOptions.importHelpers) {
+        if (compilerOptions.importHelpers) {
             const sourceFile = getSourceFileOfNode(location);
             if (isEffectiveExternalModule(sourceFile, compilerOptions) && !(location.flags & NodeFlags.Ambient)) {
                 const helpersModule = resolveHelpersModule(sourceFile, location);
                 if (helpersModule !== unknownSymbol) {
-                    const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
-                    for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
-                        if (uncheckedHelpers & helper) {
-                            for (const name of getHelperNames(helper)) {
-                                if (requestedExternalEmitHelperNames.has(name)) continue;
-                                requestedExternalEmitHelperNames.add(name);
-
-                                const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
-                                if (!symbol) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
-                                }
-                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                    const links = getSymbolLinks(helpersModule);
+                    links.requestedExternalEmitHelpers ??= 0 as ExternalEmitHelpers;
+                    if ((links.requestedExternalEmitHelpers & helpers) !== helpers) {
+                        const uncheckedHelpers = helpers & ~links.requestedExternalEmitHelpers;
+                        for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
+                            if (uncheckedHelpers & helper) {
+                                for (const name of getHelperNames(helper)) {
+                                    const symbol = resolveSymbol(getSymbol(getExportsOfModule(helpersModule), escapeLeadingUnderscores(name), SymbolFlags.Value));
+                                    if (!symbol) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                     }
-                                }
-                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                    else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                                        }
                                     }
-                                }
-                                else if (helper & ExternalEmitHelpers.SpreadArray) {
-                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
-                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                    else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                        }
+                                    }
+                                    else if (helper & ExternalEmitHelpers.SpreadArray) {
+                                        if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
+                                            error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    links.requestedExternalEmitHelpers |= helpers;
                 }
-                requestedExternalEmitHelpers |= helpers;
             }
         }
     }
@@ -49593,10 +49618,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function resolveHelpersModule(file: SourceFile, errorNode: Node) {
-        if (!externalHelpersModule) {
-            externalHelpersModule = resolveExternalModule(getImportHelpersImportSpecifier(file), externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
+        const links = getNodeLinks(file);
+        if (!links.externalHelpersModule) {
+            links.externalHelpersModule = resolveExternalModule(getImportHelpersImportSpecifier(file), externalHelpersModuleNameText, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, errorNode) || unknownSymbol;
         }
-        return externalHelpersModule;
+        return links.externalHelpersModule;
     }
 
     // GRAMMAR CHECKING

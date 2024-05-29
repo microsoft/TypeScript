@@ -4,17 +4,15 @@ import {
     FsContents,
     libContent,
 } from "./contents.js";
-import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForNoEmitOnError(): FsContents {
+function getFsContentsForNoEmitOnError(outFile: boolean, declaration: true | undefined, incremental: true | undefined): FsContents {
     return {
         "/user/username/projects/noEmitOnError/tsconfig.json": jsonToReadableText({
             compilerOptions: {
-                outDir: "./dev-build",
+                ...outFile ? { outFile: "../dev-build.js", module: "amd" } : { outDir: "./dev-build" },
+                declaration,
+                incremental,
                 noEmitOnError: true,
             },
         }),
@@ -37,21 +35,26 @@ export function getFsContentsForNoEmitOnError(): FsContents {
     };
 }
 
-export function getFsForNoEmitOnError() {
-    return loadProjectFromFiles(
-        getFsContentsForNoEmitOnError(),
-        {
-            cwd: "/user/username/projects/noEmitOnError",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForNoEmitOnError() {
-    return createWatchedSystem(
-        getFsContentsForNoEmitOnError(),
-        {
-            currentDirectory: "/user/username/projects/noEmitOnError",
-        },
-    );
+export function forEachNoEmitOnErrorScenario<T>(
+    loadFs: (contents: FsContents, currentDirectory: string, executingFilePath: string) => T,
+    action: (
+        scenarioName: (scenario: string) => string,
+        fs: () => T,
+    ) => void,
+) {
+    for (const outFile of [false, true]) {
+        for (const declaration of [undefined, true] as const) {
+            for (const incremental of [undefined, true] as const) {
+                action(
+                    scenario => `${scenario}${outFile ? " outFile" : ""}${declaration ? " with declaration" : ""}${incremental ? " with incremental" : ""}`,
+                    () =>
+                        loadFs(
+                            getFsContentsForNoEmitOnError(outFile, declaration, incremental),
+                            "/user/username/projects/noEmitOnError",
+                            libFile.path,
+                        ),
+                );
+            }
+        }
+    }
 }

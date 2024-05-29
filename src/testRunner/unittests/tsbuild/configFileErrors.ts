@@ -43,57 +43,61 @@ describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the mis
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    verifyTsc({
-        scenario: "configFileErrors",
-        subScenario: "reports syntax errors in config file",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/a.ts": "export function foo() { }",
-                "/src/b.ts": "export function bar() { }",
-                "/src/tsconfig.json": dedent`
+    function verify(outFile?: object) {
+        verifyTsc({
+            scenario: "configFileErrors",
+            subScenario: `reports syntax errors in config file${outFile ? " with outFile" : ""}`,
+            fs: () =>
+                loadProjectFromFiles({
+                    "/src/a.ts": "export function foo() { }",
+                    "/src/b.ts": "export function bar() { }",
+                    "/src/tsconfig.json": dedent`
 {
     "compilerOptions": {
-        "composite": true,
+        "composite": true,${outFile ? jsonToReadableText(outFile).replace(/[{}]/g, "") : ""}
     },
     "files": [
         "a.ts"
         "b.ts"
     ]
 }`,
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json"],
-        edits: [
-            {
-                edit: fs =>
-                    replaceText(
-                        fs,
-                        "/src/tsconfig.json",
-                        ",",
-                        `,
+                }),
+            commandLineArgs: ["--b", "/src/tsconfig.json"],
+            edits: [
+                {
+                    edit: fs =>
+                        replaceText(
+                            fs,
+                            "/src/tsconfig.json",
+                            ",",
+                            `,
         "declaration": true,`,
-                    ),
-                caption: "reports syntax errors after change to config file",
-                discrepancyExplanation: () => [
-                    "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
-                    "Clean build has declaration option in tsbuildinfo",
-                ],
-            },
-            {
-                edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
-                caption: "reports syntax errors after change to ts file",
-            },
-            noChangeRun,
-            {
-                edit: fs =>
-                    fs.writeFileSync(
-                        "/src/tsconfig.json",
-                        jsonToReadableText({
-                            compilerOptions: { composite: true, declaration: true },
-                            files: ["a.ts", "b.ts"],
-                        }),
-                    ),
-                caption: "builds after fixing config file errors",
-            },
-        ],
-    });
+                        ),
+                    caption: "reports syntax errors after change to config file",
+                    discrepancyExplanation: !outFile ? () => [
+                        "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
+                        "Clean build has declaration option in tsbuildinfo",
+                    ] : undefined,
+                },
+                {
+                    edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                    caption: "reports syntax errors after change to ts file",
+                },
+                noChangeRun,
+                {
+                    edit: fs =>
+                        fs.writeFileSync(
+                            "/src/tsconfig.json",
+                            jsonToReadableText({
+                                compilerOptions: { composite: true, declaration: true, ...outFile },
+                                files: ["a.ts", "b.ts"],
+                            }),
+                        ),
+                    caption: "builds after fixing config file errors",
+                },
+            ],
+        });
+    }
+    verify();
+    verify({ outFile: "../outFile.js", module: "amd" });
 });
