@@ -51,12 +51,12 @@ function f3<T3 extends "a" | "b">(x: T3) {
 >x : Symbol(x, Decl(templateLiteralTypes5.ts, 11, 34))
 >T3 : Symbol(T3, Decl(templateLiteralTypes5.ts, 11, 12))
 
-    const test1: `${T3}` = x    
+    const test1: `${T3}` = x; // error, T3 could be instantiated with a string enum
 >test1 : Symbol(test1, Decl(templateLiteralTypes5.ts, 12, 9))
 >T3 : Symbol(T3, Decl(templateLiteralTypes5.ts, 11, 12))
 >x : Symbol(x, Decl(templateLiteralTypes5.ts, 11, 34))
 
-    const test2: T3 = "" as `${T3}`;    
+    const test2: T3 = "" as `${T3}`; // error, T3 could be instantiated with a string enum
 >test2 : Symbol(test2, Decl(templateLiteralTypes5.ts, 13, 9))
 >T3 : Symbol(T3, Decl(templateLiteralTypes5.ts, 11, 12))
 >T3 : Symbol(T3, Decl(templateLiteralTypes5.ts, 11, 12))

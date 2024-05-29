@@ -18087,14 +18087,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (contains(types, wildcardType)) {
             return wildcardType;
         }
-        if (
-            texts.length === 2 && texts[0] === "" && texts[1] === ""
-            // literals (including string enums) are stringified below
-            && !(types[0].flags & TypeFlags.Literal)
-            // infer T extends StringLike can't be unwrapped eagerly
-            && !types[0].symbol?.declarations?.some(d => d.parent.kind === SyntaxKind.InferType)
-            && isTypeAssignableTo(types[0], stringType)
-        ) {
+        if (texts.length === 2 && texts[0] === "" && texts[1] === "" && (types[0].flags & TypeFlags.StringMapping)) {
             return types[0];
         }
         const newTypes: Type[] = [];
@@ -25580,6 +25573,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(type: Type): type is TemplateLiteralType {
+        if (!(type.flags & TypeFlags.TemplateLiteral)) {
+            return false;
+        }
+        const texts = (type as TemplateLiteralType).texts;
+        return texts.length === 2 && texts[0] === "" && texts[1] === "";
+    }
+
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
         if (target.flags & TypeFlags.Intersection) {
             return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
@@ -26217,6 +26218,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
+            if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(source) && isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(target)) {
+                inferFromTypes(source.types[0], target.types[0]);
+                return;
+            }
             const matches = inferTypesFromTemplateLiteralType(source, target);
             const types = target.types;
             // When the target template literal contains only placeholders (meaning that inference is intended to extract

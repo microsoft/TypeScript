@@ -14,6 +14,6 @@ type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
 const f2: F2 = f
 
 function f3<T3 extends "a" | "b">(x: T3) {
-    const test1: `${T3}` = x    
-    const test2: T3 = "" as `${T3}`;    
+    const test1: `${T3}` = x; // error, T3 could be instantiated with a string enum
+    const test2: T3 = "" as `${T3}`; // error, T3 could be instantiated with a string enum
 }
