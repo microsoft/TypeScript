@@ -853,9 +853,9 @@ Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that refe
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar/index.d.ts', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/@types/bar/index.d.ts' has a '.d.ts' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
@@ -1175,9 +1175,9 @@ Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that refe
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo/index.d.ts', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo/index.d.ts' has a '.d.ts' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
@@ -3619,9 +3619,9 @@ Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that refe
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' has a '.d.ts' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
@@ -3969,9 +3969,9 @@ Info seq  [hh:mm:ss:mss] 'package.json' has 'types' field 'index.d.ts' that refe
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo2/index.d.ts', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/foo2/index.d.ts' has a '.d.ts' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
