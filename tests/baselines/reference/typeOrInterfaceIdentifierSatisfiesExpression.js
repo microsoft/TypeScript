@@ -11,6 +11,7 @@ const interface = 'x';
 interface satisfies string;
 interface as string;
 
+
 //// [typeOrInterfaceIdentifierSatisfiesExpression.js]
 var type = 'x';
 type;
