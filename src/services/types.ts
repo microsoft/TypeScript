@@ -445,6 +445,7 @@ export const enum SemanticClassificationFormat {
     TwentyTwenty = "2020",
 }
 
+/** @internal */
 export interface RegionDiagnosticsResult {
     diagnostics: Diagnostic[];
     spans: TextSpan[];

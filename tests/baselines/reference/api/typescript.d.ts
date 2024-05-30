@@ -8451,15 +8451,12 @@ declare namespace ts {
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
     function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
-    function textSpanContainsTextRange(span: TextSpan, range: TextRange): boolean;
-    function textRangeContainsTextSpan(range: TextRange, span: TextSpan): boolean;
     function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
     function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
     function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean;
     function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean;
     function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean;
     function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
-    function textRangeIntersectsWithTextSpan(range: TextRange, span: TextSpan): boolean;
     function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
     function createTextSpan(start: number, length: number): TextSpan;
     function createTextSpanFromBounds(start: number, end: number): TextSpan;
@@ -9979,10 +9976,6 @@ declare namespace ts {
     enum SemanticClassificationFormat {
         Original = "original",
         TwentyTwenty = "2020",
-    }
-    interface RegionDiagnosticsResult {
-        diagnostics: Diagnostic[];
-        spans: TextSpan[];
     }
     interface LanguageService {
         /** This is used as a part of restarting the language service. */

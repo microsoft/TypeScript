@@ -357,10 +357,12 @@ export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
     return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
 }
 
+/** @internal */
 export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
     return range.pos >= span.start && range.end <= textSpanEnd(span);
 }
 
+/** @internal */
 export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
     return span.start >= range.pos && textSpanEnd(span) <= range.end;
 }
@@ -392,6 +394,7 @@ export function textSpanIntersectsWithPosition(span: TextSpan, position: number)
     return position <= textSpanEnd(span) && position >= span.start;
 }
 
+/** @internal */
 export function textRangeIntersectsWithTextSpan(range: TextRange, span: TextSpan): boolean {
     return textSpanIntersectsWith(span, range.pos, range.end - range.pos);
 }
