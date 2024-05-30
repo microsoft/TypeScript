@@ -30,7 +30,7 @@ class G<T extends A> {
 
 declare function foo(arg: (x: D) => number): string;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^      ^^^   ^^             ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >arg : (x: D) => number
 >    : ^ ^^ ^^^^^      
 >x : D
@@ -38,7 +38,7 @@ declare function foo(arg: (x: D) => number): string;
 
 declare function foo(arg: (x: C) => any): string;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^             ^^^      ^^^   ^^             ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >arg : (x: C) => any
 >    : ^ ^^ ^^^^^   
 >x : C
@@ -46,7 +46,7 @@ declare function foo(arg: (x: C) => any): string;
 
 declare function foo(arg: (x: B) => any): number;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^   ^^             ^^^      ^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >arg : (x: B) => any
 >    : ^ ^^ ^^^^^   
 >x : B
@@ -58,7 +58,7 @@ var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so fir
 >foo(x => new G(x)) : never
 >                   : ^^^^^
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >x => new G(x) : (x: D) => G<A>
 >              : ^ ^^^^^^^^^^^^
 >x : D
@@ -76,7 +76,7 @@ var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fa
 >foo(x => new G<typeof x>(x)) : never
 >                             : ^^^^^
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >x => new G<typeof x>(x) : (x: D) => G<D>
 >                        : ^ ^^^^^^^^^^^^
 >x : D
@@ -96,7 +96,7 @@ var result3: string = foo(x => { // x has type D
 >foo(x => { // x has type D    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;}) : never
 >                                                                                                                                                                : ^^^^^
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->    : ^^^   ^^                ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^   ^^             ^^^^^^^^^^^^
+>    : ^^^   ^^                ^^^      ^^^   ^^             ^^^      ^^^   ^^             ^^^      ^^^
 >x => { // x has type D    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;} : (x: D) => G<D>
 >                                                                                                                                                           : ^ ^^^^^^^^^^^^
 >x : D

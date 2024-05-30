@@ -17,7 +17,7 @@ if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 >hasOwnProperty(arrayLikeOrIterable, 'length') : boolean
 >                                              : ^^^^^^^
 >hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { readonly [K in P]: unknown; }
->               : ^ ^^^^^^^^^           ^^      ^^  ^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^           ^^      ^^  ^^        ^^ ^^^^^                                         
 >arrayLikeOrIterable : ArrayLike<any> | Iterable<any>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' : "length"

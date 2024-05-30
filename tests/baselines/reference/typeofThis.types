@@ -143,7 +143,7 @@ function Test3(this: { no: number }) {
 >this.no : number
 >        : ^^^^^^
 >this : { no: number; }
->     : ^^^^^^^^^^^^^^^
+>     : ^^^^^^      ^^^
 >no : number
 >   : ^^^^^^
 >1 : 1
@@ -164,7 +164,7 @@ function Test4(this: { no: number } | undefined) {
 >this.no : number
 >        : ^^^^^^
 >this : { no: number; } | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
 >no : number
 >   : ^^^^^^
 >1 : 1
@@ -441,36 +441,36 @@ class Test10 {
 >    : ^^^^^^^^^^
 
         let a: typeof this.a = undefined as any;
->a : { b?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.a : { b?: string | undefined; } | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
+>this.a : { b?: string; } | undefined
+>       : ^^^^^^      ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >undefined as any : any
 >                 : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
         if (this.a) {
->this.a : { b?: string | undefined; } | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.a : { b?: string; } | undefined
+>       : ^^^^^^      ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 
             let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
->a : { b?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.a : { b?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; }
+>  : ^^^^^^      ^^^
+>this.a : { b?: string; }
+>       : ^^^^^^      ^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; }
+>  : ^^^^^^      ^^^
 >undefined as any : any
 >                 : ^^^
 >undefined : undefined
@@ -481,12 +481,12 @@ class Test10 {
 >  : ^^^^^^^^^^^^^^^^^^
 >this.a.b : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->this.a : { b?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.a : { b?: string; }
+>       : ^^^^^^      ^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; }
+>  : ^^^^^^      ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >undefined as any : any
@@ -497,12 +497,12 @@ class Test10 {
             if (this.a.b) {
 >this.a.b : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->this.a : { b?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.a : { b?: string; }
+>       : ^^^^^^      ^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; }
+>  : ^^^^^^      ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -511,12 +511,12 @@ class Test10 {
 >  : ^^^^^^
 >this.a.b : string
 >         : ^^^^^^
->this.a : { b?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.a : { b?: string; }
+>       : ^^^^^^      ^^^
 >this : this
 >     : ^^^^
->a : { b?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; }
+>  : ^^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 >undefined as any : any
@@ -549,34 +549,34 @@ class Test11 {
 >     : ^^^^
 
         let bar: typeof o.this = {};
->bar : { x?: string | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->o.this : { x?: string | undefined; } | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { x?: string; } | undefined
+>    : ^^^^^^      ^^^^^^^^^^^^^^^
+>o.this : { x?: string; } | undefined
+>       : ^^^^^^      ^^^^^^^^^^^^^^^
 >o : this
 >  : ^^^^
->this : { x?: string | undefined; } | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; } | undefined
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
         if (o.this && o.this.x) {
 >o.this && o.this.x : string | undefined
 >                   : ^^^^^^^^^^^^^^^^^^
->o.this : { x?: string | undefined; } | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o.this : { x?: string; } | undefined
+>       : ^^^^^^      ^^^^^^^^^^^^^^^
 >o : this
 >  : ^^^^
->this : { x?: string | undefined; } | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; } | undefined
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
 >o.this.x : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->o.this : { x?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o.this : { x?: string; }
+>       : ^^^^^^      ^^^
 >o : this
 >  : ^^^^
->this : { x?: string | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; }
+>     : ^^^^^^      ^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -585,12 +585,12 @@ class Test11 {
 >  : ^^^^^^
 >o.this.x : string
 >         : ^^^^^^
->o.this : { x?: string | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o.this : { x?: string; }
+>       : ^^^^^^      ^^^
 >o : this
 >  : ^^^^
->this : { x?: string | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; }
+>     : ^^^^^^      ^^^
 >x : string
 >  : ^^^^^^
         }

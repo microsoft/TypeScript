@@ -45,11 +45,11 @@ var o = {
 >window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                                       : ^^^^^^^^^^
 >window.onmousemove : (ev: MouseEvent) => any
->                   : ^  ^^          ^^^^^^^^
+>                   : ^  ^^          ^^^^^   
 >window : Window
 >       : ^^^^^^
 >onmousemove : (ev: MouseEvent) => any
->            : ^  ^^          ^^^^^^^^
+>            : ^  ^^          ^^^^^   
 >() => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                  : ^^^^^^^^^^
 

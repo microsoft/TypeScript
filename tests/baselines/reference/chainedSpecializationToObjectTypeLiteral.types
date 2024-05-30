@@ -49,11 +49,11 @@ var s2 = s.groupBy(s => s.length);
 >s.groupBy(s => s.length) : Sequence<{ key: number; items: string[]; }>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
->          : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
 >s : Sequence<string>
 >  : ^^^^^^^^^^^^^^^^
 >groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
->        : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
 >s => s.length : (s: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -71,11 +71,11 @@ var s3 = s2.each(x => { x.key /* Type is K, should be number */ });
 >s2.each(x => { x.key /* Type is K, should be number */ }) : void
 >                                                          : ^^^^
 >s2.each : (iterator: (value: { key: number; items: string[]; }) => void) => void
->        : ^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    
 >s2 : Sequence<{ key: number; items: string[]; }>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >each : (iterator: (value: { key: number; items: string[]; }) => void) => void
->     : ^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    
 >x => { x.key /* Type is K, should be number */ } : (x: { key: number; items: string[]; }) => void
 >                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { key: number; items: string[]; }

@@ -29,11 +29,11 @@ declare module "./index" {
 === node_modules/@types/lodash/pick.d.ts ===
 import { pick } from "./index";
 >pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
->     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
 
 export = pick;
 >pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
->     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
 
 === node_modules/@types/lodash/index.d.ts ===
 /// <reference path="./object.d.ts" />
@@ -58,7 +58,7 @@ declare namespace _ {
 === index.ts ===
 import * as pick from 'lodash/pick';
 >pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
->     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
 
 export const pick = () => pick();
 >pick : () => any

@@ -100,9 +100,9 @@ function g(a, b) {
 >g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 >  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >b : { y: typeof import("index").b; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^              ^^^^^^^  ^^^^
 
     return a.x && b.y();
 >a.x && b.y() : void
@@ -110,7 +110,7 @@ function g(a, b) {
 >a.x : string
 >    : ^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 >b.y() : void
@@ -118,7 +118,7 @@ function g(a, b) {
 >b.y : typeof import("index").b
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^              ^^^^^^^  ^^^^
 >y : typeof import("index").b
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -135,9 +135,9 @@ function hh(a, b) {
 >hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 >   : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >b : { y: typeof import("index").b; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^              ^^^^^^^  ^^^^
 
     return a.x && b.y();
 >a.x && b.y() : void
@@ -145,7 +145,7 @@ function hh(a, b) {
 >a.x : string
 >    : ^^^^^^
 >a : { x: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 >b.y() : void
@@ -153,7 +153,7 @@ function hh(a, b) {
 >b.y : typeof import("index").b
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^              ^^^^^^^  ^^^^
 >y : typeof import("index").b
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }

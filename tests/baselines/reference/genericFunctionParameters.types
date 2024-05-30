@@ -31,7 +31,7 @@ let x1 = f1(x => x);  // {}
 >f1(x => x) : unknown
 >           : ^^^^^^^
 >f1 : <T>(cb: <S>(x: S) => T) => T
->   : ^ ^^  ^^              ^^^^^^
+>   : ^ ^^  ^^              ^^^^^ 
 >x => x : <S>(x: S) => S
 >       : ^^^^ ^^^^^^^^^
 >x : S
@@ -45,7 +45,7 @@ let x2 = f2(x => x);  // number
 >f2(x => x) : number
 >           : ^^^^^^
 >f2 : <T>(cb: <S extends number>(x: S) => T) => T
->   : ^ ^^  ^^                             ^^^^^^
+>   : ^ ^^  ^^                             ^^^^^ 
 >x => x : <S extends number>(x: S) => S
 >       : ^^^^^^^^^^^      ^^ ^^^^^^^^^
 >x : S
@@ -59,7 +59,7 @@ let x3 = f3(x => x);  // Array<any>
 >f3(x => x) : any[]
 >           : ^^^^^
 >f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
->   : ^ ^^  ^^                               ^^^^^^
+>   : ^ ^^  ^^                               ^^^^^ 
 >x => x : <S extends S[]>(x: S) => S
 >       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >x : S
@@ -85,7 +85,7 @@ const x = s(a => a.init());  // x is any, should have been {}
 >s(a => a.init()) : unknown
 >                 : ^^^^^^^
 >s : <R>(go: <S>(ops: { init(): S; }) => R) => R
->  : ^ ^^  ^^                             ^^^^^^
+>  : ^ ^^  ^^                             ^^^^^ 
 >a => a.init() : <S>(a: { init(): S; }) => S
 >              : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >a : { init(): S; }

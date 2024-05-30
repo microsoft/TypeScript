@@ -42,19 +42,19 @@ export const createService = <T>(
 >Object.keys(ServiceCtr).forEach(key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    }) : void
 >                                                                                                                                                         : ^^^^
 >Object.keys(ServiceCtr).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->                                : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                                : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >Object.keys(ServiceCtr) : string[]
 >                        : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^      ^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^        
 >ServiceCtr : ExtendedService<T> & Service<T>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    } : (key: string) => void
 >                                                                                                                        : ^   ^^^^^^^^^^^^^^^^^
 >key : string

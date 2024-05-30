@@ -41,7 +41,7 @@ const inferredParams1 = createMachine({
 >createMachine({  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,}) : ["foo", StateConfig<"foo">]
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
->              : ^       ^^^^^^^^^                    ^^       ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^       ^^^^^^^^^                    ^^       ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                              ^^^^^                  
 >{  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "bar"; }; }; extra: number; }
 >                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -85,7 +85,7 @@ const inferredParams2 = createMachine({
 >createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
->              : ^       ^^^^^^^^^                    ^^       ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^       ^^^^^^^^^                    ^^       ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                              ^^^^^                  
 >{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
 >                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -204,11 +204,11 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 
@@ -229,7 +229,7 @@ doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
 >doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 }) : { field: 1; anotherField: "a"; }
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
->                 : ^ ^^^^^^^^^     ^^ ^^                                       ^^^^^^
+>                 : ^ ^^^^^^^^^     ^^ ^^                                       ^^^^^ 
 >{ field: 1, anotherField: 'a', extra: 123 } : { field: 1; anotherField: "a"; extra: number; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >field : 1
@@ -257,11 +257,11 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 
@@ -282,7 +282,7 @@ doStuffWithStuffArr([
 >doStuffWithStuffArr([    { field: 1, anotherField: 'a', extra: 123 },]) : { field: 1; anotherField: "a"; }[]
 >                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
->                    : ^ ^^^^^^^^^     ^^   ^^                                         ^^^^^^^^
+>                    : ^ ^^^^^^^^^     ^^   ^^                                         ^^^^^   
 >[    { field: 1, anotherField: 'a', extra: 123 },] : { field: 1; anotherField: "a"; extra: number; }[]
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -332,16 +332,16 @@ function bar(props: {x: number, y: string}) {
 >foo(props) : void
 >           : ^^^^
 >foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
->    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^    
 >props : { x: number; y: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^
 }
 
 foo({x: 1, y: 'foo'});
 >foo({x: 1, y: 'foo'}) : void
 >                      : ^^^^
 >foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
->    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^    
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >x : 1
@@ -357,7 +357,7 @@ foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by
 >foo({...{x: 1, y: 'foo'}}) : void
 >                           : ^^^^
 >foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
->    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^    
 >{...{x: 1, y: 'foo'}} : { x: 1; y: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
@@ -391,7 +391,7 @@ baz({x: 1});
 >baz({x: 1}) : void
 >            : ^^^^
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
->    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^    
 >{x: 1} : { x: 1; }
 >       : ^^^^^^^^^
 >x : 1
@@ -403,7 +403,7 @@ baz({x: 1, z: 123});
 >baz({x: 1, z: 123}) : void
 >                    : ^^^^
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
->    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^    
 >{x: 1, z: 123} : { x: 1; z: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^
 >x : 1
@@ -419,7 +419,7 @@ baz({x: 1, y: 'foo'});
 >baz({x: 1, y: 'foo'}) : void
 >                      : ^^^^
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
->    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^    
 >{x: 1, y: 'foo'} : { x: 1; y: "foo"; }
 >                 : ^^^^^^^^^^^^^^^^^^^
 >x : 1
@@ -435,7 +435,7 @@ baz({x: 1, y: 'foo', z: 123});
 >baz({x: 1, y: 'foo', z: 123}) : void
 >                              : ^^^^
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
->    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^    
 >{x: 1, y: 'foo', z: 123} : { x: 1; y: "foo"; z: number; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : 1
@@ -480,7 +480,7 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; }
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
->               : ^ ^^^^^^^^^              ^^     ^^                                                ^^^^^^
+>               : ^ ^^^^^^^^^              ^^     ^^                                                ^^^^^ 
 >{prop: 'foo', nested: { prop: 'bar' }, extra: 10 } : { prop: "foo"; nested: { prop: string; }; extra: number; }
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : "foo"
@@ -606,7 +606,7 @@ const config = createXMachine({
 >createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
 >                                                                                                                                              : ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->               : ^^^^^^^       ^^^^^^^^^                     ^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^^^^^^^^
+>               : ^^^^^^^       ^^^^^^^^^                     ^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^       
 >{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { src: "str"; }; extra: number; }
 >                                                                                                                              : ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -661,7 +661,7 @@ const config2 = createXMachine({
 >createXMachine({  invoke: {    src: "whatever",  },  extra: 10}) : { invoke: { readonly src: "whatever"; }; }
 >                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->               : ^^^^^^^       ^^^^^^^^^                     ^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^^^^^^^^
+>               : ^^^^^^^       ^^^^^^^^^                     ^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^       
 >{  invoke: {    src: "whatever",  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

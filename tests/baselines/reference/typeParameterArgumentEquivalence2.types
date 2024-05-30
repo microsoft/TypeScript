@@ -19,18 +19,18 @@ function foo<T,U>() {
 
     x = y;  // Should be an error
 >x = y : (item: T) => boolean
->      : ^    ^^ ^^^^^^^^^^^^
+>      : ^    ^^ ^^^^^       
 >x : (item: U) => boolean
->  : ^    ^^ ^^^^^^^^^^^^
+>  : ^    ^^ ^^^^^       
 >y : (item: T) => boolean
->  : ^    ^^ ^^^^^^^^^^^^
+>  : ^    ^^ ^^^^^       
 
     y = x;  // Shound be an error
 >y = x : (item: U) => boolean
->      : ^    ^^ ^^^^^^^^^^^^
+>      : ^    ^^ ^^^^^       
 >y : (item: T) => boolean
->  : ^    ^^ ^^^^^^^^^^^^
+>  : ^    ^^ ^^^^^       
 >x : (item: U) => boolean
->  : ^    ^^ ^^^^^^^^^^^^
+>  : ^    ^^ ^^^^^       
 }
 

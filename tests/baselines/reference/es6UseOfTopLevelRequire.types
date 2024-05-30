@@ -3,13 +3,13 @@
 === a.ts ===
 import require from "./b"
 >require : (s: string) => void
->        : ^ ^^      ^^^^^^^^^
+>        : ^ ^^      ^^^^^    
 
 require("arg");
 >require("arg") : void
 >               : ^^^^
 >require : (s: string) => void
->        : ^ ^^      ^^^^^^^^^
+>        : ^ ^^      ^^^^^    
 >"arg" : "arg"
 >      : ^^^^^
 

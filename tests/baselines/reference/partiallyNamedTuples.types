@@ -150,7 +150,7 @@ const output = test(input);
 >test(input) : [first: number, string]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
->     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^^
+>     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^ 
 >input : [first: { type: number; }, { type: string; }]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
 

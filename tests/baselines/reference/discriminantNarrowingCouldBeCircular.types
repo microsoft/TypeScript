@@ -38,7 +38,7 @@ if (o) {
 >is<string>(value) : boolean
 >                  : ^^^^^^^
 >is : <T>(v: T) => v is T
->   : ^ ^^ ^^ ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^      
 >value : string
 >      : ^^^^^^
     }
@@ -85,7 +85,7 @@ function getImplicitAriaRole(element: SomeRecord) {
 >parentElementOrShadowHost(ancestor) : SomeRecord | undefined
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^
 >parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
->                          : ^       ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^       ^^          ^^^^^                      
 >ancestor : SomeRecord
 >         : ^^^^^^^^^^
 
@@ -121,11 +121,11 @@ function getImplicitAriaRole(element: SomeRecord) {
 >parents.includes(parent.a) : boolean
 >                           : ^^^^^^^
 >parents.includes : (searchElement: string, fromIndex?: number) => boolean
->                 : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^^
+>                 : ^             ^^^^^^^^^^         ^^^      ^^^^^       
 >parents : string[]
 >        : ^^^^^^^^
 >includes : (searchElement: string, fromIndex?: number) => boolean
->         : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^^
+>         : ^             ^^^^^^^^^^         ^^^      ^^^^^       
 >parent.a : string
 >         : ^^^^^^
 >parent : SomeRecord
@@ -162,7 +162,7 @@ declare function isPlainObject2<T>(
 >isPlainObject2(myObj2) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^    ^^       ^^^^^                                    
 >myObj2 : unknown
 >       : ^^^^^^^
 
@@ -196,17 +196,17 @@ declare function isPlainObject2<T>(
 >isPlainObject2(deeper) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^    ^^       ^^^^^                                    
 >deeper : unknown
 >       : ^^^^^^^
 >Object.keys(deeper) : string[]
 >                    : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >deeper : Record<PropertyKey, unknown>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]

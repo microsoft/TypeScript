@@ -317,7 +317,7 @@ function f20(x: unknown) {
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : (x: unknown) => x is Function
->           : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 

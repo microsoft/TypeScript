@@ -80,7 +80,7 @@ prop = getProperty2(obj, 'first');
 >getProperty2(obj, 'first') : string
 >                           : ^^^^^^
 >getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
->             : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^                  ^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^                  ^^^^^    
 >obj : StrNum
 >    : ^^^^^^
 >'first' : "first"
@@ -94,7 +94,7 @@ prop = getProperty3(obj, 'first');
 >getProperty3(obj, 'first') : string
 >                           : ^^^^^^
 >getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
->             : ^ ^^ ^^^^^^^^^                        ^^   ^^ ^^   ^^ ^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^                        ^^   ^^ ^^   ^^ ^^^^^    
 >obj : StrNum
 >    : ^^^^^^
 >'first' : "first"
@@ -109,7 +109,7 @@ prop = getProperty2(obj, s);
 >getProperty2(obj, s) : string
 >                     : ^^^^^^
 >getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
->             : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^                  ^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^                  ^^^^^    
 >obj : StrNum
 >    : ^^^^^^
 >s : unique symbol
@@ -123,7 +123,7 @@ prop = getProperty3(obj, s);
 >getProperty3(obj, s) : string | number
 >                     : ^^^^^^^^^^^^^^^
 >getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
->             : ^ ^^ ^^^^^^^^^                        ^^   ^^ ^^   ^^ ^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^                        ^^   ^^ ^^   ^^ ^^^^^    
 >obj : StrNum
 >    : ^^^^^^
 >s : unique symbol

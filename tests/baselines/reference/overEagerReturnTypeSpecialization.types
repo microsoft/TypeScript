@@ -23,15 +23,15 @@ var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >v1.func(num => num.toString()) // Correctly returns an I1<string>           .func(str => str.length) : I1<number>
 >                                                                                                     : ^^^^^^^^^^
 >v1.func(num => num.toString()) // Correctly returns an I1<string>           .func : <U>(callback: (value: string) => U) => I1<U>
->                                                                                  : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >v1.func(num => num.toString()) : I1<string>
 >                               : ^^^^^^^^^^
 >v1.func : <U>(callback: (value: number) => U) => I1<U>
->        : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >v1 : I1<number>
 >   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<U>
->     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >num => num.toString() : (num: number) => string
 >                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -39,15 +39,15 @@ var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >num.toString() : string
 >               : ^^^^^^
 >num.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >num : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
            .func(str => str.length);    // should error
 >func : <U>(callback: (value: string) => U) => I1<U>
->     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >str => str.length : (str: string) => number
 >                  : ^   ^^^^^^^^^^^^^^^^^^^
 >str : string
@@ -65,15 +65,15 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >v1.func(num => num.toString()) // Correctly returns an I1<string>           .func(str => str.length) : I1<number>
 >                                                                                                     : ^^^^^^^^^^
 >v1.func(num => num.toString()) // Correctly returns an I1<string>           .func : <U>(callback: (value: string) => U) => I1<U>
->                                                                                  : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >v1.func(num => num.toString()) : I1<string>
 >                               : ^^^^^^^^^^
 >v1.func : <U>(callback: (value: number) => U) => I1<U>
->        : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >v1 : I1<number>
 >   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<U>
->     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >num => num.toString() : (num: number) => string
 >                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -81,15 +81,15 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >num.toString() : string
 >               : ^^^^^^
 >num.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >num : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
            .func(str => str.length);    // should be ok 
 >func : <U>(callback: (value: string) => U) => I1<U>
->     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^        ^^^     ^^^^^^^^^^^^^^^^^^^   ^ 
 >str => str.length : (str: string) => number
 >                  : ^   ^^^^^^^^^^^^^^^^^^^
 >str : string

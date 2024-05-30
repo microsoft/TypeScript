@@ -960,21 +960,21 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Array.isArray(a) : boolean
 >                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >a : T & object
 >  : ^^^^^^^^^^
 >Array.isArray(b) : boolean
 >                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >b : T & object
 >  : ^^^^^^^^^^
 
@@ -990,11 +990,11 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys(a) : string[]
 >               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^      ^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^        
 >a : T & object
 >  : ^^^^^^^^^^
 >length : number
@@ -1004,11 +1004,11 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys(b) : string[]
 >               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^      ^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^        
 >b : T & object
 >  : ^^^^^^^^^^
 >length : number
@@ -1611,7 +1611,7 @@ function fx20(value: Either) {
 >assertNever(value) : never
 >                   : ^^^^^
 >assertNever : (v: never) => never
->            : ^ ^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^     
 >value : never
 >      : ^^^^^
     }

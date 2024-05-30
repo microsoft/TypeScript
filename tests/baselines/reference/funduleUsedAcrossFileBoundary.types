@@ -36,9 +36,9 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >Q.defer<T>() : string
 >             : ^^^^^^
 >Q.defer : <T_1>() => string
->        : ^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^      
 >Q : typeof Q
 >  : ^^^^^^^^
 >defer : <T_1>() => string
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^      
 }

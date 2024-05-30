@@ -27,11 +27,11 @@ export const numberConstBad2 = Math.random();
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 export const numberConstBad3 = numberConst;
 >numberConstBad3 : 1
@@ -61,7 +61,7 @@ export const bigIntConstBad2 = time();
 >time() : bigint
 >       : ^^^^^^
 >time : () => bigint
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
 export const bigIntConstBad3 = bigIntConst;
 >bigIntConstBad3 : 1n
@@ -162,11 +162,11 @@ export let numberLetBad2 = Math.random();
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 export let numberLetBad3 = numberLet;
 >numberLetBad3 : number
@@ -196,7 +196,7 @@ export let bigIntLetBad2 = time();
 >time() : bigint
 >       : ^^^^^^
 >time : () => bigint
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
 export let bigIntLetBad3 = bigIntLet;
 >bigIntLetBad3 : bigint
@@ -416,11 +416,11 @@ export class Exported {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     public numberLetBad3 = numberLet;
 >numberLetBad3 : number
@@ -450,7 +450,7 @@ export class Exported {
 >time() : bigint
 >       : ^^^^^^
 >time : () => bigint
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
     public bigIntLetBad3 = bigIntLet;
 >bigIntLetBad3 : bigint
@@ -543,11 +543,11 @@ export class Exported {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
     readonly numberConstBad3 = numberConst;
 >numberConstBad3 : 1
@@ -577,7 +577,7 @@ export class Exported {
 >time() : bigint
 >       : ^^^^^^
 >time : () => bigint
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
     readonly bigIntConstBad3 = bigIntConst;
 >bigIntConstBad3 : 1n
@@ -755,19 +755,19 @@ export function numberParamBad2(p = Math.random()): void { }
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 export function numberParamBad3(p = numberParam): void { }
 >numberParamBad3 : (p?: (p?: number) => void) => void
->                : ^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    
+>                : ^ ^^^^ ^^^^^^^^^^^^^^    ^^^^^    
 >p : (p?: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^    
 >numberParam : (p?: number) => void
->            : ^ ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^    
 
 export function bigIntParam(p = 1n): void { }
 >bigIntParam : (p?: bigint) => void
@@ -797,15 +797,15 @@ export function bigIntParamBad2(p = time()): void { }
 >time() : bigint
 >       : ^^^^^^
 >time : () => bigint
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 
 export function bigIntParamBad3(p = bigIntParam): void { }
 >bigIntParamBad3 : (p?: (p?: bigint) => void) => void
->                : ^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    
+>                : ^ ^^^^ ^^^^^^^^^^^^^^    ^^^^^    
 >p : (p?: bigint) => void
->  : ^ ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^    
 >bigIntParam : (p?: bigint) => void
->            : ^ ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^    
 
 export function stringParam(p = "s"): void { }
 >stringParam : (p?: string) => void

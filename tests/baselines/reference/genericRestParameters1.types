@@ -19,19 +19,19 @@ declare let f2: (x0: number, x1: string, x2: boolean) => void;
 
 f1 = f2;
 >f1 = f2 : (x0: number, x1: string, x2: boolean) => void
->        : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>        : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 
 f2 = f1;
 >f2 = f1 : (x_0: number, x_1: string, x_2: boolean) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
 declare const t3: [number, string, boolean];
 >t3 : [number, string, boolean]
@@ -61,7 +61,7 @@ f1(42, "hello", true);
 >f1(42, "hello", true) : void
 >                      : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -73,7 +73,7 @@ f1(t3[0], t3[1], t3[2]);
 >f1(t3[0], t3[1], t3[2]) : void
 >                        : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >t3[0] : number
 >      : ^^^^^^
 >t3 : [number, string, boolean]
@@ -97,7 +97,7 @@ f1(...t3);
 >f1(...t3) : void
 >          : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >...t3 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [number, string, boolean]
@@ -107,7 +107,7 @@ f1(42, ...t2);
 >f1(42, ...t2) : void
 >              : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -119,7 +119,7 @@ f1(42, "hello", ...t1);
 >f1(42, "hello", ...t1) : void
 >                       : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -133,7 +133,7 @@ f1(42, "hello", true, ...t0);
 >f1(42, "hello", true, ...t0) : void
 >                             : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -149,7 +149,7 @@ f1(ns[0], ns[1], true);
 >f1(ns[0], ns[1], true) : void
 >                       : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >ns[0] : number
 >      : ^^^^^^
 >ns : [number, string]
@@ -169,7 +169,7 @@ f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number he
 >f1(...ns, true) : void
 >                : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >...ns : string | number
 >      : ^^^^^^^^^^^^^^^
 >ns : [number, string]
@@ -181,7 +181,7 @@ f2(42, "hello", true);
 >f2(42, "hello", true) : void
 >                      : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -193,7 +193,7 @@ f2(t3[0], t3[1], t3[2]);
 >f2(t3[0], t3[1], t3[2]) : void
 >                        : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >t3[0] : number
 >      : ^^^^^^
 >t3 : [number, string, boolean]
@@ -217,7 +217,7 @@ f2(...t3);
 >f2(...t3) : void
 >          : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >...t3 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [number, string, boolean]
@@ -227,7 +227,7 @@ f2(42, ...t2);
 >f2(42, ...t2) : void
 >              : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -239,7 +239,7 @@ f2(42, "hello", ...t1);
 >f2(42, "hello", ...t1) : void
 >                       : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -253,7 +253,7 @@ f2(42, "hello", true, ...t0);
 >f2(42, "hello", true, ...t0) : void
 >                             : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -269,7 +269,7 @@ f2(ns[0], ns[1], true);
 >f2(ns[0], ns[1], true) : void
 >                       : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >ns[0] : number
 >      : ^^^^^^
 >ns : [number, string]
@@ -289,7 +289,7 @@ f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number he
 >f2(...ns, true) : void
 >                : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
->   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^^^^^
+>   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
 >...ns : string | number
 >      : ^^^^^^^^^^^^^^^
 >ns : [number, string]
@@ -309,7 +309,7 @@ const x10 = f10(42, "hello", true);  // [number, string, boolean]
 >f10(42, "hello", true) : [number, string, boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -323,7 +323,7 @@ const x11 = f10(42, "hello");  // [number, string]
 >f10(42, "hello") : [number, string]
 >                 : ^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -335,7 +335,7 @@ const x12 = f10(42);  // [number]
 >f10(42) : [number]
 >        : ^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 
@@ -345,7 +345,7 @@ const x13 = f10();  // []
 >f10() : []
 >      : ^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 
 const x14 = f10(...t3);  // [number, string, boolean]
 >x14 : [number, string, boolean]
@@ -353,7 +353,7 @@ const x14 = f10(...t3);  // [number, string, boolean]
 >f10(...t3) : [number, string, boolean]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...t3 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [number, string, boolean]
@@ -365,7 +365,7 @@ const x15 = f10(42, ...t2);  // [number, string, boolean]
 >f10(42, ...t2) : [number, string, boolean]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -379,7 +379,7 @@ const x16 = f10(42, "hello", ...t1);  // [number, string, boolean]
 >f10(42, "hello", ...t1) : [number, string, boolean]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -395,7 +395,7 @@ const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
 >f10(42, "hello", true, ...t0) : [number, string, boolean]
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -413,7 +413,7 @@ const x18 = f10(...ns, true);  // (string | number | boolean)[]
 >f10(...ns, true) : [number, string, boolean]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...ns : string | number
 >      : ^^^^^^^^^^^^^^^
 >ns : [number, string]
@@ -435,7 +435,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10(...u) : U
 >          : ^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...u : string
 >     : ^^^^^^
 >u : U
@@ -447,7 +447,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10(...v) : V
 >          : ^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...v : number
 >     : ^^^^^^
 >v : V
@@ -459,7 +459,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10(1, ...u) : [number, ...U]
 >             : ^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >1 : 1
 >  : ^
 >...u : string
@@ -473,7 +473,7 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f10(...u, ...v) : [...U, ...V]
 >                : ^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
->    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >...u : string
 >     : ^^^^^^
 >u : U
@@ -496,7 +496,7 @@ const z10 = f11(42, "hello", true);  // [42, "hello", true]
 >f11(42, "hello", true) : [42, "hello", true]
 >                       : ^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -510,7 +510,7 @@ const z11 = f11(42, "hello");  // [42, "hello"]
 >f11(42, "hello") : [42, "hello"]
 >                 : ^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -522,7 +522,7 @@ const z12 = f11(42);  // [42]
 >f11(42) : [42]
 >        : ^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 
@@ -532,7 +532,7 @@ const z13 = f11();  // []
 >f11() : []
 >      : ^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 
 const z14 = f11(...t3);  // [number, string, boolean]
 >z14 : [number, string, boolean]
@@ -540,7 +540,7 @@ const z14 = f11(...t3);  // [number, string, boolean]
 >f11(...t3) : [number, string, boolean]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >...t3 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [number, string, boolean]
@@ -552,7 +552,7 @@ const z15 = f11(42, ...t2);  // [42, string, boolean]
 >f11(42, ...t2) : [42, string, boolean]
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -566,7 +566,7 @@ const z16 = f11(42, "hello", ...t1);  // [42, "hello", boolean]
 >f11(42, "hello", ...t1) : [42, "hello", boolean]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -582,7 +582,7 @@ const z17 = f11(42, "hello", true, ...t0);  // [42, "hello", true]
 >f11(42, "hello", true, ...t0) : [42, "hello", true]
 >                              : ^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -600,7 +600,7 @@ const z18 = f11(...ns, true);  // (string | number | true)[]
 >f11(...ns, true) : [number, string, true]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >...ns : string | number
 >      : ^^^^^^^^^^^^^^^
 >ns : [number, string]
@@ -622,7 +622,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11(...u) : U
 >          : ^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >...u : string
 >     : ^^^^^^
 >u : U
@@ -634,7 +634,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11(...v) : V
 >          : ^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >...v : number
 >     : ^^^^^^
 >v : V
@@ -646,7 +646,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11(1, ...u) : [1, ...U]
 >             : ^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >1 : 1
 >  : ^
 >...u : string
@@ -660,7 +660,7 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >f11(...u, ...v) : [...U, ...V]
 >                : ^^^^^^^^^^^^
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^^^^    ^^ ^^^^^ 
 >...u : string
 >     : ^^^^^^
 >u : U
@@ -685,7 +685,7 @@ function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 >f(...args) : U
 >           : ^
 >f : (...args: T) => U
->  : ^^^^    ^^ ^^^^^^
+>  : ^^^^    ^^ ^^^^^ 
 >...args : unknown
 >        : ^^^^^^^
 >args : T
@@ -706,7 +706,7 @@ function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
 >f(...args) : U
 >           : ^
 >f : (...args: T) => U
->  : ^^^^    ^^ ^^^^^^
+>  : ^^^^    ^^ ^^^^^ 
 >...args : unknown
 >        : ^^^^^^^
 >args : T
@@ -785,7 +785,7 @@ let x22 = call(f15, "hello", 42);  // string | number
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f15 : (a: string, b: number) => string | number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^               
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42
@@ -799,7 +799,7 @@ let x23 = call(f16, "hello", 42);  // unknown
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f16 : <A, B>(a: A, b: B) => A | B
->    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42
@@ -813,7 +813,7 @@ let x24 = call<[string, number], string | number>(f16, "hello", 42);  // string 
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f16 : <A, B>(a: A, b: B) => A | B
->    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42
@@ -851,7 +851,7 @@ let x31 = callr(sn, f15);  // string | number
 >sn : [string, number]
 >   : ^^^^^^^^^^^^^^^^
 >f15 : (a: string, b: number) => string | number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^               
 
 let x32 = callr(sn, f16);  // string | number
 >x32 : string | number
@@ -863,7 +863,7 @@ let x32 = callr(sn, f16);  // string | number
 >sn : [string, number]
 >   : ^^^^^^^^^^^^^^^^
 >f16 : <A, B>(a: A, b: B) => A | B
->    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 
 function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
@@ -885,7 +885,7 @@ function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 >f(x, ...rest) : V
 >              : ^
 >f : (x: T, ...rest: U) => V
->  : ^ ^^ ^^^^^    ^^ ^^^^^^
+>  : ^ ^^ ^^^^^    ^^ ^^^^^ 
 >x : T
 >  : ^
 >...rest : unknown
@@ -912,7 +912,7 @@ const f21 = bind(f20, 42);  // (y: string, z: boolean) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
 >     : ^ ^^ ^^^^^^^^^         ^^ ^^ ^^                       ^^ ^^ ^^^^^^^^^    ^^ ^^^^^^
 >f20 : (x: number, y: string, z: boolean) => string[]
->    : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
 >42 : 42
 >   : ^^
 
@@ -944,7 +944,7 @@ f20(42, "hello", true);
 >f20(42, "hello", true) : string[]
 >                       : ^^^^^^^^
 >f20 : (x: number, y: string, z: boolean) => string[]
->    : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -994,7 +994,7 @@ const g21 = bind(g20, 42);  // (y: string, z: boolean) => string[]
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
 >     : ^ ^^ ^^^^^^^^^         ^^ ^^ ^^                       ^^ ^^ ^^^^^^^^^    ^^ ^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
->    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
 >42 : 42
 >   : ^^
 
@@ -1026,7 +1026,7 @@ g20(42, "hello", true);
 >g20(42, "hello", true) : string[]
 >                       : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
->    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -1038,7 +1038,7 @@ g20(42, "hello");
 >g20(42, "hello") : string[]
 >                 : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
->    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -1048,7 +1048,7 @@ g20(42);
 >g20(42) : string[]
 >        : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
->    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
 >42 : 42
 >   : ^^
 
@@ -1112,7 +1112,7 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >f30(42, x => "" + x, x => x + 1) : [(x: number) => string, (x: number) => number]
 >                                 : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
->    : ^ ^^ ^^^^^^^^^                 ^^ ^^ ^^^^^    ^^ ^^^^^^
+>    : ^ ^^ ^^^^^^^^^                 ^^ ^^ ^^^^^    ^^ ^^^^^ 
 >42 : 42
 >   : ^^
 >x => "" + x : (x: number) => string
@@ -1238,11 +1238,11 @@ events.emit('move', 10, 'left');
 >events.emit('move', 10, 'left') : void
 >                                : ^^^^
 >events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >events : EventType<Record1>
 >       : ^^^^^^^^^^^^^^^^^^
 >emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'move' : "move"
 >       : ^^^^^^
 >10 : 10
@@ -1254,11 +1254,11 @@ events.emit('jump', 20, 'up');
 >events.emit('jump', 20, 'up') : void
 >                              : ^^^^
 >events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >events : EventType<Record1>
 >       : ^^^^^^^^^^^^^^^^^^
 >emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'jump' : "jump"
 >       : ^^^^^^
 >20 : 20
@@ -1270,11 +1270,11 @@ events.emit('stop', 'Bye!');
 >events.emit('stop', 'Bye!') : void
 >                            : ^^^^
 >events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >events : EventType<Record1>
 >       : ^^^^^^^^^^^^^^^^^^
 >emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'stop' : "stop"
 >       : ^^^^^^
 >'Bye!' : "Bye!"
@@ -1284,11 +1284,11 @@ events.emit('done');
 >events.emit('done') : void
 >                    : ^^^^
 >events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >events : EventType<Record1>
 >       : ^^^^^^^^^^^^^^^^^^
 >emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'done' : "done"
 >       : ^^^^^^
 
@@ -1318,25 +1318,25 @@ declare var ff4: (a: never) => void;
 
 ff1 = ff2;
 >ff1 = ff2 : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >ff1 : (...args: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >ff2 : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 ff1 = ff3;
 >ff1 = ff3 : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >ff1 : (...args: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >ff3 : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 ff1 = ff4;  // Error
 >ff1 = ff4 : (a: never) => void
->          : ^ ^^     ^^^^^^^^^
+>          : ^ ^^     ^^^^^    
 >ff1 : (...args: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >ff4 : (a: never) => void
->    : ^ ^^     ^^^^^^^^^
+>    : ^ ^^     ^^^^^    
 

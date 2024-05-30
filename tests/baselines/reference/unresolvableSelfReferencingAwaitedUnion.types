@@ -77,7 +77,7 @@ export async function handleEffectResult(result: EffectResult) {
 >result() : EffectResult
 >         : ^^^^^^^^^^^^
 >result : () => EffectResult
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^            
 
   } else if (result instanceof Promise) {
 >result instanceof Promise : boolean
@@ -95,7 +95,7 @@ export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult : (result: EffectResult) => Promise<void>
 >                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >await result : () => EffectResult
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^            
 >result : Promise<EffectResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^
   }

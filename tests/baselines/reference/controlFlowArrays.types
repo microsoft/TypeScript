@@ -67,11 +67,11 @@ function f2() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -79,11 +79,11 @@ function f2() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -91,11 +91,11 @@ function f2() {
 >x.push(true) : number
 >             : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -122,11 +122,11 @@ function f3() {
 >x.push(5, "hello") : number
 >                   : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 >"hello" : "hello"
@@ -151,17 +151,17 @@ function f4() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x.push(5);
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
     }
@@ -170,11 +170,11 @@ function f4() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -194,7 +194,7 @@ function f5() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = [];
 >x = [] : never[]
@@ -207,11 +207,11 @@ function f5() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
     }
@@ -227,11 +227,11 @@ function f5() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -251,7 +251,7 @@ function f6() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = 5;
 >x = 5 : 5
@@ -272,11 +272,11 @@ function f6() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -296,7 +296,7 @@ function f7() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = [];
 >x = [] : never[]
@@ -309,17 +309,17 @@ function f7() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
             x.push("hello");
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
         }
@@ -343,11 +343,11 @@ function f8() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -355,7 +355,7 @@ function f8() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 >x : number[]
 >  : ^^^^^^^^
 
@@ -363,11 +363,11 @@ function f8() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -375,7 +375,7 @@ function f8() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 >x : (string | number)[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -383,11 +383,11 @@ function f8() {
 >x.push(true) : number
 >             : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -410,17 +410,17 @@ function f9() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x.push(5);
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -433,11 +433,11 @@ function f9() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -461,17 +461,17 @@ function f10() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x.push(true);
 >x.push(true) : number
 >             : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -484,11 +484,11 @@ function f10() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -500,17 +500,17 @@ function f10() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
             x.push("hello");
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
         }
@@ -522,11 +522,11 @@ function f10() {
 >x.push(99) : number
 >           : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >99 : 99
 >   : ^^
 
@@ -561,11 +561,11 @@ function f11() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -604,11 +604,11 @@ function f12() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -631,11 +631,11 @@ function f13() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -643,11 +643,11 @@ function f13() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -655,11 +655,11 @@ function f13() {
 >x.push(true) : number
 >             : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -682,11 +682,11 @@ function f14() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -694,11 +694,11 @@ function f14() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -706,11 +706,11 @@ function f14() {
 >x.push(true) : number
 >             : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -733,23 +733,23 @@ function f15() {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         while (cond()) {}
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x.push("hello");
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
     }
@@ -772,7 +772,7 @@ function f16() {
 >(x = [], x).push(5) : number
 >                    : ^^^^^^
 >(x = [], x).push : (...items: any[]) => number
->                 : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                 : ^^^^     ^^^^^^^^^^^^      
 >(x = [], x) : any[]
 >            : ^^^^^
 >x = [], x : any[]
@@ -785,7 +785,7 @@ function f16() {
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -793,7 +793,7 @@ function f16() {
 >(x.push("hello"), x).push(true) : number
 >                                : ^^^^^^
 >(x.push("hello"), x).push : (...items: any[]) => number
->                          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                          : ^^^^     ^^^^^^^^^^^^      
 >(x.push("hello"), x) : any[]
 >                     : ^^^^^
 >x.push("hello"), x : any[]
@@ -801,17 +801,17 @@ function f16() {
 >x.push("hello") : number
 >                : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -853,11 +853,11 @@ function f17() {
 >x.unshift(5) : number
 >             : ^^^^^^
 >x.unshift : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >unshift : (...items: any[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -865,11 +865,11 @@ function f17() {
 >x.unshift("hello") : number
 >                   : ^^^^^^
 >x.unshift : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >unshift : (...items: any[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -877,11 +877,11 @@ function f17() {
 >x.unshift(true) : number
 >                : ^^^^^^
 >x.unshift : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >unshift : (...items: any[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -904,11 +904,11 @@ function f18() {
 >x.push(5) : number
 >          : ^^^^^^
 >x.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >5 : 5
 >  : ^
 
@@ -916,11 +916,11 @@ function f18() {
 >x.unshift("hello") : number
 >                   : ^^^^^^
 >x.unshift : (...items: any[]) => number
->          : ^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^      
 >x : any[]
 >  : ^^^^^
 >unshift : (...items: any[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -960,11 +960,11 @@ arr.push({ val: 1, bar: 2 });
 >arr.push({ val: 1, bar: 2 }) : number
 >                             : ^^^^^^
 >arr.push : (...items: any[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^      
 >arr : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >{ val: 1, bar: 2 } : { val: number; bar: number; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : number
@@ -980,7 +980,7 @@ foo(arr);
 >foo(arr) : void
 >         : ^^^^
 >foo : (arg: { val: number; }[]) => void
->    : ^   ^^                  ^^^^^^^^^
+>    : ^   ^^                  ^^^^^    
 >arr : { val: number; bar: number; }[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

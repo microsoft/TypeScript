@@ -148,7 +148,7 @@ a.empty.push(1)
 >a.empty.push(1) : number
 >                : ^^^^^^
 >a.empty.push : (...items: any[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
 >        : ^^^^^
 >a : A
@@ -156,7 +156,7 @@ a.empty.push(1)
 >empty : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >1 : 1
 >  : ^
 
@@ -164,7 +164,7 @@ a.empty.push(true)
 >a.empty.push(true) : number
 >                   : ^^^^^^
 >a.empty.push : (...items: any[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
 >        : ^^^^^
 >a : A
@@ -172,7 +172,7 @@ a.empty.push(true)
 >empty : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >true : true
 >     : ^^^^
 
@@ -180,7 +180,7 @@ a.empty.push({})
 >a.empty.push({}) : number
 >                 : ^^^^^^
 >a.empty.push : (...items: any[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
 >        : ^^^^^
 >a : A
@@ -188,7 +188,7 @@ a.empty.push({})
 >empty : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >{} : {}
 >   : ^^
 
@@ -196,7 +196,7 @@ a.empty.push('hi')
 >a.empty.push('hi') : number
 >                   : ^^^^^^
 >a.empty.push : (...items: any[]) => number
->             : ^^^^     ^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^      
 >a.empty : any[]
 >        : ^^^^^
 >a : A
@@ -204,7 +204,7 @@ a.empty.push('hi')
 >empty : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 
@@ -305,11 +305,11 @@ function f(a = null, b = n, l = []) {
 >l.push(1) : number
 >          : ^^^^^^
 >l.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >1 : 1
 >  : ^
 
@@ -317,11 +317,11 @@ function f(a = null, b = n, l = []) {
 >l.push('ok') : number
 >             : ^^^^^^
 >l.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >'ok' : "ok"
 >     : ^^^^
 }
@@ -383,18 +383,18 @@ l.push('ok')
 >l.push('ok') : number
 >             : ^^^^^^
 >l.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >l : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >'ok' : "ok"
 >     : ^^^^
 
 /** @type {(v: unknown) => v is undefined} */
 const isUndef = v => v === undefined;
 >isUndef : (v: unknown) => v is undefined
->        : ^ ^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^       ^^^^^              
 >v => v === undefined : (v: unknown) => v is undefined
 >                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : unknown
@@ -423,11 +423,11 @@ const g = e.filter(isUndef);
 >e.filter(isUndef) : undefined[]
 >                  : ^^^^^^^^^^^
 >e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >e : (number | undefined)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >isUndef : (v: unknown) => v is undefined
->        : ^ ^^       ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^       ^^^^^              
 

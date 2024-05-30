@@ -48,19 +48,19 @@ function fn2b() {
 //Multiple function overload signatures that differ only by return type
 function fn3(x: string): string;
 >fn3 : { (x: string): string; (y: string): number; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
 function fn3(y: string): number;
 >fn3 : { (x: string): string; (y: string): number; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >y : string
 >  : ^^^^^^
 
 function fn3(): any {
 >fn3 : { (x: string): string; (y: string): number; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
     return null;
 }
@@ -316,7 +316,7 @@ function fn14(n: string): string;
 
 function fn14() {
 >fn14 : (n: string) => string
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 
     return 3;
 >3 : 3
@@ -326,15 +326,15 @@ function fn14() {
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
->     : ^^^ ^^^^^^^^^               ^^^^^ ^^^^^^^^^^^^^^^         ^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^               ^^^^^ ^^^   ^^^^^^^^^         ^^^^^   ^^^
 
 function fn15<T extends List<any>>(): T;
 >fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
->     : ^^^^^^^^^^^^^^^               ^^^^^^^^^^^ ^^^^^^^^^         ^^^^^ ^^^
+>     : ^^^   ^^^^^^^^^               ^^^^^   ^^^ ^^^^^^^^^         ^^^^^ ^^^
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
->     : ^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
+>     : ^^^ ^^^^^^^^^               ^^^^^ ^^^ ^^^^^^^^^         ^^^^^ ^^^
 
     return undefined;
 >undefined : undefined

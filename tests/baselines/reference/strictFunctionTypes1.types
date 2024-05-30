@@ -79,15 +79,15 @@ declare function fx(f: (x: "def") => void): void;
 
 const x1 = f1(fo, fs);  // (x: string) => void
 >x1 : (x: string) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^    
 >f1(fo, fs) : (x: string) => void
->           : ^ ^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^    
 >f1 : <T>(f1: (x: T) => void, f2: (x: T) => void) => (x: T) => void
->   : ^ ^^  ^^              ^^  ^^              ^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^  ^^              ^^  ^^              ^^^^^              
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fs : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 const x2 = f2("abc", fo, fs);  // "abc"
 >x2 : "abc"
@@ -95,13 +95,13 @@ const x2 = f2("abc", fo, fs);  // "abc"
 >f2("abc", fo, fs) : "abc"
 >                  : ^^^^^
 >f2 : <T>(obj: T, f1: (x: T) => void, f2: (x: T) => void) => T
->   : ^ ^^   ^^ ^^  ^^              ^^  ^^              ^^^^^^
+>   : ^ ^^   ^^ ^^  ^^              ^^  ^^              ^^^^^ 
 >"abc" : "abc"
 >      : ^^^^^
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fs : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 const x3 = f3("abc", fo, fx);  // "abc" | "def"
 >x3 : "def" | "abc"
@@ -109,13 +109,13 @@ const x3 = f3("abc", fo, fx);  // "abc" | "def"
 >f3("abc", fo, fx) : "def" | "abc"
 >                  : ^^^^^^^^^^^^^
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
->   : ^ ^^   ^^ ^^  ^^              ^^  ^^                           ^^^^^^
+>   : ^ ^^   ^^ ^^  ^^              ^^  ^^                           ^^^^^ 
 >"abc" : "abc"
 >      : ^^^^^
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fx : (f: (x: "def") => void) => void
->   : ^ ^^                  ^^^^^^^^^
+>   : ^ ^^                  ^^^^^    
 
 const x4 = f4(fo, fs);  // Func<string>
 >x4 : Func<string>
@@ -123,11 +123,11 @@ const x4 = f4(fo, fs);  // Func<string>
 >f4(fo, fs) : Func<string>
 >           : ^^^^^^^^^^^^
 >f4 : <T>(f1: Func<T>, f2: Func<T>) => Func<T>
->   : ^ ^^  ^^       ^^  ^^       ^^^^^^^^^^^^
+>   : ^ ^^  ^^       ^^  ^^       ^^^^^       
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fs : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 declare const never: never;
 >never : never
@@ -139,13 +139,13 @@ const x10 = f2(never, fo, fs);  // string
 >f2(never, fo, fs) : string
 >                  : ^^^^^^
 >f2 : <T>(obj: T, f1: (x: T) => void, f2: (x: T) => void) => T
->   : ^ ^^   ^^ ^^  ^^              ^^  ^^              ^^^^^^
+>   : ^ ^^   ^^ ^^  ^^              ^^  ^^              ^^^^^ 
 >never : never
 >      : ^^^^^
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fs : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 const x11 = f3(never, fo, fx);  // "def"
 >x11 : "def"
@@ -153,13 +153,13 @@ const x11 = f3(never, fo, fx);  // "def"
 >f3(never, fo, fx) : "def"
 >                  : ^^^^^
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
->   : ^ ^^   ^^ ^^  ^^              ^^  ^^                           ^^^^^^
+>   : ^ ^^   ^^ ^^  ^^              ^^  ^^                           ^^^^^ 
 >never : never
 >      : ^^^^^
 >fo : (x: Object) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >fx : (f: (x: "def") => void) => void
->   : ^ ^^                  ^^^^^^^^^
+>   : ^ ^^                  ^^^^^    
 
 // Repro from #21112
 
@@ -175,7 +175,7 @@ let x = foo([]);  // never
 >foo([]) : never
 >        : ^^^^^
 >foo : <T>(a: ReadonlyArray<T>) => T
->    : ^ ^^ ^^                ^^^^^^
+>    : ^ ^^ ^^                ^^^^^ 
 >[] : never[]
 >   : ^^^^^^^
 
@@ -225,11 +225,11 @@ const t1: A = coAndContra(a, acceptUnion);
 >coAndContra(a, acceptUnion) : A
 >                            : ^
 >coAndContra : <T>(value: T, func: (t: T) => void) => T
->            : ^ ^^     ^^ ^^    ^^              ^^^^^^
+>            : ^ ^^     ^^ ^^    ^^              ^^^^^ 
 >a : A
 >  : ^
 >acceptUnion : (x: A | number) => void
->            : ^ ^^          ^^^^^^^^^
+>            : ^ ^^          ^^^^^    
 
 const t2: B = coAndContra(b, acceptA);
 >t2 : B
@@ -237,11 +237,11 @@ const t2: B = coAndContra(b, acceptA);
 >coAndContra(b, acceptA) : B
 >                        : ^
 >coAndContra : <T>(value: T, func: (t: T) => void) => T
->            : ^ ^^     ^^ ^^    ^^              ^^^^^^
+>            : ^ ^^     ^^ ^^    ^^              ^^^^^ 
 >b : B
 >  : ^
 >acceptA : (x: A) => void
->        : ^ ^^ ^^^^^^^^^
+>        : ^ ^^ ^^^^^    
 
 const t3: A = coAndContra(never, acceptA);
 >t3 : A
@@ -249,11 +249,11 @@ const t3: A = coAndContra(never, acceptA);
 >coAndContra(never, acceptA) : A
 >                            : ^
 >coAndContra : <T>(value: T, func: (t: T) => void) => T
->            : ^ ^^     ^^ ^^    ^^              ^^^^^^
+>            : ^ ^^     ^^ ^^    ^^              ^^^^^ 
 >never : never
 >      : ^^^^^
 >acceptA : (x: A) => void
->        : ^ ^^ ^^^^^^^^^
+>        : ^ ^^ ^^^^^    
 
 declare function coAndContraArray<T>(value: T[], func: (t: T) => void): T[];
 >coAndContraArray : <T>(value: T[], func: (t: T) => void) => T[]
@@ -271,13 +271,13 @@ const t4: A[] = coAndContraArray([a], acceptUnion);
 >coAndContraArray([a], acceptUnion) : A[]
 >                                   : ^^^
 >coAndContraArray : <T>(value: T[], func: (t: T) => void) => T[]
->                 : ^ ^^     ^^   ^^    ^^              ^^^^^^^^
+>                 : ^ ^^     ^^   ^^    ^^              ^^^^^   
 >[a] : A[]
 >    : ^^^
 >a : A
 >  : ^
 >acceptUnion : (x: A | number) => void
->            : ^ ^^          ^^^^^^^^^
+>            : ^ ^^          ^^^^^    
 
 const t5: B[] = coAndContraArray([b], acceptA);
 >t5 : B[]
@@ -285,13 +285,13 @@ const t5: B[] = coAndContraArray([b], acceptA);
 >coAndContraArray([b], acceptA) : B[]
 >                               : ^^^
 >coAndContraArray : <T>(value: T[], func: (t: T) => void) => T[]
->                 : ^ ^^     ^^   ^^    ^^              ^^^^^^^^
+>                 : ^ ^^     ^^   ^^    ^^              ^^^^^   
 >[b] : B[]
 >    : ^^^
 >b : B
 >  : ^
 >acceptA : (x: A) => void
->        : ^ ^^ ^^^^^^^^^
+>        : ^ ^^ ^^^^^    
 
 const t6: A[] = coAndContraArray([], acceptA);
 >t6 : A[]
@@ -299,9 +299,9 @@ const t6: A[] = coAndContraArray([], acceptA);
 >coAndContraArray([], acceptA) : A[]
 >                              : ^^^
 >coAndContraArray : <T>(value: T[], func: (t: T) => void) => T[]
->                 : ^ ^^     ^^   ^^    ^^              ^^^^^^^^
+>                 : ^ ^^     ^^   ^^    ^^              ^^^^^   
 >[] : never[]
 >   : ^^^^^^^
 >acceptA : (x: A) => void
->        : ^ ^^ ^^^^^^^^^
+>        : ^ ^^ ^^^^^    
 

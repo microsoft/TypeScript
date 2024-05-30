@@ -17,17 +17,17 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString(): string; } | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
@@ -52,11 +52,11 @@ function stringify2(anything: {} | undefined): string {
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
@@ -81,11 +81,11 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
@@ -106,17 +106,17 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString?(): string; } | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }

@@ -359,7 +359,7 @@ type T43 = Split<any, '.'>;  // string[]
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
->        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^   ^^    ^^^^^^^^^                  ^^    ^^^^^^^^^                        ^^   ^^   ^^    ^^                 ^^^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^   ^^    ^^^^^^^^^                  ^^    ^^^^^^^^^                        ^^   ^^   ^^    ^^                 ^^^               ^^^   ^^    ^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^         ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
 >    : ^
 >path : `${P0}.${P1}.${P2}`
@@ -367,7 +367,7 @@ declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] 
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
 >getProp : { <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}.${P2}`): T_1[P0_1][P1_1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
->        : ^^^   ^^    ^^^^^^^^^                  ^^    ^^^^^^^^^                        ^^  ^^^^^^^^^                              ^^   ^^   ^^    ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^   ^^    ^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^   ^^    ^^^^^^^^^                  ^^    ^^^^^^^^^                        ^^  ^^^^^^^^^                              ^^   ^^   ^^    ^^                       ^^^                   ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^   ^^    ^^^^^^^^^                  ^^   ^^   ^^    ^^    ^^^         ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
 >    : ^
 >path : `${P0}.${P1}`
@@ -375,7 +375,7 @@ declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] 
 
 declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
 >getProp : { <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1] & string>(obj: T_1, path: `${P0_1}.${P1}.${P2}`): T_1[P0_1][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1}`): T_1[P0_1][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
->        : ^^^   ^^    ^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^  ^^^^^^^^^                            ^^   ^^   ^^    ^^                     ^^^^^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^   ^^   ^^    ^^               ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^   ^^    ^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^  ^^^^^^^^^                            ^^   ^^   ^^    ^^                     ^^^                 ^^^   ^^    ^^^^^^^^^                  ^^  ^^^^^^^^^                        ^^   ^^   ^^    ^^               ^^^             ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : T
 >    : ^
 >path : P0
@@ -383,7 +383,7 @@ declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0
 
 declare function getProp(obj: object, path: string): unknown;
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
->        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^      ^^    ^^      ^^^       ^^^
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >obj : object
 >    : ^^^^^^
 >path : string
@@ -395,7 +395,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a') : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
->        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
@@ -425,7 +425,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b') : { readonly c: 42; readonly d: "hello"; }
 >                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
->        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
@@ -455,7 +455,7 @@ let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d') : "hello"
 >                                                            : ^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
->        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
+>        : ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^  ^^^^^^^^^                        ^^   ^^ ^^    ^^                   ^^^             ^^^ ^^  ^^^^^^^^^                ^^  ^^^^^^^^^                    ^^   ^^ ^^    ^^             ^^^         ^^^ ^^  ^^^^^^^^^                ^^   ^^ ^^    ^^  ^^^     ^^^   ^^      ^^    ^^      ^^^       ^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
@@ -526,7 +526,7 @@ getPropValue(obj, 'a');  // { b: {c: number, d: string } }
 >getPropValue(obj, 'a') : { b: { c: number; d: string; }; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
->             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -536,7 +536,7 @@ getPropValue(obj, 'a.b');  // {c: number, d: string }
 >getPropValue(obj, 'a.b') : { c: number; d: string; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
->             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b' : "a.b"
@@ -546,7 +546,7 @@ getPropValue(obj, 'a.b.d');  // string
 >getPropValue(obj, 'a.b.d') : string
 >                           : ^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
->             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b.d' : "a.b.d"
@@ -556,7 +556,7 @@ getPropValue(obj, 'a.b.x');  // unknown
 >getPropValue(obj, 'a.b.x') : unknown
 >                           : ^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
->             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a.b.x' : "a.b.x"
@@ -566,7 +566,7 @@ getPropValue(obj, s);  // unknown
 >getPropValue(obj, s) : unknown
 >                     : ^^^^^^^
 >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
->             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^^^^^^^^      ^^   ^^ ^^    ^^ ^^^^^              
 >obj : { a: { b: { c: number; d: string; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -886,7 +886,7 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >getProp2(obj2, 'cars.1.make') : "Trabant"
 >                              : ^^^^^^^^^
 >getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
->         : ^ ^^ ^^^^^^^^^           ^^   ^^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^           ^^   ^^ ^^    ^^ ^^^^^              
 >obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'cars.1.make' : "cars.1.make"

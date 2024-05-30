@@ -39,7 +39,7 @@ const r1 = f(v);
 >f(v) : number
 >     : ^^^^^^
 >f : <A extends string, B extends string, R>(x: { [K in A]: Field<B, R>; }) => R
->  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^                          ^^^^^^
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^                          ^^^^^ 
 >v : { test: { smth: number; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ const r2 = g(v);
 >g(v) : number
 >     : ^^^^^^
 >g : <A extends string, B extends string, R>(x: Field<A, Field<B, R>>) => R
->  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^                     ^^^^^^
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^                     ^^^^^ 
 >v : { test: { smth: number; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -82,7 +82,7 @@ function boxify<T>(obj: T): Boxified<T> {
 >box(obj[k]) : Box<T[Extract<keyof T, string>]>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >box : <T_1>(x: T_1) => Box<T_1>
->    : ^   ^^ ^^   ^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^        
 >obj[k] : T[Extract<keyof T, string>]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
@@ -127,7 +127,7 @@ function unboxify<T extends object>(obj: Boxified<T>): T {
 >unbox(obj[k]) : T[Extract<keyof T, string>]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unbox : <T_1>(x: Box<T_1>) => T_1
->      : ^   ^^ ^^        ^^^^^^^^
+>      : ^   ^^ ^^        ^^^^^   
 >obj[k] : Boxified<T>[Extract<keyof T, string>]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Boxified<T>
@@ -211,7 +211,7 @@ function f1() {
 >boxify(v) : Boxified<{ a: number; b: string; c: boolean; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^           
 >v : { a: number; b: string; c: boolean; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -246,7 +246,7 @@ function f2() {
 >box(42) : Box<number>
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >42 : 42
 >   : ^^
 
@@ -256,7 +256,7 @@ function f2() {
 >box("hello") : Box<string>
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -266,7 +266,7 @@ function f2() {
 >box(true) : Box<boolean>
 >          : ^^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 
@@ -277,7 +277,7 @@ function f2() {
 >unboxify(b) : { a: number; b: string; c: boolean; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^^
+>         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^ 
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -308,7 +308,7 @@ function f3() {
 >box(42) : Box<number>
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >42 : 42
 >   : ^^
 
@@ -318,7 +318,7 @@ function f3() {
 >box("hello") : Box<string>
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -328,7 +328,7 @@ function f3() {
 >box(true) : Box<boolean>
 >          : ^^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 
@@ -364,7 +364,7 @@ function f4() {
 >box(42) : Box<number>
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >42 : 42
 >   : ^^
 
@@ -374,7 +374,7 @@ function f4() {
 >box("hello") : Box<string>
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -384,7 +384,7 @@ function f4() {
 >box(true) : Box<boolean>
 >          : ^^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 
@@ -397,11 +397,11 @@ function f4() {
 >boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^           
 >unboxify(b) : { a: number; b: string; c: boolean; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^^
+>         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^ 
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -413,11 +413,11 @@ function f4() {
 >unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^^
+>         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^ 
 >boxify(b) : Boxified<{ a: Box<number>; b: Box<string>; c: Box<boolean>; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^           
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -455,7 +455,7 @@ function f5(s: string) {
 >box(42) : Box<number>
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >42 : 42
 >   : ^^
 
@@ -465,7 +465,7 @@ function f5(s: string) {
 >box("hello") : Box<string>
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -475,7 +475,7 @@ function f5(s: string) {
 >box(true) : Box<boolean>
 >          : ^^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 
@@ -486,7 +486,7 @@ function f5(s: string) {
 >unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^^
+>         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^ 
 >b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -536,7 +536,7 @@ function f6(s: string) {
 >box(42) : Box<number>
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >42 : 42
 >   : ^^
 
@@ -546,7 +546,7 @@ function f6(s: string) {
 >box("hello") : Box<string>
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -556,7 +556,7 @@ function f6(s: string) {
 >box(true) : Box<boolean>
 >          : ^^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
->    : ^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 
@@ -567,7 +567,7 @@ function f6(s: string) {
 >unboxify(b) : { [x: string]: any; }
 >            : ^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^^
+>         : ^ ^^^^^^^^^      ^^   ^^           ^^^^^ 
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -621,31 +621,31 @@ function f10(foo: Foo) {
 
     let x = validate(foo);  // { a: number, readonly b: string }
 >x : { a: number; readonly b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^      ^^^
 >validate(foo) : { a: number; readonly b: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^^^^^^^^^^^^      ^^^
 >validate : <T>(obj: { [P in keyof T]?: T[P]; }) => T
->         : ^ ^^   ^^                          ^^^^^^
+>         : ^ ^^   ^^                          ^^^^^ 
 >foo : Foo
 >    : ^^^
 
     let y = clone(foo);  // { a?: number, b: string }
->y : { a?: number | undefined; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->clone(foo) : { a?: number | undefined; b: string; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : { a?: number; b: string; }
+>  : ^^^^^^      ^^^^^      ^^^
+>clone(foo) : { a?: number; b: string; }
+>           : ^^^^^^      ^^^^^      ^^^
 >clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
->      : ^ ^^   ^^                                  ^^^^^^
+>      : ^ ^^   ^^                                  ^^^^^ 
 >foo : Foo
 >    : ^^^
 
     let z = validateAndClone(foo);  // { a: number, b: string }
 >z : { a: number; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >validateAndClone(foo) : { a: number; b: string; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^      ^^^^^      ^^^
 >validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P]; }) => T
->                 : ^ ^^   ^^                                   ^^^^^^
+>                 : ^ ^^   ^^                                   ^^^^^ 
 >foo : Foo
 >    : ^^^
 }
@@ -685,7 +685,7 @@ var g1 = applySpec({
 >applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
 >                                                                                   : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
->          : ^ ^^   ^^       ^^^^^^^^^    ^^     ^^^^^^
+>          : ^ ^^   ^^       ^^^^^                     
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
 >                                                                        : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^
 
@@ -722,7 +722,7 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 >applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
 >                                                       : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
->          : ^ ^^   ^^       ^^^^^^^^^    ^^     ^^^^^^
+>          : ^ ^^   ^^       ^^^^^                     
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar: { baz: (x: any) => boolean; }; }
@@ -840,7 +840,7 @@ let x0 = f20({ foo: 42, bar: "hello" });
 >f20({ foo: 42, bar: "hello" }) : { foo: number; bar: string; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f20 : <T, K extends keyof T>(obj: Pick<T, K>) => T
->    : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^ 
 >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -858,7 +858,7 @@ let x1 = f21({ foo: 42, bar: "hello" });
 >f21({ foo: 42, bar: "hello" }) : "foo" | "bar"
 >                               : ^^^^^^^^^^^^^
 >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
->    : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^          ^^^^^ 
 >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -876,7 +876,7 @@ let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
 >f22({ foo: { value: 42} , bar: { value: "hello" } }) : { foo: number; bar: string; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f22 : <T, K extends keyof T>(obj: Boxified<Pick<T, K>>) => T
->    : ^ ^^ ^^^^^^^^^       ^^   ^^                    ^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^                    ^^^^^ 
 >{ foo: { value: 42} , bar: { value: "hello" } } : { foo: { value: number; }; bar: { value: string; }; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { value: number; }
@@ -902,7 +902,7 @@ let x3 = f23({ foo: 42, bar: "hello" });
 >f23({ foo: 42, bar: "hello" }) : { foo: number; bar: string; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f23 : <T, U extends keyof T, K extends U>(obj: Pick<T, K>) => T
->    : ^ ^^ ^^^^^^^^^       ^^ ^^^^^^^^^ ^^   ^^          ^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^ ^^^^^^^^^ ^^   ^^          ^^^^^ 
 >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -920,7 +920,7 @@ let x4 = f24({ foo: 42, bar: "hello" });
 >f24({ foo: 42, bar: "hello" }) : { foo: number; bar: string; } & { foo: number; bar: string; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f24 : <T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>) => T & U
->    : ^ ^^ ^^ ^^^^^^^^^                 ^^   ^^              ^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^                 ^^   ^^              ^^^^^     
 >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -959,7 +959,7 @@ const o1 = getProps(myAny, ['foo', 'bar']);
 >getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
->         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^          
 >myAny : any
 >['foo', 'bar'] : ("foo" | "bar")[]
 >               : ^^^^^^^^^^^^^^^^^
@@ -976,7 +976,7 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 >getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
->         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^          
 >myAny : any
 >['foo', 'bar'] : ("foo" | "bar")[]
 >               : ^^^^^^^^^^^^^^^^^

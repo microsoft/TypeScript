@@ -86,7 +86,7 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >C : any
 >  : ^^^
 >a : any

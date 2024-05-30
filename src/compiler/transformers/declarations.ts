@@ -139,6 +139,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -995,25 +996,26 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
-            if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (
-                    isolatedDeclarations
-                    // Classes usually elide properties with computed names that are not of a literal type
+            if (hasDynamicName(input)) {
+                if (isolatedDeclarations) {
+                    // Classes and object literals usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-                    && isClassDeclaration(input.parent)
-                    && isEntityNameExpression(input.name.expression)
-                    // If the symbol is not accessible we get another TS error no need to add to that
-                    && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
-                    && !resolver.isNonNarrowedBindableName(input.name)
-                ) {
-                    context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
+                    if (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) {
+                        context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
+                        return;
+                    }
+                    else if (
+                        // Type declarations just need to double-check that the input computed name is an entity name expression
+                        (isInterfaceDeclaration(input.parent) || isTypeLiteralNode(input.parent))
+                        && !isEntityNameExpression(input.name.expression)
+                    ) {
+                        context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
+                        return;
+                    }
                 }
-                if (!isEntityNameExpression(input.name.expression)) {
+                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isEntityNameExpression(input.name.expression)) {
                     return;
                 }
-                // A.B.C that is not late bound - usually this means the expression did not resolve.
-                // Check the entity name, and copy the declaration, rather than elide it (there's
-                // probably a checker error in the input, but this is most likely the desired output).
             }
         }
 

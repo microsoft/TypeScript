@@ -47,11 +47,11 @@ class MessageWrapper {
 >m.secret() : void
 >           : ^^^^
 >m.secret : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >m : Message
 >  : ^^^^^^^
 >secret : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
     }
   }
 }
@@ -277,11 +277,11 @@ function bString<T extends string>(this: T, arg: B) {
 >this.toLowerCase() : string
 >                   : ^^^^^^
 >this.toLowerCase : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >this : T
 >     : ^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
   arg.a(); // should error
 >arg.a() : void

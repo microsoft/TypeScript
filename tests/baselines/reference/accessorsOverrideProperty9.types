@@ -102,7 +102,7 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 >ApiItemContainerMixin(ApiItem) : ApiItem & ApiItemContainerMixin
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
->                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^                                                            
 >ApiItem : typeof ApiItem
 >        : ^^^^^^^^^^^^^^
 

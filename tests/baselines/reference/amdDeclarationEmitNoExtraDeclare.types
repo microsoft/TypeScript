@@ -3,7 +3,7 @@
 === Class.ts ===
 import { Configurable } from "./Configurable"
 >Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
->             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^^
+>             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^ 
 
 export class HiddenClass {}
 >HiddenClass : HiddenClass
@@ -15,7 +15,7 @@ export class ActualClass extends Configurable(HiddenClass) {}
 >Configurable(HiddenClass) : HiddenClass
 >                          : ^^^^^^^^^^^
 >Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
->             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^^
+>             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^ 
 >HiddenClass : typeof HiddenClass
 >            : ^^^^^^^^^^^^^^^^^^
 

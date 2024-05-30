@@ -57,7 +57,7 @@ function foo1(x: A | B): any {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: A | B) => x is A
->    : ^ ^^     ^^^^^^^^^^^
+>    : ^ ^^     ^^^^^      
 >x : A | B
 >  : ^^^^^
 
@@ -73,7 +73,7 @@ function foo1(x: A | B): any {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: A | B) => x is B
->    : ^ ^^     ^^^^^^^^^^^
+>    : ^ ^^     ^^^^^      
 >x : B
 >  : ^
 

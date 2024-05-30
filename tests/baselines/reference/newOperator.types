@@ -56,7 +56,7 @@ new string;
 >(new Date()).toString() : string
 >                        : ^^^^^^
 >(new Date()).toString : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 >(new Date()) : Date
 >             : ^^^^
 >new Date() : Date
@@ -64,7 +64,7 @@ new string;
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 // Various spacing
 var t3 = new string[]( );
@@ -141,7 +141,7 @@ new union;
 >new union : any
 >          : ^^^
 >union : { a: string; } | { b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^^^^^^      ^^^
 
 // Error on union with one constructor
 declare const ctorUnion: { a: string } | (new (a: string) => void)
@@ -156,7 +156,7 @@ new ctorUnion("");
 >new ctorUnion("") : any
 >                  : ^^^
 >ctorUnion : { a: string; } | (new (a: string) => void)
->          : ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>          : ^^^^^      ^^^^^^^^^^^^ ^^      ^^^^^    ^
 >"" : ""
 >   : ^^
 
@@ -173,7 +173,7 @@ new ctorUnion2("");
 >new ctorUnion2("") : any
 >                   : ^^^
 >ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
->           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^    ^^^^^^^^^^^^^ ^^      ^^^^^    ^
 >"" : ""
 >   : ^^
 

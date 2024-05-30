@@ -65,85 +65,85 @@ assign<number[], [...number[]]>();
 >assign<number[], [...number[]]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<number[], [number, ...number[]]>();
 >assign<number[], [number, ...number[]]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[...number[]], number[]>();
 >assign<[...number[]], number[]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], number[]>();  // Error
 >assign<[number, ...number[]], number[]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], []>();  // Error
 >assign<[number, ...number[]], []>() : void
 >                                    : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number]>();
 >assign<[number, ...number[]], [number]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number]>();
 >assign<[number, ...number[]], [number, number]>() : void
 >                                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, ...number[]]>();
 >assign<[number, ...number[]], [number, number, ...number[]]>() : void
 >                                                               : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number], [...number[]]>();  // Error
 >assign<[number], [...number[]]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number], [number, ...number[]]>();  // Error
 >assign<[number], [number, ...number[]]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, ...string[]]>();  // Error
 >assign<[number, ...number[]], [number, ...string[]]>() : void
 >                                                       : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [string, ...number[]]>();  // Error
 >assign<[number, ...number[]], [string, ...number[]]>() : void
 >                                                       : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, string]>() : void
 >                                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<[number, ...number[]], [number, number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, number, string]>() : void
 >                                                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 type T20 = [number, string, ...boolean[]];
 >T20 : T20
@@ -249,7 +249,7 @@ f0([]);  // Error
 >f0([]) : [unknown, unknown]
 >       : ^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[] : []
 >   : ^^
 
@@ -257,7 +257,7 @@ f0([1]);
 >f0([1]) : [number, unknown]
 >        : ^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1
@@ -267,7 +267,7 @@ f0([1, 2, 3]);
 >f0([1, 2, 3]) : [number, number]
 >              : ^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -281,7 +281,7 @@ f0([1, "hello", true]);
 >f0([1, "hello", true]) : [number, string | boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, "hello", true] : [number, string, true]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -315,7 +315,7 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]) : void
 >                                                      : ^^^^
 >f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
->   : ^ ^^                                                     ^^^^^^^^^
+>   : ^ ^^                                                     ^^^^^    
 >[x => x * 2, x => x.length, x => x.charCodeAt(0)] : [(x: number) => number, (x: string) => number, (x: string) => number]
 >                                                  : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
@@ -345,11 +345,11 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >x.charCodeAt(0) : number
 >                : ^^^^^^
 >x.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -357,7 +357,7 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
 >                                                    : ^^^^
 >f2 : (a_0: (x: number) => number, ...a_1: ((x: string) => number)[]) => void
->   : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^    
 >x => x * 2 : (x: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -385,11 +385,11 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >x.charCodeAt(0) : number
 >                : ^^^^^^
 >x.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >0 : 0
 >  : ^
 
