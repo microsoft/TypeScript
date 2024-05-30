@@ -886,7 +886,7 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.getEmitResolver().requiresAddingImplicitUndefined(node)) {
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         const flags = (
