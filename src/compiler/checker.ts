@@ -8487,6 +8487,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
             }
 
+            function tryVisitTypeReference(node: TypeReferenceNode) {
+                if (canReuseTypeNode(context, node)) {
+                    const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
+                    const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
+
+                    if (!introducesError) {
+                        const updated = factory.updateTypeReferenceNode(
+                            node,
+                            newName,
+                            typeArguments,
+                        );
+                        return setTextRange(context, updated, node);
+                    }
+                    else {
+                        const serializedName = serializeTypeName(context, node.typeName, /*isTypeOf*/ false, typeArguments);
+                        if (serializedName) {
+                            return setTextRange(context, serializedName, node.typeName);
+                        }
+                    }
+                }
+            }
+
             function visitExistingNodeTreeSymbolsWorker(node: Node): Node | undefined {
                 if (isJSDocTypeExpression(node)) {
                     // Unwrap JSDocTypeExpressions
@@ -8590,27 +8612,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         visitNode(node.default, visitExistingNodeTreeSymbols, isTypeNode),
                     );
                 }
-                if (isTypeReferenceNode(node)) {
-                    if (canReuseTypeNode(context, node)) {
-                        const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
-                        const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
 
-                        if (!introducesError) {
-                            const updated = factory.updateTypeReferenceNode(
-                                node,
-                                newName,
-                                typeArguments,
-                            );
-                            return setTextRange(context, updated, node);
-                        }
-                        else {
-                            const serializedName = serializeTypeName(context, node.typeName, /*isTypeOf*/ false, typeArguments);
-                            if (serializedName) {
-                                return setTextRange(context, serializedName, node.typeName);
-                            }
-                        }
+                if (isIndexedAccessTypeNode(node) && isTypeReferenceNode(node.objectType)) {
+                    const objectType = tryVisitTypeReference(node.objectType);
+                    if (!objectType) {
+                        return serializeExistingTypeNode(context, node);
                     }
-                    return serializeExistingTypeNode(context, node);
+                    return factory.updateIndexedAccessTypeNode(node, objectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
+                }
+
+                if (isTypeReferenceNode(node)) {
+                    return tryVisitTypeReference(node) ?? serializeExistingTypeNode(context, node);
                 }
                 if (isLiteralImportTypeNode(node)) {
                     const nodeSymbol = getNodeLinks(node).resolvedSymbol;
@@ -8735,9 +8747,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
 
-                if (isTypeOperatorNode(node) && node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
-                    if (!canReuseTypeNode(context, node)) {
-                        return serializeExistingTypeNode(context, node);
+                if (isTypeOperatorNode(node)) {
+                    if (node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
+                        if (!canReuseTypeNode(context, node)) {
+                            return serializeExistingTypeNode(context, node);
+                        }
+                    }
+                    else if (node.operator === SyntaxKind.KeyOfKeyword) {
+                        if (isTypeReferenceNode(node.type)) {
+                            const type = tryVisitTypeReference(node.type);
+                            if (!type) {
+                                return serializeExistingTypeNode(context, node);
+                            }
+                            return factory.updateTypeOperatorNode(node, type);
+                        }
                     }
                 }
 
