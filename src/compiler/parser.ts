@@ -5153,12 +5153,7 @@ namespace Parser {
         switch (token()) {
             case SyntaxKind.AsKeyword:
             case SyntaxKind.SatisfiesKeyword: {
-                let truthy = false;
-                lookAhead(() => {
-                    nextToken();
-                    truthy = token() === SyntaxKind.EqualsToken || token() === SyntaxKind.OpenBraceToken;
-                });
-                return truthy;
+                return lookAhead(() => nextToken() === SyntaxKind.EqualsToken);
             }
 
             default:
