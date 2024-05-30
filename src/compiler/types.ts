@@ -2765,17 +2765,17 @@ export interface RegularExpressionLiteral extends LiteralExpression {
 // dprint-ignore
 /** @internal */
 export const enum RegularExpressionFlags {
-    None        = 0,
-    HasIndices  = 1 << 0, // d
-    Global      = 1 << 1, // g
-    IgnoreCase  = 1 << 2, // i
-    Multiline   = 1 << 3, // m
-    DotAll      = 1 << 4, // s
-    Unicode     = 1 << 5, // u
-    UnicodeSets = 1 << 6, // v
-    Sticky      = 1 << 7, // y
-    UnicodeMode = Unicode | UnicodeSets,
-    Modifiers   = IgnoreCase | Multiline | DotAll,
+    None           = 0,
+    HasIndices     = 1 << 0, // d
+    Global         = 1 << 1, // g
+    IgnoreCase     = 1 << 2, // i
+    Multiline      = 1 << 3, // m
+    DotAll         = 1 << 4, // s
+    Unicode        = 1 << 5, // u
+    UnicodeSets    = 1 << 6, // v
+    Sticky         = 1 << 7, // y
+    AnyUnicodeMode = Unicode | UnicodeSets,
+    Modifiers      = IgnoreCase | Multiline | DotAll,
 }
 
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
@@ -5955,6 +5955,7 @@ export interface SymbolLinks {
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     accessibleChainCache?: Map<string, Symbol[] | undefined>;
     filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
+    requestedExternalEmitHelpers?: ExternalEmitHelpers; // External emit helpers already checked for this symbol.
 }
 
 // dprint-ignore
@@ -6141,6 +6142,7 @@ export interface NodeLinks {
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
+    externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
 }
 
 /** @internal */

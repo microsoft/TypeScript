@@ -4,4 +4,4 @@
 / b;
 
 //// [parserMissingToken2.js]
-/ b;;
+/ b;

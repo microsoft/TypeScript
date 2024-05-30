@@ -1,7 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { FileSet } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
+import { forEachDeclarationEmitWithErrorsScenario } from "../helpers/declarationEmit.js";
 import {
     noChangeOnlyRuns,
     verifyTsc,
@@ -126,43 +126,16 @@ export function fn4() {
         commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"],
     });
 
-    verifyTsc({
-        scenario: "declarationEmit",
-        subScenario: "reports dts generation errors with incremental",
-        commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        module: "NodeNext",
-                        moduleResolution: "NodeNext",
-                        incremental: true,
-                        declaration: true,
-                        skipLibCheck: true,
-                        skipDefaultLibCheck: true,
-                    },
-                }),
-                "/src/project/index.ts": dedent`
-                    import ky from 'ky';
-                    export const api = ky.extend({});
-                `,
-                "/src/project/package.json": jsonToReadableText({
-                    type: "module",
-                }),
-                "/src/project/node_modules/ky/distribution/index.d.ts": dedent`
-                   type KyInstance = {
-                        extend(options: Record<string,unknown>): KyInstance;
-                    }
-                    declare const ky: KyInstance;
-                    export default ky;
-                `,
-                "/src/project/node_modules/ky/package.json": jsonToReadableText({
-                    name: "ky",
-                    type: "module",
-                    main: "./distribution/index.js",
-                }),
-                "/lib/lib.esnext.full.d.ts": libContent,
-            }),
-        edits: noChangeOnlyRuns,
-    });
+    forEachDeclarationEmitWithErrorsScenario(
+        (scenario, fs) => {
+            verifyTsc({
+                scenario: "declarationEmit",
+                subScenario: scenario("reports dts generation errors"),
+                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "--v"],
+                fs,
+                edits: noChangeOnlyRuns,
+            });
+        },
+        /*withComposite*/ false,
+    );
 });

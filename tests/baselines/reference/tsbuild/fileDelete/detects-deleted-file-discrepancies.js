@@ -25,14 +25,11 @@ CleanBuild:
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./child.ts",
         [
           {
-            "file": "./child.ts",
             "start": 23,
             "length": 17,
             "messageText": "Cannot find module '../child/child2' or its corresponding type declarations.",
@@ -71,14 +68,11 @@ IncrementalBuild:
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
       [
         "./child.ts",
         [
           {
-            "file": "./child.ts",
             "start": 23,
             "length": 17,
             "messageText": "Cannot find module '../child/child2' or its corresponding type declarations.",

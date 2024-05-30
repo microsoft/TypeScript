@@ -1789,13 +1789,21 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
     "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
+    },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
     },
 
     "The types of '{0}' are incompatible between these types.": {

@@ -167,7 +167,7 @@ export {};
 
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./test/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -238,14 +238,9 @@ export {};
         "../index.js"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../lib/lib.esnext.full.d.ts",
-      "../index.js",
-      "../test/index.js"
-    ],
     "latestChangedDtsFile": "./test/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1032
+  "size": 995
 }
 

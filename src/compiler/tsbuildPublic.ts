@@ -71,7 +71,6 @@ import {
     getWatchErrorSummaryDiagnosticMessage,
     hasProperty,
     identity,
-    isArray,
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
     isPackageJsonInfo,
@@ -105,7 +104,6 @@ import {
     SemanticDiagnosticsBuilderProgram,
     setGetSourceFileAsHashVersioned,
     SharedExtendedConfigFileWatcher,
-    some,
     SourceFile,
     Status,
     sys,
@@ -1698,7 +1696,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 (!project.options.noEmit ?
                     (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
                     (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
-                    some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
+                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile?.length)
             ) {
                 return {
                     type: UpToDateStatusType.OutOfDateBuildInfo,

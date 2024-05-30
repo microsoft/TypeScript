@@ -1,10 +1,11 @@
-import { getSysForNoEmitOnError } from "../helpers/noEmitOnError.js";
+import { forEachNoEmitOnErrorScenario } from "../helpers/noEmitOnError.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError::", () => {
     function change(caption: string, content: string): TscWatchCompileChange {
         return {
             caption,
@@ -20,33 +21,36 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         // build project
         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     };
-    verifyTscWatch({
-        scenario: "noEmitOnError",
-        subScenario: "does not emit any files on error",
-        commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: getSysForNoEmitOnError,
-        edits: [
-            noChange,
-            change(
-                "Fix Syntax error",
-                `import { A } from "../shared/types/db";
+    forEachNoEmitOnErrorScenario(
+        (fsContents, currentDirectory) => createWatchedSystem(fsContents, { currentDirectory }),
+        (scenarioName, sys) =>
+            verifyTscWatch({
+                scenario: "noEmitOnError",
+                subScenario: scenarioName("does not emit any files on error"),
+                commandLineArgs: ["-b", "-w", "-verbose"],
+                sys,
+                edits: [
+                    noChange,
+                    change(
+                        "Fix Syntax error",
+                        `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`,
-            ),
-            change(
-                "Semantic Error",
-                `import { A } from "../shared/types/db";
+                    ),
+                    change(
+                        "Semantic Error",
+                        `import { A } from "../shared/types/db";
 const a: string = 10;`,
-            ),
-            noChange,
-            change(
-                "Fix Semantic Error",
-                `import { A } from "../shared/types/db";
+                    ),
+                    noChange,
+                    change(
+                        "Fix Semantic Error",
+                        `import { A } from "../shared/types/db";
 const a: string = "hello";`,
-            ),
-            noChange,
-        ],
-        baselineIncremental: true,
-    });
+                    ),
+                    noChange,
+                ],
+            }),
+    );
 });

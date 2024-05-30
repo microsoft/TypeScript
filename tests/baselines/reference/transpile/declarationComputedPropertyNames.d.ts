@@ -67,10 +67,6 @@ export interface B {
     ["2"]: number;
 }
 export declare class C {
-    [missing]: number;
-    [ns.missing]: number;
-    [presentNs.a]: number;
-    [Symbol.iterator]: number;
     [1]: number;
     ["2"]: number;
 }

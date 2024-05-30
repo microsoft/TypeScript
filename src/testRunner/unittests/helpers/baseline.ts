@@ -136,10 +136,12 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
     }
 }
 
-export type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ts.ReusableDiagnostic[]];
+export type ReadableProgramBuildInfoDiagnosticOfFile = [file: string, diagnostics: readonly ts.ReusableDiagnostic[]];
+export type ReadableProgramBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableProgramBuildInfoDiagnosticOfFile;
+export type ReadableProgramBuildInfoEmitDiagnostic = ReadableProgramBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
-export type ReadableProgramBuildInfoEmitSignature = string | [string, ts.EmitSignature | []];
+export type ReadableProgramBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];
 export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impliedFormat"> & {
     impliedFormat: string | undefined;
     original: T | undefined;
@@ -159,7 +161,7 @@ export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmit
     resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
     referencedMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
-    emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+    emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoEmitDiagnostic[] | undefined;
     affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
     changeFileSet: readonly string[] | undefined;
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
@@ -216,7 +218,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
-            emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
+            emitDiagnosticsPerFile: toReadableProgramBuildInfoEmitDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
             changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
             emitSignatures: buildInfo.program.emitSignatures?.map(s =>
@@ -298,9 +300,13 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     function toReadableProgramBuildInfoDiagnosticsPerFile(diagnostics: ts.ProgramBuildInfoDiagnostic[] | undefined): readonly ReadableProgramBuildInfoDiagnostic[] | undefined {
         return diagnostics?.map(d =>
             ts.isNumber(d) ?
-                toFileName(d) :
+                [toFileName(d), "not cached or not changed"] :
                 [toFileName(d[0]), d[1]]
         );
+    }
+
+    function toReadableProgramBuildInfoEmitDiagnosticsPerFile(diagnostics: ts.ProgramBuildInfoEmitDiagnostic[] | undefined): readonly ReadableProgramBuildInfoEmitDiagnostic[] | undefined {
+        return diagnostics?.map(d => [toFileName(d[0]), d[1]]);
     }
 }
 
