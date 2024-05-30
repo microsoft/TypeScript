@@ -46812,7 +46812,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (checkExternalImportOrExportDeclaration(node)) {
             const importClause = node.importClause;
-            const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
             if (importClause && !checkGrammarImportClause(importClause)) {
                 if (importClause.name) {
                     checkImportBinding(importClause);
@@ -46825,8 +46824,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
                         }
                     }
-                    else if (moduleExisted) {
-                        forEach(importClause.namedBindings.elements, checkImportBinding);
+                    else {
+                        const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
+                        if (moduleExisted) {
+                            forEach(importClause.namedBindings.elements, checkImportBinding);
+                        }
                     }
                 }
             }
