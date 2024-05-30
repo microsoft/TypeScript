@@ -994,12 +994,6 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
-    /**
-     * Maps a file path to duration in milliseconds of full semantic checking.
-     * Used for deciding whether to do a region semantic check.
-     */
-    private semanticCheckPerformance: Map<NormalizedPath, number>;
-
     private diagnosticsTime: [number, number] | undefined;
 
     constructor(opts: SessionOptions) {
@@ -1012,7 +1006,6 @@ export class Session<TMessage = string> implements EventSender {
         this.canUseEvents = opts.canUseEvents;
         this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
         this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
-        this.semanticCheckPerformance = new Map();
 
         const { throttleWaitMilliseconds } = opts;
 
@@ -1307,24 +1300,13 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
         const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.getLineCount();
-        const perf = this.semanticCheckPerformance.get(file);
-        return !!(lineCount && lineCount > 500 && (!perf || perf > 200));
-    }
-
-    /** @internal */
-    private cleanUpSemanticCheckPerformance(closedFiles: string[] | undefined): void {
-        if (closedFiles) {
-            closedFiles.forEach(file => this.semanticCheckPerformance.delete(toNormalizedPath(file)));
-        }
+        return !!(lineCount && lineCount > 500);
     }
 
     private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
             const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
-            if (kind === "semanticDiag" && !this.shouldDoRegionCheck(file)) {
-                this.semanticCheckPerformance.set(file, duration);
-            }
 
             const body: protocol.DiagnosticEventBody = {
                 file,
@@ -3348,7 +3330,6 @@ export class Session<TMessage = string> implements EventSender {
                 })),
                 request.arguments.closedFiles,
             );
-            this.cleanUpSemanticCheckPerformance(request.arguments.closedFiles);
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
@@ -3362,7 +3343,6 @@ export class Session<TMessage = string> implements EventSender {
                 })),
                 request.arguments.closedFiles,
             );
-            this.cleanUpSemanticCheckPerformance(request.arguments.closedFiles);
             // TODO: report errors
             return this.requiredResponse(/*response*/ true);
         },
