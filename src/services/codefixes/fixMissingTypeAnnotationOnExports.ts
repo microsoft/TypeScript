@@ -237,7 +237,6 @@ function withContext<T>(
     const sourceFile: SourceFile = context.sourceFile;
     const program = context.program;
     const typeChecker: TypeChecker = program.getTypeChecker();
-    const emitResolver = typeChecker.getEmitResolver();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const fixedNodes = new Set<Node>();
@@ -887,7 +886,7 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && emitResolver.requiresAddingImplicitUndefined(node)) {
+        if (isParameter(node) && typeChecker.getEmitResolver().requiresAddingImplicitUndefined(node)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         const flags = (
