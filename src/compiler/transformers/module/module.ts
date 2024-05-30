@@ -1623,19 +1623,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
             for (const specifier of node.exportClause.elements) {
+                const specifierName = specifier.propertyName || specifier.name;
                 const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
                     !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                    moduleExportNameIsDefault(specifier.propertyName || specifier.name);
-                const specifierName = specifier.propertyName || specifier.name;
+                    moduleExportNameIsDefault(specifierName);
+                const target = exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName;
                 const exportedValue = specifierName.kind === SyntaxKind.StringLiteral
-                    ? factory.createElementAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifierName,
-                    )
-                    : factory.createPropertyAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifierName,
-                    );
+                    ? factory.createElementAccessExpression(target, specifierName)
+                    : factory.createPropertyAccessExpression(target, specifierName);
                 statements.push(
                     setOriginalNode(
                         setTextRange(
@@ -2374,16 +2369,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     const name = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
                         name.kind === SyntaxKind.StringLiteral
-                            ? factory.createElementAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(name),
-                            )
-                            : factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(name),
-                            ),
+                            ? factory.createElementAccessExpression(target, factory.cloneNode(name))
+                            : factory.createPropertyAccessExpression(target, factory.cloneNode(name)),
                         /*location*/ node,
                     );
                 }

@@ -1857,18 +1857,13 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     const importedName = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
                         factory.createPropertyAssignment(
                             factory.cloneNode(name),
                             importedName.kind === SyntaxKind.StringLiteral
-                                ? factory.createElementAccessExpression(
-                                    factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                    factory.cloneNode(importedName),
-                                )
-                                : factory.createPropertyAccessExpression(
-                                    factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                    factory.cloneNode(importedName),
-                                ),
+                                ? factory.createElementAccessExpression(target, factory.cloneNode(importedName))
+                                : factory.createPropertyAccessExpression(target, factory.cloneNode(importedName)),
                         ),
                         /*location*/ node,
                     );
@@ -1931,16 +1926,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     const importedName = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
                         importedName.kind === SyntaxKind.StringLiteral
-                            ? factory.createElementAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(importedName),
-                            )
-                            : factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(importedName),
-                            ),
+                            ? factory.createElementAccessExpression(target, factory.cloneNode(importedName))
+                            : factory.createPropertyAccessExpression(target, factory.cloneNode(importedName)),
                         /*location*/ node,
                     );
                 }
