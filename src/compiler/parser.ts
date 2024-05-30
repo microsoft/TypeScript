@@ -2320,7 +2320,6 @@ namespace Parser {
         if (token() === SyntaxKind.AwaitKeyword && inAwaitContext()) {
             return false;
         }
-
         return token() > SyntaxKind.LastReservedWord;
     }
 
@@ -5140,7 +5139,24 @@ namespace Parser {
 
     function nextTokenIsIdentifierOnSameLine() {
         nextToken();
-        return !scanner.hasPrecedingLineBreak() && isIdentifier();
+        if (scanner.hasPrecedingLineBreak()) {
+            return false
+        }
+
+        switch(token()) {
+            case SyntaxKind.AsKeyword:
+            case SyntaxKind.SatisfiesKeyword:{
+                let truthy = false
+                lookAhead(() => {
+                    nextToken()
+                    truthy = token() === SyntaxKind.EqualsToken || token() === SyntaxKind.OpenBraceToken
+                })
+                return truthy
+            }
+            
+            default:
+                return isIdentifier();
+        }
     }
 
     function parseYieldExpression(): YieldExpression {

@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/typeOrInterfaceIdentifierSatisfiesExpression.ts] ////
+
+=== typeOrInterfaceIdentifierSatisfiesExpression.ts ===
+const type = 'x';
+>type : "x"
+>     : ^^^
+>'x' : "x"
+>    : ^^^
+
+type satisfies string;
+>type satisfies string : "x"
+>                      : ^^^
+>type : "x"
+>     : ^^^
+
+type as string;
+>type as string : string
+>               : ^^^^^^
+>type : "x"
+>     : ^^^
+
+const interface = 'x';
+>interface : "x"
+>          : ^^^
+>'x' : "x"
+>    : ^^^
+
+interface satisfies string;
+>interface satisfies string : "x"
+>                           : ^^^
+>interface : "x"
+>          : ^^^
+
+interface as string;
+>interface as string : string
+>                    : ^^^^^^
+>interface : "x"
+>          : ^^^
+
