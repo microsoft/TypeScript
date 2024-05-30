@@ -78,7 +78,7 @@ export function forEachDeclarationEmitWithErrorsScenario(
     for (const outFile of [false, true]) {
         for (const incremental of [undefined, true] as const) {
             action(
-                scenario => `${scenario}${outFile ? " outFile" : ""}${incremental ? " with incremental" : ""}`,
+                scenario => `${outFile ? "outFile" : "multiFile"}/${scenario}${incremental ? " with incremental" : ""}`,
                 () =>
                     (outFile ? getFsForDeclarationEmitWithErrorsWithOutFile :
                         getFsForDeclarationEmitWithErrors)(

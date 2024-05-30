@@ -45,9 +45,9 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 //// [/src/project/tsconfig.json]
 {
   "compilerOptions": {
-    "incremental": true,
-    "declaration": true,
-    "outFile": "../outFile.js"
+    "composite": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
   }
 }
 
@@ -55,30 +55,79 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/outFile.d.ts]
+declare module "src/class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
+    export function writeLog(s: string): void;
+}
 declare function someFunc(arguments: boolean, ...rest: any[]): void;
 
 
 //// [/src/outFile.js]
+define("src/class", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.classC = void 0;
+    var classC = /** @class */ (function () {
+        function classC() {
+            this.prop = 1;
+        }
+        return classC;
+    }());
+    exports.classC = classC;
+});
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.indirectClass = void 0;
+    var indirectClass = /** @class */ (function () {
+        function indirectClass() {
+            this.classC = new class_1.classC();
+        }
+        return indirectClass;
+    }());
+    exports.indirectClass = indirectClass;
+});
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_1.indirectClass().classC.prop;
+});
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_2.indirectClass().classC.prop;
+});
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.writeLog = writeLog;
+    function writeLog(s) {
+    }
+});
 function someFunc(arguments) {
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
@@ -88,7 +137,7 @@ function someFunc(arguments) {
 
 
 //// [/src/outFile.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"545032748-export class classC {\n    prop = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"declaration":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"545032748-export class classC {\n    prop = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"8998999540-declare module \"src/class\" {\n    export class classC {\n        prop: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -177,12 +226,15 @@ function someFunc(arguments) {
       ]
     ],
     "options": {
-      "declaration": true,
+      "composite": true,
+      "module": 2,
       "outFile": "./outFile.js"
-    }
+    },
+    "outSignature": "8998999540-declare module \"src/class\" {\n    export class classC {\n        prop: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n",
+    "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1492
+  "size": 2052
 }
 
 
@@ -193,15 +245,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -212,15 +256,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -236,11 +272,6 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -262,10 +293,9 @@ Output::
     'prop1' is declared here.
 
 
-Found 3 errors in 3 files.
+Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
@@ -284,22 +314,14 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
@@ -311,22 +333,14 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
@@ -338,15 +352,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -357,15 +363,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -376,22 +374,14 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
@@ -408,11 +398,6 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -439,20 +424,87 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 4 errors in 4 files.
+Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
      1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/outFile.d.ts] file written with same contents
-//// [/src/outFile.js] file written with same contents
+//// [/src/outFile.d.ts]
+declare module "src/class" {
+    export class classC {
+        prop1: number;
+    }
+}
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
+
+
+//// [/src/outFile.js]
+define("src/class", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.classC = void 0;
+    var classC = /** @class */ (function () {
+        function classC() {
+            this.prop1 = 1;
+        }
+        return classC;
+    }());
+    exports.classC = classC;
+});
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.indirectClass = void 0;
+    var indirectClass = /** @class */ (function () {
+        function indirectClass() {
+            this.classC = new class_1.classC();
+        }
+        return indirectClass;
+    }());
+    exports.indirectClass = indirectClass;
+});
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_1.indirectClass().classC.prop;
+});
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_2.indirectClass().classC.prop;
+});
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.writeLog = writeLog;
+    function writeLog(s) {
+    }
+});
+function someFunc(arguments) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}
+
+
 //// [/src/outFile.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"declaration":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"1786859709-export class classC {\n    prop1 = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-1966987419-declare module \"src/class\" {\n    export class classC {\n        prop1: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -541,12 +593,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ],
     "options": {
-      "declaration": true,
+      "composite": true,
+      "module": 2,
       "outFile": "./outFile.js"
-    }
+    },
+    "outSignature": "-1966987419-declare module \"src/class\" {\n    export class classC {\n        prop1: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n",
+    "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1494
+  "size": 2056
 }
 
 
@@ -557,11 +612,6 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -588,10 +638,9 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 4 errors in 4 files.
+Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
      1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
@@ -606,11 +655,6 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -632,10 +676,9 @@ Output::
     'prop1' is declared here.
 
 
-Found 3 errors in 3 files.
+Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
@@ -649,11 +692,6 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -675,10 +713,9 @@ Output::
     'prop1' is declared here.
 
 
-Found 3 errors in 3 files.
+Found 2 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
@@ -692,11 +729,6 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
 [7m2[0m new indirectClass().classC.prop;
@@ -723,10 +755,9 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 4 errors in 4 files.
+Found 3 errors in 3 files.
 
 Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
      1  src/project/src/directUse.ts[90m:2[0m
      1  src/project/src/indirectUse.ts[90m:2[0m
      1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
@@ -746,15 +777,7 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -765,29 +788,89 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/outFile.d.ts] file written with same contents
-//// [/src/outFile.js] file written with same contents
+//// [/src/outFile.d.ts]
+declare module "src/class" {
+    export class classC {
+        prop: number;
+    }
+}
+declare module "src/indirectClass" {
+    import { classC } from "src/class";
+    export class indirectClass {
+        classC: classC;
+    }
+}
+declare module "src/directUse" { }
+declare module "src/indirectUse" { }
+declare module "src/noChangeFile" {
+    export function writeLog(s: string): void;
+}
+declare function someFunc(arguments: boolean, ...rest: any[]): void;
+
+
+//// [/src/outFile.js]
+define("src/class", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.classC = void 0;
+    var classC = /** @class */ (function () {
+        function classC() {
+            this.prop = 1;
+        }
+        return classC;
+    }());
+    exports.classC = classC;
+});
+define("src/indirectClass", ["require", "exports", "src/class"], function (require, exports, class_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.indirectClass = void 0;
+    var indirectClass = /** @class */ (function () {
+        function indirectClass() {
+            this.classC = new class_1.classC();
+        }
+        return indirectClass;
+    }());
+    exports.indirectClass = indirectClass;
+});
+define("src/directUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_1.indirectClass().classC.prop;
+});
+define("src/indirectUse", ["require", "exports", "src/indirectClass"], function (require, exports, indirectClass_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    new indirectClass_2.indirectClass().classC.prop;
+});
+define("src/noChangeFile", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.writeLog = writeLog;
+    function writeLog(s) {
+    }
+});
+function someFunc(arguments) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+}
+
+
 //// [/src/outFile.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"545032748-export class classC {\n    prop = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"declaration":true,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./project/src/class.ts","./project/src/indirectclass.ts","./project/src/directuse.ts","./project/src/indirectuse.ts","./project/src/nochangefile.ts","./project/src/nochangefilewithemitspecificerror.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"545032748-export class classC {\n    prop = 1;\n}","impliedFormat":1},{"version":"6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","impliedFormat":1},{"version":"6714567633-export function writeLog(s: string) {\n}","impliedFormat":1},{"version":"-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}","impliedFormat":1}],"root":[[2,7]],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"8998999540-declare module \"src/class\" {\n    export class classC {\n        prop: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -876,12 +959,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ],
     "options": {
-      "declaration": true,
+      "composite": true,
+      "module": 2,
       "outFile": "./outFile.js"
-    }
+    },
+    "outSignature": "8998999540-declare module \"src/class\" {\n    export class classC {\n        prop: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n",
+    "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1492
+  "size": 2052
 }
 
 
@@ -892,15 +978,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -911,15 +989,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
-
-Found 1 error in src/project/src/class.ts[90m:1[0m
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -930,22 +1000,14 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/src/class.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS6131: [0mCannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
-
-[7m1[0m export class classC {
-[7m [0m [91m             ~~~~~~[0m
-
 [96msrc/project/src/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2396: [0mDuplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 [7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors in 2 files.
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
-Errors  Files
-     1  src/project/src/class.ts[90m:1[0m
-     1  src/project/src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 

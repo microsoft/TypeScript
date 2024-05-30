@@ -46,7 +46,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
     function verify(outFile?: object) {
         verifyTsc({
             scenario: "configFileErrors",
-            subScenario: `reports syntax errors in config file${outFile ? " with outFile" : ""}`,
+            subScenario: `${outFile ? "outFile" : "multiFile"}/reports syntax errors in config file`,
             fs: () =>
                 loadProjectFromFiles({
                     "/src/a.ts": "export function foo() { }",

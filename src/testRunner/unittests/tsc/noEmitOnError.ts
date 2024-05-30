@@ -69,7 +69,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes`,
+        subScenario: `multiFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -104,7 +104,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes with outFile`,
+        subScenario: `outFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -135,7 +135,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError",
+        subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -157,7 +157,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError with outFile",
+        subScenario: "outFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
