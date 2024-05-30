@@ -1,78 +1,140 @@
 //// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_syntax.ts] ////
 
-//// [values.ts]
-// Valid
+//// [values-valid.ts]
 export const foo = 123;
 export { foo as "valid 1" };
-import { "valid 1" as bar } from "./values";
-export { "valid 1" as "valid 2" } from "./values";
-export { foo as "valid 3" } from "./values";
-export * as "valid 4" from "./values";
+import { "valid 1" as bar } from "./values-valid";
+export { "valid 1" as "valid 2" } from "./values-valid";
+export { foo as "valid 3" } from "./values-valid";
+export * as "valid 4" from "./values-valid";
 
-// Invalid
-import { "invalid 1" } from "./values";
-import { foo as "invalid 2" } from "./values";
+//// [values-bad-import.ts]
+import { foo as "invalid 2" } from "./values-valid";
+
+//// [values-bad-export.ts]
 export { "invalid 3" as baz };
 
-//// [types1.ts]
-// Valid
+//// [values-no-as.ts]
+import { "invalid 1" } from "./values-valid";
+
+//// [values-type-as.ts]
+import { type as "invalid 4" } from "./values-valid";
+
+
+//// [type-decls-valid.ts]
 export type foo = 123;
 export type { foo as "valid 1" };
-import type { "valid 1" as bar } from "./types1";
-export type { "valid 1" as "valid 2" } from "./types1";
-export type { foo as "valid 3" } from "./types1";
-export type * as "valid 4" from "./types1";
+import type { "valid 1" as bar } from "./type-decls-valid";
+export type { "valid 1" as "valid 2" } from "./type-decls-valid";
+export type { foo as "valid 3" } from "./type-decls-valid";
+export type * as "valid 4" from "./type-decls-valid";
 
-// Invalid
-import type { "invalid 1" } from "./types1";
-import type { foo as "invalid 2" } from "./types1";
+//// [type-decls-bad-import.ts]
+import type { foo as "invalid 2" } from "./type-decls-valid";
+
+//// [type-decls-bad-export.ts]
 export type { "invalid 3" as baz };
 
-//// [types2.ts]
-// Valid
+//// [type-decls-no-as.ts]
+import type { "invalid 1" } from "./type-decls-valid";
+
+//// [type-decls-type-as.ts]
+import type { type as "invalid 4" } from "./type-decls-valid";
+
+//// [type-clause-valid.ts]
 export type foo = 123;
 export { type foo as "valid 1" };
-import { type "valid 1" as bar } from "./types2";
-export { type "valid 1" as "valid 2" } from "./types2";
-export { type foo as "valid 3" } from "./types2";
+import { type "valid 1" as bar } from "./type-clause-valid";
+export { type "valid 1" as "valid 2" } from "./type-clause-valid";
+export { type foo as "valid 3" } from "./type-clause-valid";
 
-// Invalid
-import { type "invalid 1" } from "./types2";
-import { type foo as "invalid 2" } from "./types2";
+//// [type-clause-bad-import.ts]
+import { type foo as "invalid 2" } from "./type-clause-valid";
+
+//// [type-clause-bad-export.ts]
 export { type "invalid 3" as baz };
 
+//// [type-clause-no-as.ts]
+import { type "invalid 1" } from "./type-clause-valid";
 
-//// [values.js]
-// Valid
+//// [type-clause-type-as-as.ts]
+import { type as as "invalid 4" } from "./type-clause-valid";
+
+
+//// [values-valid.js]
 export const foo = 123;
 export { foo as "valid 1" };
-export { "valid 1" as "valid 2" } from "./values";
-export { foo as "valid 3" } from "./values";
-export * as "valid 4" from "./values";
+export { "valid 1" as "valid 2" } from "./values-valid";
+export { foo as "valid 3" } from "./values-valid";
+export * as "valid 4" from "./values-valid";
+//// [values-bad-import.js]
+export {};
+//// [values-bad-export.js]
 export { "invalid 3" as baz };
-//// [types1.js]
+//// [values-no-as.js]
 export {};
-//// [types2.js]
+//// [values-type-as.js]
+export {};
+//// [type-decls-valid.js]
+export {};
+//// [type-decls-bad-import.js]
+export {};
+//// [type-decls-bad-export.js]
+export {};
+//// [type-decls-no-as.js]
+export {};
+//// [type-decls-type-as.js]
+export {};
+//// [type-clause-valid.js]
+export {};
+//// [type-clause-bad-import.js]
+export {};
+//// [type-clause-bad-export.js]
+export {};
+//// [type-clause-no-as.js]
+export {};
+//// [type-clause-type-as-as.js]
 export {};
 
 
-//// [values.d.ts]
+//// [values-valid.d.ts]
 export declare const foo = 123;
 export { foo as "valid 1" };
-export { "valid 1" as "valid 2" } from "./values";
-export { foo as "valid 3" } from "./values";
-export * as "valid 4" from "./values";
+export { "valid 1" as "valid 2" } from "./values-valid";
+export { foo as "valid 3" } from "./values-valid";
+export * as "valid 4" from "./values-valid";
+//// [values-bad-import.d.ts]
+export {};
+//// [values-bad-export.d.ts]
 export { "invalid 3" as baz };
-//// [types1.d.ts]
+//// [values-no-as.d.ts]
+export {};
+//// [values-type-as.d.ts]
+export {};
+//// [type-decls-valid.d.ts]
 export type foo = 123;
 export type { foo as "valid 1" };
-export type { "valid 1" as "valid 2" } from "./types1";
-export type { foo as "valid 3" } from "./types1";
-export type * as "valid 4" from "./types1";
+export type { "valid 1" as "valid 2" } from "./type-decls-valid";
+export type { foo as "valid 3" } from "./type-decls-valid";
+export type * as "valid 4" from "./type-decls-valid";
+//// [type-decls-bad-import.d.ts]
+export {};
+//// [type-decls-bad-export.d.ts]
 export type { "invalid 3" as baz };
-//// [types2.d.ts]
+//// [type-decls-no-as.d.ts]
+export {};
+//// [type-decls-type-as.d.ts]
+export {};
+//// [type-clause-valid.d.ts]
 export type foo = 123;
 export { type foo as "valid 1" };
-export { type "valid 1" as "valid 2" } from "./types2";
-export { type foo as "valid 3" } from "./types2";
+export { type "valid 1" as "valid 2" } from "./type-clause-valid";
+export { type foo as "valid 3" } from "./type-clause-valid";
+//// [type-clause-bad-import.d.ts]
+export {};
+//// [type-clause-bad-export.d.ts]
 export { type "invalid 3" as baz };
+//// [type-clause-no-as.d.ts]
+export {};
+//// [type-clause-type-as-as.d.ts]
+export {};

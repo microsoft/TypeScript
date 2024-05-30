@@ -8513,6 +8513,10 @@ namespace Parser {
         return finishNode(factory.createNamespaceImport(name), pos);
     }
 
+    function canParseModuleExportName(): boolean {
+        return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.StringLiteral;
+    }
+
     function parseModuleExportName(parseName: () => Identifier): ModuleExportName {
         return token() === SyntaxKind.StringLiteral ? parseLiteralNode() as StringLiteral : parseName();
     }
@@ -8574,11 +8578,12 @@ namespace Parser {
                 if (token() === SyntaxKind.AsKeyword) {
                     // { type as as ...? }
                     const secondAs = parseIdentifierName();
-                    if (tokenIsIdentifierOrKeyword(token())) {
+                    if (canParseModuleExportName()) {
                         // { type as as something }
+                        // { type as as "something" }
                         isTypeOnly = true;
                         propertyName = firstAs;
-                        name = parseNameWithKeywordCheck();
+                        name = parseModuleExportName(parseNameWithKeywordCheck);
                         canParseAsKeyword = false;
                     }
                     else {
@@ -8588,11 +8593,12 @@ namespace Parser {
                         canParseAsKeyword = false;
                     }
                 }
-                else if (tokenIsIdentifierOrKeyword(token())) {
+                else if (canParseModuleExportName()) {
                     // { type as something }
+                    // { type as "something" }
                     propertyName = name;
                     canParseAsKeyword = false;
-                    name = parseNameWithKeywordCheck();
+                    name = parseModuleExportName(parseNameWithKeywordCheck);
                 }
                 else {
                     // { type as }
@@ -8600,25 +8606,28 @@ namespace Parser {
                     name = firstAs;
                 }
             }
-            else if (token() === SyntaxKind.StringLiteral) {
-                // { type "something" as ... }
-                isTypeOnly = true;
-                name = parseLiteralNode() as StringLiteral;
-            }
-            else if (tokenIsIdentifierOrKeyword(token())) {
+            else if (canParseModuleExportName()) {
                 // { type something ...? }
+                // { type "something" ...? }
                 isTypeOnly = true;
-                name = parseNameWithKeywordCheck();
+                name = parseModuleExportName(parseNameWithKeywordCheck);
             }
         }
 
-        if ((kind === SyntaxKind.ImportSpecifier && name.kind === SyntaxKind.StringLiteral) || (canParseAsKeyword && token() === SyntaxKind.AsKeyword)) {
+        if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
             propertyName = name;
             parseExpected(SyntaxKind.AsKeyword);
             name = parseModuleExportName(parseNameWithKeywordCheck);
         }
-        if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
-            parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
+        if (kind === SyntaxKind.ImportSpecifier) {
+            if (name.kind !== SyntaxKind.Identifier) {
+                // ImportSpecifier casts "name" to Identifier below, so make sure it's an identifier
+                parseErrorAt(skipTrivia(sourceText, name.pos), name.end, Diagnostics.Identifier_expected);
+                name = setTextRangePosEnd(createMissingNode<Identifier>(SyntaxKind.Identifier, /* reportAtCurrentPosition */ false), name.pos, name.pos);
+            }
+            else if (checkIdentifierIsKeyword) {
+                parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
+            }
         }
         const node = kind === SyntaxKind.ImportSpecifier
             ? factory.createImportSpecifier(isTypeOnly, propertyName, name as Identifier)
@@ -8666,28 +8675,6 @@ namespace Parser {
         if (moduleSpecifier && (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
             attributes = parseImportAttributes(currentToken);
         }
-
-        // String literals are only allowed in the export specifiers if there's
-        // a module present:
-        //
-        //   // Valid:
-        //   export { "x" } from "foo";
-        //   export { "x" as y } from "foo";
-        //   export { x as "y" };
-        //
-        //   // Invalid:
-        //   export { "x" };
-        //   export { "x" as y };
-        //
-        if (exportClause && exportClause.kind === SyntaxKind.NamedExports && !moduleSpecifier) {
-            for (const element of exportClause.elements) {
-                const name = element.propertyName || element.name;
-                if (name.kind === SyntaxKind.StringLiteral) {
-                    parseErrorAt(skipTrivia(sourceText, name.pos), name.end, Diagnostics.Identifier_expected);
-                }
-            }
-        }
-
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
         const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, attributes);

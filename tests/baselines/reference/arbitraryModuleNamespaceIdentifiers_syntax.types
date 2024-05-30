@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_syntax.ts] ////
 
-=== values.ts ===
-// Valid
+=== values-valid.ts ===
 export const foo = 123;
 >foo : 123
 >    : ^^^
@@ -14,41 +13,50 @@ export { foo as "valid 1" };
 >"valid 1" : 123
 >          : ^^^
 
-import { "valid 1" as bar } from "./values";
+import { "valid 1" as bar } from "./values-valid";
 >bar : 123
 >    : ^^^
 
-export { "valid 1" as "valid 2" } from "./values";
+export { "valid 1" as "valid 2" } from "./values-valid";
 >"valid 2" : 123
 >          : ^^^
 
-export { foo as "valid 3" } from "./values";
+export { foo as "valid 3" } from "./values-valid";
 >foo : 123
 >    : ^^^
 >"valid 3" : 123
 >          : ^^^
 
-export * as "valid 4" from "./values";
->"valid 4" : typeof import("values")
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+export * as "valid 4" from "./values-valid";
+>"valid 4" : typeof import("values-valid")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-// Invalid
-import { "invalid 1" } from "./values";
-> : any
-> : ^^^
-
-import { foo as "invalid 2" } from "./values";
+=== values-bad-import.ts ===
+import { foo as "invalid 2" } from "./values-valid";
 >foo : 123
 >    : ^^^
->"invalid 2" : 123
->            : ^^^
+> : 123
+> : ^^^
 
+=== values-bad-export.ts ===
 export { "invalid 3" as baz };
 >baz : any
 >    : ^^^
 
-=== types1.ts ===
-// Valid
+=== values-no-as.ts ===
+import { "invalid 1" } from "./values-valid";
+> : any
+> : ^^^
+
+=== values-type-as.ts ===
+import { type as "invalid 4" } from "./values-valid";
+>type : any
+>     : ^^^
+> : any
+> : ^^^
+
+
+=== type-decls-valid.ts ===
 export type foo = 123;
 >foo : 123
 >    : ^^^
@@ -59,41 +67,49 @@ export type { foo as "valid 1" };
 >"valid 1" : any
 >          : ^^^
 
-import type { "valid 1" as bar } from "./types1";
+import type { "valid 1" as bar } from "./type-decls-valid";
 >bar : 123
 >    : ^^^
 
-export type { "valid 1" as "valid 2" } from "./types1";
+export type { "valid 1" as "valid 2" } from "./type-decls-valid";
 >"valid 2" : any
 >          : ^^^
 
-export type { foo as "valid 3" } from "./types1";
+export type { foo as "valid 3" } from "./type-decls-valid";
 >foo : any
 >    : ^^^
 >"valid 3" : any
 >          : ^^^
 
-export type * as "valid 4" from "./types1";
->"valid 4" : typeof import("types1")
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+export type * as "valid 4" from "./type-decls-valid";
+>"valid 4" : typeof import("type-decls-valid")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-// Invalid
-import type { "invalid 1" } from "./types1";
-> : any
-> : ^^^
-
-import type { foo as "invalid 2" } from "./types1";
+=== type-decls-bad-import.ts ===
+import type { foo as "invalid 2" } from "./type-decls-valid";
 >foo : any
 >    : ^^^
->"invalid 2" : any
->            : ^^^
+> : 123
+> : ^^^
 
+=== type-decls-bad-export.ts ===
 export type { "invalid 3" as baz };
 >baz : any
 >    : ^^^
 
-=== types2.ts ===
-// Valid
+=== type-decls-no-as.ts ===
+import type { "invalid 1" } from "./type-decls-valid";
+> : any
+> : ^^^
+
+=== type-decls-type-as.ts ===
+import type { type as "invalid 4" } from "./type-decls-valid";
+>type : any
+>     : ^^^
+> : any
+> : ^^^
+
+=== type-clause-valid.ts ===
 export type foo = 123;
 >foo : 123
 >    : ^^^
@@ -104,32 +120,41 @@ export { type foo as "valid 1" };
 >"valid 1" : any
 >          : ^^^
 
-import { type "valid 1" as bar } from "./types2";
+import { type "valid 1" as bar } from "./type-clause-valid";
 >bar : any
 >    : ^^^
 
-export { type "valid 1" as "valid 2" } from "./types2";
+export { type "valid 1" as "valid 2" } from "./type-clause-valid";
 >"valid 2" : any
 >          : ^^^
 
-export { type foo as "valid 3" } from "./types2";
+export { type foo as "valid 3" } from "./type-clause-valid";
 >foo : any
 >    : ^^^
 >"valid 3" : any
 >          : ^^^
 
-// Invalid
-import { type "invalid 1" } from "./types2";
+=== type-clause-bad-import.ts ===
+import { type foo as "invalid 2" } from "./type-clause-valid";
+>foo : any
+>    : ^^^
 > : any
 > : ^^^
 
-import { type foo as "invalid 2" } from "./types2";
->foo : any
->    : ^^^
->"invalid 2" : any
->            : ^^^
-
+=== type-clause-bad-export.ts ===
 export { type "invalid 3" as baz };
 >baz : any
 >    : ^^^
+
+=== type-clause-no-as.ts ===
+import { type "invalid 1" } from "./type-clause-valid";
+> : any
+> : ^^^
+
+=== type-clause-type-as-as.ts ===
+import { type as as "invalid 4" } from "./type-clause-valid";
+>as : any
+>   : ^^^
+> : any
+> : ^^^
 

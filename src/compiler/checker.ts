@@ -46566,8 +46566,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function checkModuleExportName(name: ModuleExportName | undefined) {
-        if (name !== undefined && name.kind === SyntaxKind.StringLiteral && (moduleKind === ModuleKind.ES2015 || moduleKind === ModuleKind.ES2020)) {
+    function checkModuleExportName(name: ModuleExportName | undefined, allowStringLiteral = true) {
+        if (name === undefined || name.kind !== SyntaxKind.StringLiteral) {
+            return;
+        }
+        if (!allowStringLiteral) {
+            grammarErrorOnNode(name, Diagnostics.Identifier_expected);
+        }
+        else if (moduleKind === ModuleKind.ES2015 || moduleKind === ModuleKind.ES2020) {
             grammarErrorOnNode(name, Diagnostics.String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020);
         }
     }
@@ -46955,12 +46961,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExportSpecifier(node: ExportSpecifier) {
         checkAliasSymbol(node);
-        checkModuleExportName(node.propertyName);
+        const hasModuleSpecifier = node.parent.parent.moduleSpecifier !== undefined;
+        checkModuleExportName(node.propertyName, hasModuleSpecifier);
         checkModuleExportName(node.name);
         if (getEmitDeclarations(compilerOptions)) {
             collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
         }
-        if (!node.parent.parent.moduleSpecifier) {
+        if (!hasModuleSpecifier) {
             const exportedName = node.propertyName || node.name;
             if (exportedName.kind === SyntaxKind.StringLiteral) {
                 return; // Skip for invalid syntax like this: export { "x" }
