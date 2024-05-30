@@ -1,7 +1,6 @@
 tsconfig.json(6,11): error TS5061: Pattern '@interface/**/*' can have at most one '*' character.
 tsconfig.json(7,11): error TS5061: Pattern '@service/**/*' can have at most one '*' character.
 tsconfig.json(7,29): error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
-src/main.ts(1,8): error TS2307: Cannot find module 'someModule' or its corresponding type declarations.
 
 
 ==== tsconfig.json (3 errors) ====
@@ -23,7 +22,5 @@ src/main.ts(1,8): error TS2307: Cannot find module 'someModule' or its correspon
         }
     }
     
-==== src/main.ts (1 errors) ====
+==== src/main.ts (0 errors) ====
     import 'someModule';
-           ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'someModule' or its corresponding type declarations.

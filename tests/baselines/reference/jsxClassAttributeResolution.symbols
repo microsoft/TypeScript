@@ -18,11 +18,11 @@ interface IntrinsicClassAttributesAlias<T> {
 >ref : Symbol(IntrinsicClassAttributesAlias.ref, Decl(index.d.ts, 0, 44))
 >T : Symbol(T, Decl(index.d.ts, 0, 40))
 }
-export declare namespace JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(index.d.ts, 2, 1))
 
     type IntrinsicClassAttributes<T> = IntrinsicClassAttributesAlias<T>
->IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(index.d.ts, 3, 30))
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(index.d.ts, 3, 23))
 >T : Symbol(T, Decl(index.d.ts, 4, 34))
 >IntrinsicClassAttributesAlias : Symbol(IntrinsicClassAttributesAlias, Decl(index.d.ts, 0, 0))
 >T : Symbol(T, Decl(index.d.ts, 4, 34))

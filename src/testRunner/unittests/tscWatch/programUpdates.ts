@@ -2129,7 +2129,7 @@ import { x } from "../b";`,
         sys: () => {
             const module1: File = {
                 path: `/user/username/projects/myproject/a.ts`,
-                content: `export {};`,
+                content: ``,
             };
             const module2: File = {
                 path: `/user/username/projects/myproject/b.ts`,

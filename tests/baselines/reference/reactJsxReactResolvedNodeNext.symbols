@@ -3,13 +3,15 @@
 === file.tsx ===
 export const a = <div></div>;
 >a : Symbol(a, Decl(file.tsx, 0, 12))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(index.d.ts, 1, 33))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(index.d.ts, 1, 33))
 
 === node_modules/@types/react/index.d.ts ===
-export declare namespace JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(index.d.ts, 0, 0))
 
     interface IntrinsicElements { [x: string]: any; }
->IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 0, 30))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 0, 23))
 >x : Symbol(x, Decl(index.d.ts, 1, 35))
 }
 === node_modules/@types/react/jsx-runtime.d.ts ===

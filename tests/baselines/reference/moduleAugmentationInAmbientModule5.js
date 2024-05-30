@@ -33,30 +33,3 @@ var y = x.getA().x;
 
 //// [f.d.ts]
 import "array";
-
-
-//// [DtsFileErrors]
-
-
-f.d.ts(1,8): error TS2307: Cannot find module 'array' or its corresponding type declarations.
-
-
-==== f.d.ts (1 errors) ====
-    import "array";
-           ~~~~~~~
-!!! error TS2307: Cannot find module 'array' or its corresponding type declarations.
-    
-==== array.d.ts (0 errors) ====
-    declare module "A" {
-        class A { x: number; }
-    }
-    
-    declare module "array" {
-        import {A} from "A";
-        global {
-            interface Array<T> {
-                getA(): A;
-            }
-        }
-    }
-    

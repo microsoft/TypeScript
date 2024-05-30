@@ -19,7 +19,7 @@ export const a = <div></div>;
     }
 }
 // @filename: node_modules/@types/react/index.d.ts
-export declare namespace JSX {
+declare namespace JSX {
     interface IntrinsicElements { [x: string]: any; }
 }
 // @filename: node_modules/@types/react/jsx-runtime.d.ts

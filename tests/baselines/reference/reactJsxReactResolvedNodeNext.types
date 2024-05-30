@@ -10,7 +10,7 @@ export const a = <div></div>;
 >    : ^^^
 
 === node_modules/@types/react/index.d.ts ===
-export declare namespace JSX {
+declare namespace JSX {
     interface IntrinsicElements { [x: string]: any; }
 >x : string
 >  : ^^^^^^

@@ -6,8 +6,10 @@ class App {}
 >    : ^^^
 
 export const a = <App></App>;
->a : error
-><App></App> : error
+>a : any
+>  : ^^^
+><App></App> : any
+>            : ^^^
 >App : typeof App
 >    : ^^^^^^^^^^
 >App : typeof App
@@ -19,7 +21,7 @@ interface IntrinsicClassAttributesAlias<T> {
 >ref : T
 >    : ^
 }
-export declare namespace JSX {
+declare namespace JSX {
     type IntrinsicClassAttributes<T> = IntrinsicClassAttributesAlias<T>
 >IntrinsicClassAttributes : IntrinsicClassAttributes<T>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^

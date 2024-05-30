@@ -4568,9 +4568,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
-                const importOrExport = findAncestor(location, isImportDeclaration) ||
+                const importOrExport = findAncestor(location, isImportDeclaration)?.importClause ||
                     findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
-                if (errorNode && importOrExport && !(isImportDeclaration(importOrExport) ? importOrExport.importClause : importOrExport)?.isTypeOnly || findAncestor(location, isImportCall)) {
+                if (errorNode && importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
                     error(
                         errorNode,
                         Diagnostics.A_declaration_file_cannot_be_imported_without_import_type_Did_you_mean_to_import_an_implementation_file_0_instead,
@@ -4579,9 +4579,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
-                const importOrExport = findAncestor(location, isImportDeclaration) ||
+                const importOrExport = findAncestor(location, isImportDeclaration)?.importClause ||
                     findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
-                if (errorNode && !(importOrExport && (isImportDeclaration(importOrExport) ? importOrExport.importClause : importOrExport)?.isTypeOnly || findAncestor(location, isImportTypeNode))) {
+                if (errorNode && !(importOrExport?.isTypeOnly || findAncestor(location, isImportTypeNode))) {
                     const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
                     error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
                 }

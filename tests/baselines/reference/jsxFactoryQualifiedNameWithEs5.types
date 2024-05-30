@@ -5,7 +5,6 @@ import "./jsx";
 
 var skate: any;
 >skate : any
->      : ^^^
 
 const React = { createElement: skate.h };
 >React : { createElement: any; }
@@ -13,9 +12,7 @@ const React = { createElement: skate.h };
 >{ createElement: skate.h } : { createElement: any; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >createElement : any
->              : ^^^
 >skate.h : any
->        : ^^^
 >skate : any
 >      : ^^^
 >h : any
@@ -30,8 +27,7 @@ class Component {
 >               : ^^^^^^^^^
 
         return <div>test</div>;
-><div>test</div> : any
->                : ^^^
+><div>test</div> : error
 >div : any
 >    : ^^^
 >div : any

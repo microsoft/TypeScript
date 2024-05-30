@@ -1,22 +1,16 @@
-consumer.ts(4,8): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
-consumer.ts(6,8): error TS2307: Cannot find module 'foo2' or its corresponding type declarations.
 foo.d.ts(1,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 foo2.d.ts(1,10): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 indirection.d.ts(3,20): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 indirection2.d.ts(3,14): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 
 
-==== consumer.ts (2 errors) ====
+==== consumer.ts (0 errors) ====
     /// <reference path="./indirection.d.ts" />
     /// <reference path="./indirection2.d.ts" />
     import "indirect";
     import "foo";
-           ~~~~~
-!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     import "indirect2";
     import "foo2";
-           ~~~~~~
-!!! error TS2307: Cannot find module 'foo2' or its corresponding type declarations.
 ==== foo.d.ts (1 errors) ====
     export default 2 + 2;
                    ~~~~~
