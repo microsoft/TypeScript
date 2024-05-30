@@ -8703,7 +8703,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (canReuseTypeNode(context, node)) {
                         return node;
                     }
-                    return serializeExistingTypeNode(context, node);
+                    hadError = true;
+                    return node;
                 }
                 if (isTypeParameterDeclaration(node)) {
                     return factory.updateTypeParameterDeclaration(
@@ -8718,13 +8719,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIndexedAccessTypeNode(node) && isTypeReferenceNode(node.objectType)) {
                     const objectType = tryVisitTypeReference(node.objectType);
                     if (!objectType) {
-                        return serializeExistingTypeNode(context, node);
+                        hadError = true;
+                        return node;
                     }
                     return factory.updateIndexedAccessTypeNode(node, objectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
                 }
 
                 if (isTypeReferenceNode(node)) {
-                    return tryVisitTypeReference(node) ?? serializeExistingTypeNode(context, node);
+                    const result = tryVisitTypeReference(node);
+                    if (result) {
+                        return result;
+                    }
+                    hadError = true;
+                    return node;
                 }
                 if (isLiteralImportTypeNode(node)) {
                     const nodeSymbol = getNodeLinks(node).resolvedSymbol;
@@ -8777,7 +8784,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (serializedName) {
                             return setTextRange(context, serializedName, node.exprName);
                         }
-                        return serializeExistingTypeNode(context, node);
+                        hadError = true;
+                        return node;
                     }
                     return factory.updateTypeQueryNode(
                         node,
@@ -8852,14 +8860,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isTypeOperatorNode(node)) {
                     if (node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
                         if (!canReuseTypeNode(context, node)) {
-                            return serializeExistingTypeNode(context, node);
+                            hadError = true;
+                            return node;
                         }
                     }
                     else if (node.operator === SyntaxKind.KeyOfKeyword) {
                         if (isTypeReferenceNode(node.type)) {
                             const type = tryVisitTypeReference(node.type);
                             if (!type) {
-                                return serializeExistingTypeNode(context, node);
+                                hadError = true;
+                                return node;
                             }
                             return factory.updateTypeOperatorNode(node, type);
                         }
