@@ -183,7 +183,7 @@ registerCodeFix({
 
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Full, f => f.addInlineAssertion(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Relative, f => f.addInlineAssertion(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Widened, f => f.addInlineAssertion(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Widened, f => f.addInlineAssertion(context.span));
 
         addCodeAction(extractExpression, fixes, context, TypePrintMode.Full, f => f.extractAsVariable(context.span));
 
@@ -1107,26 +1107,26 @@ function withContext<T>(
         setEmitFlags(node, EmitFlags.None);
         return result;
     }
-}
 
-// Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
-// ancestors to look for node that needs type annotation. This function can return undefined if the AST is ill-formed.
-function findAncestorWithMissingType(node: Node): Node | undefined {
-    return findAncestor(node, n => {
-        return canHaveTypeAnnotation.has(n.kind) &&
-            ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
-    });
-}
+    // Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
+    // ancestors to look for node that needs type annotation. This function can return undefined if the AST is ill-formed.
+    function findAncestorWithMissingType(node: Node): Node | undefined {
+        return findAncestor(node, n => {
+            return canHaveTypeAnnotation.has(n.kind) &&
+                ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
+        });
+    }
 
-function findBestFittingNode(node: Node, span: TextSpan) {
-    while (node && node.end < span.start + span.length) {
-        node = node.parent;
+    function findBestFittingNode(node: Node, span: TextSpan) {
+        while (node && node.end < span.start + span.length) {
+            node = node.parent;
+        }
+        while (node.parent.pos === node.pos && node.parent.end === node.end) {
+            node = node.parent;
+        }
+        if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
+            return node.parent.initializer;
+        }
+        return node;
     }
-    while (node.parent.pos === node.pos && node.parent.end === node.end) {
-        node = node.parent;
-    }
-    if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
-        return node.parent.initializer;
-    }
-    return node;
 }
