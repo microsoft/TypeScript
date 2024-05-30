@@ -2320,6 +2320,7 @@ namespace Parser {
         if (token() === SyntaxKind.AwaitKeyword && inAwaitContext()) {
             return false;
         }
+        
         return token() > SyntaxKind.LastReservedWord;
     }
 
