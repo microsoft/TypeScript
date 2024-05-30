@@ -282,16 +282,16 @@ const textToToken = new Map(Object.entries({
     "`": SyntaxKind.BacktickToken,
 }));
 
-const charToRegExpFlag = new Map(Object.entries({
-    d: RegularExpressionFlags.HasIndices,
-    g: RegularExpressionFlags.Global,
-    i: RegularExpressionFlags.IgnoreCase,
-    m: RegularExpressionFlags.Multiline,
-    s: RegularExpressionFlags.DotAll,
-    u: RegularExpressionFlags.Unicode,
-    v: RegularExpressionFlags.UnicodeSets,
-    y: RegularExpressionFlags.Sticky,
-}));
+const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
+    [CharacterCodes.d, RegularExpressionFlags.HasIndices],
+    [CharacterCodes.g, RegularExpressionFlags.Global],
+    [CharacterCodes.i, RegularExpressionFlags.IgnoreCase],
+    [CharacterCodes.m, RegularExpressionFlags.Multiline],
+    [CharacterCodes.s, RegularExpressionFlags.DotAll],
+    [CharacterCodes.u, RegularExpressionFlags.Unicode],
+    [CharacterCodes.v, RegularExpressionFlags.UnicodeSets],
+    [CharacterCodes.y, RegularExpressionFlags.Sticky],
+]);
 
 const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
@@ -394,8 +394,8 @@ function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | u
         lookupInUnicodeMap(code, unicodeES5IdentifierPart);
 }
 
-function makeReverseMap(source: Map<string, number>): string[] {
-    const result: string[] = [];
+function makeReverseMap<T>(source: Map<T, number>): T[] {
+    const result: T[] = [];
     source.forEach((value, name) => {
         result[value] = name;
     });
@@ -416,16 +416,16 @@ export function stringToToken(s: string): SyntaxKind | undefined {
     return textToToken.get(s);
 }
 
-const regExpFlagChars = makeReverseMap(charToRegExpFlag);
+const regExpFlagCharCodes = makeReverseMap(charCodeToRegExpFlag);
 
 /** @internal */
-export function regularExpressionFlagToCharacter(f: RegularExpressionFlags): string | undefined {
-    return regExpFlagChars[f];
+export function regularExpressionFlagToCharacterCode(f: RegularExpressionFlags): CharacterCodes | undefined {
+    return regExpFlagCharCodes[f];
 }
 
 /** @internal */
-export function characterToRegularExpressionFlag(c: string): RegularExpressionFlags | undefined {
-    return charToRegExpFlag.get(c);
+export function characterCodeToRegularExpressionFlag(ch: CharacterCodes): RegularExpressionFlags | undefined {
+    return charCodeToRegExpFlag.get(ch);
 }
 
 /** @internal */
@@ -2564,7 +2564,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     const size = charSize(ch);
                     if (reportErrors) {
-                        const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
+                        const flag = characterCodeToRegularExpressionFlag(ch);
                         if (flag === undefined) {
                             error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                         }
@@ -2849,7 +2849,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     break;
                 }
                 const size = charSize(ch);
-                const flag = characterToRegularExpressionFlag(utf16EncodeAsString(ch));
+                const flag = characterCodeToRegularExpressionFlag(ch);
                 if (flag === undefined) {
                     error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                 }
