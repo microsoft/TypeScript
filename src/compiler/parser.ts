@@ -5139,9 +5139,15 @@ namespace Parser {
     }
 
     function nextTokenIsIdentifierOnSameLine() {
+        const isTypeKeyword = token() === SyntaxKind.TypeKeyword;
         nextToken();
+
         if (scanner.hasPrecedingLineBreak()) {
             return false;
+        }
+
+        if (!isTypeKeyword) {
+            return isIdentifier();
         }
 
         switch (token()) {

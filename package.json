@@ -94,7 +94,8 @@
         "gulp": "hereby",
         "lint": "hereby lint",
         "format": "dprint fmt",
-        "setup-hooks": "node scripts/link-hooks.mjs"
+        "setup-hooks": "node scripts/link-hooks.mjs",
+        "work": "hereby local && node ./built/local/tsc.js tmp.ts"
     },
     "browser": {
         "fs": false,
