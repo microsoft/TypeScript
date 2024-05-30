@@ -216,7 +216,7 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
         const sourceFile = program.getSourceFile("main.ts")!;
         const typeChecker = program.getTypeChecker();
         typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ts.ImportDeclaration).moduleSpecifier);
-        const diagnostics = program.getSemanticDiagnostics();
+        const diagnostics = program.getSemanticDiagnostics()
         assert.equal(diagnostics.length, 1);
         assert.equal(diagnostics[0].code, ts.Diagnostics.File_0_is_not_a_module.code);
         assert.equal(diagnostics[0].messageText, "File '/module.d.ts' is not a module.");
