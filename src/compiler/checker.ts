@@ -23411,7 +23411,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceArity = getTypeReferenceArity(source);
                     const targetArity = getTypeReferenceArity(target);
                     const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
-                    const targetRestFlag = target.target.combinedFlags & ElementFlags.Rest;
                     const targetHasRestElement = target.target.hasRestElement;
                     const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
                     const targetMinLength = target.target.minLength;
@@ -23421,7 +23420,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return Ternary.False;
                     }
-                    if (!targetRestFlag && targetArity < sourceMinLength) {
+                    if (!targetHasRestElement && targetArity < sourceMinLength) {
                         if (reportErrors) {
                             reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
                         }
