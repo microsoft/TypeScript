@@ -910,7 +910,7 @@ o6.f;
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->          : ^ ^^     ^^ ^^^^^                               
+>          : ^^^^     ^^ ^^^^^                               
 >value : T
 >      : ^
 
@@ -988,7 +988,7 @@ function f01(x: unknown) {
 >isDefined(maybeIsString) : void
 >                         : ^^^^
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->          : ^ ^^     ^^ ^^^^^                               
+>          : ^^^^     ^^ ^^^^^                               
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
 >              : ^^     ^^       ^^^^^                       ^^^^^^^^^^^^^
 
@@ -2732,7 +2732,7 @@ declare function assert(x: unknown): asserts x;
 
 declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
 >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
->              : ^ ^^ ^^ ^^^^^                           
+>              : ^^^^ ^^ ^^^^^                           
 >x : T
 >  : ^
 
@@ -2848,7 +2848,7 @@ function f30(o: Thing | undefined) {
 >assertNonNull(o?.foo) : void
 >                      : ^^^^
 >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
->              : ^ ^^ ^^ ^^^^^                           
+>              : ^^^^ ^^ ^^^^^                           
 >o?.foo : string | number | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : Thing | undefined

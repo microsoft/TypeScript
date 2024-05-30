@@ -129,13 +129,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >key : K
 >    : ^
 
@@ -174,13 +174,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.set(key, { ref, value }) : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this.#weakMap.set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
->                  : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
+>                  : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^ ^  ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^ 
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
->    : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
+>    : ^   ^^^^^     ^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^ ^  ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^ 
 >key : K
 >    : ^
 >{ ref, value } : { ref: WeakRef<K>; value: V; }
@@ -194,13 +194,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#refSet.add(ref) : Set<WeakRef<K>>
 >                      : ^^^^^^^^^^^^^^^
 >this.#refSet.add : (value: WeakRef<K>) => Set<WeakRef<K>>
->                 : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ 
 >this.#refSet : Set<WeakRef<K>>
 >             : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >add : (value: WeakRef<K>) => Set<WeakRef<K>>
->    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ 
 >ref : WeakRef<K>
 >    : ^^^^^^^^^^
 
@@ -274,13 +274,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >key : K
 >    : ^
 >value : V | undefined
@@ -299,13 +299,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >key : K
 >    : ^
 
@@ -425,13 +425,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^  ^^^^^^^^^^^^^^          ^ ^^^^^^^ ^              
 >key : K
 >    : ^
 
@@ -486,11 +486,11 @@ Object.defineProperties(IterableWeakMap.prototype, {
 >Object.defineProperties(IterableWeakMap.prototype, {    [Symbol.iterator]: {        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    },    [Symbol.toStringTag]: {        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    },}) : IterableWeakMap<any, any>
 >                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
->                        : ^ ^^ ^^ ^^          ^^                                     ^^^^^ 
+>                        : ^^^^ ^^ ^^          ^^                                     ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperties : <T>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
->                 : ^ ^^ ^^ ^^          ^^                                     ^^^^^ 
+>                 : ^^^^ ^^ ^^          ^^                                     ^^^^^ 
 >IterableWeakMap.prototype : IterableWeakMap<any, any>
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >IterableWeakMap : typeof IterableWeakMap

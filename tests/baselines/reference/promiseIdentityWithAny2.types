@@ -4,7 +4,7 @@
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->     : ^ ^^ ^^        ^^                        ^^^^^              
+>     : ^^^^^^^        ^^                        ^^^^^              
 >callback : (x: T) => IPromise<U, W>
 >         : ^ ^^ ^^^^^              
 >x : T
@@ -33,7 +33,7 @@ var x: Promise<string, boolean>;
 interface IPromise2<T, V> {
     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise2<U, W>) => IPromise2<U, W>
->     : ^ ^^ ^^        ^^                         ^^^^^               
+>     : ^^^^^^^        ^^                         ^^^^^               
 >callback : (x: T) => IPromise2<U, W>
 >         : ^ ^^ ^^^^^               
 >x : T

@@ -9,7 +9,7 @@ export interface INode<T> {
 
 export function create<T>(): () => INode<T>;
 >create : <T>() => () => INode<T>
->       : ^ ^^^^^^^              
+>       : ^^^^^^^^^              
 
 === lib.d.ts ===
 export type G<T extends string> = { [P in T]: string };
@@ -52,7 +52,7 @@ import { T, Q } from "./lib";
 
 import { create } from "./bbb";
 >create : <T>() => () => import("bbb").INode<T>
->       : ^ ^^^^^^^             ^^^^^  ^^^^^   
+>       : ^^^^^^^^^             ^^^^^  ^^^^^   
 
 export const fun = create<T>();
 >fun : () => import("bbb").INode<T>
@@ -60,7 +60,7 @@ export const fun = create<T>();
 >create<T>() : () => import("bbb").INode<T>
 >            : ^^^^^^       ^^^^^  ^^^^^ ^ 
 >create : <T>() => () => import("bbb").INode<T>
->       : ^ ^^^^^^^             ^^^^^  ^^^^^   
+>       : ^^^^^^^^^             ^^^^^  ^^^^^   
 
 export const fun2 = create<Q>();
 >fun2 : () => import("bbb").INode<Q>
@@ -68,5 +68,5 @@ export const fun2 = create<Q>();
 >create<Q>() : () => import("bbb").INode<Q>
 >            : ^^^^^^       ^^^^^  ^^^^^ ^ 
 >create : <T>() => () => import("bbb").INode<T>
->       : ^ ^^^^^^^             ^^^^^  ^^^^^   
+>       : ^^^^^^^^^             ^^^^^  ^^^^^   
 

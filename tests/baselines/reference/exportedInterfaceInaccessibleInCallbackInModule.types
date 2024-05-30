@@ -28,7 +28,7 @@ export declare class TPromise<V> {
     // removing this method fixes the error squiggle.....
 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
 >then : <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback) => TPromise<U>
->     : ^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^^^           
+>     : ^^^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^^^           
 >success : (value: V) => TPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : V

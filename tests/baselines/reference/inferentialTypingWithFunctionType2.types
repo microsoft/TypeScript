@@ -3,7 +3,7 @@
 === inferentialTypingWithFunctionType2.ts ===
 function identity<A>(a: A): A {
 >identity : <A>(a: A) => A
->         : ^ ^^ ^^ ^^^^^ 
+>         : ^^^^ ^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -31,7 +31,7 @@ var x = [1, 2, 3].map(identity)[0];
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >identity : <A>(a: A) => A
->         : ^ ^^ ^^ ^^^^^ 
+>         : ^^^^ ^^ ^^^^^ 
 >0 : 0
 >  : ^
 

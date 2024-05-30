@@ -9,7 +9,7 @@ type Q<T> = number extends T ? (n: number) => void : never;
 
 function fn<T>(arg: Q<T>) {
 >fn : <T>(arg: Q<T>) => void
->   : ^ ^^   ^^    ^^^^^^^^^
+>   : ^^^^   ^^    ^^^^^^^^^
 >arg : Q<T>
 >    : ^^^^
 
@@ -28,7 +28,7 @@ fn<string | number>(m => m.toFixed());
 >fn<string | number>(m => m.toFixed()) : void
 >                                      : ^^^^
 >fn : <T>(arg: Q<T>) => void
->   : ^ ^^   ^^    ^^^^^^^^^
+>   : ^^^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
@@ -46,7 +46,7 @@ fn<number>(m => m.toFixed());
 >fn<number>(m => m.toFixed()) : void
 >                             : ^^^^
 >fn : <T>(arg: Q<T>) => void
->   : ^ ^^   ^^    ^^^^^^^^^
+>   : ^^^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
@@ -83,7 +83,7 @@ type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 
 function fn2<T>(arg: Q2<T>) {
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^ ^^   ^^     ^^^^^^^^^
+>    : ^^^^   ^^     ^^^^^^^^^
 >arg : Q2<T>
 >    : ^^^^^
 
@@ -115,7 +115,7 @@ fn2<string | number>(m => m(42));
 >fn2<string | number>(m => m(42)) : void
 >                                 : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^ ^^   ^^     ^^^^^^^^^
+>    : ^^^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
 >           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void
@@ -131,7 +131,7 @@ fn2<number>(m => m(42));
 >fn2<number>(m => m(42)) : void
 >                        : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^ ^^   ^^     ^^^^^^^^^
+>    : ^^^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
 >           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void

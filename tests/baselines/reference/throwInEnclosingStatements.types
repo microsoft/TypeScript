@@ -12,7 +12,7 @@ function fn(x) {
 
 <T>(x: T) => { throw x; }
 ><T>(x: T) => { throw x; } : <T>(x: T) => never
->                          : ^ ^^ ^^ ^^^^^^^^^^
+>                          : ^^^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 >x : T

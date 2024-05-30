@@ -298,7 +298,7 @@ throw function () { return 'a string' };
 
 throw <T>(x:T) => 42;
 ><T>(x:T) => 42 : <T>(x: T) => number
->               : ^ ^^ ^^ ^^^^^^^^^^^
+>               : ^^^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >42 : 42

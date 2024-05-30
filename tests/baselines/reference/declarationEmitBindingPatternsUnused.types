@@ -146,7 +146,7 @@ function referencedInSignartureKeyword({ function: alias }: { function: string }
 
 function referencedInInferredType({ name: alias }: Named) {
 >referencedInInferredType : ({ name: alias }: Named) => { name: typeof alias; }
->                         : ^               ^^     ^^^^^^^^^^^^^            ^^^
+>                         : ^               ^^     ^^^^^  ^^^^^^            ^  
 >name : any
 >     : ^^^
 >alias : string

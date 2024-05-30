@@ -30,7 +30,7 @@ class Left<L, A> {
     /** The given function is applied if this is a `Right` */
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
->    : ^ ^^ ^^           ^^^^^            
+>    : ^^^^ ^^           ^^^^^            
 >f : (a: A) => B
 >  : ^ ^^ ^^^^^ 
 >a : A
@@ -43,7 +43,7 @@ class Left<L, A> {
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
->   : ^ ^^   ^^                      ^^^^^            
+>   : ^^^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
 >    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
@@ -78,7 +78,7 @@ class Right<L, A> {
 
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
->    : ^ ^^ ^^           ^^^^^            
+>    : ^^^^ ^^           ^^^^^            
 >f : (a: A) => B
 >  : ^ ^^ ^^^^^ 
 >a : A
@@ -102,7 +102,7 @@ class Right<L, A> {
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
->   : ^ ^^   ^^                      ^^^^^            
+>   : ^^^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
 >    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
@@ -205,7 +205,7 @@ const tmp1: MyInfo = null!;
 
 function tmp2<N extends NeededInfo>(n: N) {}
 >tmp2 : <N extends NeededInfo>(n: N) => void
->     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
+>     : ^^^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >n : N
 >  : ^
 
@@ -213,7 +213,7 @@ tmp2(tmp1); // uncommenting this line removes a type error from a completely unr
 >tmp2(tmp1) : void
 >           : ^^^^
 >tmp2 : <N extends NeededInfo>(n: N) => void
->     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
+>     : ^^^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >tmp1 : MyInfo
 >     : ^^^^^^
 

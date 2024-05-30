@@ -15,7 +15,7 @@ declare const x: "foo".charCodeAt(0);
 interface String {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->       : ^ ^^ ^^ ^^^^^ 
+>       : ^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -50,11 +50,11 @@ const nodes = document.getElementsByTagName("li");
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                              : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                              : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >document : Document
 >         : ^^^^^^^^
 >getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                     : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                     : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >"li" : "li"
 >     : ^^^^
 
@@ -80,7 +80,7 @@ type ItemType = "".typeof(nodes.item(0));
 interface Number {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->       : ^ ^^ ^^ ^^^^^ 
+>       : ^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -115,11 +115,11 @@ const nodes2 = document.getElementsByTagName("li");
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                              : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                              : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >document : Document
 >         : ^^^^^^^^
 >getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                     : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                     : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >"li" : "li"
 >     : ^^^^
 
@@ -145,7 +145,7 @@ type ItemType2 = 4..typeof(nodes.item(0));
 interface Boolean {
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->       : ^ ^^ ^^ ^^^^^ 
+>       : ^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -182,11 +182,11 @@ const nodes3 = document.getElementsByTagName("li");
 >document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >document.getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                              : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                              : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >document : Document
 >         : ^^^^^^^^
 >getElementsByTagName : { <K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; <K extends keyof MathMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<MathMLElementTagNameMap[K]>; <K extends keyof HTMLElementDeprecatedTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementDeprecatedTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
->                     : ^^^ ^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^ ^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^ ^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^ ^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
+>                     : ^^^^^^^^^^^^^                           ^^             ^^ ^^^                                          ^^^^^^^^^^^^^                          ^^             ^^ ^^^                                         ^^^^^^^^^^^^^                             ^^             ^^ ^^^                                            ^^^^^^^^^^^^^                                     ^^             ^^ ^^^                                                    ^^^             ^^      ^^^                         ^^^
 >"li" : "li"
 >     : ^^^^
 

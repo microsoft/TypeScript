@@ -15,7 +15,7 @@ interface GraphActions {
 
 export declare function create<T>(config: T): void;
 >create : <T>(config: T) => void
->       : ^ ^^      ^^ ^^^^^    
+>       : ^^^^      ^^ ^^^^^    
 >config : T
 >       : ^
 
@@ -29,7 +29,7 @@ create<GraphActions>({
 >create<GraphActions>({  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },}) : void
 >                                                                                                     : ^^^^
 >create : <T>(config: T) => void
->       : ^ ^^      ^^ ^^^^^    
+>       : ^^^^      ^^ ^^^^^    
 >{  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },} : { setDirection: (direction?: CanvasDirection) => void; }
 >                                                                               : ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -52,7 +52,7 @@ const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
 
 function isDefined<T>(a: T | undefined): a is T {
 >isDefined : <T>(a: T | undefined) => a is T
->          : ^ ^^ ^^             ^^^^^      
+>          : ^^^^ ^^             ^^^^^      
 >a : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -71,11 +71,11 @@ const foundAdmins = admins.filter(isDefined);  // "admin"[]
 >admins.filter(isDefined) : "admin"[]
 >                         : ^^^^^^^^^
 >admins.filter : { <S extends "admin" | undefined>(predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => unknown, thisArg?: any): ("admin" | undefined)[]; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^   ^^^^^^^^^^  ^^^
 >admins : ("admin" | undefined)[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 >filter : { <S extends "admin" | undefined>(predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "admin" | undefined, index: number, array: ("admin" | undefined)[]) => unknown, thisArg?: any): ("admin" | undefined)[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^   ^^^^^^^^^^  ^^^
 >isDefined : <T>(a: T | undefined) => a is T
->          : ^ ^^ ^^             ^^^^^      
+>          : ^^^^ ^^             ^^^^^      
 

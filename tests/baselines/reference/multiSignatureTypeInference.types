@@ -117,19 +117,19 @@ type InferTwoOverloads<F extends Function> =
 
 type Expected = InferTwoOverloads<((x: string) => number) & (() => string)>;  // [(x: string) => number, () => string]    
 >Expected : [(x: string) => number, () => string]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^      ^^^^^^^^      ^
 >x : string
 >  : ^^^^^^
 
 type JustOneSignature = InferTwoOverloads<((x: string) => number)>;  // [(x: string) => number, (x: string) => number]
 >JustOneSignature : [(x: string) => number, (x: string) => number]
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^
 >x : string
 >  : ^^^^^^
 
 type JustTheOtherSignature = InferTwoOverloads<(() => string)>;  // [() => string, () => string]
 >JustTheOtherSignature : [() => string, () => string]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^      ^^^^^^^^      ^
 
 // Repro from #28867
 

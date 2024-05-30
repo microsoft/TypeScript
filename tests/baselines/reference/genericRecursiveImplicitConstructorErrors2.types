@@ -45,7 +45,7 @@ module TypeScript2 {
 
     public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
 >getType : <A, B, C>() => PullTypeSymbol<A, B, C>
->        : ^ ^^ ^^ ^^^^^^^                       
+>        : ^^^^^^^^^^^^^^^                       
 
       return undefined;
 >undefined : undefined

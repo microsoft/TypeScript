@@ -37,7 +37,7 @@ declare function assertIsArrayOfStrings(value: unknown): asserts value is string
 
 declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^                               
+>              : ^^^^     ^^ ^^^^^                               
 >value : T
 >      : ^
 
@@ -263,7 +263,7 @@ function f01(x: unknown) {
 >assertDefined(x) : void
 >                 : ^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^                               
+>              : ^^^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -391,7 +391,7 @@ function f02(x: string | undefined) {
 >assertDefined(x) : void
 >                 : ^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^                               
+>              : ^^^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -446,7 +446,7 @@ namespace Debug {
 
     export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^                               
+>              : ^^^^     ^^ ^^^^^                               
 >value : T
 >      : ^
 }
@@ -529,11 +529,11 @@ function f10(x: string | undefined) {
 >Debug.assertDefined(x) : void
 >                       : ^^^^
 >Debug.assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->                    : ^ ^^     ^^ ^^^^^                               
+>                    : ^^^^     ^^ ^^^^^                               
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^                               
+>              : ^^^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

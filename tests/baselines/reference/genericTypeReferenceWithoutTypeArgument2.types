@@ -103,13 +103,13 @@ interface I2 extends M.C { }
 
 function h<T extends I>(x: T) { }
 >h : <T extends I>(x: T) => void
->  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
+>  : ^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
 function i<T extends M.E>(x: T) { }
 >i : <T extends M.E>(x: T) => void
->  : ^ ^^^^^^^^^   ^^ ^^ ^^^^^^^^^
+>  : ^^^^^^^^^^^   ^^ ^^ ^^^^^^^^^
 >M : any
 >  : ^^^
 >x : T

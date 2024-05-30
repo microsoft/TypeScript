@@ -154,7 +154,7 @@ type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
 
 export function matchFilter<U extends Update, Q extends FilterQuery>(
 >matchFilter : <U extends Update, Q extends FilterQuery>(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
->            : ^ ^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^       ^^^^^                               
+>            : ^^^^^^^^^^^      ^^^^^^^^^^^^           ^^      ^^       ^^^^^                               
 
     filter: Q | Q[],
 >filter : Q | Q[]
@@ -281,7 +281,7 @@ class EventHub<U extends Update> {
     }
     on<Q extends FilterQuery>(
 >on : <Q extends FilterQuery>(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
->   : ^ ^^^^^^^^^           ^^      ^^       ^^^^^          ^^                               ^^^^^                      
+>   : ^^^^^^^^^^^           ^^      ^^       ^^^^^          ^^                               ^^^^^                      
 
         filter: Q | Q[],
 >filter : Q | Q[]

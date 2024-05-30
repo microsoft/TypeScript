@@ -16,7 +16,7 @@ declare class StateMachine<T> {
 
 declare function createMachine<T>(implementations: {
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->              : ^ ^^               ^^                                                                 ^^^^^    
+>              : ^^^^               ^^                                                                 ^^^^^    
 >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
 >                : ^^^^^^^^^^^^                                                  ^^^
 
@@ -30,7 +30,7 @@ createMachine<{ count: number }>({
 >createMachine<{ count: number }>({  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },}) : void
 >                                                                                                                                                                        : ^^^^
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->              : ^ ^^               ^^                                                                 ^^^^^    
+>              : ^^^^               ^^                                                                 ^^^^^    
 >count : number
 >      : ^^^^^^
 >{  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },} : { services: { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }; }
@@ -50,11 +50,11 @@ createMachine<{ count: number }>({
 >Promise.reject("some err") : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^      ^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >"some err" : "some err"
 >           : ^^^^^^^^^^
 
@@ -66,11 +66,11 @@ createMachine<{ count: number }>({
 >Promise.reject("some err") : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^      ^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >"some err" : "some err"
 >           : ^^^^^^^^^^
 
@@ -92,11 +92,11 @@ function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number 
 >Promise.reject('some err') : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^      ^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^          
 >'some err' : "some err"
 >           : ^^^^^^^^^^
 }

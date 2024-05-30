@@ -7,7 +7,7 @@ interface IComparable<T> {
 }
 function f<T, I extends IComparable<T>>() {
 >f : <T, I extends IComparable<T>>() => void
->  : ^ ^^^^^^^^^^^^              ^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^              ^^^^^^^^^^^
 }
 
 interface I1<T, U extends I1<T, any>> { // Error, any does not satisfy the constraint I1<T, any>
@@ -27,7 +27,7 @@ interface I3<T, U extends string> {
 
 function foo<T, U extends <V extends T>(v: V) => void>() {
 >foo : <T, U extends <V extends T>(v: V) => void>() => void
->    : ^ ^^^^^^^^^^^^                           ^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^                           ^^^^^^^^^^^
 >v : V
 >  : ^
 }

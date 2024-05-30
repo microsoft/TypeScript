@@ -17,7 +17,7 @@ module Q {
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->    : ^ ^^ ^^                          ^^^^^^ ^^           ^^^^^      
+>    : ^^^^ ^^                          ^^^^^^ ^^           ^^^^^      
 >x : (a: Iterator<T>) => number
 >  : ^ ^^           ^^^^^      
 >a : Iterator<T>
@@ -41,6 +41,6 @@ module Q {
 >foo(null) : (a: Iterator<unknown>) => number
 >          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^      
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->    : ^ ^^ ^^                          ^^^^^^ ^^           ^^^^^      
+>    : ^^^^ ^^                          ^^^^^^ ^^           ^^^^^      
     }
 }

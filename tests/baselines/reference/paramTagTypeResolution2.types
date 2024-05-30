@@ -8,18 +8,18 @@
  */
 function f(a, b) {
 >f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
->  : ^ ^^ ^^ ^^ ^^                                          ^^^^^^^^^
+>  : ^^^^ ^^ ^^ ^^                                          ^^^^^^^^^
 >a : T
 >  : ^
 >b : { [K in keyof T]: (value: T[K]) => void; }
->  : ^^^ ^^^^^^^^^^^^^^^     ^^    ^^^^^    ^^^
+>  : ^^^^^^^^^^^^^^^^^^^     ^^    ^^^^^    ^^^
 }
 
 f({ x: 42 }, { x(param) { param.toFixed() } });
 >f({ x: 42 }, { x(param) { param.toFixed() } }) : void
 >                                               : ^^^^
 >f : <T>(a: T, b: { [K in keyof T]: (value: T[K]) => void; }) => void
->  : ^ ^^ ^^ ^^ ^^                                          ^^^^^^^^^
+>  : ^^^^ ^^ ^^ ^^                                          ^^^^^^^^^
 >{ x: 42 } : { x: number; }
 >          : ^^^^^^^^^^^^^^
 >x : number

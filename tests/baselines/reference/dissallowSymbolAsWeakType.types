@@ -27,11 +27,11 @@ ws.add(s);
 >ws.add(s) : WeakSet<object>
 >          : ^^^^^^^^^^^^^^^
 >ws.add : (value: object) => WeakSet<object>
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
 >ws : WeakSet<object>
 >   : ^^^^^^^^^^^^^^^
 >add : (value: object) => WeakSet<object>
->    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
 >s : symbol
 >  : ^^^^^^
 
@@ -79,11 +79,11 @@ wm.set(s, true);
 >wm.set(s, true) : WeakMap<object, boolean>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >wm.set : (key: object, value: boolean) => WeakMap<object, boolean>
->       : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^^ 
 >wm : WeakMap<object, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >set : (key: object, value: boolean) => WeakMap<object, boolean>
->    : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^^ 
 >s : symbol
 >  : ^^^^^^
 >true : true
@@ -105,11 +105,11 @@ wm.get(s);
 >wm.get(s) : boolean
 >          : ^^^^^^^
 >wm.get : (key: object) => boolean | undefined
->       : ^   ^^^^^^^^^^^^^^^^^^^^            
+>       : ^   ^^^^^^^^^^^^^                   
 >wm : WeakMap<object, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (key: object) => boolean | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^            
+>    : ^   ^^^^^^^^^^^^^                   
 >s : symbol
 >  : ^^^^^^
 
@@ -139,11 +139,11 @@ wr.deref();
 >wr.deref() : object
 >           : ^^^^^^
 >wr.deref : () => object | undefined
->         : ^^^^^^^^^^^^            
+>         : ^^^^^^                  
 >wr : WeakRef<object>
 >   : ^^^^^^^^^^^^^^^
 >deref : () => object | undefined
->      : ^^^^^^^^^^^^            
+>      : ^^^^^^                  
 
 const f = new FinalizationRegistry(() => {});
 >f : FinalizationRegistry<unknown>

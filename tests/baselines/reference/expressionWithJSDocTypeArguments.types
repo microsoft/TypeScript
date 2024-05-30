@@ -5,7 +5,7 @@
 
 function foo<T>(x: T): T { return x }
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -21,59 +21,59 @@ class Bar<T> { constructor(public x: T) { } }
 
 const WhatFoo = foo<?>;
 >WhatFoo : (x: any) => any
->        : ^ ^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^   
 >foo<?> : (x: any) => any
->       : ^ ^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^   
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 const HuhFoo = foo<string?>;
 >HuhFoo : (x: string | null) => string | null
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo<string?> : (x: string | null) => string | null
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 const NopeFoo = foo<?string>;
 >NopeFoo : (x: string | null) => string | null
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo<?string> : (x: string | null) => string | null
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 const ComeOnFoo = foo<?string?>;
 >ComeOnFoo : (x: string | null) => string | null
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo<?string?> : (x: string | null) => string | null
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 type TWhatFoo = typeof foo<?>;
 >TWhatFoo : typeof foo<unknown>
->         :            ^^^^^^^ 
+>         :                    
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 type THuhFoo = typeof foo<string?>;
 >THuhFoo : typeof foo<string | null>
->        :                  ^^^^^^^ 
+>        :                     ^^^^ 
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 type TNopeFoo = typeof foo<?string>;
 >TNopeFoo : typeof foo<string | null>
->         :                  ^^^^^^^ 
+>         :                     ^^^^ 
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 type TComeOnFoo = typeof foo<?string?>;
 >TComeOnFoo : typeof foo<(string | null) | null>
->           :            ^      ^^^^^^^^^^^^^^^ 
+>           :            ^         ^^^^^   ^^^^ 
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 
 const WhatBar = Bar<?>;
 >WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
@@ -109,25 +109,25 @@ const ComeOnBar = Bar<?string?>;
 
 type TWhatBar = typeof Bar<?>;
 >TWhatBar : typeof Bar<unknown>
->         :            ^^^^^^^ 
+>         :                    
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type THuhBar = typeof Bar<string?>;
 >THuhBar : typeof Bar<string | null>
->        :                  ^^^^^^^ 
+>        :                     ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type TNopeBar = typeof Bar<?string>;
 >TNopeBar : typeof Bar<string | null>
->         :                  ^^^^^^^ 
+>         :                     ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type TComeOnBar = typeof Bar<?string?>;
 >TComeOnBar : typeof Bar<(string | null) | null>
->           :            ^      ^^^^^^^^^^^^^^^ 
+>           :            ^         ^^^^^   ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

@@ -32,11 +32,11 @@ const getStringGetter = (key) => {
 >cache.get(key) : string | Set<string> | undefined
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cache.get : (key: string) => (string | Set<string>) | undefined
->          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            
+>          : ^   ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^            
 >cache : Map<string, string | Set<string>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => (string | Set<string>) | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^            
 >key : string
 >    : ^^^^^^
   }

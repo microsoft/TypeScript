@@ -14,7 +14,7 @@ class Chain2<T extends { length: number }> {
 
     then<S extends Function>(cb: (x: T) => S): Chain2<S> {
 >then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
->     : ^ ^^^^^^^^^        ^^  ^^           ^^^^^         
+>     : ^^^^^^^^^^^        ^^  ^^           ^^^^^         
 >cb : (x: T) => S
 >   : ^ ^^ ^^^^^ 
 >x : T
@@ -49,11 +49,11 @@ class Chain2<T extends { length: number }> {
 >this.then(x => result) : Chain2<S>
 >                       : ^^^^^^^^^
 >this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
->          : ^ ^^^^^^^^^        ^^  ^^           ^^^^^         
+>          : ^^^^^^^^^^^        ^^  ^^           ^^^^^         
 >this : this
 >     : ^^^^
 >then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
->     : ^ ^^^^^^^^^        ^^  ^^           ^^^^^         
+>     : ^^^^^^^^^^^        ^^  ^^           ^^^^^         
 >x => result : (x: T) => S
 >            : ^ ^^^^^^^^^
 >x : T

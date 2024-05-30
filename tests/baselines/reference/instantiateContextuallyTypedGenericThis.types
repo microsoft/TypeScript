@@ -4,7 +4,7 @@
 interface JQuery {
     each<T>(
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
->     : ^ ^^          ^^   ^^        ^^                      ^^^^^   
+>     : ^^^^          ^^   ^^        ^^                      ^^^^^   
 
         collection: T[], callback: (this: T, dit: T) => T
 >collection : T[]
@@ -31,11 +31,11 @@ $.each(lines, function(dit) {
 >$.each(lines, function(dit) {    return dit.charAt(0) + this.charAt(1);}) : string[]
 >                                                                          : ^^^^^^^^
 >$.each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
->       : ^ ^^          ^^   ^^        ^^                      ^^^^^   
+>       : ^^^^          ^^   ^^        ^^                      ^^^^^   
 >$ : JQuery
 >  : ^^^^^^
 >each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
->     : ^ ^^          ^^   ^^        ^^                      ^^^^^   
+>     : ^^^^          ^^   ^^        ^^                      ^^^^^   
 >lines : string[]
 >      : ^^^^^^^^
 >function(dit) {    return dit.charAt(0) + this.charAt(1);} : (this: string, dit: string) => string

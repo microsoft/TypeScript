@@ -18,11 +18,11 @@ export const A: AX = 0 as any;
 === b.ts ===
 import { A } from './a';
 >A : { readonly A: unique symbol; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^       ^^^^^^^^^
 
 export const A1 = A;
 >A1 : { readonly A: unique symbol; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^       ^^^^^^^^^
 >A : { readonly A: unique symbol; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^       ^^^^^^^^^
 

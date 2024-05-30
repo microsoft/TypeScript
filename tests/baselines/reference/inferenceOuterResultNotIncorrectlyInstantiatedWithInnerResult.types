@@ -14,7 +14,7 @@ export class Test<A, B> {
 
     test<C>(c: C): Test<B, C> {
 >test : <C>(c: C) => Test<B, C>
->     : ^ ^^ ^^ ^^^^^          
+>     : ^^^^ ^^ ^^^^^          
 >c : C
 >  : ^
 
@@ -38,7 +38,7 @@ export class Test<A, B> {
 interface Supervisor<out T> {
     zip<A>(right: Supervisor<A>): Supervisor<[T, A]>;
 >zip : <A>(right: Supervisor<A>) => Supervisor<[T, A]>
->    : ^ ^^     ^^             ^^^^^                  
+>    : ^^^^     ^^             ^^^^^                  
 >right : Supervisor<A>
 >      : ^^^^^^^^^^^^^
 }
@@ -60,7 +60,7 @@ export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
 
     zip<A>(right: Supervisor<A>): Supervisor<[[T0, T1], A]> {
 >zip : <A>(right: Supervisor<A>) => Supervisor<[[T0, T1], A]>
->    : ^ ^^     ^^             ^^^^^                         
+>    : ^^^^     ^^             ^^^^^                         
 >right : Supervisor<A>
 >      : ^^^^^^^^^^^^^
 
@@ -110,11 +110,11 @@ export class Foo<T> extends Base<T> {
 >Object.assign(this.t, { x: 1 }) : T & { x: number; }
 >                                : ^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
->              : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^       ^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
+>              : ^^^^^^^^^^^^^^^  ^^^^^      ^^   ^^      ^^ ^^^       ^^^^^^^^^^^^^^^  ^^^^^^^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^^^^^^^^^^^^^  ^^^^^^^^^^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
->       : ^^^   ^^^^^^^^^  ^^ ^^      ^^   ^^      ^^ ^^^       ^^^   ^^^^^^^^^  ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^   ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
+>       : ^^^^^^^^^^^^^^^  ^^^^^      ^^   ^^      ^^ ^^^       ^^^^^^^^^^^^^^^  ^^^^^^^^      ^^   ^^       ^^ ^^       ^^ ^^^           ^^^^^^^^^^^^^^^  ^^^^^^^^^^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^               ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >this.t : T
 >       : ^
 >this : this

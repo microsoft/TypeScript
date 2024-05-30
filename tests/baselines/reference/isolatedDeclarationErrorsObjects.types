@@ -222,7 +222,7 @@ export let oWithAccessor = {
 
 function prop<T>(v: T): T { return v }
 >prop : <T>(v: T) => T
->     : ^ ^^ ^^ ^^^^^ 
+>     : ^^^^ ^^ ^^^^^ 
 >v : T
 >  : ^
 >v : T
@@ -284,7 +284,7 @@ export const oWithComputedProperties = {
 >prop(2) : 2
 >        : ^
 >prop : <T>(v: T) => T
->     : ^ ^^ ^^ ^^^^^ 
+>     : ^^^^ ^^ ^^^^^ 
 >2 : 2
 >  : ^
 >2 : 2

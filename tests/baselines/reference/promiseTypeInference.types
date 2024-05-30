@@ -7,7 +7,7 @@ declare class CPromise<T> {
 
     then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 >then : <U>(success?: (value: T) => CPromise<U>) => CPromise<U>
->     : ^ ^^       ^^^                         ^^^^^           
+>     : ^^^^       ^^^                         ^^^^^           
 >success : (value: T) => CPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : T
@@ -16,7 +16,7 @@ declare class CPromise<T> {
 interface IPromise<T> {
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 >then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
->     : ^ ^^       ^^^                         ^^^^^           
+>     : ^^^^       ^^^                         ^^^^^           
 >success : (value: T) => IPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : T

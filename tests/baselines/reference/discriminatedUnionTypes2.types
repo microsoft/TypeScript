@@ -176,7 +176,7 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 >f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
->    : ^ ^^ ^^                                           ^^^^^^^^^
+>    : ^^^^ ^^                                           ^^^^^^^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
 >  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >a : 0
@@ -315,7 +315,7 @@ type DataCarrier<Data> = WithError | WithoutError<Data>
 
 function f20<Data>(carrier: DataCarrier<Data>) {
 >f20 : <Data>(carrier: DataCarrier<Data>) => void
->    : ^    ^^       ^^                 ^^^^^^^^^
+>    : ^^^^^^^       ^^                 ^^^^^^^^^
 >carrier : DataCarrier<Data>
 >        : ^^^^^^^^^^^^^^^^^
 

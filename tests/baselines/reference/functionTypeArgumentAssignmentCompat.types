@@ -3,7 +3,7 @@
 === functionTypeArgumentAssignmentCompat.ts ===
 var f : {
 >f : <T>(x: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>  : ^^^^ ^^ ^^^^^ 
 
  <T>(x:T): T;
 >x : T
@@ -12,7 +12,7 @@ var f : {
 
 var g : {
 >g : <S>() => S[]
->  : ^ ^^^^^^^   
+>  : ^^^^^^^^^   
 
  <S>() : S[];
 } = () => [];
@@ -23,11 +23,11 @@ var g : {
 
 f = g;
 >f = g : <S>() => S[]
->      : ^ ^^^^^^^   
+>      : ^^^^^^^^^   
 >f : <T>(x: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>  : ^^^^ ^^ ^^^^^ 
 >g : <S>() => S[]
->  : ^ ^^^^^^^   
+>  : ^^^^^^^^^   
 
 var s = f("str").toUpperCase();
 >s : string
@@ -39,7 +39,7 @@ var s = f("str").toUpperCase();
 >f("str") : "str"
 >         : ^^^^^
 >f : <T>(x: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>  : ^^^^ ^^ ^^^^^ 
 >"str" : "str"
 >      : ^^^^^
 >toUpperCase : () => string

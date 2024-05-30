@@ -1540,7 +1540,7 @@ let anyThis = new AnyThis();
 //// type parameter inference ////
 declare var f: { 
 >f : { (this: void, x: number): number; call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U; }
->  : ^^^    ^^    ^^ ^^      ^^^      ^^^^^^^ ^^    ^^                         ^^^^^        ^^     ^^^ ^^^
+>  : ^^^    ^^    ^^ ^^      ^^^      ^^^^^^^^^^    ^^                         ^^^^^        ^^     ^^^ ^^^
 
     (this: void, x: number): number, 
 >this : void
@@ -1550,7 +1550,7 @@ declare var f: {
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->     : ^ ^^    ^^                         ^^^^^        ^^     ^^^^^ 
+>     : ^^^^    ^^                         ^^^^^        ^^     ^^^^^ 
 >this : (...argArray: any[]) => U
 >     : ^^^^        ^^     ^^^^^ 
 >argArray : any[]
@@ -1565,11 +1565,11 @@ let n: number = f.call(12);
 >f.call(12) : number
 >           : ^^^^^^
 >f.call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->       : ^ ^^    ^^                         ^^^^^        ^^     ^^^^^ 
+>       : ^^^^    ^^                         ^^^^^        ^^     ^^^^^ 
 >f : { (this: void, x: number): number; call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U; }
->  : ^^^    ^^    ^^ ^^      ^^^      ^^^^^^^ ^^    ^^                         ^^^^^        ^^     ^^^ ^^^
+>  : ^^^    ^^    ^^ ^^      ^^^      ^^^^^^^^^^    ^^                         ^^^^^        ^^     ^^^ ^^^
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->     : ^ ^^    ^^                         ^^^^^        ^^     ^^^^^ 
+>     : ^^^^    ^^                         ^^^^^        ^^     ^^^^^ 
 >12 : 12
 >   : ^^
 

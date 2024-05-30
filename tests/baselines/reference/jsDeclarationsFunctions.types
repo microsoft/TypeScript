@@ -59,7 +59,7 @@ export function d(a, b) { return /** @type {*} */(null); }
  */
 export function e(a, b) { return /** @type {*} */(null); }
 >e : <T, U>(a: T, b: U) => T & U
->  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
+>  : ^^^^^^^ ^^ ^^ ^^ ^^^^^     
 >a : T
 >  : ^
 >b : U

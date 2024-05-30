@@ -649,7 +649,7 @@ namespace n1 {
     }
     declare let f1: (cb: typeof Foo.f1) => void;
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^      ^^^^^    
+>   : ^  ^^  ^^                 ^^^^^    
 >cb : (x: Animal) => Animal
 >   : ^ ^^      ^^^^^      
 >Foo.f1 : (x: Animal) => Animal
@@ -661,7 +661,7 @@ namespace n1 {
 
     declare let f2: (cb: typeof Foo.f2) => void;
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^      ^^^^^    
+>   : ^  ^^  ^^              ^^^^^    
 >cb : (x: Dog) => Animal
 >   : ^ ^^   ^^^^^      
 >Foo.f2 : (x: Dog) => Animal
@@ -673,19 +673,19 @@ namespace n1 {
 
     f1 = f2;
 >f1 = f2 : (cb: (x: Dog) => Animal) => void
->        : ^  ^^^ ^^   ^^^^^      ^^^^^    
+>        : ^  ^^  ^^              ^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^      ^^^^^    
+>   : ^  ^^  ^^                 ^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^      ^^^^^    
+>   : ^  ^^  ^^              ^^^^^    
 
     f2 = f1;  // Error
 >f2 = f1 : (cb: (x: Animal) => Animal) => void
->        : ^  ^^^ ^^      ^^^^^      ^^^^^    
+>        : ^  ^^  ^^                 ^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^   ^^^^^      ^^^^^    
+>   : ^  ^^  ^^              ^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^      ^^^^^      ^^^^^    
+>   : ^  ^^  ^^                 ^^^^^    
 }
 
 namespace n2 {
@@ -702,29 +702,29 @@ namespace n2 {
 
     declare let f1: (cb: BivariantHack<Animal, Animal>) => void;
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^^^^     ^^^^^^^^^^^    
 >cb : (x: Animal) => Animal
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 
     declare let f2: (cb: BivariantHack<Dog, Animal>) => void;
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^     ^^^^^^^^^^^    
 >cb : (x: Dog) => Animal
 >   : ^ ^^^^^^^^^^^^^^^^
 
     f1 = f2;
 >f1 = f2 : (cb: (x: Dog) => Animal) => void
->        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
+>        : ^  ^^  ^^^^^     ^^^^^^^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^^^^     ^^^^^^^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^     ^^^^^^^^^^^    
 
     f2 = f1;  // Error
 >f2 = f1 : (cb: (x: Animal) => Animal) => void
->        : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
+>        : ^  ^^  ^^^^^^^^     ^^^^^^^^^^^    
 >f2 : (cb: (x: Dog) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^     ^^^^^^^^^^^    
 >f1 : (cb: (x: Animal) => Animal) => void
->   : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^  ^^^^^^^^     ^^^^^^^^^^^    
 }

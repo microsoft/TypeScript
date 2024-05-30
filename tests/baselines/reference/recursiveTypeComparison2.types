@@ -14,7 +14,7 @@ declare module Bacon {
     interface Observable<T> {
         zip<U, V>(other: EventStream<U>, f: (a: T, b: U) => V): EventStream<V>;
 >zip : <U, V>(other: EventStream<U>, f: (a: T, b: U) => V) => EventStream<V>
->    : ^ ^^ ^^     ^^              ^^ ^^                 ^^^^^              
+>    : ^^^^^^^     ^^              ^^ ^^                 ^^^^^              
 >other : EventStream<U>
 >      : ^^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
@@ -38,7 +38,7 @@ declare module Bacon {
 
         combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
 >combine : <U, V>(other: Observable<U>, f: (a: T, b: U) => V) => Property<V>
->        : ^ ^^ ^^     ^^             ^^ ^^                 ^^^^^           
+>        : ^^^^^^^     ^^             ^^ ^^                 ^^^^^           
 >other : Observable<U>
 >      : ^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
@@ -50,7 +50,7 @@ declare module Bacon {
 
         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
 >withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>) => EventStream<V>
->                 : ^ ^^ ^^         ^^ ^^ ^^                                               ^^^^^              
+>                 : ^^^^^^^         ^^ ^^ ^^                                               ^^^^^              
 >initState : U
 >          : ^
 >f : (state: U, event: Event<T>) => StateValue<U, V>
@@ -68,7 +68,7 @@ declare module Bacon {
 
         awaiting<U>(other: Observable<U>): Property<boolean>;
 >awaiting : <U>(other: Observable<U>) => Property<boolean>
->         : ^ ^^     ^^             ^^^^^                 
+>         : ^^^^     ^^             ^^^^^                 
 >other : Observable<U>
 >      : ^^^^^^^^^^^^^
 
@@ -108,7 +108,7 @@ declare module Bacon {
     }
     var Bus: new <T>() => Bus<T>;
 >Bus : new <T>() => Bus<T>
->    : ^^^^^ ^^^^^^^      
+>    : ^^^^^^^^^^^^^      
 }
 
 var stuck: Bacon.Bus<number> = new Bacon.Bus();
@@ -119,9 +119,9 @@ var stuck: Bacon.Bus<number> = new Bacon.Bus();
 >new Bacon.Bus() : Bacon.Bus<number>
 >                : ^^^^^^^^^^^^^^^^^
 >Bacon.Bus : new <T>() => Bacon.Bus<T>
->          : ^^^^^ ^^^^^^^^^^^^^^^^   
+>          : ^^^^^^^^^^^^^^^^^^^^^^   
 >Bacon : typeof Bacon
 >      : ^^^^^^^^^^^^
 >Bus : new <T>() => Bacon.Bus<T>
->    : ^^^^^ ^^^^^^^^^^^^^^^^   
+>    : ^^^^^^^^^^^^^^^^^^^^^^   
 

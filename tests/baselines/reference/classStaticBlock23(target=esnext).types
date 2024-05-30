@@ -25,11 +25,11 @@ const nums = [1, 2, 3].map(n => Promise.resolve(n))
 >Promise.resolve(n) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>                : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>        : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
 >n : number
 >  : ^^^^^^
 

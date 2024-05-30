@@ -171,7 +171,7 @@ function f12({ kind, payload }: Action) {
 // repro #50206
 function f13<T extends Action>({ kind, payload }: T) {
 >f13 : <T extends Action>({ kind, payload }: T) => void
->    : ^ ^^^^^^^^^      ^^                 ^^ ^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^                 ^^ ^^^^^^^^^
 >kind : "A" | "B"
 >     : ^^^^^^^^^
 >payload : string | number
@@ -217,7 +217,7 @@ function f13<T extends Action>({ kind, payload }: T) {
 
 function f14<T extends Action>(t: T) {
 >f14 : <T extends Action>(t: T) => void
->    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -663,19 +663,19 @@ type AB<T> = A<T> | B<T>;
 
 declare function printValue<T>(t: T): void;
 >printValue : <T>(t: T) => void
->           : ^ ^^ ^^ ^^^^^    
+>           : ^^^^ ^^ ^^^^^    
 >t : T
 >  : ^
 
 declare function printValueList<T>(t: Array<T>): void;
 >printValueList : <T>(t: Array<T>) => void
->               : ^ ^^ ^^        ^^^^^    
+>               : ^^^^ ^^        ^^^^^    
 >t : T[]
 >  : ^^^
 
 function unrefined1<T>(ab: AB<T>): void {
 >unrefined1 : <T>(ab: AB<T>) => void
->           : ^ ^^  ^^     ^^^^^    
+>           : ^^^^  ^^     ^^^^^    
 >ab : AB<T>
 >   : ^^^^^
 
@@ -699,7 +699,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValue<T>(value) : void
 >                     : ^^^^
 >printValue : <T_1>(t: T_1) => void
->           : ^   ^^ ^^   ^^^^^    
+>           : ^^^^^^ ^^   ^^^^^    
 >value : T
 >      : ^
     }
@@ -708,7 +708,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValueList<T>(value) : void
 >                         : ^^^^
 >printValueList : <T_1>(t: Array<T_1>) => void
->               : ^   ^^ ^^          ^^^^^    
+>               : ^^^^^^ ^^          ^^^^^    
 >value : T[]
 >      : ^^^
     }
@@ -800,11 +800,11 @@ const { value, done } = it.next();
 >it.next() : IteratorResult<number, any>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >it.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^                           
 >it : Iterator<number, any, undefined>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^                           
 
 if (!done) {
 >!done : boolean
@@ -1086,7 +1086,7 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >args.firstArr.concat(args.secondArr) : any[]
 >                                     : ^^^^^
 >args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
+>                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^     ^^^^^^^^^^     ^^^
 >args.firstArr : any[]
 >              : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
@@ -1094,7 +1094,7 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >firstArr : any[]
 >         : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^     ^^^^^^^^^^     ^^^
 >args.secondArr : any[]
 >               : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
@@ -1720,7 +1720,7 @@ declare class Client {
 
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>   : ^^^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >event : K
 >      : ^
 >listener : (...args: ClientEvents[K]) => void
@@ -1741,11 +1741,11 @@ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconne
 >bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
 >                                                                                                                                           : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>       : ^^^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>   : ^^^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
@@ -1789,11 +1789,11 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
 >                                                                                                   : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>       : ^^^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^ ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
+>   : ^^^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^    
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void

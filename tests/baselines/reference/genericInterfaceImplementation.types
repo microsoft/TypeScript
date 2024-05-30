@@ -8,7 +8,7 @@ interface IOption<A> {
 
     flatten<B>(): IOption<B>;
 >flatten : <B>() => IOption<B>
->        : ^ ^^^^^^^          
+>        : ^^^^^^^^^          
 }
 
 class None<T> implements IOption<T>{
@@ -24,7 +24,7 @@ class None<T> implements IOption<T>{
 
     flatten<U>() : IOption<U> {
 >flatten : <U>() => IOption<U>
->        : ^ ^^^^^^^          
+>        : ^^^^^^^^^          
 
         return new None<U>();
 >new None<U>() : None<U>

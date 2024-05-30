@@ -15,7 +15,7 @@ import React from 'react';
 
 function test<P>(wrappedProps: P) {
 >test : <P>(wrappedProps: P) => void
->     : ^ ^^            ^^ ^^^^^^^^^
+>     : ^^^^            ^^ ^^^^^^^^^
 >wrappedProps : P
 >             : ^
 

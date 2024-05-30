@@ -1327,7 +1327,7 @@ const directive = Symbol('directive');
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
+>    : ^^^^^^^^^^^^^^^^^^^       ^^                                                                 ^^^^^    
 >options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }
 >        : ^^^^^^^^^^^^^^^^   ^^    ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >arg : TArg
@@ -1343,7 +1343,7 @@ let case1 = foo({
 >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                                : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
+>    : ^^^^^^^^^^^^^^^^^^^       ^^                                                                 ^^^^^    
 >{    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: (x: string) => "str"; addOne: (x: number) => number; double: (x: number) => number; }
 >                                                                                                           : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
@@ -1395,7 +1395,7 @@ let case2 = foo({
 >foo({    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',}) : void
 >                                                                                                                : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
+>    : ^^^^^^^^^^^^^^^^^^^       ^^                                                                 ^^^^^    
 >{    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',} : { addOne: (x: number) => number; double: (x: number) => number; [directive]: (x: string) => "str"; }
 >                                                                                                           : ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 
@@ -1447,7 +1447,7 @@ let case3 = foo({
 >foo({    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                 : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
+>    : ^^^^^^^^^^^^^^^^^^^       ^^                                                                 ^^^^^    
 >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
 >                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 

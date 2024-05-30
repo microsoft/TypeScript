@@ -3,7 +3,7 @@
 === inferThisType.ts ===
 declare function f<T>(g: (this: T) => void): T
 >f : <T>(g: (this: T) => void) => T
->  : ^ ^^ ^^                 ^^^^^ 
+>  : ^^^^ ^^                 ^^^^^ 
 >g : (this: T) => void
 >  : ^    ^^ ^^^^^    
 >this : T
@@ -19,7 +19,7 @@ f(h)
 >f(h) : number
 >     : ^^^^^^
 >f : <T>(g: (this: T) => void) => T
->  : ^ ^^ ^^                 ^^^^^ 
+>  : ^^^^ ^^                 ^^^^^ 
 >h : (this: number) => void
 >  : ^    ^^      ^^^^^    
 

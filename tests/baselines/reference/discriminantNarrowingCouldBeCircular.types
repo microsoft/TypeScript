@@ -4,7 +4,7 @@
 // #57705, 57690
 declare function is<T>(v: T): v is T;
 >is : <T>(v: T) => v is T
->   : ^ ^^ ^^ ^^^^^      
+>   : ^^^^ ^^ ^^^^^      
 >v : T
 >  : ^
 
@@ -38,7 +38,7 @@ if (o) {
 >is<string>(value) : boolean
 >                  : ^^^^^^^
 >is : <T>(v: T) => v is T
->   : ^ ^^ ^^ ^^^^^      
+>   : ^^^^ ^^ ^^^^^      
 >value : string
 >      : ^^^^^^
     }

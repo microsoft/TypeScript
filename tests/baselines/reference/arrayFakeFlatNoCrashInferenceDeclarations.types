@@ -30,7 +30,7 @@ type BadFlatArray<Arr, Depth extends number> = {obj: {
 
 declare function flat<A, D extends number = 1>(
 >flat : <A, D extends number = 1>(arr: A, depth?: D) => BadFlatArray<A, D>[]
->     : ^ ^^ ^^^^^^^^^      ^^^^^^   ^^ ^^     ^^^ ^^^^^                    
+>     : ^^^^^^^^^^^^^^      ^^^^^^   ^^ ^^     ^^^ ^^^^^                    
 
     arr: A,
 >arr : A
@@ -44,7 +44,7 @@ declare function flat<A, D extends number = 1>(
 
 function foo<T>(arr: T[], depth: number) {
 >foo : <T>(arr: T[], depth: number) => (T | (T extends readonly (infer InnerArr)[] ? InnerArr | (InnerArr extends readonly (infer InnerArr)[] ? any : InnerArr) : T))[]
->    : ^ ^^   ^^   ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^   ^^   ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arr : T[]
 >    : ^^^
 >depth : number
@@ -54,7 +54,7 @@ function foo<T>(arr: T[], depth: number) {
 >flat(arr, depth) : (T | (T extends readonly (infer InnerArr)[] ? InnerArr | (InnerArr extends readonly (infer InnerArr)[] ? any : InnerArr) : T))[]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >flat : <A, D extends number = 1>(arr: A, depth?: D) => BadFlatArray<A, D>[]
->     : ^ ^^ ^^^^^^^^^      ^^^^^^   ^^ ^^     ^^^ ^^^^^                    
+>     : ^^^^^^^^^^^^^^      ^^^^^^   ^^ ^^     ^^^ ^^^^^                    
 >arr : T[]
 >    : ^^^
 >depth : number

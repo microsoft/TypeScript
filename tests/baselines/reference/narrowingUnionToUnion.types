@@ -35,7 +35,7 @@ function fx1(x: string | number | undefined) {
 
 function fx2<T>(x: T | undefined) {
 >fx2 : <T>(x: T | undefined) => void
->    : ^ ^^ ^^             ^^^^^^^^^
+>    : ^^^^ ^^             ^^^^^^^^^
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ function fx2<T>(x: T | undefined) {
 
 function fx3<T extends string | number>(x: T) {
 >fx3 : <T extends string | number>(x: T) => void
->    : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^
+>    : ^^^^^^^^^^^               ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -296,13 +296,13 @@ declare function isMaybeZero(value: number | null | undefined): value is 0 | nul
 
 declare function isEmptyArray<T>(value: T[]): value is [];
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^ ^^     ^^   ^^^^^           
+>             : ^^^^     ^^   ^^^^^           
 >value : T[]
 >      : ^^^
 
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^     ^^                      ^^^^^                              
+>                  : ^^^^     ^^                      ^^^^^                              
 >value : T[] | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -452,7 +452,7 @@ const TEST_CASES = [
 >isEmptyArray(value) : boolean
 >                    : ^^^^^^^
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^ ^^     ^^   ^^^^^           
+>             : ^^^^     ^^   ^^^^^           
 >value : string[]
 >      : ^^^^^^^^
 
@@ -469,7 +469,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^     ^^                      ^^^^^                              
+>                  : ^^^^     ^^                      ^^^^^                              
 >value : string[]
 >      : ^^^^^^^^
 
@@ -493,7 +493,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^     ^^                      ^^^^^                              
+>                  : ^^^^     ^^                      ^^^^^                              
 >value : string[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 
@@ -565,7 +565,7 @@ if (isEmpty(test)) {
 
 declare function assert<T>(value: any): asserts value is T
 >assert : <T>(value: any) => asserts value is T
->       : ^ ^^     ^^   ^^^^^                  
+>       : ^^^^     ^^   ^^^^^                  
 >value : any
 
 function test1(foo: number | string | boolean) {
@@ -578,7 +578,7 @@ function test1(foo: number | string | boolean) {
 >assert<1 | string>(foo) : void
 >                        : ^^^^
 >assert : <T>(value: any) => asserts value is T
->       : ^ ^^     ^^   ^^^^^                  
+>       : ^^^^     ^^   ^^^^^                  
 >foo : string | number | boolean
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

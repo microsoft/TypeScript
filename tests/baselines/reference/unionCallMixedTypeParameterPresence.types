@@ -6,7 +6,7 @@
 interface Err<T> {
   f<U>(a: (err: T) => U): Err<U>;
 >f : <U>(a: (err: T) => U) => Err<U>
->  : ^ ^^ ^^             ^^^^^      
+>  : ^^^^ ^^             ^^^^^      
 >a : (err: T) => U
 >  : ^   ^^ ^^^^^ 
 >err : T

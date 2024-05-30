@@ -19,7 +19,7 @@ interface Class<A> {
 
 declare const Class: <Self>(
 >Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
->      : ^    ^^          ^^      ^^^^^                                                                                 
+>      : ^^^^^^^          ^^      ^^^^^                                                                                 
 
   identifier: string,
 >identifier : string
@@ -67,7 +67,7 @@ export class A extends Class<A>("A")(
 >Class<A>("A") : <Fields>(fields: Fields, annotations?: Schema<A> | undefined) => Class<OutputFrom<Fields>>
 >              : ^^^^^^^^^      ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^  
 >Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
->      : ^    ^^          ^^      ^^^^^                                                                                 
+>      : ^^^^^^^          ^^      ^^^^^                                                                                 
 >"A" : "A"
 >    : ^^^
 

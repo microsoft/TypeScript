@@ -30,7 +30,7 @@ declare module "./observable" {
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
->    : ^ ^^    ^^           ^^^^^             
+>    : ^^^^    ^^           ^^^^^             
 >proj : (e: T) => U
 >     : ^ ^^ ^^^^^ 
 >e : T

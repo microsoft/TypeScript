@@ -159,7 +159,7 @@ module Errors {
         interface I extends A {
             a2: new <T, U>(x: T) => U[]; // error, contextual signature instantiation doesn't relate return types so U is {}, not a subtype of string[]
 >a2 : new <T, U>(x: T) => U[]
->   : ^^^^^ ^^ ^^ ^^ ^^^^^   
+>   : ^^^^^^^^^^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -176,7 +176,7 @@ module Errors {
             // valid, no inferences for V so it defaults to Derived2
             a7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >a7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^^^^^^^^        ^^ ^^             ^^^^^           
+>   : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       ^^^^^^^^^^^^        ^^ ^^             ^^^^^           
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -188,7 +188,7 @@ module Errors {
         interface I4 extends A {
             a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; // error, type mismatch
 >a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^           
+>   : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       ^^ ^^             ^^ ^^                             ^^^^^           
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -206,7 +206,7 @@ module Errors {
         interface I4B extends A {
             a10: new <T extends Derived>(...x: T[]) => T; // valid, parameter covariance works even after contextual signature instantiation
 >a10 : new <T extends Derived>(...x: T[]) => T
->    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
+>    : ^^^^^^^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
 >x : T[]
 >  : ^^^
         }
@@ -214,7 +214,7 @@ module Errors {
         interface I4C extends A {
             a11: new <T extends Derived>(x: T, y: T) => T; // valid, even though x is a Base, parameter covariance works even after contextual signature instantiation
 >a11 : new <T extends Derived>(x: T, y: T) => T
->    : ^^^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^ 
+>    : ^^^^^^^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -224,7 +224,7 @@ module Errors {
         interface I4E extends A {
             a12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; // valid, no inferences for T, defaults to Array<Derived2>
 >a12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
->    : ^^^^^ ^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^ 
+>    : ^^^^^^^^^^^^^^^               ^^ ^^           ^^ ^^           ^^^^^ 
 >x : Base[]
 >  : ^^^^^^
 >y : Base[]
@@ -234,7 +234,7 @@ module Errors {
         interface I6 extends A {
             a15: new <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
 >a15 : new <T>(x: { a: T; b: T; }) => T
->    : ^^^^^ ^^ ^^               ^^^^^ 
+>    : ^^^^^^^^ ^^               ^^^^^ 
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -246,7 +246,7 @@ module Errors {
         interface I7 extends A {
             a15: new <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
 >a15 : new <T extends Base>(x: { a: T; b: T; }) => number
->    : ^^^^^ ^^^^^^^^^    ^^ ^^               ^^^^^      
+>    : ^^^^^^^^^^^^^^^    ^^ ^^               ^^^^^      
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -259,7 +259,7 @@ module Errors {
             // ok, we relate each signature of a16 to b16, and within that, we make inferences from two different signatures in the respective A.a16 signature
             a16: new <T>(x: new (a: T) => T) => T[];
 >a16 : new <T>(x: new (a: T) => T) => T[]
->    : ^^^^^ ^^ ^^               ^^^^^   
+>    : ^^^^^^^^ ^^               ^^^^^   
 >x : new (a: T) => T
 >  : ^^^^^ ^^ ^^^^^ 
 >a : T
@@ -272,7 +272,7 @@ module Errors {
         interface B {
             a2: new <T>(x: T) => T[];
 >a2 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^   
+>   : ^^^^^^^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -280,7 +280,7 @@ module Errors {
         interface I6 extends B {
             a2: new <T>(x: T) => string[]; // error
 >a2 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^        
+>   : ^^^^^^^^ ^^ ^^^^^        
 >x : T
 >  : ^
         }
@@ -289,7 +289,7 @@ module Errors {
         interface C {
             a2: new <T>(x: T) => string[];
 >a2 : new <T>(x: T) => string[]
->   : ^^^^^ ^^ ^^ ^^^^^        
+>   : ^^^^^^^^ ^^ ^^^^^        
 >x : T
 >  : ^
         }
@@ -297,7 +297,7 @@ module Errors {
         interface I7 extends C {
             a2: new <T>(x: T) => T[]; // error
 >a2 : new <T>(x: T) => T[]
->   : ^^^^^ ^^ ^^ ^^^^^   
+>   : ^^^^^^^^ ^^ ^^^^^   
 >x : T
 >  : ^
         }
@@ -306,7 +306,7 @@ module Errors {
         interface D {
             a14: {
 >a14 : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
->    : ^^^^^^^ ^^^^^^^^^       ^^ ^^ ^^^        ^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^        ^^^
+>    : ^^^^^^^^^^^^^^^^^       ^^ ^^ ^^^        ^^^^^^^^^^^^^^^^^    ^^ ^^ ^^^        ^^^
 
                 new <T extends Derived>(x: T): number[];
 >x : T
@@ -322,7 +322,7 @@ module Errors {
         interface I8 extends D {
             a14: new <T extends Base>(x: T) => number[];
 >a14 : new <T extends Base>(x: T) => number[]
->    : ^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^        
+>    : ^^^^^^^^^^^^^^^    ^^ ^^ ^^^^^        
 >x : T
 >  : ^
         }

@@ -307,9 +307,9 @@ module M2 {
 // <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = <T>(n: T) => [n];
 >generic1 : <T>(n: T) => T[]
->         : ^ ^^ ^^ ^^^^^^^^
+>         : ^^^^ ^^ ^^^^^^^^
 ><T>(n: T) => [n] : <T>(n: T) => T[]
->                 : ^ ^^ ^^ ^^^^^^^^
+>                 : ^^^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 >[n] : T[]
@@ -319,15 +319,15 @@ var generic1 = <T>(n: T) => [n];
 
 var generic1: { <T>(n: T): T[] }; // Incorrect error, Bug 829597
 >generic1 : <T>(n: T) => T[]
->         : ^ ^^ ^^ ^^^^^^^^
+>         : ^^^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 
 var generic2 = <T>(n: T) => { return [n]; };
 >generic2 : <T>(n: T) => T[]
->         : ^ ^^ ^^ ^^^^^^^^
+>         : ^^^^ ^^ ^^^^^^^^
 ><T>(n: T) => { return [n]; } : <T>(n: T) => T[]
->                             : ^ ^^ ^^ ^^^^^^^^
+>                             : ^^^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 >[n] : T[]
@@ -337,7 +337,7 @@ var generic2 = <T>(n: T) => { return [n]; };
 
 var generic2: { <T>(n: T): T[] };
 >generic2 : <T>(n: T) => T[]
->         : ^ ^^ ^^ ^^^^^^^^
+>         : ^^^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 

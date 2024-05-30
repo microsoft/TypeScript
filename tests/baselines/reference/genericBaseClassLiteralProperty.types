@@ -30,11 +30,11 @@ class SubClass extends BaseClass<number> {
 >this._getValue1() : number
 >                  : ^^^^^^
 >this._getValue1 : () => number
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >this : this
 >     : ^^^^
 >_getValue1 : () => number
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 
         var y : number = this._getValue2();
 >y : number
@@ -42,10 +42,10 @@ class SubClass extends BaseClass<number> {
 >this._getValue2() : number
 >                  : ^^^^^^
 >this._getValue2 : () => number
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >this : this
 >     : ^^^^
 >_getValue2 : () => number
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
     }
 }

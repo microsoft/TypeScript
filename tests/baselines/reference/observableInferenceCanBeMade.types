@@ -5,13 +5,13 @@
 
 declare function of<T>(a: T): Observable<T>;
 >of : <T>(a: T) => Observable<T>
->   : ^ ^^ ^^ ^^^^^             
+>   : ^^^^ ^^ ^^^^^             
 >a : T
 >  : ^
 
 declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^                              
+>     : ^^^^^^^^^^^                    ^^     ^^ ^^^^^                              
 >input : O
 >      : ^
 
@@ -76,13 +76,13 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 >of(input) : Observable<string>
 >          : ^^^^^^^^^^^^^^^^^^
 >of : <T>(a: T) => Observable<T>
->   : ^ ^^ ^^ ^^^^^             
+>   : ^^^^ ^^ ^^^^^             
 >input : string
 >      : ^^^^^^
 >from(input) : Observable<string>
 >            : ^^^^^^^^^^^^^^^^^^
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^                              
+>     : ^^^^^^^^^^^                    ^^     ^^ ^^^^^                              
 >input : ObservableInput<string>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 }

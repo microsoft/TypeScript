@@ -21,7 +21,7 @@ interface MyArrayWrapper<T> {
 
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->       : ^ ^^             ^^^   ^^^^^                 
+>       : ^^^^             ^^^   ^^^^^                 
 >initialValues : T[]
 >              : ^^^
 
@@ -31,7 +31,7 @@ var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 >create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]) : MyArrayWrapper<{ name: string; id: number; }>
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->       : ^ ^^             ^^^   ^^^^^                 
+>       : ^^^^             ^^^   ^^^^^                 
 >[{ name: "bob", id: 24 }, { name: "doug", id: 32 }] : { name: string; id: number; }[]
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "bob", id: 24 } : { name: string; id: number; }

@@ -213,7 +213,7 @@ interface Big {
 }
 declare function getCtor<T extends keyof Big>(comp: T): CtorOf<Big[T]>
 >getCtor : <T extends keyof Big>(comp: T) => CtorOf<Big[T]>
->        : ^ ^^^^^^^^^         ^^    ^^ ^^^^^              
+>        : ^^^^^^^^^^^         ^^    ^^ ^^^^^              
 >comp : T
 >     : ^
 
@@ -227,7 +227,7 @@ const ctor = getCtor(all);
 >getCtor(all) : CtorOf<{ common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; } | { common?: string; "1"?: number; ref?: Obj<Big["1"]> | Func<Big["1"]>; } | { common?: string; "2"?: number; ref?: Obj<Big["2"]> | Func<Big["2"]>; } | { common?: string; "3"?: number; ref?: Obj<Big["3"]> | Func<Big["3"]>; } | { common?: string; "4"?: number; ref?: Obj<Big["4"]> | Func<Big["4"]>; } | { common?: string; "5"?: number; ref?: Obj<Big["5"]> | Func<Big["5"]>; } | { common?: string; "6"?: number; ref?: Obj<Big["6"]> | Func<Big["6"]>; } | { common?: string; "7"?: number; ref?: Obj<Big["7"]> | Func<Big["7"]>; } | { common?: string; "8"?: number; ref?: Obj<Big["8"]> | Func<Big["8"]>; } | { common?: string; "9"?: number; ref?: Obj<Big["9"]> | Func<Big["9"]>; } | { common?: string; "10"?: number; ref?: Obj<Big["10"]> | Func<Big["10"]>; } | { common?: string; "11"?: number; ref?: Obj<Big["11"]> | Func<Big["11"]>; } | { common?: string; "12"?: number; ref?: Obj<Big["12"]> | Func<Big["12"]>; } | { common?: string; "13"?: number; ref?: Obj<Big["13"]> | Func<Big["13"]>; } | { common?: string; "14"?: number; ref?: Obj<Big["14"]> | Func<Big["14"]>; } | { common?: string; "15"?: number; ref?: Obj<Big["15"]> | Func<Big["15"]>; } | { common?: string; "16"?: number; ref?: Obj<Big["16"]> | Func<Big["16"]>; } | { common?: string; "17"?: number; ref?: Obj<Big["17"]> | Func<Big["17"]>; }>
 >             : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^                              ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^                                ^^^^
 >getCtor : <T extends keyof Big>(comp: T) => CtorOf<Big[T]>
->        : ^ ^^^^^^^^^         ^^    ^^ ^^^^^              
+>        : ^^^^^^^^^^^         ^^    ^^ ^^^^^              
 >all : keyof Big
 >    : ^^^^^^^^^
 

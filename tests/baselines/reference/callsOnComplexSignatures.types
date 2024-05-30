@@ -28,7 +28,7 @@ function test1() {
     interface Temp1 {
         getValue(name: stringType1): number;
 >getValue : (name: "foo" | "bar") => number
->         : ^    ^^^^^^^^^^^^^^^^^^^^      
+>         : ^    ^^^^^^^   ^^^^^^^^^^      
 >name : "foo" | "bar"
 >     : ^^^^^^^^^^^^^
     }
@@ -36,7 +36,7 @@ function test1() {
     interface Temp2 {
         getValue(name: stringType2): string;
 >getValue : (name: "bar" | "baz") => string
->         : ^    ^^^^^^^^^^^^^^^^^^^^      
+>         : ^    ^^^^^^^   ^^^^^^^^^^      
 >name : "bar" | "baz"
 >     : ^^^^^^^^^^^^^
     }
@@ -53,11 +53,11 @@ function test1() {
 >t.getValue("bar") : string | number
 >                  : ^^^^^^^^^^^^^^^
 >t.getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
->           : ^^    ^^^^^^^^^^^^^^^^^^^^      ^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^
+>           : ^^    ^^^^^^^   ^^^^^^^^^^      ^^^^^^    ^^^^^^^   ^^^^^^^^^^      ^
 >t : Temp1 | Temp2
 >  : ^^^^^^^^^^^^^
 >getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
->         : ^^    ^^^^^^^^^^^^^^^^^^^^      ^^^^^^    ^^^^^^^^^^^^^^^^^^^^      ^
+>         : ^^    ^^^^^^^   ^^^^^^^^^^      ^^^^^^    ^^^^^^^   ^^^^^^^^^^      ^
 >"bar" : "bar"
 >      : ^^^^^
     }

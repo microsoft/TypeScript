@@ -15,9 +15,9 @@ const { promise, resolve, reject } = Promise.withResolvers<T>();
 >Promise.withResolvers<T>() : PromiseWithResolvers<T>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.withResolvers : <T>() => PromiseWithResolvers<T>
->                      : ^ ^^^^^^^                       
+>                      : ^^^^^^^^^                       
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >withResolvers : <T>() => PromiseWithResolvers<T>
->              : ^ ^^^^^^^                       
+>              : ^^^^^^^^^                       
 

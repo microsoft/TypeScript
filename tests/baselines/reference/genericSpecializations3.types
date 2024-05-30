@@ -17,11 +17,11 @@ iFoo.foo(1);
 >iFoo.foo(1) : number
 >            : ^^^^^^
 >iFoo.foo : (x: number) => number
->         : ^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^      
 >iFoo : IFoo<number>
 >     : ^^^^^^^^^^^^
 >foo : (x: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^      
 >1 : 1
 >  : ^
 
@@ -106,7 +106,7 @@ class StringFoo3 implements IFoo<string> { // error
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->    : ^ ^^ ^^ ^^^^^ 
+>    : ^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

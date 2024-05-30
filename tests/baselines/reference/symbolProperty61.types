@@ -92,7 +92,7 @@ type InteropObservable<T> = {
 
 function from<T>(obs: InteropObservable<T>) {
 >from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
->     : ^ ^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
+>     : ^^^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs : InteropObservable<T>
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -115,7 +115,7 @@ from(new MyObservable(42))
 >from(new MyObservable(42)) : { subscribe(next: (val: number) => void): void; }
 >                           : ^^^^^^^^^^^^    ^^^   ^^^^^^^^^^^^^    ^^^    ^^^
 >from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
->     : ^ ^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
+>     : ^^^^   ^^                    ^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >new MyObservable(42) : MyObservable<number>
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >MyObservable : typeof MyObservable
