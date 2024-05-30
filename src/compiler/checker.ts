@@ -46568,7 +46568,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkModuleExportName(name: ModuleExportName | undefined) {
         if (name !== undefined && name.kind === SyntaxKind.StringLiteral && (moduleKind === ModuleKind.ES2015 || moduleKind === ModuleKind.ES2020)) {
-            grammarErrorOnNode(name, Diagnostics.Arbitrary_module_namespace_identifiers_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020);
+            grammarErrorOnNode(name, Diagnostics.String_literal_import_and_export_names_are_not_supported_when_the_module_flag_is_set_to_es2015_or_es2020);
         }
     }
 
