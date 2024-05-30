@@ -2604,6 +2604,7 @@ export class Session<TMessage = string> implements EventSender {
         }
         const file = normalizePath(fileName);
         this.projectService.closeClientFile(file);
+        this.cleanUpSemanticCheckPerformance([fileName]);
     }
 
     private mapLocationNavigationBarItems(items: NavigationBarItem[], scriptInfo: ScriptInfo): protocol.NavigationBarItem[] {
