@@ -8472,17 +8472,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 cancellationToken.throwIfCancellationRequested();
             }
             let hadError = false;
+            const { finalizeBoundary, startRecoveryScope } = createRecoveryBoundary();
             const transformed = visitNode(existing, visitExistingNodeTreeSymbols, isTypeNode);
-            if (hadError) {
+            if (!finalizeBoundary()) {
                 return undefined;
             }
             context.approximateLength += existing.end - existing.pos;
             return transformed;
 
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
+                // If there was an error in a sibling node bail early, the result will be discarded anyway
+                if (hadError) return node;
+                const recover = startRecoveryScope();
                 const onExitNewScope = isNewScopeNode(node) ? onEnterNewScope(node) : undefined;
                 const result = visitExistingNodeTreeSymbolsWorker(node);
                 onExitNewScope?.();
+
+                // If there was an error, maybe we can recover by serializing the actual type of the node
+                if (hadError) {
+                    if (isTypeNode(node) && !isTypePredicateNode(node)) {
+                        recover();
+                        return serializeExistingTypeNode(context, node);
+                    }
+                    return node;
+                }
                 // We want to clone the subtree, so when we mark it up with __pos and __end in quickfixes,
                 //  we don't get odd behavior because of reused nodes. We also need to clone to _remove_
                 //  the position information if the node comes from a different file than the one the node builder
@@ -8492,6 +8505,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result === node ? setTextRange(context, factory.cloneNode(result), node) : result;
             }
 
+            function createRecoveryBoundary() {
+                let unreportedErrors: (() => void)[];
+                const oldTracker = context.tracker;
+                const oldTrackedSymbols = context.trackedSymbols;
+                context.trackedSymbols = [];
+                const oldEncounteredError = context.encounteredError;
+                context.tracker = new SymbolTrackerImpl(context, {
+                    ...oldTracker.inner,
+                    reportCyclicStructureError() {
+                        markError(() => oldTracker.reportCyclicStructureError());
+                    },
+                    reportInaccessibleThisError() {
+                        markError(() => oldTracker.reportInaccessibleThisError());
+                    },
+                    reportInaccessibleUniqueSymbolError() {
+                        markError(() => oldTracker.reportInaccessibleUniqueSymbolError());
+                    },
+                    reportLikelyUnsafeImportRequiredError(specifier) {
+                        markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier));
+                    },
+                    reportNonSerializableProperty(name) {
+                        markError(() => oldTracker.reportNonSerializableProperty(name));
+                    },
+                    trackSymbol(sym, decl, meaning) {
+                        const accessibility = isSymbolAccessible(sym, decl, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
+                        if (accessibility.accessibility !== SymbolAccessibility.Accessible) {
+                            (context.trackedSymbols ??= []).push([sym, decl, meaning]);
+                            return true;
+                        }
+                        return false;
+                    },
+                    moduleResolverHost: context.tracker.moduleResolverHost,
+                }, context.tracker.moduleResolverHost);
+
+                return {
+                    startRecoveryScope,
+                    finalizeBoundary,
+                };
+
+                function markError(unreportedError: () => void) {
+                    hadError = true;
+                    (unreportedErrors ??= []).push(unreportedError);
+                }
+
+                function startRecoveryScope() {
+                    const initialTrackedSymbolsTop = context.trackedSymbols?.length ?? 0;
+                    const unreportedErrorsTop = unreportedErrors?.length ?? 0;
+                    return () => {
+                        hadError = false;
+                        // Reset the tracked symbols to before the error
+                        if (context.trackedSymbols) {
+                            context.trackedSymbols.length = initialTrackedSymbolsTop;
+                        }
+                        if (unreportedErrors) {
+                            unreportedErrors.length = unreportedErrorsTop;
+                        }
+                    };
+                }
+
+                function finalizeBoundary() {
+                    context.tracker = oldTracker;
+                    const newTrackedSymbols = context.trackedSymbols;
+                    context.trackedSymbols = oldTrackedSymbols;
+                    context.encounteredError = oldEncounteredError;
+
+                    unreportedErrors?.forEach(fn => fn());
+                    if (hadError) {
+                        return false;
+                    }
+                    newTrackedSymbols?.forEach(
+                        ([symbol, enclosingDeclaration, meaning]) =>
+                            context.tracker.trackSymbol(
+                                symbol,
+                                enclosingDeclaration,
+                                meaning,
+                            ),
+                    );
+                    return true;
+                }
+            }
             function onEnterNewScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
                 return enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
             }
@@ -8765,12 +8858,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
                     if (context.bundled || context.enclosingFile !== getSourceFileOfNode(lit)) {
-                        const targetFile = getExternalModuleFileFromDeclaration(parent);
-                        if (targetFile) {
-                            const newName = getSpecifierForModuleSymbol(targetFile.symbol, context);
-                            if (newName !== lit.text) {
-                                return setOriginalNode(factory.createStringLiteral(newName), lit);
+                        let name = lit.text;
+                        const nodeSymbol = getNodeLinks(node).resolvedSymbol;
+                        const meaning = parent.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
+                        const parentSymbol = nodeSymbol
+                            && isSymbolAccessible(nodeSymbol, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible
+                            && lookupSymbolChain(nodeSymbol, context, meaning, /*yieldModuleSymbol*/ true)[0];
+                        if (parentSymbol && parentSymbol.flags & SymbolFlags.Module) {
+                            name = getSpecifierForModuleSymbol(parentSymbol, context);
+                        }
+                        else {
+                            const targetFile = getExternalModuleFileFromDeclaration(parent);
+                            if (targetFile) {
+                                name = getSpecifierForModuleSymbol(targetFile.symbol, context);
                             }
+                        }
+                        if (name.includes("/node_modules/")) {
+                            context.encounteredError = true;
+                            if (context.tracker.reportLikelyUnsafeImportRequiredError) {
+                                context.tracker.reportLikelyUnsafeImportRequiredError(name);
+                            }
+                        }
+                        if (name !== lit.text) {
+                            return setOriginalNode(factory.createStringLiteral(name), lit);
                         }
                     }
                     return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
