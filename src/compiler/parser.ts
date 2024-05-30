@@ -5141,20 +5141,20 @@ namespace Parser {
     function nextTokenIsIdentifierOnSameLine() {
         nextToken();
         if (scanner.hasPrecedingLineBreak()) {
-            return false
+            return false;
         }
 
-        switch(token()) {
+        switch (token()) {
             case SyntaxKind.AsKeyword:
-            case SyntaxKind.SatisfiesKeyword:{
-                let truthy = false
+            case SyntaxKind.SatisfiesKeyword: {
+                let truthy = false;
                 lookAhead(() => {
-                    nextToken()
-                    truthy = token() === SyntaxKind.EqualsToken || token() === SyntaxKind.OpenBraceToken
-                })
-                return truthy
+                    nextToken();
+                    truthy = token() === SyntaxKind.EqualsToken || token() === SyntaxKind.OpenBraceToken;
+                });
+                return truthy;
             }
-            
+
             default:
                 return isIdentifier();
         }
