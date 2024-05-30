@@ -8618,7 +8618,7 @@ namespace Parser {
             if (name.kind !== SyntaxKind.Identifier) {
                 // ImportSpecifier casts "name" to Identifier below, so make sure it's an identifier
                 parseErrorAt(skipTrivia(sourceText, name.pos), name.end, Diagnostics.Identifier_expected);
-                name = setTextRangePosEnd(createMissingNode<Identifier>(SyntaxKind.Identifier, /* reportAtCurrentPosition */ false), name.pos, name.pos);
+                name = setTextRangePosEnd(createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false), name.pos, name.pos);
             }
             else if (checkIdentifierIsKeyword) {
                 parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
