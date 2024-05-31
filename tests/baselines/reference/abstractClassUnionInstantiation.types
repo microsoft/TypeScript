@@ -75,7 +75,7 @@ new cls3(); // should work
 >[ConcreteA, AbstractA, AbstractB].map(cls => new cls()) : any[]
 >                                                        : ^^^^^
 >[ConcreteA, AbstractA, AbstractB].map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->                                      : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                                      : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[ConcreteA, AbstractA, AbstractB] : (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ConcreteA : typeof ConcreteA
@@ -85,7 +85,7 @@ new cls3(); // should work
 >AbstractB : typeof AbstractB
 >          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >cls => new cls() : (cls: typeof ConcreteA | typeof AbstractA | typeof AbstractB) => any
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
@@ -99,7 +99,7 @@ new cls3(); // should work
 >[AbstractA, AbstractB, ConcreteA].map(cls => new cls()) : any[]
 >                                                        : ^^^^^
 >[AbstractA, AbstractB, ConcreteA].map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->                                      : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                                      : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[AbstractA, AbstractB, ConcreteA] : (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AbstractA : typeof AbstractA
@@ -109,7 +109,7 @@ new cls3(); // should work
 >ConcreteA : typeof ConcreteA
 >          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >cls => new cls() : (cls: typeof ConcreteA | typeof AbstractA | typeof AbstractB) => any
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
@@ -123,7 +123,7 @@ new cls3(); // should work
 >[ConcreteA, ConcreteB].map(cls => new cls()) : ConcreteA[]
 >                                             : ^^^^^^^^^^^
 >[ConcreteA, ConcreteB].map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
->                           : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[ConcreteA, ConcreteB] : (typeof ConcreteA)[]
 >                       : ^^^^^^^^^^^^^^^^^^^^
 >ConcreteA : typeof ConcreteA
@@ -131,7 +131,7 @@ new cls3(); // should work
 >ConcreteB : typeof ConcreteB
 >          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >cls => new cls() : (cls: typeof ConcreteA) => ConcreteA
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA
@@ -145,7 +145,7 @@ new cls3(); // should work
 >[AbstractA, AbstractB].map(cls => new cls()) : any[]
 >                                             : ^^^^^
 >[AbstractA, AbstractB].map : <U>(callbackfn: (value: typeof AbstractA | typeof AbstractB, index: number, array: (typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->                           : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[AbstractA, AbstractB] : (typeof AbstractA | typeof AbstractB)[]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AbstractA : typeof AbstractA
@@ -153,7 +153,7 @@ new cls3(); // should work
 >AbstractB : typeof AbstractB
 >          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof AbstractA | typeof AbstractB, index: number, array: (typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >cls => new cls() : (cls: typeof AbstractA | typeof AbstractB) => any
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof AbstractA | typeof AbstractB

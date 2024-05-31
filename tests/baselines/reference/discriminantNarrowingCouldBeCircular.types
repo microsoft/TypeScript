@@ -146,7 +146,7 @@ function getImplicitAriaRole(element: SomeRecord) {
 
 declare function isPlainObject2<T>(
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^    ^^       ^^^^^                                    
+>               : ^ ^^    ^^       ^^^^^                                    
 
     data: unknown,
 >data : unknown
@@ -162,7 +162,7 @@ declare function isPlainObject2<T>(
 >isPlainObject2(myObj2) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^    ^^       ^^^^^                                    
+>               : ^ ^^    ^^       ^^^^^                                    
 >myObj2 : unknown
 >       : ^^^^^^^
 
@@ -196,7 +196,7 @@ declare function isPlainObject2<T>(
 >isPlainObject2(deeper) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^    ^^       ^^^^^                                    
+>               : ^ ^^    ^^       ^^^^^                                    
 >deeper : unknown
 >       : ^^^^^^^
 >Object.keys(deeper) : string[]

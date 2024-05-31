@@ -51,7 +51,7 @@ function f2<
 >f1(`${scope}:${event}`) : void
 >                        : ^^^^
 >f1 : <Scope_1 extends Keyof<Registry>, Event_1 extends Keyof<Registry[Scope_1]>>(eventPath: `${Scope_1}:${Event_1}`) => void
->   : ^       ^^^^^^^^^               ^^       ^^^^^^^^^                        ^^         ^^                       ^^^^^    
+>   : ^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^                        ^^         ^^                       ^^^^^    
 >`${scope}:${event}` : `${Scope}:${Event}`
 >                    : ^^^^^^^^^^^^^^^^^^^
 >scope : Scope

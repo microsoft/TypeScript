@@ -284,7 +284,7 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 >f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
 >   : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -296,23 +296,23 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 >a = b : { [key: string]: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b = a;
 >b = a : { [P in K]: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 
     a[k];
 >a[k] : { [P in K]: number; }[K]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >k : K
 >  : ^
 
@@ -320,9 +320,9 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 >a[k] = 1 : 1
 >         : ^
 >a[k] : { [P in K]: number; }[K]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >k : K
 >  : ^
 >1 : 1
@@ -333,7 +333,7 @@ function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: numb
 >f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
 >    : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : K
@@ -343,17 +343,17 @@ function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: numb
 >a = b : { [x: string]: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     b = a;
 >b = a : { [P in K]: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
@@ -611,11 +611,11 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[IdOf<E>][]
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ids.map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
->        : ^^^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>        : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >ids : IdOf<E>[]
 >    : ^^^^^^^^^
 >map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >id => entities[id] : (id: IdOf<E>) => { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >                   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>
@@ -794,7 +794,7 @@ function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number])
 
 function fn4<K extends number>() {
 >fn4 : <K extends number>() => void
->    : ^^^^^^^^^^^      ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
     let x: Array<string>[K] = 'abc';
 >x : string[][K]

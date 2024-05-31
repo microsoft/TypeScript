@@ -15,7 +15,7 @@ interface B {
 
 function f<T, U extends A, V extends U>(): void {
 >f : <T, U extends A, V extends U>() => void
->  : ^^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^    
+>  : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^    
 
     let t: T;
 >t : T

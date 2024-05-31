@@ -104,31 +104,31 @@ bound(b); // expect error
 
 function bound2<T extends object>() {}
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^      ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<{}>();
 >bound2<{}>() : void
 >             : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^      ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<Object>();
 >bound2<Object>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^      ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<number>(); // expect error
 >bound2<number>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^      ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<string>(); // expect error
 >bound2<string>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^      ^^^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void

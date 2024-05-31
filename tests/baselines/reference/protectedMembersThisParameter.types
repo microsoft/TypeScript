@@ -23,7 +23,7 @@ class MessageWrapper {
 
   wrap<T>() {
 >wrap : <T>() => void
->     : ^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^
 
     let m = this.message;
 >m : Message

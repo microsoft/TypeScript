@@ -385,7 +385,7 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 >mapArray(arr) : Mapped<T>
 >              : ^^^^^^^^^
 >mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
->         : ^   ^^^^^^^^^     ^^   ^^   ^^^^^           
+>         : ^^^^^^^^^^^^^     ^^   ^^   ^^^^^           
 >arr : T
 >    : ^
 }

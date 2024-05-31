@@ -23,7 +23,7 @@ type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in k
 >type : "boolean"
 >     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema1<T[P]>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj1: Schema1<Request> = {
 >schemaObj1 : Schema1<Request>
@@ -76,7 +76,7 @@ type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { pro
 >type : "boolean"
 >     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema2<T[P]>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj2: Schema2<Request> = {
 >schemaObj2 : { props: { l1: { props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>; }; } & Example<Request>
@@ -129,7 +129,7 @@ type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { pro
 >type : "boolean"
 >     : ^^^^^^^^^
 >props : { [P in keyof T]: Schema3<T[P]>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj3: Schema3<Request> = {
 >schemaObj3 : Schema3<Request>
@@ -182,7 +182,7 @@ type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { pro
 >type : "boolean"
 >     : ^^^^^^^^^
 >props : Example<T> & { [P in keyof T]: Schema4<T[P]>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const schemaObj4: Schema4<Request> = {
 >schemaObj4 : { props: Example<Request> & { l1: { props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }; }; }

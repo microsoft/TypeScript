@@ -65,7 +65,7 @@ export class A extends Class<A>("A")(
 >Class<A>("A")(  { a: string },  {    pretty: (a) => JSON.stringify(a),  },) : OutputFrom<{ a: () => Type<string>; }>
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^            ^^^^
 >Class<A>("A") : <Fields>(fields: Fields, annotations?: Schema<A> | undefined) => Class<OutputFrom<Fields>>
->              : ^^^^^^^^^      ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^  
+>              : ^      ^^      ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^  
 >Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
 >      : ^    ^^          ^^      ^^^^^                                                                                 
 >"A" : "A"

@@ -3,7 +3,7 @@
 === typeParameterAssignmentWithConstraints.ts ===
 function f<A, B extends A>() {
 >f : <A, B extends A>() => void
->  : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^ ^^^^^^^^^^^
 
     var a: A;
 >a : A

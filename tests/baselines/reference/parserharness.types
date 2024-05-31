@@ -10737,15 +10737,15 @@ module Harness {
 >entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current)) : any
 >                                                                                         : ^^^
 >entries.map(x => x.editRange.minChar).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->                                             : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>                                             : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >entries.map(x => x.editRange.minChar) : any[]
 >                                      : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>            : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.editRange.minChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
 >                         : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -10761,7 +10761,7 @@ module Harness {
 >minChar : any
 >        : ^^^
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(prev, current) => Math.min(prev, current) : (prev: any, current: any) => number
 >                                           : ^    ^^^^^^^       ^^^^^^^^^^^^^^^^
 >prev : any
@@ -10787,15 +10787,15 @@ module Harness {
 >entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current)) : number
 >                                                                                                    : ^^^^^^
 >entries.map(x => x.length - x.editRange.limChar).reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
->                                                        : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>                                                        : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >entries.map(x => x.length - x.editRange.limChar) : number[]
 >                                                 : ^^^^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>            : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.length - x.editRange.limChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => number
 >                                    : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -10819,7 +10819,7 @@ module Harness {
 >limChar : any
 >        : ^^^
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
->       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(prev, current) => Math.min(prev, current) : (prev: number, current: number) => number
 >                                           : ^    ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^
 >prev : number
@@ -10845,15 +10845,15 @@ module Harness {
 >entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current) : any
 >                                                                              : ^^^
 >entries.map(x => x.editRange.delta).reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->                                           : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>                                           : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >entries.map(x => x.editRange.delta) : any[]
 >                                    : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>            : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x.editRange.delta : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
 >                       : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -10869,7 +10869,7 @@ module Harness {
 >delta : any
 >      : ^^^
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >(prev, current) => prev + current : (prev: any, current: any) => any
 >                                  : ^    ^^^^^^^       ^^^^^^^^^^^^^
 >prev : any

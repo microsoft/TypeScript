@@ -41,11 +41,11 @@ const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(is
 >arrayOfStringsNumbersAndBooleans.find(isNumber) : number
 >                                                : ^^^^^^
 >arrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean) | undefined; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
 >arrayOfStringsNumbersAndBooleans : (string | number | boolean)[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >find : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean) | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
 >isNumber : (x: any) => x is number
 >         : ^ ^^   ^^^^^           
 
@@ -63,11 +63,11 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 >readonlyArrayOfStringsNumbersAndBooleans.find(isNumber) : number
 >                                                        : ^^^^^^
 >readonlyArrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean) | undefined; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
 >readonlyArrayOfStringsNumbersAndBooleans : readonly (string | number | boolean)[]
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >find : { <S extends string | number | boolean>(predicate: (value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => unknown, thisArg?: any): (string | number | boolean) | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
 >isNumber : (x: any) => x is number
 >         : ^ ^^   ^^^^^           
 

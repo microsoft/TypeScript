@@ -3,7 +3,7 @@
 === mappedTypes2.ts ===
 function verifyLibTypes<T, K extends keyof T, U>() {
 >verifyLibTypes : <T, K extends keyof T, U>() => void
->               : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>               : ^ ^^ ^^^^^^^^^       ^^ ^^^^^^^^^^^
 
     var x1: Partial<T>;
 >x1 : Partial<T>

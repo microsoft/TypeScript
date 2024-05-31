@@ -41,7 +41,7 @@ interface Collection<K, V> {
     // these seem necessary to push it over the top for memory usage
     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
+>       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^^^^^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -59,7 +59,7 @@ interface Collection<K, V> {
 
     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
+>       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R
@@ -1325,7 +1325,7 @@ declare module Immutable {
 
     zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>;
 >zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
->        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^             ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^               ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
+>        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^             ^^^^^^^^ ^^^^^^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^               ^^^^^^^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
 >zipper : (value: T, otherValue: U) => Z
 >       : ^     ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -1337,7 +1337,7 @@ declare module Immutable {
 
     zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>;
 >zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): OrderedSet<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
->        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^               ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^             ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
+>        : ^^^^^^^^^^^^^      ^^                                  ^^               ^^                    ^^^               ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^             ^^^^^^^^      ^^                           ^^^^^           ^^                           ^^^               ^^^
 >zipper : (value: T, otherValue: U, thirdValue: V) => Z
 >       : ^     ^^ ^^          ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -1353,7 +1353,7 @@ declare module Immutable {
 
     zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
 >zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): OrderedSet<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>; }
->        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^               ^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^               ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^             ^^^
+>        : ^^^ ^^^^^^^      ^^                                ^^               ^^                  ^^^               ^^^ ^^ ^^^^^^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^               ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^             ^^^
 >zipper : (...any: Array<any>) => Z
 >       : ^^^^   ^^          ^^^^^ 
 >any : any[]
@@ -1813,7 +1813,7 @@ declare module Immutable {
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K_1, V_1>(): Seq.Keyed<K_1, V_1>; (): Seq.Keyed<any, any>; }
->      : ^^^ ^^ ^^          ^^                ^^^               ^^^   ^^   ^^                       ^^^                      ^^^   ^^   ^^^^^                   ^^^^^^                   ^^^
+>      : ^^^ ^^ ^^          ^^                ^^^               ^^^^^^^^   ^^                       ^^^                      ^^^^^^^^^^^^^^^^                   ^^^^^^                   ^^^
 >collection : Iterable<[K, V]>
 >           : ^^^^^^^^^^^^^^^^
 >Seq : any
@@ -1821,7 +1821,7 @@ declare module Immutable {
 
     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
 >Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Seq.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V_1>(): Seq.Keyed<K, V_1>; (): Seq.Keyed<any, any>; }
->      : ^^^ ^^   ^^          ^^                  ^^^                 ^^^ ^^   ^^                     ^^^                    ^^^ ^^   ^^^^^                 ^^^^^^                   ^^^
+>      : ^^^ ^^^^^^^          ^^                  ^^^                 ^^^ ^^   ^^                     ^^^                    ^^^ ^^^^^^^^^^                 ^^^^^^                   ^^^
 >obj : { [key: string]: V; }
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -1831,7 +1831,7 @@ declare module Immutable {
 
     export function Keyed<K, V>(): Seq.Keyed<K, V>;
 >Keyed : { <K_1, V_1>(collection: Iterable<[K_1, V_1]>): Seq.Keyed<K_1, V_1>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
->      : ^^^   ^^   ^^          ^^                    ^^^                   ^^^   ^^   ^^                       ^^^                      ^^^ ^^ ^^^^^               ^^^^^^                   ^^^
+>      : ^^^^^^^^^^^^^          ^^                    ^^^                   ^^^^^^^^   ^^                       ^^^                      ^^^ ^^ ^^^^^               ^^^^^^                   ^^^
 >Seq : any
 >    : ^^^
 
@@ -2372,7 +2372,7 @@ declare module Immutable {
     export module Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Collection.Keyed<string, V_1>; }
->      : ^^^ ^^ ^^          ^^                ^^^                      ^^^   ^^   ^^                       ^^^                             ^^^
+>      : ^^^ ^^ ^^          ^^                ^^^                      ^^^^^^^^   ^^                       ^^^                             ^^^
 >collection : Iterable<[K, V]>
 >           : ^^^^^^^^^^^^^^^^
 >Collection : any
@@ -2380,7 +2380,7 @@ declare module Immutable {
 
     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
 >Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Collection.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
->      : ^^^ ^^   ^^          ^^                  ^^^                        ^^^ ^^   ^^                     ^^^                           ^^^
+>      : ^^^ ^^^^^^^          ^^                  ^^^                        ^^^ ^^   ^^                     ^^^                           ^^^
 >obj : { [key: string]: V; }
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -2611,7 +2611,7 @@ declare module Immutable {
 
       zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>;
 >zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
->        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^                     ^^^   ^^ ^^   ^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^                       ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
+>        : ^^^ ^^ ^^      ^^                              ^^               ^^                  ^^^                     ^^^^^^^^ ^^^^^^^      ^^                                                 ^^               ^^                    ^^               ^^                  ^^^                       ^^^^^^^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
 >zipper : (value: T, otherValue: U) => Z
 >       : ^     ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -2625,7 +2625,7 @@ declare module Immutable {
 
       zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>;
 >zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): Collection.Indexed<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
->        : ^^^   ^^   ^^      ^^                                  ^^               ^^                    ^^^                       ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^                     ^^^   ^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
+>        : ^^^^^^^^^^^^^      ^^                                  ^^               ^^                    ^^^                       ^^^ ^^ ^^ ^^      ^^                                             ^^               ^^                  ^^               ^^                  ^^^                     ^^^^^^^^      ^^                           ^^^^^           ^^                           ^^^                       ^^^
 >zipper : (value: T, otherValue: U, thirdValue: V) => Z
 >       : ^     ^^ ^^          ^^ ^^          ^^ ^^^^^ 
 >value : T
@@ -2643,7 +2643,7 @@ declare module Immutable {
 
       zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>;
 >zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): Collection.Indexed<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
->        : ^^^ ^^   ^^      ^^                                ^^               ^^                  ^^^                       ^^^ ^^ ^^   ^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^                       ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^                     ^^^
+>        : ^^^ ^^^^^^^      ^^                                ^^               ^^                  ^^^                       ^^^ ^^ ^^^^^^^      ^^                                               ^^               ^^                  ^^               ^^                  ^^^                       ^^^ ^^      ^^                         ^^^^^           ^^                           ^^^                     ^^^
 >zipper : (...any: Array<any>) => Z
 >       : ^^^^   ^^          ^^^^^ 
 >any : any[]
@@ -3338,7 +3338,7 @@ declare module Immutable {
     // Reducing a value
     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
+>       : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^^^^^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -3356,7 +3356,7 @@ declare module Immutable {
 
     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->       : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
+>       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R
@@ -3370,7 +3370,7 @@ declare module Immutable {
 
     reduceRight<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
 >reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
->            : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^   ^^       ^^                                                         ^^^   ^^^
+>            : ^^^ ^^       ^^                                                 ^^                ^^ ^^       ^^^   ^^^ ^^^^^^^^       ^^                                                         ^^^   ^^^
 >reducer : (reduction: R, value: V, key: K, iter: this) => R
 >        : ^         ^^ ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : R
@@ -3388,7 +3388,7 @@ declare module Immutable {
 
     reduceRight<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
 >reduceRight : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
->            : ^^^   ^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
+>            : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
 >reduction : V | R

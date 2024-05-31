@@ -33,15 +33,15 @@ function f1(a: Item[]) {
 >a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: true; } | { isSuccess: false; })[]
 >                                                 : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^
 >a.map(item => ({ ...item })).filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
+>                                    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
 >a.map(item => ({ ...item })) : ({ isSuccess: true; } | { isSuccess: false; })[]
 >                             : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^
 >a.map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
->      : ^^^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>      : ^ ^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >a : Item[]
 >  : ^^^^^^
 >map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >item => ({ ...item }) : (item: Item) => { isSuccess: true; } | { isSuccess: false; }
 >                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^
 >item : Item
@@ -53,7 +53,7 @@ function f1(a: Item[]) {
 >item : Item
 >     : ^^^^
 >filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
 >value => {} : (value: { isSuccess: true; } | { isSuccess: false; }) => void
 >            : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^
 >value : { isSuccess: true; } | { isSuccess: false; }
@@ -62,7 +62,7 @@ function f1(a: Item[]) {
 
 function f2<T>(a: Item[]) {
 >f2 : <T>(a: Item[]) => void
->   : ^^^^ ^^      ^^^^^^^^^
+>   : ^ ^^ ^^      ^^^^^^^^^
 >a : Item[]
 >  : ^^^^^^
 
@@ -70,15 +70,15 @@ function f2<T>(a: Item[]) {
 >a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: true; } | { isSuccess: false; })[]
 >                                                 : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^
 >a.map(item => ({ ...item })).filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
+>                                    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
 >a.map(item => ({ ...item })) : ({ isSuccess: true; } | { isSuccess: false; })[]
 >                             : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^
 >a.map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
->      : ^^^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>      : ^ ^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >a : Item[]
 >  : ^^^^^^
 >map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >item => ({ ...item }) : (item: Item) => { isSuccess: true; } | { isSuccess: false; }
 >                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^
 >item : Item
@@ -90,7 +90,7 @@ function f2<T>(a: Item[]) {
 >item : Item
 >     : ^^^^
 >filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^  ^^^
 >value => {} : (value: { isSuccess: true; } | { isSuccess: false; }) => void
 >            : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^
 >value : { isSuccess: true; } | { isSuccess: false; }

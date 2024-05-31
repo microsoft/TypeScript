@@ -18,7 +18,7 @@ declare module Q {
     }
     export function defer<T>(): string;
 >defer : <T>() => string
->      : ^^^^^^^^^      
+>      : ^ ^^^^^^^      
 }
 
 === funduleUsedAcrossFileBoundary_file2.ts ===
