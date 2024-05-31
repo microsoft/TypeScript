@@ -15,25 +15,25 @@
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        "code": 1536,
+        "code": 1538,
         "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
         "reportsDeprecated": true,
         "range": ranges[0]
     },
     {
-        "code": 1536,
+        "code": 1538,
         "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
         "reportsDeprecated": true,
         "range": ranges[1]
     },
     {
-        "code": 1536,
+        "code": 1538,
         "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
         "reportsDeprecated": true,
         "range": ranges[2]
     },
     {
-        "code": 1536,
+        "code": 1538,
         "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
         "reportsDeprecated": true,
         "range": ranges[3]

@@ -53,16 +53,46 @@ declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
 >  : ^
 
 const res3 = fn3()(() => res3);
->res3 : any
->     : ^^^
+>res3 : (a: unknown) => void
+>     : ^ ^^^^^^^^^^^^^^    
 >fn3()(() => res3) : (a: unknown) => void
 >                  : ^ ^^^^^^^^^^^^^^    
 >fn3() : <T2>(cb: (arg: T2) => any) => (a: unknown) => void
 >      : ^^^^^  ^^^   ^^^^^^^^^   ^^^^^    ^^^^^^^         
 >fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
 >    : ^ ^^^^^^^                                            
->() => res3 : () => any
->           : ^^^^^^^^^
->res3 : any
->     : ^^^
+>() => res3 : () => (a: unknown) => void
+>           : ^^^^^^^ ^^^^^^^^^^^^^^    
+>res3 : (a: unknown) => void
+>     : ^ ^^^^^^^^^^^^^^    
+
+// https://github.com/microsoft/TypeScript/issues/58616
+
+function foo(arg: Parameters<typeof bar>[0]) {
+>foo : (arg: Parameters<typeof bar>[0]) => string
+>    : ^   ^^                         ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>bar : (arg: string) => string
+>    : ^   ^^      ^^^^^^^^^^^
+
+    return arg;
+>arg : string
+>    : ^^^^^^
+}
+
+function bar(arg: string) {
+>bar : (arg: string) => string
+>    : ^   ^^      ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return foo(arg);
+>foo(arg) : string
+>         : ^^^^^^
+>foo : (arg: Parameters<typeof bar>[0]) => string
+>    : ^   ^^                         ^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+}
 

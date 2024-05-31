@@ -1789,7 +1789,7 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
@@ -1797,9 +1797,17 @@
         "category": "Error",
         "code": 1535
     },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
+    },
     "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.": {
         "category": "Suggestion",
-        "code": 1536,
+        "code": 1538,
         "reportsDeprecated": true
     },
 
