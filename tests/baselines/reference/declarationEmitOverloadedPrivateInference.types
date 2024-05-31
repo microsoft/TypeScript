@@ -61,15 +61,15 @@ export class Wrapper {
 
     public Proxies = {
 >Proxies : { Failure: (options?: unknown) => string; Success: (options: string) => string; }
->        : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^       ^^^^^^^^^^^^^      ^^^
+>        : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
 >{        Failure: this.proxy(noArgs, true),        Success: this.proxy(oneArg),    } : { Failure: (options?: unknown) => string; Success: (options: string) => string; }
->                                                                                     : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^       ^^^^^^^^^^^^^      ^^^
+>                                                                                     : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
 
         Failure: this.proxy(noArgs, true),
 >Failure : (options?: unknown) => string
->        : ^       ^^^^^^^^^^^^^^^      
+>        : ^       ^^^^^^^^^^^^^^^^^^^^^
 >this.proxy(noArgs, true) : (options?: unknown) => string
->                         : ^       ^^^^^^^^^^^^^^^      
+>                         : ^       ^^^^^^^^^^^^^^^^^^^^^
 >this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
 >           : ^^^^^^^^^  ^^                 ^^^                 ^^^^^^^^^  ^^                  ^^      ^^    ^^^                  ^^^
 >this : this
@@ -83,9 +83,9 @@ export class Wrapper {
 
         Success: this.proxy(oneArg),
 >Success : (options: string) => string
->        : ^       ^^^^^^^^^^^^^      
+>        : ^       ^^^^^^^^^^^^^^^^^^^
 >this.proxy(oneArg) : (options: string) => string
->                   : ^       ^^^^^^^^^^^^^      
+>                   : ^       ^^^^^^^^^^^^^^^^^^^
 >this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
 >           : ^^^^^^^^^  ^^                 ^^^                 ^^^^^^^^^  ^^                  ^^      ^^    ^^^                  ^^^
 >this : this

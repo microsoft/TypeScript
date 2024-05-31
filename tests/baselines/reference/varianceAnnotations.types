@@ -513,7 +513,7 @@ let OuterC = class C<out T> {
 
     foo(): C<T> {
 >foo : () => C<T>
->    : ^^^^^^^ ^ 
+>    : ^^^^^^^^^^
 
         return this;
 >this : this

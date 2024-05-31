@@ -72,9 +72,9 @@ module GenericParameter {
 
     var r6 = foo5(<T>(x: T) => x); // ok
 >r6 : { (x: unknown): string; (x: number): unknown; }
->   : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^       ^^^
+>   : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^^^^^^^^^^^
 >foo5(<T>(x: T) => x) : { (x: unknown): string; (x: number): unknown; }
->                     : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^       ^^^
+>                     : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
 >     : ^^^^  ^^                                   ^^^^^^^^ ^^ ^^^      ^^^ ^^      ^^^ ^^^
 ><T>(x: T) => x : <T>(x: T) => T

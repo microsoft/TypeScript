@@ -43,9 +43,9 @@ let f00 = foo.bind(undefined);
 
 let f01 = foo.bind(undefined, 10);
 >f01 : (b: string) => string
->    : ^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >foo.bind(undefined, 10) : (b: string) => string
->                        : ^^^^^^^^^^^^^^^      
+>                        : ^^^^^^^^^^^^^^^^^^^^^
 >foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >         : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
@@ -59,9 +59,9 @@ let f01 = foo.bind(undefined, 10);
 
 let f02 = foo.bind(undefined, 10, "hello");
 >f02 : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 >foo.bind(undefined, 10, "hello") : () => string
->                                 : ^^^^^^      
+>                                 : ^^^^^^^^^^^^
 >foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >         : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
@@ -77,9 +77,9 @@ let f02 = foo.bind(undefined, 10, "hello");
 
 let f03 = foo.bind(undefined, 10, 20);  // Error
 >f03 : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 >foo.bind(undefined, 10, 20) : () => string
->                            : ^^^^^^      
+>                            : ^^^^^^^^^^^^
 >foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >         : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >foo : (a: number, b: string) => string
@@ -336,9 +336,9 @@ declare let obj: {};
 
 let f10 = c.foo.bind(c);
 >f10 : (a: number, b: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(c) : (a: number, b: string) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >           : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
@@ -354,9 +354,9 @@ let f10 = c.foo.bind(c);
 
 let f11 = c.foo.bind(c, 10);
 >f11 : (b: string) => string
->    : ^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(c, 10) : (b: string) => string
->                  : ^^^^^^^^^^^^^^^      
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >           : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
@@ -374,9 +374,9 @@ let f11 = c.foo.bind(c, 10);
 
 let f12 = c.foo.bind(c, 10, "hello");
 >f12 : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 >c.foo.bind(c, 10, "hello") : () => string
->                           : ^^^^^^      
+>                           : ^^^^^^^^^^^^
 >c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >           : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
@@ -396,9 +396,9 @@ let f12 = c.foo.bind(c, 10, "hello");
 
 let f13 = c.foo.bind(c, 10, 20);  // Error
 >f13 : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 >c.foo.bind(c, 10, 20) : () => string
->                      : ^^^^^^      
+>                      : ^^^^^^^^^^^^
 >c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >           : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
@@ -418,9 +418,9 @@ let f13 = c.foo.bind(c, 10, 20);  // Error
 
 let f14 = c.foo.bind(undefined);  // Error
 >f14 : (a: number, b: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind(undefined) : (a: number, b: string) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c.foo.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >           : ^^^^^^    ^^ ^^       ^^                    ^^^                    ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c.foo : (this: C, a: number, b: string) => string
@@ -914,7 +914,7 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 
     callback.bind(1);
 >callback.bind(1) : (...args: T) => void
->                 : ^^^^    ^^^^^^^^    
+>                 : ^^^^    ^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
@@ -926,7 +926,7 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 
     callback.bind(2); // Error
 >callback.bind(2) : (...args: T) => void
->                 : ^^^^    ^^^^^^^^    
+>                 : ^^^^    ^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
@@ -949,7 +949,7 @@ function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknow
 
     callback.bind(1);
 >callback.bind(1) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
@@ -961,7 +961,7 @@ function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknow
 
     callback.bind(2); // Error
 >callback.bind(2) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
 >              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void

@@ -342,7 +342,7 @@ function f5(shape: Shape) {
 >p.name.get() : string
 >             : ^^^^^^
 >p.name.get : () => string
->           : ^^^^^^      
+>           : ^^^^^^^^^^^^
 >p.name : Proxy<string>
 >       : ^^^^^^^^^^^^^
 >p : Proxify<Shape>
@@ -350,7 +350,7 @@ function f5(shape: Shape) {
 >name : Proxy<string>
 >     : ^^^^^^^^^^^^^
 >get : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 
     p.width.set(42);
 >p.width.set(42) : void

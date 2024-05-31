@@ -96,9 +96,9 @@ module GenericParameter {
     }
     var r5 = foo5(a); // new{} => string; new(x:number) => {}
 >r5 : { new (x: boolean): string; new (x: number): boolean; }
->   : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^       ^^^
+>   : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5(a) : { new (x: boolean): string; new (x: number): boolean; }
->        : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^       ^^^
+>        : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
 >     : ^^^^  ^^                                           ^^^^^^^^^^^^ ^^ ^^^      ^^^^^^^ ^^      ^^^ ^^^
 >a : { new (x: boolean): string; new (x: number): boolean; }
@@ -114,9 +114,9 @@ module GenericParameter {
 
     var r7 = foo5(b); // new any => string; new(x:number) => any
 >r7 : { new (x: unknown): string; new (x: number): unknown; }
->   : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^       ^^^
+>   : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5(b) : { new (x: unknown): string; new (x: number): unknown; }
->        : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^       ^^^
+>        : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
 >     : ^^^^  ^^                                           ^^^^^^^^^^^^ ^^ ^^^      ^^^^^^^ ^^      ^^^ ^^^
 >b : { new <T>(x: T): string; new <T>(x: number): T; }

@@ -168,11 +168,11 @@ module M {
 >x.sort(CompareYeux) : IEye[]
 >                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^  
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^  
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
 >            : ^ ^^          ^^ ^^          ^^^^^      
 
@@ -183,11 +183,11 @@ module M {
 >x.sort(CompareEyes) : IEye[]
 >                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^  
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^  
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
 >CompareEyes : (a: IEye, b: IEye) => number
 >            : ^ ^^    ^^ ^^    ^^^^^      
 

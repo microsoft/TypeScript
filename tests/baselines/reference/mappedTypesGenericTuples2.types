@@ -53,11 +53,11 @@ Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
 >result.slice(1) : any[]
 >                : ^^^^^
 >result.slice : (start?: number, end?: number) => any[]
->             : ^     ^^^      ^^   ^^^      ^^^^^     
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^  
 >result : [string, ...any[]]
 >       : ^^^^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^     ^^^      ^^   ^^^      ^^^^^     
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
 >1 : 1
 >  : ^
 

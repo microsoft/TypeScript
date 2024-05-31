@@ -27,7 +27,7 @@ export var vextend = extend;
 === app.js ===
 import {vextend} from './func';
 >vextend : (options: ComponentOptions<{}>) => void
->        : ^       ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^    
+>        : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
 // hover on vextend
 export var a = vextend({
@@ -36,7 +36,7 @@ export var a = vextend({
 >vextend({  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }}) : void
 >                                                                                       : ^^^^
 >vextend : (options: ComponentOptions<{}>) => void
->        : ^       ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^    
+>        : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >{  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }} : { watch: { data1(val: any): void; }; }
 >                                                                              : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 

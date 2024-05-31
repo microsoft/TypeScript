@@ -2309,6 +2309,17 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
             const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
+        case SyntaxKind.Constructor: {
+            const constructorDeclaration = node as ConstructorDeclaration;
+            const start = skipTrivia(sourceFile.text, constructorDeclaration.pos);
+            const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, start);
+            let token = scanner.scan();
+            while (token !== SyntaxKind.ConstructorKeyword && token !== SyntaxKind.EndOfFileToken) {
+                token = scanner.scan();
+            }
+            const end = scanner.getTokenEnd();
+            return createTextSpanFromBounds(start, end);
+        }
     }
 
     if (errorNode === undefined) {
@@ -10082,7 +10093,28 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
         options.noCheck ||
-        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
+        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
+        !canIncludeBindAndCheckDiagnsotics(sourceFile, options);
+}
+
+/** @internal */
+export function canIncludeBindAndCheckDiagnsotics(sourceFile: SourceFile, options: CompilerOptions) {
+    if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
+    if (
+        sourceFile.scriptKind === ScriptKind.TS ||
+        sourceFile.scriptKind === ScriptKind.TSX ||
+        sourceFile.scriptKind === ScriptKind.External
+    ) return true;
+
+    const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+    const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+    const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
+
+    // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+    // - plain JS: .js files with no // ts-check and checkJs: undefined
+    // - check JS: .js files with either // ts-check or checkJs: true
+    // - external: files that are added by plugins
+    return isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
 }
 
 /** @internal */

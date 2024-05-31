@@ -17,11 +17,11 @@ iFoo.foo(1);
 >iFoo.foo(1) : number
 >            : ^^^^^^
 >iFoo.foo : (x: number) => number
->         : ^ ^^^^^^^^^^^^^      
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >iFoo : IFoo<number>
 >     : ^^^^^^^^^^^^
 >foo : (x: number) => number
->    : ^ ^^^^^^^^^^^^^      
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

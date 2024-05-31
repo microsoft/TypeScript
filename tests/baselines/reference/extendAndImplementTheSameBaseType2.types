@@ -61,11 +61,11 @@ var r3: string = d.bar();
 >d.bar() : string
 >        : ^^^^^^
 >d.bar : () => string
->      : ^^^^^^      
+>      : ^^^^^^^^^^^^
 >d : D
 >  : ^
 >bar : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 
 var r4: number = d.bar();
 >r4 : number
@@ -73,9 +73,9 @@ var r4: number = d.bar();
 >d.bar() : string
 >        : ^^^^^^
 >d.bar : () => string
->      : ^^^^^^      
+>      : ^^^^^^^^^^^^
 >d : D
 >  : ^
 >bar : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 

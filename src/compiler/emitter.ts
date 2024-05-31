@@ -21,6 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
+    canIncludeBindAndCheckDiagnsotics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -800,9 +801,14 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
 
-        if (compilerOptions.noCheck) {
-            (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(markLinkedReferences);
-        }
+        (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(
+            sourceFile => {
+                if (
+                    compilerOptions.noCheck ||
+                    !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                ) markLinkedReferences(sourceFile);
+            },
+        );
 
         // Transform the source files
         const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
@@ -859,15 +865,19 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if (
-            (emitOnly && !getEmitDeclarations(compilerOptions)) ||
-            compilerOptions.noCheck ||
-            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit)
-        ) {
-            // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
-            // Do that here when emitting only dts files
-            filesForEmit.forEach(collectLinkedAliases);
-        }
+        // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
+        // Do that here when emitting only dts files
+        filesForEmit.forEach(sourceFile => {
+            if (
+                (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+                compilerOptions.noCheck ||
+                emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit) ||
+                !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+            ) {
+                collectLinkedAliases(sourceFile);
+            }
+        });
+
         const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
         if (length(declarationTransform.diagnostics)) {
             for (const diagnostic of declarationTransform.diagnostics!) {

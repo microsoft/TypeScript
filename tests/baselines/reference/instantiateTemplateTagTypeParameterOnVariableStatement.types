@@ -39,7 +39,7 @@ var text3 = seq(text1)(text2);
 >seq(text1)(text2) : string
 >                  : ^^^^^^
 >seq(text1) : (b: string) => string
->           : ^ ^^^^^^^^^^^^^      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >seq : <T>(a: T) => (b: T) => T
 >    : ^^^^ ^^ ^^^^^           
 >text1 : "hello"

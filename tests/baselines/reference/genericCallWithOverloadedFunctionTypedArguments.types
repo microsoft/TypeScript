@@ -92,9 +92,9 @@ module GenericParameter {
 
     var r5 = foo5(x => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
 >r5 : { (x: any): string; (x: number): any; }
->   : ^^^ ^^^^^^^^      ^^^ ^^      ^^^   ^^^
+>   : ^^^ ^^^^^^^^      ^^^ ^^      ^^^^^^^^^
 >foo5(x => x) : { (x: any): string; (x: number): any; }
->             : ^^^ ^^^^^^^^      ^^^ ^^      ^^^   ^^^
+>             : ^^^ ^^^^^^^^      ^^^ ^^      ^^^^^^^^^
 >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
 >     : ^^^^  ^^                                   ^^^^^^^^ ^^ ^^^      ^^^ ^^      ^^^ ^^^
 >x => x : (x: any) => any
@@ -112,9 +112,9 @@ module GenericParameter {
 
     var r7 = foo5(a); // any => string (+1 overload)
 >r7 : { (x: unknown): string; (x: number): unknown; }
->   : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^       ^^^
+>   : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^^^^^^^^^^^
 >foo5(a) : { (x: unknown): string; (x: number): unknown; }
->        : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^       ^^^
+>        : ^^^ ^^^^^^^^^^^^      ^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
 >     : ^^^^  ^^                                   ^^^^^^^^ ^^ ^^^      ^^^ ^^      ^^^ ^^^
 >a : { <T>(x: T): string; <T>(x: number): T; }

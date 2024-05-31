@@ -223,7 +223,7 @@ var r6 = (new C2()).f<number>(1, '');
 >(new C2()).f<number>(1, '') : unknown
 >                            : ^^^^^^^
 >(new C2()).f : (x: unknown, y: unknown) => unknown
->             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >(new C2()) : C2<unknown, unknown>
 >           : ^^^^^^^^^^^^^^^^^^^^
 >new C2() : C2<unknown, unknown>
@@ -231,7 +231,7 @@ var r6 = (new C2()).f<number>(1, '');
 >C2 : typeof C2
 >   : ^^^^^^^^^
 >f : (x: unknown, y: unknown) => unknown
->  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'' : ""
@@ -243,7 +243,7 @@ var r6b = (new C2()).f<number, string, number>(1, '');
 >(new C2()).f<number, string, number>(1, '') : unknown
 >                                            : ^^^^^^^
 >(new C2()).f : (x: unknown, y: unknown) => unknown
->             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >(new C2()) : C2<unknown, unknown>
 >           : ^^^^^^^^^^^^^^^^^^^^
 >new C2() : C2<unknown, unknown>
@@ -251,7 +251,7 @@ var r6b = (new C2()).f<number, string, number>(1, '');
 >C2 : typeof C2
 >   : ^^^^^^^^^
 >f : (x: unknown, y: unknown) => unknown
->  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^       
+>  : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'' : ""
@@ -276,11 +276,11 @@ var r7 = i2.f<number>(1, '');
 >i2.f<number>(1, '') : number
 >                    : ^^^^^^
 >i2.f : (x: number, y: string) => number
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^      
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i2 : I2<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 >f : (x: number, y: string) => number
->  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^      
+>  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'' : ""
@@ -292,11 +292,11 @@ var r7b = i2.f<number, string, number>(1, '');
 >i2.f<number, string, number>(1, '') : number
 >                                    : ^^^^^^
 >i2.f : (x: number, y: string) => number
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^      
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i2 : I2<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 >f : (x: number, y: string) => number
->  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^      
+>  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'' : ""

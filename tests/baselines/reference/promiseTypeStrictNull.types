@@ -253,11 +253,11 @@ const p00 = p.catch();
 >p.catch() : Promise<boolean>
 >          : ^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 
 const p01 = p.then();
 >p01 : Promise<boolean>
@@ -277,11 +277,11 @@ const p10 = p.catch(undefined);
 >p.catch(undefined) : Promise<boolean>
 >                   : ^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -291,11 +291,11 @@ const p11 = p.catch(null);
 >p.catch(null) : Promise<boolean>
 >              : ^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 
 const p12 = p.catch(() => 1);
 >p12 : Promise<number | boolean>
@@ -303,11 +303,11 @@ const p12 = p.catch(() => 1);
 >p.catch(() => 1) : Promise<number | boolean>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -319,11 +319,11 @@ const p13 = p.catch(() => x);
 >p.catch(() => x) : Promise<any>
 >                 : ^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
@@ -334,11 +334,11 @@ const p14 = p.catch(() => undefined);
 >p.catch(() => undefined) : Promise<boolean | undefined>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => undefined : () => undefined
 >                : ^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -350,11 +350,11 @@ const p15 = p.catch(() => null);
 >p.catch(() => null) : Promise<boolean | null>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => null : () => null
 >           : ^^^^^^^^^^
 
@@ -364,11 +364,11 @@ const p16 = p.catch(() => {});
 >p.catch(() => {}) : Promise<boolean | void>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => {} : () => void
 >         : ^^^^^^^^^^
 
@@ -378,11 +378,11 @@ const p17 = p.catch(() => {throw 1});
 >p.catch(() => {throw 1}) : Promise<boolean>
 >                         : ^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => {throw 1} : () => never
 >                : ^^^^^^^^^^^
 >1 : 1
@@ -394,11 +394,11 @@ const p18 = p.catch(() => Promise.reject(1));
 >p.catch(() => Promise.reject(1)) : Promise<boolean>
 >                                 : ^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => Promise.reject(1) : () => Promise<never>
 >                        : ^^^^^^^^^^^^^^^^^^^^
 >Promise.reject(1) : Promise<never>
@@ -418,11 +418,11 @@ const p19 = p.catch(() => Promise.resolve(1));
 >p.catch(() => Promise.resolve(1)) : Promise<number | boolean>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >p.catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>        : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >p : Promise<boolean>
 >  : ^^^^^^^^^^^^^^^^
 >catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<boolean | TResult>
->      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^ 
+>      : ^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^               ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^   ^^^^^^^ 
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>

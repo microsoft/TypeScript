@@ -21,33 +21,33 @@ class Bar<T> { constructor(public x: T) { } }
 
 const WhatFoo = foo<?>;
 >WhatFoo : (x: any) => any
->        : ^ ^^^^^^^^^^   
+>        : ^ ^^^^^^^^^^^^^
 >foo<?> : (x: any) => any
->       : ^ ^^^^^^^^^^   
+>       : ^ ^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
 >    : ^^^^ ^^ ^^^^^ 
 
 const HuhFoo = foo<string?>;
 >HuhFoo : (x: string | null) => string | null
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<string?> : (x: string | null) => string | null
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
 >    : ^^^^ ^^ ^^^^^ 
 
 const NopeFoo = foo<?string>;
 >NopeFoo : (x: string | null) => string | null
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<?string> : (x: string | null) => string | null
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
 >    : ^^^^ ^^ ^^^^^ 
 
 const ComeOnFoo = foo<?string?>;
 >ComeOnFoo : (x: string | null) => string | null
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<?string?> : (x: string | null) => string | null
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
 >    : ^^^^ ^^ ^^^^^ 
 

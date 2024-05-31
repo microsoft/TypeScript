@@ -62,6 +62,7 @@ import {
     canHaveModifiers,
     canHaveModuleSpecifier,
     canHaveSymbol,
+    canIncludeBindAndCheckDiagnsotics,
     canUsePropertyAccess,
     cartesianProduct,
     CaseBlock,
@@ -1763,6 +1764,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getImmediateAliasedSymbol,
         getAliasedSymbol: resolveAlias,
         getEmitResolver,
+        requiresAddingImplicitUndefined,
         getExportsOfModule: getExportsOfModuleAsArray,
         getExportsAndPropertiesOfModule,
         forEachExportAndPropertyOfModule,
@@ -8482,17 +8484,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 cancellationToken.throwIfCancellationRequested();
             }
             let hadError = false;
+            const { finalizeBoundary, startRecoveryScope } = createRecoveryBoundary();
             const transformed = visitNode(existing, visitExistingNodeTreeSymbols, isTypeNode);
-            if (hadError) {
+            if (!finalizeBoundary()) {
                 return undefined;
             }
             context.approximateLength += existing.end - existing.pos;
             return transformed;
 
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
+                // If there was an error in a sibling node bail early, the result will be discarded anyway
+                if (hadError) return node;
+                const recover = startRecoveryScope();
                 const onExitNewScope = isNewScopeNode(node) ? onEnterNewScope(node) : undefined;
                 const result = visitExistingNodeTreeSymbolsWorker(node);
                 onExitNewScope?.();
+
+                // If there was an error, maybe we can recover by serializing the actual type of the node
+                if (hadError) {
+                    if (isTypeNode(node) && !isTypePredicateNode(node)) {
+                        recover();
+                        return serializeExistingTypeNode(context, node);
+                    }
+                    return node;
+                }
                 // We want to clone the subtree, so when we mark it up with __pos and __end in quickfixes,
                 //  we don't get odd behavior because of reused nodes. We also need to clone to _remove_
                 //  the position information if the node comes from a different file than the one the node builder
@@ -8502,8 +8517,110 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result ? setTextRange(context, result, node) : undefined;
             }
 
+            function createRecoveryBoundary() {
+                let unreportedErrors: (() => void)[];
+                const oldTracker = context.tracker;
+                const oldTrackedSymbols = context.trackedSymbols;
+                context.trackedSymbols = [];
+                const oldEncounteredError = context.encounteredError;
+                context.tracker = new SymbolTrackerImpl(context, {
+                    ...oldTracker.inner,
+                    reportCyclicStructureError() {
+                        markError(() => oldTracker.reportCyclicStructureError());
+                    },
+                    reportInaccessibleThisError() {
+                        markError(() => oldTracker.reportInaccessibleThisError());
+                    },
+                    reportInaccessibleUniqueSymbolError() {
+                        markError(() => oldTracker.reportInaccessibleUniqueSymbolError());
+                    },
+                    reportLikelyUnsafeImportRequiredError(specifier) {
+                        markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier));
+                    },
+                    reportNonSerializableProperty(name) {
+                        markError(() => oldTracker.reportNonSerializableProperty(name));
+                    },
+                    trackSymbol(sym, decl, meaning) {
+                        const accessibility = isSymbolAccessible(sym, decl, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
+                        if (accessibility.accessibility !== SymbolAccessibility.Accessible) {
+                            (context.trackedSymbols ??= []).push([sym, decl, meaning]);
+                            return true;
+                        }
+                        return false;
+                    },
+                    moduleResolverHost: context.tracker.moduleResolverHost,
+                }, context.tracker.moduleResolverHost);
+
+                return {
+                    startRecoveryScope,
+                    finalizeBoundary,
+                };
+
+                function markError(unreportedError: () => void) {
+                    hadError = true;
+                    (unreportedErrors ??= []).push(unreportedError);
+                }
+
+                function startRecoveryScope() {
+                    const initialTrackedSymbolsTop = context.trackedSymbols?.length ?? 0;
+                    const unreportedErrorsTop = unreportedErrors?.length ?? 0;
+                    return () => {
+                        hadError = false;
+                        // Reset the tracked symbols to before the error
+                        if (context.trackedSymbols) {
+                            context.trackedSymbols.length = initialTrackedSymbolsTop;
+                        }
+                        if (unreportedErrors) {
+                            unreportedErrors.length = unreportedErrorsTop;
+                        }
+                    };
+                }
+
+                function finalizeBoundary() {
+                    context.tracker = oldTracker;
+                    const newTrackedSymbols = context.trackedSymbols;
+                    context.trackedSymbols = oldTrackedSymbols;
+                    context.encounteredError = oldEncounteredError;
+
+                    unreportedErrors?.forEach(fn => fn());
+                    if (hadError) {
+                        return false;
+                    }
+                    newTrackedSymbols?.forEach(
+                        ([symbol, enclosingDeclaration, meaning]) =>
+                            context.tracker.trackSymbol(
+                                symbol,
+                                enclosingDeclaration,
+                                meaning,
+                            ),
+                    );
+                    return true;
+                }
+            }
             function onEnterNewScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
                 return enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
+            }
+
+            function tryVisitTypeReference(node: TypeReferenceNode) {
+                if (canReuseTypeNode(context, node)) {
+                    const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
+                    const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
+
+                    if (!introducesError) {
+                        const updated = factory.updateTypeReferenceNode(
+                            node,
+                            newName,
+                            typeArguments,
+                        );
+                        return setTextRange(context, updated, node);
+                    }
+                    else {
+                        const serializedName = serializeTypeName(context, node.typeName, /*isTypeOf*/ false, typeArguments);
+                        if (serializedName) {
+                            return setTextRange(context, serializedName, node.typeName);
+                        }
+                    }
+                }
             }
 
             function visitExistingNodeTreeSymbolsWorker(node: Node): Node | undefined {
@@ -8598,7 +8715,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (canReuseTypeNode(context, node)) {
                         return node;
                     }
-                    return serializeExistingTypeNode(context, node);
+                    hadError = true;
+                    return node;
                 }
                 if (isTypeParameterDeclaration(node)) {
                     return factory.updateTypeParameterDeclaration(
@@ -8609,27 +8727,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         visitNode(node.default, visitExistingNodeTreeSymbols, isTypeNode),
                     );
                 }
-                if (isTypeReferenceNode(node)) {
-                    if (canReuseTypeNode(context, node)) {
-                        const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
-                        const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
 
-                        if (!introducesError) {
-                            const updated = factory.updateTypeReferenceNode(
-                                node,
-                                newName,
-                                typeArguments,
-                            );
-                            return setTextRange(context, updated, node);
-                        }
-                        else {
-                            const serializedName = serializeTypeName(context, node.typeName, /*isTypeOf*/ false, typeArguments);
-                            if (serializedName) {
-                                return setTextRange(context, serializedName, node.typeName);
-                            }
-                        }
+                if (isIndexedAccessTypeNode(node) && isTypeReferenceNode(node.objectType)) {
+                    const objectType = tryVisitTypeReference(node.objectType);
+                    if (!objectType) {
+                        hadError = true;
+                        return node;
                     }
-                    return serializeExistingTypeNode(context, node);
+                    return factory.updateIndexedAccessTypeNode(node, objectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
+                }
+
+                if (isTypeReferenceNode(node)) {
+                    const result = tryVisitTypeReference(node);
+                    if (result) {
+                        return result;
+                    }
+                    hadError = true;
+                    return node;
                 }
                 if (isLiteralImportTypeNode(node)) {
                     const nodeSymbol = getNodeLinks(node).resolvedSymbol;
@@ -8682,7 +8796,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (serializedName) {
                             return setTextRange(context, serializedName, node.exprName);
                         }
-                        return serializeExistingTypeNode(context, node);
+                        hadError = true;
+                        return node;
                     }
                     return factory.updateTypeQueryNode(
                         node,
@@ -8754,9 +8869,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
 
-                if (isTypeOperatorNode(node) && node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
-                    if (!canReuseTypeNode(context, node)) {
-                        return serializeExistingTypeNode(context, node);
+                if (isTypeOperatorNode(node)) {
+                    if (node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
+                        if (!canReuseTypeNode(context, node)) {
+                            hadError = true;
+                            return node;
+                        }
+                    }
+                    else if (node.operator === SyntaxKind.KeyOfKeyword) {
+                        if (isTypeReferenceNode(node.type)) {
+                            const type = tryVisitTypeReference(node.type);
+                            if (!type) {
+                                hadError = true;
+                                return node;
+                            }
+                            return factory.updateTypeOperatorNode(node, type);
+                        }
                     }
                 }
 
@@ -8801,12 +8929,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
                     if (context.bundled || context.enclosingFile !== getSourceFileOfNode(lit)) {
-                        const targetFile = getExternalModuleFileFromDeclaration(parent);
-                        if (targetFile) {
-                            const newName = getSpecifierForModuleSymbol(targetFile.symbol, context);
-                            if (newName !== lit.text) {
-                                return setOriginalNode(factory.createStringLiteral(newName), lit);
+                        let name = lit.text;
+                        const nodeSymbol = getNodeLinks(node).resolvedSymbol;
+                        const meaning = parent.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
+                        const parentSymbol = nodeSymbol
+                            && isSymbolAccessible(nodeSymbol, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible
+                            && lookupSymbolChain(nodeSymbol, context, meaning, /*yieldModuleSymbol*/ true)[0];
+                        if (parentSymbol && parentSymbol.flags & SymbolFlags.Module) {
+                            name = getSpecifierForModuleSymbol(parentSymbol, context);
+                        }
+                        else {
+                            const targetFile = getExternalModuleFileFromDeclaration(parent);
+                            if (targetFile) {
+                                name = getSpecifierForModuleSymbol(targetFile.symbol, context);
                             }
+                        }
+                        if (name.includes("/node_modules/")) {
+                            context.encounteredError = true;
+                            if (context.tracker.reportLikelyUnsafeImportRequiredError) {
+                                context.tracker.reportLikelyUnsafeImportRequiredError(name);
+                            }
+                        }
+                        if (name !== lit.text) {
+                            return setOriginalNode(factory.createStringLiteral(name), lit);
                         }
                     }
                     return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
@@ -29405,6 +29550,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
+        if (isNoInferType(type)) {
+            type = (type as SubstitutionType).baseType;
+        }
         // When the type of a reference is or contains an instantiable type with a union type constraint, and
         // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
         // has a contextual type containing no top-level instantiables (meaning constraints will determine
@@ -48955,7 +49103,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function calculateNodeCheckFlagWorker(node: Node, flag: LazyNodeCheckFlags) {
-        if (!compilerOptions.noCheck) {
+        if (!compilerOptions.noCheck && canIncludeBindAndCheckDiagnsotics(getSourceFileOfNode(node), compilerOptions)) {
             // Unless noCheck is passed, assume calculation of node check flags has been done eagerly.
             // This saves needing to mark up where in the eager traversal certain results are "done",
             // just to reconcile the eager and lazy results. This wouldn't be hard if an eager typecheck
@@ -50824,7 +50972,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return true;
                     }
                 }
-                return false;
             }
         }
 

@@ -545,11 +545,11 @@ const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 >l.nested.readonlyNestedType : unique symbol
 >                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
 >  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
 >                   : ^^^^^^^^^^^^^
 
@@ -575,21 +575,21 @@ const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNeste
 >l.nested.readonlyNestedType : unique symbol
 >                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
 >  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
 >                   : ^^^^^^^^^^^^^
 >l.nested.readonlyNestedType : unique symbol
 >                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
 >  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
 >                   : ^^^^^^^^^^^^^
 
@@ -609,11 +609,11 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 >l.nested.readonlyNestedType : unique symbol
 >                            : ^^^^^^^^^^^^^
 >l.nested : { readonly readonlyNestedType: unique symbol; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >l : L
 >  : ^
 >nested : { readonly readonlyNestedType: unique symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >readonlyNestedType : unique symbol
 >                   : ^^^^^^^^^^^^^
 

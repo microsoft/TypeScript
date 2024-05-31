@@ -205,11 +205,11 @@ num = x.commonMethodWithTypeParameter(num);
 >x.commonMethodWithTypeParameter(num) : number
 >                                     : ^^^^^^
 >x.commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
->                                : ^^ ^^^^^^^^^^^^^      ^^^^^^ ^^^^^^^^^^^^^      ^
+>                                : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
->                              : ^^ ^^^^^^^^^^^^^      ^^^^^^ ^^^^^^^^^^^^^      ^
+>                              : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 

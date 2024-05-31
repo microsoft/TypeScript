@@ -7,13 +7,13 @@ const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >[0].findLast((item) => item === 0) : 0
 >                                   : ^
 >[0].findLast : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; }
->             : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^                  ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^            ^^^
 >[0] : number[]
 >    : ^^^^^^^^
 >0 : 0
 >  : ^
 >findLast : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^                  ^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^            ^^^
 >(item) => item === 0 : (item: number) => item is 0
 >                     : ^    ^^^^^^^^^^^^^^^^^^^^^^
 >item : number
@@ -31,13 +31,13 @@ const itemString: string | undefined = ["string"].findLast((item) => item === "s
 >["string"].findLast((item) => item === "string") : "string"
 >                                                 : ^^^^^^^^
 >["string"].findLast : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string | undefined; }
->                    : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^                  ^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^            ^^^
 >["string"] : string[]
 >           : ^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >findLast : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^                  ^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^            ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^            ^^^
 >(item) => item === "string" : (item: string) => item is "string"
 >                            : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : string

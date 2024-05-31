@@ -35,9 +35,9 @@ import { getNotification } from "../API/NotificationAPIUtils";
 
 export const NotificationScenario = test(
 >NotificationScenario : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                     : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test(  getNotification) : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                        : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T>(a: () => T) => () => T
 >     : ^^^^ ^^       ^^^^^       
 

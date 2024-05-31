@@ -11,17 +11,17 @@ declare let f: { <T>(): T, g<U>(): U };
 
 const a1 = f<number>;  // { (): number; g<U>(): U; }
 >a1 : { (): number; g<U>(): U; }
->   : ^^^^^^      ^^^^^^^^^^ ^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
 const a2 = f.g<number>;  // () => number
 >a2 : () => number
->   : ^^^^^^      
+>   : ^^^^^^^^^^^^
 >f.g<number> : () => number
->            : ^^^^^^      
+>            : ^^^^^^^^^^^^
 >f.g : <U>() => U
 >    : ^^^^^^^^^ 
 >f : { <T>(): T; g<U>(): U; }
@@ -35,7 +35,7 @@ const a3 = f<number>.g;  // <U>() => U
 >f<number>.g : <U>() => U
 >            : ^^^^^^^^^ 
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 >g : <U>() => U
@@ -43,13 +43,13 @@ const a3 = f<number>.g;  // <U>() => U
 
 const a4 = f<number>.g<number>;  // () => number
 >a4 : () => number
->   : ^^^^^^      
+>   : ^^^^^^^^^^^^
 >f<number>.g<number> : () => number
->                    : ^^^^^^      
+>                    : ^^^^^^^^^^^^
 >f<number>.g : <U>() => U
 >            : ^^^^^^^^^ 
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 >g : <U>() => U
@@ -57,9 +57,9 @@ const a4 = f<number>.g<number>;  // () => number
 
 const a5 = f['g']<number>;  // () => number
 >a5 : () => number
->   : ^^^^^^      
+>   : ^^^^^^^^^^^^
 >f['g']<number> : () => number
->               : ^^^^^^      
+>               : ^^^^^^^^^^^^
 >f['g'] : <U>() => U
 >       : ^^^^^^^^^ 
 >f : { <T>(): T; g<U>(): U; }
@@ -91,9 +91,9 @@ const a7 = (f<number>)['g'];
 >(f<number>)['g'] : <U>() => U
 >                 : ^^^^^^^^^ 
 >(f<number>) : { (): number; g<U>(): U; }
->            : ^^^^^^      ^^^^^^^^^^ ^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 >'g' : "g"
@@ -123,9 +123,9 @@ const a9 = (f<number>)<number>;  // Error, no applicable signatures
 >(f<number>)<number> : { g<U>(): U; }
 >                    : ^^^^^^^^^^ ^^^
 >(f<number>) : { (): number; g<U>(): U; }
->            : ^^^^^^      ^^^^^^^^^^ ^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -153,7 +153,7 @@ const b3 = f<number>?.();
 >f<number>?.() : number
 >              : ^^^^^^
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -163,7 +163,7 @@ const b4 = f<number>?.<number>();  // Error, expected no type arguments
 >f<number>?.<number>() : number
 >                      : ^^^^^^
 >f<number> : { (): number; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -177,11 +177,11 @@ declare let g: (<T>(x: T) => T) | undefined;
 
 const c1 = g<string> || ((x: string) => x);
 >c1 : (x: string) => string
->   : ^ ^^^^^^^^^^^^^      
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> || ((x: string) => x) : (x: string) => string
 >                                : ^ ^^      ^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^ ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
 >  : ^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
@@ -195,11 +195,11 @@ const c1 = g<string> || ((x: string) => x);
 
 const c2 = g<string> ?? ((x: string) => x);
 >c2 : (x: string) => string
->   : ^ ^^^^^^^^^^^^^      
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> ?? ((x: string) => x) : (x: string) => string
 >                                : ^ ^^      ^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^ ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
 >  : ^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
@@ -217,7 +217,7 @@ const c3 = g<string> && ((x: string) => x);
 >g<string> && ((x: string) => x) : ((x: string) => string) | undefined
 >                                : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^ ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
 >  : ^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
@@ -453,9 +453,9 @@ class C1 {
 
     static specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
->           : ^^^^^^      ^^^^^^^^^^ ^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -472,9 +472,9 @@ class C2 {
 
     public specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
->           : ^^^^^^      ^^^^^^^^^^ ^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -491,9 +491,9 @@ class C3 {
 
     private specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
->           : ^^^^^^      ^^^^^^^^^^ ^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 
@@ -510,9 +510,9 @@ class C4 {
 
     protected specialFoo = f<string>
 >specialFoo : { (): string; g<U>(): U; }
->           : ^^^^^^      ^^^^^^^^^^ ^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f<string> : { (): string; g<U>(): U; }
->          : ^^^^^^      ^^^^^^^^^^ ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^^
 >f : { <T>(): T; g<U>(): U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 

@@ -121,7 +121,7 @@ const f02: <A>(x: A) => A[] = wrap(list);
 >x : A
 >  : ^
 >wrap(list) : (a: A) => A[]
->           : ^ ^^^^^^^^^  
+>           : ^ ^^^^^^^^^^^
 >wrap : <A, B>(f: (a: A) => B) => (a: A) => B
 >     : ^^^^^^^ ^^           ^^^^^           
 >list : <T>(a: T) => T[]
@@ -133,7 +133,7 @@ const f03: <A>(x: A) => A[] = wrap(x => [x]);
 >x : A
 >  : ^
 >wrap(x => [x]) : (a: A) => A[]
->               : ^ ^^^^^^^^^  
+>               : ^ ^^^^^^^^^^^
 >wrap : <A, B>(f: (a: A) => B) => (a: A) => B
 >     : ^^^^^^^ ^^           ^^^^^           
 >x => [x] : (x: A) => A[]
@@ -151,7 +151,7 @@ const f10: <T>(x: T) => Box<T[]> = compose(a => list(a), b => box(b));
 >x : T
 >  : ^
 >compose(a => list(a), b => box(b)) : (a: T) => Box<T[]>
->                                   : ^ ^^^^^^^^^^^ ^^^ 
+>                                   : ^ ^^^^^^^^^^^^^^^^
 >compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
 >        : ^^^^^^^^^^ ^^           ^^ ^^           ^^^^^           
 >a => list(a) : (a: T) => T[]
@@ -181,7 +181,7 @@ const f11: <T>(x: T) => Box<T[]> = compose(list, box);
 >x : T
 >  : ^
 >compose(list, box) : (a: T) => Box<T[]>
->                   : ^ ^^^^^^^^^^^ ^^^ 
+>                   : ^ ^^^^^^^^^^^^^^^^
 >compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
 >        : ^^^^^^^^^^ ^^           ^^ ^^           ^^^^^           
 >list : <T>(a: T) => T[]
@@ -407,7 +407,7 @@ const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
 >a : A
 >  : ^
 >flip(zip) : (y: B, x: A) => [A, B]
->          : ^ ^^^^^ ^^^^^^^^ ^  ^ 
+>          : ^ ^^^^^ ^^^^^^^^^^^^^^
 >flip : <X, Y, Z>(f: (x: X, y: Y) => Z) => (y: Y, x: X) => Z
 >     : ^^^^^^^^^^ ^^                 ^^^^^                 
 >zip : <A, B>(a: A, b: B) => [A, B]

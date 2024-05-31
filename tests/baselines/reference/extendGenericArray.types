@@ -19,9 +19,9 @@ var x: number = arr.foo();
 >arr.foo() : string
 >          : ^^^^^^
 >arr.foo : () => string
->        : ^^^^^^      
+>        : ^^^^^^^^^^^^
 >arr : string[]
 >    : ^^^^^^^^
 >foo : () => string
->    : ^^^^^^      
+>    : ^^^^^^^^^^^^
 

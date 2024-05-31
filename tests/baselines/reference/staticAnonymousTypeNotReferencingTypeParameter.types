@@ -515,11 +515,11 @@ class ListWrapper {
 >a.concat(b) : any[]
 >            : ^^^^^
 >a.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^     ^^^^^^^^^^     ^^^
+>         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >a : any[]
 >  : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^     ^^^^^^^^^^     ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >b : any[]
 >  : ^^^^^
 
@@ -960,11 +960,11 @@ class ListWrapper {
 >l.sort(compareFn) : T[]
 >                  : ^^^
 >l.sort : (compareFn?: (a: T, b: T) => number) => T[]
->       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^  
+>       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
 >l : T[]
 >  : ^^^
 >sort : (compareFn?: (a: T, b: T) => number) => T[]
->     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^  
+>     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
 >compareFn : (a: T, b: T) => number
 >          : ^ ^^ ^^ ^^ ^^^^^      
 
@@ -973,11 +973,11 @@ class ListWrapper {
 >l.sort() : T[]
 >         : ^^^
 >l.sort : (compareFn?: (a: T, b: T) => number) => T[]
->       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^  
+>       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
 >l : T[]
 >  : ^^^
 >sort : (compareFn?: (a: T, b: T) => number) => T[]
->     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^  
+>     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
     }
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }

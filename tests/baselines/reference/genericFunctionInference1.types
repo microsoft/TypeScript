@@ -71,9 +71,9 @@ declare function foo<T extends { value: T }>(x: T): T;
 
 const f00 = pipe(list);
 >f00 : <T>(a: T) => T[]
->    : ^^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^
 >pipe(list) : <T>(a: T) => T[]
->           : ^^^^^^^^^^^^^^  
+>           : ^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -81,9 +81,9 @@ const f00 = pipe(list);
 
 const f01 = pipe(list, box);
 >f01 : <T>(a: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(list, box) : <T>(a: T) => { value: T[]; }
->                : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -93,9 +93,9 @@ const f01 = pipe(list, box);
 
 const f02 = pipe(box, list);
 >f02 : <V>(x: V) => { value: V; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe(box, list) : <V>(x: V) => { value: V; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^^  
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -105,9 +105,9 @@ const f02 = pipe(box, list);
 
 const f03 = pipe(x => list(x), box);
 >f03 : (x: any) => { value: any[]; }
->    : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(x => list(x), box) : (x: any) => { value: any[]; }
->                        : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: any) => any[]
@@ -125,9 +125,9 @@ const f03 = pipe(x => list(x), box);
 
 const f04 = pipe(list, x => box(x));
 >f04 : <T>(a: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(list, x => box(x)) : <T>(a: T) => { value: T[]; }
->                        : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -145,9 +145,9 @@ const f04 = pipe(list, x => box(x));
 
 const f05 = pipe(x => list(x), x => box(x))
 >f05 : (x: any) => { value: any[]; }
->    : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(x => list(x), x => box(x)) : (x: any) => { value: any[]; }
->                                : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: any) => any[]
@@ -173,15 +173,15 @@ const f05 = pipe(x => list(x), x => box(x))
 
 const f06 = pipe(list, pipe(box));
 >f06 : <T>(a: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(list, pipe(box)) : <T>(a: T) => { value: T[]; }
->                      : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
 >     : ^^^^ ^^ ^^^^^   
 >pipe(box) : (x: T[]) => { value: T[]; }
->          : ^^^^^^^^^^^^  ^^^^^^^^^^^  
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -189,9 +189,9 @@ const f06 = pipe(list, pipe(box));
 
 const f07 = pipe(x => list(x), pipe(box));
 >f07 : (x: any) => { value: any[]; }
->    : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(x => list(x), pipe(box)) : (x: any) => { value: any[]; }
->                              : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: any) => any[]
@@ -205,7 +205,7 @@ const f07 = pipe(x => list(x), pipe(box));
 >x : any
 >  : ^^^
 >pipe(box) : (x: any[]) => { value: any[]; }
->          : ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -213,9 +213,9 @@ const f07 = pipe(x => list(x), pipe(box));
 
 const f08 = pipe(x => list(x), pipe(x => box(x)));
 >f08 : (x: any) => { value: any[]; }
->    : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(x => list(x), pipe(x => box(x))) : (x: any) => { value: any[]; }
->                                      : ^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: any) => any[]
@@ -229,7 +229,7 @@ const f08 = pipe(x => list(x), pipe(x => box(x)));
 >x : any
 >  : ^^^
 >pipe(x => box(x)) : (x: any[]) => { value: any[]; }
->                  : ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => box(x) : (x: any[]) => { value: any[]; }
@@ -245,9 +245,9 @@ const f08 = pipe(x => list(x), pipe(x => box(x)));
 
 const f09 = pipe(list, x => x.length);
 >f09 : <T>(a: T) => number
->    : ^^^^^^^^^^^^^      
+>    : ^^^^^^^^^^^^^^^^^^^
 >pipe(list, x => x.length) : <T>(a: T) => number
->                          : ^^^^^^^^^^^^^      
+>                          : ^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -291,7 +291,7 @@ const g00: <T>(x: T) => T[] = pipe(list);
 >x : T
 >  : ^
 >pipe(list) : (a: T) => T[]
->           : ^^^^^^^^^^^  
+>           : ^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -305,7 +305,7 @@ const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
 >value : T[]
 >      : ^^^
 >pipe(list, box) : (a: T) => { value: T[]; }
->                : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -321,7 +321,7 @@ const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
 >value : T
 >      : ^
 >pipe(box, list) : (x: T) => { value: T; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^  
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -337,7 +337,7 @@ const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
 >value : T[]
 >      : ^^^
 >pipe(x => list(x), box) : (x: T) => { value: T[]; }
->                        : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: T) => T[]
@@ -361,7 +361,7 @@ const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
 >value : T[]
 >      : ^^^
 >pipe(list, x => box(x)) : (a: T) => { value: T[]; }
->                        : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -385,7 +385,7 @@ const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
 >value : T[]
 >      : ^^^
 >pipe(x => list(x), x => box(x)) : (x: T) => { value: T[]; }
->                                : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: T) => T[]
@@ -417,13 +417,13 @@ const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
 >value : T[]
 >      : ^^^
 >pipe(list, pipe(box)) : (a: T) => { value: T[]; }
->                      : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
 >     : ^^^^ ^^ ^^^^^   
 >pipe(box) : (x: T[]) => { value: T[]; }
->          : ^^^^^^^^^^^^  ^^^^^^^^^^^  
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -437,7 +437,7 @@ const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
 >value : T[]
 >      : ^^^
 >pipe(x => list(x), pipe(box)) : (x: T) => { value: T[]; }
->                              : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: T) => T[]
@@ -451,7 +451,7 @@ const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
 >x : T
 >  : ^
 >pipe(box) : (x: T[]) => { value: T[]; }
->          : ^^^^^^^^^^^^  ^^^^^^^^^^^  
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -465,7 +465,7 @@ const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
 >value : T[]
 >      : ^^^
 >pipe(x => list(x), pipe(x => box(x))) : (x: T) => { value: T[]; }
->                                      : ^^^^^^^^^^  ^^^^^^^^^^^  
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => list(x) : (x: T) => T[]
@@ -479,7 +479,7 @@ const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
 >x : T
 >  : ^
 >pipe(x => box(x)) : (x: T[]) => { value: T[]; }
->                  : ^^^^^^^^^^^^  ^^^^^^^^^^^  
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >x => box(x) : (x: T[]) => { value: T[]; }
@@ -499,7 +499,7 @@ const g09: <T>(x: T) => number = pipe(list, x => x.length);
 >x : T
 >  : ^
 >pipe(list, x => x.length) : (a: T) => number
->                          : ^^^^^^^^^^      
+>                          : ^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list : <T>(a: T) => T[]
@@ -561,9 +561,9 @@ declare function pipe2<A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D): (a: [A, C]
 
 const f20 = pipe2(list, box);
 >f20 : <T, V>(a: [T, V]) => [T[], { value: V; }]
->    : ^^^^^^^ ^^^^^^^^^^^^^ ^      ^^^^^^^ ^   
+>    : ^^^^^^^ ^^^^^^^^^^^^^ ^^^  ^^^^^^^^^ ^^^ 
 >pipe2(list, box) : <T, V>(a: [T, V]) => [T[], { value: V; }]
->                 : ^^^^^^^ ^^^^^^^^^^^^^ ^      ^^^^^^^ ^   
+>                 : ^^^^^^^ ^^^^^^^^^^^^^ ^^^  ^^^^^^^^^ ^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >list : <T>(a: T) => T[]
@@ -573,9 +573,9 @@ const f20 = pipe2(list, box);
 
 const f21 = pipe2(box, list);
 >f21 : <V, T>(a: [V, T]) => [{ value: V; }, T[]]
->    : ^^^^^^^ ^^^^^^^^^^^^^   ^^^^^^^ ^    ^   
+>    : ^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^ ^^^  ^^^ 
 >pipe2(box, list) : <V, T>(a: [V, T]) => [{ value: V; }, T[]]
->                 : ^^^^^^^ ^^^^^^^^^^^^^   ^^^^^^^ ^    ^   
+>                 : ^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^ ^^^  ^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >box : <V>(x: V) => { value: V; }
@@ -585,9 +585,9 @@ const f21 = pipe2(box, list);
 
 const f22 = pipe2(list, list);
 >f22 : <T, T1>(a: [T, T1]) => [T[], T1[]]
->    : ^^^^^^^^ ^^^^^^^^^^^^^^ ^    ^^   
+>    : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^  ^^^^ 
 >pipe2(list, list) : <T, T1>(a: [T, T1]) => [T[], T1[]]
->                  : ^^^^^^^^ ^^^^^^^^^^^^^^ ^    ^^   
+>                  : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^  ^^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >list : <T>(a: T) => T[]
@@ -597,9 +597,9 @@ const f22 = pipe2(list, list);
 
 const f23 = pipe2(box, box);
 >f23 : <V, V1>(a: [V, V1]) => [{ value: V; }, { value: V1; }]
->    : ^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^ ^      ^^^^^^^^^^   
+>    : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^ ^^^  ^^^^^^^^^^^^^^ 
 >pipe2(box, box) : <V, V1>(a: [V, V1]) => [{ value: V; }, { value: V1; }]
->                : ^^^^^^^^ ^^^^^^^^^^^^^^   ^^^^^^^ ^      ^^^^^^^^^^   
+>                : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^ ^^^  ^^^^^^^^^^^^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >box : <V>(x: V) => { value: V; }
@@ -609,15 +609,15 @@ const f23 = pipe2(box, box);
 
 const f24 = pipe2(f20, f20);
 >f24 : <T, V, T1, V1>(a: [[T, V], [T1, V1]]) => [[T[], { value: V; }], [T1[], { value: V1; }]]
->    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^  ^^^^^^^^^ ^^^    ^^^^  ^^^^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^  ^^^^^^^^^^^^^^^^^^^^^^ 
 >pipe2(f20, f20) : <T, V, T1, V1>(a: [[T, V], [T1, V1]]) => [[T[], { value: V; }], [T1[], { value: V1; }]]
->                : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^  ^^^^^^^^^ ^^^    ^^^^  ^^^^^^^^^^^^^^  
+>                : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^  ^^^^^^^^^^^^^^^^^^^^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >f20 : <T, V>(a: [T, V]) => [T[], { value: V; }]
->    : ^^^^^^^ ^^^^^^^^^^^^^ ^      ^^^^^^^ ^   
+>    : ^^^^^^^ ^^^^^^^^^^^^^ ^^^  ^^^^^^^^^ ^^^ 
 >f20 : <T, V>(a: [T, V]) => [T[], { value: V; }]
->    : ^^^^^^^ ^^^^^^^^^^^^^ ^      ^^^^^^^ ^   
+>    : ^^^^^^^ ^^^^^^^^^^^^^ ^^^  ^^^^^^^^^ ^^^ 
 
 const f25 = pipe2(foo, foo);
 >f25 : <T extends { value: T; }, T1 extends { value: T1; }>(a: [T, T1]) => [T, T1]
@@ -633,9 +633,9 @@ const f25 = pipe2(foo, foo);
 
 const f26 = pipe2(f25, f25);
 >f26 : <T extends { value: T; }, T1 extends { value: T1; }, T2 extends { value: T2; }, T3 extends { value: T3; }>(a: [[T, T1], [T2, T3]]) => [[T, T1], [T2, T3]]
->    : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^  ^^    ^^  ^^  
+>    : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^ 
 >pipe2(f25, f25) : <T extends { value: T; }, T1 extends { value: T1; }, T2 extends { value: T2; }, T3 extends { value: T3; }>(a: [[T, T1], [T2, T3]]) => [[T, T1], [T2, T3]]
->                : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^  ^^    ^^  ^^  
+>                : ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^^^^ 
 >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
 >      : ^^^^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                     
 >f25 : <T extends { value: T; }, T1 extends { value: T1; }>(a: [T, T1]) => [T, T1]
@@ -659,9 +659,9 @@ declare function pipe3<A, B, C>(ab: (a: A) => B, ac: (a: A) => C): (a: A) => [B,
 
 const f30 = pipe3(list, box);
 >f30 : <T>(a: T) => [T[], { value: T; }]
->    : ^^^^ ^^^^^^^^ ^      ^^^^^^^^^   
+>    : ^^^^ ^^^^^^^^ ^^^  ^^^^^^^^^^^^^ 
 >pipe3(list, box) : <T>(a: T) => [T[], { value: T; }]
->                 : ^^^^ ^^^^^^^^ ^      ^^^^^^^^^   
+>                 : ^^^^ ^^^^^^^^ ^^^  ^^^^^^^^^^^^^ 
 >pipe3 : <A, B, C>(ab: (a: A) => B, ac: (a: A) => C) => (a: A) => [B, C]
 >      : ^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                
 >list : <T>(a: T) => T[]
@@ -671,9 +671,9 @@ const f30 = pipe3(list, box);
 
 const f31 = pipe3(box, list);
 >f31 : <V>(a: V) => [{ value: V; }, V[]]
->    : ^^^^ ^^^^^^^^   ^^^^^^^ ^    ^   
+>    : ^^^^ ^^^^^^^^ ^^^^^^^^^ ^^^  ^^^ 
 >pipe3(box, list) : <V>(a: V) => [{ value: V; }, V[]]
->                 : ^^^^ ^^^^^^^^   ^^^^^^^ ^    ^   
+>                 : ^^^^ ^^^^^^^^ ^^^^^^^^^ ^^^  ^^^ 
 >pipe3 : <A, B, C>(ab: (a: A) => B, ac: (a: A) => C) => (a: A) => [B, C]
 >      : ^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                
 >box : <V>(x: V) => { value: V; }
@@ -683,9 +683,9 @@ const f31 = pipe3(box, list);
 
 const f32 = pipe3(list, list);
 >f32 : <T>(a: T) => [T[], T[]]
->    : ^^^^ ^^^^^^^^ ^    ^   
+>    : ^^^^ ^^^^^^^^ ^^^  ^^^ 
 >pipe3(list, list) : <T>(a: T) => [T[], T[]]
->                  : ^^^^ ^^^^^^^^ ^    ^   
+>                  : ^^^^ ^^^^^^^^ ^^^  ^^^ 
 >pipe3 : <A, B, C>(ab: (a: A) => B, ac: (a: A) => C) => (a: A) => [B, C]
 >      : ^^^^^^^^^^  ^^           ^^  ^^           ^^^^^                
 >list : <T>(a: T) => T[]
@@ -707,9 +707,9 @@ declare function pipe4<A, B, C>(funcs: [(a: A) => B, (b: B) => C]): (a: A) => C;
 
 const f40 = pipe4([list, box]);
 >f40 : <T>(a: T) => { value: T[]; }
->    : ^^^^ ^^^^^^^^  ^^^^^^^^^^^  
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >pipe4([list, box]) : <T>(a: T) => { value: T[]; }
->                   : ^^^^ ^^^^^^^^  ^^^^^^^^^^^  
+>                   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >pipe4 : <A, B, C>(funcs: [(a: A) => B, (b: B) => C]) => (a: A) => C
 >      : ^^^^^^^^^^     ^^                          ^^^^^           
 >[list, box] : [<T>(a: T) => T[], <V>(x: V) => { value: V; }]
@@ -721,9 +721,9 @@ const f40 = pipe4([list, box]);
 
 const f41 = pipe4([box, list]);
 >f41 : <V>(a: V) => { value: V; }[]
->    : ^^^^ ^^^^^^^^^^^^^^^^^ ^^^  
+>    : ^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe4([box, list]) : <V>(a: V) => { value: V; }[]
->                   : ^^^^ ^^^^^^^^^^^^^^^^^ ^^^  
+>                   : ^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe4 : <A, B, C>(funcs: [(a: A) => B, (b: B) => C]) => (a: A) => C
 >      : ^^^^^^^^^^     ^^                          ^^^^^           
 >[box, list] : [<V>(x: V) => { value: V; }, <T>(a: T) => T[]]
@@ -747,9 +747,9 @@ declare function pipe5<A, B>(f: (a: A) => B): { f: (a: A) => B };
 
 const f50 = pipe5(list);  // No higher order inference
 >f50 : { f: (a: unknown) => unknown[]; }
->    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^^
+>    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe5(list) : { f: (a: unknown) => unknown[]; }
->            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^^
+>            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
 >      : ^^^^^^^ ^^           ^^^^^                   
 >list : <T>(a: T) => T[]
@@ -785,9 +785,9 @@ declare function baz<T, U extends T>(t1: T, t2: T, u: U): [T, U];
 
 let f60 = wrap3(baz);
 >f60 : <T, U extends T>(a: T, b1: U, b2: U) => [T, U]
->    : ^^^^^^^^^^^^^^ ^^ ^^^^^  ^^^^^  ^^^^^^^^ ^  ^ 
+>    : ^^^^^^^^^^^^^^ ^^ ^^^^^  ^^^^^  ^^^^^^^^^^^^^^
 >wrap3(baz) : <T, U extends T>(a: T, b1: U, b2: U) => [T, U]
->           : ^^^^^^^^^^^^^^ ^^ ^^^^^  ^^^^^  ^^^^^^^^ ^  ^ 
+>           : ^^^^^^^^^^^^^^ ^^ ^^^^^  ^^^^^  ^^^^^^^^^^^^^^
 >wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
 >      : ^^^^^^^^^^ ^^                         ^^^^^                         
 >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
@@ -812,9 +812,9 @@ declare const list2: {
 
 let f70 = pipe(list2, box);
 >f70 : <T>(a: T) => { value: T[]; }
->    : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(list2, box) : <T>(a: T) => { value: T[]; }
->                 : ^^^^^^^^^^^^^  ^^^^^^^^^^^  
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
@@ -824,9 +824,9 @@ let f70 = pipe(list2, box);
 
 let f71 = pipe(box, list2);
 >f71 : <V>(x: V) => { value: V; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^  
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe(box, list2) : <V>(x: V) => { value: V; }[]
->                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^  
+>                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >box : <V>(x: V) => { value: V; }
@@ -1008,9 +1008,9 @@ declare class GenericComp<T> extends Comp<GenericProps<T>> {}
 
 const GenericComp2 = myHoc(GenericComp);
 >GenericComp2 : new <T>(props: GenericProps<T>) => Comp<GenericProps<T>>
->             : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^ ^  
+>             : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^ 
 >myHoc(GenericComp) : new <T>(props: GenericProps<T>) => Comp<GenericProps<T>>
->                   : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^ ^  
+>                   : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^ 
 >myHoc : <P>(C: CompClass<P>) => CompClass<P>
 >      : ^^^^ ^^            ^^^^^            
 >GenericComp : typeof GenericComp
@@ -1177,7 +1177,7 @@ var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
 >x : T
 >  : ^
 >flip(zip) : (b: U, a: T) => [T, U]
->          : ^ ^^^^^ ^^^^^^^^ ^  ^ 
+>          : ^ ^^^^^ ^^^^^^^^^^^^^^
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
 >     : ^^^^^^^^^^ ^^                 ^^^^^                 
 >zip : <T, U>(x: T, y: U) => [T, U]
@@ -1185,9 +1185,9 @@ var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
 
 var actual = flip(zip);
 >actual : <T, U>(b: U, a: T) => [T, U]
->       : ^^^^^^^ ^^^^^ ^^^^^^^^ ^  ^ 
+>       : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 >flip(zip) : <T, U>(b: U, a: T) => [T, U]
->          : ^^^^^^^ ^^^^^ ^^^^^^^^ ^  ^ 
+>          : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
 >     : ^^^^^^^^^^ ^^                 ^^^^^                 
 >zip : <T, U>(x: T, y: U) => [T, U]
@@ -1284,9 +1284,9 @@ function of2<a, b>(one: a, two: b): [a, b] {
 
 const flipped = flip(of2);
 >flipped : <a, b>(b: b, a: a) => [a, b]
->        : ^^^^^^^ ^^^^^ ^^^^^^^^ ^  ^ 
+>        : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 >flip(of2) : <a, b>(b: b, a: a) => [a, b]
->          : ^^^^^^^ ^^^^^ ^^^^^^^^ ^  ^ 
+>          : ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
 >     : ^^^^^^^^^^ ^^                 ^^^^^                 
 >of2 : <a, b>(one: a, two: b) => [a, b]
@@ -1320,9 +1320,9 @@ declare const MyComponent1: Component<{ foo: 1 }>;
 
 const enhance = pipe(
 >enhance : <P>(C: Component<P>) => Component<P>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(    myHoc1,    myHoc2,) : <P>(C: Component<P>) => Component<P>
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1342,7 +1342,7 @@ const MyComponent2 = enhance(MyComponent1);
 >enhance(MyComponent1) : Component<{ foo: 1; }>
 >                      : ^^^^^^^^^^^^^^^^^ ^^^^
 >enhance : <P>(C: Component<P>) => Component<P>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent1 : Component<{ foo: 1; }>
 >             : ^^^^^^^^^^^^^^^^^ ^^^^
 
@@ -1350,9 +1350,9 @@ const MyComponent2 = enhance(MyComponent1);
 
 const fn20 = pipe((_a?: {}) => 1);
 >fn20 : (_a?: {} | undefined) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe((_a?: {}) => 1) : (_a?: {} | undefined) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 >(_a?: {}) => 1 : (_a?: {}) => number
@@ -1374,7 +1374,7 @@ const fn30: Fn = pipe(
 >fn30 : Fn
 >     : ^^
 >pipe(    x => x + 1,    x => x * 2,) : (x: number) => number
->                                     : ^^^^^^^^^^^^^^^      
+>                                     : ^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1430,7 +1430,7 @@ promise.then(
 
     pipe(
 >pipe(        x => x + 1,        x => x * 2,    ) : (x: number) => number
->                                                 : ^^^^^^^^^^^^^^^      
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1481,9 +1481,9 @@ declare const identity: <T>(value: T) => T;
 
 const fn40 = pipe(
 >fn40 : () => string | undefined
->     : ^^^^^^^^^^^^   ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe(    getString,    string => orUndefined(string),    identity,) : () => string | undefined
->                                                                    : ^^^^^^^^^^^^   ^^^^^^^^^
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1523,9 +1523,9 @@ declare const first: <T>(ts: T[]) => T;
 
 const fn60 = pipe(
 >fn60 : () => string
->     : ^^^^^^      
+>     : ^^^^^^^^^^^^
 >pipe(    getArray,    x => x,    first,) : () => string
->                                         : ^^^^^^      
+>                                         : ^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1549,9 +1549,9 @@ const fn60 = pipe(
 
 const fn61 = pipe(
 >fn61 : () => string
->     : ^^^^^^      
+>     : ^^^^^^^^^^^^
 >pipe(    getArray,    identity,    first,) : () => string
->                                           : ^^^^^^      
+>                                           : ^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1571,9 +1571,9 @@ const fn61 = pipe(
 
 const fn62 = pipe(
 >fn62 : () => string
->     : ^^^^^^      
+>     : ^^^^^^^^^^^^
 >pipe(    getArray,    x => x,    x => first(x),) : () => string
->                                                 : ^^^^^^      
+>                                                 : ^^^^^^^^^^^^
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 >     : ^^^^^^^^^^^^^     ^^^^^  ^^                 ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^  ^^                 ^^  ^^           ^^^                 ^^^^^^^^^^^^^     ^^^^^^^^^^^  ^^                 ^^  ^^           ^^  ^^           ^^^                 ^^^
 
@@ -1659,7 +1659,7 @@ const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]
 >times(identity)(5) : number[]
 >                   : ^^^^^^^^
 >times(identity) : (n: number) => number[]
->                : ^ ^^      ^^^^^        
+>                : ^ ^^      ^^^^^^^^^^^  
 >times : <T>(fn: (i: number) => T) => (n: number) => T[]
 >      : ^^^^  ^^                ^^^^^                  
 >identity : <T>(value: T) => T
