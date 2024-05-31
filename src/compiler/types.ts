@@ -5265,6 +5265,7 @@ export interface TypeChecker {
     /** @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
     /** @internal */ getGlobalDiagnostics(): Diagnostic[];
     /** @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken, forceDts?: boolean): EmitResolver;
+    /** @internal */ requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 
     /** @internal */ getNodeCount(): number;
     /** @internal */ getIdentifierCount(): number;

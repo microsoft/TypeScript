@@ -1763,6 +1763,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getImmediateAliasedSymbol,
         getAliasedSymbol: resolveAlias,
         getEmitResolver,
+        requiresAddingImplicitUndefined,
         getExportsOfModule: getExportsOfModuleAsArray,
         getExportsAndPropertiesOfModule,
         forEachExportAndPropertyOfModule,
