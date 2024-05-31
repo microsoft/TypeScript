@@ -3016,22 +3016,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
             const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
             const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
-            const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
             // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
             // - plain JS: .js files with no // ts-check and checkJs: undefined
             // - check JS: .js files with either // ts-check or checkJs: true
             // - external: files that are added by plugins
-            const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-            let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+            let bindDiagnostics = sourceFile.bindDiagnostics;
+            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
             if (isPlainJs) {
                 bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(sourceFile, !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
         });
     }
 
@@ -4463,9 +4460,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.noCheck) {
             if (options.noEmit) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noCheck", "noEmit");
-            }
-            if (!options.emitDeclarationOnly) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "noCheck", "emitDeclarationOnly");
             }
         }
 

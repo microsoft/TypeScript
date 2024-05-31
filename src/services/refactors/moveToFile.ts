@@ -1149,7 +1149,7 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
     for (const statement of statements) {
         forEachReference(statement, checker, s => {
             const symbol = skipAlias(s, checker);
-            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFile) {
+            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration).path === sourceFile.path) {
                 existingLocals.add(symbol);
             }
         });

@@ -21,6 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
+    canIncludeBindAndCheckDiagnsotics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -207,6 +208,7 @@ import {
     isGeneratedPrivateIdentifier,
     isIdentifier,
     isImportAttributes,
+    isImportEqualsDeclaration,
     isIncrementalCompilation,
     isInJsonFile,
     isJSDocLikeText,
@@ -798,6 +800,16 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             emitSkipped = true;
             return;
         }
+
+        (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(
+            sourceFile => {
+                if (
+                    compilerOptions.noCheck ||
+                    !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                ) markLinkedReferences(sourceFile);
+            },
+        );
+
         // Transform the source files
         const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
@@ -853,15 +865,19 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if (
-            (emitOnly && !getEmitDeclarations(compilerOptions)) ||
-            compilerOptions.noCheck ||
-            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit)
-        ) {
-            // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
-            // Do that here when emitting only dts files
-            filesForEmit.forEach(collectLinkedAliases);
-        }
+        // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
+        // Do that here when emitting only dts files
+        filesForEmit.forEach(sourceFile => {
+            if (
+                (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+                compilerOptions.noCheck ||
+                emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit) ||
+                !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+            ) {
+                collectLinkedAliases(sourceFile);
+            }
+        });
+
         const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
         if (length(declarationTransform.diagnostics)) {
             for (const diagnostic of declarationTransform.diagnostics!) {
@@ -931,6 +947,14 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
         forEachChild(node, collectLinkedAliases);
+    }
+
+    function markLinkedReferences(file: SourceFile) {
+        ts.forEachChildRecursively(file, n => {
+            if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
+            if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
+            resolver.markLinkedReferences(n);
+        });
     }
 
     function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, transform: TransformationResult<SourceFile | Bundle>, printer: Printer, mapOptions: SourceMapOptions) {
@@ -1099,10 +1123,11 @@ export const notImplementedResolver: EmitResolver = {
     isValueAliasDeclaration: notImplemented,
     isReferencedAliasDeclaration: notImplemented,
     isTopLevelValueImportEqualsWithEntityName: notImplemented,
-    getNodeCheckFlags: notImplemented,
+    hasNodeCheckFlag: notImplemented,
     isDeclarationVisible: notImplemented,
     isLateBound: (_node): _node is LateBoundDeclaration => false,
     collectLinkedAliases: notImplemented,
+    markLinkedReferences: notImplemented,
     isImplementationOfOverload: notImplemented,
     requiresAddingImplicitUndefined: notImplemented,
     isExpandoFunctionDeclaration: notImplemented,
