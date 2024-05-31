@@ -801,9 +801,14 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
 
-        if (compilerOptions.noCheck) {
-            (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(markLinkedReferences);
-        }
+        (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(
+            sourceFile => {
+                if (
+                    compilerOptions.noCheck ||
+                    !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                ) markLinkedReferences(sourceFile);
+            },
+        );
 
         // Transform the source files
         const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
