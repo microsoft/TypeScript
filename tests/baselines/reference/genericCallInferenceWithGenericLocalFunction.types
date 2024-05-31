@@ -41,7 +41,7 @@ function withP2<P>(p: P) {
 >createTransform(m) : <I>(from: I) => I & P
 >                   : ^^^^    ^^^^^^^^^^^^^
 >createTransform : <I, O>(tr: (from: I) => O) => (from: I) => O
->                : ^ ^^ ^^  ^^              ^^^^^^    ^^ ^^^^^^
+>                : ^ ^^ ^^  ^^              ^^^^^^    ^^ ^^^^^ 
 >m : <I>(from: I) => I & P
 >  : ^ ^^    ^^ ^^^^^^^^^^
 }

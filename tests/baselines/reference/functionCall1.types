@@ -11,5 +11,5 @@ var x = foo();
 >x : any
 >foo() : any
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 

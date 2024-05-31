@@ -3,7 +3,7 @@
 === elementAccessExpressionInternalComments.ts ===
 /*0*/ Array /*1*/[ /*2*/ "toString" /*3*/ ] /*4*/; /*5*/
 >Array /*1*/[ /*2*/ "toString" /*3*/ ] : () => string
->                                      : ^^^^^^^^^^^^
+>                                      : ^^^^^^      
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >"toString" : "toString"
@@ -11,7 +11,7 @@
 
 /*0*/ Array 
 >Array     // single line    /*1*/[ /*2*/ "toString"    // single line    /*3*/ ] : () => string
->                                                                                 : ^^^^^^^^^^^^
+>                                                                                 : ^^^^^^      
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 

@@ -29,7 +29,7 @@ errorOnAssignmentBelow.a = "";
 >errorOnAssignmentBelow.a : string
 >                         : ^^^^^^
 >errorOnAssignmentBelow : { (): void; a: string; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^    ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >"" : ""

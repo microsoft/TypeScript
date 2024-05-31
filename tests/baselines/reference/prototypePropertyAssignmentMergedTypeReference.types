@@ -31,7 +31,7 @@ f.prototype.a = "a";
 /** @type {new () => f} */
 var x = f;
 >x : new () => f
->  : ^^^^^^^^^^^
+>  : ^^^^^^^^^^ 
 >f : typeof f
 >  : ^^^^^^^^
 

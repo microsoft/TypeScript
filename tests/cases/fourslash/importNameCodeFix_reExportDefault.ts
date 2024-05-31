@@ -6,6 +6,9 @@
 // @Filename: /user2.ts
 ////unnamed;
 
+// @Filename: /user3.ts
+////reExportUnnamed;
+
 // @Filename: /reExportNamed.ts
 ////export { default } from "./named";
 
@@ -38,3 +41,9 @@ unnamed;`,
 
 unnamed;`,
 ]);
+
+goTo.file("/user3.ts");
+verify.importFixAtPosition([
+`import reExportUnnamed from "./reExportUnnamed";
+
+reExportUnnamed;`]);

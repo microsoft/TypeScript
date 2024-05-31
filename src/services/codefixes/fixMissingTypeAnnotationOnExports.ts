@@ -65,6 +65,7 @@ import {
     isSpreadAssignment,
     isSpreadElement,
     isStatement,
+    isTypeNode,
     isValueSignatureDeclaration,
     isVariableDeclaration,
     ModifierFlags,
@@ -94,7 +95,7 @@ import {
     VariableDeclaration,
     VariableStatement,
     walkUpParenthesizedExpressions,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 import {
     createCodeFixAction,
@@ -103,8 +104,8 @@ import {
     eachDiagnostic,
     registerCodeFix,
     typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix";
-import { getIdentifierForNode } from "../refactors/helpers";
+} from "../_namespaces/ts.codefix.js";
+import { getIdentifierForNode } from "../refactors/helpers.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -121,6 +122,7 @@ const errorCodes = [
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations.code,
+    Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations.code,
     Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations.code,
     Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations.code,
@@ -131,6 +133,7 @@ const errorCodes = [
     Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations.code,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
     Diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_supported_with_isolatedDeclarations.code,
+    Diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations.code,
     Diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit.code,
 ];
 
@@ -180,7 +183,7 @@ registerCodeFix({
 
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Full, f => f.addInlineAssertion(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Relative, f => f.addInlineAssertion(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Widened, f => f.addInlineAssertion(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Widened, f => f.addInlineAssertion(context.span));
 
         addCodeAction(extractExpression, fixes, context, TypePrintMode.Full, f => f.extractAsVariable(context.span));
 
@@ -234,7 +237,6 @@ function withContext<T>(
     const sourceFile: SourceFile = context.sourceFile;
     const program = context.program;
     const typeChecker: TypeChecker = program.getTypeChecker();
-    const emitResolver = typeChecker.getEmitResolver();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const fixedNodes = new Set<Node>();
@@ -351,7 +353,7 @@ function withContext<T>(
             return undefined;
         }
         // No support for typeof in extends clauses
-        if (isExpressionTarget && findAncestor(targetNode, isHeritageClause)) {
+        if (isExpressionTarget && (findAncestor(targetNode, isHeritageClause) || findAncestor(targetNode, isTypeNode))) {
             return undefined;
         }
         // Can't inline type spread elements. Whatever you do isolated declarations will not infer from them
@@ -884,7 +886,7 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && emitResolver.requiresAddingImplicitUndefined(node)) {
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         const flags = (
@@ -1105,26 +1107,26 @@ function withContext<T>(
         setEmitFlags(node, EmitFlags.None);
         return result;
     }
-}
 
-// Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
-// ancestors to look for node that needs type annotation. This function can return undefined if the AST is ill-formed.
-function findAncestorWithMissingType(node: Node): Node | undefined {
-    return findAncestor(node, n => {
-        return canHaveTypeAnnotation.has(n.kind) &&
-            ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
-    });
-}
+    // Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
+    // ancestors to look for node that needs type annotation. This function can return undefined if the AST is ill-formed.
+    function findAncestorWithMissingType(node: Node): Node | undefined {
+        return findAncestor(node, n => {
+            return canHaveTypeAnnotation.has(n.kind) &&
+                ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
+        });
+    }
 
-function findBestFittingNode(node: Node, span: TextSpan) {
-    while (node && node.end < span.start + span.length) {
-        node = node.parent;
+    function findBestFittingNode(node: Node, span: TextSpan) {
+        while (node && node.end < span.start + span.length) {
+            node = node.parent;
+        }
+        while (node.parent.pos === node.pos && node.parent.end === node.end) {
+            node = node.parent;
+        }
+        if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
+            return node.parent.initializer;
+        }
+        return node;
     }
-    while (node.parent.pos === node.pos && node.parent.end === node.end) {
-        node = node.parent;
-    }
-    if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
-        return node.parent.initializer;
-    }
-    return node;
 }

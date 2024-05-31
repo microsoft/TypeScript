@@ -5,7 +5,7 @@ import {
     noop,
     Version,
     version,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export let enableDeprecationWarnings = true;
 

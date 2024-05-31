@@ -131,6 +131,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateChildWatches
 
+Host is moving to new time
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
@@ -148,6 +149,7 @@ Before running Timeout callback:: count: 2
 2: timerToInvalidateFailedLookupResolutions
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear

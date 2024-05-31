@@ -1,8 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
-import { baselineParseConfig } from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 const caseInsensitiveBasePath = "c:/dev/";
 const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";

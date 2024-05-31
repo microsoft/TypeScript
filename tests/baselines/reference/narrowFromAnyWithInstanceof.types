@@ -110,11 +110,11 @@ if (x instanceof Date) {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : Date
 >  : ^^^^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
     x.getHuors();
 >x.getHuors() : any

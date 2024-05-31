@@ -94,7 +94,7 @@ var o1 = overloaded(1,2)
 >overloaded(1,2) : number
 >                : ^^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
->           : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -106,7 +106,7 @@ var o2 = overloaded("zero", "one")
 >overloaded("zero", "one") : never
 >                          : ^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
->           : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
 >"zero" : "zero"
 >       : ^^^^^^
 >"one" : "one"
@@ -118,7 +118,7 @@ var o3 = overloaded("a",false)
 >overloaded("a",false) : string
 >                      : ^^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
->           : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
 >"a" : "a"
 >    : ^^^
 >false : false
@@ -155,7 +155,7 @@ uncheckedInternally(1,2)
 >uncheckedInternally(1,2) : number
 >                         : ^^^^^^
 >uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
->                    : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -165,7 +165,7 @@ uncheckedInternally("zero", "one")
 >uncheckedInternally("zero", "one") : never
 >                                   : ^^^^^
 >uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
->                    : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
 >"zero" : "zero"
 >       : ^^^^^^
 >"one" : "one"

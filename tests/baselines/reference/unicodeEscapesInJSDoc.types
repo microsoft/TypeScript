@@ -17,11 +17,11 @@ function foo(a, aa) {
 >console.log(a + aa) : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >a + aa : number
 >       : ^^^^^^
 >a : number
@@ -46,11 +46,11 @@ function bar(a, aa) {
 >console.log(a + aa) : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >a + aa : number
 >       : ^^^^^^
 >a : number

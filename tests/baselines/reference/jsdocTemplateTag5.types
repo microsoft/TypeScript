@@ -34,7 +34,7 @@ Multimap.prototype = {
 >Multimap : typeof Multimap
 >         : ^^^^^^^^^^^^^^^
 >prototype : { get(key: K): V; }
->          : ^^^^^^   ^^ ^^^^^^^
+>          : ^^^^^^   ^^ ^^^ ^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
 >                                                                                                                                       : ^^^^^^   ^^ ^^^ ^^^
 
@@ -101,7 +101,7 @@ Multimap2.prototype = {
 >Multimap2 : typeof Multimap2
 >          : ^^^^^^^^^^^^^^^^
 >prototype : { get: (key: K) => V; }
->          : ^^^^^^^^   ^^ ^^^^^^^^^
+>          : ^^^^^^^^   ^^ ^^^^^ ^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get: function(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
 >                                                                                                                                                 : ^^^^^^^^   ^^ ^^^^^ ^^^
 
@@ -186,7 +186,7 @@ Ns.Multimap3.prototype = {
 >Multimap3 : typeof Multimap3
 >          : ^^^^^^^^^^^^^^^^
 >prototype : { get(key: K): V; }
->          : ^^^^^^   ^^ ^^^^^^^
+>          : ^^^^^^   ^^ ^^^ ^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
 >                                                                                                                                       : ^^^^^^   ^^ ^^^ ^^^
 

@@ -33,7 +33,7 @@ const myReducer1: Reducer<MyState> = combineReducers({
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
->                : ^ ^^        ^^                                  ^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^                                  ^^^^^          
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -43,7 +43,7 @@ const myReducer1: Reducer<MyState> = combineReducers({
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
->                : ^ ^^        ^^                                  ^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^                                  ^^^^^          
 >{ foo } : { foo: Reducer<number>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Reducer<number>
@@ -57,7 +57,7 @@ const myReducer2 = combineReducers({
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
->                : ^ ^^        ^^                                  ^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^                                  ^^^^^          
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ const myReducer2 = combineReducers({
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
->                : ^ ^^        ^^                                  ^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^                                  ^^^^^          
 >{ foo } : { foo: Reducer<number>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Reducer<number>
@@ -103,7 +103,7 @@ const enhancer4 = withH((props: Props) => ({
 >withH((props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},})) : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
 >                                                                                                              : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >withH : <T, U>(handlerCreators: HandleCreatorsFactory<T, U>) => U
->      : ^ ^^ ^^               ^^                           ^^^^^^
+>      : ^ ^^ ^^               ^^                           ^^^^^ 
 >(props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},}) : (props: Props) => { onChange: (props: Props) => (e: any) => void; onSubmit: (props: Props) => (e: any) => void; }
 >                                                                                                       : ^     ^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >props : Props

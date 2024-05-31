@@ -260,6 +260,7 @@ Before running Timeout callback:: count: 2
 5: timerToInvalidateFailedLookupResolutions
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Reloading new file names and options

@@ -121,7 +121,7 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {
@@ -778,7 +778,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: false,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
+        transpileOptionValue: true,
         defaultValueDescription: false,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
@@ -1638,6 +1638,12 @@ export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] 
 export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
 
 // Build related options
 /** @internal */

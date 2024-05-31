@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AnyFunction,
     AssertionLevel,
@@ -64,6 +64,7 @@ import {
     ModifierFlags,
     Node,
     NodeArray,
+    NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
     noop,
@@ -91,7 +92,7 @@ import {
     unescapeLeadingUnderscores,
     VarianceFlags,
     zipWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum LogLevel {
@@ -453,6 +454,10 @@ export namespace Debug {
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
+    }
+
+    export function formatNodeCheckFlags(flags: NodeCheckFlags | undefined): string {
+        return formatEnum(flags, (ts as any).NodeCheckFlags, /*isFlags*/ true);
     }
 
     export function formatModifierFlags(flags: ModifierFlags | undefined): string {

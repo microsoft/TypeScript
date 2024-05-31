@@ -42,9 +42,9 @@ x1("string");
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
 >x2 : (arg0: number) => number
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >(a) => a + 1 : (a: number) => number
->             : ^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^      
 >a : number
 >  : ^^^^^^
 >a + 1 : number
@@ -67,16 +67,16 @@ a = x2(0);
 >x2(0) : number
 >      : ^^^^^^
 >x2 : (arg0: number) => number
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >0 : 0
 >  : ^
 
 /** @type {function (number): number} */
 const x3 = (a) => a.concat("hi");
 >x3 : (arg0: number) => number
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >(a) => a.concat("hi") : (a: number) => number
->                      : ^ ^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^^^^^      
 >a : number
 >  : ^^^^^^
 >a.concat("hi") : any
@@ -94,16 +94,16 @@ x3(0);
 >x3(0) : number
 >      : ^^^^^^
 >x3 : (arg0: number) => number
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >0 : 0
 >  : ^
 
 /** @type {function (number): string} */
 const x4 = (a) => a + 1;
 >x4 : (arg0: number) => string
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >(a) => a + 1 : (a: number) => string
->             : ^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^      
 >a : number
 >  : ^^^^^^
 >a + 1 : number
@@ -117,7 +117,7 @@ x4(0);
 >x4(0) : string
 >      : ^^^^^^
 >x4 : (arg0: number) => string
->   : ^^^^^^^      ^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^^      
 >0 : 0
 >  : ^
 

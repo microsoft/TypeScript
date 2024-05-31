@@ -94,7 +94,7 @@ import {
     WatchType,
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;
@@ -594,6 +594,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             });
             parsedConfigs = undefined;
         }
+        builderProgram = undefined!;
     }
 
     function getResolutionCache() {

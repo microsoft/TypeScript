@@ -9,7 +9,7 @@ function f(x: "foo"): number;
 
 function f(x: "foo"): number {
 >f : (x: "foo") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >x : "foo"
 >  : ^^^^^
 
@@ -26,7 +26,7 @@ function g(x: "bar"): number;
 
 function g(x: "bar"): number {
 >g : (x: "bar") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >x : "bar"
 >  : ^^^^^
 
@@ -37,29 +37,29 @@ function g(x: "bar"): number {
 
 let a = f;
 >a : (x: "foo") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >f : (x: "foo") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 
 let b = g;
 >b : (x: "bar") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >g : (x: "bar") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 
 a = b;
 >a = b : (x: "bar") => number
->      : ^ ^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^      
 >a : (x: "foo") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >b : (x: "bar") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 
 b = a;
 >b = a : (x: "foo") => number
->      : ^ ^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^      
 >b : (x: "bar") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 >a : (x: "foo") => number
->  : ^ ^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^      
 

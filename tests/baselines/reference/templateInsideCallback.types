@@ -61,7 +61,7 @@ function flatMap(array, iterable = identity) {
 >array : unknown[]
 >      : ^^^^^^^^^
 >iterable : (x: unknown) => unknown
->         : ^ ^^       ^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^       
 >identity : any
 >         : ^^^
 
@@ -98,11 +98,11 @@ function flatMap(array, iterable = identity) {
 >result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
 >                                                             : ^^^^^^
 >result.push : (...items: unknown[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^^      
 >result : unknown[]
 >       : ^^^^^^^^^
 >push : (...items: unknown[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >.../** @type {unknown[]} */(iterable(array[i])) : unknown
 >                                                : ^^^^^^^
 >(iterable(array[i])) : unknown[]
@@ -110,7 +110,7 @@ function flatMap(array, iterable = identity) {
 >iterable(array[i]) : unknown
 >                   : ^^^^^^^
 >iterable : (x: unknown) => unknown
->         : ^ ^^       ^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^       
 >array[i] : unknown
 >         : ^^^^^^^
 >array : unknown[]

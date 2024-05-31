@@ -57,11 +57,11 @@ for (var propname in HTMLDOMPropertyConfig.Properties) {
 >propname.toLowerCase() : string
 >                       : ^^^^^^
 >propname.toLowerCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >propname : string
 >         : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 }
 
 /**
@@ -264,11 +264,11 @@ function isEmpty(string) {
 >/[^\s]/.test(string) : boolean
 >                     : ^^^^^^^
 >/[^\s]/.test : (string: string) => boolean
->             : ^      ^^      ^^^^^^^^^^^^
+>             : ^      ^^      ^^^^^       
 >/[^\s]/ : RegExp
 >        : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >string : any
 }
 
@@ -288,11 +288,11 @@ function isConvertiblePixelValue(value) {
 >/^\d+px$/.test(value) : boolean
 >                      : ^^^^^^^
 >/^\d+px$/.test : (string: string) => boolean
->               : ^      ^^      ^^^^^^^^^^^^
+>               : ^      ^^      ^^^^^       
 >/^\d+px$/ : RegExp
 >          : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >value : any
 }
 
@@ -392,17 +392,17 @@ export class HTMLtoJSX {
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >                                                                                                                                                                 : ^^^^^^
 >text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                                                : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                                                : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >text        .replace(/\r/g, '') : string
 >                                : ^^^^^^
 >text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >text : string
 >     : ^^^^^^
 
         .replace(/\r/g, '')
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r/g : RegExp
 >      : ^^^^^^
 >'' : ""
@@ -410,7 +410,7 @@ export class HTMLtoJSX {
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/( {2,}|\n|\t|\{|\})/g : RegExp
 >                       : ^^^^^^
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
@@ -428,11 +428,11 @@ export class HTMLtoJSX {
 >JSON.stringify(whitespace) : string
 >                           : ^^^^^^
 >JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
->               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
 >JSON : JSON
 >     : ^^^^
 >stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
->          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
 >whitespace : string
 >           : ^^^^^^
 >'}' : "}"
@@ -447,11 +447,11 @@ export class HTMLtoJSX {
 >text.indexOf('\n') : number
 >                   : ^^^^^^
 >text.indexOf : (searchString: string, position?: number) => number
->             : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>             : ^            ^^      ^^        ^^^      ^^^^^      
 >text : string
 >     : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
->        : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
+>        : ^            ^^      ^^        ^^^      ^^^^^      
 >'\n' : "\n"
 >     : ^^^^
 >-1 : -1
@@ -512,7 +512,7 @@ export class StyleParser {
 >this.styles.hasOwnProperty(key) : boolean
 >                                : ^^^^^^^
 >this.styles.hasOwnProperty : (v: PropertyKey) => boolean
->                           : ^ ^^           ^^^^^^^^^^^^
+>                           : ^ ^^           ^^^^^       
 >this.styles : {}
 >            : ^^
 >this : this
@@ -520,7 +520,7 @@ export class StyleParser {
 >styles : {}
 >       : ^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >key : string
 >    : ^^^^^^
       }

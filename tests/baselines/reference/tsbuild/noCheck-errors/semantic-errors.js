@@ -32,12 +32,12 @@ const a: number = "hello"
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:08 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:09 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:10 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -74,12 +74,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:11 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:12 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:13 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -120,12 +120,12 @@ const a = "hello"
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:15 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:16 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:17 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -162,12 +162,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -212,12 +212,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:22 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:23 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
@@ -258,12 +258,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:25 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:26 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 

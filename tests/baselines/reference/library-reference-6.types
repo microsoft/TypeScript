@@ -8,7 +8,7 @@ var x: string = alpha.a;
 >alpha.a : string
 >        : ^^^^^^
 >alpha : { a: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 

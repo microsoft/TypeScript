@@ -97,14 +97,14 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --v
-[[90m12:00:24 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:26 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/sample1/core/anotherModule.ts' not found.
   The file is in the program because:
@@ -115,13 +115,13 @@ Output::
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-[[90m12:00:30 AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:00:31 AM[0m] Skipping build of project '/user/username/projects/sample1/logic/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/logic/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
-[[90m12:00:32 AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:00:33 AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
+[[90mHH:MM:SS AM[0m] Skipping build of project '/user/username/projects/sample1/tests/tsconfig.json' because its dependency '/user/username/projects/sample1/core' has errors
 
 
 Found 1 error.
@@ -130,7 +130,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":false,"impliedFormat":1},{"version":"-7959511260-declare const dts: any;","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":false,"impliedFormat":1},{"version":"-7959511260-declare const dts: any;","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"options":{"composite":true},"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -186,7 +186,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "options": {
       "composite": true
     },
-    "referencedMap": {},
     "changeFileSet": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts",
@@ -194,6 +193,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1090
+  "size": 1071
 }
 

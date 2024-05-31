@@ -91,11 +91,11 @@ var r3 = Base.fn(); // ok
 >Base.fn() : string
 >          : ^^^^^^
 >Base.fn : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >Base : typeof Base
 >     : ^^^^^^^^^^^
 >fn : () => string
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
 var r4 = Derived.fn(); // error
 >r4 : string
@@ -103,11 +103,11 @@ var r4 = Derived.fn(); // error
 >Derived.fn() : string
 >             : ^^^^^^
 >Derived.fn : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >fn : () => string
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
 var r5 = Base.a; // ok
 >r5 : number

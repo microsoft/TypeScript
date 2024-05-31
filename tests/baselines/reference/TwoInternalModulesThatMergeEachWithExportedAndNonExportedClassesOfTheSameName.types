@@ -69,7 +69,7 @@ var p: { x: number; y: number; };
 
 var p: A.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >A : any
 >  : ^^^
 
@@ -124,7 +124,7 @@ var l: { length: number; }
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^
 >X : any
 >  : ^^^
 >Y : any

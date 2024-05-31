@@ -3,7 +3,7 @@
 === indexedAccessConstraints.ts ===
 function foo<T extends object>(a: T[keyof T]) {
 >foo : <T extends object>(a: T[keyof T]) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^^^^
 >a : T[keyof T]
 >  : ^^^^^^^^^^
 
@@ -18,7 +18,7 @@ function foo<T extends object>(a: T[keyof T]) {
 
 export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKey: K): number {
 >methodFnLength : <T extends {}, K extends keyof T>(obj: T, methodKey: K) => number
->               : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^         ^^ ^^^^^      
+>               : ^ ^^^^^^^^^  ^^ ^^^^^^^^^       ^^   ^^ ^^         ^^ ^^^^^      
 >obj : T
 >    : ^
 >methodKey : K
@@ -61,7 +61,7 @@ export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKe
 
 function getField<T extends object>(x: T | null, k: keyof T) {
 >getField : <T extends object>(x: T | null, k: keyof T) => T[keyof T] | null
->         : ^ ^^^^^^^^^^^^^^^^^ ^^        ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^      ^^ ^^        ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >x : T | null
 >  : ^^^^^^^^
 >k : keyof T

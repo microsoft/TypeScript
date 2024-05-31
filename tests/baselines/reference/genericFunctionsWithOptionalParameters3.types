@@ -58,11 +58,11 @@ var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
 >utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() }) : Collection<Date>
 >                                                                      : ^^^^^^^^^^^^^^^^
 >utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >utils : Utils
 >      : ^^^^^
 >mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >c : Collection<string>
 >  : ^^^^^^^^^^^^^^^^^^
 >(x) => { return 1 } : (x: string) => number
@@ -86,11 +86,11 @@ var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return
 >utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() }) : Collection<Date>
 >                                                                                      : ^^^^^^^^^^^^^^^^
 >utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >utils : Utils
 >      : ^^^^^
 >mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >c : Collection<string>
 >  : ^^^^^^^^^^^^^^^^^^
 >(x: string) => { return 1 } : (x: string) => number
@@ -136,11 +136,11 @@ var r5 = utils.mapReduce(c, f1, f2);
 >utils.mapReduce(c, f1, f2) : Collection<Date>
 >                           : ^^^^^^^^^^^^^^^^
 >utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >utils : Utils
 >      : ^^^^^
 >mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^ ^^             ^^      ^^           ^^       ^^           ^^^^^             
 >c : Collection<string>
 >  : ^^^^^^^^^^^^^^^^^^
 >f1 : (x: string) => number

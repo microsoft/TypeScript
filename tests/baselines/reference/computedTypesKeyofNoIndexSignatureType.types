@@ -40,11 +40,11 @@ type FooBar = { foo: "hello"; bar: "world"; };
 
 type WithIndex = Compute<FooBar & IndexObject>;   // { [x: string]: {}; foo: "hello"; bar: "world"; } <-- OK
 >WithIndex : { [x: string]: {}; foo: "hello"; bar: "world"; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^       ^^^
 
 type WithoutIndex = OmitIndex<WithIndex, string>; // { foo: "hello"; bar: "world"; }                  <-- OK
 >WithoutIndex : OmitIndex<{ [x: string]: {}; foo: "hello"; bar: "world"; }, string>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^
 
 type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
 >FooBarKey : keyof FooBar

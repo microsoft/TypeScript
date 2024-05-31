@@ -102,12 +102,12 @@ var Func;
 /** @type {(s: string) => number} */
 var f;
 >f : (s: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 >ctor : new (s: string) => { s: string; }
->     : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^      ^^^^^              
 
 === b.ts ===
 var S: string;
@@ -190,13 +190,13 @@ var Func: Function;
 
 var f: (s: string) => number;
 >f : (s: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
 var ctor: new (s: string) => { s: string };
 >ctor : new (s: string) => { s: string; }
->     : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^      ^^^^^              
 >s : string
 >  : ^^^^^^
 >s : string

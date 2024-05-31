@@ -23,8 +23,8 @@ function f2<T, U extends U>() { }
 >   : ^^^^^^^^^^^^^^^^
 
 var a: {
->a : { <T>(): void; <T_1, U>(): void; }
->  : ^^^^^^^^^    ^^^^^^^^^^^^^^    ^^^
+>a : { <T>(): void; <T, U>(): void; }
+>  : ^^^^^^^^^    ^^^^^^^^^^^^    ^^^
 
     <T extends T>(): void;
     <T, U extends U>(): void;
