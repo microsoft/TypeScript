@@ -1,8 +1,6 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "./helpers";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import { jsonToReadableText } from "./helpers.js";
 
 interface File {
     name: string;
@@ -122,7 +120,7 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
         testTypingsIgnored(["a", "b"]);
         testTypingsIgnored({ a: "b" });
         testTypingsIgnored(/*typings*/ true);
-        testTypingsIgnored(/*typings*/ null); // eslint-disable-line no-null/no-null
+        testTypingsIgnored(/*typings*/ null); // eslint-disable-line no-restricted-syntax
         testTypingsIgnored(/*typings*/ undefined);
         runBaseline("relative module name as directory with invalid typings", baselines);
 

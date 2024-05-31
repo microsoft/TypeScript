@@ -34,6 +34,7 @@ export { }
 {
   "compilerOptions": {
     "outDir": "./dev-build",
+    "incremental": true,
     "noEmitOnError": true
   }
 }
@@ -41,7 +42,14 @@ export { }
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
@@ -58,8 +66,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -83,7 +91,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n","-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -103,23 +111,40 @@ Shape signatures in builder refreshed for::
       "../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+          "impliedFormat": 1
+        },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": "commonjs"
       },
       "../src/main.ts": {
+        "original": {
+          "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+          "impliedFormat": 1
+        },
         "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
-        "signature": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;"
+        "signature": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+        "impliedFormat": "commonjs"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+          "impliedFormat": 1
+        },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "signature": "9084524823-console.log(\"hi\");\nexport { }\n"
+        "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -144,19 +169,11 @@ Shape signatures in builder refreshed for::
         "../shared/types/db.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "../shared/types/db.ts",
       [
         "../src/main.ts",
         [
           {
-            "file": "../src/main.ts",
             "start": 46,
             "length": 1,
             "code": 2322,
@@ -164,8 +181,7 @@ Shape signatures in builder refreshed for::
             "messageText": "Type 'number' is not assignable to type 'string'."
           }
         ]
-      ],
-      "../src/other.ts"
+      ]
     ],
     "affectedFilesPendingEmit": [
       [
@@ -183,7 +199,7 @@ Shape signatures in builder refreshed for::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1176
+  "size": 1225
 }
 
 
@@ -193,7 +209,14 @@ Input::
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
@@ -210,8 +233,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -237,7 +260,14 @@ const a: string = "hello";
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -246,8 +276,8 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
-  "noEmitOnError": true,
   "incremental": true,
+  "noEmitOnError": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -282,7 +312,7 @@ console.log("hi");
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},"9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -302,27 +332,41 @@ console.log("hi");
       "../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "../shared/types/db.ts": {
+        "original": {
+          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+          "impliedFormat": 1
+        },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": "commonjs"
       },
       "../src/main.ts": {
         "original": {
           "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
-          "signature": "-3531856636-export {};\n"
+          "signature": "-3531856636-export {};\n",
+          "impliedFormat": 1
         },
         "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": "commonjs"
       },
       "../src/other.ts": {
+        "original": {
+          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+          "impliedFormat": 1
+        },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "signature": "9084524823-console.log(\"hi\");\nexport { }\n"
+        "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -346,17 +390,10 @@ console.log("hi");
       "../src/main.ts": [
         "../shared/types/db.ts"
       ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "../shared/types/db.ts",
-      "../src/main.ts",
-      "../src/other.ts"
-    ]
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1050
+  "size": 1083
 }
 
 
@@ -366,7 +403,12 @@ Input::
 
 
 Output::
-/a/lib/tsc --b --incremental
+/a/lib/tsc --b --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'src/main.ts' is older than output 'dev-build/tsconfig.tsbuildinfo'
+
 exitCode:: ExitStatus.Success
 
 

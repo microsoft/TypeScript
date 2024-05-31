@@ -6,7 +6,7 @@ module M {
         decorator(target: Object, key: string): void { }
     }
     class C extends S {
-        @super.decorator
+        @(super.decorator)
         method() { }
     }
 }
@@ -48,7 +48,7 @@ var M;
         }
         C.prototype.method = function () { };
         __decorate([
-            _super.decorator
+            (_super.decorator)
         ], C.prototype, "method", null);
         return C;
     }(S));

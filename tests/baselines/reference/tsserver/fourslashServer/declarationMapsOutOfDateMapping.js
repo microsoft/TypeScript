@@ -45,15 +45,15 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/a/dist
-Info seq  [hh:mm:ss:mss] For info: /node_modules/a/dist/index.d.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /node_modules/a/dist/index.d.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -87,10 +87,35 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/a/dist/package.json: *new*
+  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /node_modules/a/dist/node_modules/@types: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/a/dist/index.d.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -101,10 +126,10 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -145,6 +170,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -164,10 +190,53 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/node_modules/a/dist/package.json:
+  {"pollingInterval":2000} *new*
+
+watchedFiles *deleted*::
+/node_modules/a/dist/package.json:
+  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive *deleted*::
 /node_modules/a/dist/node_modules/@types:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *deleted*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isClosed: true *changed*
+    isOrphan: true *changed*
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
+/node_modules/a/dist/index.d.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *default* *new*
+        /dev/null/inferredProject1* *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -221,5 +290,50 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/a/dist/index.d.ts.map: *new*
   {"pollingInterval":500}
+/node_modules/a/dist/package.json:
+  {"pollingInterval":2000}
 /node_modules/a/src/index.ts: *new*
   {"pollingInterval":500}
+
+Projects::
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/a/dist/index.d.ts: DocumentPositionMapper1 *new*
+
+ScriptInfos::
+/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/node_modules/a/dist/index.d.ts (Open) *changed*
+    version: SVC-1-0
+    sourceMapFilePath: /node_modules/a/dist/index.d.ts.map *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/node_modules/a/dist/index.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /node_modules/a/dist/index.d.ts
+    sourceInfos: 1
+        /node_modules/a/src/index.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/node_modules/a/src/index.ts *new*
+    version: Text-1
+    containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

@@ -1,4 +1,10 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     canHaveExportModifier,
     canHaveLocals,
     Declaration,
@@ -30,13 +36,7 @@ import {
     textChanges,
     tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixImportNonExportedMember";
 const errorCodes = [
@@ -116,10 +116,10 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const importDeclaration = findAncestor(token, isImportDeclaration);
         if (importDeclaration === undefined) return undefined;
 
-        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier.text : undefined;
+        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = program.getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined)?.resolvedModule;
+        const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);
@@ -136,7 +136,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (node === undefined) return undefined;
 
         const exportName = { node: token, isTypeOnly: isTypeDeclaration(node) };
-        return { exportName, node, moduleSourceFile, moduleSpecifier };
+        return { exportName, node, moduleSourceFile, moduleSpecifier: moduleSpecifier.text };
     }
     return undefined;
 }

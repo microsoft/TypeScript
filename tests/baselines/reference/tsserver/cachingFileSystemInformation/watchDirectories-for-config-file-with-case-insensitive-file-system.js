@@ -68,8 +68,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
-Info seq  [hh:mm:ss:mss] For info: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined:: Result: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/tsconfig.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -126,7 +125,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/redux/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/package.json 2000 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -288,8 +294,22 @@ After request
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules: *new*
   {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/package.json: *new*
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/package.json: *new*
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/redux/package.json: *new*
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/utils/package.json: *new*
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/package.json: *new*
+  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
+/Users/someuser/work/applications/package.json: *new*
+  {"pollingInterval":2000}
+/Users/someuser/work/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts: *new*
@@ -302,6 +322,25 @@ FsWatches::
 FsWatchesRecursive::
 /Users/someuser/work/applications/frontend/src: *new*
   {}
+
+Projects::
+/Users/someuser/work/applications/frontend/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
+/a/lib/lib.es2016.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /Users/someuser/work/applications/frontend/tsconfig.json
@@ -318,10 +357,16 @@ Timeout callback:: count: 2
 1: /Users/someuser/work/applications/frontend/tsconfig.json *new*
 2: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/Users/someuser/work/applications/frontend/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
 Info seq  [hh:mm:ss:mss] Running: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -374,8 +419,22 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/redux/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/utils/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/package.json:
+  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
+/Users/someuser/work/applications/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
@@ -390,6 +449,30 @@ FsWatches::
 FsWatchesRecursive::
 /Users/someuser/work/applications/frontend/src:
   {}
+
+Projects::
+/Users/someuser/work/applications/frontend/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/a/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {
@@ -423,8 +506,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
-Info seq  [hh:mm:ss:mss] For info: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts ProjectRootPath: undefined:: Result: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -443,8 +525,22 @@ After request
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules:
   {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/redux/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/app/utils/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/applications/frontend/src/package.json:
+  {"pollingInterval":2000}
 /Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
+/Users/someuser/work/applications/package.json:
+  {"pollingInterval":2000}
+/Users/someuser/work/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
@@ -461,6 +557,25 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /Users/someuser/work/applications/frontend/src:
   {}
+
+ScriptInfos::
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
+/a/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] fileExists:: []
 Info seq  [hh:mm:ss:mss] directoryExists:: []

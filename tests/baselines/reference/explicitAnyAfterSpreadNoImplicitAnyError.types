@@ -5,7 +5,9 @@
 >({ a: [], ...(null as any) }) : any
 >{ a: [], ...(null as any) } : any
 >a : undefined[]
+>  : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >(null as any) : any
 >null as any : any
 

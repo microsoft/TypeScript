@@ -24,17 +24,17 @@
 // t("!", 12, false);
 //   ^
 // | ----------------------------------------------------------------------
-// | t(**eventName: string**, eventName2: string | number, eventName3: any): number
+// | t(**eventName: string**, eventName2: number | string, eventName3: any): number
 // | @type {FooHandler} callback
 // | ----------------------------------------------------------------------
 //        ^
 // | ----------------------------------------------------------------------
-// | t(eventName: string, **eventName2: string | number**, eventName3: any): number
+// | t(eventName: string, **eventName2: number | string**, eventName3: any): number
 // | @type {FooHandler} callback
 // | ----------------------------------------------------------------------
 //            ^
 // | ----------------------------------------------------------------------
-// | t(eventName: string, eventName2: string | number, **eventName3: any**): number
+// | t(eventName: string, eventName2: number | string, **eventName3: any**): number
 // | @type {FooHandler} callback
 // | ----------------------------------------------------------------------
 
@@ -139,7 +139,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "string",
+                  "text": "number",
                   "kind": "keyword"
                 },
                 {
@@ -155,7 +155,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "number",
+                  "text": "string",
                   "kind": "keyword"
                 }
               ],
@@ -321,7 +321,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "string",
+                  "text": "number",
                   "kind": "keyword"
                 },
                 {
@@ -337,7 +337,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "number",
+                  "text": "string",
                   "kind": "keyword"
                 }
               ],
@@ -503,7 +503,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "string",
+                  "text": "number",
                   "kind": "keyword"
                 },
                 {
@@ -519,7 +519,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "number",
+                  "text": "string",
                   "kind": "keyword"
                 }
               ],

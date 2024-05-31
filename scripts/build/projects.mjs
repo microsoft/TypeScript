@@ -1,10 +1,6 @@
-import {
-    resolve,
-} from "path";
+import { resolve } from "path";
 
-import {
-    findUpRoot,
-} from "./findUpDir.mjs";
+import { findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import {
     Debouncer,

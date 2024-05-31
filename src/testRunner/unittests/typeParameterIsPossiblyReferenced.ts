@@ -1,8 +1,8 @@
-import * as documents from "../_namespaces/documents";
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
+import * as documents from "../_namespaces/documents.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
 
 describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => {
     it("with type parameter aliasing", () => {
@@ -32,7 +32,7 @@ describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => 
             .type as ts.TypeQueryNode // typeof a
         ;
         const typeParameterDecl = (file.statements[0] as ts.FunctionDeclaration).typeParameters![0]; // T in f<T>
-        const typeParameter = checker.getTypeAtLocation(typeParameterDecl)! as ts.TypeParameter;
+        const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as ts.TypeParameter;
         const isReferenced = checker.isTypeParameterPossiblyReferenced(typeParameter, typeQueryNode);
         assert.ok(isReferenced, "Type parameter is referenced in type query node");
     });

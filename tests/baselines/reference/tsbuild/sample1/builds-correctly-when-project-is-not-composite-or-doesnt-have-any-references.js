@@ -98,12 +98,12 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b core --verbose
-[[90m12:00:23 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/anotherModule.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/anotherModule.js' does not exist
 
-[[90m12:00:25 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -134,11 +134,11 @@ export declare function multiply(a: number, b: number): number;
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiply = exports.leftPad = exports.someString = void 0;
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
 
 

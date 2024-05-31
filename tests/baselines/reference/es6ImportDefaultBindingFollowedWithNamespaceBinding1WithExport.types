@@ -3,17 +3,24 @@
 === server.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export default a;
 >a : number
+>  : ^^^^^^
 
 === client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "server";
 >defaultBinding : number
+>               : ^^^^^^
 >nameSpaceBinding : typeof nameSpaceBinding
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export var x: number = defaultBinding;
 >x : number
+>  : ^^^^^^
 >defaultBinding : number
+>               : ^^^^^^
 

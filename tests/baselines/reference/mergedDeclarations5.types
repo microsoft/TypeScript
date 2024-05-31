@@ -3,17 +3,22 @@
 === a.ts ===
 class A {
 >A : A
+>  : ^
 
     protected foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 === b.ts ===
 interface A { }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     protected foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }

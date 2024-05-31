@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/modularizeLibrary_Worker.iterable.ts] ////
+
+=== modularizeLibrary_Worker.iterable.ts ===
+for (const [key, entry] of new FormData()) {
+>key : string
+>    : ^^^^^^
+>entry : FormDataEntryValue
+>      : ^^^^^^^^^^^^^^^^^^
+>new FormData() : FormData
+>               : ^^^^^^^^
+>FormData : { new (): FormData; prototype: FormData; }
+>         : ^^^^^^^^^^        ^^^^^^^^^^^^^        ^^^
+
+    entry;
+>entry : FormDataEntryValue
+>      : ^^^^^^^^^^^^^^^^^^
+}
+

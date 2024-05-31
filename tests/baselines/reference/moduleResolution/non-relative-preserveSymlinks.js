@@ -22,7 +22,6 @@ Resolution:: {
     "/app/node_modules/linked.ts",
     "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index",
     "/app/node_modules/linked/index.ts",
     "/app/node_modules/linked/index.tsx"
   ],
@@ -54,7 +53,6 @@ Resolution:: {
     "/app/node_modules/linked.ts",
     "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index",
     "/app/node_modules/linked/index.ts",
     "/app/node_modules/linked/index.tsx"
   ],

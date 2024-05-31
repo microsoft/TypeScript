@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/mergeSymbolReexportInterface.ts] ////
+
+=== main.ts ===
+import {Row2, C} from '.'
+>Row2 : any
+>     : ^^^
+>C : any
+>  : ^^^
+
+const x : Row2 = { }
+>x : Row2
+>  : ^^^^
+>{ } : {}
+>    : ^^
+
+const y : C = { s: '' }
+>y : C
+>  : ^
+>{ s: '' } : { s: string; }
+>          : ^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>'' : ""
+>   : ^^
+
+ 
+=== ./a.d.ts ===
+import '.'
+declare module '.' {
+>'.' : typeof import("index")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Row2 = { a: string }
+>Row2 : Row2
+>     : ^^^^
+>a : string
+>  : ^^^^^^
+
+  type C = { s : string }
+>C : C
+>  : ^
+>s : string
+>  : ^^^^^^
+}
+ 
+=== ./index.d.ts ===
+export type {Row2} from './common';
+>Row2 : import("common").Row2
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+=== ./common.d.ts ===
+export interface Row2 { b: string }
+>b : string
+>  : ^^^^^^
+

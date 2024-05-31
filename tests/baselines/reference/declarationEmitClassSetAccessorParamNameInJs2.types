@@ -3,6 +3,7 @@
 === foo.js ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     /**
      * Bar.
@@ -11,5 +12,6 @@ export class Foo {
      */
     set bar({}) {}
 >bar : { prop: string; }
+>    : ^^^^^^^^      ^^^
 }
 

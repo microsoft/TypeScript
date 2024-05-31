@@ -3,7 +3,9 @@
 === es5ExportDefaultIdentifier.ts ===
 export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
 export default f;
 >f : () => void
+>  : ^^^^^^^^^^
 

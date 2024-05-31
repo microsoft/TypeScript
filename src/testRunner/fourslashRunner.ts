@@ -1,10 +1,10 @@
-import * as FourSlash from "./_namespaces/FourSlash";
+import * as FourSlash from "./_namespaces/FourSlash.js";
 import {
     IO,
     RunnerBase,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class FourSlashRunner extends RunnerBase {
     protected basePath: string;
@@ -41,8 +41,7 @@ export class FourSlashRunner extends RunnerBase {
         }
 
         describe(this.testSuiteName + " tests", () => {
-            this.tests.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
+            this.tests.forEach(file => {
                 describe(file, () => {
                     let fn = ts.normalizeSlashes(file);
                     const justName = fn.replace(/^.*[\\/]/, "");

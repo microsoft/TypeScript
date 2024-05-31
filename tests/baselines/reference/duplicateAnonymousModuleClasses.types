@@ -3,9 +3,11 @@
 === duplicateAnonymousModuleClasses.ts ===
 module F {
 >F : typeof F
+>  : ^^^^^^^^
 
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
 
@@ -14,10 +16,12 @@ module F {
 
 module F {
 >F : typeof F
+>  : ^^^^^^^^
     
     // Should not be an error
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
 
@@ -25,9 +29,11 @@ module F {
 
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
 
@@ -36,10 +42,12 @@ module Foo {
 
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
     
     // Should not be an error
     class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
     }
 
@@ -47,12 +55,15 @@ module Foo {
 
 module Gar {
 >Gar : typeof Gar
+>    : ^^^^^^^^^^
 
     module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
         }
 
@@ -61,10 +72,12 @@ module Gar {
 
     module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
     
         // Should not be an error
         class Helper {
 >Helper : Helper
+>       : ^^^^^^
 
         }
 

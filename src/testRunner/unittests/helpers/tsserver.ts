@@ -1,20 +1,18 @@
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger.js";
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "./solutionBuilder";
+} from "../../../harness/tsserverLogger.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { ensureErrorFreeBuild } from "./solutionBuilder.js";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
     TestTypingsInstallerOptions,
-} from "./typingsInstaller";
+} from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -22,20 +20,12 @@ import {
     FileOrFolderOrSymLink,
     libFile,
     SerializeOutputOrder,
-    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
-}
-
-export function appendAllScriptInfos(session: TestSession) {
-    session.logger.log("");
-    session.logger.log(`ScriptInfos:`);
-    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
-    session.logger.log("");
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -52,9 +42,12 @@ export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
 };
 export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
+    session: TestSession | undefined,
     logger: LoggerWithInMemoryLogs,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
+    host.service = session?.getProjectService();
+    if (session) patchServiceForStateBaseline(session.getProjectService());
     if (host.patched) return host;
     host.patched = true;
     if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
@@ -62,20 +55,10 @@ export function patchHostTimeouts(
         return host;
     }
 
-    const originalSetTime = host.setTime;
-
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
-    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.setTime = setTime;
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
-
-    function setTime(time: number) {
-        logger.log(`Host is moving to new time`);
-        return originalSetTime.call(host, time);
-    }
 
     function baselineHost(title: string) {
         logger.log(title);
@@ -133,7 +116,8 @@ export class TestSession extends ts.server.Session {
         if (typingsInstaller) typingsInstaller.session = this;
         this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
         patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host),
+            changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(this.host)),
+            this,
             this.logger,
         );
     }
@@ -479,21 +463,9 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function verifyDynamic(session: TestSession, path: string) {
-    session.logger.log(`${path} isDynamic:: ${session.getProjectService().filenameToScriptInfo.get(path)!.isDynamic}`);
-}
-
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
     const host = createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
     return host;
-}
-
-export function logInferredProjectsOrphanStatus(session: TestSession) {
-    session.getProjectService().inferredProjects.forEach(inferredProject => session.logger.log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
-}
-
-export function logConfiguredProjectsHasOpenRefStatus(session: TestSession) {
-    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
 }

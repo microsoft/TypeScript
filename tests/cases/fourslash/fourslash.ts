@@ -281,8 +281,8 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
-        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string, actionDescription?: string, kind?: string, preferences?: {}, includeInteractiveActions?: boolean): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {
@@ -444,6 +444,15 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        pasteEdits(options: {
+            newFileContents: { readonly [fileName: string]: string };
+            args: {
+                pastedText: string[];
+                pasteLocations: { pos: number, end: number }[];
+                copiedFrom?: { file: string, range: { pos: number, end: number }[] };
+            }
+        }): void;
+        baselineMapCode(ranges: Range[][], changes: string[]): void;
     }
     class edit {
         caretPosition(): Marker;
@@ -670,6 +679,7 @@ declare namespace FourSlashInterface {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

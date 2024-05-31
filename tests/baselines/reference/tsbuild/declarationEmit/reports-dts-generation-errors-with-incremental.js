@@ -37,10 +37,10 @@ export const api = ky.extend({});
 
 //// [/src/project/node_modules/ky/distribution/index.d.ts]
 type KyInstance = {
-     extend(options: Record<string,unknown>): KyInstance;
- }
- declare const ky: KyInstance;
- export default ky;
+    extend(options: Record<string,unknown>): KyInstance;
+}
+declare const ky: KyInstance;
+export default ky;
 
 
 //// [/src/project/node_modules/ky/package.json]
@@ -60,8 +60,8 @@ type KyInstance = {
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "incremental": true,
     "declaration": true,
+    "incremental": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   }
@@ -71,12 +71,12 @@ type KyInstance = {
 
 Output::
 /lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
-[[90m12:00:16 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:17 AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:18 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 [96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
 
@@ -99,7 +99,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"declaration":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"declaration":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"affectedFilesPendingEmit":[3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -128,11 +128,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       },
       "./node_modules/ky/distribution/index.d.ts": {
         "original": {
-          "version": "20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n",
+          "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
           "impliedFormat": 99
         },
-        "version": "20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n",
-        "signature": "20726041391-type KyInstance = {\n     extend(options: Record<string,unknown>): KyInstance;\n }\n declare const ky: KyInstance;\n export default ky;\n",
+        "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
+        "signature": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
         "impliedFormat": "esnext"
       },
       "./index.ts": {
@@ -162,16 +162,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "./node_modules/ky/distribution/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "./node_modules/ky/distribution/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.esnext.full.d.ts",
-      "./index.ts",
-      "./node_modules/ky/distribution/index.d.ts"
-    ],
     "affectedFilesPendingEmit": [
       [
         "./index.ts",
@@ -180,7 +170,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1182
+  "size": 1112
 }
 
 
@@ -191,12 +181,12 @@ Input::
 
 Output::
 /lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
-[[90m12:00:22 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90m12:00:23 AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:24 AM[0m] Building project '/src/project/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 [96msrc/project/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/node_modules/ky/distribution/index" but cannot be named.
 

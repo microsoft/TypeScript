@@ -50,8 +50,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/replay/axios-src/lib/core
-Info seq  [hh:mm:ss:mss] For info: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -61,6 +60,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-s
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/core/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -72,7 +74,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/no
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-0 "export const b = 10;\n\n"
@@ -83,11 +85,12 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	c:/temp/replay/axios-src/node_modules/follow-redirects/index.js Text-1 "export const x = 10;"
@@ -117,6 +120,10 @@ After request
 PolledWatches::
 C:/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+C:/temp/replay/axios-src/lib/core/package.json: *new*
+  {"pollingInterval":2000}
+C:/temp/replay/axios-src/lib/package.json: *new*
+  {"pollingInterval":2000}
 c:/temp/node_modules/@types: *new*
   {"pollingInterval":500}
 c:/temp/replay/axios-src/jsconfig.json: *new*
@@ -145,12 +152,33 @@ c:/temp/replay/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-c:/temp/replay/axios-src/package.json: *new*
+C:/temp/replay/axios-src/node_modules/follow-redirects/package.json: *new*
+  {}
+C:/temp/replay/axios-src/package.json: *new*
   {}
 
 FsWatchesRecursive::
 c:/temp/replay/axios-src/node_modules: *new*
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -187,6 +215,26 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -198,8 +246,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/replay/axios-src/lib/core
-Info seq  [hh:mm:ss:mss] For info: c:/temp/replay/axios-src/lib/core/dispatchRequest.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/dispatchRequest.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
@@ -219,6 +266,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/core/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -230,7 +280,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/no
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-1 "export const b = 10;\n//comment\n"
@@ -263,6 +313,12 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/lib/core/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/lib/core/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -274,6 +330,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -292,6 +350,10 @@ After request
 PolledWatches::
 C:/a/lib/lib.d.ts:
   {"pollingInterval":500}
+C:/temp/replay/axios-src/lib/core/package.json:
+  {"pollingInterval":2000}
+C:/temp/replay/axios-src/lib/package.json:
+  {"pollingInterval":2000}
 c:/temp/node_modules: *new*
   {"pollingInterval":500}
 c:/temp/node_modules/@types:
@@ -332,18 +394,54 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-C:/temp/replay/axios-src/node_modules/follow-redirects/package.json: *new*
+C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
+  {}
+C:/temp/replay/axios-src/package.json:
   {}
 c:/temp/replay/axios-src/lib/core: *new*
   {}
 c:/temp/replay/axios-src/lib/core/settle.js: *new*
   {}
-c:/temp/replay/axios-src/package.json:
-  {}
 
 FsWatchesRecursive::
 c:/temp/replay/axios-src/node_modules:
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+/dev/null/inferredProject1* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
+    version: SVC-1-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *default* *new*
+        /dev/null/inferredProject1* *deleted*
+c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+c:/temp/replay/axios-src/lib/core/settle.js *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/autoImportProviderProject1* *deleted*
 
 Before request
 
@@ -356,13 +454,15 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/replay/axios-src/lib/core
-Info seq  [hh:mm:ss:mss] For info: c:/temp/replay/axios-src/lib/core/mergeConfig.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/mergeConfig.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/core/package.json 2000 undefined Project: /dev/null/inferredProject3* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/lib/package.json 2000 undefined Project: /dev/null/inferredProject3* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/package.json 2000 undefined Project: /dev/null/inferredProject3* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
@@ -374,7 +474,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/no
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-1 "export const b = 10;\n//comment\n"
@@ -387,9 +487,10 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	c:/temp/replay/axios-src/node_modules/follow-redirects/index.js Text-1 "export const x = 10;"
@@ -423,6 +524,42 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Projects::
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
+    version: SVC-1-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject2* *default*
+        /dev/null/inferredProject3* *new*
+c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
+c:/temp/replay/axios-src/lib/core/settle.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2* *new*
 
 Before request
 
@@ -462,6 +599,10 @@ After request
 PolledWatches::
 C:/a/lib/lib.d.ts:
   {"pollingInterval":500}
+C:/temp/replay/axios-src/lib/core/package.json:
+  {"pollingInterval":2000}
+C:/temp/replay/axios-src/lib/package.json:
+  {"pollingInterval":2000}
 c:/temp/node_modules:
   {"pollingInterval":500}
 c:/temp/node_modules/@types:
@@ -504,18 +645,58 @@ c:/temp/replay/tsconfig.json:
 FsWatches::
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
+C:/temp/replay/axios-src/package.json:
+  {}
 c:/temp/replay/axios-src/lib/core:
   {}
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js: *new*
   {}
 c:/temp/replay/axios-src/lib/core/settle.js:
   {}
-c:/temp/replay/axios-src/package.json:
-  {}
 
 FsWatchesRecursive::
 c:/temp/replay/axios-src/node_modules:
   {}
+
+Projects::
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/dev/null/inferredProject3* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
+    open: false *changed*
+    version: SVC-1-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/inferredProject3*
+c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
+c:/temp/replay/axios-src/lib/core/settle.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2*
 
 Before request
 
@@ -529,10 +710,9 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: c:/temp/replay/axios-src/lib/core/settle.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/replay/axios-src/lib/core
-Info seq  [hh:mm:ss:mss] For info: c:/temp/replay/axios-src/lib/core/settle.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/replay/axios-src/lib/core/settle.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js Text-2 "export const b = 10;\n\n"
@@ -569,6 +749,10 @@ After request
 PolledWatches::
 C:/a/lib/lib.d.ts:
   {"pollingInterval":500}
+C:/temp/replay/axios-src/lib/core/package.json:
+  {"pollingInterval":2000}
+C:/temp/replay/axios-src/lib/package.json:
+  {"pollingInterval":2000}
 c:/temp/node_modules:
   {"pollingInterval":500}
 c:/temp/node_modules/@types:
@@ -611,11 +795,11 @@ c:/temp/replay/tsconfig.json:
 FsWatches::
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
+C:/temp/replay/axios-src/package.json:
+  {}
 c:/temp/replay/axios-src/lib/core:
   {}
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js:
-  {}
-c:/temp/replay/axios-src/package.json:
   {}
 
 FsWatches *deleted*::
@@ -625,3 +809,43 @@ c:/temp/replay/axios-src/lib/core/settle.js:
 FsWatchesRecursive::
 c:/temp/replay/axios-src/node_modules:
   {}
+
+Projects::
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/inferredProject3*
+c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
+c:/temp/replay/axios-src/lib/core/settle.js (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2*

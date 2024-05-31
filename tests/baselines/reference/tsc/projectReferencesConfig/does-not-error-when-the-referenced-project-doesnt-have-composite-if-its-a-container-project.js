@@ -52,7 +52,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/reference/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"}},"version":"FakeTSVersion"}
 
 //// [/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -63,11 +63,9 @@ exitCode:: ExitStatus.Success
     "options": {
       "composite": true,
       "outDir": "./"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {}
+    }
   },
   "version": "FakeTSVersion",
-  "size": 165
+  "size": 122
 }
 
