@@ -6036,15 +6036,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * It also calls `setOriginalNode` to setup a `.original` pointer, since you basically *always* want these in the node builder.
          */
         function setTextRange<T extends Node>(context: NodeBuilderContext, range: T, location: Node | undefined): T {
-            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(range)) {
-                range = factory.cloneNode(range);
+            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(range))) {
+                range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
             }
             if (range === location) return range;
             if (!location) {
                 return range;
             }
             if (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(location))) {
-                return setOriginalNode(range, location);
+                return setOriginalNode(range, location); // if `location` is from another file, only set/update original pointer, and not positions, since copying text across files isn't supported by the emitter
             }
             return setTextRangeWorker(setOriginalNode(range, location), location);
         }
