@@ -2328,8 +2328,8 @@ module Formatting {
                     });
 
                     return result;
->result : true
->       : ^^^^
+>result : boolean
+>       : ^^^^^^^
             }
 
             return false;

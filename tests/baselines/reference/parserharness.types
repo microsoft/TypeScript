@@ -1838,8 +1838,8 @@ module Harness {
                     });
 
                     return isAsync;
->isAsync : true
->        : ^^^^
+>isAsync : boolean
+>        : ^^^^^^^
                 }
 
             } catch (e) {
