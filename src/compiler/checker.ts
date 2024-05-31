@@ -1106,6 +1106,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    getLambdaArgument,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -27773,8 +27774,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 noCacheCheck = false;
             }
-            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
-                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation).antecedent;
+            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.LambdaArgs)) {
+                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowCall).antecedent;
             }
             else if (flags & FlowFlags.Call) {
                 const signature = getEffectsSignature((flow as FlowCall).node);
@@ -27842,8 +27843,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 noCacheCheck = false;
             }
-            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause)) {
-                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause).antecedent;
+            if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause | FlowFlags.LambdaArgs)) {
+                flow = (flow as FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause | FlowCall).antecedent;
             }
             else if (flags & FlowFlags.Call) {
                 if ((flow as FlowCall).node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -27903,6 +27904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = tryCast(reference, canHaveFlowNode)?.flowNode) {
         let key: string | undefined;
         let isKeySet = false;
+        let inLambdaArg = false;
         let flowDepth = 0;
         if (flowAnalysisDisabled) {
             return errorType;
@@ -27994,6 +27996,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         continue;
                     }
                 }
+                else if (flags & FlowFlags.LambdaArgs) {
+                    type = getTypeAtFlowLambdaArgs(flow as FlowCall);
+                }
                 else if (flags & FlowFlags.ReduceLabel) {
                     const target = (flow as FlowReduceLabel).node.target;
                     const saveAntecedents = target.antecedent;
@@ -28005,7 +28010,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Check if we should continue with the control flow of the containing function.
                     const container = (flow as FlowStart).node;
                     if (
-                        container && container !== flowContainer &&
+                        container && container !== flowContainer && !inLambdaArg &&
                         reference.kind !== SyntaxKind.PropertyAccessExpression &&
                         reference.kind !== SyntaxKind.ElementAccessExpression &&
                         !(reference.kind === SyntaxKind.ThisKeyword && container.kind !== SyntaxKind.ArrowFunction)
@@ -28130,6 +28135,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return undefined;
+        }
+
+        function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
+            const flowType = getTypeAtFlowNode(flow.antecedent);
+            const saveInitialType = initialType;
+            const saveInLambdaArg = inLambdaArg;
+            initialType = getTypeFromFlowType(flowType);
+            inLambdaArg = true;
+            let lambdaTypes: Type[] | undefined;
+            for (const arg of flow.node.arguments) {
+                const lambda = getLambdaArgument(arg);
+                if (lambda && lambda.returnFlowNode) {
+                    const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
+                    if (lambdaType !== initialType) {
+                        lambdaTypes ??= [initialType];
+                        lambdaTypes.push(lambdaType);
+                    }
+                }
+            }
+            inLambdaArg = saveInLambdaArg;
+            initialType = saveInitialType;
+            return lambdaTypes ? createFlowType(getUnionOrEvolvingArrayType(lambdaTypes, UnionReduction.Literal), isIncomplete(flowType)) : flowType;
         }
 
         function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType | undefined {

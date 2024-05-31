@@ -101,6 +101,7 @@ import {
     getImmediatelyInvokedFunctionExpression,
     getJSDocHost,
     getJSDocTypeTag,
+    getLambdaArgument,
     getLeftmostAccessExpression,
     getNameOfDeclaration,
     getNameOrArgument,
@@ -318,6 +319,7 @@ import {
     unreachableCodeIsError,
     unusedLabelIsError,
     VariableDeclaration,
+    walkUpParenthesizedExpressions,
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts.js";
@@ -1015,6 +1017,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 !(node as FunctionLikeDeclaration).asteriskToken &&
                 !!getImmediatelyInvokedFunctionExpression(node)
             ) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+            const isLambdaArgument = (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction) &&
+                walkUpParenthesizedExpressions(node.parent).kind === SyntaxKind.CallExpression;
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
             // similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
@@ -1025,7 +1029,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+            currentReturnTarget = isImmediatelyInvoked || isLambdaArgument || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -1047,7 +1051,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
-                if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                if (isLambdaArgument || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
                     (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                 }
             }
@@ -2213,6 +2217,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     currentFlow = createFlowCall(currentFlow, node);
                 }
             }
+        }
+        if (some(node.arguments, arg => !!getLambdaArgument(arg))) {
+            currentFlow = createFlowNode(FlowFlags.LambdaArgs, node, currentFlow);
         }
         if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
             const propertyAccess = node.expression as PropertyAccessExpression;

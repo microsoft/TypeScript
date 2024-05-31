@@ -4111,8 +4111,9 @@ export const enum FlowFlags {
     ArrayMutation  = 1 << 8,  // Potential array mutation
     Call           = 1 << 9,  // Potential assertion call
     ReduceLabel    = 1 << 10, // Temporarily reduce antecedents of label
-    Referenced     = 1 << 11, // Referenced as antecedent once
-    Shared         = 1 << 12, // Referenced as antecedent more than once
+    LambdaArgs     = 1 << 11, // Call expression with lambda arguments
+    Referenced     = 1 << 12, // Referenced as antecedent once
+    Shared         = 1 << 13, // Referenced as antecedent more than once
 
     Label = BranchLabel | LoopLabel,
     Condition = TrueCondition | FalseCondition,

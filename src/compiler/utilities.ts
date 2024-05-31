@@ -11632,3 +11632,15 @@ export function hasInferredType(node: Node): node is HasInferredType {
             return false;
     }
 }
+
+/** @internal */
+export function getLambdaArgument(node: Node): FunctionLikeDeclaration | undefined {
+    switch (node.kind) {
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+            return node as FunctionLikeDeclaration;
+        case SyntaxKind.ParenthesizedExpression:
+            return getLambdaArgument((node as ParenthesizedExpression).expression);
+    }
+    return undefined;
+}
