@@ -25,7 +25,7 @@ declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World"
 
 function fun1<T>(x: T, y: T) {
 >fun1 : <T>(x: T, y: T) => T
->     : ^^^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -46,7 +46,7 @@ function fun1<T>(x: T, y: T) {
 
 function fun2<T, U>(x: T, y: U) {
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -67,7 +67,7 @@ function fun2<T, U>(x: T, y: U) {
 
 function fun3<T>(...args: T[]): T {
 >fun3 : <T>(...args: T[]) => T
->     : ^^^^^^^    ^^   ^^^^^ 
+>     : ^ ^^^^^    ^^   ^^^^^ 
 >args : T[]
 >     : ^^^
 
@@ -97,7 +97,7 @@ namespace n1 {
 >fun1("Hello", "World") : "Hello" | "World"
 >                       : ^^^^^^^^^^^^^^^^^
 >fun1 : <T>(x: T, y: T) => T
->     : ^^^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -109,7 +109,7 @@ namespace n1 {
 >fun1("Hello", "Hello") : "Hello"
 >                       : ^^^^^^^
 >fun1 : <T>(x: T, y: T) => T
->     : ^^^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -121,7 +121,7 @@ namespace n1 {
 >fun2("Hello", "World") : "Hello" | "World"
 >                       : ^^^^^^^^^^^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -133,7 +133,7 @@ namespace n1 {
 >fun2("Hello", "Hello") : "Hello"
 >                       : ^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -145,7 +145,7 @@ namespace n1 {
 >fun3("Hello", "Hello", "World", "Foo") : "Hello" | "World" | "Foo"
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >fun3 : <T>(...args: T[]) => T
->     : ^^^^^^^    ^^   ^^^^^ 
+>     : ^ ^^^^^    ^^   ^^^^^ 
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -351,7 +351,7 @@ namespace n2 {
 >fun1<"Hello">("Hello", "Hello") : "Hello"
 >                                : ^^^^^^^
 >fun1 : <T>(x: T, y: T) => T
->     : ^^^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -363,7 +363,7 @@ namespace n2 {
 >fun1<"Hello">("Hello", "World") : "Hello"
 >                                : ^^^^^^^
 >fun1 : <T>(x: T, y: T) => T
->     : ^^^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -375,7 +375,7 @@ namespace n2 {
 >fun2<"Hello", "Hello">("Hello", "Hello") : "Hello"
 >                                         : ^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -387,7 +387,7 @@ namespace n2 {
 >fun2<"Hello", "Hello">("Hello", "World") : "Hello"
 >                                         : ^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -399,7 +399,7 @@ namespace n2 {
 >fun3<"Hello">("Hello", "World") : "Hello"
 >                                : ^^^^^^^
 >fun3 : <T>(...args: T[]) => T
->     : ^^^^^^^    ^^   ^^^^^ 
+>     : ^ ^^^^^    ^^   ^^^^^ 
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -602,7 +602,7 @@ namespace n3 {
 >fun2<"Hello", "World">("Hello", "World") : "Hello" | "World"
 >                                         : ^^^^^^^^^^^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"
@@ -614,7 +614,7 @@ namespace n3 {
 >fun2<"Hello", "World">("World", "Hello") : "Hello" | "World"
 >                                         : ^^^^^^^^^^^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"World" : "World"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -626,7 +626,7 @@ namespace n3 {
 >fun2<"World", "Hello">("Hello", "Hello") : "Hello" | "World"
 >                                         : ^^^^^^^^^^^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"Hello" : "Hello"
@@ -638,7 +638,7 @@ namespace n3 {
 >fun2<"World", "Hello">("World", "World") : "Hello" | "World"
 >                                         : ^^^^^^^^^^^^^^^^^
 >fun2 : <T, U>(x: T, y: U) => T | U
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >"World" : "World"
 >        : ^^^^^^^
 >"World" : "World"
@@ -650,7 +650,7 @@ namespace n3 {
 >fun3<"Hello" | "World">("Hello", "World") : "Hello" | "World"
 >                                          : ^^^^^^^^^^^^^^^^^
 >fun3 : <T>(...args: T[]) => T
->     : ^^^^^^^    ^^   ^^^^^ 
+>     : ^ ^^^^^    ^^   ^^^^^ 
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"

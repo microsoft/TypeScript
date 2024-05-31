@@ -100,18 +100,18 @@ var d5: D<any> = new D(null);
 
 function foo<T>(): T { return null; };
 >foo : <T>() => T
->    : ^^^^^^^^^ 
+>    : ^ ^^^^^^^ 
 
 foo() 
 >foo() : unknown
 >      : ^^^^^^^
 >foo : <T>() => T
->    : ^^^^^^^^^ 
+>    : ^ ^^^^^^^ 
 
 foo<any>();
 >foo<any>() : any
 >foo : <T>() => T
->    : ^^^^^^^^^ 
+>    : ^ ^^^^^^^ 
 
 
     

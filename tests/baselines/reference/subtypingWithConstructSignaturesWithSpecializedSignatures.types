@@ -100,7 +100,7 @@ module MemberWithCallSignature {
         }
         a3: new <T>(x: T) => void;
 >a3 : new <T>(x: T) => void
->   : ^^^^^^^^ ^^ ^^^^^    
+>   : ^^^^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
     }
@@ -124,7 +124,7 @@ module MemberWithCallSignature {
 
         a3: new <T>(x: T) => string; // ok because base returns void
 >a3 : new <T>(x: T) => string
->   : ^^^^^^^^ ^^ ^^^^^      
+>   : ^^^^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
     }
@@ -145,7 +145,7 @@ module MemberWithCallSignature {
         }
         a2: new <T>(x: T) => T;
 >a2 : new <T>(x: T) => T
->   : ^^^^^^^^ ^^ ^^^^^ 
+>   : ^^^^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
     }
@@ -165,7 +165,7 @@ module MemberWithCallSignature {
         // N's
         a2: new <T>(x: T) => string; // error because base returns non-void;
 >a2 : new <T>(x: T) => string
->   : ^^^^^^^^ ^^ ^^^^^      
+>   : ^^^^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
     }

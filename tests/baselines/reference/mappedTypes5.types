@@ -3,7 +3,7 @@
 === mappedTypes5.ts ===
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
 >f : <T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) => void
->  : ^^^^ ^^          ^^ ^^           ^^  ^^                    ^^  ^^                    ^^^^^^^^^
+>  : ^ ^^ ^^          ^^ ^^           ^^  ^^                    ^^  ^^                    ^^^^^^^^^
 >p : Partial<T>
 >  : ^^^^^^^^^^
 >r : Readonly<T>
@@ -152,7 +152,7 @@ type Args2<T extends State> = {
 
 function doit<T extends State>() {
 >doit : <T extends State>() => void
->     : ^^^^^^^^^^^     ^^^^^^^^^^^
+>     : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     let previous: Partial<T> = Object.create(null);
 >previous : Partial<T>

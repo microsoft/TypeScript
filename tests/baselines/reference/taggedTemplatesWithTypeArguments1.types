@@ -3,7 +3,7 @@
 === taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 >f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
->  : ^^^^    ^^                    ^^^^^         ^^                    ^^^^^    
+>  : ^ ^^    ^^                    ^^^^^         ^^                    ^^^^^    
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >callbacks : ((x: T) => any)[]
@@ -31,7 +31,7 @@ export const a = f<Stuff> `
 >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
 >                                                                                                            : ^^^^
 >f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
->  : ^^^^    ^^                    ^^^^^         ^^                    ^^^^^    
+>  : ^ ^^    ^^                    ^^^^^         ^^                    ^^^^^    
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 >                                                                                                   : ^^^^^^
 
@@ -78,7 +78,7 @@ export const a = f<Stuff> `
 
 declare function g<Input, T, U, V>(
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->  : ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^         
+>  : ^     ^^ ^^ ^^ ^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^         
 
     strs: TemplateStringsArray,
 >strs : TemplateStringsArray
@@ -104,7 +104,7 @@ export const b = g<Stuff, number, string, boolean> `
 >g<Stuff, number, string, boolean> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string | number | boolean
 >                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->  : ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^         
+>  : ^     ^^ ^^ ^^ ^^    ^^                    ^^ ^^               ^^ ^^               ^^ ^^               ^^^^^         
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 >                                                                                                   : ^^^^^^
 
@@ -155,7 +155,7 @@ declare let obj: {
 
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->     : ^^^^    ^^                    ^^ ^^               ^^^^^                       
+>     : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >x : (input: T) => T
@@ -175,7 +175,7 @@ export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
 >obj["prop"]<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->            : ^^^^    ^^                    ^^ ^^               ^^^^^                       
+>            : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
 >    : ^^^^^^^^                                                                              ^^^
 >"prop" : "prop"
@@ -237,11 +237,11 @@ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
 >obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->         : ^^^^    ^^                    ^^ ^^               ^^^^^                       
+>         : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
 >    : ^^^^^^^^                                                                              ^^^
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->     : ^^^^    ^^                    ^^ ^^               ^^^^^                       
+>     : ^ ^^    ^^                    ^^ ^^               ^^^^^                       
 >`${(input) => ({ ...input })}` : string
 >                               : ^^^^^^
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }

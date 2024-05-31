@@ -38,7 +38,7 @@ class C2<T> implements IFoo2<T> { // error
 
     foo<Tstring>(x: Tstring): number {
 >foo : <Tstring>(x: Tstring) => number
->    : ^^^^^^^^^^ ^^       ^^^^^      
+>    : ^       ^^ ^^       ^^^^^      
 >x : Tstring
 >  : ^^^^^^^
 

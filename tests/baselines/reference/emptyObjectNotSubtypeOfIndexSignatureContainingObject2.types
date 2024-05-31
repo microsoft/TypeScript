@@ -40,7 +40,7 @@ type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues<T, TResult>(
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->          : ^^^^^^^^^^^^^   ^^                                                       ^^        ^^                              ^^^^^                   
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 
   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
 >obj : Dictionary<T> | NumericDictionary<T>
@@ -84,7 +84,7 @@ export function fooToBar(
 >mapValues(foos, f => f.foo) : Dictionary<string>
 >                            : ^^^^^^^^^^^^^^^^^^
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->          : ^^^^^^^^^^^^^   ^^                                                       ^^        ^^                              ^^^^^                   
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 >foos : Record<string, Foo>
 >     : ^^^^^^^^^^^^^^^^^^^
 >f => f.foo : (f: Foo) => string
@@ -112,7 +112,7 @@ export function fooToBar(
 >mapValues(foos, f => f.foo) : Dictionary<string>
 >                            : ^^^^^^^^^^^^^^^^^^
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->          : ^^^^^^^^^^^^^   ^^                                                       ^^        ^^                              ^^^^^                   
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 >foos : Record<string, Foo>
 >     : ^^^^^^^^^^^^^^^^^^^
 >f => f.foo : (f: Foo) => string

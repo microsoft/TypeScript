@@ -2081,7 +2081,7 @@ interface Array<T> {
       */
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^^^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
 >items : U[]
 >      : ^^^
 
@@ -2091,7 +2091,7 @@ interface Array<T> {
       */
     concat(...items: T[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^^^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^   ^^^
 >items : T[]
 >      : ^^^
 
@@ -2286,7 +2286,7 @@ interface Array<T> {
       */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 >map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^                                          ^^       ^^^   ^^^^^   
+>    : ^ ^^          ^^                                          ^^       ^^^   ^^^^^   
 >callbackfn : (value: T, index: number, array: T[]) => U
 >           : ^     ^^ ^^     ^^      ^^     ^^   ^^^^^ 
 >value : T
@@ -2322,7 +2322,7 @@ interface Array<T> {
       */
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^^^^          ^^                                                                          ^^            ^^ ^^^ ^^^
+>       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
 >           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : T
@@ -2343,7 +2343,7 @@ interface Array<T> {
       */
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^^^^          ^^                                                                          ^^            ^^ ^^^ ^^^
+>       : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
 >           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : U
@@ -2364,7 +2364,7 @@ interface Array<T> {
       */
     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^^^^          ^^                                                                          ^^            ^^ ^^^ ^^^
+>            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
 >           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : T
@@ -2385,7 +2385,7 @@ interface Array<T> {
       */
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^^^^          ^^                                                                          ^^            ^^ ^^^ ^^^
+>            : ^^^          ^^                                                                          ^^            ^^^ ^^^ ^^^ ^^          ^^                                                                          ^^            ^^ ^^^ ^^^
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
 >           : ^             ^^ ^^            ^^ ^^            ^^      ^^     ^^   ^^^^^ 
 >previousValue : U
@@ -2412,7 +2412,7 @@ interface Array<T> {
 }
 declare var Array: {
 >Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: Array<any>; }
->      : ^^^           ^^^      ^^^     ^^^^^^           ^^      ^^^   ^^^^^^^^^     ^^   ^^^   ^^^^^^^           ^^^      ^^^     ^^^^^^^^^^           ^^      ^^^   ^^^^^^^^^^^^^     ^^   ^^^   ^^^^^^^^^^   ^^   ^^^       ^^^^^^^^^^^^^          ^^^
+>      : ^^^           ^^^      ^^^     ^^^ ^^           ^^      ^^^   ^^^ ^^^^^     ^^   ^^^   ^^^^^^^           ^^^      ^^^     ^^^^^^^ ^^           ^^      ^^^   ^^^^^^^ ^^^^^     ^^   ^^^   ^^^^^^^^^^   ^^   ^^^       ^^^^^^^^^^^^^          ^^^
 
     new (arrayLength?: number): any[];
 >arrayLength : number

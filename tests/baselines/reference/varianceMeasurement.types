@@ -150,7 +150,7 @@ interface Fn<A, B> {
 
   then<C>(next: Fn<B, C>): Fn<A, C>;
 >then : <C>(next: Fn<B, C>) => Fn<A, C>
->     : ^^^^    ^^        ^^^^^        
+>     : ^ ^^    ^^        ^^^^^        
 >next : Fn<B, C>
 >     : ^^^^^^^^
 }

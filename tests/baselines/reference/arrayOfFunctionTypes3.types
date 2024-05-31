@@ -122,7 +122,7 @@ var r5b = r4(1);
 
 var a2: { <T>(x: T): number; (x: string): string;};
 >a2 : { <T>(x: T): number; (x: string): string; }
->   : ^^^^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
 >x : T
 >  : ^
 >x : string
@@ -130,7 +130,7 @@ var a2: { <T>(x: T): number; (x: string): string;};
 
 var b2: { <T>(x: T): number; (x: string): string; };
 >b2 : { <T>(x: T): number; (x: string): string; }
->   : ^^^^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
 >x : T
 >  : ^
 >x : string
@@ -138,7 +138,7 @@ var b2: { <T>(x: T): number; (x: string): string; };
 
 var c2: { (x: number): number; <T>(x: T): any; };
 >c2 : { (x: number): number; <T>(x: T): any; }
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
 >x : number
 >  : ^^^^^^
 >x : T
@@ -146,23 +146,23 @@ var c2: { (x: number): number; <T>(x: T): any; };
 
 var z2 = [a2, b2, c2];
 >z2 : { (x: number): number; <T>(x: T): any; }[]
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^^^
 >[a2, b2, c2] : { (x: number): number; <T>(x: T): any; }[]
->             : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^^^
+>             : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^^^
 >a2 : { <T>(x: T): number; (x: string): string; }
->   : ^^^^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
 >b2 : { <T>(x: T): number; (x: string): string; }
->   : ^^^^^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^ ^^ ^^^      ^^^ ^^      ^^^      ^^^
 >c2 : { (x: number): number; <T>(x: T): any; }
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
 
 var r6 = z2[0];
 >r6 : { (x: number): number; <T>(x: T): any; }
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
 >z2[0] : { (x: number): number; <T>(x: T): any; }
->      : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^
+>      : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
 >z2 : { (x: number): number; <T>(x: T): any; }[]
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^^^
 >0 : 0
 >  : ^
 
@@ -170,7 +170,7 @@ var r7 = r6(''); // any not string
 >r7 : any
 >r6('') : any
 >r6 : { (x: number): number; <T>(x: T): any; }
->   : ^^^ ^^      ^^^      ^^^^^^ ^^ ^^^   ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
 >'' : ""
 >   : ^^
 

@@ -3,7 +3,7 @@
 === genericCallbackInvokedInsideItsContainingFunction1.ts ===
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >foo : <T, U>(x: T, y: U, f: (v: T) => U) => void
->    : ^^^^^^^ ^^ ^^ ^^ ^^ ^^           ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^           ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

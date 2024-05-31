@@ -19,7 +19,7 @@ class A<U>{
 }
 function Choice<T>(...v_args: T[]): A<T>;
 >Choice : <T>(...v_args: T[]) => A<T>
->       : ^^^^^^^      ^^   ^^^^^    
+>       : ^ ^^^^^      ^^   ^^^^^    
 >v_args : T[]
 >       : ^^^
 

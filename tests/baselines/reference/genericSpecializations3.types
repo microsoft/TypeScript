@@ -106,7 +106,7 @@ class StringFoo3 implements IFoo<string> { // error
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->    : ^^^^ ^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

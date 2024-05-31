@@ -8002,6 +8002,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(result.kind & SyntaxKind.Identifier)) {
                 return factory.createIdentifier("(Missing type parameter)");
             }
+            const decl = type.symbol?.declarations?.[0];
+            if (decl && isTypeParameterDeclaration(decl)) {
+                result = setTextRange(context, result, decl.name);
+            }
             if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                 const rawtext = result.escapedText as string;
                 let i = context.typeParameterNamesByTextNextNameCount?.get(rawtext) || 0;

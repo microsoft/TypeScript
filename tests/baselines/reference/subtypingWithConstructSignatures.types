@@ -38,7 +38,7 @@ module ConstructSignature {
 
     var rarg2: new <T>(x: T) => string;
 >rarg2 : new <T>(x: T) => string
->      : ^^^^^^^^ ^^ ^^^^^      
+>      : ^^^^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 
@@ -50,7 +50,7 @@ module ConstructSignature {
 >foo1 : { (cb: new (x: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                       ^^^         ^^^  ^^   ^^^   ^^^
 >rarg2 : new <T>(x: T) => string
->      : ^^^^^^^^ ^^ ^^^^^      
+>      : ^^^^^ ^^ ^^ ^^^^^      
 
     declare function foo2(cb: new (x: number, y: number) => void): typeof cb;
 >foo2 : { (cb: new (x: number, y: number) => void): typeof cb; (cb: any): any; }
@@ -89,7 +89,7 @@ module ConstructSignature {
 
     var r4arg1: new <T>(x: T) => string;
 >r4arg1 : new <T>(x: T) => string
->       : ^^^^^^^^ ^^ ^^^^^      
+>       : ^^^^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 
@@ -101,5 +101,5 @@ module ConstructSignature {
 >foo2 : { (cb: new (x: number, y: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                                  ^^^         ^^^  ^^   ^^^   ^^^
 >r4arg1 : new <T>(x: T) => string
->       : ^^^^^^^^ ^^ ^^^^^      
+>       : ^^^^^ ^^ ^^ ^^^^^      
 }

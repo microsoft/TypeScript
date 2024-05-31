@@ -5,9 +5,9 @@
 // The type of `arg` blocks inference but simplifies to T.
 function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]): T {
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 
     console.log(arg.length);
 >console.log(arg.length) : void
@@ -21,19 +21,19 @@ function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]):
 >arg.length : number
 >           : ^^^^^^
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 
     return arg;
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 }
 logLength(42);  // error
 >logLength(42) : string
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >42 : 42
 >   : ^^
 
@@ -49,15 +49,15 @@ z = logLength(42);  // no error; T is inferred as `any`
 >logLength(42) : string
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >42 : 42
 >   : ^^
 
 function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T }[U]): T {
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
->               : ^^^^^^^^^^^        ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>               : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 
     console.log(arg[0].length);
 >console.log(arg[0].length) : void
@@ -73,7 +73,7 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 >arg[0] : string
 >       : ^^^^^^
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >length : number
@@ -81,13 +81,13 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 
     return arg;
 >arg : { [K in U]: T; }[U]
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^
 }
 logFirstLength([42]);  // error
 >logFirstLength([42]) : string[]
 >                     : ^^^^^^^^
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
->               : ^^^^^^^^^^^        ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>               : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >[42] : number[]
 >     : ^^^^^^^^
 >42 : 42
@@ -111,7 +111,7 @@ zz.push(logLength(42));  // no error; T is inferred as `any`
 >logLength(42) : string
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
->          : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >42 : 42
 >   : ^^
 
@@ -123,7 +123,7 @@ zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
 >logFirstLength([42]) : string[]
 >                     : ^^^^^^^^
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
->               : ^^^^^^^^^^^        ^^^^^^^^^^^^      ^^   ^^                   ^^^^^ 
+>               : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >[42] : number[]
 >     : ^^^^^^^^
 >42 : 42

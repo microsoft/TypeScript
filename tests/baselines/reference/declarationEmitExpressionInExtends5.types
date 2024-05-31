@@ -21,13 +21,13 @@ namespace Test
 >getClass<IFace>() : IFace
 >                  : ^^^^^
 >getClass : <T>() => new () => T
->         : ^^^^^^^^^           
+>         : ^ ^^^^^^^           
 	{
 	}
 
 	export function getClass<T>() : new() => T
 >getClass : <T>() => new () => T
->         : ^^^^^^^^^           
+>         : ^ ^^^^^^^           
 	{
 		return SomeClass as (new() => T);
 >SomeClass as (new() => T) : new () => T

@@ -315,23 +315,23 @@ module GenericSignaturesInvalid {
 
         a: <T>() => T;
 >a : <T>() => T
->  : ^^^^^^^^^ 
+>  : ^ ^^^^^^^ 
 
         a2: <T>(x?: T) => T;
 >a2 : <T>(x?: T) => T
->   : ^^^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 
         a3: <T>(x: T) => T;
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
         a4: <T>(x: T, y?: T) => T;
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -339,7 +339,7 @@ module GenericSignaturesInvalid {
 
         a5: <T>(x?: T, y?: T) => T;
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -386,7 +386,7 @@ module GenericSignaturesInvalid {
 
     function foo<T>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
         var b: Base2;
 >b : Base2
@@ -809,23 +809,23 @@ module GenericSignaturesValid {
 
         a: <T>() => T;
 >a : <T>() => T
->  : ^^^^^^^^^ 
+>  : ^ ^^^^^^^ 
 
         a2: <T>(x?: T) => T;
 >a2 : <T>(x?: T) => T
->   : ^^^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 
         a3: <T>(x: T) => T;
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
         a4: <T>(x: T, y?: T) => T;
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -833,7 +833,7 @@ module GenericSignaturesValid {
 
         a5: <T>(x?: T, y?: T) => T;
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -847,135 +847,135 @@ module GenericSignaturesValid {
 
             this.a = <T>() => null; // ok, same T of required params
 >this.a = <T>() => null : <T>() => any
->                       : ^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^
 >this.a : <T>() => T
->       : ^^^^^^^^^ 
+>       : ^ ^^^^^^^ 
 >this : this
 >     : ^^^^
 >a : <T>() => T
->  : ^^^^^^^^^ 
+>  : ^ ^^^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a = <T>(x?: T) => null; // ok, same T of required params
 >this.a = <T>(x?: T) => null : <T>(x?: T) => any
->                            : ^^^^ ^^^ ^^^^^^^^
+>                            : ^ ^^ ^^^ ^^^^^^^^
 >this.a : <T>() => T
->       : ^^^^^^^^^ 
+>       : ^ ^^^^^^^ 
 >this : this
 >     : ^^^^
 >a : <T>() => T
->  : ^^^^^^^^^ 
+>  : ^ ^^^^^^^ 
 ><T>(x?: T) => null : <T>(x?: T) => any
->                   : ^^^^ ^^^ ^^^^^^^^
+>                   : ^ ^^ ^^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a = <T>(x: T) => null; // error, too many required params
 >this.a = <T>(x: T) => null : <T>(x: T) => any
->                           : ^^^^ ^^ ^^^^^^^^
+>                           : ^ ^^ ^^ ^^^^^^^^
 >this.a : <T>() => T
->       : ^^^^^^^^^ 
+>       : ^ ^^^^^^^ 
 >this : this
 >     : ^^^^
 >a : <T>() => T
->  : ^^^^^^^^^ 
+>  : ^ ^^^^^^^ 
 ><T>(x: T) => null : <T>(x: T) => any
->                  : ^^^^ ^^ ^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a2 = <T>() => null; // ok, same T of required params
 >this.a2 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a2 : <T>(x?: T) => T
->        : ^^^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a2 : <T>(x?: T) => T
->   : ^^^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a2 = <T>(x?: T) => null; // ok, same T of required params
 >this.a2 = <T>(x?: T) => null : <T>(x?: T) => any
->                             : ^^^^ ^^^ ^^^^^^^^
+>                             : ^ ^^ ^^^ ^^^^^^^^
 >this.a2 : <T>(x?: T) => T
->        : ^^^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a2 : <T>(x?: T) => T
->   : ^^^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^^^^ 
 ><T>(x?: T) => null : <T>(x?: T) => any
->                   : ^^^^ ^^^ ^^^^^^^^
+>                   : ^ ^^ ^^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a2 = <T>(x: T) => null; // ok, same number of params
 >this.a2 = <T>(x: T) => null : <T>(x: T) => any
->                            : ^^^^ ^^ ^^^^^^^^
+>                            : ^ ^^ ^^ ^^^^^^^^
 >this.a2 : <T>(x?: T) => T
->        : ^^^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a2 : <T>(x?: T) => T
->   : ^^^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^^^^ 
 ><T>(x: T) => null : <T>(x: T) => any
->                  : ^^^^ ^^ ^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a3 = <T>() => null; // ok, fewer required params
 >this.a3 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a3 : <T>(x: T) => T
->        : ^^^^ ^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a3 = <T>(x?: T) => null; // ok, fewer required params
 >this.a3 = <T>(x?: T) => null : <T>(x?: T) => any
->                             : ^^^^ ^^^ ^^^^^^^^
+>                             : ^ ^^ ^^^ ^^^^^^^^
 >this.a3 : <T>(x: T) => T
->        : ^^^^ ^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 ><T>(x?: T) => null : <T>(x?: T) => any
->                   : ^^^^ ^^^ ^^^^^^^^
+>                   : ^ ^^ ^^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a3 = <T>(x: T) => null; // ok, same T of required params
 >this.a3 = <T>(x: T) => null : <T>(x: T) => any
->                            : ^^^^ ^^ ^^^^^^^^
+>                            : ^ ^^ ^^ ^^^^^^^^
 >this.a3 : <T>(x: T) => T
->        : ^^^^ ^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 ><T>(x: T) => null : <T>(x: T) => any
->                  : ^^^^ ^^ ^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
 >this.a3 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                                  : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                                  : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >this.a3 : <T>(x: T) => T
->        : ^^^^ ^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a3 : <T>(x: T) => T
->   : ^^^^ ^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                        : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                        : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -983,27 +983,27 @@ module GenericSignaturesValid {
 
             this.a4 = <T>() => null; // ok, fewer required params
 >this.a4 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a4 : <T>(x: T, y?: T) => T
->        : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
 >this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->                                    : ^^^^ ^^^ ^^ ^^^ ^^^^^^^^
+>                                    : ^ ^^ ^^^ ^^ ^^^ ^^^^^^^^
 >this.a4 : <T>(x: T, y?: T) => T
->        : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->                          : ^^^^ ^^^ ^^ ^^^ ^^^^^^^^
+>                          : ^ ^^ ^^^ ^^ ^^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -1011,29 +1011,29 @@ module GenericSignaturesValid {
 
             this.a4 = <T>(x: T) => null; // ok, same T of required params
 >this.a4 = <T>(x: T) => null : <T>(x: T) => any
->                            : ^^^^ ^^ ^^^^^^^^
+>                            : ^ ^^ ^^ ^^^^^^^^
 >this.a4 : <T>(x: T, y?: T) => T
->        : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 ><T>(x: T) => null : <T>(x: T) => any
->                  : ^^^^ ^^ ^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params
 >this.a4 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                                  : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                                  : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >this.a4 : <T>(x: T, y?: T) => T
->        : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a4 : <T>(x: T, y?: T) => T
->   : ^^^^ ^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                        : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                        : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -1042,27 +1042,27 @@ module GenericSignaturesValid {
 
             this.a5 = <T>() => null; // ok, fewer required params
 >this.a5 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a5 : <T>(x?: T, y?: T) => T
->        : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
 >this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->                                    : ^^^^ ^^^ ^^ ^^^ ^^^^^^^^
+>                                    : ^ ^^ ^^^ ^^ ^^^ ^^^^^^^^
 >this.a5 : <T>(x?: T, y?: T) => T
->        : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->                          : ^^^^ ^^^ ^^ ^^^ ^^^^^^^^
+>                          : ^ ^^ ^^^ ^^ ^^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -1070,29 +1070,29 @@ module GenericSignaturesValid {
 
             this.a5 = <T>(x: T) => null; // ok, all present params match
 >this.a5 = <T>(x: T) => null : <T>(x: T) => any
->                            : ^^^^ ^^ ^^^^^^^^
+>                            : ^ ^^ ^^ ^^^^^^^^
 >this.a5 : <T>(x?: T, y?: T) => T
->        : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 ><T>(x: T) => null : <T>(x: T) => any
->                  : ^^^^ ^^ ^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 
             this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params
 >this.a5 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                                  : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                                  : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >this.a5 : <T>(x?: T, y?: T) => T
->        : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>        : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >this : this
 >     : ^^^^
 >a5 : <T>(x?: T, y?: T) => T
->   : ^^^^ ^^^ ^^ ^^^ ^^^^^ 
+>   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->                        : ^^^^ ^^ ^^ ^^ ^^^^^^^^
+>                        : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 >y : T

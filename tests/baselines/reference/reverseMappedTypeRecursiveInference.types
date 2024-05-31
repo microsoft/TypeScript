@@ -17,7 +17,7 @@ type Bar<V> = {
 
 function test<V>(value: Foo<V>): V {
 >test : <V>(value: Foo<V>) => V
->     : ^^^^     ^^      ^^^^^ 
+>     : ^ ^^     ^^      ^^^^^ 
 >value : Foo<V>
 >      : ^^^^^^
 
@@ -49,7 +49,7 @@ test(bar);
 >test(bar) : { [x: string]: any; }
 >          : ^^^^^^^^^^^^^^^^^^^^^
 >test : <V>(value: Foo<V>) => V
->     : ^^^^     ^^      ^^^^^ 
+>     : ^ ^^     ^^      ^^^^^ 
 >bar : Bar<any>
 >    : ^^^^^^^^
 

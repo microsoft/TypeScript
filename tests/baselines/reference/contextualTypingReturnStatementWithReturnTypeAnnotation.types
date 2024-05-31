@@ -13,7 +13,7 @@ declare function isString(text: unknown): text is string;
 
 declare function getPropFromRaw<T>(
 >getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
->               : ^^^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
+>               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
 
   prop: "files" | "include" | "exclude" | "references",
 >prop : "files" | "include" | "exclude" | "references"
@@ -44,7 +44,7 @@ function getSpecsFromRaw(
 >getPropFromRaw(prop, isString, "string") : PropOfRaw<string>
 >                                         : ^^^^^^^^^^^^^^^^^
 >getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
->               : ^^^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
+>               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
 >prop : "files" | "include" | "exclude"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isString : (text: unknown) => text is string

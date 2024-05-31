@@ -16,11 +16,11 @@ function f(x: number, y: number, z: number) {
 >Array.from(arguments) : any[]
 >                      : ^^^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^^^^         ^^            ^^^   ^^^^^^^^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^^^^        ^^                          ^^^   ^^^^^^^^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^^^^         ^^            ^^^   ^^^^^^^^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^^^^        ^^                          ^^^   ^^^^^^^^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }
@@ -226,13 +226,13 @@ out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
 >                                             : ^^^^^^^^^^^^^
 >out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>           : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >out() : Promise<unknown>
 >      : ^^^^^^^^^^^^^^^^
 >out : () => Promise<unknown>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >() => {    console.log("Yea!");} : () => void
 >                                 : ^^^^^^^^^^
 

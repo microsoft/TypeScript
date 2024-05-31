@@ -157,7 +157,7 @@ module schema {
 
         get createValidator9(): <T>(data: T) => T {
 >createValidator9 : <T>(data: T) => T
->                 : ^^^^    ^^ ^^^^^ 
+>                 : ^ ^^    ^^ ^^^^^ 
 >data : T
 >     : ^
 
@@ -168,9 +168,9 @@ module schema {
         
         set createValidator10(v: <T>(data: T) => T) {
 >createValidator10 : <T>(data: T) => T
->                  : ^^^^    ^^ ^^^^^ 
+>                  : ^ ^^    ^^ ^^^^^ 
 >v : <T>(data: T) => T
->  : ^^^^    ^^ ^^^^^ 
+>  : ^ ^^    ^^ ^^^^^ 
 >data : T
 >     : ^
         }

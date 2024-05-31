@@ -12,7 +12,7 @@ interface Sequence<T> {
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
 >map : <U>(iterator: (value: T) => U) => Sequence<U>
->    : ^^^^        ^^               ^^^^^           
+>    : ^ ^^        ^^               ^^^^^           
 >iterator : (value: T) => U
 >         : ^     ^^ ^^^^^ 
 >value : T
@@ -28,7 +28,7 @@ interface Sequence<T> {
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
 >groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: T[]; }>
->        : ^^^^           ^^               ^^^^^                                 
+>        : ^ ^^           ^^               ^^^^^                                 
 >keySelector : (value: T) => K
 >            : ^     ^^ ^^^^^ 
 >value : T
@@ -49,11 +49,11 @@ var s2 = s.groupBy(s => s.length);
 >s.groupBy(s => s.length) : Sequence<{ key: number; items: string[]; }>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
->          : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
+>          : ^ ^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
 >s : Sequence<string>
 >  : ^^^^^^^^^^^^^^^^
 >groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
->        : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
+>        : ^ ^^           ^^^     ^^^^^^^^^^^^^^^^^^^                ^         ^^^^^^      
 >s => s.length : (s: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string

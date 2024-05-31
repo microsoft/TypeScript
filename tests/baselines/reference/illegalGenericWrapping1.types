@@ -12,7 +12,7 @@ interface Sequence<T> {
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
 >map : <U>(iterator: (value: T) => U) => Sequence<U>
->    : ^^^^        ^^               ^^^^^           
+>    : ^ ^^        ^^               ^^^^^           
 >iterator : (value: T) => U
 >         : ^     ^^ ^^^^^ 
 >value : T
@@ -28,7 +28,7 @@ interface Sequence<T> {
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: Sequence<T>; }>;
 >groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: Sequence<T>; }>
->        : ^^^^           ^^               ^^^^^                                         
+>        : ^ ^^           ^^               ^^^^^                                         
 >keySelector : (value: T) => K
 >            : ^     ^^ ^^^^^ 
 >value : T

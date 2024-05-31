@@ -30,6 +30,6 @@ export class Example<Z extends CustomDocument> {
 
     public test<Z extends Document>() { }
 >test : <Z extends Document>() => void
->     : ^^^^^^^^^^^        ^^^^^^^^^^^
+>     : ^ ^^^^^^^^^        ^^^^^^^^^^^
 }
 

@@ -13,17 +13,17 @@ interface ISubject<T> extends IObservable<T> { }
 
 declare function combineLatest<TOther>(x: IObservable<TOther>[]): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->              : ^^^^^^^^^^^ ^^                     ^^^    ^^^^^^    ^^^
+>              : ^^^      ^^ ^^                     ^^^    ^^^^^^    ^^^
 >x : IObservable<TOther>[]
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
 declare function combineLatest(): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->              : ^^^^^^^^^^^ ^^                     ^^^    ^^^^^^    ^^^
+>              : ^^^      ^^ ^^                     ^^^    ^^^^^^    ^^^
 
 function fn<T>() {
 >fn : <T>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     var values: ISubject<any>[] = [];
 >values : ISubject<any>[]
@@ -36,7 +36,7 @@ function fn<T>() {
 >combineLatest<T>(values) : void
 >                         : ^^^^
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->              : ^^^^^^^^^^^ ^^                     ^^^    ^^^^^^    ^^^
+>              : ^^^      ^^ ^^                     ^^^    ^^^^^^    ^^^
 >values : ISubject<any>[]
 >       : ^^^^^^^^^^^^^^^
 }

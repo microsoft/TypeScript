@@ -32,7 +32,7 @@ class CoachMarkAnchorDecorator {
 
     decorateComponent<P>(anchor: P) {
 >decorateComponent : <P>(anchor: P) => typeof CoachMarkAnchor
->                  : ^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anchor : P
 >       : ^
 

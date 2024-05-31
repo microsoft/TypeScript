@@ -35,17 +35,17 @@ interface I2 {
 
 var a: { new<Z>(x: Z): B<Z> }
 >a : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 >x : Z
 >  : ^
 
 var b = { new<A>(x: A) { return new C<A>(x); } };
 >b : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >{ new<A>(x: A) { return new C<A>(x); } } : { "new"<A>(x: A): C<A>; }
->                                         : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>                                         : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >new : <A>(x: A) => C<A>
->    : ^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : A
 >  : ^
 >new C<A>(x) : C<A>
@@ -110,17 +110,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 >a : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 >a : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -131,17 +131,17 @@ function foo4(x: typeof b);
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >b : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >b : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 
 function foo4(x: any) { }
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -192,9 +192,9 @@ function foo10(x: typeof a); // BUG 832086
 >foo10 : { (x: B<string>): any; (x: typeof a): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 >a : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 
 function foo10(x: any) { }
 >foo10 : { (x: B<string>): any; (x: typeof a): any; }
@@ -211,9 +211,9 @@ function foo11(x: typeof b); // ok
 >foo11 : { (x: B<string>): any; (x: typeof b): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >b : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 
 function foo11(x: any) { }
 >foo11 : { (x: B<string>): any; (x: typeof b): any; }
@@ -264,9 +264,9 @@ function foo13(x: typeof a); // BUG 832086
 >foo13 : { (x: I<string>): any; (x: typeof a): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 >a : new <Z>(x: Z) => B<Z>
->  : ^^^^^^^^ ^^ ^^^^^    
+>  : ^^^^^ ^^ ^^ ^^^^^    
 
 function foo13(x: any) { }
 >foo13 : { (x: I<string>): any; (x: typeof a): any; }
@@ -283,9 +283,9 @@ function foo14(x: typeof b); // ok
 >foo14 : { (x: I<string>): any; (x: typeof b): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 >b : { "new"<A>(x: A): C<A>; }
->  : ^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^
 
 function foo14(x: any) { }
 >foo14 : { (x: I<string>): any; (x: typeof b): any; }

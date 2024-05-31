@@ -24,7 +24,7 @@ type Constructor<T = {}> = new (...args: any[]) => T;
 
 function Mixin<TBase extends Constructor>(Base: TBase) {
 >Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
->      : ^^^^^^^^^^^^^^^           ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^           ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : TBase
 >     : ^^^^^
 
@@ -48,7 +48,7 @@ class CrashTrigger extends Mixin(Empty) {
 >Mixin(Empty) : Mixin<typeof Empty>.(Anonymous class) & Empty
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
->      : ^^^^^^^^^^^^^^^           ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^           ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Empty : typeof Empty
 >      : ^^^^^^^^^^^^
 

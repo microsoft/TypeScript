@@ -42,7 +42,7 @@ module CallSignature {
 >foo1 : { (cb: (x: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                   ^^^         ^^^  ^^   ^^^   ^^^
 ><T>(x: T) => '' : <T>(x: T) => string
->                : ^^^^ ^^ ^^^^^^^^^^^
+>                : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >'' : ""
@@ -89,7 +89,7 @@ module CallSignature {
 >foo2 : { (cb: (x: number, y: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                              ^^^         ^^^  ^^   ^^^   ^^^
 ><T>(x: T) => '' : <T>(x: T) => string
->                : ^^^^ ^^ ^^^^^^^^^^^
+>                : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >'' : ""

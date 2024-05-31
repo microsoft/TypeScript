@@ -3,7 +3,7 @@
 === genericConstructorFunction1.ts ===
 function f1<T>(args: T) {
 >f1 : <T>(args: T) => Date
->   : ^^^^    ^^ ^^^^^^^^^
+>   : ^ ^^    ^^ ^^^^^^^^^
 >args : T
 >     : ^
 
@@ -49,7 +49,7 @@ interface I1<T> { new (arg: T): Date };
 
 function f2<T>(args: T) {
 >f2 : <T>(args: T) => Date
->   : ^^^^    ^^ ^^^^^^^^^
+>   : ^ ^^    ^^ ^^^^^^^^^
 >args : T
 >     : ^
 

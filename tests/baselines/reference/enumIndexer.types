@@ -45,11 +45,11 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >_arr.map(o => MyEnumType[o.key] === enumValue) : boolean[]
 >                                               : ^^^^^^^^^
 >_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
->         : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>         : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >_arr : { key: string; }[]
 >     : ^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
 >                                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { key: string; }

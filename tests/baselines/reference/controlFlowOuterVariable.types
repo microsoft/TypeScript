@@ -39,9 +39,9 @@ const CONFIG = {
 
 const helper = function<T>(t: T[]) {
 >helper : <T>(t: T[]) => void
->       : ^^^^ ^^   ^^^^^^^^^
+>       : ^ ^^ ^^   ^^^^^^^^^
 >function<T>(t: T[]) {    helper(t.slice(1));} : <T>(t: T[]) => void
->                                              : ^^^^ ^^   ^^^^^^^^^
+>                                              : ^ ^^ ^^   ^^^^^^^^^
 >t : T[]
 >  : ^^^
 
@@ -49,7 +49,7 @@ const helper = function<T>(t: T[]) {
 >helper(t.slice(1)) : void
 >                   : ^^^^
 >helper : <T>(t: T[]) => void
->       : ^^^^ ^^   ^^^^^^^^^
+>       : ^ ^^ ^^   ^^^^^^^^^
 >t.slice(1) : T[]
 >           : ^^^
 >t.slice : (start?: number, end?: number) => T[]

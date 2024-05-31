@@ -9,7 +9,7 @@ type PromiseOrValue<T> = Promise<T> | T;
 
 function mapAsyncIterable<T, U, R = undefined>(
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->                 : ^^^^^^^^^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
 
   iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>,
 >iterable : AsyncGenerator<T, R, void> | AsyncIterable<T>
@@ -320,11 +320,11 @@ const iterable = {
 >Promise.resolve({      done: items.length === 0,      value,    }) : Promise<{ done: boolean; value: number; }>
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >{      done: items.length === 0,      value,    } : { done: boolean; value: number; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -356,7 +356,7 @@ const doubles = mapAsyncIterable(iterable, (x) => x + x);
 >mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->                 : ^^^^^^^^^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
 >iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x + x : (x: number) => number

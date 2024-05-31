@@ -40,9 +40,9 @@
  */
 const identity = x => x;
 >identity : <T>(x: T) => T
->         : ^^^^ ^^ ^^^^^ 
+>         : ^ ^^ ^^ ^^^^^ 
 >x => x : <T>(x: T) => T
->       : ^^^^ ^^ ^^^^^ 
+>       : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -69,7 +69,7 @@ const identity = x => x;
  */
 function flatMap(array, iterable = identity) {
 >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T>(array: T[][]): T[]; }
->        : ^^^^^^^^^     ^^   ^^        ^^             ^^^   ^^^^^^     ^^     ^^^   ^^^
+>        : ^^^ ^^ ^^     ^^   ^^        ^^             ^^^   ^^^ ^^     ^^     ^^^   ^^^
 >array : unknown[]
 >      : ^^^^^^^^^
 >iterable : (x: unknown) => unknown

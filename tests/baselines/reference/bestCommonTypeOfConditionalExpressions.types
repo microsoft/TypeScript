@@ -178,7 +178,7 @@ var r11 = true ? base : derived2;
 
 function foo5<T, U>(t: T, u: U): Object {
 >foo5 : <T, U>(t: T, u: U) => Object
->     : ^^^^^^^ ^^ ^^ ^^ ^^^^^      
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >t : T
 >  : ^
 >u : U

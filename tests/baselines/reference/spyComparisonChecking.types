@@ -34,7 +34,7 @@ type SpyObj<T> = T & {
 
 declare function createSpyObj<T>(
 >createSpyObj : <T>(name: string, names: Array<keyof T>) => SpyObj<T>
->             : ^^^^    ^^      ^^     ^^              ^^^^^         
+>             : ^ ^^    ^^      ^^     ^^              ^^^^^         
 
     name: string, names: Array<keyof T>): SpyObj<T>;
 >name : string
@@ -44,7 +44,7 @@ declare function createSpyObj<T>(
 
 function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 >mock : <T>(spyName: string, methodNames: Array<keyof T>) => SpyObj<T>
->     : ^^^^       ^^      ^^           ^^              ^^^^^         
+>     : ^ ^^       ^^      ^^           ^^              ^^^^^         
 >spyName : string
 >        : ^^^^^^
 >methodNames : (keyof T)[]

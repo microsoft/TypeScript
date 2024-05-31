@@ -7,7 +7,7 @@ export class BuildError<A, B, C>{
 
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
 >parent : <A, B extends A, C>() => FileWithErrors<A, B, C>
->       : ^^^^^^^^^^^^^^ ^^^^^^^^^^                       
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                       
 
     return undefined;
 >undefined : undefined
@@ -20,7 +20,7 @@ export class FileWithErrors<A, B, C>{
 
   public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
 >errors : <A, B extends A, C>() => BuildError<A, B, C>[]
->       : ^^^^^^^^^^^^^^ ^^^^^^^^^^                     
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                     
 
     return undefined;
 >undefined : undefined
@@ -28,7 +28,7 @@ export class FileWithErrors<A, B, C>{
   }
   public parent<A, B extends A, C>(): BuildResult<A, B, C> {
 >parent : <A, B extends A, C>() => BuildResult<A, B, C>
->       : ^^^^^^^^^^^^^^ ^^^^^^^^^^                    
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^                    
 
     return undefined;
 >undefined : undefined
@@ -41,7 +41,7 @@ export class BuildResult<A, B, C>{
 
   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
 >merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
->      : ^^^^^^^^^^^^^^ ^^^^^     ^^                    ^^^^^    
+>      : ^ ^^ ^^^^^^^^^ ^^ ^^     ^^                    ^^^^^    
 >other : BuildResult<A, B, C>
 >      : ^^^^^^^^^^^^^^^^^^^^
 

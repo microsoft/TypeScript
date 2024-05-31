@@ -6,7 +6,7 @@
 
 function outer<T>(x: T) {
 >outer : <T>(x: T) => typeof Inner
->      : ^^^^ ^^ ^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -32,7 +32,7 @@ let y: number = outer(5).y;
 >outer(5) : typeof Inner
 >         : ^^^^^^^^^^^^
 >outer : <T>(x: T) => typeof Inner
->      : ^^^^ ^^ ^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 >y : number
@@ -44,7 +44,7 @@ class ListWrapper2 {
 
   static clone<T>(dit: typeof ListWrapper2, array: T[]): T[] { return array.slice(0); }
 >clone : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
->      : ^^^^   ^^                   ^^     ^^   ^^^^^   
+>      : ^ ^^   ^^                   ^^     ^^   ^^^^^   
 >dit : typeof ListWrapper2
 >    : ^^^^^^^^^^^^^^^^^^^
 >ListWrapper2 : typeof ListWrapper2
@@ -64,7 +64,7 @@ class ListWrapper2 {
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
 >reversed : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
->         : ^^^^   ^^                   ^^     ^^   ^^^^^   
+>         : ^ ^^   ^^                   ^^     ^^   ^^^^^   
 >dit : typeof ListWrapper2
 >    : ^^^^^^^^^^^^^^^^^^^
 >ListWrapper2 : typeof ListWrapper2
@@ -104,7 +104,7 @@ namespace tessst {
      */
     export function funkyFor<T, U>(array: T[], callback: (element: T, index: number) => U): U {
 >funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
->         : ^^^^^^^     ^^   ^^        ^^                                ^^^^^ 
+>         : ^ ^^ ^^     ^^   ^^        ^^                                ^^^^^ 
 >array : T[]
 >      : ^^^
 >callback : (element: T, index: number) => U
@@ -176,7 +176,7 @@ namespace tessst {
 interface Scanner {
   scanRange<T>(start: number, length: number, callback: () => T): T;
 >scanRange : <T>(start: number, length: number, callback: () => T) => T
->          : ^^^^     ^^      ^^      ^^      ^^        ^^       ^^^^^ 
+>          : ^ ^^     ^^      ^^      ^^      ^^        ^^       ^^^^^ 
 >start : number
 >      : ^^^^^^
 >length : number
@@ -224,7 +224,7 @@ class ListWrapper {
 
   static clone<T>(dit: typeof ListWrapper, array: T[]): T[] { return array.slice(0); }
 >clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->      : ^^^^   ^^                  ^^     ^^   ^^^^^   
+>      : ^ ^^   ^^                  ^^     ^^   ^^^^^   
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -244,7 +244,7 @@ class ListWrapper {
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
 >forEachWithIndex : <T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) => void
->                 : ^^^^   ^^                  ^^     ^^   ^^  ^^                         ^^^^^^^^^
+>                 : ^ ^^   ^^                  ^^     ^^   ^^  ^^                         ^^^^^^^^^
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -295,7 +295,7 @@ class ListWrapper {
   }
   static first<T>(dit: typeof ListWrapper, array: T[]): T {
 >first : <T>(dit: typeof ListWrapper, array: T[]) => T
->      : ^^^^   ^^                  ^^     ^^   ^^^^^ 
+>      : ^ ^^   ^^                  ^^     ^^   ^^^^^ 
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -319,7 +319,7 @@ class ListWrapper {
   }
   static last<T>(dit: typeof ListWrapper, array: T[]): T {
 >last : <T>(dit: typeof ListWrapper, array: T[]) => T
->     : ^^^^   ^^                  ^^     ^^   ^^^^^ 
+>     : ^ ^^   ^^                  ^^     ^^   ^^^^^ 
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -363,7 +363,7 @@ class ListWrapper {
   }
   static indexOf<T>(dit: typeof ListWrapper, array: T[], value: T, startIndex: number = 0): number {
 >indexOf : <T>(dit: typeof ListWrapper, array: T[], value: T, startIndex?: number) => number
->        : ^^^^   ^^                  ^^     ^^   ^^     ^^ ^^          ^^^      ^^^^^      
+>        : ^ ^^   ^^                  ^^     ^^   ^^     ^^ ^^          ^^^      ^^^^^      
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -393,7 +393,7 @@ class ListWrapper {
   }
   static contains<T>(dit: typeof ListWrapper, list: T[], el: T): boolean { return list.indexOf(el) !== -1; }
 >contains : <T>(dit: typeof ListWrapper, list: T[], el: T) => boolean
->         : ^^^^   ^^                  ^^    ^^   ^^  ^^ ^^^^^       
+>         : ^ ^^   ^^                  ^^    ^^   ^^  ^^ ^^^^^       
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -421,7 +421,7 @@ class ListWrapper {
 
   static reversed<T>(dit: typeof ListWrapper, array: T[]): T[] {
 >reversed : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->         : ^^^^   ^^                  ^^     ^^   ^^^^^   
+>         : ^ ^^   ^^                  ^^     ^^   ^^^^^   
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -471,11 +471,11 @@ class ListWrapper {
 >tessst.funkyFor(array, t => t.toString()) : string
 >                                          : ^^^^^^
 >tessst.funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
->                : ^^^^^^^^^     ^^     ^^        ^^                                  ^^^^^ 
+>                : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >tessst : typeof tessst
 >       : ^^^^^^^^^^^^^
 >funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
->         : ^^^^^^^^^     ^^     ^^        ^^                                  ^^^^^ 
+>         : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >array : T[]
 >      : ^^^
 >t => t.toString() : (t: T) => string
@@ -525,7 +525,7 @@ class ListWrapper {
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
 >insert : <T>(dit: typeof ListWrapper, list: T[], index: number, value: T) => void
->       : ^^^^   ^^                  ^^    ^^   ^^     ^^      ^^     ^^ ^^^^^^^^^
+>       : ^ ^^   ^^                  ^^    ^^   ^^     ^^      ^^     ^^ ^^^^^^^^^
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -553,7 +553,7 @@ class ListWrapper {
 
   static removeAt<T>(dit: typeof ListWrapper, list: T[], index: number): T {
 >removeAt : <T>(dit: typeof ListWrapper, list: T[], index: number) => T
->         : ^^^^   ^^                  ^^    ^^   ^^     ^^      ^^^^^ 
+>         : ^ ^^   ^^                  ^^    ^^   ^^     ^^      ^^^^^ 
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -593,7 +593,7 @@ class ListWrapper {
   }
   static removeAll<T>(dit: typeof ListWrapper, list: T[], items: T[]) {
 >removeAll : <T>(dit: typeof ListWrapper, list: T[], items: T[]) => void
->          : ^^^^   ^^                  ^^    ^^   ^^     ^^   ^^^^^^^^^
+>          : ^ ^^   ^^                  ^^    ^^   ^^     ^^   ^^^^^^^^^
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -658,7 +658,7 @@ class ListWrapper {
   }
   static remove<T>(dit: typeof ListWrapper, list: T[], el: T): boolean {
 >remove : <T>(dit: typeof ListWrapper, list: T[], el: T) => boolean
->       : ^^^^   ^^                  ^^    ^^   ^^  ^^ ^^^^^       
+>       : ^ ^^   ^^                  ^^    ^^   ^^  ^^ ^^^^^       
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -870,7 +870,7 @@ class ListWrapper {
   }
   static slice<T>(dit: typeof ListWrapper, l: T[], from: number = 0, to: number = null): T[] {
 >slice : <T>(dit: typeof ListWrapper, l: T[], from?: number, to?: number) => T[]
->      : ^^^^   ^^                  ^^ ^^   ^^    ^^^      ^^  ^^^      ^^^^^   
+>      : ^ ^^   ^^                  ^^ ^^   ^^    ^^^      ^^  ^^^      ^^^^^   
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -908,7 +908,7 @@ class ListWrapper {
   }
   static splice<T>(dit: typeof ListWrapper, l: T[], from: number, length: number): T[] { return l.splice(from, length); }
 >splice : <T>(dit: typeof ListWrapper, l: T[], from: number, length: number) => T[]
->       : ^^^^   ^^                  ^^ ^^   ^^    ^^      ^^      ^^      ^^^^^   
+>       : ^ ^^   ^^                  ^^ ^^   ^^    ^^      ^^      ^^      ^^^^^   
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -934,7 +934,7 @@ class ListWrapper {
 
   static sort<T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) {
 >sort : <T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) => void
->     : ^^^^   ^^                  ^^ ^^   ^^         ^^^                      ^^^^^^^^^
+>     : ^ ^^   ^^                  ^^ ^^   ^^         ^^^                      ^^^^^^^^^
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -982,7 +982,7 @@ class ListWrapper {
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }
 >toString : <T>(dit: typeof ListWrapper, l: T[]) => string
->         : ^^^^   ^^                  ^^ ^^   ^^^^^      
+>         : ^ ^^   ^^                  ^^ ^^   ^^^^^      
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -1000,7 +1000,7 @@ class ListWrapper {
 
   static toJSON<T>(dit: typeof ListWrapper, l: T[]): string { return JSON.stringify(l); }
 >toJSON : <T>(dit: typeof ListWrapper, l: T[]) => string
->       : ^^^^   ^^                  ^^ ^^   ^^^^^      
+>       : ^ ^^   ^^                  ^^ ^^   ^^^^^      
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -1020,7 +1020,7 @@ class ListWrapper {
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
 >maximum : <T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number) => T
->        : ^^^^   ^^                  ^^    ^^   ^^         ^^                ^^^^^ 
+>        : ^ ^^   ^^                  ^^    ^^   ^^         ^^                ^^^^^ 
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >ListWrapper : typeof ListWrapper
@@ -1144,11 +1144,11 @@ let cloned = ListWrapper.clone(ListWrapper, [1,2,3,4]);
 >ListWrapper.clone(ListWrapper, [1,2,3,4]) : number[]
 >                                          : ^^^^^^^^
 >ListWrapper.clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->                  : ^^^^   ^^                  ^^     ^^   ^^^^^   
+>                  : ^ ^^   ^^                  ^^     ^^   ^^^^^   
 >ListWrapper : typeof ListWrapper
 >            : ^^^^^^^^^^^^^^^^^^
 >clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->      : ^^^^   ^^                  ^^     ^^   ^^^^^   
+>      : ^ ^^   ^^                  ^^     ^^   ^^^^^   
 >ListWrapper : typeof ListWrapper
 >            : ^^^^^^^^^^^^^^^^^^
 >[1,2,3,4] : number[]
@@ -1169,7 +1169,7 @@ declare function isBlank(x: any): boolean;
 
 declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 >isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
->          : ^^^^         ^^^                      ^^^^^       
+>          : ^ ^^         ^^^                      ^^^^^       
 >compareFn : (a: T, b: T) => number
 >          : ^ ^^ ^^ ^^ ^^^^^      
 >a : T

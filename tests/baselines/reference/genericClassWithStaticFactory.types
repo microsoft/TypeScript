@@ -742,7 +742,7 @@ module Editor {
 
         public MakeHead<T>(): List<T> {
 >MakeHead : <T>() => List<T>
->         : ^^^^^^^^^       
+>         : ^ ^^^^^^^       
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<T>
@@ -785,7 +785,7 @@ module Editor {
 
         public MakeEntry<T>(data: T): List<T> {
 >MakeEntry : <T>(data: T) => List<T>
->          : ^^^^    ^^ ^^^^^       
+>          : ^ ^^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -832,7 +832,7 @@ module Editor {
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
 >RemoveEntry : <T>(entry: List<T>) => List<T>
->            : ^^^^     ^^       ^^^^^       
+>            : ^ ^^     ^^       ^^^^^       
 >entry : List<T>
 >      : ^^^^^^^
 

@@ -11,7 +11,7 @@ interface Foo {
 interface Bar {
     f<T>(x: T): T;
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

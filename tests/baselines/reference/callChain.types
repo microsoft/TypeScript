@@ -431,7 +431,7 @@ o3["b"]?.(1, ...[2, 3], 4).c;
 
 declare const o4: undefined | (<T>(f: (a: T) => T) => T);
 >o4 : (<T>(f: (a: T) => T) => T) | undefined
->   : ^^^^^ ^^           ^^^^^ ^^^^^^^^^^^^^
+>   : ^^ ^^ ^^           ^^^^^ ^^^^^^^^^^^^^
 >f : (a: T) => T
 >  : ^ ^^ ^^^^^ 
 >a : T
@@ -449,14 +449,14 @@ const v: number | undefined = o4?.(incr);
 >o4?.(incr) : number | undefined
 >           : ^^^^^^^^^^^^^^^^^^
 >o4 : (<T>(f: (a: T) => T) => T) | undefined
->   : ^^^^^ ^^           ^^^^^ ^^^^^^^^^^^^^
+>   : ^^ ^^ ^^           ^^^^^ ^^^^^^^^^^^^^
 >incr : (x: number) => number
 >     : ^ ^^      ^^^^^      
 
 // GH#33744
 declare const o5: <T>() => undefined | (() => void);
 >o5 : <T>() => undefined | (() => void)
->   : ^^^^^^^^^                        
+>   : ^ ^^^^^^^                        
 
 o5<number>()?.();
 >o5<number>()?.() : void | undefined
@@ -464,7 +464,7 @@ o5<number>()?.();
 >o5<number>() : (() => void) | undefined
 >             : ^^^^^^^    ^^^^^^^^^^^^^
 >o5 : <T>() => undefined | (() => void)
->   : ^^^^^^^^^                        
+>   : ^ ^^^^^^^                        
 
 // GH#36031
 o2?.b()!.toString;

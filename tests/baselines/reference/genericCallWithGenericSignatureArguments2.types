@@ -10,7 +10,7 @@ module onlyT {
 
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -39,7 +39,7 @@ module onlyT {
 >foo((x: number) => 1, (x: string) => '') : (x: number) => number
 >                                         : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -55,7 +55,7 @@ module onlyT {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->       : ^^^^^^^^^^^    ^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -105,7 +105,7 @@ module onlyT {
 
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->     : ^^^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -128,7 +128,7 @@ module onlyT {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->       : ^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -187,7 +187,7 @@ module onlyT {
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->     : ^^^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >a : (x: T) => T
@@ -216,7 +216,7 @@ module onlyT {
 >foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
 >                                  : ^ ^^^^^^^^^
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->     : ^^^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >E.A : E
 >    : ^
 >E : typeof E
@@ -251,7 +251,7 @@ module TU {
 
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->    : ^^^^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -280,7 +280,7 @@ module TU {
 >foo((x: number) => 1, (x: string) => '') : (x: number) => number
 >                                         : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->    : ^^^^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -296,7 +296,7 @@ module TU {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->       : ^^^^^^^^^^^    ^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -306,7 +306,7 @@ module TU {
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
 >                              : ^ ^^^^^^^^^
 >foo : <T_1, U>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
->    : ^^^^^^^^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
+>    : ^^^^^^ ^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
 >(a: T) => a : (a: T) => T
 >            : ^ ^^ ^^^^^^
 >a : T
@@ -345,7 +345,7 @@ module TU {
 
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
 >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->     : ^^^^^^^^^^^    ^^^^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -368,7 +368,7 @@ module TU {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->       : ^^^^^^^^^^^      ^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -378,7 +378,7 @@ module TU {
 >foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
 >                               : ^ ^^^^^^^^^^^^^^^
 >foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
->     : ^^^^^^^^^^^^^    ^^^^^^^^^^^^    ^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
+>     : ^^^^^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
 >(a: T) => a : (a: T) => T
 >            : ^ ^^ ^^^^^^
 >a : T
@@ -398,7 +398,7 @@ module TU {
 >foo2((a) => a, (b) => b) : (x: Date) => Date
 >                         : ^ ^^^^^^^^^^^^^^^
 >foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
->     : ^^^^^^^^^^^^^    ^^^^^^^^^^^^    ^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
+>     : ^^^^^^^^^^^^^    ^^ ^^^^^^^^^    ^^ ^^               ^^ ^^           ^^^^^^ ^^   ^^^^^   
 >(a) => a : (a: Date) => Date
 >         : ^ ^^^^^^^^^^^^^^^
 >a : Date
@@ -427,7 +427,7 @@ module TU {
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->     : ^^^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >a : (x: T) => T
@@ -456,7 +456,7 @@ module TU {
 >foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
 >                                  : ^ ^^^^^^^^^
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->     : ^^^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >E.A : E
 >    : ^
 >E : typeof E

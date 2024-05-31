@@ -3,7 +3,7 @@
 === genericFunctionTypedArgumentsAreFixed.ts ===
 declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
 >map : <T, U>(f: (x: T) => U, xs: T[]) => U[]
->    : ^^^^^^^ ^^           ^^  ^^   ^^^^^   
+>    : ^ ^^ ^^ ^^           ^^  ^^   ^^^^^   
 >f : (x: T) => U
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -15,7 +15,7 @@ map((a) => a.length, [1]);
 >map((a) => a.length, [1]) : any[]
 >                          : ^^^^^
 >map : <T, U>(f: (x: T) => U, xs: T[]) => U[]
->    : ^^^^^^^ ^^           ^^  ^^   ^^^^^   
+>    : ^ ^^ ^^ ^^           ^^  ^^   ^^^^^   
 >(a) => a.length : (a: number) => any
 >                : ^ ^^^^^^^^^^^^^^^^
 >a : number

@@ -112,7 +112,7 @@ function subDataFunc(): TestCase<string | number>[] {
 
 function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->         : ^^^^       ^^         ^^^^^                   
+>         : ^ ^^       ^^         ^^^^^                   
 >subFunc : () => T[]
 >        : ^^^^^^   
 
@@ -137,7 +137,7 @@ function testFunc() {
 >dataFunc<TestCase<string | number>>(subDataFunc) : MultiCaseFixture<TestCase<string | number>>
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->         : ^^^^       ^^         ^^^^^                   
+>         : ^ ^^       ^^         ^^^^^                   
 >subDataFunc : () => TestCase<string | number>[]
 >            : ^^^^^^                           
 

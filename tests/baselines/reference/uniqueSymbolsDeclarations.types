@@ -624,11 +624,11 @@ const promiseForConstCall = Promise.resolve(constCall);
 >Promise.resolve(constCall) : Promise<unique symbol>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->                : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->        : ^^^^^^             ^^^^^^     ^^ ^^^                   ^^^^^^     ^^                  ^^^                   ^^^
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -669,7 +669,7 @@ declare const o: { [s]: "a", [N.s]: "b" };
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -700,7 +700,7 @@ f(s);
 >f(s) : unique symbol
 >     : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -708,7 +708,7 @@ f(N.s);
 >f(N.s) : unique symbol
 >       : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -720,7 +720,7 @@ f(N["s"]);
 >f(N["s"]) : unique symbol
 >          : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >N["s"] : unique symbol
 >       : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1012,7 +1012,7 @@ f<typeof s>(s);
 >f<typeof s>(s) : unique symbol
 >               : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1022,7 +1022,7 @@ f<typeof N.s>(N.s);
 >f<typeof N.s>(N.s) : unique symbol
 >                   : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1040,7 +1040,7 @@ f<typeof N.s>(N["s"]);
 >f<typeof N.s>(N["s"]) : unique symbol
 >                      : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
