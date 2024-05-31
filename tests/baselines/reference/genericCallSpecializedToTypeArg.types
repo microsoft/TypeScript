@@ -23,7 +23,7 @@ function dupeAndGetDist<U>(x: U): U {
 >dupe(x) : U
 >        : ^
 >dupe : <T>(x: T) => T
->     : ^ ^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^^^^ 
 >x : U
 >  : ^
 

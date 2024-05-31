@@ -76,7 +76,7 @@ import {
     trace,
     updateResolutionField,
     WatchDirectoryFlags,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface HasInvalidatedFromResolutionCache {

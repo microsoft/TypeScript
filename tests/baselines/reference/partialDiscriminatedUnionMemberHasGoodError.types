@@ -41,11 +41,11 @@ foo.push({
 >foo.push({    types: [{        type: "A"    }]}) : number
 >                                                 : ^^^^^^
 >foo.push : (...items: Wrapper[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^      
 >foo : Wrapper[]
 >    : ^^^^^^^^^
 >push : (...items: Wrapper[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
 >{    types: [{        type: "A"    }]} : { types: { type: "A"; }[]; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -41,13 +41,13 @@ f2(...[],);
 // Not confused by overloads
 declare function f3(x, ): number;
 >f3 : { (x: any): number; (x: any, y: any): string; }
->   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >x : any
 >  : ^^^
 
 declare function f3(x, y,): string;
 >f3 : { (x: any): number; (x: any, y: any): string; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^      ^^^
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >x : any
 >  : ^^^
 >y : any
@@ -59,7 +59,7 @@ declare function f3(x, y,): string;
 >f3(1,) : number
 >       : ^^^^^^
 >f3 : { (x: any): number; (x: any, y: any): string; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >1 : 1
 >  : ^
 
@@ -69,7 +69,7 @@ declare function f3(x, y,): string;
 >f3(1, 2,) : string
 >          : ^^^^^^
 >f3 : { (x: any): number; (x: any, y: any): string; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^      ^^^ ^^^^^^^ ^^^^^^^^      ^^^
 >1 : 1
 >  : ^
 >2 : 2

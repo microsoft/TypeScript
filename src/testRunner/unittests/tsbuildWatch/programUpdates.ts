@@ -1,11 +1,11 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
 import {
     getFsContentsForSampleProjectReferences,
     getFsContentsForSampleProjectReferencesLogicConfig,
     getSysForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
+} from "../helpers/sampleProjectReferences.js";
 import {
     commonFile1,
     commonFile2,
@@ -15,12 +15,12 @@ import {
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     verifyTscWatch({

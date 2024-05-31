@@ -66,7 +66,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-        var dispose;
+        var dispose, inner;
         if (async) {
             if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
             dispose = value[Symbol.asyncDispose];
@@ -74,8 +74,10 @@ var __addDisposableResource = (this && this.__addDisposableResource) || function
         if (dispose === void 0) {
             if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
             dispose = value[Symbol.dispose];
+            if (async) inner = dispose;
         }
         if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+        if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
         env.stack.push({ value: value, dispose: dispose, async: async });
     }
     else if (async) {
@@ -128,18 +130,17 @@ try {
         let _classDescriptor;
         let _classExtraInitializers = [];
         let _classThis;
-        var class_1 = (_classThis = class {
-                static [Symbol.dispose]() { }
-            },
-            __setFunctionName(_classThis, "C3"),
-            (() => {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                class_1 = _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-                __runInitializers(_classThis, _classExtraInitializers);
-            })(),
-            _classThis);
+        var class_1 = _classThis = class {
+            static [Symbol.dispose]() { }
+        };
+        __setFunctionName(_classThis, "C3");
+        (() => {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            class_1 = _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            __runInitializers(_classThis, _classExtraInitializers);
+        })();
         return class_1 = _classThis;
     })(), false);
     C4 = __addDisposableResource(env_1, (() => {
@@ -147,21 +148,20 @@ try {
         let _classDescriptor;
         let _classExtraInitializers = [];
         let _classThis;
-        var class_2 = (_classThis = class {
-                static [Symbol.dispose]() { }
-            },
-            __setFunctionName(_classThis, "C4"),
-            (() => {
-                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-                class_2 = _classThis = _classDescriptor.value;
-                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            })(),
-            _classThis.x = 1,
-            (() => {
-                __runInitializers(_classThis, _classExtraInitializers);
-            })(),
-            _classThis);
+        var class_2 = _classThis = class {
+            static [Symbol.dispose]() { }
+        };
+        __setFunctionName(_classThis, "C4");
+        (() => {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            class_2 = _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        })();
+        _classThis.x = 1;
+        (() => {
+            __runInitializers(_classThis, _classExtraInitializers);
+        })();
         return class_2 = _classThis;
     })(), false);
 }

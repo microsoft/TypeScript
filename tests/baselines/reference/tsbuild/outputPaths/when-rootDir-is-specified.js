@@ -30,12 +30,12 @@ export const x = 10;
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:09 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:10 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
 
-[[90m12:00:11 AM[0m] Building project '/src/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -55,10 +55,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json -v
-[[90m12:00:14 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/index.js'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than output 'src/dist/index.js'
 
 exitCode:: ExitStatus.Success
 

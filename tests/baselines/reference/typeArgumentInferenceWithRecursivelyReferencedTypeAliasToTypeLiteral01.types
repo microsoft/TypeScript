@@ -22,11 +22,11 @@ nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
 >                       : ^^^^^^^^
 >nodes.map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
->          : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>          : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >nodes : TreeNode[]
 >      : ^^^^^^^^^^
 >map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n.name : (n: TreeNode) => string
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : TreeNode

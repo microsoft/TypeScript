@@ -1,4 +1,4 @@
-import * as evaluator from "../../_namespaces/evaluator";
+import * as evaluator from "../../_namespaces/evaluator.js";
 
 describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420

@@ -320,8 +320,8 @@ import {
     VariableDeclaration,
     WhileStatement,
     WithStatement,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export const enum ModuleInstanceState {

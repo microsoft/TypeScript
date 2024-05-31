@@ -123,7 +123,6 @@ Projects::
     dirty: true
 
 Info seq  [hh:mm:ss:mss] Calling ensureInferredProjectsUpToDate_TestOnly
-Info seq  [hh:mm:ss:mss] Loading configured project /tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

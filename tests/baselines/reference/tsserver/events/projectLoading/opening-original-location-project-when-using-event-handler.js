@@ -352,6 +352,17 @@ Info seq  [hh:mm:ss:mss] event:
         "version": "FakeVersion"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::configFileDiag",
+      "body": {
+        "configFileName": "/user/username/projects/a/tsconfig.json",
+        "diagnostics": [],
+        "triggerFile": "/user/username/projects/a/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/a/a.ts position 13 in project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:

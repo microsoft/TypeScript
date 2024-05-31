@@ -46,7 +46,7 @@ function func(arg: A) {
 >assertUnreachable(optionalProp) : never
 >                                : ^^^^^
 >assertUnreachable : (_: never) => never
->                  : ^ ^^     ^^^^^^^^^^
+>                  : ^ ^^     ^^^^^     
 >optionalProp : never
 >             : ^^^^^
   }
@@ -70,11 +70,11 @@ function func2() {
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
   switch (optionalProp) {
 >optionalProp : "hello"
@@ -101,7 +101,7 @@ function func2() {
 >assertUnreachable(optionalProp) : never
 >                                : ^^^^^
 >assertUnreachable : (_: never) => never
->                  : ^ ^^     ^^^^^^^^^^
+>                  : ^ ^^     ^^^^^     
 >optionalProp : never
 >             : ^^^^^
   }

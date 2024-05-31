@@ -46,12 +46,12 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}).mapValues(square) : Chainable<{ a: number; b: number; }>
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->chain({a: 1, b: 2}).mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
->                              : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>chain({a: 1, b: 2}).mapValues : <U>(func: (v: number) => U) => Chainable<{ [k in keyof { a: number; b: number; }]: U; }>
+>                              : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^    
 >chain({a: 1, b: 2}) : Chainable<{ a: number; b: number; }>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain : <T>(t: T) => Chainable<T>
->      : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^^^^            
 >{a: 1, b: 2} : { a: number; b: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -62,8 +62,8 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >  : ^^^^^^
 >2 : 2
 >  : ^
->mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
->          : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapValues : <U>(func: (v: number) => U) => Chainable<{ [k in keyof { a: number; b: number; }]: U; }>
+>          : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^    
 >square : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >value : () => { a: number; b: number; }

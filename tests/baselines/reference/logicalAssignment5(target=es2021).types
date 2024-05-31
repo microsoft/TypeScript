@@ -11,9 +11,9 @@ function foo1 (f?: (a: number) => void) {
 
     f ??= (a => a)
 >f ??= (a => a) : (a: number) => void
->               : ^ ^^      ^^^^^^^^^
+>               : ^ ^^      ^^^^^    
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(a => a) : (a: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -27,7 +27,7 @@ function foo1 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : (a: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >42 : 42
 >   : ^^
 }
@@ -42,9 +42,9 @@ function foo2 (f?: (a: number) => void) {
 
     f ||= (a => a)
 >f ||= (a => a) : (a: number) => void
->               : ^ ^^      ^^^^^^^^^
+>               : ^ ^^      ^^^^^    
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(a => a) : (a: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -58,7 +58,7 @@ function foo2 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : (a: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >42 : 42
 >   : ^^
 }
@@ -75,7 +75,7 @@ function foo3 (f?: (a: number) => void) {
 >f &&= (a => a) : ((a: number) => number) | undefined
 >               : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(a => a) : (a: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -89,7 +89,7 @@ function foo3 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
@@ -104,9 +104,9 @@ function bar1 (f?: (a: number) => void) {
 
     f ??= (f.toString(), (a => a))
 >f ??= (f.toString(), (a => a)) : (a: number) => void
->                               : ^ ^^      ^^^^^^^^^
+>                               : ^ ^^      ^^^^^    
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(f.toString(), (a => a)) : (a: number) => number
 >                         : ^ ^^^^^^^^^^^^^^^^^^^
 >f.toString(), (a => a) : (a: number) => number
@@ -132,7 +132,7 @@ function bar1 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : (a: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >42 : 42
 >   : ^^
 }
@@ -147,9 +147,9 @@ function bar2 (f?: (a: number) => void) {
 
     f ||= (f.toString(), (a => a))
 >f ||= (f.toString(), (a => a)) : (a: number) => void
->                               : ^ ^^      ^^^^^^^^^
+>                               : ^ ^^      ^^^^^    
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(f.toString(), (a => a)) : (a: number) => number
 >                         : ^ ^^^^^^^^^^^^^^^^^^^
 >f.toString(), (a => a) : (a: number) => number
@@ -175,7 +175,7 @@ function bar2 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : (a: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >42 : 42
 >   : ^^
 }
@@ -192,7 +192,7 @@ function bar3 (f?: (a: number) => void) {
 >f &&= (f.toString(), (a => a)) : ((a: number) => number) | undefined
 >                               : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >(f.toString(), (a => a)) : (a: number) => number
 >                         : ^ ^^^^^^^^^^^^^^^^^^^
 >f.toString(), (a => a) : (a: number) => number
@@ -200,11 +200,11 @@ function bar3 (f?: (a: number) => void) {
 >f.toString() : string
 >             : ^^^^^^
 >f.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >f : (a: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >(a => a) : (a: number) => number
 >         : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -218,7 +218,7 @@ function bar3 (f?: (a: number) => void) {
 >f(42) : void
 >      : ^^^^
 >f : ((a: number) => void) | undefined
->  : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }

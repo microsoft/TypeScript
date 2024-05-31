@@ -21,7 +21,7 @@ var x = new Services.UserServices().getUserName();
 >new Services.UserServices().getUserName() : string
 >                                          : ^^^^^^
 >new Services.UserServices().getUserName : () => string
->                                        : ^^^^^^^^^^^^
+>                                        : ^^^^^^      
 >new Services.UserServices() : Services.UserServices
 >                            : ^^^^^^^^^^^^^^^^^^^^^
 >Services.UserServices : typeof Services.UserServices
@@ -31,7 +31,7 @@ var x = new Services.UserServices().getUserName();
 >UserServices : typeof Services.UserServices
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getUserName : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 === file1.ts ===
 export module App {

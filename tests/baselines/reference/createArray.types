@@ -80,7 +80,7 @@ if (ba[14]) {
 >f(sa[3]) : number
 >         : ^^^^^^
 >f : (s: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >sa[3] : any
 >      : ^^^
 >sa : any

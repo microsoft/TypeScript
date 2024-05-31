@@ -24,16 +24,16 @@ declare global {
 >       : ^^^^^^^^^^^^^
 
   export const THREE: typeof _three;
->THREE : typeof import("global")
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>THREE : typeof _three
+>      : ^^^^^^^^^^^^^
 >_three : typeof _three
 >       : ^^^^^^^^^^^^^
 }
 
 === test.ts ===
 const m = THREE
->m : typeof import("global")
->  : ^^^^^^^^^^^^^^^^^^^^^^^
->THREE : typeof import("global")
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>m : typeof import("three")
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>THREE : typeof import("three")
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 

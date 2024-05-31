@@ -1,4 +1,17 @@
 import {
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createCombinedCodeActions,
+    createImportAdder,
+    createSignatureDeclarationFromCallExpression,
+    createSignatureDeclarationFromSignature,
+    createStubbedBody,
+    eachDiagnostic,
+    getAllSupers,
+    ImportAdder,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     addToSeen,
     arrayFrom,
@@ -112,20 +125,7 @@ import {
     TypeNode,
     TypeReference,
     UnionType,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    createCombinedCodeActions,
-    createImportAdder,
-    createSignatureDeclarationFromCallExpression,
-    createSignatureDeclarationFromSignature,
-    createStubbedBody,
-    eachDiagnostic,
-    getAllSupers,
-    ImportAdder,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";

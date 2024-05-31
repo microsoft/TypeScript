@@ -1094,6 +1094,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] mobxCache: {
+  "kind": "node_modules",
   "modulePaths": [
     {
       "path": "/node_modules/mobx/index.d.ts",

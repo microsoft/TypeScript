@@ -1,4 +1,16 @@
 import {
+    createImportTracker,
+    ExportInfo,
+    ExportKind,
+    findModuleReferences,
+    getExportInfo,
+    getImportOrExportSymbol,
+    ImportExport,
+    ImportsResult,
+    ImportTracker,
+    ModuleReference,
+} from "./_namespaces/ts.FindAllReferences.js";
+import {
     __String,
     addToSeen,
     append,
@@ -253,19 +265,7 @@ import {
     TypeChecker,
     TypeLiteralNode,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import {
-    createImportTracker,
-    ExportInfo,
-    ExportKind,
-    findModuleReferences,
-    getExportInfo,
-    getImportOrExportSymbol,
-    ImportExport,
-    ImportsResult,
-    ImportTracker,
-    ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface SymbolAndEntries {
@@ -757,7 +757,7 @@ interface PrefixAndSuffix {
     readonly suffixText?: string;
 }
 function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
-    if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
+    if (entry.kind !== EntryKind.Span && (isIdentifier(originalNode) || isStringLiteralLike(originalNode))) {
         const { node, kind } = entry;
         const parent = node.parent;
         const name = originalNode.text;

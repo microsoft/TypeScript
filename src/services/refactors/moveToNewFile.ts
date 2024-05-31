@@ -5,9 +5,13 @@ import {
     Debug,
     Diagnostics,
     emptyArray,
+    findAncestor,
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
+    getTokenAtPosition,
     hostGetCanonicalFileName,
+    isBlockLike,
+    isSourceFile,
     LanguageServiceHost,
     last,
     ModuleKind,
@@ -17,7 +21,7 @@ import {
     SourceFile,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     addNewFileToTsconfig,
     createNewFileName,
@@ -26,7 +30,7 @@ import {
     getUsageInfo,
     registerRefactor,
     ToMove,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
@@ -40,6 +44,16 @@ registerRefactor(refactorName, {
     kinds: [moveToNewFileAction.kind],
     getAvailableActions: function getRefactorActionsToMoveToNewFile(context): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
+
+        const file = context.file;
+        if (context.triggerReason === "implicit" && context.endPosition !== undefined) {
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
+        }
+
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             const file = context.file;
             const affectedTextRange = {

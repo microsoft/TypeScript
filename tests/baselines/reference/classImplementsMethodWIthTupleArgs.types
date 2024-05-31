@@ -7,13 +7,13 @@ declare class MySettable implements Settable {
 
     set(option: Record<string, unknown>): void;
 >set : { (option: Record<string, unknown>): void; (name: string, value: unknown): void; }
->    : ^^^      ^^                       ^^^    ^^^    ^^      ^^     ^^       ^^^^^^^^^^
+>    : ^^^      ^^                       ^^^    ^^^    ^^      ^^     ^^       ^^^    ^^^
 >option : Record<string, unknown>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 
     set(name: string, value: unknown): void;
 >set : { (option: Record<string, unknown>): void; (name: string, value: unknown): void; }
->    : ^^^      ^^                       ^^^^^^^^^^    ^^      ^^     ^^       ^^^    ^^^
+>    : ^^^      ^^                       ^^^    ^^^    ^^      ^^     ^^       ^^^    ^^^
 >name : string
 >     : ^^^^^^
 >value : unknown

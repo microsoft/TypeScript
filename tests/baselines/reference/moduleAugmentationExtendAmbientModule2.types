@@ -18,11 +18,11 @@ let y = x.map(x => x + 1);
 >x.map(x => x + 1) : Observable<number>
 >                  : ^^^^^^^^^^^^^^^^^^
 >x.map : <U>(proj: (e: number) => U) => Observable<U>
->      : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
 >x : Observable<number>
 >  : ^^^^^^^^^^^^^^^^^^
 >map : <U>(proj: (e: number) => U) => Observable<U>
->    : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
 >x => x + 1 : (x: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -40,7 +40,7 @@ let z1 = Observable.someValue.toFixed();
 >Observable.someValue.toFixed() : string
 >                               : ^^^^^^
 >Observable.someValue.toFixed : (fractionDigits?: number) => string
->                             : ^              ^^^      ^^^^^^^^^^^
+>                             : ^              ^^^      ^^^^^      
 >Observable.someValue : number
 >                     : ^^^^^^
 >Observable : typeof Observable
@@ -48,7 +48,7 @@ let z1 = Observable.someValue.toFixed();
 >someValue : number
 >          : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 let z2 = Observable.someAnotherValue.toLowerCase();
 >z2 : string
@@ -56,7 +56,7 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 >Observable.someAnotherValue.toLowerCase() : string
 >                                          : ^^^^^^
 >Observable.someAnotherValue.toLowerCase : () => string
->                                        : ^^^^^^^^^^^^
+>                                        : ^^^^^^      
 >Observable.someAnotherValue : string
 >                            : ^^^^^^
 >Observable : typeof Observable
@@ -64,7 +64,7 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 >someAnotherValue : string
 >                 : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 === map.ts ===
 import { Observable } from "observable"

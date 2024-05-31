@@ -387,19 +387,19 @@ class Chowder extends Soup {
 >Chowder : Chowder
 >        : ^^^^^^^
 >Soup : Soup<{ claim: "ignorant" | "malicious"; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^                        ^^^^
 
     log() {
 >log : () => { claim: "ignorant" | "malicious"; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^                        ^^^
 
         return this.flavour
 >this.flavour : { claim: "ignorant" | "malicious"; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^                        ^^^
 >this : this
 >     : ^^^^
 >flavour : { claim: "ignorant" | "malicious"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^                        ^^^
     }
 }
 
@@ -439,11 +439,11 @@ chowder.flavour.claim
 >chowder.flavour.claim : "ignorant" | "malicious"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >chowder.flavour : { claim: "ignorant" | "malicious"; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^                        ^^^
 >chowder : Chowder
 >        : ^^^^^^^
 >flavour : { claim: "ignorant" | "malicious"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^                        ^^^
 >claim : "ignorant" | "malicious"
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
