@@ -695,11 +695,11 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >x.toString(2) : string
 >              : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >2 : 2
 >  : ^
 
@@ -749,11 +749,11 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >x.toString(2) : string
 >              : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >2 : 2
 >  : ^
 

@@ -46,24 +46,24 @@ const jaJP = new Intl.Locale("ja-JP");
 new Intl.Segmenter(enUS);
 >new Intl.Segmenter(enUS) : Intl.Segmenter
 >                         : ^^^^^^^^^^^^^^
->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 new Intl.Segmenter([deDE, jaJP]);
 >new Intl.Segmenter([deDE, jaJP]) : Intl.Segmenter
 >                                 : ^^^^^^^^^^^^^^
->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -74,32 +74,32 @@ new Intl.Segmenter([deDE, jaJP]);
 Intl.Segmenter.supportedLocalesOf(enUS);
 >Intl.Segmenter.supportedLocalesOf(enUS) : string[]
 >                                        : ^^^^^^^^
->Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
->                                  : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^
->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                                  : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
->supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
 >Intl.Segmenter.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                : ^^^^^^^^
->Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
->                                  : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^
->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                                  : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
->          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
->supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>          : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale

@@ -31,8 +31,8 @@ let value: string;
 if (isNonBlank(value)) {
 >isNonBlank(value) : boolean
 >                  : ^^^^^^^
->isNonBlank : (value: string) => value is string & Tag
->           : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isNonBlank : (value: string) => value is (string & Tag)
+>           : ^     ^^      ^^^^^                       
 >value : string
 >      : ^^^^^^
 
@@ -40,7 +40,7 @@ if (isNonBlank(value)) {
 >doThis(value) : void
 >              : ^^^^
 >doThis : (value: string & Tag) => void
->       : ^     ^^            ^^^^^^^^^
+>       : ^     ^^            ^^^^^    
 >value : string & Tag
 >      : ^^^^^^^^^^^^
 
@@ -49,7 +49,7 @@ if (isNonBlank(value)) {
 >doThat(value) : void
 >              : ^^^^
 >doThat : (value: string) => void
->       : ^     ^^      ^^^^^^^^^
+>       : ^     ^^      ^^^^^    
 >value : string
 >      : ^^^^^^
 }
@@ -80,8 +80,8 @@ declare function doThat2(value: string) : void;
 if (isNonBlank2(value)) {
 >isNonBlank2(value) : boolean
 >                   : ^^^^^^^
->isNonBlank2 : (value: string) => value is never
->            : ^     ^^      ^^^^^^^^^^^^^^^^^^^
+>isNonBlank2 : (value: string) => value is (string & Tag2)
+>            : ^     ^^      ^^^^^                        
 >value : string
 >      : ^^^^^^
 
@@ -89,7 +89,7 @@ if (isNonBlank2(value)) {
 >doThis2(value) : void
 >               : ^^^^
 >doThis2 : (value: string & Tag2) => void
->        : ^     ^^             ^^^^^^^^^
+>        : ^     ^^             ^^^^^    
 >value : never
 >      : ^^^^^
 
@@ -98,7 +98,7 @@ if (isNonBlank2(value)) {
 >doThat2(value) : void
 >               : ^^^^
 >doThat2 : (value: string) => void
->        : ^     ^^      ^^^^^^^^^
+>        : ^     ^^      ^^^^^    
 >value : string
 >      : ^^^^^^
 }

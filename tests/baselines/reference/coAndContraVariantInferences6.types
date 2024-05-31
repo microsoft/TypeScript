@@ -71,7 +71,7 @@ createElementIsolated(WrapperIsolated, { value: "C" });
 >createElementIsolated(WrapperIsolated, { value: "C" }) : void
 >                                                       : ^^^^
 >createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
->                      : ^ ^^^^^^^^^  ^^    ^^                                                 ^^     ^^^        ^^^^^^^^^
+>                      : ^ ^^^^^^^^^  ^^    ^^                                                 ^^     ^^^        ^^^^^    
 >WrapperIsolated : JSXElementConstructor<ExactProps>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ value: "C" } : { value: "C"; }
@@ -93,15 +93,15 @@ declare const stat: any;
 >[].push.apply(props, stat.properties) : number
 >                                      : ^^^^^^
 >[].push.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->              : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^^^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^^^^^
+>              : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >[].push : (...items: never[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^      
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: never[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^      
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
->      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^^^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^^^^^
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
 >props : any[]
 >      : ^^^^^
 >stat.properties : any

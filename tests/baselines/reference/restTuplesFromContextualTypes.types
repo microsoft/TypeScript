@@ -105,7 +105,7 @@ f1((a, b, c) => {})
 >f1((a, b, c) => {}) : void
 >                    : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
 >                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
@@ -119,7 +119,7 @@ f1((...x) => {})
 >f1((...x) => {}) : void
 >                 : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(...x) => {} : (x_0: number, x_1: boolean, x_2: string) => void
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, string]
@@ -129,7 +129,7 @@ f1((a, ...x) => {})
 >f1((a, ...x) => {}) : void
 >                    : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, ...x) => {} : (a: number, x_0: boolean, x_1: string) => void
 >                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -141,7 +141,7 @@ f1((a, b, ...x) => {})
 >f1((a, b, ...x) => {}) : void
 >                       : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, x_0: string) => void
 >                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -155,7 +155,7 @@ f1((a, b, c, ...x) => {})
 >f1((a, b, c, ...x) => {}) : void
 >                          : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string) => void
 >                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
@@ -271,7 +271,7 @@ f2((a, b, c) => {})
 >f2((a, b, c) => {}) : void
 >                    : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
 >                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
@@ -285,7 +285,7 @@ f2((...x) => {})
 >f2((...x) => {}) : void
 >                 : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
@@ -295,7 +295,7 @@ f2((a, ...x) => {})
 >f2((a, ...x) => {}) : void
 >                    : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
 >                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -307,7 +307,7 @@ f2((a, b, ...x) => {})
 >f2((a, b, ...x) => {}) : void
 >                       : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
 >                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -321,7 +321,7 @@ f2((a, b, c, ...x) => {})
 >f2((a, b, c, ...x) => {}) : void
 >                          : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
->   : ^  ^^                            ^^^^^^^^^
+>   : ^  ^^                            ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
 >                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -449,7 +449,7 @@ f3((a, b, c) => {})
 >f3((a, b, c) => {}) : void
 >                    : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^  ^^                                       ^^^^^^^^^
+>   : ^  ^^                                       ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
 >                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
@@ -463,7 +463,7 @@ f3((...x) => {})
 >f3((...x) => {}) : void
 >                 : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^  ^^                                       ^^^^^^^^^
+>   : ^  ^^                                       ^^^^^    
 >(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [x: number, boolean, ...string[]]
@@ -473,7 +473,7 @@ f3((a, ...x) => {})
 >f3((a, ...x) => {}) : void
 >                    : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^  ^^                                       ^^^^^^^^^
+>   : ^  ^^                                       ^^^^^    
 >(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
 >                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -485,7 +485,7 @@ f3((a, b, ...x) => {})
 >f3((a, b, ...x) => {}) : void
 >                       : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^  ^^                                       ^^^^^^^^^
+>   : ^  ^^                                       ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
 >                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -499,7 +499,7 @@ f3((a, b, c, ...x) => {})
 >f3((a, b, c, ...x) => {}) : void
 >                          : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
->   : ^  ^^                                       ^^^^^^^^^
+>   : ^  ^^                                       ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
 >                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -632,7 +632,7 @@ let g0 = f5(() => "hello");
 >f5(() => "hello") : () => string
 >                  : ^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >() => "hello" : () => string
 >              : ^^^^^^^^^^^^
 >"hello" : "hello"
@@ -644,7 +644,7 @@ let g1 = f5((x, y) => 42);
 >f5((x, y) => 42) : (x: any, y: any) => number
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x, y) => 42 : (x: any, y: any) => number
 >             : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -660,7 +660,7 @@ let g2 = f5((x: number, y) => 42);
 >f5((x: number, y) => 42) : (x: number, y: any) => number
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x: number, y) => 42 : (x: number, y: any) => number
 >                     : ^ ^^      ^^ ^^^^^^^^^^^^^^^^
 >x : number
@@ -676,7 +676,7 @@ let g3 = f5((x: number, y: number) => x + y);
 >f5((x: number, y: number) => x + y) : (x: number, y: number) => number
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x: number, y: number) => x + y : (x: number, y: number) => number
 >                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -696,7 +696,7 @@ let g4 = f5((...args) => true);
 >f5((...args) => true) : (...args: any[]) => boolean
 >                      : ^^^^    ^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(...args) => true : (...args: any[]) => boolean
 >                  : ^^^^    ^^^^^^^^^^^^^^^^^^^
 >args : any[]
@@ -724,7 +724,7 @@ let g5 = pipe(() => true, b => 42);
 >pipe(() => true, b => 42) : () => number
 >                          : ^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >() => true : () => boolean
 >           : ^^^^^^^^^^^^^
 >true : true
@@ -742,7 +742,7 @@ let g6 = pipe(x => "hello", s => s.length);
 >pipe(x => "hello", s => s.length) : (x: any) => number
 >                                  : ^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >x => "hello" : (x: any) => string
 >             : ^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -766,7 +766,7 @@ let g7 = pipe((x, y) => 42, x => "" + x);
 >pipe((x, y) => 42, x => "" + x) : (x: any, y: any) => string
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >(x, y) => 42 : (x: any, y: any) => number
 >             : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -792,7 +792,7 @@ let g8 = pipe((x: number, y: string) => 42, x => "" + x);
 >pipe((x: number, y: string) => 42, x => "" + x) : (x: number, y: string) => string
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >(x: number, y: string) => 42 : (x: number, y: string) => number
 >                             : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -868,7 +868,7 @@ take(function(...rest){});
 >take(function(...rest){}) : void
 >                          : ^^^^
 >take : (cb: (a: number, b: string) => void) => void
->     : ^  ^^                              ^^^^^^^^^
+>     : ^  ^^                              ^^^^^    
 >function(...rest){} : (a: number, b: string) => void
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [a: number, b: string]

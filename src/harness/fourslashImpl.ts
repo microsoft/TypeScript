@@ -4510,6 +4510,57 @@ export class TestState {
 
         this.verifyCurrentFileContent(newFileContent);
     }
+
+    public baselineMapCode(
+        ranges: Range[][],
+        changes: string[] = [],
+    ): void {
+        const fileName = this.activeFile.fileName;
+        const focusLocations = ranges.map(r =>
+            r.map(({ pos, end }) => {
+                return { start: pos, length: end - pos };
+            })
+        );
+        let before = this.getFileContent(fileName);
+        const edits = this.languageService.mapCode(
+            fileName,
+            // We trim the leading whitespace stuff just so our test cases can be more readable.
+            changes,
+            focusLocations,
+            this.formatCodeSettings,
+            {},
+        );
+        this.applyChanges(edits);
+        focusLocations.forEach(r => {
+            r.sort((a, b) => a.start - b.start);
+        });
+        focusLocations.sort((a, b) => a[0].start - b[0].start);
+        for (const subLoc of focusLocations) {
+            for (const { start, length } of subLoc) {
+                let offset = 0;
+                for (const sl2 of focusLocations) {
+                    for (const { start: s2, length: l2 } of sl2) {
+                        if (s2 < start) {
+                            offset += 4;
+                            if ((s2 + l2) > start) {
+                                offset -= 2;
+                            }
+                        }
+                    }
+                }
+                before = before.slice(0, start + offset) + "[|" + before.slice(start + offset, start + offset + length) + "|]" + before.slice(start + offset + length);
+            }
+        }
+        const after = this.getFileContent(fileName);
+        const baseline = `
+// === ORIGINAL ===
+${before}
+// === INCOMING CHANGES ===
+${changes.join("\n// ---\n")}
+// === MAPPED ===
+${after}`;
+        this.baseline("mapCode", baseline, ".mapCode.ts");
+    }
 }
 
 function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {

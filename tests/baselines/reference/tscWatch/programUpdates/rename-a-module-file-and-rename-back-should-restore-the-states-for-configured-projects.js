@@ -216,6 +216,7 @@ Before running Timeout callback:: count: 2
 7: timerToInvalidateFailedLookupResolutions
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -225,6 +226,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

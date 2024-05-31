@@ -76,17 +76,17 @@ const globalConst = 10;
 
 Output::
 /lib/tsc -b /src/app --verbose
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:28 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:29 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

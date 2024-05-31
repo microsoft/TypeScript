@@ -35,7 +35,7 @@ function func<T extends X>(value: T) {
 >value.a : string
 >        : ^^^^^^
 >value : { kind: "a"; a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -43,14 +43,14 @@ function func<T extends X>(value: T) {
 >a : string
 >  : ^^^^^^
 >value : { kind: "a"; a: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^      ^^^
 
     } else {
         value.b;
 >value.b : string
 >        : ^^^^^^
 >value : { kind: "b"; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 
@@ -58,7 +58,7 @@ function func<T extends X>(value: T) {
 >b : string
 >  : ^^^^^^
 >value : { kind: "b"; b: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^      ^^^
     }
 }
 
@@ -110,9 +110,9 @@ function func2<T extends Z>(value: T) {
 >f : any
 >  : ^^^
 >f1 : { a: number; b: string; c: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         const { f: { a, ...spread } } = value;
 >f : any
@@ -120,17 +120,17 @@ function func2<T extends Z>(value: T) {
 >a : number
 >  : ^^^^^^
 >spread : { b: string; c: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         value.f;
 >value.f : { a: number; b: string; c: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 >f : { a: number; b: string; c: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
 
     } else {
         const { g: { c, ...spread } } = value;
@@ -139,17 +139,17 @@ function func2<T extends Z>(value: T) {
 >c : string
 >  : ^^^^^^
 >spread : { a: string; b: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^      ^^^
 >value : { kind: "g"; g: { a: string; b: number; c: string; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         value.g;
 >value.g : { a: string; b: number; c: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "g"; g: { a: string; b: number; c: string; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 >g : { a: string; b: number; c: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
     }
 }
 
@@ -173,7 +173,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >t.kind : "a" | "b"
 >       : ^^^^^^^^^
 >t : { kind: "a"; a: string; } | { kind: "b"; b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^^^      ^^^
 >kind : "a" | "b"
 >     : ^^^^^^^^^
 >"a" : "a"
@@ -185,25 +185,25 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >r1 : Omit<T, "kind">
 >   : ^^^^^^^^^^^^^^^
 >t : { kind: "a"; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^
 
         const r2 = (({ kind, ...rest }) => rest)(t);
 >r2 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >(({ kind, ...rest }) => rest)(t) : { a: string; }
->                                 : ^^^^^^^^^^^^^^
+>                                 : ^^^^^      ^^^
 >(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
 >({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                            : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
 >kind : "a"
 >     : ^^^
 >rest : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >rest : { a: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >t : { kind: "a"; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^   ^^^^^      ^^^
     }
 }
 

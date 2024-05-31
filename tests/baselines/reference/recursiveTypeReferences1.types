@@ -315,8 +315,8 @@ declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
 flat([1, [2, [3]]]);  // number[]
 >flat([1, [2, [3]]]) : number[]
 >                    : ^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -333,8 +333,8 @@ flat([1, [2, [3]]]);  // number[]
 flat([[[0]]]);  // number[]
 >flat([[[0]]]) : number[]
 >              : ^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -347,8 +347,8 @@ flat([[[0]]]);  // number[]
 flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
 >flat([[[[[[[[[[[4]]]]]]]]]]]) : number[]
 >                              : ^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[[[[[[[[[[[4]]]]]]]]]]] : number[][][][][][][][][][][]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[[[[[[[[[[4]]]]]]]]]] : number[][][][][][][][][][]
@@ -377,8 +377,8 @@ flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
 flat([1, 'a', [2]]);  // (string | number)[]
 >flat([1, 'a', [2]]) : (string | number)[]
 >                    : ^^^^^^^^^^^^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -393,8 +393,8 @@ flat([1, 'a', [2]]);  // (string | number)[]
 flat([1, [2, 'a']]);  // (string | number)[]
 >flat([1, [2, 'a']]) : (string | number)[]
 >                    : ^^^^^^^^^^^^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -409,8 +409,8 @@ flat([1, [2, 'a']]);  // (string | number)[]
 flat([1, ['a']]);  // Error
 >flat([1, ['a']]) : string[]
 >                 : ^^^^^^^^
->flat : <T>(a: RecArray<T>) => T[]
->     : ^ ^^ ^^           ^^^^^^^^
+>flat : <T>(a: RecArray<T>) => Array<T>
+>     : ^ ^^ ^^           ^^^^^        
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -423,8 +423,8 @@ flat([1, ['a']]);  // Error
 flat1([1, [2, [3]]]);  // (number | number[])[]
 >flat1([1, [2, [3]]]) : (number | number[])[]
 >                     : ^^^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: Array<T | Array<T>>) => T[]
->      : ^ ^^ ^^                   ^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
+>      : ^ ^^ ^^                   ^^^^^        
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -441,8 +441,8 @@ flat1([1, [2, [3]]]);  // (number | number[])[]
 flat1([[[0]]]);  // number[][]
 >flat1([[[0]]]) : number[][]
 >               : ^^^^^^^^^^
->flat1 : <T>(a: Array<T | Array<T>>) => T[]
->      : ^ ^^ ^^                   ^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
+>      : ^ ^^ ^^                   ^^^^^        
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -455,8 +455,8 @@ flat1([[[0]]]);  // number[][]
 flat1([1, 'a', [2]]);  // (string | number)[]
 >flat1([1, 'a', [2]]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: Array<T | Array<T>>) => T[]
->      : ^ ^^ ^^                   ^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
+>      : ^ ^^ ^^                   ^^^^^        
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -471,8 +471,8 @@ flat1([1, 'a', [2]]);  // (string | number)[]
 flat1([1, [2, 'a']]);  // (string | number)[]
 >flat1([1, [2, 'a']]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat1 : <T>(a: Array<T | Array<T>>) => T[]
->      : ^ ^^ ^^                   ^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
+>      : ^ ^^ ^^                   ^^^^^        
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -487,8 +487,8 @@ flat1([1, [2, 'a']]);  // (string | number)[]
 flat1([1, ['a']]);  // Error
 >flat1([1, ['a']]) : string[]
 >                  : ^^^^^^^^
->flat1 : <T>(a: Array<T | Array<T>>) => T[]
->      : ^ ^^ ^^                   ^^^^^^^^
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
+>      : ^ ^^ ^^                   ^^^^^        
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -501,8 +501,8 @@ flat1([1, ['a']]);  // Error
 flat2([1, [2, [3]]]);  // number[]
 >flat2([1, [2, [3]]]) : number[]
 >                     : ^^^^^^^^
->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
->      : ^ ^^ ^^                              ^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
+>      : ^ ^^ ^^                              ^^^^^        
 >[1, [2, [3]]] : (number | (number | number[])[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -519,8 +519,8 @@ flat2([1, [2, [3]]]);  // number[]
 flat2([[[0]]]);  // number[]
 >flat2([[[0]]]) : number[]
 >               : ^^^^^^^^
->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
->      : ^ ^^ ^^                              ^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
+>      : ^ ^^ ^^                              ^^^^^        
 >[[[0]]] : number[][][]
 >        : ^^^^^^^^^^^^
 >[[0]] : number[][]
@@ -533,8 +533,8 @@ flat2([[[0]]]);  // number[]
 flat2([1, 'a', [2]]);  // (string | number)[]
 >flat2([1, 'a', [2]]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
->      : ^ ^^ ^^                              ^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
+>      : ^ ^^ ^^                              ^^^^^        
 >[1, 'a', [2]] : (string | number | number[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -549,8 +549,8 @@ flat2([1, 'a', [2]]);  // (string | number)[]
 flat2([1, [2, 'a']]);  // (string | number)[]
 >flat2([1, [2, 'a']]) : (string | number)[]
 >                     : ^^^^^^^^^^^^^^^^^^^
->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
->      : ^ ^^ ^^                              ^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
+>      : ^ ^^ ^^                              ^^^^^        
 >[1, [2, 'a']] : (number | (string | number)[])[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -565,8 +565,8 @@ flat2([1, [2, 'a']]);  // (string | number)[]
 flat2([1, ['a']]);  // Error
 >flat2([1, ['a']]) : string[]
 >                  : ^^^^^^^^
->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => T[]
->      : ^ ^^ ^^                              ^^^^^^^^
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
+>      : ^ ^^ ^^                              ^^^^^        
 >[1, ['a']] : (number | string[])[]
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -626,7 +626,7 @@ let x1 = foo1(ra1);  // Boom!
 >foo1(ra1) : string
 >          : ^^^^^^
 >foo1 : <T>(a: ValueOrArray1<T>) => T
->     : ^ ^^ ^^                ^^^^^^
+>     : ^ ^^ ^^                ^^^^^ 
 >ra1 : ValueOrArray2<string>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -654,7 +654,7 @@ let x2 = foo2(ra2);  // Boom!
 >foo2(ra2) : string
 >          : ^^^^^^
 >foo2 : <T>(a: ValueOrArray1<T>) => T
->     : ^ ^^ ^^                ^^^^^^
+>     : ^ ^^ ^^                ^^^^^ 
 >ra2 : ValueOrArray2<string>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -684,11 +684,11 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  }) : any[]
 >                                                                                                                                                                                                                                                                     : ^^^^^
 >node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->         : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>         : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >node : Tree
 >     : ^^^^
 >map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
 >                                                                                                                                                                                                                                                           : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >el : HTMLHeadingElement
@@ -752,11 +752,11 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >idx.join('.') : string
 >              : ^^^^^^
 >idx.join : (separator?: string) => string
->         : ^         ^^^      ^^^^^^^^^^^
+>         : ^         ^^^      ^^^^^      
 >idx : number[]
 >    : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >'.' : "."
 >    : ^^^
 >el.textContent! : string
@@ -784,7 +784,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse(children, idx) : HTMLUListElement
 >                     : ^^^^^^^^^^^^^^^^
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
->      : ^    ^^    ^^     ^^^        ^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^    ^^     ^^^        ^^^^^                
 >children : Tree
 >         : ^^^^
 >idx : number[]
@@ -834,11 +834,11 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hss.pop() : HTMLHeadingElement[] | undefined
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hss.pop : () => HTMLHeadingElement[] | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^            
 >hss : HTMLHeadingElement[][]
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >pop : () => HTMLHeadingElement[] | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^            
 
       return hs.length === 0 || level(h) > level(hs[0])
 >hs.length === 0 || level(h) > level(hs[0])        ? concat(hss, [concat(hs, [h])])        : concat(hss, [hs, [h]]) : any
@@ -860,13 +860,13 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >level(h) : number
 >         : ^^^^^^
 >level : (h: HTMLHeadingElement) => number
->      : ^ ^^                  ^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^      
 >h : HTMLHeadingElement
 >  : ^^^^^^^^^^^^^^^^^^
 >level(hs[0]) : number
 >             : ^^^^^^
 >level : (h: HTMLHeadingElement) => number
->      : ^ ^^                  ^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^      
 >hs[0] : HTMLHeadingElement
 >      : ^^^^^^^^^^^^^^^^^^
 >hs : HTMLHeadingElement[]
@@ -960,15 +960,15 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hs.shift() : HTMLHeadingElement | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hs.shift : () => HTMLHeadingElement | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^            
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 >shift : () => HTMLHeadingElement | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^            
 >cons(hs) : Tree
 >         : ^^^^
 >cons : (hs: HTMLHeadingElement[]) => Tree
->     : ^  ^^                    ^^^^^^^^^
+>     : ^  ^^                    ^^^^^    
 >hs : HTMLHeadingElement[]
 >   : ^^^^^^^^^^^^^^^^^^^^
 
@@ -991,7 +991,7 @@ function level(h: HTMLHeadingElement): number {
 >isFinite(+h.tagName[1]) : boolean
 >                        : ^^^^^^^
 >isFinite : (number: number) => boolean
->         : ^      ^^      ^^^^^^^^^^^^
+>         : ^      ^^      ^^^^^       
 >+h.tagName[1] : number
 >              : ^^^^^^
 >h.tagName[1] : string

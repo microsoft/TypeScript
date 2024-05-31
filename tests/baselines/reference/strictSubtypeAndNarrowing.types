@@ -17,23 +17,23 @@ declare const x12: { x: any };
 
 const a11 = [x11, x12];
 >a11 : { x: any; }[]
->    : ^^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^
 >[x11, x12] : { x: any; }[]
->           : ^^^^^^^^^^^^^
+>           : ^^^^^   ^^^^^
 >x11 : { x: unknown; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^       ^^^
 >x12 : { x: any; }
->    : ^^^^^^^^^^^
+>    : ^^^^^   ^^^
 
 const a12 = [x12, x11];
 >a12 : { x: any; }[]
->    : ^^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^
 >[x12, x11] : { x: any; }[]
->           : ^^^^^^^^^^^^^
+>           : ^^^^^   ^^^^^
 >x12 : { x: any; }
->    : ^^^^^^^^^^^
+>    : ^^^^^   ^^^
 >x11 : { x: unknown; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^       ^^^
 
 declare const x21: { x: any };
 >x21 : { x: any; }
@@ -49,23 +49,23 @@ declare const x22: { x: unknown };
 
 const a21 = [x22, x21];
 >a21 : { x: any; }[]
->    : ^^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^
 >[x22, x21] : { x: any; }[]
->           : ^^^^^^^^^^^^^
+>           : ^^^^^   ^^^^^
 >x22 : { x: unknown; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^       ^^^
 >x21 : { x: any; }
->    : ^^^^^^^^^^^
+>    : ^^^^^   ^^^
 
 const a22 = [x21, x22];
 >a22 : { x: any; }[]
->    : ^^^^^^^^^^^^^
+>    : ^^^^^   ^^^^^
 >[x21, x22] : { x: any; }[]
->           : ^^^^^^^^^^^^^
+>           : ^^^^^   ^^^^^
 >x21 : { x: any; }
->    : ^^^^^^^^^^^
+>    : ^^^^^   ^^^
 >x22 : { x: unknown; }
->    : ^^^^^^^^^^^^^^^
+>    : ^^^^^       ^^^
 
 // Strict subtype doesn't infer index signatures in non-fresh object types
 
@@ -95,7 +95,7 @@ const a31 = [x31, x32];
 >x31 : { a: number; }
 >    : ^^^^^^^^^^^^^^
 >x32 : { [x: string]: unknown; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
 const a32 = [x32, x31];
 >a32 : { a: number; }[]
@@ -103,7 +103,7 @@ const a32 = [x32, x31];
 >[x32, x31] : { a: number; }[]
 >           : ^^^^^^^^^^^^^^^^
 >x32 : { [x: string]: unknown; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >x31 : { a: number; }
 >    : ^^^^^^^^^^^^^^
 
@@ -133,7 +133,7 @@ const a41 = [x42, x41];
 >x42 : { a: number; }
 >    : ^^^^^^^^^^^^^^
 >x41 : { [x: string]: unknown; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
 const a42 = [x41, x42];
 >a42 : { a: number; }[]
@@ -141,7 +141,7 @@ const a42 = [x41, x42];
 >[x41, x42] : { a: number; }[]
 >           : ^^^^^^^^^^^^^^^^
 >x41 : { [x: string]: unknown; a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >x42 : { a: number; }
 >    : ^^^^^^^^^^^^^^
 
@@ -191,13 +191,13 @@ function fx1(f: (() => void) | undefined) {
 >isFunction<A>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
         f;  // () => void
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
     else {
         f;  // undefined
@@ -206,7 +206,7 @@ function fx1(f: (() => void) | undefined) {
     }
     f;  // (() => void) | undefined
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 }
 
 function fx2(f: (() => void) | undefined) {
@@ -219,13 +219,13 @@ function fx2(f: (() => void) | undefined) {
 >isFunction<B>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
         f;  // () => void
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
     else {
         f;  // undefined
@@ -234,7 +234,7 @@ function fx2(f: (() => void) | undefined) {
     }
     f;  // (() => void) | undefined
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 }
 
 function fx3(f: (() => void) | undefined) {
@@ -247,13 +247,13 @@ function fx3(f: (() => void) | undefined) {
 >isFunction<C>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
         f;  // () => void
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
     else {
         f;  // undefined
@@ -262,7 +262,7 @@ function fx3(f: (() => void) | undefined) {
     }
     f;  // (() => void) | undefined
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 }
 
 function fx4(f: (() => void) | undefined) {
@@ -275,13 +275,13 @@ function fx4(f: (() => void) | undefined) {
 >isFunction<D>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
         f;  // () => void
 >f : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
     else {
         f;  // undefined
@@ -290,7 +290,7 @@ function fx4(f: (() => void) | undefined) {
     }
     f;  // (() => void) | undefined
 >f : (() => void) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 }
 
 function checkA(f: FnTypes) {
@@ -303,7 +303,7 @@ function checkA(f: FnTypes) {
 >isFunction<A>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : FnTypes
 >  : ^^^^^^^
 
@@ -331,7 +331,7 @@ function checkB(f: FnTypes) {
 >isFunction<B>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : FnTypes
 >  : ^^^^^^^
 
@@ -359,7 +359,7 @@ function checkC(f: FnTypes) {
 >isFunction<C>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : FnTypes
 >  : ^^^^^^^
 
@@ -387,7 +387,7 @@ function checkD(f: FnTypes) {
 >isFunction<C>(f) : boolean
 >                 : ^^^^^^^
 >isFunction : <T>(x: unknown) => x is T
->           : ^^^^ ^^       ^^^^^^^^^^^
+>           : ^ ^^ ^^       ^^^^^      
 >f : FnTypes
 >  : ^^^^^^^
 
@@ -424,12 +424,12 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
     obj1 = obj2 = { x: 1, y: 2 };
 >obj1 = obj2 = { x: 1, y: 2 } : { x: number; y: number; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
->obj1 : { x?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj1 : { x?: number; }
+>     : ^^^^^^      ^^^
 >obj2 = { x: 1, y: 2 } : { x: number; y: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
->obj2 : { x?: number | undefined; y?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj2 : { x?: number; y?: number; }
+>     : ^^^^^^      ^^^^^^      ^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -444,12 +444,12 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
     obj2 = obj1 = { x: 1, y: 2 };
 >obj2 = obj1 = { x: 1, y: 2 } : { x: number; y: number; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
->obj2 : { x?: number | undefined; y?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj2 : { x?: number; y?: number; }
+>     : ^^^^^^      ^^^^^^      ^^^
 >obj1 = { x: 1, y: 2 } : { x: number; y: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
->obj1 : { x?: number | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj1 : { x?: number; }
+>     : ^^^^^^      ^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -479,8 +479,8 @@ function fx11(): { x?: number } {
     return obj = { x: 1, y: 2 };
 >obj = { x: 1, y: 2 } : { x: number; y: number; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : { x?: number | undefined; y?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { x?: number; y?: number; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -517,13 +517,13 @@ function ff1(value: { [index: number]: boolean, length: number } | undefined) {
 >isArrayLike(value) : boolean
 >                   : ^^^^^^^
 >isArrayLike : (value: any) => value is { length: number; }
->            : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^                            
 >value : { [index: number]: boolean; length: number; } | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 
         value;
 >value : { [index: number]: boolean; length: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     } else {
         value;
@@ -532,7 +532,7 @@ function ff1(value: { [index: number]: boolean, length: number } | undefined) {
     }
     value;
 >value : { [index: number]: boolean; length: number; } | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 }
 
 function ff2(value: { [index: number]: boolean, length: number } | string) {
@@ -549,13 +549,13 @@ function ff2(value: { [index: number]: boolean, length: number } | string) {
 >isArrayLike(value) : boolean
 >                   : ^^^^^^^
 >isArrayLike : (value: any) => value is { length: number; }
->            : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^                            
 >value : string | { [index: number]: boolean; length: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
         value;
 >value : string | { [index: number]: boolean; length: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     } else {
         value;
@@ -564,7 +564,7 @@ function ff2(value: { [index: number]: boolean, length: number } | string) {
     }
     value;
 >value : string | { [index: number]: boolean; length: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 }
 
 function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
@@ -585,22 +585,22 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 >isArrayLike(value) : boolean
 >                   : ^^^^^^^
 >isArrayLike : (value: any) => value is { length: number; }
->            : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^   ^^^^^                            
 >value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         value;
 >value : string | { [index: number]: boolean; length: number; } | [number, boolean] | string[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         value;
 >value : number | { length: string; } | { a: string; } | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
     }
     value;
 >value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from comment in #52984
@@ -707,11 +707,11 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 >assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA)) : void
 >                                                                : ^^^^
 >assert : (condition: boolean) => asserts condition
->       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^       ^^^^^                 
 >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
 >                                                        : ^^^^^^^
 >doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^                                                 
 >foo : Foo
 >    : ^^^
 >['value', 'type'] : ["value", "type"]
@@ -721,11 +721,11 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 >'type' : "type"
 >       : ^^^^^^
 >isA : (arg: unknown) => arg is "A"
->    : ^   ^^       ^^^^^^^^^^^^^^^
+>    : ^   ^^       ^^^^^          
 
     return foo;
->foo : { value: { type: "A"; }; a?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { value: { type: "A"; }; a?: number; }
+>    : ^^^^^^^^^              ^^^^^^      ^^^
 }
 
 function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
@@ -744,13 +744,13 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB)) : void
 >                                                                 : ^^^^
 >assert : (condition: boolean) => asserts condition
->       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^       ^^^^^                 
 >!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
 >                                                         : ^^^^^^^
 >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
 >                                                        : ^^^^^^^
 >doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^                                                 
 >foo : Foo
 >    : ^^^
 >['value', 'type'] : ["value", "type"]
@@ -760,11 +760,11 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >'type' : "type"
 >       : ^^^^^^
 >isB : (arg: unknown) => arg is "B"
->    : ^   ^^       ^^^^^^^^^^^^^^^
+>    : ^   ^^       ^^^^^          
 
     return foo;
->foo : { value: { type: "A"; }; a?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : { value: { type: "A"; }; a?: number; }
+>    : ^^^^^^^^^              ^^^^^^      ^^^
 }
 
 // Repro from #53063
@@ -816,8 +816,8 @@ const f = (value: Union) => {
 >                       : ^^^^^^^
 >checkIsPremium(value) : boolean
 >                      : ^^^^^^^
->checkIsPremium : (a: Union) => a is { premium: true; } & Premium
->               : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>checkIsPremium : (a: Union) => a is Union & Premium
+>               : ^ ^^     ^^^^^                    
 >value : Union
 >      : ^^^^^
 
@@ -825,7 +825,7 @@ const f = (value: Union) => {
 >value.premium : false
 >              : ^^^^^
 >value : { premium: false; }
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^     ^^^
 >premium : false
 >        : ^^^^^
     }

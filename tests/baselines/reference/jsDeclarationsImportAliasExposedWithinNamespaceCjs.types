@@ -70,10 +70,10 @@ module.exports = {testFn, testFnTypes};
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
->{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
->                      : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->testFn : (input: testFnTypes.input) => number
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number | null; testFnTypes: { [x: string]: any; }; }
+>                      : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>testFn : (input: testFnTypes.input) => number | null
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^             
 >testFnTypes : { [x: string]: any; }
 >            : ^^^^^^^^^^^^^^^^^^^^^
 

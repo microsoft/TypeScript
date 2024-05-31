@@ -151,7 +151,7 @@ var ResultIsAny9 = void foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsAny10 = void A.foo();
 >ResultIsAny10 : any
@@ -231,7 +231,7 @@ void foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 void objA.a;
 >void objA.a : undefined

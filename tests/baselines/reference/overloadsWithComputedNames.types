@@ -38,12 +38,12 @@ let p = new Person();
 p.A(0)
 >p.A(0) : string | number
 >       : ^^^^^^^^^^^^^^^
->p.A : (a: string | number) => string | number
->    : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
+>p.A : (a: string | number) => number | string
+>    : ^ ^^               ^^^^^               
 >p : Person
 >  : ^^^^^^
->A : (a: string | number) => string | number
->  : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
+>A : (a: string | number) => number | string
+>  : ^ ^^               ^^^^^               
 >0 : 0
 >  : ^
 
@@ -51,11 +51,11 @@ p.B(0)
 >p.B(0) : string
 >       : ^^^^^^
 >p.B : (a: number) => string
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >p : Person
 >  : ^^^^^^
 >B : (a: number) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -78,7 +78,7 @@ class C {
 
     ["foo"]() {
 >["foo"] : { (): void; (): number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^    ^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 
@@ -128,7 +128,7 @@ class C1 {
 
     [uniqueSym]() { }
 >[uniqueSym] : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 >uniqueSym : unique symbol
 >          : ^^^^^^^^^^^^^
 }
@@ -148,13 +148,13 @@ interface I1 {
 
     [uniqueSym](): void;
 >[uniqueSym] : { (): void; (): void; }
->            : ^^^^^^    ^^^^^^^^^^^^^
+>            : ^^^^^^    ^^^^^^    ^^^
 >uniqueSym : unique symbol
 >          : ^^^^^^^^^^^^^
 
     [uniqueSym](): void;
 >[uniqueSym] : { (): void; (): void; }
->            : ^^^^^^^^^^^^^^^^    ^^^
+>            : ^^^^^^    ^^^^^^    ^^^
 >uniqueSym : unique symbol
 >          : ^^^^^^^^^^^^^
 }
@@ -211,7 +211,7 @@ class C3 {
 
     [2]() { }
 >[2] : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >2 : 2
 >  : ^
 }
@@ -225,13 +225,13 @@ interface I3 {
 
     [2](): void;
 >[2] : { (): void; (): void; }
->    : ^^^^^^    ^^^^^^^^^^^^^
+>    : ^^^^^^    ^^^^^^    ^^^
 >2 : 2
 >  : ^
 
     [2](): void;
 >[2] : { (): void; (): void; }
->    : ^^^^^^^^^^^^^^^^    ^^^
+>    : ^^^^^^    ^^^^^^    ^^^
 >2 : 2
 >  : ^
 }

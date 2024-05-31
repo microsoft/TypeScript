@@ -171,11 +171,11 @@ class Person {
 >console.log("work") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"work" : "work"
 >       : ^^^^^^
 
@@ -185,11 +185,11 @@ class Person {
 >console.log("Hi") : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Hi" : "Hi"
 >     : ^^^^
 }
@@ -204,11 +204,11 @@ class Car {
 >console.log("Wof Wof") : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Wof Wof" : "Wof Wof"
 >          : ^^^^^^^^^
 }
@@ -231,11 +231,11 @@ function test(o: Person | Car) {
 >console.log("Is Person") : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Is Person" : "Is Person"
 >            : ^^^^^^^^^^^
 
@@ -243,7 +243,7 @@ function test(o: Person | Car) {
 >(o as Person).work() : void
 >                     : ^^^^
 >(o as Person).work : () => void
->                   : ^^^^^^^^^^
+>                   : ^^^^^^    
 >(o as Person) : Person
 >              : ^^^^^^
 >o as Person : Person
@@ -251,18 +251,18 @@ function test(o: Person | Car) {
 >o : Person | Car
 >  : ^^^^^^^^^^^^
 >work : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
     }
     else {
         console.log("Is Car")
 >console.log("Is Car") : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"Is Car" : "Is Car"
 >         : ^^^^^^^^
 
@@ -270,11 +270,11 @@ function test(o: Person | Car) {
 >o.sayHi() : void
 >          : ^^^^
 >o.sayHi : (() => void) | (() => void)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^    ^^^^^^^^^^^    ^
 >o : Person | Car
 >  : ^^^^^^^^^^^^
 >sayHi : (() => void) | (() => void)
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^    ^^^^^^^^^^^    ^
     }
 }
 

@@ -16,11 +16,11 @@ function f(x: number, y: number, z: number) {
 >Array.from(arguments) : any[]
 >                      : ^^^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }

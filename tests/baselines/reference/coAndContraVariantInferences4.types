@@ -66,20 +66,20 @@ function foo() {
 >every(modifiers, isModifier) : boolean
 >                             : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >modifiers : readonly Decorator[] | readonly Modifier[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isModifier : (node: Node) => node is Modifier
->           : ^    ^^    ^^^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^    ^^^^^                
 
     every(modifiers, isDecorator);
 >every(modifiers, isDecorator) : boolean
 >                              : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >modifiers : readonly Decorator[] | readonly Modifier[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDecorator : (node: Node) => node is Decorator
->            : ^    ^^    ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^    ^^^^^                 
 }
 

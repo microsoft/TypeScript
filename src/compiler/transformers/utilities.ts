@@ -105,7 +105,7 @@ export interface ExternalModuleInfo {
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
-    exportedFunctions: FunctionDeclaration[] | undefined; // all of the top-level exported function declarations
+    exportedFunctions: Set<FunctionDeclaration>; // all of the top-level exported function declarations
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
@@ -174,8 +174,8 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportSpecifiers = new IdentifierNameMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
+    const exportedFunctions = new Set<FunctionDeclaration>();
     let exportedNames: Identifier[] | undefined;
-    let exportedFunctions: FunctionDeclaration[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
     let hasExportStarsToExportValues = false;
@@ -256,22 +256,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
             case SyntaxKind.FunctionDeclaration:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                    exportedFunctions = append(exportedFunctions, node as FunctionDeclaration);
-                    if (hasSyntacticModifier(node, ModifierFlags.Default)) {
-                        // export default function() { }
-                        if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
-                            hasExportDefault = true;
-                        }
-                    }
-                    else {
-                        // export function x() { }
-                        const name = (node as FunctionDeclaration).name!;
-                        if (!uniqueExports.get(idText(name))) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                            uniqueExports.set(idText(name), true);
-                        }
-                    }
+                    addExportedFunctionDeclaration(node as FunctionDeclaration, /*name*/ undefined, hasSyntacticModifier(node, ModifierFlags.Default));
                 }
                 break;
 
@@ -317,11 +302,37 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     || resolver.getReferencedValueDeclaration(name);
 
                 if (decl) {
+                    if (decl.kind === SyntaxKind.FunctionDeclaration) {
+                        addExportedFunctionDeclaration(decl as FunctionDeclaration, specifier.name, specifier.name.escapedText === InternalSymbolName.Default);
+                        continue;
+                    }
+
                     multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                 }
 
                 uniqueExports.set(idText(specifier.name), true);
                 exportedNames = append(exportedNames, specifier.name);
+            }
+        }
+    }
+
+    function addExportedFunctionDeclaration(node: FunctionDeclaration, name: Identifier | undefined, isDefault: boolean) {
+        exportedFunctions.add(node);
+        if (isDefault) {
+            // export default function() { }
+            // function x() { } + export { x as default };
+            if (!hasExportDefault) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name ?? context.factory.getDeclarationName(node));
+                hasExportDefault = true;
+            }
+        }
+        else {
+            // export function x() { }
+            // function x() { } + export { x }
+            name ??= node.name!;
+            if (!uniqueExports.get(idText(name))) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                uniqueExports.set(idText(name), true);
             }
         }
     }

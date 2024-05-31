@@ -109,9 +109,9 @@ const A = object<Something>()({
 >object<Something>()({  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),}) : ObjectType<Something>
 >                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^
 >object<Something>() : <Fields extends { [Key in keyof Fields]: Field<Something, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Something>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^ 
 >object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
->       : ^      ^^^^^^^^      ^^^^^^^^^                                                       ^^      ^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^                                                                                                                                                          
 >{  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),} : { name: string; fields: () => any; }
 >                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -137,7 +137,7 @@ const A = object<Something>()({
 >field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<Something, "a">
 >                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->      : ^      ^^    ^^^^^^^^^               ^^^^^^^^^^^^^^      ^^     ^^                           ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^    ^^^^^^^^^               ^^   ^^^^^^^^^      ^^     ^^                           ^^^^^                  
 >{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: ObjectType<Something>; resolve(): { foo: number; }; }
 >                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

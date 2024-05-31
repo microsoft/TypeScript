@@ -31,19 +31,19 @@ foo1<Date>(""); // should error
 
 function foo2<T extends Date>(test: T): T;
 >foo2 : { <T extends Date>(test: T): T; <T_1 extends Number>(test: string): T_1; }
->     : ^^^ ^^^^^^^^^    ^^    ^^ ^^^ ^^^^^^^^^^^^^^^      ^^    ^^      ^^^^^^^^^
+>     : ^^^ ^^^^^^^^^    ^^    ^^ ^^^ ^^^   ^^^^^^^^^      ^^    ^^      ^^^   ^^^
 >test : T
 >     : ^
 
 function foo2<T extends Number>(test: string): T; 
 >foo2 : { <T_1 extends Date>(test: T_1): T_1; <T extends Number>(test: string): T; }
->     : ^^^   ^^^^^^^^^    ^^    ^^   ^^^^^^^^^ ^^^^^^^^^      ^^    ^^      ^^^ ^^^
+>     : ^^^   ^^^^^^^^^    ^^    ^^   ^^^   ^^^ ^^^^^^^^^      ^^    ^^      ^^^ ^^^
 >test : string
 >     : ^^^^^^
 
 function foo2<T extends String>(test: any): any { return null; }
 >foo2 : { <T_1 extends Date>(test: T_1): T_1; <T_1 extends Number>(test: string): T_1; }
->     : ^^^   ^^^^^^^^^    ^^    ^^   ^^^^^^^^^^^^^^^^^^^^^      ^^    ^^      ^^^^^^^^^
+>     : ^^^   ^^^^^^^^^    ^^    ^^   ^^^   ^^^   ^^^^^^^^^      ^^    ^^      ^^^   ^^^
 >test : any
 >     : ^^^
 
@@ -51,7 +51,7 @@ foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type p
 >foo2<Date>("") : Date
 >               : ^^^^
 >foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
->     : ^^^ ^^^^^^^^^    ^^    ^^ ^^^^^^^^^^^^^^^^^      ^^    ^^      ^^^^^^^
+>     : ^^^ ^^^^^^^^^    ^^    ^^ ^^^ ^^^ ^^^^^^^^^      ^^    ^^      ^^^ ^^^
 >"" : ""
 >   : ^^
 

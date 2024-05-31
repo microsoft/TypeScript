@@ -5,9 +5,13 @@ import {
     Debug,
     Diagnostics,
     emptyArray,
+    findAncestor,
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
+    getTokenAtPosition,
     hostGetCanonicalFileName,
+    isBlockLike,
+    isSourceFile,
     LanguageServiceHost,
     last,
     ModuleKind,
@@ -40,6 +44,16 @@ registerRefactor(refactorName, {
     kinds: [moveToNewFileAction.kind],
     getAvailableActions: function getRefactorActionsToMoveToNewFile(context): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
+
+        const file = context.file;
+        if (context.triggerReason === "implicit" && context.endPosition !== undefined) {
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
+        }
+
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             const file = context.file;
             const affectedTextRange = {

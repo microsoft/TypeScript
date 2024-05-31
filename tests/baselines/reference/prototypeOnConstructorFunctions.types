@@ -22,11 +22,11 @@ i.const.prototype.prop = "yo";
 >i.const.prototype : any
 >                  : ^^^
 >i.const : new (options?: any, element?: any) => any
->        : ^^^^^       ^^^^^^^^       ^^^^^^^^^^^^^^
+>        : ^^^^^       ^^^^^^^^       ^^^^^^^^^^^   
 >i : I1
 >  : ^^
 >const : new (options?: any, element?: any) => any
->      : ^^^^^       ^^^^^^^^       ^^^^^^^^^^^^^^
+>      : ^^^^^       ^^^^^^^^       ^^^^^^^^^^^   
 >prototype : any
 >          : ^^^
 >prop : any

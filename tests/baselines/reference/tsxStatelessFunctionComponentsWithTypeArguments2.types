@@ -42,7 +42,7 @@ function Bar<T extends {prop: number}>(arg: T) {
 ><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
 >                                                 : ^^^^^^^^^^^
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
->                   : ^ ^^ ^^                                   ^^^^^^^^^^^^^^^^
+>                   : ^ ^^ ^^                                   ^^^^^           
 >arg : T
 >    : ^
 >ignore-prop : number
@@ -64,7 +64,7 @@ function Baz<T>(arg: T) {
 ><ComponentSpecific1 {...arg} /> : JSX.Element
 >                                : ^^^^^^^^^^^
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
->                   : ^ ^^ ^^                                   ^^^^^^^^^^^^^^^^
+>                   : ^ ^^ ^^                                   ^^^^^           
 >arg : T
 >    : ^
 }
@@ -98,11 +98,11 @@ function createLink(func: (a: number, b: string)=>void) {
 ><Link func={func} /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->     : ^ ^^ ^^                           ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                           ^^^^^           
 >func : (a: number, b: string) => void
->     : ^ ^^      ^^ ^^      ^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^    
 >func : (a: number, b: string) => void
->     : ^ ^^      ^^ ^^      ^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^    
 }
 
 interface InferParamProp<T> {
@@ -132,7 +132,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : JSX.Element
 >                                                                                   : ^^^^^^^^^^^
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->                    : ^ ^^    ^^                 ^^^^^^^^^^^^^^^^
+>                    : ^ ^^    ^^                 ^^^^^           
 >values : number[]
 >       : ^^^^^^^^
 >[1, 2, 3, 4] : number[]

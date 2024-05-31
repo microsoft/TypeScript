@@ -4,7 +4,7 @@
 ///<reference path='exportEqualErrorType_0.ts'/>
 import connect = require('exportEqualErrorType_0');
 >connect : { (): connect.connectExport; foo: Date; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 >connect().use(connect.static('foo')) : connect.connectExport
@@ -14,7 +14,7 @@ connect().use(connect.static('foo')); // Error  1      The property 'static' doe
 >connect() : connect.connectExport
 >          : ^^^^^^^^^^^^^^^^^^^^^
 >connect : { (): connect.connectExport; foo: Date; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >use : (mod: connect.connectModule) => connect.connectExport
 >    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect.static('foo') : any
@@ -22,7 +22,7 @@ connect().use(connect.static('foo')); // Error  1      The property 'static' doe
 >connect.static : any
 >               : ^^^
 >connect : { (): connect.connectExport; foo: Date; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >static : any
 >       : ^^^
 >'foo' : "foo"
@@ -62,5 +62,5 @@ var server: {
 };
 export = server;
 >server : { (): server.connectExport; foo: Date; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                    ^^^^^^^    ^^^
  

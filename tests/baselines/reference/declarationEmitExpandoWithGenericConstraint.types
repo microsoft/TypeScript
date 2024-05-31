@@ -23,9 +23,9 @@ export interface Rect<p extends Point> {
 
 export const Point = (x: number, y: number): Point => ({ x, y });
 >Point : { (x: number, y: number): Point; zero(): Point; }
->      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >(x: number, y: number): Point => ({ x, y }) : { (x: number, y: number): Point; zero(): Point; }
->                                            : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^^^^^^^^^
+>                                            : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -63,15 +63,15 @@ Point.zero = (): Point => Point(0, 0);
 >Point.zero : () => Point
 >           : ^^^^^^     
 >Point : { (x: number, y: number): Point; zero(): Point; }
->      : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >zero : () => Point
->     : ^^^^^^^^^^^
+>     : ^^^^^^     
 >(): Point => Point(0, 0) : () => Point
 >                         : ^^^^^^     
 >Point(0, 0) : Point
 >            : ^^^^^
 >Point : { (x: number, y: number): Point; zero(): Point; }
->      : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^ ^^      ^^^     ^^^^^^^^^^     ^^^
 >0 : 0
 >  : ^
 >0 : 0

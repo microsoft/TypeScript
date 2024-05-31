@@ -34,13 +34,13 @@ function foo1(opts1) {
 >foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
 >     : ^     ^^^     ^^      ^     ^^^      ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     opts1.x;
 >opts1.x : string
 >        : ^^^^^^
 >opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -66,15 +66,15 @@ function foo2(/** @param opts2 bad idea theatre! */opts2) {
 >foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
 >     : ^     ^^^            ^^      ^            ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >opts2 : { anotherX: string; anotherY?: string | undefined; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 
     opts2[0].anotherX;
 >opts2[0].anotherX : string
 >                  : ^^^^^^
 >opts2[0] : { anotherX: string; anotherY?: string | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >opts2 : { anotherX: string; anotherY?: string | undefined; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >anotherX : string
@@ -103,13 +103,13 @@ function foo3(opts3) {
 >foo3 : (opts3: {    x: string;}) => void
 >     : ^     ^^^     ^^      ^^^^^^^^^^^
 >opts3 : { x: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 
     opts3.x;
 >opts3.x : string
 >        : ^^^^^^
 >opts3 : { x: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 }
@@ -136,15 +136,15 @@ function foo4(opts4) {
 >foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
 >     : ^     ^^^     ^^      ^     ^^^      ^^^^^^^^^^^^^     ^^^      ^     ^^^      ^^^^^^^^^^^
 >opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     opts4[0].x;
 >opts4[0].x : string
 >           : ^^^^^^
 >opts4[0] : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >x : string
@@ -178,28 +178,28 @@ foo4([{ x: 'hi' }]);
 function foo5(opts5) {
 >foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void
 >     : ^     ^^^        ^^      ^        ^^^         ^^      ^           ^^^                ^^      ^              ^^       ^        ^^    ^^          ^^      ^^^^^^^^^^^
->opts5 : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
+>      : ^^^^^^^^      ^^^^^^^^^     ^^      ^       ^^^            ^^      ^          ^^       ^    ^^^^^^^^^^^^^      ^^^^^
 
     opts5[0].what.bad[0].idea;
 >opts5[0].what.bad[0].idea : string
 >                          : ^^^^^^
 >opts5[0].what.bad[0] : { idea: string; oh: boolean; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^      ^^^^^^       ^^^
 >opts5[0].what.bad : { idea: string; oh: boolean; }[]
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->opts5[0].what : { a: string; bad: { idea: string; oh: boolean; }[]; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->opts5[0] : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->opts5 : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^      ^^^^^^       ^^^^^
+>opts5[0].what : { a: string; bad: {    idea: string;    oh: boolean;}; }
+>              : ^^^^^      ^^^^^^^^        ^^      ^      ^^       ^^^^^
+>opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
+>         : ^^^^^^^^      ^^^^^^^^^     ^^      ^       ^^^            ^^      ^          ^^       ^    ^^^^^^^^^^^^^      ^^^
+>opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
+>      : ^^^^^^^^      ^^^^^^^^^     ^^      ^       ^^^            ^^      ^          ^^       ^    ^^^^^^^^^^^^^      ^^^^^
 >0 : 0
 >  : ^
->what : { a: string; bad: { idea: string; oh: boolean; }[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>what : { a: string; bad: {    idea: string;    oh: boolean;}; }
+>     : ^^^^^      ^^^^^^^^        ^^      ^      ^^       ^^^^^
 >bad : { idea: string; oh: boolean; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^      ^^^^^^       ^^^^^
 >0 : 0
 >  : ^
 >idea : string
@@ -208,10 +208,10 @@ function foo5(opts5) {
     opts5[0].unnest;
 >opts5[0].unnest : number
 >                : ^^^^^^
->opts5[0] : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->opts5 : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
+>         : ^^^^^^^^      ^^^^^^^^^     ^^      ^       ^^^            ^^      ^          ^^       ^    ^^^^^^^^^^^^^      ^^^
+>opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
+>      : ^^^^^^^^      ^^^^^^^^^     ^^      ^       ^^^            ^^      ^          ^^       ^    ^^^^^^^^^^^^^      ^^^^^
 >0 : 0
 >  : ^
 >unnest : number

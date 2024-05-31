@@ -36,13 +36,13 @@ export declare const e: {
 === projD/index.ts ===
 import {e} from "../projC";
 >e : { f: (foo: import("projA/index").Foo) => boolean; }
->  : ^^^^^^   ^^                         ^^^^^^^^^^^^^^^
+>  : ^^^^^                                           ^^^
 
 export const d = {e};
 >d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
->  : ^^^^^^^^^^^   ^^                         ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^                                           ^^^^^^
 >{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
->    : ^^^^^^^^^^^   ^^                         ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^                                           ^^^^^^
 >e : { f: (foo: import("projA/index").Foo) => boolean; }
->  : ^^^^^^   ^^                         ^^^^^^^^^^^^^^^
+>  : ^^^^^                                           ^^^
 

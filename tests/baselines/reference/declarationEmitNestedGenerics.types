@@ -17,8 +17,8 @@ function f<T>(p: T) {
 >null as any : any
 
     return g;
->g : <T_1>(x: T_1) => T
->  : ^   ^^ ^^   ^^^^^^
+>g : <T_1>(x: T_1) => typeof p
+>  : ^   ^^ ^^   ^^^^^        
 }
 
 function g<T>(x: T) {

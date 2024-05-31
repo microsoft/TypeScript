@@ -32,11 +32,11 @@ class Derived extends Base {
 >console.log(`x was set to ${value}`) : void
 >                                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >`x was set to ${value}` : string
 >                        : ^^^^^^
 >value : number
@@ -55,11 +55,11 @@ console.log(obj.x); // number
 >console.log(obj.x) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj.x : number
 >      : ^^^^^^
 >obj : Derived

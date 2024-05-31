@@ -21,9 +21,9 @@ var d: Derived;
 
 var r = new d();
 >r : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >new d() : { a: number; }
->        : ^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^
 >d : Derived
 >  : ^^^^^^^
 

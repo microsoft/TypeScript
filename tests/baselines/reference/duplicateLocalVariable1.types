@@ -55,11 +55,11 @@ export class TestRunner {
 >arg1.every(function (val, index) { return val === arg2[index] }) : boolean
 >                                                                 : ^^^^^^^
 >arg1.every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
->           : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >arg1 : any[]
 >     : ^^^^^
 >every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function (val, index) { return val === arg2[index] } : (val: any, index: number) => boolean
 >                                                     : ^   ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
 >val : any
@@ -88,7 +88,7 @@ export class TestRunner {
 >this.tests.push(test) : number
 >                      : ^^^^^^
 >this.tests.push : (...items: TestCase[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^^^^^^      
 >this.tests : TestCase[]
 >           : ^^^^^^^^^^
 >this : this
@@ -96,7 +96,7 @@ export class TestRunner {
 >tests : TestCase[]
 >      : ^^^^^^^^^^
 >push : (...items: TestCase[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >test : TestCase
 >     : ^^^^^^^^
     }
@@ -157,11 +157,11 @@ export class TestRunner {
 >testcase.test() : boolean
 >                : ^^^^^^^
 >testcase.test : () => boolean
->              : ^^^^^^^^^^^^^
+>              : ^^^^^^       
 >testcase : TestCase
 >         : ^^^^^^^^
 >test : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
             }
             catch (e) {
 >e : any
@@ -247,11 +247,11 @@ export class TestRunner {
 >regex.test(e.message) : boolean
 >                      : ^^^^^^^
 >regex.test : (string: string) => boolean
->           : ^      ^^      ^^^^^^^^^^^^
+>           : ^      ^^      ^^^^^       
 >regex : RegExp
 >      : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >e.message : any
 >          : ^^^
 >e : any
@@ -436,11 +436,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]) : boolean
 >                                              : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -480,11 +480,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]) : boolean
 >                                              : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >[3, 2, 3] : number[]
 >          : ^^^^^^^^
 >3 : 3
@@ -1520,11 +1520,11 @@ export var tests: TestRunner = (function () {
 >chars.push(fb.readByte()) : number
 >                          : ^^^^^^
 >chars.push : (...items: any[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^      
 >chars : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >fb.readByte() : any
 >              : ^^^
 >fb.readByte : any
@@ -1538,11 +1538,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]) : boolean
 >                                                                                                   : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >chars : any[]
 >      : ^^^^^
 >[0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A] : number[]
@@ -1637,11 +1637,11 @@ export var tests: TestRunner = (function () {
 >chars.push(fb.readUtf8CodePoint()) : number
 >                                   : ^^^^^^
 >chars.push : (...items: any[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^      
 >chars : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >fb.readUtf8CodePoint() : any
 >                       : ^^^
 >fb.readUtf8CodePoint : any
@@ -1655,11 +1655,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]) : boolean
 >                                                                                 : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >chars : any[]
 >      : ^^^^^
 >[0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A] : number[]
@@ -1801,11 +1801,11 @@ export var tests: TestRunner = (function () {
 >bytes.push(fb.readByte()) : number
 >                          : ^^^^^^
 >bytes.push : (...items: any[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^      
 >bytes : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >fb.readByte() : any
 >              : ^^^
 >fb.readByte : any
@@ -1853,11 +1853,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(bytes, expected) : boolean
 >                                         : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >bytes : any[]
 >      : ^^^^^
 >expected : number[]
@@ -1942,11 +1942,11 @@ export var tests: TestRunner = (function () {
 >chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); }) : void
 >                                                                      : ^^^^
 >chars.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->              : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>              : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >chars : number[]
 >      : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function (val) { fb.writeUtf16CodePoint(val, false); } : (val: number) => void
 >                                                       : ^   ^^^^^^^^^^^^^^^^^
 >val : number
@@ -2060,11 +2060,11 @@ export var tests: TestRunner = (function () {
 >expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            }) : void
 >                                                                                                                                                                                                                       : ^^^^
 >expectedBytes.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->                      : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                      : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >expectedBytes : number[]
 >              : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            } : (val: number) => void
 >                                                                                                                                                                                                : ^   ^^^^^^^^^^^^^^^^^
 >val : number
@@ -2311,11 +2311,11 @@ export var tests: TestRunner = (function () {
 >codePoints.push(savedFile.readUtf16CodePoint(false)) : number
 >                                                     : ^^^^^^
 >codePoints.push : (...items: any[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^      
 >codePoints : any[]
 >           : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >savedFile.readUtf16CodePoint(false) : any
 >                                    : ^^^
 >savedFile.readUtf16CodePoint : any
@@ -2349,11 +2349,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(codePoints, expectedCodePoints) : boolean
 >                                                        : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >codePoints : any[]
 >           : ^^^^^
 >expectedCodePoints : number[]
@@ -2446,11 +2446,11 @@ export var tests: TestRunner = (function () {
 >codePoints.push(savedFile.readUtf8CodePoint()) : number
 >                                               : ^^^^^^
 >codePoints.push : (...items: any[]) => number
->                : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^^^^^^^^^^^      
 >codePoints : any[]
 >           : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >savedFile.readUtf8CodePoint() : any
 >                              : ^^^
 >savedFile.readUtf8CodePoint : any
@@ -2482,11 +2482,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(codePoints, expectedCodePoints) : boolean
 >                                                        : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >codePoints : any[]
 >           : ^^^^^
 >expectedCodePoints : number[]
@@ -2560,11 +2560,11 @@ export var tests: TestRunner = (function () {
 >chars.forEach(function (val) { fb.writeUtf8CodePoint(val); }) : void
 >                                                              : ^^^^
 >chars.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->              : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>              : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >chars : number[]
 >      : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function (val) { fb.writeUtf8CodePoint(val); } : (val: number) => void
 >                                               : ^   ^^^^^^^^^^^^^^^^^
 >val : number
@@ -2666,11 +2666,11 @@ export var tests: TestRunner = (function () {
 >expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            }) : void
 >                                                                                                                                                                                                                       : ^^^^
 >expectedBytes.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->                      : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                      : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >expectedBytes : number[]
 >              : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            } : (val: number) => void
 >                                                                                                                                                                                                : ^   ^^^^^^^^^^^^^^^^^
 >val : number
