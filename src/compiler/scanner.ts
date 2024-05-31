@@ -2558,7 +2558,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 pos++;
                 let regExpFlags = RegularExpressionFlags.None;
                 while (true) {
-                    const ch = codePointChecked(pos);
+                    const ch = charCodeChecked(pos);
                     if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                         break;
                     }
