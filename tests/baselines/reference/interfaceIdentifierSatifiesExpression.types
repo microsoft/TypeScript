@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/interfaceIdentifierSatifiesExpression.ts] ////
+
+=== interfaceIdentifierSatifiesExpression.ts ===
+// These were written with the expectation of parse errors.
+const interface = 'x';
+>interface : "x"
+>          : ^^^
+>'x' : "x"
+>    : ^^^
+
+interface satisfies string;
+>string : any
+>       : ^^^
+
+interface as string;
+>string : any
+>       : ^^^
+
