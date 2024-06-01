@@ -47,6 +47,7 @@ import {
     Block,
     BooleanLiteral,
     BreakOrContinueStatement,
+    CalculationType,
     CallChain,
     CallExpression,
     CallLikeExpression,
@@ -1398,6 +1399,11 @@ const enum IntrinsicTypeKind {
     Capitalize,
     Uncapitalize,
     NoInfer,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Integer,
 }
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
@@ -1406,6 +1412,11 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Capitalize: IntrinsicTypeKind.Capitalize,
     Uncapitalize: IntrinsicTypeKind.Uncapitalize,
     NoInfer: IntrinsicTypeKind.NoInfer,
+    Add: IntrinsicTypeKind.Add,
+    Sub: IntrinsicTypeKind.Sub,
+    Mul: IntrinsicTypeKind.Mul,
+    Div: IntrinsicTypeKind.Div,
+    Integer: IntrinsicTypeKind.Integer,
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -2011,6 +2022,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var indexedAccessTypes = new Map<string, IndexedAccessType>();
     var templateLiteralTypes = new Map<string, TemplateLiteralType>();
     var stringMappingTypes = new Map<string, StringMappingType>();
+    var CalculationTypes = new Map<string, CalculationType>();
     var substitutionTypes = new Map<string, SubstitutionType>();
     var subtypeReductionCache = new Map<string, Type[]>();
     var decoratorContextOverrideTypeCache = new Map<string, Type>();
@@ -6429,6 +6441,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.StringMapping) {
                 const typeNode = typeToTypeNodeHelper((type as StringMappingType).type, context);
                 return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
+            }
+            if (type.flags & TypeFlags.Calculation) {
+                return symbolToTypeNode(
+                    (type as CalculationType).symbol,
+                    context,
+                    SymbolFlags.Type,
+                    (type as CalculationType).types.map(type => typeToTypeNodeHelper(type, context)),
+                );
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 const objectTypeNode = typeToTypeNodeHelper((type as IndexedAccessType).objectType, context);
@@ -14611,7 +14631,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseConstraintOfType(type: Type): Type | undefined {
-        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || isGenericTupleType(type)) {
+        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation) || isGenericTupleType(type)) {
             const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
@@ -14722,7 +14742,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (t.flags & TypeFlags.StringMapping) {
                 const constraint = getBaseConstraint((t as StringMappingType).type);
-                return constraint && constraint !== (t as StringMappingType).type ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
+                return constraint && constraint !== (t as StringMappingType).type ? getIntrinsicMappingType((t as StringMappingType).symbol, constraint) : stringType;
+            }
+            if (t.flags & TypeFlags.Calculation) {
+                const types = (t as CalculationType).types;
+                const constraints = mapDefined(types, getBaseConstraint);
+                return constraints.length === types.length
+                    ? constraints.length === 1
+                        ? getIntrinsicMappingType((t as CalculationType).symbol, constraints[0])
+                        : getIntrinsicMappingType2((t as CalculationType).symbol, constraints[0], constraints[1])
+                    : numberType;
             }
             if (t.flags & TypeFlags.IndexedAccess) {
                 if (isMappedTypeGenericIndexedAccess(t)) {
@@ -16294,10 +16323,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const type = getDeclaredTypeOfSymbol(symbol);
-        if (type === intrinsicMarkerType) {
+        if (type === intrinsicMarkerType && typeArguments) {
             const typeKind = intrinsicTypeKinds.get(symbol.escapedName as string);
-            if (typeKind !== undefined && typeArguments && typeArguments.length === 1) {
-                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) : getStringMappingType(symbol, typeArguments[0]);
+            if (typeKind !== undefined && typeArguments.length === 1) {
+                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) : getIntrinsicMappingType(symbol, typeArguments[0]);
+            }
+            if (typeKind !== undefined && typeArguments.length === 2) {
+                return getIntrinsicMappingType2(symbol, typeArguments[0], typeArguments[1]);
             }
         }
         const links = getSymbolLinks(symbol);
@@ -17438,7 +17470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const t = types[i];
             const flags = t.flags;
             const remove = flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && includes & TypeFlags.String ||
-                flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
+                flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) && includes & TypeFlags.Number ||
                 flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                 flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
                 reduceVoidUndefined && flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
@@ -18159,6 +18191,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
                 type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).baseType) && isDistributive((type as SubstitutionType).constraint) :
                 type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
+                type.flags & TypeFlags.Calculation ? isDistributive((type as CalculationType).types[0]) || ((type as CalculationType).types.length === 2 && isDistributive((type as CalculationType).types[1]!)) :
                 false;
         }
     }
@@ -18351,16 +18384,53 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function getStringMappingType(symbol: Symbol, type: Type): Type {
-        return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
+    function getIntrinsicMappingType(symbol: Symbol, type: Type): Type {
+        return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getIntrinsicMappingType(symbol, t)) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
+            type.flags & TypeFlags.NumberLiteral ? applyNumberMapping(symbol, type as NumberLiteralType) :
             type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
-            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
+            type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? (getBaseConstraintOfType(type)?.flags ?? 0) & TypeFlags.StringLike ? getStringMappingTypeForGenericType(symbol, type) :
+                getCalculationTypeForGenericType(symbol, [type]) :
             // This handles Mapping<`${number}`> and Mapping<`${bigint}`>
             isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, getTemplateLiteralType(["", ""], [type])) :
             type;
+    }
+
+    // Currently the only 2-type intrinsics are Calculation types (i.e. numeric)
+    function getIntrinsicMappingType2(symbol: Symbol, type1: Type, type2: Type): Type {
+        return type1.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type1, t => getIntrinsicMappingType2(symbol, t, type2)) :
+            isGenericIndexType(type1) || isGenericIndexType(type2) ? getCalculationTypeForGenericType(symbol, [type1, type2]) :
+            type2.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type2, t => getIntrinsicMappingType2(symbol, type1, t)) :
+            // handle division by zero
+            intrinsicTypeKinds.get(symbol.escapedName as string) === IntrinsicTypeKind.Div && type2.flags & TypeFlags.NumberLiteral && (type2 as NumberLiteralType).value === 0 ? neverType :
+            type1.flags & TypeFlags.NumberLiteral ?
+            type2.flags & TypeFlags.NumberLiteral ? applyNumberMapping2(symbol, type1 as NumberLiteralType, type2 as NumberLiteralType) :
+                type2 :
+            type1;
+    }
+
+    function applyNumberMapping(symbol: Symbol, n: NumberLiteralType): Type {
+        switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+            case IntrinsicTypeKind.Integer:
+                return getNumberLiteralType(Math.floor(n.value));
+        }
+        return n;
+    }
+
+    function applyNumberMapping2(symbol: Symbol, a: NumberLiteralType, b: NumberLiteralType): Type {
+        switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+            case IntrinsicTypeKind.Add:
+                return getNumberLiteralType(a.value + b.value);
+            case IntrinsicTypeKind.Sub:
+                return getNumberLiteralType(a.value - b.value);
+            case IntrinsicTypeKind.Mul:
+                return getNumberLiteralType(a.value * b.value);
+            case IntrinsicTypeKind.Div:
+                return getNumberLiteralType(a.value / b.value);
+        }
+        return a;
     }
 
     function applyStringMapping(symbol: Symbol, str: string) {
@@ -18380,13 +18450,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function applyTemplateStringMapping(symbol: Symbol, texts: readonly string[], types: readonly Type[]): [texts: readonly string[], types: readonly Type[]] {
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
             case IntrinsicTypeKind.Uppercase:
-                return [texts.map(t => t.toUpperCase()), types.map(t => getStringMappingType(symbol, t))];
+                return [
+                    texts.map(t => t.toUpperCase()),
+                    types.map(t => getIntrinsicMappingType(symbol, t)),
+                ];
             case IntrinsicTypeKind.Lowercase:
-                return [texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t))];
+                return [
+                    texts.map(t => t.toLowerCase()),
+                    types.map(t => getIntrinsicMappingType(symbol, t)),
+                ];
             case IntrinsicTypeKind.Capitalize:
-                return [texts[0] === "" ? texts : [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
+                return [
+                    texts[0] === "" ?
+                        texts :
+                        [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)],
+                    texts[0] === "" ?
+                        [getIntrinsicMappingType(symbol, types[0]), ...types.slice(1)] :
+                        types,
+                ];
             case IntrinsicTypeKind.Uncapitalize:
-                return [texts[0] === "" ? texts : [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
+                return [
+                    texts[0] === "" ?
+                        texts :
+                        [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)],
+                    texts[0] === "" ?
+                        [getIntrinsicMappingType(symbol, types[0]), ...types.slice(1)] :
+                        types,
+                ];
         }
         return [texts, types];
     }
@@ -18397,6 +18487,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!result) {
             stringMappingTypes.set(id, result = createStringMappingType(symbol, type));
         }
+        return result;
+    }
+
+    function getCalculationTypeForGenericType(symbol: Symbol, types: [Type] | [Type, Type]): Type {
+        const id = `${getSymbolId(symbol)},${types.map(getTypeId).join(",")}`;
+        let result = CalculationTypes.get(id);
+        if (!result) {
+            CalculationTypes.set(id, result = createCalculationType(symbol, types));
+        }
+        return result;
+    }
+
+    function createCalculationType(symbol: Symbol, types: [Type] | [Type, Type]) {
+        const result = createType(TypeFlags.Calculation) as CalculationType;
+        result.symbol = symbol;
+        result.types = types;
         return result;
     }
 
@@ -18689,12 +18795,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isPatternLiteralType(type: Type) {
         // A pattern literal type is a template literal or a string mapping type that contains only
         // non-generic pattern literal placeholders.
-        return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
-            !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
+        return (
+            !!(type.flags & TypeFlags.TemplateLiteral) &&
+                every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
+            !!(type.flags & TypeFlags.StringMapping) &&
+                isPatternLiteralPlaceholderType((type as StringMappingType).type)
+        );
     }
 
     function isGenericStringLikeType(type: Type) {
-        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
+        // @todo TypeFlags.Calculation not exactly stringlike right?
+        return !!(type.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation)) && !isPatternLiteralType(type);
     }
 
     function isGenericType(type: Type): boolean {
@@ -19796,7 +19907,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-        return sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) : makeArrayTypeMapper(sources, targets);
+        return sources.length === 1 ?
+            makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
+            makeArrayTypeMapper(sources, targets);
     }
 
     function getMappedType(type: Type, mapper: TypeMapper): Type {
@@ -20300,7 +20413,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTemplateLiteralType((type as TemplateLiteralType).texts, instantiateTypes((type as TemplateLiteralType).types, mapper));
         }
         if (flags & TypeFlags.StringMapping) {
-            return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+            return getIntrinsicMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+        }
+        if (flags & TypeFlags.Calculation) {
+            const calculation = type as CalculationType;
+            if (calculation.types.length === 1) {
+                return getIntrinsicMappingType(calculation.symbol, instantiateType(calculation.types[0], mapper));
+            }
+            return getIntrinsicMappingType2(calculation.symbol, instantiateType(calculation.types[0], mapper), instantiateType(calculation.types[1], mapper));
         }
         if (flags & TypeFlags.IndexedAccess) {
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
@@ -23103,6 +23223,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+            else if (sourceFlags & TypeFlags.Calculation) {
+                const s = source as CalculationType;
+                if (targetFlags & TypeFlags.Calculation && s.symbol === (target as CalculationType).symbol) {
+                    const t = target as CalculationType;
+                    if (result = isRelatedTo(s.types[0], t.types[0], RecursionFlags.Both, reportErrors)) {
+                        resetErrorInfo(saveErrorInfo);
+                        return result;
+                    }
+                    if (s.types.length === 2 && t.types.length === 2 && (result = isRelatedTo(s.types[1], t.types[1], RecursionFlags.Both, reportErrors))) {
+                        resetErrorInfo(saveErrorInfo);
+                        return result;
+                    }
+                }
+                else {
+                    const constraint = getBaseConstraintOfType(source);
+                    if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
+                        resetErrorInfo(saveErrorInfo);
+                        return result;
+                    }
+                }
+            }
             else if (sourceFlags & TypeFlags.StringMapping) {
                 if (targetFlags & TypeFlags.StringMapping) {
                     if ((source as StringMappingType).symbol !== (target as StringMappingType).symbol) {
@@ -24779,7 +24920,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getBaseTypeOfLiteralType(type: Type): Type {
         return type.flags & TypeFlags.EnumLike ? getBaseTypeOfEnumLikeType(type as LiteralType) :
             type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
-            type.flags & TypeFlags.NumberLiteral ? numberType :
+            type.flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) ? numberType :
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
             type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnion(type as UnionType) :
@@ -25762,7 +25903,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 mappingStack.unshift(target.symbol);
                 target = (target as StringMappingType).type;
             }
-            const mappedSource = reduceLeft(mappingStack, (memo, value) => getStringMappingType(value, memo), source);
+            const mappedSource = reduceLeft(mappingStack, (memo, value) => getIntrinsicMappingType(value, memo), source);
             return mappedSource === source && isMemberOfStringMapping(source, target);
         }
         return false;
@@ -26088,6 +26229,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
                 if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                     inferFromTypes((source as StringMappingType).type, (target as StringMappingType).type);
+                }
+            }
+            else if (source.flags & TypeFlags.Calculation && target.flags & TypeFlags.Calculation) {
+                const sourceCalculation = source as CalculationType;
+                const targetCalculation = target as CalculationType;
+                if (sourceCalculation.symbol === targetCalculation.symbol) {
+                    inferFromTypes(sourceCalculation.types[0], targetCalculation.types[0]);
+                    if (sourceCalculation.types.length === 2 && targetCalculation.types.length === 2) {
+                        inferFromTypes(sourceCalculation.types[1], targetCalculation.types[1]);
+                    }
                 }
             }
             else if (source.flags & TypeFlags.Substitution) {
@@ -26686,7 +26837,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function hasPrimitiveConstraint(type: TypeParameter): boolean {
         const constraint = getConstraintOfTypeParameter(type);
-        return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+        return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation);
     }
 
     function isObjectLiteralType(type: Type) {
@@ -27708,12 +27859,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function replacePrimitivesWithLiterals(typeWithPrimitives: Type, typeWithLiterals: Type) {
         if (
             maybeTypeOfKind(typeWithPrimitives, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.Number | TypeFlags.BigInt) &&
-            maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)
+            maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)
         ) {
             return mapType(typeWithPrimitives, t =>
                 t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) :
                     isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
-                    t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
+                    t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral | TypeFlags.Calculation) :
                     t.flags & TypeFlags.BigInt ? extractTypesOfKind(typeWithLiterals, TypeFlags.BigInt | TypeFlags.BigIntLiteral) : t);
         }
         return typeWithPrimitives;
@@ -34899,7 +35050,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getContextualTypeForElementExpression(restType, i - index, argCount - index) || unknownType :
                     getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                 const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
-                const hasPrimitiveContextualType = inConstContext || maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+                const hasPrimitiveContextualType = inConstContext || maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Calculation);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                 flags.push(ElementFlags.Required);
             }
@@ -40129,7 +40280,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If the contextual type is a literal of a particular primitive type, we consider this a
             // literal context for all literals of that primitive type.
             return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
-                contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
+                contextualType.flags & (TypeFlags.NumberLiteral | TypeFlags.Calculation) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                 contextualType.flags & TypeFlags.BigIntLiteral && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                 contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                 contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol));
@@ -46292,7 +46443,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-            if (!intrinsicTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+            if (!intrinsicTypeKinds.has(node.name.escapedText as string) || !(length(node.typeParameters) === 1 || length(node.typeParameters) === 2)) {
                 error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
             }
         }

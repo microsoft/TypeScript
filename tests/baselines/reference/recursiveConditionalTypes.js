@@ -283,11 +283,11 @@ type ParseManyWhitespace2<S extends string> = S extends ` ${infer R0}` ? Helper<
 type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null;
 type TP2 = ParseManyWhitespace2<" foo">;
 type NTuple<N extends number, Tup extends unknown[] = []> = Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
-type Add<A extends number, B extends number> = [
+type AddTuples<A extends number, B extends number> = [
     ...NTuple<A>,
     ...NTuple<B>
 ]['length'];
-declare let five: Add<2, 3>;
+declare let five: AddTuples<2, 3>;
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T ? [T, ...A] extends [...infer X] ? X : never : never;
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length'] ? A : _Enumerate<_PrependNextNum<A>, N> & number;
 type Enumerate<N extends number> = number extends N ? number : _Enumerate<[], N> extends (infer E)[] ? E : never;

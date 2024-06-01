@@ -6222,6 +6222,7 @@ export const enum TypeFlags {
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
     /** @internal */
     Reserved2       = 1 << 30,  // Used by union/intersection type construction
+    Calculation     = 1 << 31,  // Math type
 
     /** @internal */
     AnyOrUnknown = Any | Unknown,
@@ -6239,7 +6240,7 @@ export const enum TypeFlags {
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
-    NumberLike = Number | NumberLiteral | Enum,
+    NumberLike = Number | NumberLiteral | Enum | Calculation,
     BigIntLike = BigInt | BigIntLiteral,
     BooleanLike = Boolean | BooleanLiteral,
     EnumLike = Enum | EnumLiteral,
@@ -6255,7 +6256,7 @@ export const enum TypeFlags {
     StructuredType = Object | Union | Intersection,
     TypeVariable = TypeParameter | IndexedAccess,
     InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-    InstantiablePrimitive = Index | TemplateLiteral | StringMapping,
+    InstantiablePrimitive = Index | TemplateLiteral | StringMapping | Calculation,
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
@@ -6824,6 +6825,11 @@ export interface TemplateLiteralType extends InstantiableType {
 export interface StringMappingType extends InstantiableType {
     symbol: Symbol;
     type: Type;
+}
+
+export interface CalculationType extends InstantiableType {
+    symbol: Symbol;
+    types: [Type] | [Type, Type];
 }
 
 // Type parameter substitution (TypeFlags.Substitution)
