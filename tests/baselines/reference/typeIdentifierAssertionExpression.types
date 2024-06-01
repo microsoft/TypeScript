@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/typeIdentifierSatisfiesExpression.ts] ////
+//// [tests/cases/compiler/typeIdentifierAssertionExpression.ts] ////
 
-=== typeIdentifierSatisfiesExpression.ts ===
+=== typeIdentifierAssertionExpression.ts ===
 const type = 'x';
 >type : "x"
 >     : ^^^

@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/satifiesOrAsTypeAliasWithTypeParameters.ts] ////
+
+=== satifiesOrAsTypeAliasWithTypeParameters.ts ===
+type satisfies<T> = T;
+>satisfies : T
+>          : ^
+
+type as<T> = T;
+>as : T
+>   : ^
+

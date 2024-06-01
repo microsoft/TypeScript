@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/satifiesOrAsTypeAliasWithTypeParameters.ts] ////
+
+=== satifiesOrAsTypeAliasWithTypeParameters.ts ===
+type satisfies<T> = T;
+>satisfies : Symbol(satisfies, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 0, 15))
+>T : Symbol(T, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 0, 15))
+
+type as<T> = T;
+>as : Symbol(as, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 0, 22))
+>T : Symbol(T, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 1, 8))
+>T : Symbol(T, Decl(satifiesOrAsTypeAliasWithTypeParameters.ts, 1, 8))
+

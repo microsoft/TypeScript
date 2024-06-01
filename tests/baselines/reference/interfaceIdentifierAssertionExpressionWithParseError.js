@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/interfaceIdentifierSatifiesExpression.ts] ////
+//// [tests/cases/compiler/interfaceIdentifierAssertionExpressionWithParseError.ts] ////
 
-//// [interfaceIdentifierSatifiesExpression.ts]
+//// [interfaceIdentifierAssertionExpressionWithParseError.ts]
 // These were written with the expectation of parse errors.
 const interface = 'x';
 
@@ -8,7 +8,7 @@ interface satisfies string;
 interface as string;
 
 
-//// [interfaceIdentifierSatifiesExpression.js]
+//// [interfaceIdentifierAssertionExpressionWithParseError.js]
 // These were written with the expectation of parse errors.
 var interface = 'x';
 string;
