@@ -56,7 +56,7 @@ Output::
 [7m [0m [91m         ~[0m
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 alpha/bin/a.d.ts
   Imported via '../alpha/a' from file 'beta/b.ts'
   File is output of project reference source 'alpha/a.ts'
@@ -103,7 +103,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../alpha/bin/a.d.ts": {
         "original": {
@@ -112,7 +112,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
         },
         "version": "-3531955686-export { };",
         "signature": "-3531955686-export { };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../b.ts": {
         "original": {
@@ -122,7 +122,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
         },
         "version": "-4853599800-import { m } from '../alpha/a'",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

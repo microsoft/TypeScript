@@ -89,7 +89,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
@@ -237,7 +237,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/mypr
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
@@ -386,7 +386,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
@@ -523,7 +523,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
@@ -662,7 +662,7 @@ FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
@@ -817,7 +817,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.es2016.full.d.ts
-  Default library for target 'es2016'
+  Default library for target 'ES2016'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found

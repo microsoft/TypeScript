@@ -72,7 +72,7 @@ var x = data_json_1.default;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./data.d.json.ts": {
         "original": {
@@ -81,7 +81,7 @@ var x = data_json_1.default;
         },
         "version": "2718060498-declare var val: string; export default val;",
         "signature": "2718060498-declare var val: string; export default val;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./main.ts": {
         "original": {
@@ -90,7 +90,7 @@ var x = data_json_1.default;
         },
         "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
         "signature": "6961905452-import data from \"./data.json\"; let x: string = data;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

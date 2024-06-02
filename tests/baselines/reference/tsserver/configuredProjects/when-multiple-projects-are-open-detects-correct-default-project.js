@@ -162,7 +162,7 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "lib": [
-              "es2017"
+              "ES2017"
             ]
           },
           "typeAcquisition": {
@@ -363,8 +363,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "lib": [
-              "dom",
-              "es2017"
+              "DOM",
+              "ES2017"
             ]
           },
           "typeAcquisition": {

@@ -123,7 +123,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -299,7 +299,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	fns.ts
 	  Matched by default include pattern '**/*'
 

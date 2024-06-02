@@ -105,7 +105,7 @@ declare namespace Hmi {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./Source.ts": {
         "original": {
@@ -113,7 +113,7 @@ declare namespace Hmi {
           "impliedFormat": 1
         },
         "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -174,7 +174,7 @@ declare namespace Hmi {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../buttonClass/Source.d.ts": {
         "original": {
@@ -182,7 +182,7 @@ declare namespace Hmi {
           "impliedFormat": 1
         },
         "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./Source.ts": {
         "original": {
@@ -190,7 +190,7 @@ declare namespace Hmi {
           "impliedFormat": 1
         },
         "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -282,7 +282,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../buttonClass/Source.ts
 	  Source from referenced project '../buttonClass/tsconfig.json' included because '--outFile' specified
 	Source.ts
@@ -322,7 +322,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "none",
+            "module": "None",
             "composite": true,
             "outFile": ""
           },

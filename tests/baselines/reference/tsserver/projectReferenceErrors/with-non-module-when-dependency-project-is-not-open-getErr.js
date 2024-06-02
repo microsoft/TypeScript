@@ -121,7 +121,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../dependency/fns.ts
 	  Source from referenced project '../dependency/tsconfig.json' included because '--outFile' specified
 	usage.ts

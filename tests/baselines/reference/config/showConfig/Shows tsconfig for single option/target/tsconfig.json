@@ -1,5 +1,5 @@
 {
     "compilerOptions": {
-        "target": "es3"
+        "target": "ES3"
     }
 }

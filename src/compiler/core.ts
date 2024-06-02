@@ -1778,16 +1778,16 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
         get size() {
             return size;
         },
-        forEach(action: (value: TElement, key: TElement, set: Set<TElement>) => void): void {
+        forEach(callback: (value: TElement, key: TElement, set: Set<TElement>) => void): void {
             for (const elements of arrayFrom(multiMap.values())) {
                 if (isArray(elements)) {
                     for (const element of elements) {
-                        action(element, element, set);
+                        callback(element, element, set);
                     }
                 }
                 else {
                     const element = elements;
-                    action(element, element, set);
+                    callback(element, element, set);
                 }
             }
         },
@@ -1809,6 +1809,118 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     };
 
     return set;
+}
+
+/**
+ * Creates a Map with custom equality and hash code functionality.  This is useful when you
+ * want to use something looser than object identity - e.g. "has the same span".
+ *
+ * If `equals(a, b)`, it must be the case that `getHashCode(a) === getHashCode(b)`.
+ * The converse is not required.
+ *
+ * @internal
+ */
+export function createMap<TKey, TValue, THash = number>(getHashCode: (key: TKey) => THash, equals: EqualityComparer<TKey>): Map<TKey, TValue> {
+    const multiMap = new Map<THash, Map<TKey, TValue>>();
+    let size = 0;
+
+    function* entriesIterator(): IterableIterator<[TKey, TValue]> {
+        for (const candidates of multiMap.values()) {
+            yield* candidates;
+        }
+    }
+
+    const map: Map<TKey, TValue> = {
+        has(key: TKey): boolean {
+            const hash = getHashCode(key);
+            if (!multiMap.has(hash)) return false;
+            const candidates = multiMap.get(hash)!;
+            for (const candidateKey of candidates.keys()) {
+                if (equals(candidateKey, key)) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        get(key: TKey): TValue | undefined {
+            const hash = getHashCode(key);
+            if (!multiMap.has(hash)) return undefined;
+            const candidates = multiMap.get(hash)!;
+            for (const [candidateKey, candidateValue] of candidates) {
+                if (equals(candidateKey, key)) {
+                    return candidateValue;
+                }
+            }
+        },
+        set(key: TKey, value: TValue): Map<TKey, TValue> {
+            const hash = getHashCode(key);
+            if (multiMap.has(hash)) {
+                const candidates = multiMap.get(hash)!;
+                for (const candidateKey of candidates.keys()) {
+                    if (equals(candidateKey, key)) {
+                        candidates.delete(candidateKey);
+                        candidates.set(key, value);
+                        return this;
+                    }
+                }
+                candidates.set(key, value);
+            }
+            else {
+                multiMap.set(hash, new Map([[key, value]]));
+            }
+            size++;
+            return this;
+        },
+        delete(key: TKey): boolean {
+            const hash = getHashCode(key);
+            if (!multiMap.has(hash)) return false;
+            const candidates = multiMap.get(hash)!;
+            for (const candidateKey of candidates.keys()) {
+                if (equals(candidateKey, key)) {
+                    candidates.delete(candidateKey);
+                    size--;
+                    return true;
+                }
+            }
+            return false;
+        },
+        clear(): void {
+            multiMap.clear();
+            size = 0;
+        },
+        get size() {
+            return size;
+        },
+        forEach(callback: (value: TValue, key: TKey, map: Map<TKey, TValue>) => void): void {
+            for (const candidates of multiMap.values()) {
+                candidates.forEach(callback);
+            }
+        },
+        *keys(): IterableIterator<TKey> {
+            for (const candidates of multiMap.values()) {
+                yield* candidates.keys();
+            }
+        },
+        *values(): IterableIterator<TValue> {
+            for (const candidates of multiMap.values()) {
+                yield* candidates.values();
+            }
+        },
+        entries: entriesIterator,
+        [Symbol.iterator]: entriesIterator,
+        [Symbol.toStringTag]: multiMap[Symbol.toStringTag],
+    };
+
+    return map;
+}
+
+/** @internal */
+export function entriesToCaseInsensitiveMap<TKey extends string, TValue>(entries: Iterable<[TKey, TValue]>): Map<TKey, TValue> {
+    const map = createMap<TKey, TValue, string>(toUpperCase, equateStringsCaseInsensitive);
+    for (const [key, value] of entries) {
+        map.set(key, value);
+    }
+    return map;
 }
 
 /**
@@ -1899,12 +2011,21 @@ export function identity<T>(x: T) {
 }
 
 /**
- * Returns lower case string
+ * Returns a lower case string
  *
  * @internal
  */
 export function toLowerCase(x: string) {
     return x.toLowerCase();
+}
+
+/**
+ * Returns an upper case string
+ *
+ * @internal
+ */
+export function toUpperCase(x: string) {
+    return x.toUpperCase();
 }
 
 // We convert the file names to lower case as key for file name on case insensitive file system

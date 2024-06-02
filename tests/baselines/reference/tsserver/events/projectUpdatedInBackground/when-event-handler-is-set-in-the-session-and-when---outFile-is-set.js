@@ -74,7 +74,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -220,7 +220,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	a.ts
 	  Matched by default include pattern '**/*'
 	b.ts

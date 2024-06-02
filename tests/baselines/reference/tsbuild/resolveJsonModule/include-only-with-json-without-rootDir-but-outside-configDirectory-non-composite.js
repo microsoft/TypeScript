@@ -57,7 +57,7 @@ TSFILE: /src/dist/src/src/index.js
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 hello.json
   Imported via "../../hello.json" from file 'src/src/index.ts'
 src/src/index.ts

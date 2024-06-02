@@ -259,7 +259,7 @@ sourceFile:file4.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../lib/module.d.ts": {
         "original": {
@@ -267,7 +267,7 @@ sourceFile:file4.ts
           "impliedFormat": 1
         },
         "version": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file3.ts": {
         "original": {
@@ -275,7 +275,7 @@ sourceFile:file4.ts
           "impliedFormat": 1
         },
         "version": "-10505171738-export const z = 30;\nimport { x } from \"file1\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file4.ts": {
         "original": {
@@ -283,7 +283,7 @@ sourceFile:file4.ts
           "impliedFormat": 1
         },
         "version": "1463681686-const myVar = 30;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -599,7 +599,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file0.ts": {
         "original": {
@@ -607,7 +607,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "3587416848-const myGlob = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file1.ts": {
         "original": {
@@ -615,7 +615,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -623,7 +623,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "-13729954175-export const y = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./global.ts": {
         "original": {
@@ -631,7 +631,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "1028229885-const globalConst = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -878,7 +878,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file0.ts": {
         "original": {
@@ -886,7 +886,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "3587416848-const myGlob = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file1.ts": {
         "original": {
@@ -894,7 +894,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "-4405159098-export const x = 10;console.log(x);",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -902,7 +902,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "-13729954175-export const y = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./global.ts": {
         "original": {
@@ -910,7 +910,7 @@ sourceFile:global.ts
           "impliedFormat": 1
         },
         "version": "1028229885-const globalConst = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

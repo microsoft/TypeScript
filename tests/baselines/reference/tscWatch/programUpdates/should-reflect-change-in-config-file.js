@@ -32,7 +32,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
@@ -108,7 +108,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
@@ -175,7 +175,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.

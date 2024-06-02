@@ -162,7 +162,7 @@ export * from "./subfolder";
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/subfolder/index.ts": {
         "original": {
@@ -172,7 +172,7 @@ export * from "./subfolder";
         },
         "version": "-11228512861-export const FOO = \"bar\";",
         "signature": "-8746013027-export declare const FOO = \"bar\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "../src/index.ts": {
         "original": {
@@ -182,7 +182,7 @@ export * from "./subfolder";
         },
         "version": "-16576232793-export * from \"./subfolder\";",
         "signature": "-14439737455-export * from \"./subfolder\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -259,7 +259,7 @@ export {};
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../package-a/build/subfolder/index.d.ts": {
         "original": {
@@ -268,7 +268,7 @@ export {};
         },
         "version": "-8746013027-export declare const FOO = \"bar\";\n",
         "signature": "-8746013027-export declare const FOO = \"bar\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "../../package-a/build/index.d.ts": {
         "original": {
@@ -277,7 +277,7 @@ export {};
         },
         "version": "-14439737455-export * from \"./subfolder\";\n",
         "signature": "-14439737455-export * from \"./subfolder\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "../src/index.ts": {
         "original": {
@@ -287,7 +287,7 @@ export {};
         },
         "version": "-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -577,13 +577,13 @@ Info seq  [hh:mm:ss:mss] event:
             "declarationMap": true,
             "esModuleInterop": true,
             "lib": [
-              "es2021"
+              "ES2021"
             ],
-            "module": "esnext",
-            "moduleResolution": "bundler",
+            "module": "ESNext",
+            "moduleResolution": "Bundler",
             "outDir": "",
             "rootDir": "",
-            "target": "es2021",
+            "target": "ES2021",
             "traceResolution": true,
             "tsBuildInfoFile": ""
           },

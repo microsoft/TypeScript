@@ -69,7 +69,7 @@ Output::
 
 TSFILE: /src/project/outFile.js
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
 src/project/src/index.ts
@@ -104,7 +104,7 @@ Output::
 
 TSFILE: /src/project/outFile.js
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
 src/project/src/index.ts
@@ -137,7 +137,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
 src/project/src/index.ts

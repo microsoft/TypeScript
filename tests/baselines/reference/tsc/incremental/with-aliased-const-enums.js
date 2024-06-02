@@ -82,7 +82,7 @@ var a = 1 /* A.ONE */;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.d.ts": {
         "original": {
@@ -91,7 +91,7 @@ var a = 1 /* A.ONE */;
         },
         "version": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
         "signature": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -100,7 +100,7 @@ var a = 1 /* A.ONE */;
         },
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -109,7 +109,7 @@ var a = 1 /* A.ONE */;
         },
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -194,7 +194,7 @@ var a = 2 /* A.ONE */;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.d.ts": {
         "original": {
@@ -203,7 +203,7 @@ var a = 2 /* A.ONE */;
         },
         "version": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
         "signature": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -213,7 +213,7 @@ var a = 2 /* A.ONE */;
         },
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -223,7 +223,7 @@ var a = 2 /* A.ONE */;
         },
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -308,7 +308,7 @@ var a = 3 /* A.ONE */;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.d.ts": {
         "original": {
@@ -317,7 +317,7 @@ var a = 3 /* A.ONE */;
         },
         "version": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
         "signature": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -327,7 +327,7 @@ var a = 3 /* A.ONE */;
         },
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -336,7 +336,7 @@ var a = 3 /* A.ONE */;
         },
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -416,7 +416,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.d.ts": {
         "original": {
@@ -425,7 +425,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
         "signature": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -435,7 +435,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -444,7 +444,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -519,7 +519,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.d.ts": {
         "original": {
@@ -528,7 +528,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
         "signature": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -538,7 +538,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -547,7 +547,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

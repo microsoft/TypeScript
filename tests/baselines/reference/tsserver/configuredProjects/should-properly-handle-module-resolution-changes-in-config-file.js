@@ -13,7 +13,7 @@ export interface T {}
 //// [/a/b/tsconfig.json]
 {
   "compilerOptions": {
-    "moduleResolution": "node10"
+    "moduleResolution": "Node10"
   },
   "files": [
     "/a/b/file1.ts"
@@ -106,7 +106,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "moduleResolution": "node10"
+            "moduleResolution": "Node10"
           },
           "typeAcquisition": {
             "enable": false,
@@ -135,7 +135,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES5'",
             "code": 6053,
             "category": "error"
           },
@@ -356,7 +356,7 @@ Before running Timeout callback:: count: 2
 //// [/a/b/tsconfig.json]
 {
   "compilerOptions": {
-    "moduleResolution": "classic"
+    "moduleResolution": "Classic"
   },
   "files": [
     "/a/b/file1.ts"
@@ -431,7 +431,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES5'",
             "code": 6053,
             "category": "error"
           },

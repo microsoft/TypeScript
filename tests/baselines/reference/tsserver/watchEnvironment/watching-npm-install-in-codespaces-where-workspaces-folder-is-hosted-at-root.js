@@ -83,7 +83,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
 	  Entry point for implicit type library 'random-seed'
@@ -438,7 +438,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	main.ts
 	  Matched by default include pattern '**/*'
 
@@ -718,7 +718,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
 	  Entry point for implicit type library 'random-seed'

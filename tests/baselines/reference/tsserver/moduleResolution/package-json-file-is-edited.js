@@ -110,7 +110,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	fileB.mts
 	  Imported via "./fileB.mjs" from file 'fileA.ts'
 	  Matched by default include pattern '**/*'
@@ -153,8 +153,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es2016",
-            "module": "node16",
+            "target": "ES2016",
+            "module": "Node16",
             "outDir": "",
             "traceResolution": true
           },

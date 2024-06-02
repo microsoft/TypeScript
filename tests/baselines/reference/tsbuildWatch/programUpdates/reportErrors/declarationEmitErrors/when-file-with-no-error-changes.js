@@ -65,7 +65,7 @@ Output::
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./filewitherror.ts": {
         "original": {
@@ -74,7 +74,7 @@ Output::
         },
         "version": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
         "signature": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./filewithouterror.ts": {
         "original": {
@@ -84,7 +84,7 @@ Output::
         },
         "version": "-11785903855-export class myClass { }",
         "signature": "-7432826827-export declare class myClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -226,7 +226,7 @@ Output::
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./filewitherror.ts": {
         "original": {
@@ -235,7 +235,7 @@ Output::
         },
         "version": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
         "signature": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./filewithouterror.ts": {
         "original": {
@@ -245,7 +245,7 @@ Output::
         },
         "version": "-10959532701-export class myClass2 { }",
         "signature": "-8459626297-export declare class myClass2 {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

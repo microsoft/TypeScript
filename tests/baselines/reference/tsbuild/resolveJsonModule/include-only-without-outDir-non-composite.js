@@ -53,7 +53,7 @@ Output::
 
 TSFILE: /src/src/index.js
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
 src/src/index.ts

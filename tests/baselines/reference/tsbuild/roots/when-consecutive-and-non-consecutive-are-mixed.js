@@ -195,7 +195,7 @@ exports.nonConsecutive = "hello";
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file1.ts": {
         "original": {
@@ -205,7 +205,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10637577098-export const x = \"hello\";",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -215,7 +215,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-11520681045-export const y = \"world\";",
         "signature": "-5502661211-export declare const y = \"world\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random.d.ts": {
         "original": {
@@ -224,7 +224,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./nonconsecutive.ts": {
         "original": {
@@ -234,7 +234,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n",
         "signature": "-7909998901-export declare const nonConsecutive = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random1.d.ts": {
         "original": {
@@ -243,7 +243,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray1.ts": {
         "original": {
@@ -253,7 +253,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray2.ts": {
         "original": {
@@ -263,7 +263,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10637577098-export const x = \"hello\";",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray3.ts": {
         "original": {
@@ -273,7 +273,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10637577098-export const x = \"hello\";",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random2.d.ts": {
         "original": {
@@ -282,7 +282,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./anothernonconsecutive.ts": {
         "original": {
@@ -292,7 +292,7 @@ exports.nonConsecutive = "hello";
         },
         "version": "-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n",
         "signature": "-7909998901-export declare const nonConsecutive = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -404,7 +404,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -414,7 +414,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-11520681045-export const y = \"world\";",
         "signature": "-5502661211-export declare const y = \"world\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random.d.ts": {
         "original": {
@@ -423,7 +423,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./nonconsecutive.ts": {
         "original": {
@@ -433,7 +433,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n",
         "signature": "-7909998901-export declare const nonConsecutive = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random1.d.ts": {
         "original": {
@@ -442,7 +442,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray1.ts": {
         "original": {
@@ -452,7 +452,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray2.ts": {
         "original": {
@@ -462,7 +462,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10637577098-export const x = \"hello\";",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./asarray3.ts": {
         "original": {
@@ -472,7 +472,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10637577098-export const x = \"hello\";",
         "signature": "-6425002032-export declare const x = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./random2.d.ts": {
         "original": {
@@ -481,7 +481,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10812219521-export const random = \"hello\";",
         "signature": "-10812219521-export const random = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./anothernonconsecutive.ts": {
         "original": {
@@ -491,7 +491,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n",
         "signature": "-7909998901-export declare const nonConsecutive = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

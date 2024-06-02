@@ -150,7 +150,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../dist/compositeb/b.d.ts
 	  Imported via "@ref/compositeb/b" from file 'a.ts'
 	a.ts
@@ -389,7 +389,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../compositeb/b.ts
 	  Imported via "@ref/compositeb/b" from file 'c.ts'
 	c.ts

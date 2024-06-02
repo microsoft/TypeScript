@@ -6,7 +6,7 @@ Input::
     "composite": true,
     "noEmitOnError": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -282,7 +282,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/main.ts": {
         "original": {
@@ -290,7 +290,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/other.ts": {
         "original": {
@@ -298,7 +298,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

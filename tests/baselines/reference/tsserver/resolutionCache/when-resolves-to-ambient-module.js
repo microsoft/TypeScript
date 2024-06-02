@@ -137,7 +137,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	somefolder/module1.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "somefolder/module1" from file 'somefolder/srcfile.ts'
@@ -182,9 +182,9 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "amd",
-            "moduleResolution": "classic",
-            "target": "es5",
+            "module": "AMD",
+            "moduleResolution": "Classic",
+            "target": "ES5",
             "outDir": "",
             "baseUrl": "",
             "typeRoots": [

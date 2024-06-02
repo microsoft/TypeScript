@@ -177,7 +177,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/packag
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} File location affecting resolution
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -430,7 +430,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts

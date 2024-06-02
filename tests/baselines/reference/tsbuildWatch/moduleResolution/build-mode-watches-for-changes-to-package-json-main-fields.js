@@ -188,7 +188,7 @@ export type TheStr = string;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../const.ts": {
         "original": {
@@ -198,7 +198,7 @@ export type TheStr = string;
         },
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../index.ts": {
         "original": {
@@ -208,7 +208,7 @@ export type TheStr = string;
         },
         "version": "-11225381282-export type { TheNum } from './const.js';",
         "signature": "-9660329432-export type { TheNum } from './const.js';\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../other.ts": {
         "original": {
@@ -218,7 +218,7 @@ export type TheStr = string;
         },
         "version": "-4609154030-export type TheStr = string;",
         "signature": "-6073194916-export type TheStr = string;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -33,7 +33,7 @@ import { b } from "./b";export const d = b;
     "incremental": true,
     "declaration": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -52,7 +52,7 @@ import { b } from "b"; export const g = b;
     "incremental": true,
     "declaration": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   },
   "references": [
     {
@@ -177,7 +177,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -185,7 +185,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -193,7 +193,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -201,7 +201,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -209,7 +209,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -403,7 +403,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -411,7 +411,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-16597586570-export const a = 10;const aLocal = 10;const aa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -419,7 +419,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -427,7 +427,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -435,7 +435,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -587,7 +587,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -595,7 +595,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -603,7 +603,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -611,7 +611,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -619,7 +619,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -781,7 +781,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -789,7 +789,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -797,7 +797,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -805,7 +805,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -813,7 +813,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1036,7 +1036,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -1044,7 +1044,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -1052,7 +1052,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-2761163262-export const b = 10;const bLocal = 10;const alocal = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -1060,7 +1060,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -1068,7 +1068,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1204,7 +1204,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -1212,7 +1212,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -1220,7 +1220,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-3037017594-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -1228,7 +1228,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -1236,7 +1236,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1389,7 +1389,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -1397,7 +1397,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -1405,7 +1405,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-7233149715-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -1413,7 +1413,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -1421,7 +1421,7 @@ declare module "d" {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1608,7 +1608,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -1616,7 +1616,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -1624,7 +1624,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-18124257118-export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export const aaaaa = 10;export const a2 = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -1632,7 +1632,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -1640,7 +1640,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
           "impliedFormat": 1
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

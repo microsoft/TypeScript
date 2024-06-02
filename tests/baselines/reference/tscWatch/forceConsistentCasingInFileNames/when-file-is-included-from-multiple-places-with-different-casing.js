@@ -284,7 +284,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -652,7 +652,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -919,7 +919,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'

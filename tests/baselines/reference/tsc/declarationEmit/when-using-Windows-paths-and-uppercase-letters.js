@@ -112,12 +112,7 @@ Output::
 
 [91merror[0m[90m TS6053: [0mFile 'D:/a/lib/lib.es2017.full.d.ts' not found.
   The file is in the program because:
-    Default library for target 'es2017'
-
-  [96mtsconfig.json[0m:[93m10[0m:[93m15[0m
-    [7m10[0m     "target": "es2017",
-    [7m  [0m [96m              ~~~~~~~~[0m
-    File is default library for target specified here.
+    Default library for target 'ES2017'
 
 src/utils/type-helpers.ts
   Imported via './type-helpers' from file 'src/utils/index.ts'

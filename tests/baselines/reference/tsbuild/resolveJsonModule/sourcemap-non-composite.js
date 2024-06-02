@@ -58,7 +58,7 @@ TSFILE: /src/dist/hello.json
 TSFILE: /src/dist/index.js.map
 TSFILE: /src/dist/index.js
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
   Part of 'files' list in tsconfig.json

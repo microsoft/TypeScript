@@ -22,7 +22,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "module": "amd"
+    "module": "AMD"
   }
 }
 

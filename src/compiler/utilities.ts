@@ -191,6 +191,7 @@ import {
     getLinesBetweenPositions,
     getLineStarts,
     getModeForUsageLocation,
+    getNameOfCompilerOptionValue,
     getNameOfDeclaration,
     getNodeChildren,
     getNormalizedAbsolutePath,
@@ -9114,7 +9115,7 @@ export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: Str
 
 /** @internal */
 export function getNameOfScriptTarget(scriptTarget: ScriptTarget): string | undefined {
-    return forEachEntry(targetOptionDeclaration.type, (value, key) => value === scriptTarget ? key : undefined);
+    return getNameOfCompilerOptionValue(scriptTarget, targetOptionDeclaration.type);
 }
 
 /** @internal */

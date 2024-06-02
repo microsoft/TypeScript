@@ -370,13 +370,13 @@ Info seq  [hh:mm:ss:mss] event:
             "declarationMap": true,
             "esModuleInterop": true,
             "lib": [
-              "es2021"
+              "ES2021"
             ],
-            "module": "esnext",
-            "moduleResolution": "bundler",
+            "module": "ESNext",
+            "moduleResolution": "Bundler",
             "outDir": "",
             "rootDir": "",
-            "target": "es2021",
+            "target": "ES2021",
             "traceResolution": true,
             "tsBuildInfoFile": ""
           },

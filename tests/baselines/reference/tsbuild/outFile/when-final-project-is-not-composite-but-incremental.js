@@ -555,7 +555,7 @@ sourceFile:../second/second_part2.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../second/second_part1.ts": {
         "original": {
@@ -563,7 +563,7 @@ sourceFile:../second/second_part2.ts
           "impliedFormat": 1
         },
         "version": "-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../second/second_part2.ts": {
         "original": {
@@ -571,7 +571,7 @@ sourceFile:../second/second_part2.ts
           "impliedFormat": 1
         },
         "version": "3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -921,7 +921,7 @@ sourceFile:../first_part3.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../first_part1.ts": {
         "original": {
@@ -929,7 +929,7 @@ sourceFile:../first_part3.ts
           "impliedFormat": 1
         },
         "version": "-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../first_part2.ts": {
         "original": {
@@ -937,7 +937,7 @@ sourceFile:../first_part3.ts
           "impliedFormat": 1
         },
         "version": "6007494133-console.log(f());\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../first_part3.ts": {
         "original": {
@@ -945,7 +945,7 @@ sourceFile:../first_part3.ts
           "impliedFormat": 1
         },
         "version": "4357625305-function f() {\n    return \"JS does hoists\";\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1107,7 +1107,7 @@ sourceFile:../../third_part1.ts
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../first/bin/first-output.d.ts": {
         "original": {
@@ -1115,7 +1115,7 @@ sourceFile:../../third_part1.ts
           "impliedFormat": 1
         },
         "version": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../2/second-output.d.ts": {
         "original": {
@@ -1123,7 +1123,7 @@ sourceFile:../../third_part1.ts
           "impliedFormat": 1
         },
         "version": "-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../third_part1.ts": {
         "original": {
@@ -1131,7 +1131,7 @@ sourceFile:../../third_part1.ts
           "impliedFormat": 1
         },
         "version": "7305100057-var c = new C();\nc.doSomething();\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -90,7 +90,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	XY.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "./xY" from file 'b.ts'

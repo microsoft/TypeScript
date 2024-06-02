@@ -121,7 +121,7 @@ Resolving real path for '/src/projects/project/packages/a/index.js', result '/sr
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 ../../../lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 packages/a/index.js
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'packages/a/package.json' has field "type" with value "module"
@@ -147,7 +147,7 @@ File '/src/projects/project/packages/a/package.json' exists according to earlier
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 packages/a/types/index.d.ts
   Imported via 'a' from file 'packages/b/index.js' with packageId 'a/index.js@0.0.0'
   File is output of project reference source 'packages/a/index.js'
@@ -192,7 +192,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../index.js": {
         "original": {
@@ -202,7 +202,7 @@ export {};
         },
         "version": "-15642581130-export const a = 'a';",
         "signature": "-13259723213-export const a: \"a\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "../test/index.js": {
         "original": {
@@ -212,7 +212,7 @@ export {};
         },
         "version": "-3920874422-import 'a';",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [

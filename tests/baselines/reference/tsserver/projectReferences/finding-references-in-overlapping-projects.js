@@ -195,7 +195,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../a/index.ts
 	  Source from referenced project '../a/tsconfig.json' included because '--module' is specified as 'none'
 	  Imported via "../a" from file 'index.ts'
@@ -388,7 +388,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -427,7 +427,7 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "module": "none"
+            "module": "None"
           },
           "typeAcquisition": {
             "enable": false,
@@ -636,7 +636,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../b/index.ts'
@@ -753,7 +753,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../c/index.ts'

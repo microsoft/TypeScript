@@ -60,7 +60,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -212,7 +212,7 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
   options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by default include pattern '**/*'

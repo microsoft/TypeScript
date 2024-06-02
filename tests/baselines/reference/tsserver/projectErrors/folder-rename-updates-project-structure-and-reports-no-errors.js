@@ -106,7 +106,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "none"
+            "module": "None"
           },
           "typeAcquisition": {
             "enable": false,
@@ -135,7 +135,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/b/projects/myproject/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES5'",
             "code": 6053,
             "category": "error"
           },

@@ -130,7 +130,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts
@@ -171,7 +171,7 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "module": "none"
+            "module": "None"
           },
           "typeAcquisition": {
             "enable": false,
@@ -480,7 +480,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../compiler/types.ts
 	  Source from referenced project '../compiler/tsconfig.json' included because '--module' is specified as 'none'
 	../compiler/program.ts

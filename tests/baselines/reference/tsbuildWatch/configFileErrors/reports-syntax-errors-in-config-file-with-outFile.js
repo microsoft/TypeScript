@@ -344,7 +344,7 @@ declare module "b" {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/a.ts": {
         "original": {
@@ -352,7 +352,7 @@ declare module "b" {
           "impliedFormat": 1
         },
         "version": "-3260843409-export function fooBar() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/b.ts": {
         "original": {
@@ -360,7 +360,7 @@ declare module "b" {
           "impliedFormat": 1
         },
         "version": "1045484683-export function bar() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

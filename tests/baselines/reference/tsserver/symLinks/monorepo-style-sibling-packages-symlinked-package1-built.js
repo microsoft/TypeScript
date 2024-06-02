@@ -198,7 +198,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	../package1/dist/index.d.ts
 	  Imported via "package1" from file 'src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
 	src/index.ts
@@ -239,8 +239,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es2016",
-            "module": "commonjs",
+            "target": "ES2016",
+            "module": "CommonJS",
             "rootDir": "",
             "declaration": true,
             "outDir": "",
@@ -601,7 +601,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	src/index.ts
 	  Matched by default include pattern '**/*'
 
@@ -933,7 +933,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	../package1/dist/index.d.ts
 	  Imported via "package1" from file 'src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
 	src/index.ts

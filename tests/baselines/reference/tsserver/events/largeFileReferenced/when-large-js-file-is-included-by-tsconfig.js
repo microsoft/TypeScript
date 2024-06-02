@@ -96,7 +96,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/file.ts
 	  Part of 'files' list in tsconfig.json
 	src/large.js

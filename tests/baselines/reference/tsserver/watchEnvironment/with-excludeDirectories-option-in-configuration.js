@@ -129,7 +129,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/bar/foo.d.ts
 	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
 	node_modules/bar/index.d.ts

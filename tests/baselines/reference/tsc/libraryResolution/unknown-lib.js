@@ -117,7 +117,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
 ../lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 ../lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 project1/core.d.ts
@@ -233,7 +233,7 @@ exports.x = "type1";
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../lib/lib.scripthost.d.ts": {
         "original": {
@@ -244,7 +244,7 @@ exports.x = "type1";
         "version": "-5403980302-interface ScriptHostInterface { }",
         "signature": "-5403980302-interface ScriptHostInterface { }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./core.d.ts": {
         "original": {
@@ -253,7 +253,7 @@ exports.x = "type1";
         },
         "version": "-15683237936-export const core = 10;",
         "signature": "-15683237936-export const core = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file.ts": {
         "original": {
@@ -263,7 +263,7 @@ exports.x = "type1";
         },
         "version": "-16628394009-export const file = 10;",
         "signature": "-9025507999-export declare const file = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -273,7 +273,7 @@ exports.x = "type1";
         },
         "version": "-15920922626-/// <reference lib=\"webworker2\"/>\n/// <reference lib=\"unknownlib\"/>\n/// <reference lib=\"scripthost\"/>\n",
         "signature": "5381-",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -283,7 +283,7 @@ exports.x = "type1";
         },
         "version": "-11532698187-export const x = \"type1\";",
         "signature": "-5899226897-export declare const x = \"type1\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./utils.d.ts": {
         "original": {
@@ -292,7 +292,7 @@ exports.x = "type1";
         },
         "version": "-13729955264-export const y = 10;",
         "signature": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -249,7 +249,7 @@ export class LassieDog extends Dog {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src-types/dogconfig.d.ts": {
         "original": {
@@ -258,7 +258,7 @@ export class LassieDog extends Dog {
         },
         "version": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
         "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "../src-types/index.d.ts": {
         "original": {
@@ -267,7 +267,7 @@ export class LassieDog extends Dog {
         },
         "version": "-6677489680-export * from './dogconfig.js';\n",
         "signature": "-6677489680-export * from './dogconfig.js';\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./dogconfig.ts": {
         "original": {
@@ -277,7 +277,7 @@ export class LassieDog extends Dog {
         },
         "version": "1966273863-import { DogConfig } from 'src-types';\n\nexport const DOG_CONFIG: DogConfig = {\n    name: 'Default dog',\n};\n",
         "signature": "15679103984-import { DogConfig } from 'src-types';\nexport declare const DOG_CONFIG: DogConfig;\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./dog.ts": {
         "original": {
@@ -287,7 +287,7 @@ export class LassieDog extends Dog {
         },
         "version": "6091345804-import { DogConfig } from 'src-types';\nimport { DOG_CONFIG } from './dogconfig.js';\n\nexport abstract class Dog {\n\n    public static getCapabilities(): DogConfig {\n        return DOG_CONFIG;\n    }\n}\n",
         "signature": "26984075437-import { DogConfig } from 'src-types';\nexport declare abstract class Dog {\n    static getCapabilities(): DogConfig;\n}\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./lassie/lassieconfig.ts": {
         "original": {
@@ -297,7 +297,7 @@ export class LassieDog extends Dog {
         },
         "version": "4440579024-import { DogConfig } from 'src-types';\n\nexport const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };\n",
         "signature": "17379560247-import { DogConfig } from 'src-types';\nexport declare const LASSIE_CONFIG: DogConfig;\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./lassie/lassiedog.ts": {
         "original": {
@@ -307,7 +307,7 @@ export class LassieDog extends Dog {
         },
         "version": "-32303727812-import { Dog } from '../dog.js';\nimport { LASSIE_CONFIG } from './lassieconfig.js';\n\nexport class LassieDog extends Dog {\n    protected static getDogConfig = () => LASSIE_CONFIG;\n}\n",
         "signature": "-10239718190-import { Dog } from '../dog.js';\nexport declare class LassieDog extends Dog {\n    protected static getDogConfig: () => import(\"src-types\").DogConfig;\n}\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./index.ts": {
         "original": {
@@ -316,7 +316,7 @@ export class LassieDog extends Dog {
         },
         "version": "-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n",
         "signature": "-15974991320-export * from 'src-types';\nexport * from './lassie/lassiedog.js';\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -412,7 +412,7 @@ export * from './dogconfig.js';
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./dogconfig.ts": {
         "original": {
@@ -422,7 +422,7 @@ export * from './dogconfig.js';
         },
         "version": "-5575793279-export interface DogConfig {\n    name: string;\n}",
         "signature": "-3612551765-export interface DogConfig {\n    name: string;\n}\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./index.ts": {
         "original": {
@@ -432,7 +432,7 @@ export * from './dogconfig.js';
         },
         "version": "-6189272282-export * from './dogconfig.js';",
         "signature": "-6677489680-export * from './dogconfig.js';\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [

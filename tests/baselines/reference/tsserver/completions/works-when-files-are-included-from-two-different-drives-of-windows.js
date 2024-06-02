@@ -167,7 +167,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	c:/a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../node_modules/@types/prop-types/index.d.ts
 	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@15.7.3'
 	  Entry point for implicit type library 'prop-types' with packageId '@types/prop-types/index.d.ts@15.7.3'

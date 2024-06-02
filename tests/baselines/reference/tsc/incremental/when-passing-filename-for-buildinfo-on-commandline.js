@@ -34,7 +34,7 @@ export const x = 10;
 Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success
@@ -60,7 +60,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/main.ts": {
         "original": {
@@ -69,7 +69,7 @@ exitCode:: ExitStatus.Success
         },
         "version": "-10726455937-export const x = 10;",
         "signature": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -104,7 +104,7 @@ Input::
 Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success

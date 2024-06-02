@@ -118,7 +118,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/index.ts
 	  Matched by include pattern 'src/*.d.ts' in 'tsconfig.json'
 
@@ -208,7 +208,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/index.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.node.json'
 
@@ -294,7 +294,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	index.d.ts
 	  Root file specified for compilation
 

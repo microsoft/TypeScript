@@ -144,7 +144,7 @@ export declare class D {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -154,7 +154,7 @@ export declare class D {
         },
         "version": "6071811233-export var C = class CReal {\n    d = 1;\n};",
         "signature": "-2874569268-export declare var C: {\n    new (): {\n        d: number;\n    };\n};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -164,7 +164,7 @@ export declare class D {
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
         "signature": "-12916012021-export declare class B {\n    c: {\n        d: number;\n    };\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -174,7 +174,7 @@ export declare class D {
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -184,7 +184,7 @@ export declare class D {
         },
         "version": "-7804761415-export class D { }",
         "signature": "-8611429667-export declare class D {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -298,7 +298,7 @@ Operation ws cancelled:: true
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -308,7 +308,7 @@ Operation ws cancelled:: true
         },
         "version": "-8116587914-export var C = class CReal {\n    d = 1;\n};export function foo() {}",
         "signature": "-2874569268-export declare var C: {\n    new (): {\n        d: number;\n    };\n};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -318,7 +318,7 @@ Operation ws cancelled:: true
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
         "signature": "-12916012021-export declare class B {\n    c: {\n        d: number;\n    };\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -328,7 +328,7 @@ Operation ws cancelled:: true
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -338,7 +338,7 @@ Operation ws cancelled:: true
         },
         "version": "-7804761415-export class D { }",
         "signature": "-8611429667-export declare class D {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -462,7 +462,7 @@ export declare function foo(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -472,7 +472,7 @@ export declare function foo(): void;
         },
         "version": "-8116587914-export var C = class CReal {\n    d = 1;\n};export function foo() {}",
         "signature": "-544179862-export declare var C: {\n    new (): {\n        d: number;\n    };\n};\nexport declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -482,7 +482,7 @@ export declare function foo(): void;
         },
         "version": "-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}",
         "signature": "-12916012021-export declare class B {\n    c: {\n        d: number;\n    };\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -492,7 +492,7 @@ export declare function foo(): void;
         },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -502,7 +502,7 @@ export declare function foo(): void;
         },
         "version": "-7804761415-export class D { }",
         "signature": "-8611429667-export declare class D {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -265,7 +265,7 @@ export declare class App {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/toolsinterface.ts": {
         "original": {
@@ -275,7 +275,7 @@ export declare class App {
         },
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/public.ts": {
         "original": {
@@ -285,7 +285,7 @@ export declare class App {
         },
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/public.ts": {
         "original": {
@@ -295,7 +295,7 @@ export declare class App {
         },
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data2.ts": {
         "original": {
@@ -305,7 +305,7 @@ export declare class App {
         },
         "version": "-11055285700-import { Data } from \"./data\";\nexport class Data2 {\n    public dat?: Data;\n}",
         "signature": "-17387821545-import { Data } from \"./data\";\nexport declare class Data2 {\n    dat?: Data;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data.ts": {
         "original": {
@@ -315,7 +315,7 @@ export declare class App {
         },
         "version": "-2056074887-import { ITest } from \"lib1/public\"; import { Data2 } from \"./data2\";\nexport class Data {\n    public dat?: Data2; public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-14170088573-import { ITest } from \"lib1/public\";\nimport { Data2 } from \"./data2\";\nexport declare class Data {\n    dat?: Data2;\n    test(): ITest;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/public.ts": {
         "original": {
@@ -325,7 +325,7 @@ export declare class App {
         },
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./app.ts": {
         "original": {
@@ -335,7 +335,7 @@ export declare class App {
         },
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -533,7 +533,7 @@ export interface ITest {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/toolsinterface.ts": {
         "original": {
@@ -543,7 +543,7 @@ export interface ITest {
         },
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/public.ts": {
         "original": {
@@ -553,7 +553,7 @@ export interface ITest {
         },
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/public.ts": {
         "original": {
@@ -563,7 +563,7 @@ export interface ITest {
         },
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data2.ts": {
         "original": {
@@ -573,7 +573,7 @@ export interface ITest {
         },
         "version": "-11055285700-import { Data } from \"./data\";\nexport class Data2 {\n    public dat?: Data;\n}",
         "signature": "-17387821545-import { Data } from \"./data\";\nexport declare class Data2 {\n    dat?: Data;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data.ts": {
         "original": {
@@ -583,7 +583,7 @@ export interface ITest {
         },
         "version": "-2056074887-import { ITest } from \"lib1/public\"; import { Data2 } from \"./data2\";\nexport class Data {\n    public dat?: Data2; public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-14170088573-import { ITest } from \"lib1/public\";\nimport { Data2 } from \"./data2\";\nexport declare class Data {\n    dat?: Data2;\n    test(): ITest;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/public.ts": {
         "original": {
@@ -593,7 +593,7 @@ export interface ITest {
         },
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./app.ts": {
         "original": {
@@ -603,7 +603,7 @@ export interface ITest {
         },
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -754,7 +754,7 @@ export interface ITest {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/toolsinterface.ts": {
         "original": {
@@ -764,7 +764,7 @@ export interface ITest {
         },
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/public.ts": {
         "original": {
@@ -774,7 +774,7 @@ export interface ITest {
         },
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/public.ts": {
         "original": {
@@ -784,7 +784,7 @@ export interface ITest {
         },
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data2.ts": {
         "original": {
@@ -794,7 +794,7 @@ export interface ITest {
         },
         "version": "-11055285700-import { Data } from \"./data\";\nexport class Data2 {\n    public dat?: Data;\n}",
         "signature": "-17387821545-import { Data } from \"./data\";\nexport declare class Data2 {\n    dat?: Data;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data.ts": {
         "original": {
@@ -804,7 +804,7 @@ export interface ITest {
         },
         "version": "-2056074887-import { ITest } from \"lib1/public\"; import { Data2 } from \"./data2\";\nexport class Data {\n    public dat?: Data2; public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-14170088573-import { ITest } from \"lib1/public\";\nimport { Data2 } from \"./data2\";\nexport declare class Data {\n    dat?: Data2;\n    test(): ITest;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/public.ts": {
         "original": {
@@ -814,7 +814,7 @@ export interface ITest {
         },
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./app.ts": {
         "original": {
@@ -824,7 +824,7 @@ export interface ITest {
         },
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -975,7 +975,7 @@ export interface ITest {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/toolsinterface.ts": {
         "original": {
@@ -985,7 +985,7 @@ export interface ITest {
         },
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/tools/public.ts": {
         "original": {
@@ -995,7 +995,7 @@ export interface ITest {
         },
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib1/public.ts": {
         "original": {
@@ -1005,7 +1005,7 @@ export interface ITest {
         },
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data2.ts": {
         "original": {
@@ -1015,7 +1015,7 @@ export interface ITest {
         },
         "version": "-11055285700-import { Data } from \"./data\";\nexport class Data2 {\n    public dat?: Data;\n}",
         "signature": "-17387821545-import { Data } from \"./data\";\nexport declare class Data2 {\n    dat?: Data;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/data.ts": {
         "original": {
@@ -1025,7 +1025,7 @@ export interface ITest {
         },
         "version": "-2056074887-import { ITest } from \"lib1/public\"; import { Data2 } from \"./data2\";\nexport class Data {\n    public dat?: Data2; public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-14170088573-import { ITest } from \"lib1/public\";\nimport { Data2 } from \"./data2\";\nexport declare class Data {\n    dat?: Data2;\n    test(): ITest;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib2/public.ts": {
         "original": {
@@ -1035,7 +1035,7 @@ export interface ITest {
         },
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./app.ts": {
         "original": {
@@ -1045,7 +1045,7 @@ export interface ITest {
         },
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

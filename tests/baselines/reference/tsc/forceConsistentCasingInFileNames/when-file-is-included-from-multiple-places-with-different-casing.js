@@ -297,7 +297,7 @@ Output::
     File is included via import here.
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'home/src/projects/project/src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'home/src/projects/project/src/anotherFile.ts'

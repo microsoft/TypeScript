@@ -72,7 +72,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	user/username/projects/project1/src/node_modules/minimatch/index.js
 	  Imported via "minimatch" from file 'user/username/projects/project1/src/node_modules/glob/index.js'
 	  Imported via 'minimatch' from file 'user/username/projects/project1/src/file1.js'

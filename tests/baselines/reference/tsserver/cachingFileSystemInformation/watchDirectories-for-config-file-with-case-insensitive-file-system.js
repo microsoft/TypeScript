@@ -141,7 +141,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
 	src/app/utils/Analytic.ts
@@ -183,9 +183,9 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "strict": true,
             "strictNullChecks": true,
-            "target": "es2016",
-            "module": "commonjs",
-            "moduleResolution": "node10",
+            "target": "ES2016",
+            "module": "CommonJS",
+            "moduleResolution": "Node10",
             "sourceMap": true,
             "noEmitOnError": true,
             "experimentalDecorators": true,
@@ -376,7 +376,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.es2016.full.d.ts
-	  Default library for target 'es2016'
+	  Default library for target 'ES2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
 	src/app/utils/Analytic.ts

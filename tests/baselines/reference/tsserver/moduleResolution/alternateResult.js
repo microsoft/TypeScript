@@ -391,7 +391,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
 	node_modules/@types/bar2/index.d.ts
@@ -433,7 +433,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "moduleResolution": "node16",
+            "moduleResolution": "Node16",
             "traceResolution": true,
             "incremental": true,
             "strict": true,
@@ -2154,7 +2154,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
 	node_modules/foo2/index.d.ts
@@ -2475,7 +2475,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts
@@ -2866,7 +2866,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts
@@ -3243,7 +3243,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts

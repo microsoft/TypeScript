@@ -41,7 +41,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
@@ -143,7 +143,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'

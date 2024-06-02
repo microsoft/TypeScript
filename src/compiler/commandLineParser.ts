@@ -32,6 +32,7 @@ import {
     emptyArray,
     endsWith,
     ensureTrailingDirectorySeparator,
+    entriesToCaseInsensitiveMap,
     every,
     Expression,
     extend,
@@ -130,7 +131,7 @@ export const compileOnSaveCommandLineOption: CommandLineOption = {
     defaultValueDescription: false,
 };
 
-const jsxOptionMap = new Map(Object.entries({
+const jsxOptionMap = entriesToCaseInsensitiveMap(Object.entries({
     "preserve": JsxEmit.Preserve,
     "react-native": JsxEmit.ReactNative,
     "react": JsxEmit.React,
@@ -142,7 +143,7 @@ const jsxOptionMap = new Map(Object.entries({
 export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
-//       order in the generated program (see `getDefaultLibPriority` in program.ts). This
+//       order in the generated program (see `getDefaultLibFilePriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
@@ -150,95 +151,97 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
-    ["es5", "lib.es5.d.ts"],
-    ["es6", "lib.es2015.d.ts"],
-    ["es2015", "lib.es2015.d.ts"],
-    ["es7", "lib.es2016.d.ts"],
-    ["es2016", "lib.es2016.d.ts"],
-    ["es2017", "lib.es2017.d.ts"],
-    ["es2018", "lib.es2018.d.ts"],
-    ["es2019", "lib.es2019.d.ts"],
-    ["es2020", "lib.es2020.d.ts"],
-    ["es2021", "lib.es2021.d.ts"],
-    ["es2022", "lib.es2022.d.ts"],
-    ["es2023", "lib.es2023.d.ts"],
-    ["esnext", "lib.esnext.d.ts"],
+    ["ES5", "lib.es5.d.ts"],
+    ["ES2015", "lib.es2015.d.ts"],
+    ["ES6", "lib.es2015.d.ts"],
+    ["ES2016", "lib.es2016.d.ts"],
+    ["ES7", "lib.es2016.d.ts"],
+    ["ES2017", "lib.es2017.d.ts"],
+    ["ES2018", "lib.es2018.d.ts"],
+    ["ES2019", "lib.es2019.d.ts"],
+    ["ES2020", "lib.es2020.d.ts"],
+    ["ES2021", "lib.es2021.d.ts"],
+    ["ES2022", "lib.es2022.d.ts"],
+    ["ES2023", "lib.es2023.d.ts"],
+    ["ESNext", "lib.esnext.d.ts"],
     // Host only
-    ["dom", "lib.dom.d.ts"],
-    ["dom.iterable", "lib.dom.iterable.d.ts"],
-    ["dom.asynciterable", "lib.dom.asynciterable.d.ts"],
-    ["webworker", "lib.webworker.d.ts"],
-    ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
-    ["webworker.iterable", "lib.webworker.iterable.d.ts"],
-    ["webworker.asynciterable", "lib.webworker.asynciterable.d.ts"],
-    ["scripthost", "lib.scripthost.d.ts"],
+    ["DOM", "lib.dom.d.ts"],
+    ["DOM.Iterable", "lib.dom.iterable.d.ts"],
+    ["DOM.AsyncIterable", "lib.dom.asynciterable.d.ts"],
+    ["WebWorker", "lib.webworker.d.ts"],
+    ["WebWorker.ImportScripts", "lib.webworker.importscripts.d.ts"],
+    ["WebWorker.Iterable", "lib.webworker.iterable.d.ts"],
+    ["WebWorker.AsyncIterable", "lib.webworker.asynciterable.d.ts"],
+    ["ScriptHost", "lib.scripthost.d.ts"],
     // ES2015 Or ESNext By-feature options
-    ["es2015.core", "lib.es2015.core.d.ts"],
-    ["es2015.collection", "lib.es2015.collection.d.ts"],
-    ["es2015.generator", "lib.es2015.generator.d.ts"],
-    ["es2015.iterable", "lib.es2015.iterable.d.ts"],
-    ["es2015.promise", "lib.es2015.promise.d.ts"],
-    ["es2015.proxy", "lib.es2015.proxy.d.ts"],
-    ["es2015.reflect", "lib.es2015.reflect.d.ts"],
-    ["es2015.symbol", "lib.es2015.symbol.d.ts"],
-    ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
-    ["es2016.array.include", "lib.es2016.array.include.d.ts"],
-    ["es2016.intl", "lib.es2016.intl.d.ts"],
-    ["es2017.date", "lib.es2017.date.d.ts"],
-    ["es2017.object", "lib.es2017.object.d.ts"],
-    ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
-    ["es2017.string", "lib.es2017.string.d.ts"],
-    ["es2017.intl", "lib.es2017.intl.d.ts"],
-    ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
-    ["es2018.asyncgenerator", "lib.es2018.asyncgenerator.d.ts"],
-    ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
-    ["es2018.intl", "lib.es2018.intl.d.ts"],
-    ["es2018.promise", "lib.es2018.promise.d.ts"],
-    ["es2018.regexp", "lib.es2018.regexp.d.ts"],
-    ["es2019.array", "lib.es2019.array.d.ts"],
-    ["es2019.object", "lib.es2019.object.d.ts"],
-    ["es2019.string", "lib.es2019.string.d.ts"],
-    ["es2019.symbol", "lib.es2019.symbol.d.ts"],
-    ["es2019.intl", "lib.es2019.intl.d.ts"],
-    ["es2020.bigint", "lib.es2020.bigint.d.ts"],
-    ["es2020.date", "lib.es2020.date.d.ts"],
-    ["es2020.promise", "lib.es2020.promise.d.ts"],
-    ["es2020.sharedmemory", "lib.es2020.sharedmemory.d.ts"],
-    ["es2020.string", "lib.es2020.string.d.ts"],
-    ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
-    ["es2020.intl", "lib.es2020.intl.d.ts"],
-    ["es2020.number", "lib.es2020.number.d.ts"],
-    ["es2021.promise", "lib.es2021.promise.d.ts"],
-    ["es2021.string", "lib.es2021.string.d.ts"],
-    ["es2021.weakref", "lib.es2021.weakref.d.ts"],
-    ["es2021.intl", "lib.es2021.intl.d.ts"],
-    ["es2022.array", "lib.es2022.array.d.ts"],
-    ["es2022.error", "lib.es2022.error.d.ts"],
-    ["es2022.intl", "lib.es2022.intl.d.ts"],
-    ["es2022.object", "lib.es2022.object.d.ts"],
-    ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
-    ["es2022.string", "lib.es2022.string.d.ts"],
-    ["es2022.regexp", "lib.es2022.regexp.d.ts"],
-    ["es2023.array", "lib.es2023.array.d.ts"],
-    ["es2023.collection", "lib.es2023.collection.d.ts"],
-    ["es2023.intl", "lib.es2023.intl.d.ts"],
-    ["esnext.array", "lib.es2023.array.d.ts"],
-    ["esnext.collection", "lib.esnext.collection.d.ts"],
-    ["esnext.symbol", "lib.es2019.symbol.d.ts"],
-    ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
-    ["esnext.intl", "lib.esnext.intl.d.ts"],
-    ["esnext.disposable", "lib.esnext.disposable.d.ts"],
-    ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-    ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.esnext.promise.d.ts"],
-    ["esnext.weakref", "lib.es2021.weakref.d.ts"],
-    ["esnext.decorators", "lib.esnext.decorators.d.ts"],
-    ["esnext.object", "lib.esnext.object.d.ts"],
-    ["esnext.array", "lib.esnext.array.d.ts"],
-    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
-    ["esnext.string", "lib.esnext.string.d.ts"],
-    ["decorators", "lib.decorators.d.ts"],
-    ["decorators.legacy", "lib.decorators.legacy.d.ts"],
+    ["ES2015.Core", "lib.es2015.core.d.ts"],
+    ["ES2015.Collection", "lib.es2015.collection.d.ts"],
+    ["ES2015.Generator", "lib.es2015.generator.d.ts"],
+    ["ES2015.Iterable", "lib.es2015.iterable.d.ts"],
+    ["ES2015.Promise", "lib.es2015.promise.d.ts"],
+    ["ES2015.Proxy", "lib.es2015.proxy.d.ts"],
+    ["ES2015.Reflect", "lib.es2015.reflect.d.ts"],
+    ["ES2015.Symbol", "lib.es2015.symbol.d.ts"],
+    ["ES2015.Symbol.WellKnown", "lib.es2015.symbol.wellknown.d.ts"],
+    ["ES2016.Array.Includes", "lib.es2016.array.include.d.ts"],
+    ["ES2016.Array.Include", "lib.es2016.array.include.d.ts"],
+    ["ES2016.Intl", "lib.es2016.intl.d.ts"],
+    ["ES2017.Date", "lib.es2017.date.d.ts"],
+    ["ES2017.Object", "lib.es2017.object.d.ts"],
+    ["ES2017.SharedMemory", "lib.es2017.sharedmemory.d.ts"],
+    ["ES2017.String", "lib.es2017.string.d.ts"],
+    ["ES2017.Intl", "lib.es2017.intl.d.ts"],
+    ["ES2017.TypedArrays", "lib.es2017.typedarrays.d.ts"],
+    ["ES2017.TypedArray", "lib.es2017.typedarrays.d.ts"],
+    ["ES2018.AsyncGenerator", "lib.es2018.asyncgenerator.d.ts"],
+    ["ES2018.AsyncIterable", "lib.es2018.asynciterable.d.ts"],
+    ["ES2018.Intl", "lib.es2018.intl.d.ts"],
+    ["ES2018.Promise", "lib.es2018.promise.d.ts"],
+    ["ES2018.RegExp", "lib.es2018.regexp.d.ts"],
+    ["ES2019.Array", "lib.es2019.array.d.ts"],
+    ["ES2019.Object", "lib.es2019.object.d.ts"],
+    ["ES2019.String", "lib.es2019.string.d.ts"],
+    ["ES2019.Symbol", "lib.es2019.symbol.d.ts"],
+    ["ES2019.Intl", "lib.es2019.intl.d.ts"],
+    ["ES2020.BigInt", "lib.es2020.bigint.d.ts"],
+    ["ES2020.Date", "lib.es2020.date.d.ts"],
+    ["ES2020.Promise", "lib.es2020.promise.d.ts"],
+    ["ES2020.SharedMemory", "lib.es2020.sharedmemory.d.ts"],
+    ["ES2020.String", "lib.es2020.string.d.ts"],
+    ["ES2020.Symbol.WellKnown", "lib.es2020.symbol.wellknown.d.ts"],
+    ["ES2020.Intl", "lib.es2020.intl.d.ts"],
+    ["ES2020.Number", "lib.es2020.number.d.ts"],
+    ["ES2021.Promise", "lib.es2021.promise.d.ts"],
+    ["ES2021.String", "lib.es2021.string.d.ts"],
+    ["ES2021.WeakRef", "lib.es2021.weakref.d.ts"],
+    ["ES2021.Intl", "lib.es2021.intl.d.ts"],
+    ["ES2022.Array", "lib.es2022.array.d.ts"],
+    ["ES2022.Error", "lib.es2022.error.d.ts"],
+    ["ES2022.Intl", "lib.es2022.intl.d.ts"],
+    ["ES2022.Object", "lib.es2022.object.d.ts"],
+    ["ES2022.SharedMemory", "lib.es2022.sharedmemory.d.ts"],
+    ["ES2022.String", "lib.es2022.string.d.ts"],
+    ["ES2022.RegExp", "lib.es2022.regexp.d.ts"],
+    ["ES2023.Array", "lib.es2023.array.d.ts"],
+    ["ES2023.Collection", "lib.es2023.collection.d.ts"],
+    ["ES2023.Intl", "lib.es2023.intl.d.ts"],
+    ["ESNext.Array", "lib.es2023.array.d.ts"],
+    ["ESNext.Collection", "lib.esnext.collection.d.ts"],
+    ["ESNext.Symbol", "lib.es2019.symbol.d.ts"],
+    ["ESNext.AsyncIterable", "lib.es2018.asynciterable.d.ts"],
+    ["ESNext.Intl", "lib.esnext.intl.d.ts"],
+    ["ESNext.Disposable", "lib.esnext.disposable.d.ts"],
+    ["ESNext.BigInt", "lib.es2020.bigint.d.ts"],
+    ["ESNext.String", "lib.es2022.string.d.ts"],
+    ["ESNext.Promise", "lib.esnext.promise.d.ts"],
+    ["ESNext.WeakRef", "lib.es2021.weakref.d.ts"],
+    ["ESNext.Decorators", "lib.esnext.decorators.d.ts"],
+    ["ESNext.Object", "lib.esnext.object.d.ts"],
+    ["ESNext.Array", "lib.esnext.array.d.ts"],
+    ["ESNext.RegExp", "lib.esnext.regexp.d.ts"],
+    ["ESNext.String", "lib.esnext.string.d.ts"],
+    ["Decorators", "lib.decorators.d.ts"],
+    ["Decorators.Legacy", "lib.decorators.legacy.d.ts"],
 ];
 
 /**
@@ -248,7 +251,7 @@ const libEntries: [string, string][] = [
  *
  * @internal
  */
-export const libs = libEntries.map(entry => entry[0]);
+export const libs = libEntries.map(entry => entry[0].toLowerCase());
 
 /**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
@@ -256,20 +259,20 @@ export const libs = libEntries.map(entry => entry[0]);
  *
  * @internal
  */
-export const libMap = new Map(libEntries);
+export const libMap = entriesToCaseInsensitiveMap(libEntries);
 
 // Watch related options
 /** @internal */
 export const optionsForWatch: CommandLineOption[] = [
     {
         name: "watchFile",
-        type: new Map(Object.entries({
-            fixedpollinginterval: WatchFileKind.FixedPollingInterval,
-            prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
-            dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
-            fixedchunksizepolling: WatchFileKind.FixedChunkSizePolling,
-            usefsevents: WatchFileKind.UseFsEvents,
-            usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
+        type: entriesToCaseInsensitiveMap(Object.entries({
+            fixedPollingInterval: WatchFileKind.FixedPollingInterval,
+            priorityPollingInterval: WatchFileKind.PriorityPollingInterval,
+            dynamicPriorityPolling: WatchFileKind.DynamicPriorityPolling,
+            fixedChunkSizePolling: WatchFileKind.FixedChunkSizePolling,
+            useFsEvents: WatchFileKind.UseFsEvents,
+            useFsEventsOnParentDirectory: WatchFileKind.UseFsEventsOnParentDirectory,
         })),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_how_the_TypeScript_watch_mode_works,
@@ -277,11 +280,11 @@ export const optionsForWatch: CommandLineOption[] = [
     },
     {
         name: "watchDirectory",
-        type: new Map(Object.entries({
-            usefsevents: WatchDirectoryKind.UseFsEvents,
-            fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
-            dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
-            fixedchunksizepolling: WatchDirectoryKind.FixedChunkSizePolling,
+        type: entriesToCaseInsensitiveMap(Object.entries({
+            useFsEvents: WatchDirectoryKind.UseFsEvents,
+            fixedPollingInterval: WatchDirectoryKind.FixedPollingInterval,
+            dynamicPriorityPolling: WatchDirectoryKind.DynamicPriorityPolling,
+            fixedChunkSizePolling: WatchDirectoryKind.FixedChunkSizePolling,
         })),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_how_directories_are_watched_on_systems_that_lack_recursive_file_watching_functionality,
@@ -289,11 +292,11 @@ export const optionsForWatch: CommandLineOption[] = [
     },
     {
         name: "fallbackPolling",
-        type: new Map(Object.entries({
-            fixedinterval: PollingWatchKind.FixedInterval,
-            priorityinterval: PollingWatchKind.PriorityInterval,
-            dynamicpriority: PollingWatchKind.DynamicPriority,
-            fixedchunksize: PollingWatchKind.FixedChunkSize,
+        type: entriesToCaseInsensitiveMap(Object.entries({
+            fixedInterval: PollingWatchKind.FixedInterval,
+            priorityInterval: PollingWatchKind.PriorityInterval,
+            dynamicPriority: PollingWatchKind.DynamicPriority,
+            fixedChunkSize: PollingWatchKind.FixedChunkSize,
         })),
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Specify_what_approach_the_watcher_should_use_if_the_system_runs_out_of_native_file_watchers,
@@ -526,26 +529,27 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
 export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "target",
     shortName: "t",
-    type: new Map(Object.entries({
-        es3: ScriptTarget.ES3,
-        es5: ScriptTarget.ES5,
-        es6: ScriptTarget.ES2015,
-        es2015: ScriptTarget.ES2015,
-        es2016: ScriptTarget.ES2016,
-        es2017: ScriptTarget.ES2017,
-        es2018: ScriptTarget.ES2018,
-        es2019: ScriptTarget.ES2019,
-        es2020: ScriptTarget.ES2020,
-        es2021: ScriptTarget.ES2021,
-        es2022: ScriptTarget.ES2022,
-        es2023: ScriptTarget.ES2023,
-        esnext: ScriptTarget.ESNext,
+    type: entriesToCaseInsensitiveMap(Object.entries({
+        // N.B. The first entry specifies the value shown in `tsc --init`
+        ES3: ScriptTarget.ES3,
+        ES5: ScriptTarget.ES5,
+        ES2015: ScriptTarget.ES2015,
+        ES6: ScriptTarget.ES2015,
+        ES2016: ScriptTarget.ES2016,
+        ES2017: ScriptTarget.ES2017,
+        ES2018: ScriptTarget.ES2018,
+        ES2019: ScriptTarget.ES2019,
+        ES2020: ScriptTarget.ES2020,
+        ES2021: ScriptTarget.ES2021,
+        ES2022: ScriptTarget.ES2022,
+        ES2023: ScriptTarget.ES2023,
+        ESNext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
-    deprecatedKeys: new Set(["es3"]),
+    deprecatedKeys: new Set(["ES3"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
@@ -557,20 +561,21 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
 export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "module",
     shortName: "m",
-    type: new Map(Object.entries({
-        none: ModuleKind.None,
-        commonjs: ModuleKind.CommonJS,
-        amd: ModuleKind.AMD,
-        system: ModuleKind.System,
-        umd: ModuleKind.UMD,
-        es6: ModuleKind.ES2015,
-        es2015: ModuleKind.ES2015,
-        es2020: ModuleKind.ES2020,
-        es2022: ModuleKind.ES2022,
-        esnext: ModuleKind.ESNext,
-        node16: ModuleKind.Node16,
-        nodenext: ModuleKind.NodeNext,
-        preserve: ModuleKind.Preserve,
+    type: entriesToCaseInsensitiveMap(Object.entries({
+        // N.B. The first entry specifies the value shown in `tsc --init`
+        None: ModuleKind.None,
+        CommonJS: ModuleKind.CommonJS,
+        AMD: ModuleKind.AMD,
+        System: ModuleKind.System,
+        UMD: ModuleKind.UMD,
+        ES2015: ModuleKind.ES2015,
+        ES6: ModuleKind.ES2015,
+        ES2020: ModuleKind.ES2020,
+        ES2022: ModuleKind.ES2022,
+        ESNext: ModuleKind.ESNext,
+        Node16: ModuleKind.Node16,
+        NodeNext: ModuleKind.NodeNext,
+        Preserve: ModuleKind.Preserve,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
@@ -806,7 +811,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "importsNotUsedAsValues",
-        type: new Map(Object.entries({
+        type: entriesToCaseInsensitiveMap(Object.entries({
             remove: ImportsNotUsedAsValues.Remove,
             preserve: ImportsNotUsedAsValues.Preserve,
             error: ImportsNotUsedAsValues.Error,
@@ -1030,16 +1035,16 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // Module Resolution
     {
         name: "moduleResolution",
-        type: new Map(Object.entries({
+        type: entriesToCaseInsensitiveMap(Object.entries({
             // N.B. The first entry specifies the value shown in `tsc --init`
-            node10: ModuleResolutionKind.Node10,
-            node: ModuleResolutionKind.Node10,
-            classic: ModuleResolutionKind.Classic,
-            node16: ModuleResolutionKind.Node16,
-            nodenext: ModuleResolutionKind.NodeNext,
-            bundler: ModuleResolutionKind.Bundler,
+            Node10: ModuleResolutionKind.Node10,
+            Node: ModuleResolutionKind.Node10,
+            Classic: ModuleResolutionKind.Classic,
+            Node16: ModuleResolutionKind.Node16,
+            NodeNext: ModuleResolutionKind.NodeNext,
+            Bundler: ModuleResolutionKind.Bundler,
         })),
-        deprecatedKeys: new Set(["node"]),
+        deprecatedKeys: new Set(["Node"]),
         affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
@@ -1340,7 +1345,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "newLine",
-        type: new Map(Object.entries({
+        type: entriesToCaseInsensitiveMap(Object.entries({
             crlf: NewLineKind.CarriageReturnLineFeed,
             lf: NewLineKind.LineFeed,
         })),
@@ -1585,7 +1590,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "moduleDetection",
-        type: new Map(Object.entries({
+        type: entriesToCaseInsensitiveMap(Object.entries({
             auto: ModuleDetectionKind.Auto,
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
@@ -3712,8 +3717,7 @@ function convertJsonOptionOfCustomType(
     sourceFile?: TsConfigSourceFile,
 ) {
     if (isNullOrUndefined(value)) return undefined;
-    const key = value.toLowerCase();
-    const val = opt.type.get(key);
+    const val = opt.type.get(value);
     if (val !== undefined) {
         return validateJsonOptionValue(opt, val, errors, valueExpression, sourceFile);
     }
@@ -4137,11 +4141,7 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
             const elementType = option.element;
             return isArray(value) ? mapDefined(value, v => getOptionValueWithEmptyStrings(v, elementType)) : "";
         default:
-            return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
-                if (optionEnumValue === value) {
-                    return optionStringValue;
-                }
-            });
+            return getNameOfCompilerOptionValue(value, option.type);
     }
 }
 

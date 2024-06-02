@@ -82,7 +82,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project2/src/b.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
@@ -90,7 +90,7 @@ src/project2/src/b.ts
 [[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
@@ -98,7 +98,7 @@ src/project3/src/c.ts
 [[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
 exitCode:: ExitStatus.Success
@@ -135,7 +135,7 @@ exports.b = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -145,7 +145,7 @@ exports.b = 10;
         },
         "version": "-13368947479-export const b = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -194,7 +194,7 @@ exports.c = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -204,7 +204,7 @@ exports.c = 10;
         },
         "version": "-12077479510-export const c = 10;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -253,7 +253,7 @@ exports.d = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/d.ts": {
         "original": {
@@ -263,7 +263,7 @@ exports.d = 10;
         },
         "version": "-10786011541-export const d = 10;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -305,7 +305,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
@@ -315,7 +315,7 @@ src/project3/src/c.ts
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
 exitCode:: ExitStatus.Success
@@ -352,7 +352,7 @@ exports.cc = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/c.ts": {
         "original": {
@@ -362,7 +362,7 @@ exports.cc = 10;
         },
         "version": "-12481904019-export const cc = 10;",
         "signature": "-2549218137-export declare const cc = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

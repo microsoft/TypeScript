@@ -158,7 +158,7 @@ exports.d = b_1.b;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -168,7 +168,7 @@ exports.d = b_1.b;
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -178,7 +178,7 @@ exports.d = b_1.b;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -188,7 +188,7 @@ exports.d = b_1.b;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -198,7 +198,7 @@ exports.d = b_1.b;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -347,7 +347,7 @@ exports.d = b_1.b;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -357,7 +357,7 @@ exports.d = b_1.b;
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -367,7 +367,7 @@ exports.d = b_1.b;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -377,7 +377,7 @@ exports.d = b_1.b;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -387,7 +387,7 @@ exports.d = b_1.b;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -524,7 +524,7 @@ exports.d = b_1.b;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -534,7 +534,7 @@ exports.d = b_1.b;
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -544,7 +544,7 @@ exports.d = b_1.b;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -554,7 +554,7 @@ exports.d = b_1.b;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -564,7 +564,7 @@ exports.d = b_1.b;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -730,7 +730,7 @@ export declare const d = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -740,7 +740,7 @@ export declare const d = 10;
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -750,7 +750,7 @@ export declare const d = 10;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -760,7 +760,7 @@ export declare const d = 10;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -770,7 +770,7 @@ export declare const d = 10;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -892,7 +892,7 @@ export declare const d = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -902,7 +902,7 @@ export declare const d = 10;
         },
         "version": "-18487752940-export const a = 10;const aLocal = 10;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -912,7 +912,7 @@ export declare const d = 10;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -922,7 +922,7 @@ export declare const d = 10;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -932,7 +932,7 @@ export declare const d = 10;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1081,7 +1081,7 @@ var aLocal = 100;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -1091,7 +1091,7 @@ var aLocal = 100;
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -1101,7 +1101,7 @@ var aLocal = 100;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -1111,7 +1111,7 @@ var aLocal = 100;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -1121,7 +1121,7 @@ var aLocal = 100;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1274,7 +1274,7 @@ exports.d = b_1.b;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -1284,7 +1284,7 @@ exports.d = b_1.b;
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -1294,7 +1294,7 @@ exports.d = b_1.b;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -1304,7 +1304,7 @@ exports.d = b_1.b;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -1314,7 +1314,7 @@ exports.d = b_1.b;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1458,7 +1458,7 @@ exports.d = b_1.b;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -1468,7 +1468,7 @@ exports.d = b_1.b;
         },
         "version": "-17390360476-export const a = 10;const aLocal = 100;",
         "signature": "-3497920574-export declare const a = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -1478,7 +1478,7 @@ exports.d = b_1.b;
         },
         "version": "-6189287562-export const b = 10;const bLocal = 10;",
         "signature": "-3829150557-export declare const b = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -1488,7 +1488,7 @@ exports.d = b_1.b;
         },
         "version": "3248317647-import { a } from \"./a\";export const c = a;",
         "signature": "-4160380540-export declare const c = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./d.ts": {
         "original": {
@@ -1498,7 +1498,7 @@ exports.d = b_1.b;
         },
         "version": "-19615769517-import { b } from \"./b\";export const d = b;",
         "signature": "-4491610523-export declare const d = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

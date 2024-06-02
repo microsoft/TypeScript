@@ -82,7 +82,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../file2.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts
@@ -122,7 +122,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "amd"
+            "module": "AMD"
           },
           "typeAcquisition": {
             "enable": false,
@@ -249,7 +249,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	file2.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts

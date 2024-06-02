@@ -63,7 +63,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 ../../../../a/lib/lib.es2021.full.d.ts
-  Default library for target 'es2021'
+  Default library for target 'ES2021'
 src/index.ts
   Matched by default include pattern '**/*'
   Imported via 'lib-boilerplate' from file 'test/basic.spec.ts' with packageId 'lib-boilerplate/src/index.ts@0.0.2'

@@ -137,7 +137,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	Component.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -233,7 +233,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	Component-demos.ts
 	  Root file specified for compilation
 
@@ -422,7 +422,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -496,7 +496,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	Component.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -802,7 +802,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	Component.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 

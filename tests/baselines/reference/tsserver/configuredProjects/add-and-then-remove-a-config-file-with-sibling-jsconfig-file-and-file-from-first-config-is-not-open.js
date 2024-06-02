@@ -85,7 +85,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -169,7 +169,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile2.ts
 	  Root file specified for compilation
 
@@ -309,7 +309,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile2.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -653,7 +653,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Root file specified for compilation
 
@@ -666,7 +666,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -686,7 +686,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile2.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -897,7 +897,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Root file specified for compilation
 
@@ -1032,7 +1032,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -1075,7 +1075,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile2.ts
 	  Root file specified for compilation
 
@@ -1088,7 +1088,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Root file specified for compilation
 
@@ -1305,7 +1305,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Root file specified for compilation
 
@@ -1318,7 +1318,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -1344,7 +1344,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	commonFile2.ts
 	  Root file specified for compilation
 

@@ -142,8 +142,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es6",
-            "module": "es6",
+            "target": "ES2015",
+            "module": "ES2015",
             "baseUrl": "",
             "paths": ""
           },
@@ -174,27 +174,9 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es6'",
+            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES2015'",
             "code": 6053,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 3,
-                    "offset": 15
-                  },
-                  "end": {
-                    "line": 3,
-                    "offset": 20
-                  },
-                  "file": "/a/b/tsconfig.json"
-                },
-                "message": "File is default library for target specified here.",
-                "category": "message",
-                "code": 1426
-              }
-            ]
+            "category": "error"
           },
           {
             "text": "Cannot find global type 'Array'.",

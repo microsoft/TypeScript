@@ -173,7 +173,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 plugin-one/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
 plugin-one/action.ts

@@ -7,4 +7,4 @@ FileNames::
 0.ts
 Errors::
 error TS6044: Compiler option 'target' expects an argument.
-error TS6046: Argument for '--target' option must be: 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'esnext'.
+error TS6046: Argument for '--target' option must be: 'ES5', 'ES2015', 'ES6', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', 'ES2022', 'ES2023', 'ESNext'.

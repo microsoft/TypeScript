@@ -155,7 +155,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES5'",
             "code": 6053,
             "category": "error"
           },

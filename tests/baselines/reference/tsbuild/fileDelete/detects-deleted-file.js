@@ -79,7 +79,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/child/child2.ts
   Imported via "../child/child2" from file 'src/child/child.ts'
   Matched by default include pattern '**/*'
@@ -103,7 +103,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/child/child.d.ts
   Imported via "../child/child" from file 'src/main/main.ts'
   File is output of project reference source 'src/child/child.ts'
@@ -164,7 +164,7 @@ function child2() {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./child2.ts": {
         "original": {
@@ -174,7 +174,7 @@ function child2() {
         },
         "version": "6507293504-export function child2() {\n}\n",
         "signature": "-5501507595-export declare function child2(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./child.ts": {
         "original": {
@@ -184,7 +184,7 @@ function child2() {
         },
         "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
         "signature": "-1814288093-export declare function child(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -251,7 +251,7 @@ function main() {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../child/child.d.ts": {
         "original": {
@@ -260,7 +260,7 @@ function main() {
         },
         "version": "-1814288093-export declare function child(): void;\n",
         "signature": "-1814288093-export declare function child(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./main.ts": {
         "original": {
@@ -270,7 +270,7 @@ function main() {
         },
         "version": "-8540107489-import { child } from \"../child/child\";\nexport function main() {\n    child();\n}\n",
         "signature": "-2471343004-export declare function main(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -335,7 +335,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/child/child.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
@@ -368,7 +368,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./child.ts": {
         "original": {
@@ -378,7 +378,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         },
         "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
         "signature": "-1814288093-export declare function child(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

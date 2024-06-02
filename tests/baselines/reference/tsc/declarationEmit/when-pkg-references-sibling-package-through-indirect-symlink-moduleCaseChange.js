@@ -84,7 +84,7 @@ Output::
 [7m [0m [91m             ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
 pkg1/dist/index.d.ts

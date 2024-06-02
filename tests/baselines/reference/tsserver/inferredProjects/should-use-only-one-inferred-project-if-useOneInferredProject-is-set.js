@@ -50,7 +50,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 
@@ -125,7 +125,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 	user/username/projects/myproject/a/c/main.ts
@@ -213,7 +213,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	user/username/projects/myproject/a/b/main.ts
 	  Root file specified for compilation
 	user/username/projects/myproject/a/c/main.ts
@@ -427,7 +427,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es6"
+            "target": "ES2015"
           },
           "typeAcquisition": {
             "enable": false,
@@ -456,27 +456,9 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/user/username/projects/myproject/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es6'",
+            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES2015'",
             "code": 6053,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 3,
-                    "offset": 35
-                  },
-                  "end": {
-                    "line": 3,
-                    "offset": 40
-                  },
-                  "file": "/user/username/projects/myproject/a/b/tsconfig.json"
-                },
-                "message": "File is default library for target specified here.",
-                "category": "message",
-                "code": 1426
-              }
-            ]
+            "category": "error"
           },
           {
             "text": "Cannot find global type 'Array'.",
@@ -548,7 +530,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	user/username/projects/myproject/a/c/main.ts
 	  Root file specified for compilation
 	user/username/projects/myproject/a/d/main.ts

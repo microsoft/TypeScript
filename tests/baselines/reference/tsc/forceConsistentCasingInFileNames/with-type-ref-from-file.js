@@ -53,7 +53,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/src/fileOne.d.ts
   Type library referenced via './fileOne.d.ts' from file 'src/project/src/file2.d.ts'
   Matched by default include pattern '**/*'

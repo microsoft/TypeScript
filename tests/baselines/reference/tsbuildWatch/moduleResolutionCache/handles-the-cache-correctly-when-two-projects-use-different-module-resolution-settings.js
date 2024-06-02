@@ -132,7 +132,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/file/index.d.ts": {
         "original": {
@@ -141,7 +141,7 @@ export {};
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -151,7 +151,7 @@ export {};
         },
         "version": "-4708082513-import { foo } from \"file\";",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/@types/foo/index.d.ts": {
         "original": {
@@ -160,7 +160,7 @@ export {};
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -169,7 +169,7 @@ export {};
         },
         "version": "-12042713060-export const bar = 10;",
         "signature": "-12042713060-export const bar = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -228,7 +228,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file.d.ts": {
         "original": {
@@ -237,7 +237,7 @@ export {};
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -247,7 +247,7 @@ export {};
         },
         "version": "-4708082513-import { foo } from \"file\";",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/@types/foo/index.d.ts": {
         "original": {
@@ -256,7 +256,7 @@ export {};
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -452,7 +452,7 @@ var bar = 10;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/file/index.d.ts": {
         "original": {
@@ -461,7 +461,7 @@ var bar = 10;
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -471,7 +471,7 @@ var bar = 10;
         },
         "version": "-7561100220-import { foo } from \"file\";const bar = 10;",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/@types/foo/index.d.ts": {
         "original": {
@@ -480,7 +480,7 @@ var bar = 10;
         },
         "version": "-12737086933-export const foo = 10;",
         "signature": "-12737086933-export const foo = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -489,7 +489,7 @@ var bar = 10;
         },
         "version": "-12042713060-export const bar = 10;",
         "signature": "-12042713060-export const bar = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
