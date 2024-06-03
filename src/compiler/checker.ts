@@ -1088,7 +1088,6 @@ import {
     UnionType,
     UnionTypeNode,
     UniqueESSymbolType,
-    unwrapParenthesizedType,
     usingSingleLineStringWriter,
     VariableDeclaration,
     VariableDeclarationList,
@@ -8603,7 +8602,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function tryVisitSimpleTypeNode(node: TypeNode): TypeNode | undefined {
-                const innerNode = unwrapParenthesizedType(node);
+                const innerNode = skipTypeParentheses(node);
                 switch (innerNode.kind) {
                     case SyntaxKind.TypeReference:
                         return tryVisitTypeReference(innerNode as TypeReferenceNode);
