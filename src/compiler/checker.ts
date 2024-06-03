@@ -8522,10 +8522,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function createRecoveryBoundary() {
+                let trackedSymbols: TrackedSymbol[];
                 let unreportedErrors: (() => void)[];
                 const oldTracker = context.tracker;
                 const oldTrackedSymbols = context.trackedSymbols;
-                context.trackedSymbols = [];
+                context.trackedSymbols = undefined;
                 const oldEncounteredError = context.encounteredError;
                 context.tracker = new SymbolTrackerImpl(context, {
                     ...oldTracker.inner,
@@ -8545,11 +8546,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         markError(() => oldTracker.reportNonSerializableProperty(name));
                     },
                     trackSymbol(sym, decl, meaning) {
-                        const accessibility = isSymbolAccessible(sym, decl, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
-                        if (accessibility.accessibility !== SymbolAccessibility.Accessible) {
-                            (context.trackedSymbols ??= []).push([sym, decl, meaning]);
-                            return true;
-                        }
+                        (trackedSymbols ??= []).push([sym, decl, meaning]);
                         return false;
                     },
                     moduleResolverHost: context.tracker.moduleResolverHost,
@@ -8566,13 +8563,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 function startRecoveryScope() {
-                    const initialTrackedSymbolsTop = context.trackedSymbols?.length ?? 0;
+                    const trackedSymbolsTop = trackedSymbols?.length ?? 0;
                     const unreportedErrorsTop = unreportedErrors?.length ?? 0;
                     return () => {
                         hadError = false;
                         // Reset the tracked symbols to before the error
-                        if (context.trackedSymbols) {
-                            context.trackedSymbols.length = initialTrackedSymbolsTop;
+                        if (trackedSymbols) {
+                            trackedSymbols.length = trackedSymbolsTop;
                         }
                         if (unreportedErrors) {
                             unreportedErrors.length = unreportedErrorsTop;
@@ -8582,7 +8579,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 function finalizeBoundary() {
                     context.tracker = oldTracker;
-                    const newTrackedSymbols = context.trackedSymbols;
                     context.trackedSymbols = oldTrackedSymbols;
                     context.encounteredError = oldEncounteredError;
 
@@ -8590,7 +8586,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (hadError) {
                         return false;
                     }
-                    newTrackedSymbols?.forEach(
+                    trackedSymbols?.forEach(
                         ([symbol, enclosingDeclaration, meaning]) =>
                             context.tracker.trackSymbol(
                                 symbol,
