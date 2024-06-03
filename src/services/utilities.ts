@@ -2335,12 +2335,12 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position?: number) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = position !== undefined && position <= node.getEnd() ? position : node.getEnd();
+        replacementEnd = position <= node.getEnd() ? position : node.getEnd();
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
