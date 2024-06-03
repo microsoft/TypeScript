@@ -1,7 +1,5 @@
 ///<reference path="fourslash.ts" />
 
-
-
 // @Filename: test0.ts
 //// type Test = 'test';
 //// const test0: Test = `[|t/*0*/|]; // this comment should not be deleted
@@ -37,8 +35,6 @@
 // @Filename: test8.ts
 //// type Test = 'test asdf';
 //// const test8: Test = `[|test/*8*/|] as; // this comment should not be deleted
-
-
 
 const markers = test.markers();
 const ranges = test.ranges();
