@@ -33,7 +33,7 @@ import { b } from "./b";export const d = b;
     "declaration": true,
     "emitDeclarationOnly": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -52,7 +52,7 @@ import { b } from "b"; export const g = b;
     "declaration": true,
     "emitDeclarationOnly": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   },
   "references": [
     {

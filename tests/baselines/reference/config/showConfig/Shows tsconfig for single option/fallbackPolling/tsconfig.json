@@ -1,6 +1,6 @@
 {
     "compilerOptions": {},
     "watchOptions": {
-        "fallbackPolling": "fixedinterval"
+        "fallbackPolling": "fixedInterval"
     }
 }

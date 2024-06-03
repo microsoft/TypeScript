@@ -67,7 +67,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.js": {
         "original": {
@@ -76,7 +76,7 @@ Output::
         },
         "version": "5381-",
         "signature": "5381-",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -85,7 +85,7 @@ Output::
         },
         "version": "5381-",
         "signature": "5381-",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -249,7 +249,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.js": {
         "original": {
@@ -261,7 +261,7 @@ Output::
         "version": "5029505981-const x = 10;",
         "signature": "-3042032780-declare const x: 10;\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -270,7 +270,7 @@ Output::
         },
         "version": "5381-",
         "signature": "5381-",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

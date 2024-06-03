@@ -5,7 +5,7 @@ Input::
   "compilerOptions": {
     "composite": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -137,7 +137,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/main.ts": {
         "original": {
@@ -145,7 +145,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/other.ts": {
         "original": {
@@ -153,7 +153,7 @@ declare module "other" {
           "impliedFormat": 1
         },
         "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -381,7 +381,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/main.ts": {
         "original": {
@@ -389,7 +389,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-14918944530-export const x = 10;\n// SomeComment",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/other.ts": {
         "original": {
@@ -397,7 +397,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -570,7 +570,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/main.ts": {
         "original": {
@@ -578,7 +578,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-16105752451-export const x = 10;\n// SomeComment\n// SomeComment",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./myproject/other.ts": {
         "original": {
@@ -586,7 +586,7 @@ define("other", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -41,7 +41,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	app.js
 	  Root file specified for compilation
 
@@ -334,7 +334,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../../tmp/node_modules/node/index.d.ts
 	  Imported via "net" from file 'app.js'
 	  Imported via "stream" from file 'app.js'
@@ -517,7 +517,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../../tmp/node_modules/node/index.d.ts
 	  Imported via "net" from file 'app.js'
 	app.js

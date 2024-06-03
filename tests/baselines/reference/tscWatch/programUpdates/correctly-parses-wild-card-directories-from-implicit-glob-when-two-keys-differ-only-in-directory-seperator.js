@@ -99,7 +99,7 @@ export declare const y = 1;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f1.ts": {
         "original": {
@@ -109,7 +109,7 @@ export declare const y = 1;
         },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f2.ts": {
         "original": {
@@ -119,7 +119,7 @@ export declare const y = 1;
         },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -256,7 +256,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f1.ts": {
         "original": {
@@ -266,7 +266,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
         },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f2.ts": {
         "original": {
@@ -276,7 +276,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
         },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./new-file.ts": {
         "original": {
@@ -286,7 +286,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
         },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -436,7 +436,7 @@ CreatingProgramWith::
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./new-file.ts": {
         "original": {
@@ -446,7 +446,7 @@ CreatingProgramWith::
         },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f1.ts": {
         "original": {
@@ -456,7 +456,7 @@ CreatingProgramWith::
         },
         "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./f2.ts": {
         "original": {
@@ -466,7 +466,7 @@ CreatingProgramWith::
         },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

@@ -89,7 +89,7 @@ var class2 = /** @class */ (function () {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -100,7 +100,7 @@ var class2 = /** @class */ (function () {
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -112,7 +112,7 @@ var class2 = /** @class */ (function () {
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -198,7 +198,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -209,7 +209,7 @@ exitCode:: ExitStatus.Success
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class3.d.ts": {
         "original": {
@@ -220,7 +220,7 @@ exitCode:: ExitStatus.Success
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -232,7 +232,7 @@ exitCode:: ExitStatus.Success
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -315,7 +315,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -326,7 +326,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -338,7 +338,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -404,7 +404,7 @@ exitCode:: ExitStatus.Success
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -415,7 +415,7 @@ exitCode:: ExitStatus.Success
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class3.d.ts": {
         "original": {
@@ -426,7 +426,7 @@ exitCode:: ExitStatus.Success
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -438,7 +438,7 @@ exitCode:: ExitStatus.Success
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

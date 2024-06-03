@@ -132,7 +132,7 @@ exports.a = 1;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../shared/index.ts": {
         "original": {
@@ -142,7 +142,7 @@ exports.a = 1;
         },
         "version": "-22125360210-export const a: Unrestricted = 1;",
         "signature": "115643418-export declare const a: Unrestricted;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../shared/typings-base/globals.d.ts": {
         "original": {
@@ -153,7 +153,7 @@ exports.a = 1;
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -209,7 +209,7 @@ exports.b = 1;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../webpack/index.ts": {
         "original": {
@@ -219,7 +219,7 @@ exports.b = 1;
         },
         "version": "-14405273073-export const b: Unrestricted = 1;",
         "signature": "-6010538469-export declare const b: Unrestricted;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../shared/typings-base/globals.d.ts": {
         "original": {
@@ -230,7 +230,7 @@ exports.b = 1;
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

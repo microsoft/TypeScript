@@ -1,5 +1,5 @@
 {
     "compilerOptions": {
-        "moduleResolution": "node10"
+        "moduleResolution": "Node10"
     }
 }

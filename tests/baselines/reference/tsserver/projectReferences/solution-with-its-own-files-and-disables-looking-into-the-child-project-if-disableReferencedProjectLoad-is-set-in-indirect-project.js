@@ -223,7 +223,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -329,7 +329,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -519,7 +519,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -854,7 +854,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -886,7 +886,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1117,7 +1117,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1179,7 +1179,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1422,7 +1422,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1492,7 +1492,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1548,7 +1548,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	dummy.ts
 	  Root file specified for compilation
 

@@ -64,7 +64,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -203,7 +203,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'

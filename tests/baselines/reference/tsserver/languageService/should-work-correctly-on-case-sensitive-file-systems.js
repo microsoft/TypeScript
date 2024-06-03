@@ -28,7 +28,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../Lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	app.ts
 	  Root file specified for compilation
 

@@ -84,7 +84,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../shared/types/db.ts": {
         "original": {
@@ -93,7 +93,7 @@ Output::
         },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/main.ts": {
         "original": {
@@ -102,7 +102,7 @@ Output::
         },
         "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
         "signature": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/other.ts": {
         "original": {
@@ -111,7 +111,7 @@ Output::
         },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
         "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -291,7 +291,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../shared/types/db.ts": {
         "original": {
@@ -300,7 +300,7 @@ Output::
         },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/main.ts": {
         "original": {
@@ -310,7 +310,7 @@ Output::
         },
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/other.ts": {
         "original": {
@@ -319,7 +319,7 @@ Output::
         },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
         "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -453,7 +453,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../shared/types/db.ts": {
         "original": {
@@ -462,7 +462,7 @@ Output::
         },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/main.ts": {
         "original": {
@@ -472,7 +472,7 @@ Output::
         },
         "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/other.ts": {
         "original": {
@@ -481,7 +481,7 @@ Output::
         },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
         "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -628,7 +628,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../shared/types/db.ts": {
         "original": {
@@ -637,7 +637,7 @@ Output::
         },
         "version": "-5014788164-export interface A {\n    name: string;\n}\n",
         "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/main.ts": {
         "original": {
@@ -647,7 +647,7 @@ Output::
         },
         "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/other.ts": {
         "original": {
@@ -656,7 +656,7 @@ Output::
         },
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
         "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

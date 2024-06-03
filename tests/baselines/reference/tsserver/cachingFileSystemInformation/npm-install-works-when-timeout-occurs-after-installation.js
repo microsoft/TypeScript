@@ -131,7 +131,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -2046,7 +2046,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/@types/lodash/index.d.ts
 	  Imported via 'lodash' from file 'app.ts' with packageId '@types/lodash/index.d.ts@4.14.74'
 	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.74'

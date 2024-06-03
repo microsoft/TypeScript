@@ -97,7 +97,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../lib.decorators.d.ts
 	  Library referenced via 'decorators' from file '../lib.d.ts'
 	../lib.decorators.legacy.d.ts
@@ -137,7 +137,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../lib.decorators.d.ts
 	  Library referenced via 'decorators' from file '../lib.d.ts'
 	../lib.decorators.legacy.d.ts
@@ -272,7 +272,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	../lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../lib.decorators.d.ts
 	  Library referenced via 'decorators' from file '../lib.d.ts'
 	../lib.decorators.legacy.d.ts

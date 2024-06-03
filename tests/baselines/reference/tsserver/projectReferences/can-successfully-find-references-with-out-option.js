@@ -128,7 +128,7 @@ declare namespace container {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../lib/index.ts": {
         "original": {
@@ -136,7 +136,7 @@ declare namespace container {
           "impliedFormat": 1
         },
         "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -204,7 +204,7 @@ declare namespace container {
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./lib.d.ts": {
         "original": {
@@ -212,7 +212,7 @@ declare namespace container {
           "impliedFormat": 1
         },
         "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../compositeexec/index.ts": {
         "original": {
@@ -220,7 +220,7 @@ declare namespace container {
           "impliedFormat": 1
         },
         "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -311,7 +311,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -487,7 +487,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -698,7 +698,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts

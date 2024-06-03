@@ -163,7 +163,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/node_modules/module1/index.ts
 	  Imported via "module1" from file 'src/file1.ts'
 	  Imported via "module1" from file 'src/file2.ts'

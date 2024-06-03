@@ -154,7 +154,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -414,7 +414,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/projects/myproject/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts

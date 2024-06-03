@@ -41,7 +41,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success

@@ -161,7 +161,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	test.ts
 	  Matched by default include pattern '**/*'
 	../lib/@types/UpperCasePackage/index.d.ts
@@ -204,7 +204,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "amd",
+            "module": "AMD",
             "typeRoots": [
               "",
               ""

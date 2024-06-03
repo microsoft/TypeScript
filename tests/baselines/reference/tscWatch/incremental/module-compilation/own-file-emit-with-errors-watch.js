@@ -81,7 +81,7 @@ define(["require", "exports"], function (require, exports) {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file1.ts": {
         "original": {
@@ -90,7 +90,7 @@ define(["require", "exports"], function (require, exports) {
         },
         "version": "-10726455937-export const x = 10;",
         "signature": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -99,7 +99,7 @@ define(["require", "exports"], function (require, exports) {
         },
         "version": "-13939690350-export const y: string = 20;",
         "signature": "-13939690350-export const y: string = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -261,7 +261,7 @@ define(["require", "exports"], function (require, exports) {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file1.ts": {
         "original": {
@@ -271,7 +271,7 @@ define(["require", "exports"], function (require, exports) {
         },
         "version": "-12438487295-export const z = 10;",
         "signature": "-7483702853-export declare const z = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./file2.ts": {
         "original": {
@@ -280,7 +280,7 @@ define(["require", "exports"], function (require, exports) {
         },
         "version": "-13939690350-export const y: string = 20;",
         "signature": "-13939690350-export const y: string = 20;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

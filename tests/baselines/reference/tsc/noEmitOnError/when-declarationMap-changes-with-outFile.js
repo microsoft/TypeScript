@@ -66,7 +66,7 @@ var y = 10;
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./project/a.ts": {
         "original": {
@@ -74,7 +74,7 @@ var y = 10;
           "impliedFormat": 1
         },
         "version": "5029505981-const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./project/b.ts": {
         "original": {
@@ -82,7 +82,7 @@ var y = 10;
           "impliedFormat": 1
         },
         "version": "2026006654-const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -170,7 +170,7 @@ declare const y = 10;
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./project/a.ts": {
         "original": {
@@ -178,7 +178,7 @@ declare const y = 10;
           "impliedFormat": 1
         },
         "version": "5029505981-const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./project/b.ts": {
         "original": {
@@ -186,7 +186,7 @@ declare const y = 10;
           "impliedFormat": 1
         },
         "version": "2026006654-const y = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

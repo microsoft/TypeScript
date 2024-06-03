@@ -59,7 +59,7 @@ TSFILE: /src/dist/src/index.js
 TSFILE: /src/dist/src/index.d.ts
 TSFILE: /src/dist/tsconfig.tsbuildinfo
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/src/index.json
   Imported via "./index.json" from file 'src/src/index.ts'
   Matched by include pattern 'src/**/*.json' in 'src/tsconfig.json'
@@ -115,7 +115,7 @@ exports.default = index_json_1.default.hello;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/index.json": {
         "version": "6651571919-{\n  \"hello\": \"world\"\n}",
@@ -129,7 +129,7 @@ exports.default = index_json_1.default.hello;
         },
         "version": "-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n",
         "signature": "6785192742-declare const _default: string;\nexport default _default;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

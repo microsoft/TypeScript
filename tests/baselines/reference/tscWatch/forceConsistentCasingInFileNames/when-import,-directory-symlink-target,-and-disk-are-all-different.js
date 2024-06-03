@@ -68,7 +68,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -228,7 +228,7 @@ CreatingProgramWith::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
   Matched by default include pattern '**/*'

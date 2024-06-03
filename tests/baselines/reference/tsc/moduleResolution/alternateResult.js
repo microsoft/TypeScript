@@ -414,7 +414,7 @@ export {};
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -423,7 +423,7 @@ export {};
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -432,7 +432,7 @@ export {};
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -441,7 +441,7 @@ export {};
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -1626,7 +1626,7 @@ Shape signatures in builder refreshed for::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -1635,7 +1635,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -1644,7 +1644,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -1653,7 +1653,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -1663,7 +1663,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -1908,7 +1908,7 @@ Shape signatures in builder refreshed for::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -1917,7 +1917,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -1926,7 +1926,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -1935,7 +1935,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -1944,7 +1944,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -1954,7 +1954,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -2238,7 +2238,7 @@ Shape signatures in builder refreshed for::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -2247,7 +2247,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -2256,7 +2256,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -2265,7 +2265,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -2275,7 +2275,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -2581,7 +2581,7 @@ Shape signatures in builder refreshed for::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -2590,7 +2590,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -2599,7 +2599,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -2609,7 +2609,7 @@ Shape signatures in builder refreshed for::
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [

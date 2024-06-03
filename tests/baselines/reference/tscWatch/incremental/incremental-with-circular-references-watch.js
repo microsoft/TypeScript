@@ -127,7 +127,7 @@ export { C } from "./c";
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -136,7 +136,7 @@ export { C } from "./c";
         },
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -145,7 +145,7 @@ export { C } from "./c";
         },
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -154,7 +154,7 @@ export { C } from "./c";
         },
         "version": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
         "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -163,7 +163,7 @@ export { C } from "./c";
         },
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -373,7 +373,7 @@ export interface A {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./c.ts": {
         "original": {
@@ -382,7 +382,7 @@ export interface A {
         },
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./b.ts": {
         "original": {
@@ -391,7 +391,7 @@ export interface A {
         },
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./a.ts": {
         "original": {
@@ -400,7 +400,7 @@ export interface A {
         },
         "version": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
         "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -409,7 +409,7 @@ export interface A {
         },
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

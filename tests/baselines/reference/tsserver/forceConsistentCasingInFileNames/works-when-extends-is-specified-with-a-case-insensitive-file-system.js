@@ -110,7 +110,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	index.ts
 	  Matched by default include pattern '**/*'
 	types/file2/index.d.ts

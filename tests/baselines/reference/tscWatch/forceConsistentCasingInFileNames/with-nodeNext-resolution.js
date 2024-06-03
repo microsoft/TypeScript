@@ -107,7 +107,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'

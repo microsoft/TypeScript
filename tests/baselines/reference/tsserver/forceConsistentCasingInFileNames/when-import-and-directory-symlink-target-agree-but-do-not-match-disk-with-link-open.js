@@ -94,7 +94,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	Xy/a.ts
 	  Imported via "./Xy/a" from file 'b.ts'
 	  Matched by default include pattern '**/*'
@@ -139,7 +139,7 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "forceConsistentCasingInFileNames": true,
             "outFile": "",
-            "module": "system"
+            "module": "System"
           },
           "typeAcquisition": {
             "enable": false,

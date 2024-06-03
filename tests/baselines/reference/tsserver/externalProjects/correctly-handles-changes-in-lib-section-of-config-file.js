@@ -111,12 +111,12 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "commonjs",
-            "target": "es5",
+            "module": "CommonJS",
+            "target": "ES5",
             "noImplicitAny": true,
             "sourceMap": false,
             "lib": [
-              "es5"
+              "ES5"
             ]
           },
           "typeAcquisition": {

@@ -254,7 +254,7 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "allowJS": true,
-            "moduleResolution": "node10"
+            "moduleResolution": "Node10"
           },
           "typeAcquisition": {
             "enable": true,

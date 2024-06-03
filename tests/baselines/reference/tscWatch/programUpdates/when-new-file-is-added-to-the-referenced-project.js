@@ -113,7 +113,7 @@ declare class class2 {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -124,7 +124,7 @@ declare class class2 {
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -136,7 +136,7 @@ declare class class2 {
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -409,7 +409,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -420,7 +420,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class3.d.ts": {
         "original": {
@@ -431,7 +431,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -443,7 +443,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -615,7 +615,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -626,7 +626,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -638,7 +638,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -823,7 +823,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class1.d.ts": {
         "original": {
@@ -834,7 +834,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-3469237238-declare class class1 {}",
         "signature": "-3469237238-declare class class1 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../project1/class3.d.ts": {
         "original": {
@@ -845,7 +845,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "-3469165364-declare class class3 {}",
         "signature": "-3469165364-declare class class3 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class2.ts": {
         "original": {
@@ -857,7 +857,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
         "version": "777969115-class class2 {}",
         "signature": "-2684084705-declare class class2 {\n}\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

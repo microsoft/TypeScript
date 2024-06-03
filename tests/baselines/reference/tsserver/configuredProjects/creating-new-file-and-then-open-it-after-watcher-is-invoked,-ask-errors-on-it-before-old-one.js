@@ -82,7 +82,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts
@@ -249,7 +249,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts

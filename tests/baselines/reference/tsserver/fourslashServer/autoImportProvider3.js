@@ -61,7 +61,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../../lib.decorators.d.ts
 	  Library referenced via 'decorators' from file '../../lib.d.ts'
 	../../lib.decorators.legacy.d.ts
@@ -193,27 +193,9 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/packages/a/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/lib.esnext.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'esnext'",
+            "text": "File '/lib.esnext.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ESNext'",
             "code": 6053,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 1,
-                    "offset": 34
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 42
-                  },
-                  "file": "/packages/a/tsconfig.json"
-                },
-                "message": "File is default library for target specified here.",
-                "category": "message",
-                "code": 1426
-              }
-            ]
+            "category": "error"
           },
           {
             "text": "Cannot find global type 'Array'.",

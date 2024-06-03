@@ -72,7 +72,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -81,7 +81,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
           "impliedFormat": 1
         },
         "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./types/type.ts": {
         "original": {
@@ -90,7 +90,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
           "impliedFormat": 1
         },
         "version": "-4885977236-export type t = string;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -193,7 +193,7 @@ exports.x = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -203,7 +203,7 @@ exports.x = 10;
         },
         "version": "-10726455937-export const x = 10;",
         "signature": "-6821242887-export declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./types/type.ts": {
         "original": {
@@ -213,7 +213,7 @@ exports.x = 10;
         },
         "version": "-4885977236-export type t = string;",
         "signature": "-6618426122-export type t = string;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

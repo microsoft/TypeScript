@@ -406,7 +406,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -415,7 +415,7 @@ export {};
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -424,7 +424,7 @@ export {};
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -433,7 +433,7 @@ export {};
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -1304,7 +1304,7 @@ File '/package.json' does not exist according to earlier cached lookups.
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -1313,7 +1313,7 @@ File '/package.json' does not exist according to earlier cached lookups.
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -1322,7 +1322,7 @@ File '/package.json' does not exist according to earlier cached lookups.
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -1331,7 +1331,7 @@ File '/package.json' does not exist according to earlier cached lookups.
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -1341,7 +1341,7 @@ File '/package.json' does not exist according to earlier cached lookups.
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -1590,7 +1590,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -1599,7 +1599,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -1608,7 +1608,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -1617,7 +1617,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar2/index.d.ts": {
         "original": {
@@ -1626,7 +1626,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-7439170493-export declare const bar2: number;",
         "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -1636,7 +1636,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -1940,7 +1940,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -1949,7 +1949,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -1958,7 +1958,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo2/index.d.ts": {
         "original": {
@@ -1967,7 +1967,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-1622383150-export declare const foo2: number;",
         "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -1977,7 +1977,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -2249,7 +2249,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/foo/index.d.ts": {
         "original": {
@@ -2258,7 +2258,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
         },
         "version": "-5214938848-export declare const foo: number;",
         "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/@types/bar/index.d.ts": {
         "original": {
@@ -2267,7 +2267,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
         },
         "version": "-9556021903-export declare const bar: number;",
         "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.mts": {
         "original": {
@@ -2277,7 +2277,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
         },
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [

@@ -86,7 +86,7 @@ exports.default = 1;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class1.ts": {
         "original": {
@@ -98,7 +98,7 @@ exports.default = 1;
         "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
         "signature": "-3664763344-declare const a = 1;\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./constants.ts": {
         "original": {
@@ -108,7 +108,7 @@ exports.default = 1;
         },
         "version": "-2659799048-export default 1;",
         "signature": "-183154784-declare const _default: 1;\nexport default _default;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./types.d.ts": {
         "original": {
@@ -119,7 +119,7 @@ exports.default = 1;
         "version": "-2080821236-type MagicNumber = typeof import('./constants').default",
         "signature": "-2080821236-type MagicNumber = typeof import('./constants').default",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -213,7 +213,7 @@ exports.default = 2;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./class1.ts": {
         "original": {
@@ -225,7 +225,7 @@ exports.default = 2;
         "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
         "signature": "-3664762255-declare const a = 2;\n",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./constants.ts": {
         "original": {
@@ -235,7 +235,7 @@ exports.default = 2;
         },
         "version": "-2659799015-export default 2;",
         "signature": "-10876795135-declare const _default: 2;\nexport default _default;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./types.d.ts": {
         "original": {
@@ -246,7 +246,7 @@ exports.default = 2;
         "version": "-2080821236-type MagicNumber = typeof import('./constants').default",
         "signature": "-2080821236-type MagicNumber = typeof import('./constants').default",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

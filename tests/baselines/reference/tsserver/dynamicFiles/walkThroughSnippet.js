@@ -38,7 +38,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts
 	  Root file specified for compilation
 

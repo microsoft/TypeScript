@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "lib": [
-            "es5",
-            "es2015.core"
+            "ES5",
+            "ES2015.Core"
         ]
     }
 }

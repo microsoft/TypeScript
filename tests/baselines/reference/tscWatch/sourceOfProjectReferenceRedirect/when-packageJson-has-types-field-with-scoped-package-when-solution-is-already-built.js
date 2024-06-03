@@ -105,7 +105,7 @@ export declare function foo(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/bar.ts": {
         "original": {
@@ -115,7 +115,7 @@ export declare function foo(): void;
         },
         "version": "1045484683-export function bar() { }",
         "signature": "-2904461644-export declare function bar(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -125,7 +125,7 @@ export declare function foo(): void;
         },
         "version": "4646078106-export function foo() { }",
         "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -190,7 +190,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../b/lib/index.d.ts": {
         "original": {
@@ -199,7 +199,7 @@ export {};
         },
         "version": "-5677608893-export declare function foo(): void;\n",
         "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../b/lib/bar.d.ts": {
         "original": {
@@ -208,7 +208,7 @@ export {};
         },
         "version": "-2904461644-export declare function bar(): void;\n",
         "signature": "-2904461644-export declare function bar(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -218,7 +218,7 @@ export {};
         },
         "version": "8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -283,7 +283,7 @@ Output::
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../b/src/index.ts": {
         "original": {
@@ -292,7 +292,7 @@ Output::
         },
         "version": "4646078106-export function foo() { }",
         "signature": "4646078106-export function foo() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../b/src/bar.ts": {
         "original": {
@@ -301,7 +301,7 @@ Output::
         },
         "version": "1045484683-export function bar() { }",
         "signature": "1045484683-export function bar() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -311,7 +311,7 @@ Output::
         },
         "version": "8545527381-import { foo } from '@issue/b';\nimport { bar } from '@issue/b/lib/bar';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

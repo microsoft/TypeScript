@@ -195,7 +195,7 @@ define("b", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/a.ts": {
         "original": {
@@ -203,7 +203,7 @@ define("b", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "9819159940-export function foo() { }export function fooBar() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/b.ts": {
         "original": {
@@ -211,7 +211,7 @@ define("b", ["require", "exports"], function (require, exports) {
           "impliedFormat": 1
         },
         "version": "1045484683-export function bar() { }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

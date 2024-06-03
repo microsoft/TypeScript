@@ -77,7 +77,7 @@ Output::
 
 TSFILE: /src/project/index.js
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
@@ -110,7 +110,7 @@ Output::
 
 TSFILE: /src/project/index.js
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
@@ -145,7 +145,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"

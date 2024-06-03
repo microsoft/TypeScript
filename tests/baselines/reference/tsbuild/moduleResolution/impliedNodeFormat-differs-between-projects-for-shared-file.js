@@ -97,7 +97,7 @@ File '/src/projects/node_modules/@types/pg/package.json' exists according to ear
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/projects/a/src/index.ts
   Matched by default include pattern '**/*'
 src/projects/node_modules/@types/pg/index.d.ts
@@ -136,7 +136,7 @@ Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', resul
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.es2022.full.d.ts
-  Default library for target 'es2022'
+  Default library for target 'ES2022'
 src/projects/node_modules/@types/pg/index.d.ts
   Imported via "pg" from file 'src/projects/b/src/index.ts'
   Entry point for implicit type library 'pg'

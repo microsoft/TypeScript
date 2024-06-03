@@ -192,7 +192,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../a/index.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	../b/index.ts
@@ -410,7 +410,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../refs/a.d.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	  Imported via "@ref/a" from file 'index.ts'
@@ -655,7 +655,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../a/index.ts
 	  Imported via '@ref/a' from file '../b/index.ts'
 	../b/index.ts

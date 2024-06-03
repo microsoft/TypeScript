@@ -96,7 +96,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -281,7 +281,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	b2.ts
 	  Imported via "../B/b2" from file 'b.ts'
 	  Matched by default include pattern '**/*'
@@ -700,7 +700,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	a.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	../B/b2.ts

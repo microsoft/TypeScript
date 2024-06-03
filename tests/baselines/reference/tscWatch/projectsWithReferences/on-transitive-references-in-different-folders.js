@@ -119,7 +119,7 @@ export declare class A {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -129,7 +129,7 @@ export declare class A {
         },
         "version": "-7264743946-export class A {}",
         "signature": "-8728835846-export declare class A {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -186,7 +186,7 @@ export declare const b: A;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../a/index.d.ts": {
         "original": {
@@ -195,7 +195,7 @@ export declare const b: A;
         },
         "version": "-8728835846-export declare class A {\n}\n",
         "signature": "-8728835846-export declare class A {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -205,7 +205,7 @@ export declare const b: A;
         },
         "version": "-2591036212-import {A} from '@ref/a';\nexport const b = new A();",
         "signature": "-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -295,7 +295,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -470,7 +470,7 @@ export declare function gfoo(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../a/index.d.ts": {
         "original": {
@@ -479,7 +479,7 @@ export declare function gfoo(): void;
         },
         "version": "-8728835846-export declare class A {\n}\n",
         "signature": "-8728835846-export declare class A {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./index.ts": {
         "original": {
@@ -489,7 +489,7 @@ export declare function gfoo(): void;
         },
         "version": "1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }",
         "signature": "4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -553,7 +553,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -721,7 +721,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -942,7 +942,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -1146,7 +1146,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -1344,7 +1344,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -1524,7 +1524,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -1712,7 +1712,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -1901,7 +1901,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m  [0m [91m~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -2089,7 +2089,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'

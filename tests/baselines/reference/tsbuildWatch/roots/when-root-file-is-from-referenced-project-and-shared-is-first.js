@@ -124,7 +124,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -180,7 +180,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/logging.ts'
@@ -262,7 +262,7 @@ export declare function randomFn(str: string): void;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/logging.ts": {
         "original": {
@@ -272,7 +272,7 @@ export declare function randomFn(str: string): void;
         },
         "version": "-1222780632-export function log(str: string) {\n    console.log(str);\n}\n",
         "signature": "2292560907-export declare function log(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/myclass.ts": {
         "original": {
@@ -282,7 +282,7 @@ export declare function randomFn(str: string): void;
         },
         "version": "-10369713935-export class MyClass { }",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/random.ts": {
         "original": {
@@ -292,7 +292,7 @@ export declare function randomFn(str: string): void;
         },
         "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -359,7 +359,7 @@ export {};
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/logging.d.ts": {
         "original": {
@@ -368,7 +368,7 @@ export {};
         },
         "version": "2292560907-export declare function log(str: string): void;\n",
         "signature": "2292560907-export declare function log(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/myclass.d.ts": {
         "original": {
@@ -377,7 +377,7 @@ export {};
         },
         "version": "-7943199723-export declare class MyClass {\n}\n",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/random.d.ts": {
         "original": {
@@ -386,7 +386,7 @@ export {};
         },
         "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/server.ts": {
         "original": {
@@ -396,7 +396,7 @@ export {};
         },
         "version": "-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -648,7 +648,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -695,7 +695,7 @@ export declare const x = 10;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/logging.ts": {
         "original": {
@@ -705,7 +705,7 @@ export declare const x = 10;
         },
         "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/myclass.ts": {
         "original": {
@@ -715,7 +715,7 @@ export declare const x = 10;
         },
         "version": "-10369713935-export class MyClass { }",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/random.ts": {
         "original": {
@@ -725,7 +725,7 @@ export declare const x = 10;
         },
         "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -810,7 +810,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/logging.ts'
@@ -858,7 +858,7 @@ projects/server/src/server.ts
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/logging.d.ts": {
         "original": {
@@ -867,7 +867,7 @@ projects/server/src/server.ts
         },
         "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/myclass.d.ts": {
         "original": {
@@ -876,7 +876,7 @@ projects/server/src/server.ts
         },
         "version": "-7943199723-export declare class MyClass {\n}\n",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/random.d.ts": {
         "original": {
@@ -885,7 +885,7 @@ projects/server/src/server.ts
         },
         "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/server.ts": {
         "original": {
@@ -895,7 +895,7 @@ projects/server/src/server.ts
         },
         "version": "-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1072,7 +1072,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -1100,7 +1100,7 @@ projects/shared/src/myClass.ts
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/logging.ts": {
         "original": {
@@ -1110,7 +1110,7 @@ projects/shared/src/myClass.ts
         },
         "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../src/myclass.ts": {
         "original": {
@@ -1120,7 +1120,7 @@ projects/shared/src/myClass.ts
         },
         "version": "-10369713935-export class MyClass { }",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -1246,7 +1246,7 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
   File is output of project reference source 'projects/shared/src/logging.ts'
@@ -1289,7 +1289,7 @@ projects/server/src/server.ts
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/logging.d.ts": {
         "original": {
@@ -1298,7 +1298,7 @@ projects/server/src/server.ts
         },
         "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/dist/src/myclass.d.ts": {
         "original": {
@@ -1307,7 +1307,7 @@ projects/server/src/server.ts
         },
         "version": "-7943199723-export declare class MyClass {\n}\n",
         "signature": "-7943199723-export declare class MyClass {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/server.ts": {
         "original": {
@@ -1317,7 +1317,7 @@ projects/server/src/server.ts
         },
         "version": "-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

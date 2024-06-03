@@ -444,8 +444,8 @@ Info seq  [hh:mm:ss:mss] event:
               ""
             ],
             "lib": [
-              "es5",
-              "dom"
+              "ES5",
+              "DOM"
             ],
             "traceResolution": true
           },

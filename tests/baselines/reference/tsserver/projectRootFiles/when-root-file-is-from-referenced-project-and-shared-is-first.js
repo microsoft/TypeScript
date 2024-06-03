@@ -184,7 +184,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../shared/src/logging.ts
 	  Matched by include pattern '../shared/src/**/*.ts' in 'tsconfig.json'
 	../shared/src/myClass.ts
@@ -557,7 +557,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../shared/src/logging.ts
 	  Matched by include pattern '../shared/src/**/*.ts' in 'tsconfig.json'
 	../shared/src/myClass.ts

@@ -145,7 +145,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -325,7 +325,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 
@@ -527,7 +527,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -2084,7 +2084,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -2114,7 +2114,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 

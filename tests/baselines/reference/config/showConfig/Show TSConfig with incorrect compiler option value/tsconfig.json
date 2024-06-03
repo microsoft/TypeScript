@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "lib": [
-            "es5",
-            "es2015.promise"
+            "ES5",
+            "ES2015.Promise"
         ]
     }
 }

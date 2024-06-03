@@ -1,7 +1,7 @@
 {
     "compilerOptions": {},
     "watchOptions": {
-        "watchFile": "dynamicprioritypolling"
+        "watchFile": "dynamicPriorityPolling"
     },
     "include": [
         "./src/**/*"

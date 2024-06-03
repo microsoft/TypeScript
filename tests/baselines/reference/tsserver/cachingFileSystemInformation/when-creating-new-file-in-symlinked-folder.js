@@ -101,7 +101,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	client/folder1/module1.ts
 	  Matched by include pattern 'client/**/*' in 'tsconfig.json'
 	  Imported via "folder1/module1" from file 'client/linktofolder2/module2.ts'
@@ -269,7 +269,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	client/folder1/module1.ts
 	  Matched by include pattern 'client/**/*' in 'tsconfig.json'
 	  Imported via "folder1/module1" from file 'client/linktofolder2/module2.ts'

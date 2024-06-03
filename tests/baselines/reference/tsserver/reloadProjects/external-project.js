@@ -97,7 +97,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	file2.ts
 	  Imported via "./file2" from file 'file1.ts'
 	  Root file specified for compilation
@@ -292,7 +292,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/module1/index.d.ts
 	  Imported via "module1" from file 'file1.ts'
 	file2.ts
@@ -433,7 +433,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/module1/index.d.ts
 	  Imported via "module1" from file 'file1.ts'
 	file2.ts
@@ -577,7 +577,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	node_modules/module1/index.d.ts
 	  Imported via "module1" from file 'file1.ts'
 	file1.ts

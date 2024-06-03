@@ -32,7 +32,7 @@ import { b } from "./b";export const d = b;
   "compilerOptions": {
     "declaration": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -50,7 +50,7 @@ import { b } from "b"; export const g = b;
   "compilerOptions": {
     "declaration": true,
     "outFile": "../outFile.js",
-    "module": "amd"
+    "module": "AMD"
   },
   "references": [
     {

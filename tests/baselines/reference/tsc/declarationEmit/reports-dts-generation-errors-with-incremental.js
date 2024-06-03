@@ -79,7 +79,7 @@ Output::
 TSFILE: /src/project/index.js
 TSFILE: /src/project/tsconfig.tsbuildinfo
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
@@ -123,7 +123,7 @@ export const api = ky.extend({});
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/ky/distribution/index.d.ts": {
         "original": {
@@ -132,7 +132,7 @@ export const api = ky.extend({});
         },
         "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
         "signature": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       },
       "./index.ts": {
         "original": {
@@ -141,7 +141,7 @@ export const api = ky.extend({});
         },
         "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
         "signature": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [
@@ -197,7 +197,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"
@@ -231,7 +231,7 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 src/project/node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'src/project/index.ts'
   File is ECMAScript module because 'src/project/node_modules/ky/package.json' has field "type" with value "module"

@@ -57,7 +57,7 @@ TSFILE: /src/src/index.js
 TSFILE: /src/src/index.d.ts
 TSFILE: /src/tsconfig.tsbuildinfo
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
   Part of 'files' list in tsconfig.json
@@ -107,7 +107,7 @@ exports.default = hello_json_1.default.hello;
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/hello.json": {
         "version": "6651571919-{\n  \"hello\": \"world\"\n}",
@@ -121,7 +121,7 @@ exports.default = hello_json_1.default.hello;
         },
         "version": "-6443385642-import hello from \"./hello.json\"\nexport default hello.hello\n",
         "signature": "6785192742-declare const _default: string;\nexport default _default;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

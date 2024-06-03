@@ -123,7 +123,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -163,7 +163,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "none",
+            "module": "None",
             "composite": true,
             "disableSourceOfProjectReferenceRedirect": true
           },
@@ -454,7 +454,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts
@@ -624,7 +624,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -761,7 +761,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts

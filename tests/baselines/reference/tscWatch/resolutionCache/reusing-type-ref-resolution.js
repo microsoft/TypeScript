@@ -175,7 +175,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/nod
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 fileWithImports.ts
@@ -241,7 +241,7 @@ export {};
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg0/index.d.ts": {
         "original": {
@@ -250,7 +250,7 @@ export {};
         },
         "version": "-8124756421-export interface Import0 {}",
         "signature": "-8124756421-export interface Import0 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithimports.ts": {
         "original": {
@@ -260,7 +260,7 @@ export {};
         },
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg2/index.d.ts": {
         "original": {
@@ -271,7 +271,7 @@ export {};
         "version": "-11273315461-interface Import2 {}",
         "signature": "-11273315461-interface Import2 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithtyperefs.ts": {
         "original": {
@@ -281,7 +281,7 @@ export {};
         },
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -560,7 +560,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -609,7 +609,7 @@ fileWithTypeRefs.ts
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg0/index.d.ts": {
         "original": {
@@ -618,7 +618,7 @@ fileWithTypeRefs.ts
         },
         "version": "-8124756421-export interface Import0 {}",
         "signature": "-8124756421-export interface Import0 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg1/index.d.ts": {
         "original": {
@@ -627,7 +627,7 @@ fileWithTypeRefs.ts
         },
         "version": "-8124720484-export interface Import1 {}",
         "signature": "-8124720484-export interface Import1 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithimports.ts": {
         "original": {
@@ -637,7 +637,7 @@ fileWithTypeRefs.ts
         },
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg2/index.d.ts": {
         "original": {
@@ -648,7 +648,7 @@ fileWithTypeRefs.ts
         "version": "-11273315461-interface Import2 {}",
         "signature": "-11273315461-interface Import2 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithtyperefs.ts": {
         "original": {
@@ -658,7 +658,7 @@ fileWithTypeRefs.ts
         },
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -936,7 +936,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -989,7 +989,7 @@ fileWithTypeRefs.ts
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg0/index.d.ts": {
         "original": {
@@ -998,7 +998,7 @@ fileWithTypeRefs.ts
         },
         "version": "-8124756421-export interface Import0 {}",
         "signature": "-8124756421-export interface Import0 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg1/index.d.ts": {
         "original": {
@@ -1007,7 +1007,7 @@ fileWithTypeRefs.ts
         },
         "version": "-8124720484-export interface Import1 {}",
         "signature": "-8124720484-export interface Import1 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithimports.ts": {
         "original": {
@@ -1017,7 +1017,7 @@ fileWithTypeRefs.ts
         },
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg2/index.d.ts": {
         "original": {
@@ -1028,7 +1028,7 @@ fileWithTypeRefs.ts
         "version": "-11273315461-interface Import2 {}",
         "signature": "-11273315461-interface Import2 {}",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../node_modules/pkg3/index.d.ts": {
         "original": {
@@ -1037,7 +1037,7 @@ fileWithTypeRefs.ts
         },
         "version": "-8124648610-export interface Import3 {}",
         "signature": "-8124648610-export interface Import3 {}",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../filewithtyperefs.ts": {
         "original": {
@@ -1047,7 +1047,7 @@ fileWithTypeRefs.ts
         },
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

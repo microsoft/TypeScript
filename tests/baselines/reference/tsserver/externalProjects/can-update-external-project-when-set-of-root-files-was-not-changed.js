@@ -72,7 +72,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "moduleResolution": "node10"
+            "moduleResolution": "Node10"
           },
           "typeAcquisition": {
             "enable": false,

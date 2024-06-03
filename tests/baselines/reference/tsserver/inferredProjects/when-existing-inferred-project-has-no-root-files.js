@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	module2.d.ts
 	  Imported via "./module2" from file 'module.d.ts'
 	node_modules/module3/index.d.ts
@@ -300,7 +300,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	module2.d.ts
 	  Imported via "./module2" from file 'module.d.ts'
 	node_modules/module3/index.d.ts

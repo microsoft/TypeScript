@@ -97,7 +97,7 @@ export declare function foo(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/library/index.ts": {
         "original": {
@@ -107,7 +107,7 @@ export declare function foo(): void;
         },
         "version": "3524703962-export function foo() {}",
         "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -153,7 +153,7 @@ export declare function foo(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../../shared/bld/library/index.d.ts": {
         "original": {
@@ -162,7 +162,7 @@ export declare function foo(): void;
         },
         "version": "-5677608893-export declare function foo(): void;\n",
         "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/program/bar.ts": {
         "original": {
@@ -171,7 +171,7 @@ export declare function foo(): void;
         },
         "version": "-9677035610-import {foo} from \"shared\";",
         "signature": "-9677035610-import {foo} from \"shared\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../../src/program/index.ts": {
         "original": {
@@ -182,7 +182,7 @@ export declare function foo(): void;
         "version": "193491849-foo",
         "signature": "193491849-foo",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -332,7 +332,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../../../shared/src/library/index.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts

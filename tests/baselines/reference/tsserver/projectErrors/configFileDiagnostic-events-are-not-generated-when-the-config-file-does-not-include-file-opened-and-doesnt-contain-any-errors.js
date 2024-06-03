@@ -70,7 +70,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -145,7 +145,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	test.ts
 	  Root file specified for compilation
 
@@ -298,7 +298,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	test2.ts
 	  Root file specified for compilation
 

@@ -59,7 +59,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 ../../../../a/lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+  Default library for target 'ESNext'
 index.ts
   Matched by default include pattern '**/*'
   Imported via "@this/package" from file 'index.ts'
@@ -103,7 +103,7 @@ export declare function thing(): void;
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../index.ts": {
         "original": {
@@ -113,7 +113,7 @@ export declare function thing(): void;
         },
         "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
         "signature": "-2724770439-export declare function thing(): void;\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": "ESNext"
       }
     },
     "root": [

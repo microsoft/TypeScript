@@ -77,7 +77,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/file2.ts
 	  Imported via "./file2" from file 'src/file1.ts'
 	  Matched by default include pattern '**/*'

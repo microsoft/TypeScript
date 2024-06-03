@@ -83,7 +83,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/strings/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/strings/foo.json
   Matched by include pattern 'foo.json' in 'src/strings/tsconfig.json'
 [[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/tsconfig.tsbuildinfo' does not exist
@@ -91,7 +91,7 @@ src/strings/foo.json
 [[90mHH:MM:SS AM[0m] Building project '/src/main/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/strings/foo.json
   Imported via '../strings/foo.json' from file 'src/main/index.ts'
 src/main/index.ts
@@ -136,7 +136,7 @@ console.log(foo_json_1.foo);
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "../strings/foo.json": {
         "version": "-6280880055-{\n  \"foo\": \"bar baz\"\n}",
@@ -150,7 +150,7 @@ console.log(foo_json_1.foo);
         },
         "version": "-6647471184-import { foo } from '../strings/foo.json';\nconsole.log(foo);\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -198,7 +198,7 @@ console.log(foo_json_1.foo);
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./foo.json": {
         "version": "-6280880055-{\n  \"foo\": \"bar baz\"\n}",

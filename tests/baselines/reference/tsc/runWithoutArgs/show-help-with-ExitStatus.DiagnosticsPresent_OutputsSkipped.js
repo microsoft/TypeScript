@@ -101,17 +101,17 @@ default: false
 
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, esnext
-default: es5
+one of: ES5, ES2015/ES6, ES2016, ES2017, ES2018, ES2019, ES2020, ES2021, ES2022, ES2023, ESNext
+default: ES5
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, nodenext, preserve
+one of: None, CommonJS, AMD, UMD, System, ES2015/ES6, ES2020, ES2022, ESNext, Node16, NodeNext, Preserve
 default: undefined
 
 [94m--lib[39m
 Specify a set of bundled library declaration files that describe the target runtime environment.
-one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.sharedmemory, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.string, esnext.promise, esnext.decorators, esnext.object, esnext.regexp, decorators, decorators.legacy
+one or more: ES5, ES2015/ES6, ES2016/ES7, ES2017, ES2018, ES2019, ES2020, ES2021, ES2022, ES2023, ESNext, DOM, DOM.Iterable, DOM.AsyncIterable, WebWorker, WebWorker.ImportScripts, WebWorker.Iterable, WebWorker.AsyncIterable, ScriptHost, ES2015.Core, ES2015.Collection, ES2015.Generator, ES2015.Iterable, ES2015.Promise, ES2015.Proxy, ES2015.Reflect, ES2015.Symbol, ES2015.Symbol.WellKnown, ES2016.Array.Includes/ES2016.Array.Include, ES2016.Intl, ES2017.Date, ES2017.Object, ES2017.SharedMemory, ES2017.String, ES2017.Intl, ES2017.TypedArrays/ES2017.TypedArray, ES2018.AsyncGenerator, ES2018.AsyncIterable/ESNext.AsyncIterable, ES2018.Intl, ES2018.Promise, ES2018.RegExp, ES2019.Array, ES2019.Object, ES2019.String, ES2019.Symbol/ESNext.Symbol, ES2019.Intl, ES2020.BigInt/ESNext.BigInt, ES2020.Date, ES2020.Promise, ES2020.SharedMemory, ES2020.String, ES2020.Symbol.WellKnown, ES2020.Intl, ES2020.Number, ES2021.Promise, ES2021.String, ES2021.WeakRef/ESNext.WeakRef, ES2021.Intl, ES2022.Array, ES2022.Error, ES2022.Intl, ES2022.Object, ES2022.SharedMemory, ES2022.String, ES2022.RegExp, ES2023.Array, ES2023.Collection, ES2023.Intl, ESNext.Array, ESNext.Collection, ESNext.Intl, ESNext.Disposable, ESNext.String, ESNext.Promise, ESNext.Decorators, ESNext.Object, ESNext.RegExp, Decorators, Decorators.Legacy
 default: undefined
 
 [94m--allowJs[39m

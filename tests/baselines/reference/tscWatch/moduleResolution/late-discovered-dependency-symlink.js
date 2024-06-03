@@ -117,7 +117,7 @@ File '/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as 
 Resolving real path for '/workspace/packageC/node_modules/package-a/index.d.ts', result '/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/workspace/packageA/index.d.ts'. ========
 ../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -248,7 +248,7 @@ File '/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as 
 Resolving real path for '/workspace/packageC/node_modules/package-a/index.d.ts', result '/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/workspace/packageA/index.d.ts'. ========
 ../../a/lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts

@@ -155,7 +155,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../B/src/foo.ts
 	  Imported via 'b/lib/foo' from file 'src/test.ts'
 	../B/src/bar/foo.ts

@@ -115,8 +115,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es2018",
-            "module": "commonjs",
+            "target": "ES2018",
+            "module": "CommonJS",
             "strict": true,
             "esModuleInterop": true,
             "rootDir": "",
@@ -149,9 +149,27 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/packages/babel-loader/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
+            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES2018'",
             "code": 6053,
-            "category": "error"
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 4,
+                    "offset": 19
+                  },
+                  "end": {
+                    "line": 4,
+                    "offset": 27
+                  },
+                  "file": "/packages/babel-loader/tsconfig.json"
+                },
+                "message": "File is default library for target specified here.",
+                "category": "message",
+                "code": 1426
+              }
+            ]
           },
           {
             "text": "Cannot find global type 'Array'.",

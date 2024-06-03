@@ -89,7 +89,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Imported via "./moduleFile1" from file 'file1Consumer2.ts'
@@ -375,7 +375,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Matched by default include pattern '**/*'

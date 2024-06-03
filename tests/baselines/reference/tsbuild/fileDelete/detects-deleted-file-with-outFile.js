@@ -32,7 +32,7 @@ export function child2() {
   "compilerOptions": {
     "composite": true,
     "outFile": "../childResult.js",
-    "module": "amd"
+    "module": "AMD"
   }
 }
 
@@ -48,7 +48,7 @@ export function main() {
   "compilerOptions": {
     "composite": true,
     "outFile": "../mainResult.js",
-    "module": "amd"
+    "module": "AMD"
   },
   "references": [
     {
@@ -82,7 +82,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/child/child2.ts
   Imported via "../child/child2" from file 'src/child/child.ts'
   Matched by default include pattern '**/*'
@@ -122,7 +122,7 @@ File '/child.jsx' does not exist.
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/childResult.d.ts
   Output from referenced project 'src/child/tsconfig.json' included because '--outFile' specified
 src/main/main.ts
@@ -175,7 +175,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./child/child2.ts": {
         "original": {
@@ -183,7 +183,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
           "impliedFormat": 1
         },
         "version": "6507293504-export function child2() {\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./child/child.ts": {
         "original": {
@@ -191,7 +191,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
           "impliedFormat": 1
         },
         "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -251,7 +251,7 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./childresult.d.ts": {
         "original": {
@@ -259,7 +259,7 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
           "impliedFormat": 1
         },
         "version": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./main/main.ts": {
         "original": {
@@ -267,7 +267,7 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
           "impliedFormat": 1
         },
         "version": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -324,7 +324,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
 lib/lib.d.ts
-  Default library for target 'es5'
+  Default library for target 'ES5'
 src/child/child.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors

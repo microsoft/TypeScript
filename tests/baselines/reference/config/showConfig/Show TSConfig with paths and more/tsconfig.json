@@ -3,9 +3,9 @@
         "allowJs": true,
         "outDir": "./lib",
         "esModuleInterop": true,
-        "module": "commonjs",
-        "moduleResolution": "node10",
-        "target": "es2017",
+        "module": "CommonJS",
+        "moduleResolution": "Node10",
+        "target": "ES2017",
         "sourceMap": true,
         "baseUrl": "./",
         "paths": {

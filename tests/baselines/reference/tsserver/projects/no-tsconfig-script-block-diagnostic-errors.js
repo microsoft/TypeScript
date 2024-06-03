@@ -112,7 +112,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 	f2.html
@@ -355,7 +355,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 
@@ -587,7 +587,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 
@@ -826,7 +826,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	f1.ts
 	  Part of 'files' list in tsconfig.json
 	f2.html
@@ -1068,7 +1068,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 

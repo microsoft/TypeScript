@@ -80,7 +80,7 @@ var classnames_1 = require("classnames");
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/classnames/index.d.ts": {
         "original": {
@@ -89,7 +89,7 @@ var classnames_1 = require("classnames");
         },
         "version": "1239706283-export interface Result {} export default function classNames(): Result;",
         "signature": "1239706283-export interface Result {} export default function classNames(): Result;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -98,7 +98,7 @@ var classnames_1 = require("classnames");
         },
         "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
         "signature": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/types/classnames.d.ts": {
         "original": {
@@ -107,7 +107,7 @@ var classnames_1 = require("classnames");
         },
         "version": "-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }",
         "signature": "-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [
@@ -297,7 +297,7 @@ Output::
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./node_modules/classnames/index.d.ts": {
         "original": {
@@ -306,7 +306,7 @@ Output::
         },
         "version": "1239706283-export interface Result {} export default function classNames(): Result;",
         "signature": "1239706283-export interface Result {} export default function classNames(): Result;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/index.ts": {
         "original": {
@@ -316,7 +316,7 @@ Output::
         },
         "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       },
       "./src/types/classnames.d.ts": {
         "original": {
@@ -325,7 +325,7 @@ Output::
         },
         "version": "-14890340642-export {}; declare module \"classnames\" { interface Result {} }",
         "signature": "-14890340642-export {}; declare module \"classnames\" { interface Result {} }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": "CommonJS"
       }
     },
     "root": [

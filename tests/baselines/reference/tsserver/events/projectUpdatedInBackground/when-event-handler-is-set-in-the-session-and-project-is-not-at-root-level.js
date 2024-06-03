@@ -89,7 +89,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	file1.ts
 	  Matched by default include pattern '**/*'
 	file3.ts
@@ -415,7 +415,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	../node_modules/file2.d.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts

@@ -204,7 +204,7 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	product/module2.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "../module2" from file 'product/src/file1.ts'

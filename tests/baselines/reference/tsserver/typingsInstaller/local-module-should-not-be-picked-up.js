@@ -302,7 +302,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/jsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'ES5'",
             "code": 6053,
             "category": "error"
           },
@@ -355,7 +355,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 35
             },
-            "text": "Argument for '--moduleResolution' option must be: 'node10', 'classic', 'node16', 'nodenext', 'bundler'.",
+            "text": "Argument for '--moduleResolution' option must be: 'Node10', 'Classic', 'Node16', 'NodeNext', 'Bundler'.",
             "code": 6046,
             "category": "error",
             "fileName": "/a/jsconfig.json"

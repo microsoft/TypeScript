@@ -93,7 +93,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	  Default library for target 'ES5'
 	src/blabla.json
 	  Imported via "./blabla.json" from file 'src/test.ts'
 	  Matched by include pattern './src/*.json' in 'tsconfig.json'
