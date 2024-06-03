@@ -8614,7 +8614,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.TypeQuery:
                         return tryVisitTypeQuery(innerNode as TypeQueryNode);
                     case SyntaxKind.IndexedAccessType:
-                        return tryVisitIndexAccess(innerNode as IndexedAccessTypeNode);
+                        return tryVisitIndexedAccess(innerNode as IndexedAccessTypeNode);
                     case SyntaxKind.TypeOperator:
                         const typeOperatorNode = innerNode as TypeOperatorNode;
                         if (typeOperatorNode.operator === SyntaxKind.KeyOfKeyword) {
@@ -8623,13 +8623,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return visitNode(node, visitExistingNodeTreeSymbols, isTypeNode);
             }
-            function tryVisitIndexAccess(node: IndexedAccessTypeNode): TypeNode | undefined {
+
+            function tryVisitIndexedAccess(node: IndexedAccessTypeNode): TypeNode | undefined {
                 const resultObjectType = tryVisitSimpleTypeNode(node.objectType);
                 if (resultObjectType === undefined) {
                     return undefined;
                 }
                 return factory.updateIndexedAccessTypeNode(node, resultObjectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
             }
+
             function tryVisitKeyOf(node: TypeOperatorNode): TypeNode | undefined {
                 Debug.assertEqual(node.operator, SyntaxKind.KeyOfKeyword);
                 const type = tryVisitSimpleTypeNode(node.type);
@@ -8638,6 +8640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return factory.updateTypeOperatorNode(node, type);
             }
+
             function tryVisitTypeQuery(node: TypeQueryNode): TypeNode | undefined {
                 const { introducesError, node: exprName } = trackExistingEntityName(node.exprName, context);
                 if (!introducesError) {
@@ -8653,6 +8656,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return setTextRange(context, serializedName, node.exprName);
                 }
             }
+
             function tryVisitTypeReference(node: TypeReferenceNode): TypeNode | undefined {
                 if (canReuseTypeNode(context, node)) {
                     const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
@@ -8781,7 +8785,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 if (isIndexedAccessTypeNode(node)) {
-                    const result = tryVisitIndexAccess(node);
+                    const result = tryVisitIndexedAccess(node);
                     if (!result) {
                         hadError = true;
                         return node;
