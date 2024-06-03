@@ -189,8 +189,22 @@ module.exports = {};
   "size": 1206
 }
 
+//// [/lib/sub-project/index.d.ts]
+export type MyNominal = Nominal<string, "MyNominal">;
+import { Nominal } from '../common/nominal';
+
+
+//// [/lib/sub-project/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var nominal_1 = require("../common/nominal");
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+
+
 //// [/lib/sub-project/tsconfig.tsbuildinfo]
-{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../../src/sub-project/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n","-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n"],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":7,"messageText":"'Nominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../common/nominal\").Nominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"affectedFilesPendingEmit":[3],"emitSignatures":[3],"version":"FakeTSVersion"}
+{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../../src/sub-project/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n",{"version":"-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n","signature":"-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n"}],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":7,"messageText":"'Nominal' is a type and cannot be imported in JavaScript files. Use 'import(\"../common/nominal\").Nominal' in a JSDoc type annotation.","category":1,"code":18042}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/lib/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -219,8 +233,12 @@ module.exports = {};
       "signature": "-13020584488-export type Nominal<T, Name> = T & {\n    [Symbol.species]: Name;\n};\n"
     },
     "../../src/sub-project/index.js": {
+      "original": {
+        "version": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n",
+        "signature": "-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n"
+      },
       "version": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n",
-      "signature": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n"
+      "signature": "-13328259909-export type MyNominal = Nominal<string, \"MyNominal\">;\nimport { Nominal } from '../common/nominal';\n"
     }
   },
   "root": [
@@ -257,16 +275,8 @@ module.exports = {};
       ]
     ]
   ],
-  "affectedFilesPendingEmit": [
-    [
-      "../../src/sub-project/index.js",
-      "Js | Dts"
-    ]
-  ],
-  "emitSignatures": [
-    "../../src/sub-project/index.js"
-  ],
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1511
+  "size": 1640
 }
 

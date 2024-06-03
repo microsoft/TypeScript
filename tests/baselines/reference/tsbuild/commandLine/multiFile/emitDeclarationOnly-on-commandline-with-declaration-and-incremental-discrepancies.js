@@ -147,13 +147,31 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./e.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/a.d.ts",
+      "not cached"
+    ],
+    [
+      "./f.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/b.d.ts",
+      "not cached"
+    ],
+    [
+      "./g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }
@@ -205,13 +223,31 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./e.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/a.d.ts",
+      "not cached"
+    ],
+    [
+      "./f.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/b.d.ts",
+      "not cached"
+    ],
+    [
+      "./g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }
@@ -268,13 +304,31 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./e.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/a.d.ts",
+      "not cached"
+    ],
+    [
+      "./f.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/b.d.ts",
+      "not cached"
+    ],
+    [
+      "./g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }
@@ -326,13 +380,31 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./e.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/a.d.ts",
+      "not cached"
+    ],
+    [
+      "./f.ts",
+      "not cached"
+    ],
+    [
+      "../../project1/src/b.d.ts",
+      "not cached"
+    ],
+    [
+      "./g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }

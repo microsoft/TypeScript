@@ -271,8 +271,25 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/childResult.d.ts]
+declare module "child" {
+    export function child(): void;
+}
+
+
+//// [/src/childResult.js]
+define("child", ["require", "exports", "../child/child2"], function (require, exports, child2_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.child = child;
+    function child() {
+        (0, child2_1.child2)();
+    }
+});
+
+
 //// [/src/childResult.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
 
 //// [/src/childResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -309,13 +326,9 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     ]
   ],
-  "outSignature": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
+  "outSignature": "8966811613-declare module \"child\" {\n    export function child(): void;\n}\n",
   "latestChangedDtsFile": "./childResult.d.ts",
-  "pendingEmit": [
-    "Js | Dts",
-    false
-  ],
   "version": "FakeTSVersion",
-  "size": 1195
+  "size": 1106
 }
 

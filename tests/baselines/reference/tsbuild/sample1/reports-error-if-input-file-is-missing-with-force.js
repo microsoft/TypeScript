@@ -129,8 +129,25 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/user/username/projects/sample1/core/index.d.ts]
+export declare const someString: string;
+export declare function leftPad(s: string, n: number): string;
+export declare function multiply(a: number, b: number): number;
+
+
+//// [/user/username/projects/sample1/core/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
+exports.someString = "HELLO WORLD";
+function leftPad(s, n) { return s + n; }
+function multiply(a, b) { return a * b; }
+
+
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":false},{"version":"-7959511260-declare const dts: any;","signature":false,"affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -143,26 +160,27 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "../../../../../a/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": false,
         "affectsGlobalScope": true
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./index.ts": {
       "original": {
         "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-        "signature": false
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
       },
-      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
     },
     "./some_decl.d.ts": {
       "original": {
         "version": "-7959511260-declare const dts: any;",
-        "signature": false,
         "affectsGlobalScope": true
       },
       "version": "-7959511260-declare const dts: any;",
+      "signature": "-7959511260-declare const dts: any;",
       "affectsGlobalScope": true
     }
   },
@@ -179,12 +197,22 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
   "options": {
     "composite": true
   },
-  "changeFileSet": [
-    "../../../../../a/lib/lib.d.ts",
-    "./index.ts",
-    "./some_decl.d.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../a/lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./index.ts",
+      "not cached"
+    ],
+    [
+      "./some_decl.d.ts",
+      "not cached"
+    ]
   ],
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1005
+  "size": 1200
 }
 

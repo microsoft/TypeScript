@@ -153,6 +153,62 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
+//// [/src/projects/project2/tsconfig.tsbuildinfo]
+{"fileNames":["../../../lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"latestChangedDtsFile":"./class2.d.ts","errors":true,"version":"FakeTSVersion"}
+
+//// [/src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../lib/lib.d.ts",
+    "../project1/class1.d.ts",
+    "./class2.ts"
+  ],
+  "fileInfos": {
+    "../../../lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../project1/class1.d.ts": {
+      "original": {
+        "version": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "version": "-3469237238-declare class class1 {}",
+      "signature": "-3469237238-declare class class1 {}",
+      "affectsGlobalScope": true
+    },
+    "./class2.ts": {
+      "original": {
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      },
+      "version": "777969115-class class2 {}",
+      "signature": "-2684084705-declare class class2 {\n}\n",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      3,
+      "./class2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0
+  },
+  "latestChangedDtsFile": "./class2.d.ts",
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 898
+}
+
 
 
 Change:: Add output of class3
@@ -329,11 +385,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "semanticDiagnosticsPerFile": [
     [
       "../project1/class1.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./class2.ts",
-      "not cached or not changed"
+      "not cached"
     ]
   ],
   "latestChangedDtsFile": "./class2.d.ts",

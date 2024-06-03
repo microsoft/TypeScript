@@ -64,12 +64,18 @@ Output::
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 109
 }
 
 
@@ -106,9 +112,17 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (used version)
+/user/username/projects/noemitonerror/src/other.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -129,7 +143,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -163,7 +177,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -191,7 +205,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -199,8 +213,20 @@ Output::
 
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
+
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -242,16 +268,10 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-/user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -288,8 +308,21 @@ Output::
 
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
+
 
 
 Program root files: [
@@ -336,7 +369,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -396,7 +429,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -406,8 +439,20 @@ Output::
 
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
+
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";

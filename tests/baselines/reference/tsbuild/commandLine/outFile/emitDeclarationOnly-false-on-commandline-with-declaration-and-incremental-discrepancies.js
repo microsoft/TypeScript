@@ -93,12 +93,27 @@ CleanBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "../project1/outfile.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/e.ts",
+      "not cached"
+    ],
+    [
+      "./src/f.ts",
+      "not cached"
+    ],
+    [
+      "./src/g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }
@@ -130,12 +145,27 @@ IncrementalBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "../project1/outfile.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/e.ts",
+      "not cached"
+    ],
+    [
+      "./src/f.ts",
+      "not cached"
+    ],
+    [
+      "./src/g.ts",
+      "not cached"
+    ]
   ],
   "version": "FakeTSVersion"
 }

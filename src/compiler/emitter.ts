@@ -420,6 +420,7 @@ import {
     WithStatement,
     writeCommentRange,
     writeFile,
+    WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -923,7 +924,7 @@ export function emitFiles(
                 isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
-            printSourceFileOrBundle(
+            const dtsWritten = printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
                 declarationTransform,
@@ -937,7 +938,7 @@ export function emitFiles(
                 },
             );
             if (emittedFilesList) {
-                emittedFilesList.push(declarationFilePath);
+                if (dtsWritten) emittedFilesList.push(declarationFilePath);
                 if (declarationMapPath) {
                     emittedFilesList.push(declarationMapPath);
                 }
@@ -1027,10 +1028,12 @@ export function emitFiles(
 
         // Write the output file
         const text = writer.getText();
-        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
+        const data: WriteFileCallbackData = { sourceMapUrlPos, diagnostics: transform.diagnostics };
+        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, data);
 
         // Reset state
         writer.clear();
+        return !data.skippedDtsWrite;
     }
 
     interface SourceMapOptions {

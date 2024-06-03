@@ -152,12 +152,15 @@ var container;
 
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../../exec/index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../../exec/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 58
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.js]

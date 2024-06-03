@@ -4523,6 +4523,7 @@ export interface WriteFileCallbackData {
     /** @internal */ buildInfo?: BuildInfo;
     /** @internal */ diagnostics?: readonly DiagnosticWithLocation[];
     /** @internal */ differsOnlyInMap?: true;
+    /** @internal */ skippedDtsWrite?: true;
 }
 export type WriteFileCallback = (
     fileName: string,

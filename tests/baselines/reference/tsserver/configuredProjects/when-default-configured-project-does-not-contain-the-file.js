@@ -54,12 +54,15 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 50
 }
 
 

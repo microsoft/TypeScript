@@ -4,6 +4,9 @@ The incremental build does not build third so will only update timestamps for th
 TsBuild info text without affectedFilesPendingEmit:: /src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
+  "root": [
+    "../../third_part1.ts"
+  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:

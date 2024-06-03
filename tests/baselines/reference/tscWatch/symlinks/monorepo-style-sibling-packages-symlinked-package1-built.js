@@ -92,12 +92,15 @@ export type BarType = "bar";
 
 
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 53
 }
 
 
