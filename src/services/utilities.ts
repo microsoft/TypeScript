@@ -2340,7 +2340,7 @@ export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLi
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = position <= node.getEnd() ? position : node.getEnd();
+        replacementEnd = Math.min(position, node.getEnd());
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
