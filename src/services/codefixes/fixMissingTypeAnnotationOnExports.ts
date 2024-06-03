@@ -254,6 +254,8 @@ function withContext<T>(
     };
 
     function addTypeAnnotation(span: TextSpan) {
+        context.cancellationToken.throwIfCancellationRequested();
+
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
 
         const expandoFunction = findExpandoFunction(nodeWithDiag);
@@ -331,6 +333,8 @@ function withContext<T>(
     }
 
     function addInlineAssertion(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
+        context.cancellationToken.throwIfCancellationRequested();
+
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const expandoFunction = findExpandoFunction(nodeWithDiag);
         // No inline assertions for expando members
@@ -406,6 +410,8 @@ function withContext<T>(
     }
 
     function extractAsVariable(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
+        context.cancellationToken.throwIfCancellationRequested();
+
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const targetNode = findBestFittingNode(nodeWithDiag, span) as Expression;
         if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
