@@ -1006,12 +1006,12 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 
 
 
-Change:: with declaration should not emit anything
+Change:: with emitDeclarationOnly should not emit anything
 Input::
 
 
 Output::
-/lib/tsc --b /src/project --verbose --declaration
+/lib/tsc --b /src/project --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 

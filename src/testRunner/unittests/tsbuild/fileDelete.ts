@@ -38,7 +38,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
 
     verifyTsc({
         scenario: "fileDelete",
-        subScenario: `detects deleted file`,
+        subScenario: `multiFile/detects deleted file`,
         commandLineArgs: ["--b", "/src/main/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
         fs: () => fs({ composite: true }, { composite: true }),
         edits: [{
@@ -57,7 +57,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
 
     verifyTsc({
         scenario: "fileDelete",
-        subScenario: `detects deleted file with outFile`,
+        subScenario: `outFile/detects deleted file`,
         commandLineArgs: ["--b", "/src/main/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
         fs: () => fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
@@ -68,7 +68,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
 
     verifyTsc({
         scenario: "fileDelete",
-        subScenario: `deleted file without composite`,
+        subScenario: `multiFile/deleted file without composite`,
         commandLineArgs: ["--b", "/src/child/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
         fs: () => fs({}),
         edits: [{
@@ -82,7 +82,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
 
     verifyTsc({
         scenario: "fileDelete",
-        subScenario: `deleted file with outFile without composite`,
+        subScenario: `outFile/deleted file without composite`,
         commandLineArgs: ["--b", "/src/child/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
         fs: () => fs({ outFile: "../childResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
