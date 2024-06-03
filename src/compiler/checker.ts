@@ -8601,7 +8601,58 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
             }
 
-            function tryVisitTypeReference(node: TypeReferenceNode) {
+            function tryVisitSimpleTypeNode(node: TypeNode): TypeNode | undefined {
+                const innerNode = skipTypeParentheses(node);
+                switch (innerNode.kind) {
+                    case SyntaxKind.TypeReference:
+                        return tryVisitTypeReference(innerNode as TypeReferenceNode);
+                    case SyntaxKind.TypeQuery:
+                        return tryVisitTypeQuery(innerNode as TypeQueryNode);
+                    case SyntaxKind.IndexedAccessType:
+                        return tryVisitIndexedAccess(innerNode as IndexedAccessTypeNode);
+                    case SyntaxKind.TypeOperator:
+                        const typeOperatorNode = innerNode as TypeOperatorNode;
+                        if (typeOperatorNode.operator === SyntaxKind.KeyOfKeyword) {
+                            return tryVisitKeyOf(typeOperatorNode);
+                        }
+                }
+                return visitNode(node, visitExistingNodeTreeSymbols, isTypeNode);
+            }
+
+            function tryVisitIndexedAccess(node: IndexedAccessTypeNode): TypeNode | undefined {
+                const resultObjectType = tryVisitSimpleTypeNode(node.objectType);
+                if (resultObjectType === undefined) {
+                    return undefined;
+                }
+                return factory.updateIndexedAccessTypeNode(node, resultObjectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
+            }
+
+            function tryVisitKeyOf(node: TypeOperatorNode): TypeNode | undefined {
+                Debug.assertEqual(node.operator, SyntaxKind.KeyOfKeyword);
+                const type = tryVisitSimpleTypeNode(node.type);
+                if (type === undefined) {
+                    return undefined;
+                }
+                return factory.updateTypeOperatorNode(node, type);
+            }
+
+            function tryVisitTypeQuery(node: TypeQueryNode): TypeNode | undefined {
+                const { introducesError, node: exprName } = trackExistingEntityName(node.exprName, context);
+                if (!introducesError) {
+                    return factory.updateTypeQueryNode(
+                        node,
+                        exprName,
+                        visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
+                    );
+                }
+
+                const serializedName = serializeTypeName(context, node.exprName, /*isTypeOf*/ true);
+                if (serializedName) {
+                    return setTextRange(context, serializedName, node.exprName);
+                }
+            }
+
+            function tryVisitTypeReference(node: TypeReferenceNode): TypeNode | undefined {
                 if (canReuseTypeNode(context, node)) {
                     const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
                     const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
@@ -8728,13 +8779,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
 
-                if (isIndexedAccessTypeNode(node) && isTypeReferenceNode(node.objectType)) {
-                    const objectType = tryVisitTypeReference(node.objectType);
-                    if (!objectType) {
+                if (isIndexedAccessTypeNode(node)) {
+                    const result = tryVisitIndexedAccess(node);
+                    if (!result) {
                         hadError = true;
                         return node;
                     }
-                    return factory.updateIndexedAccessTypeNode(node, objectType, visitNode(node.indexType, visitExistingNodeTreeSymbols, isTypeNode)!);
+                    return result;
                 }
 
                 if (isTypeReferenceNode(node)) {
@@ -8790,20 +8841,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return visited;
                 }
                 if (isTypeQueryNode(node)) {
-                    const { introducesError, node: exprName } = trackExistingEntityName(node.exprName, context);
-                    if (introducesError) {
-                        const serializedName = serializeTypeName(context, node.exprName, /*isTypeOf*/ true);
-                        if (serializedName) {
-                            return setTextRange(context, serializedName, node.exprName);
-                        }
+                    const result = tryVisitTypeQuery(node);
+                    if (!result) {
                         hadError = true;
                         return node;
                     }
-                    return factory.updateTypeQueryNode(
-                        node,
-                        exprName,
-                        visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
-                    );
+                    return result;
                 }
                 if (isComputedPropertyName(node) && isEntityNameExpression(node.expression)) {
                     const { node: result, introducesError } = trackExistingEntityName(node.expression, context);
@@ -8877,14 +8920,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else if (node.operator === SyntaxKind.KeyOfKeyword) {
-                        if (isTypeReferenceNode(node.type)) {
-                            const type = tryVisitTypeReference(node.type);
-                            if (!type) {
-                                hadError = true;
-                                return node;
-                            }
-                            return factory.updateTypeOperatorNode(node, type);
+                        const result = tryVisitKeyOf(node);
+                        if (!result) {
+                            hadError = true;
+                            return node;
                         }
+                        return result;
                     }
                 }
 
