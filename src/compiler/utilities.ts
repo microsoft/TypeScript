@@ -11645,14 +11645,6 @@ export function unwrapParenthesizedExpression(o: Expression) {
 }
 
 /** @internal */
-export function unwrapParenthesizedType(o: TypeNode) {
-    while (o.kind === SyntaxKind.ParenthesizedType) {
-        o = (o as ParenthesizedTypeNode).type;
-    }
-    return o;
-}
-
-/** @internal */
 export function hasInferredType(node: Node): node is HasInferredType {
     Debug.type<HasInferredType>(node);
     switch (node.kind) {
