@@ -67,7 +67,7 @@ import {
     TypeReferenceSerializationKind,
     UnionOrIntersectionTypeNode,
     VoidExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export type SerializedEntityName =

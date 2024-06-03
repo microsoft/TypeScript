@@ -54,13 +54,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -116,13 +109,6 @@ IncrementalBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -183,13 +169,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -245,13 +224,6 @@ IncrementalBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -312,13 +284,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -374,13 +339,6 @@ IncrementalBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"

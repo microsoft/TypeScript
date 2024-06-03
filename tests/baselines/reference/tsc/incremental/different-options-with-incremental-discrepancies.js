@@ -50,13 +50,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "options": {}
   },
   "version": "FakeTSVersion"
@@ -112,14 +105,7 @@ IncrementalBuild:
       "./d.ts": [
         "./b.ts"
       ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ]
+    }
   },
   "version": "FakeTSVersion"
 }
@@ -175,13 +161,6 @@ CleanBuild:
         "./b.ts"
       ]
     },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ],
     "options": {}
   },
   "version": "FakeTSVersion"
@@ -237,14 +216,7 @@ IncrementalBuild:
       "./d.ts": [
         "./b.ts"
       ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./d.ts"
-    ]
+    }
   },
   "version": "FakeTSVersion"
 }

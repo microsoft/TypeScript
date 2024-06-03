@@ -65,20 +65,20 @@ const loader = <AsyncLoader
 >            : ^^^^^^^^^^^^^^^^^^
 
     prop1={load}
->prop1 : () => Promise<ErrorResult | { success: true; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->load : () => Promise<ErrorResult | { success: true; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop1 : () => Promise<{ success: true; } | ErrorResult>
+>      : ^^^^^^                                         
+>load : () => Promise<{ success: true; } | ErrorResult>
+>     : ^^^^^^                                         
 
     prop2={result => result}
 >prop2 : (result: { success: true; }) => { success: true; }
->      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^
 >result => result : (result: { success: true; }) => { success: true; }
->                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^      ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^
 >result : { success: true; }
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^    ^^^
 >result : { success: true; }
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^    ^^^
 
 />;
 

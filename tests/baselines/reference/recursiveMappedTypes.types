@@ -35,8 +35,8 @@ type tup = [number, number, number, number];
 >    : ^^^
 
 function foo(arg: Circular<tup>): tup {
->foo : (arg: any) => tup
->    : ^   ^^^^^^^^^^   
+>foo : (arg: Circular<tup>) => tup
+>    : ^   ^^             ^^^^^   
 >arg : any
 >    : ^^^
 

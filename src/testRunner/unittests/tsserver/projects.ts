@@ -1,10 +1,10 @@
-import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     commonFile1,
     commonFile2,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -17,14 +17,14 @@ import {
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
-import { customTypesMap } from "../helpers/typingsInstaller";
+} from "../helpers/tsserver.js";
+import { customTypesMap } from "../helpers/typingsInstaller.js";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projects::", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {
@@ -177,7 +177,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             session.host.baselineHost("Before request");
             session.logger.info(`request:${ts.server.stringifyIndented(request)}`);
-            session.getProjectService().openExternalProject(request.arguments, /*print*/ true);
+            session.getProjectService().openExternalProject(request.arguments, /*cleanupAfter*/ true);
             session.host.baselineHost("After request");
             baselineTsserverLogs("projects", "external project including config file", session);
         });
@@ -1416,7 +1416,7 @@ describe("unittests:: tsserver:: projects::", () => {
             });
         }
         catch (e) {
-            assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
+            session.logger.log(e.message);
         }
         baselineTsserverLogs("projects", "assert when removing project", session);
     });

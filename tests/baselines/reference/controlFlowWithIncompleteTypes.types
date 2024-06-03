@@ -39,11 +39,11 @@ function foo1() {
 >x.slice() : string
 >          : ^^^^^^
 >x.slice : (start?: number, end?: number) => string
->        : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>        : ^     ^^^      ^^   ^^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
         }
         else {
             x = "abc";
@@ -98,11 +98,11 @@ function foo2() {
 >x.slice() : string
 >          : ^^^^^^
 >x.slice : (start?: number, end?: number) => string
->        : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>        : ^     ^^^      ^^   ^^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
         }
     }
 }

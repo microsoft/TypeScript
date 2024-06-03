@@ -43,7 +43,7 @@ function greeter(person: string, person2: string) {
 >maker2(person2) : void
 >                : ^^^^
 >maker2 : (child2: string) => void
->       : ^      ^^      ^^^^^^^^^
+>       : ^      ^^      ^^^^^    
 >person2 : string
 >        : ^^^^^^
 }

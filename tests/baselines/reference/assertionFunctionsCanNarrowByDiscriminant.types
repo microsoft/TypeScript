@@ -56,7 +56,7 @@ assertEqual(animal.type, 'cat' as const);
 >assertEqual(animal.type, 'cat' as const) : void
 >                                         : ^^^^
 >assertEqual : <T>(value: any, type: T) => asserts value is T
->            : ^ ^^     ^^   ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^   ^^    ^^ ^^^^^                  
 >animal.type : "cat" | "dog"
 >            : ^^^^^^^^^^^^^
 >animal : Animal
@@ -96,7 +96,7 @@ assertEqual(animalOrUndef?.type, 'cat' as const);
 >assertEqual(animalOrUndef?.type, 'cat' as const) : void
 >                                                 : ^^^^
 >assertEqual : <T>(value: any, type: T) => asserts value is T
->            : ^ ^^     ^^   ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^   ^^    ^^ ^^^^^                  
 >animalOrUndef?.type : "cat" | "dog" | undefined
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >animalOrUndef : Animal | undefined

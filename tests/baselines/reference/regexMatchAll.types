@@ -7,7 +7,7 @@ const matches = /\w/g[Symbol.matchAll]("matchAll");
 >/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray>
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/\w/g[Symbol.matchAll] : (str: string) => IterableIterator<RegExpMatchArray>
->                       : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^      ^^^^^                                  
 >/\w/g : RegExp
 >      : ^^^^^^
 >Symbol.matchAll : unique symbol

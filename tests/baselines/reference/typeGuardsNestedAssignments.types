@@ -38,7 +38,7 @@ function f1() {
 >getFooOrNull() : Foo | null
 >               : ^^^^^^^^^^
 >getFooOrNull : () => Foo | null
->             : ^^^^^^^^^^^^^^^^
+>             : ^^^^^^          
 
         foo;  // Foo
 >foo : Foo
@@ -72,7 +72,7 @@ function f2() {
 >getFooOrNull() : Foo | null
 >               : ^^^^^^^^^^
 >getFooOrNull : () => Foo | null
->             : ^^^^^^^^^^^^^^^^
+>             : ^^^^^^          
 >foo2 = foo1 : Foo | null
 >            : ^^^^^^^^^^
 >foo2 : Foo | null
@@ -110,7 +110,7 @@ function f3() {
 >getFooOrNull() : Foo | null
 >               : ^^^^^^^^^^
 >getFooOrNull : () => Foo | null
->             : ^^^^^^^^^^^^^^^^
+>             : ^^^^^^          
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -142,7 +142,7 @@ function f4() {
 >getStringOrNumberOrNull() : string | number | null
 >                          : ^^^^^^^^^^^^^^^^^^^^^^
 >getStringOrNumberOrNull : () => string | number | null
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^                      
 >"number" : "number"
 >         : ^^^^^^^^
 
@@ -176,11 +176,11 @@ while ((match = re.exec("xxx")) != null) {
 >re.exec("xxx") : RegExpExecArray | null
 >               : ^^^^^^^^^^^^^^^^^^^^^^
 >re.exec : (string: string) => RegExpExecArray | null
->        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^      ^^^^^                      
 >re : RegExp
 >   : ^^^^^^
 >exec : (string: string) => RegExpExecArray | null
->     : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^                      
 >"xxx" : "xxx"
 >      : ^^^^^
 

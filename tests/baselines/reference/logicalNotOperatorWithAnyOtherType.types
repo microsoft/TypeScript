@@ -127,7 +127,7 @@ var ResultIsBoolean5 = !obj;
 >!obj : boolean
 >     : ^^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsBoolean6 = !obj1;
 >ResultIsBoolean6 : boolean
@@ -221,7 +221,7 @@ var ResultIsBoolean14 = !foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsBoolean15 = !A.foo();
 >ResultIsBoolean15 : boolean

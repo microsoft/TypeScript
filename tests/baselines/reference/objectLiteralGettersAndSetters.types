@@ -327,7 +327,7 @@ var setParamType1 = {
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
 >                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string
@@ -353,7 +353,7 @@ var setParamType2 = {
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
 >                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string

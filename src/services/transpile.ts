@@ -28,7 +28,7 @@ import {
     ScriptTarget,
     toPath,
     transpileOptionValueCompilerOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;
@@ -59,6 +59,7 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
  * - noLib = true
  * - noResolve = true
  * - declaration = false
+ * - noCheck = true
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
     return transpileWorker(input, transpileOptions, /*declaration*/ false);
@@ -75,6 +76,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
  * - noResolve = true
  * - declaration = true
  * - emitDeclarationOnly = true
+ * - noCheck = true
  * Note that this declaration file may differ from one produced by a full program typecheck,
  * in that only types in the single input file are available to be used in the generated declarations.
  */

@@ -37,11 +37,11 @@ function test(r: Real | Fake) {
 >r.method(12) : void
 >             : ^^^^
 >r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
->         : ^^    ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^    ^^^^^^^^ ^^      ^^^^^^^^^^
+>         : ^^    ^^^^^^^^ ^^      ^^^^^    ^^^^^^    ^^^^^^^^ ^^      ^^^^^    ^
 >r : Real | Fake
 >  : ^^^^^^^^^^^
 >method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
->       : ^^    ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^    ^^^^^^^^ ^^      ^^^^^^^^^^
+>       : ^^    ^^^^^^^^ ^^      ^^^^^    ^^^^^^    ^^^^^^^^ ^^      ^^^^^    ^
 >12 : 12
 >   : ^^
 }

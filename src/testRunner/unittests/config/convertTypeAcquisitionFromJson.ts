@@ -1,7 +1,7 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
-import { baselineParseConfig } from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     function baselineTypeAcquisition(subScenario: string, json: any, configFileName: string) {

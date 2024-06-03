@@ -314,7 +314,7 @@ function someFn() {
 >arr(3)(4).toExponential() : string
 >                          : ^^^^^^
 >arr(3)(4).toExponential : (fractionDigits?: number) => string
->                        : ^              ^^^      ^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^      
 >arr(3)(4) : number
 >          : ^^^^^^
 >arr(3) : (p: number) => number
@@ -326,7 +326,7 @@ function someFn() {
 >4 : 4
 >  : ^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 }
 
 // Arrow function used in function
@@ -352,7 +352,7 @@ function someOtherFn() {
 >arr(4).charAt(0) : string
 >                 : ^^^^^^
 >arr(4).charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >arr(4) : string
 >       : ^^^^^^
 >arr : (n: number) => string
@@ -360,7 +360,7 @@ function someOtherFn() {
 >4 : 4
 >  : ^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 }
@@ -499,11 +499,11 @@ h.toExponential();
 >h.toExponential() : string
 >                  : ^^^^^^
 >h.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >h : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {

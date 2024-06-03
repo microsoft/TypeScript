@@ -19,48 +19,48 @@ Type Count: 1,000
   if (
     perf &&
 >perf &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : (measureName?: string) => void
->                                                                       : ^           ^^^      ^^^^^^^^^
+>                                                                       : ^           ^^^      ^^^^^    
 >perf &&    perf.measure &&    perf.clearMarks : (markName?: string) => void
->                                              : ^        ^^^      ^^^^^^^^^
+>                                              : ^        ^^^      ^^^^^    
 >perf &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 
     perf.measure &&
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 
     perf.clearMarks &&
 >perf.clearMarks : (markName?: string) => void
->                : ^        ^^^      ^^^^^^^^^
+>                : ^        ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
->           : ^        ^^^      ^^^^^^^^^
+>           : ^        ^^^      ^^^^^    
 
     perf.clearMeasures
 >perf.clearMeasures : (measureName?: string) => void
->                   : ^           ^^^      ^^^^^^^^^
+>                   : ^           ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string) => void
->              : ^           ^^^      ^^^^^^^^^
+>              : ^           ^^^      ^^^^^    
 
   ) {
     perf.measure("");
 >perf.measure("") : PerformanceMeasure
 >                 : ^^^^^^^^^^^^^^^^^^
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >"" : ""
 >   : ^^
 
@@ -68,11 +68,11 @@ Type Count: 1,000
 >perf.clearMarks("") : void
 >                    : ^^^^
 >perf.clearMarks : (markName?: string) => void
->                : ^        ^^^      ^^^^^^^^^
+>                : ^        ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
->           : ^        ^^^      ^^^^^^^^^
+>           : ^        ^^^      ^^^^^    
 >"" : ""
 >   : ^^
 
@@ -80,11 +80,11 @@ Type Count: 1,000
 >perf.clearMeasures("") : void
 >                       : ^^^^
 >perf.clearMeasures : (measureName?: string) => void
->                   : ^           ^^^      ^^^^^^^^^
+>                   : ^           ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string) => void
->              : ^           ^^^      ^^^^^^^^^
+>              : ^           ^^^      ^^^^^    
 >"" : ""
 >   : ^^
   }
@@ -93,29 +93,29 @@ Type Count: 1,000
   if (
     perf &&
 >perf &&    perf.mark &&    perf.measure || !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                                                  : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf &&    perf.mark &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf &&    perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->                     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>                     : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 
     perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 
     perf.measure || !!true
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -128,11 +128,11 @@ Type Count: 1,000
 >perf.mark("") : PerformanceMark
 >              : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 >"" : ""
 >   : ^^
   }
@@ -141,33 +141,33 @@ Type Count: 1,000
   if (
     (
 >(      perf &&      perf.mark &&      perf.measure    ) ?? !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                                                                  : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >(      perf &&      perf.mark &&      perf.measure    ) : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                                                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 
       perf &&
 >perf &&      perf.mark &&      perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->                                            : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf &&      perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->                       : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>                       : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 
       perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 
       perf.measure
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 
     ) ?? !!true
 >!!true : true
@@ -182,11 +182,11 @@ Type Count: 1,000
 >perf.mark("") : PerformanceMark
 >              : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 >"" : ""
 >   : ^^
   }
@@ -223,47 +223,47 @@ declare let inBrowser: boolean;
   if (
     perf &&
 >perf &&    perf.mark &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : false | ((measureName?: string) => void)
->                                                                                       : ^^^^^^^^^^           ^^^      ^^^^^^^^^^
+>                                                                                       : ^^^^^^^^^^           ^^^      ^^^^^    ^
 >perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | ((markName?: string) => void)
->                                                              : ^^^^^^^^^^        ^^^      ^^^^^^^^^^
+>                                                              : ^^^^^^^^^^        ^^^      ^^^^^    ^
 >perf &&    perf.mark &&    perf.measure : false | ((measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure)
->                                        : ^^^^^^^^^^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  ^
 >perf &&    perf.mark : false | ((markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark)
->                     : ^^^^^^^^^^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^        ^^      ^^           ^^^                      ^^^^^               ^
 >perf : false | Performance
 >     : ^^^^^^^^^^^^^^^^^^^
 
     perf.mark &&
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 
     perf.measure &&
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 
     perf.clearMarks &&
 >perf.clearMarks : (markName?: string) => void
->                : ^        ^^^      ^^^^^^^^^
+>                : ^        ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
->           : ^        ^^^      ^^^^^^^^^
+>           : ^        ^^^      ^^^^^    
 
     perf.clearMeasures
 >perf.clearMeasures : (measureName?: string) => void
->                   : ^           ^^^      ^^^^^^^^^
+>                   : ^           ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string) => void
->              : ^           ^^^      ^^^^^^^^^
+>              : ^           ^^^      ^^^^^    
 
   ) {
     mark = (tag) => perf.mark(tag)
@@ -278,11 +278,11 @@ declare let inBrowser: boolean;
 >perf.mark(tag) : PerformanceMark
 >               : ^^^^^^^^^^^^^^^
 >perf.mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->          : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^           ^^^                      ^^^^^               
 >perf : Performance
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
->     : ^        ^^      ^^           ^^^                      ^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^           ^^^                      ^^^^^               
 >tag : any
 >    : ^^^
 
@@ -304,11 +304,11 @@ declare let inBrowser: boolean;
 >perf.measure(name, startTag, endTag) : PerformanceMeasure
 >                                     : ^^^^^^^^^^^^^^^^^^
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >perf : Performance
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
->        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
 >name : any
 >     : ^^^
 >startTag : any
@@ -320,11 +320,11 @@ declare let inBrowser: boolean;
 >perf.clearMarks(startTag) : void
 >                          : ^^^^
 >perf.clearMarks : (markName?: string) => void
->                : ^        ^^^      ^^^^^^^^^
+>                : ^        ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
->           : ^        ^^^      ^^^^^^^^^
+>           : ^        ^^^      ^^^^^    
 >startTag : any
 >         : ^^^
 
@@ -332,11 +332,11 @@ declare let inBrowser: boolean;
 >perf.clearMarks(endTag) : void
 >                        : ^^^^
 >perf.clearMarks : (markName?: string) => void
->                : ^        ^^^      ^^^^^^^^^
+>                : ^        ^^^      ^^^^^    
 >perf : Performance
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
->           : ^        ^^^      ^^^^^^^^^
+>           : ^        ^^^      ^^^^^    
 >endTag : any
 >       : ^^^
 
@@ -369,7 +369,7 @@ function isMobile() {
 >typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
 >                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^
 >typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
->                                                        : ^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^^^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^^
 >typeof window !== 'undefined' : boolean
 >                              : ^^^^^^^
 >typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -381,21 +381,21 @@ function isMobile() {
 
       window.matchMedia && // no error
 >window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->                  : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>                  : ^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->           : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>           : ^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^
 
       window.matchMedia('(max-device-width: 680px)');
 >window.matchMedia('(max-device-width: 680px)') : MediaQueryList
 >                                               : ^^^^^^^^^^^^^^
 >window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->                  : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>                  : ^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
->           : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>           : ^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^
 >'(max-device-width: 680px)' : "(max-device-width: 680px)"
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

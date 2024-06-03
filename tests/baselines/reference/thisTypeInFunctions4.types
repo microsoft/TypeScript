@@ -39,7 +39,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >isCorrect(this) : boolean
 >                : ^^^^^^^
 >isCorrect : (obj: any) => obj is CorrectObject
->          : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^   ^^^^^                    
 >this : WrongObject | CorrectObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

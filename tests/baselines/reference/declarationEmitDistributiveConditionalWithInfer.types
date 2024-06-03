@@ -10,7 +10,7 @@ export const fun = (
 
     subFun: <Collection, Field extends keyof Collection>()
 >subFun : <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]
->       : ^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 
+>       : ^          ^^     ^^^^^^^^^                ^^^^^^^                                 
 
         => FlatArray<Collection[Field], 0>[]) => { };
 

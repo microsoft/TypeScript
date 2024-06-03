@@ -141,6 +141,46 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/packages/app/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/packages/app/package.json",
+        "configFile": "/packages/app/tsconfig.json",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 11,
+              "offset": 18
+            },
+            "end": {
+              "line": 11,
+              "offset": 38
+            },
+            "text": "Referenced project '/packages/dep' must have setting \"composite\": true.",
+            "code": 6306,
+            "category": "error",
+            "fileName": "/packages/app/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 11,
+              "offset": 3
+            },
+            "end": {
+              "line": 11,
+              "offset": 15
+            },
+            "text": "',' expected.",
+            "code": 1005,
+            "category": "error",
+            "fileName": "/packages/app/tsconfig.json"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/dep/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -190,46 +230,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/dep/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/packages/app/package.json",
-        "configFile": "/packages/app/tsconfig.json",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 11,
-              "offset": 18
-            },
-            "end": {
-              "line": 11,
-              "offset": 38
-            },
-            "text": "Referenced project '/packages/dep' must have setting \"composite\": true.",
-            "code": 6306,
-            "category": "error",
-            "fileName": "/packages/app/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 11,
-              "offset": 3
-            },
-            "end": {
-              "line": 11,
-              "offset": 15
-            },
-            "text": "',' expected.",
-            "code": 1005,
-            "category": "error",
-            "fileName": "/packages/app/tsconfig.json"
-          }
-        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:

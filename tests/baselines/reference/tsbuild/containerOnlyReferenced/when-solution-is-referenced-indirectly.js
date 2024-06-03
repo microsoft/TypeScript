@@ -71,31 +71,31 @@ export const d = 10;
 
 Output::
 /lib/tsc --b /src/project4 --verbose --explainFiles
-[[90m12:00:20 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
     * src/project3/tsconfig.json
     * src/project4/tsconfig.json
 
-[[90m12:00:21 AM[0m] Project 'src/project2/tsconfig.json' is out of date because output file 'src/project2/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/tsconfig.json' is out of date because output file 'src/project2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:22 AM[0m] Building project '/src/project2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project2/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project2/src/b.ts
   Matched by default include pattern '**/*'
-[[90m12:00:28 AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:29 AM[0m] Building project '/src/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
-[[90m12:00:35 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:36 AM[0m] Building project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -116,7 +116,7 @@ exports.b = 10;
 
 
 //// [/src/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/b.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -157,15 +157,10 @@ exports.b = 10;
     "options": {
       "composite": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/b.ts"
-    ],
     "latestChangedDtsFile": "./src/b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 853
+  "size": 799
 }
 
 //// [/src/project3/src/c.d.ts]
@@ -180,7 +175,7 @@ exports.c = 10;
 
 
 //// [/src/project3/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/c.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -221,15 +216,10 @@ exports.c = 10;
     "options": {
       "composite": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/c.ts"
-    ],
     "latestChangedDtsFile": "./src/c.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 853
+  "size": 799
 }
 
 //// [/src/project4/src/d.d.ts]
@@ -244,7 +234,7 @@ exports.d = 10;
 
 
 //// [/src/project4/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/d.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/d.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -285,15 +275,10 @@ exports.d = 10;
     "options": {
       "composite": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/d.ts"
-    ],
     "latestChangedDtsFile": "./src/d.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 853
+  "size": 799
 }
 
 
@@ -307,27 +292,27 @@ export const cc = 10;
 
 Output::
 /lib/tsc --b /src/project4 --verbose --explainFiles
-[[90m12:00:43 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/tsconfig.json
     * src/project2/tsconfig.json
     * src/project3/tsconfig.json
     * src/project4/tsconfig.json
 
-[[90m12:00:44 AM[0m] Project 'src/project2/tsconfig.json' is up to date because newest input 'src/project2/src/b.ts' is older than output 'src/project2/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/project2/tsconfig.json' is up to date because newest input 'src/project2/src/b.ts' is older than output 'src/project2/tsconfig.tsbuildinfo'
 
-[[90m12:00:45 AM[0m] Project 'src/project3/tsconfig.json' is out of date because output 'src/project3/tsconfig.tsbuildinfo' is older than input 'src/project3/src/c.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project3/tsconfig.json' is out of date because output 'src/project3/tsconfig.tsbuildinfo' is older than input 'src/project3/src/c.ts'
 
-[[90m12:00:46 AM[0m] Building project '/src/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
-[[90m12:00:52 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
+[[90mHH:MM:SS AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
 
-[[90m12:00:53 AM[0m] Building project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
-[[90m12:00:54 AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es5'
@@ -348,7 +333,7 @@ exports.cc = 10;
 
 
 //// [/src/project3/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/c.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -389,15 +374,10 @@ exports.cc = 10;
     "options": {
       "composite": true
     },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/c.ts"
-    ],
     "latestChangedDtsFile": "./src/c.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 855
+  "size": 801
 }
 
 //// [/src/project4/tsconfig.tsbuildinfo] file changed its modified time

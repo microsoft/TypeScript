@@ -63,7 +63,7 @@ import {
     TransformFlags,
     tryCast,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Organize imports by:

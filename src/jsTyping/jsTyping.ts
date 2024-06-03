@@ -29,8 +29,8 @@ import {
     TypeAcquisition,
     Version,
     versionMajorMinor,
-} from "./_namespaces/ts";
-import { stringifyIndented } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { stringifyIndented } from "./_namespaces/ts.server.js";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;

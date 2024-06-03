@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/narrowingNoInfer1.ts] ////
+
+=== narrowingNoInfer1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58266
+
+type TaggedA = { _tag: "a" };
+>TaggedA : Symbol(TaggedA, Decl(narrowingNoInfer1.ts, 0, 0))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16))
+
+type TaggedB = { _tag: "b" };
+>TaggedB : Symbol(TaggedB, Decl(narrowingNoInfer1.ts, 2, 29))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 3, 16))
+
+type TaggedUnion = TaggedA | TaggedB;
+>TaggedUnion : Symbol(TaggedUnion, Decl(narrowingNoInfer1.ts, 3, 29))
+>TaggedA : Symbol(TaggedA, Decl(narrowingNoInfer1.ts, 0, 0))
+>TaggedB : Symbol(TaggedB, Decl(narrowingNoInfer1.ts, 2, 29))
+
+const m: { result: NoInfer<TaggedUnion> }[] = [];
+>m : Symbol(m, Decl(narrowingNoInfer1.ts, 7, 5))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TaggedUnion : Symbol(TaggedUnion, Decl(narrowingNoInfer1.ts, 3, 29))
+
+function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
+>map : Symbol(map, Decl(narrowingNoInfer1.ts, 7, 49))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
+>items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
+>a : Symbol(a, Decl(narrowingNoInfer1.ts, 9, 44))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
+
+  return items.map(f);
+>items.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
+}
+
+const something = map(m, (_) =>
+>something : Symbol(something, Decl(narrowingNoInfer1.ts, 13, 5))
+>map : Symbol(map, Decl(narrowingNoInfer1.ts, 7, 49))
+>m : Symbol(m, Decl(narrowingNoInfer1.ts, 7, 5))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+
+  _.result._tag === "a" ? { ..._, result: _.result } : null,
+>_.result._tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16), Decl(narrowingNoInfer1.ts, 3, 16))
+>_.result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16), Decl(narrowingNoInfer1.ts, 3, 16))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 14, 33))
+>_.result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+
+);
+
+declare function test2<T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void): void;
+>test2 : Symbol(test2, Decl(narrowingNoInfer1.ts, 15, 2))
+>T1 : Symbol(T1, Decl(narrowingNoInfer1.ts, 17, 23))
+>T2 : Symbol(T2, Decl(narrowingNoInfer1.ts, 17, 26))
+>a : Symbol(a, Decl(narrowingNoInfer1.ts, 17, 31))
+>T1 : Symbol(T1, Decl(narrowingNoInfer1.ts, 17, 23))
+>b : Symbol(b, Decl(narrowingNoInfer1.ts, 17, 37))
+>T2 : Symbol(T2, Decl(narrowingNoInfer1.ts, 17, 26))
+>cb : Symbol(cb, Decl(narrowingNoInfer1.ts, 17, 44))
+>thing : Symbol(thing, Decl(narrowingNoInfer1.ts, 17, 50))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(narrowingNoInfer1.ts, 17, 23))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T2 : Symbol(T2, Decl(narrowingNoInfer1.ts, 17, 26))
+
+test2({ type: 'a' as const }, { type: 'b' as const }, (thing) => {
+>test2 : Symbol(test2, Decl(narrowingNoInfer1.ts, 15, 2))
+>type : Symbol(type, Decl(narrowingNoInfer1.ts, 19, 7))
+>const : Symbol(const)
+>type : Symbol(type, Decl(narrowingNoInfer1.ts, 19, 31))
+>const : Symbol(const)
+>thing : Symbol(thing, Decl(narrowingNoInfer1.ts, 19, 55))
+
+  if (thing.type === "a") {
+>thing.type : Symbol(type, Decl(narrowingNoInfer1.ts, 19, 7), Decl(narrowingNoInfer1.ts, 19, 31))
+>thing : Symbol(thing, Decl(narrowingNoInfer1.ts, 19, 55))
+>type : Symbol(type, Decl(narrowingNoInfer1.ts, 19, 7), Decl(narrowingNoInfer1.ts, 19, 31))
+
+    thing;
+>thing : Symbol(thing, Decl(narrowingNoInfer1.ts, 19, 55))
+
+  } else {
+    thing;
+>thing : Symbol(thing, Decl(narrowingNoInfer1.ts, 19, 55))
+  }
+});
+

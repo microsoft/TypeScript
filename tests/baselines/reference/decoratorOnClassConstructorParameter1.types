@@ -17,7 +17,7 @@ class C {
 
     constructor(@dec p: number) {}
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^^^^^
+>    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^    
 >p : number
 >  : ^^^^^^
 }

@@ -1733,7 +1733,7 @@
         "category": "Error",
         "code": 1519
     },
-    "Expected a class set oprand.": {
+    "Expected a class set operand.": {
         "category": "Error",
         "code": 1520
     },
@@ -1789,13 +1789,21 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
     "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
+    },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -4200,10 +4208,6 @@
         "category": "Error",
         "code": 4085
     },
-    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Error",
-        "code": 4090
-    },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4091
@@ -6388,6 +6392,10 @@
         "category": "Message",
         "code": 6804
     },
+    "Disable full type checking (only critical parse and emit errors will be reported).": {
+        "category": "Message",
+        "code": 6805
+    },
 
     "one of:": {
         "category": "Message",
@@ -7014,6 +7022,14 @@
         "category": "Error",
         "code": 9037
     },
+    "Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9038
+    },
+    "Type containing private name '{0}' can't be used with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9039
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -7331,6 +7347,46 @@
     "Update modifiers of '{0}'": {
         "category": "Message",
         "code": 90061
+    },
+    "Add annotation of type '{0}'": {
+        "category": "Message",
+        "code": 90062
+    },
+    "Add return type '{0}'": {
+        "category": "Message",
+        "code": 90063
+    },
+    "Extract base class to variable": {
+        "category": "Message",
+        "code": 90064
+    },
+    "Extract default export to variable": {
+        "category": "Message",
+        "code": 90065
+    },
+    "Extract binding expressions to variable": {
+        "category": "Message",
+        "code": 90066
+    },
+    "Add all missing type annotations": {
+        "category": "Message",
+        "code": 90067
+    },
+    "Add satisfies and an inline type assertion with '{0}'": {
+        "category": "Message",
+        "code": 90068
+    },
+    "Extract to variable and replace with '{0} as typeof {0}'": {
+        "category": "Message",
+        "code": 90069
+    },
+    "Mark array literal as const": {
+        "category": "Message",
+        "code": 90070
+    },
+    "Annotate types of properties expando function in a namespace": {
+        "category": "Message",
+        "code": 90071
     },
 
     "Convert function to an ES2015 class": {

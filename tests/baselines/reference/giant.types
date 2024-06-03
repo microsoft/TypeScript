@@ -14,6 +14,12 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
+>p : "propName"
+>  : ^^^^^^^^^^
+>"propName" : "propName"
+>           : ^^^^^^^^^^
+
 var V;
 >V : any
 >  : ^^^
@@ -177,8 +183,8 @@ interface I {
     [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
@@ -224,7 +230,7 @@ interface I {
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -232,7 +238,7 @@ interface I {
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -405,8 +411,8 @@ module M {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -452,7 +458,7 @@ module M {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -460,7 +466,7 @@ module M {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -675,8 +681,8 @@ module M {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -722,7 +728,7 @@ module M {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -730,7 +736,7 @@ module M {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1076,8 +1082,8 @@ export interface eI {
     [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
     [p1: string];
 >p1 : string
@@ -1123,7 +1129,7 @@ export interface eI {
 
     p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1131,7 +1137,7 @@ export interface eI {
 
     p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1304,8 +1310,8 @@ export module eM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -1351,7 +1357,7 @@ export module eM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1359,7 +1365,7 @@ export module eM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1574,8 +1580,8 @@ export module eM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -1621,7 +1627,7 @@ export module eM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -1629,7 +1635,7 @@ export module eM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2008,8 +2014,8 @@ export declare module eaM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -2055,7 +2061,7 @@ export declare module eaM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2063,7 +2069,7 @@ export declare module eaM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2214,8 +2220,8 @@ export declare module eaM {
         [p];
 >[p] : any
 >    : ^^^
->p : any
->  : ^^^
+>p : "propName"
+>  : ^^^^^^^^^^
 
         [p1: string];
 >p1 : string
@@ -2261,7 +2267,7 @@ export declare module eaM {
 
         p7(pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any
@@ -2269,7 +2275,7 @@ export declare module eaM {
 
         p7? (pa1, pa2): void;
 >p7 : { (pa1: any, pa2: any): void; (pa1: any, pa2: any): void; }
->   : ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^   ^^^^^^^^    ^^^
+>   : ^^^   ^^^^^^^   ^^^^^^^^    ^^^   ^^^^^^^   ^^^^^^^^    ^^^
 >pa1 : any
 >    : ^^^
 >pa2 : any

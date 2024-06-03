@@ -1,17 +1,17 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     libContent,
     libPath,
-} from "../helpers/contents";
+} from "../helpers/contents.js";
 import {
     getFsForSampleProjectReferences,
     getSysForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
+} from "../helpers/sampleProjectReferences.js";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -20,18 +20,18 @@ import {
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     prependText,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
     libFile,
     SerializeOutputOrder,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
     let projFs: vfs.FileSystem;

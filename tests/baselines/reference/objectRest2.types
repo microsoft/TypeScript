@@ -47,7 +47,7 @@ function rootConnection(name: string) {
 >connectionFromArray(objects, args) : {}
 >                                   : ^^
 >connectionFromArray : (objects: number, args: any) => {}
->                    : ^       ^^      ^^    ^^   ^^^^^^^
+>                    : ^       ^^      ^^    ^^   ^^^^^  
 >objects : number
 >        : ^^^^^^
 >args : any

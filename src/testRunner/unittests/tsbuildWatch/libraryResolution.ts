@@ -1,5 +1,5 @@
-import { getSysForLibResolution } from "../helpers/libraryResolution";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import { getSysForLibResolution } from "../helpers/libraryResolution.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true) {

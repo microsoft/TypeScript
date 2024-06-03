@@ -1,24 +1,22 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     compilerOptionsToConfigJson,
     libContent,
-} from "../helpers/contents";
-import { getFsForNoEmitOnError } from "../helpers/noEmitOnError";
+} from "../helpers/contents.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
     TestTscEdit,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     prependText,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
@@ -27,7 +25,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -48,7 +46,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -85,7 +83,7 @@ describe("unittests:: tsc:: incremental::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -114,205 +112,17 @@ describe("unittests:: tsc:: incremental::", () => {
         }],
     });
 
-    describe("with noEmitOnError", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = getFsForNoEmitOnError();
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-
-        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
-            verifyTsc({
-                scenario: "incremental",
-                subScenario,
-                fs: () => projFs,
-                commandLineArgs: ["--incremental"],
-                modifyFs,
-                edits: [
-                    noChangeRun,
-                    {
-                        caption: "incremental-declaration-doesnt-change",
-                        edit: fixModifyFs,
-                    },
-                    noChangeRun,
-                ],
-                baselinePrograms: true,
-            });
-        }
-        verifyNoEmitOnError(
-            "with noEmitOnError syntax errors",
-            fs =>
-                fs.writeFileSync(
-                    "src/main.ts",
-                    `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                    "utf-8",
-                ),
-        );
-
-        verifyNoEmitOnError(
-            "with noEmitOnError semantic errors",
-            fs =>
-                fs.writeFileSync(
-                    "src/main.ts",
-                    `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                    "utf-8",
-                ),
-            fs =>
-                fs.writeFileSync(
-                    "src/main.ts",
-                    `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                    "utf-8",
-                ),
-        );
-    });
-
-    describe("when noEmit changes between compilation", () => {
-        verifyNoEmitChanges({ incremental: true });
-        verifyNoEmitChanges({ incremental: true, declaration: true });
-        verifyNoEmitChanges({ composite: true });
-
-        function verifyNoEmitChanges(compilerOptions: ts.CompilerOptions) {
-            const discrepancyExplanation = () => [
-                "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
-                "Incremental will store the past latestChangedDtsFile and emitSignatures",
-            ];
-            const noChangeRunWithNoEmit: TestTscEdit = {
-                ...noChangeRun,
-                caption: "No Change run with noEmit",
-                commandLineArgs: ["--p", "src/project", "--noEmit"],
-                discrepancyExplanation: compilerOptions.composite ?
-                    discrepancyExplanation :
-                    undefined,
-            };
-            const noChangeRunWithEmit: TestTscEdit = {
-                ...noChangeRun,
-                caption: "No Change run with emit",
-                commandLineArgs: ["--p", "src/project"],
-            };
-            let optionsString = "";
-            for (const key in compilerOptions) {
-                if (ts.hasProperty(compilerOptions, key)) {
-                    optionsString += ` ${key}`;
-                }
-            }
-
-            verifyTsc({
-                scenario: "incremental",
-                subScenario: `noEmit changes${optionsString}`,
-                commandLineArgs: ["--p", "src/project"],
-                fs,
-                edits: [
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithNoEmit,
-                    {
-                        caption: "Introduce error but still noEmit",
-                        commandLineArgs: ["--p", "src/project", "--noEmit"],
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
-                    },
-                    {
-                        caption: "Fix error and emit",
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                    },
-                    noChangeRunWithEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithEmit,
-                    {
-                        caption: "Introduce error and emit",
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                    },
-                    noChangeRunWithEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithEmit,
-                    {
-                        caption: "Fix error and no emit",
-                        commandLineArgs: ["--p", "src/project", "--noEmit"],
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
-                    },
-                    noChangeRunWithEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithNoEmit,
-                    noChangeRunWithEmit,
-                ],
-            });
-
-            verifyTsc({
-                scenario: "incremental",
-                subScenario: `noEmit changes with initial noEmit${optionsString}`,
-                commandLineArgs: ["--p", "src/project", "--noEmit"],
-                fs,
-                edits: [
-                    noChangeRunWithEmit,
-                    {
-                        caption: "Introduce error with emit",
-                        commandLineArgs: ["--p", "src/project"],
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                    },
-                    {
-                        caption: "Fix error and no emit",
-                        edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite ?
-                            discrepancyExplanation :
-                            undefined,
-                    },
-                    noChangeRunWithEmit,
-                ],
-            });
-
-            function fs() {
-                return loadProjectFromFiles({
-                    "/src/project/src/class.ts": Utils.dedent`
-                            export class classC {
-                                prop = 1;
-                            }`,
-                    "/src/project/src/indirectClass.ts": Utils.dedent`
-                            import { classC } from './class';
-                            export class indirectClass {
-                                classC = new classC();
-                            }`,
-                    "/src/project/src/directUse.ts": Utils.dedent`
-                            import { indirectClass } from './indirectClass';
-                            new indirectClass().classC.prop;`,
-                    "/src/project/src/indirectUse.ts": Utils.dedent`
-                            import { indirectClass } from './indirectClass';
-                            new indirectClass().classC.prop;`,
-                    "/src/project/src/noChangeFile.ts": Utils.dedent`
-                            export function writeLog(s: string) {
-                            }`,
-                    "/src/project/src/noChangeFileWithEmitSpecificError.ts": Utils.dedent`
-                            function someFunc(arguments: boolean, ...rest: any[]) {
-                            }`,
-                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions }),
-                });
-            }
-        }
-    });
-
     verifyTsc({
         scenario: "incremental",
         subScenario: `when global file is added, the signatures are updated`,
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/src/main.ts": Utils.dedent`
+                "/src/project/src/main.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function main() { }
                 `,
-                "/src/project/src/anotherFileWithSameReferenes.ts": Utils.dedent`
+                "/src/project/src/anotherFileWithSameReferenes.ts": dedent`
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function anotherFileWithSameReferenes() { }
@@ -465,24 +275,6 @@ declare global {
 
     verifyTsc({
         scenario: "incremental",
-        subScenario: "when project has strict true",
-        commandLineArgs: ["-noEmit", "-p", `src/project`],
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        incremental: true,
-                        strict: true,
-                    },
-                }),
-                "/src/project/class1.ts": `export class class1 {}`,
-            }),
-        edits: noChangeOnlyRuns,
-        baselinePrograms: true,
-    });
-
-    verifyTsc({
-        scenario: "incremental",
         subScenario: "serializing error chains",
         commandLineArgs: ["-p", `src/project`],
         fs: () =>
@@ -495,7 +287,7 @@ declare global {
                         module: "esnext",
                     },
                 }),
-                "/src/project/index.tsx": Utils.dedent`
+                "/src/project/index.tsx": dedent`
                     declare namespace JSX {
                         interface ElementChildrenAttribute { children: {}; }
                         interface IntrinsicElements { div: {} }
@@ -518,7 +310,7 @@ declare global {
         subScenario: "ts file with no-default-lib that augments the global scope",
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/src/main.ts": Utils.dedent`
+                "/src/project/src/main.ts": dedent`
                     /// <reference no-default-lib="true"/>
                     /// <reference lib="esnext" />
 
@@ -529,7 +321,7 @@ declare global {
 
                     export {};
                 `,
-                "/src/project/tsconfig.json": Utils.dedent`
+                "/src/project/tsconfig.json": dedent`
                     {
                         "compilerOptions": {
                             "target": "ESNext",
@@ -590,12 +382,12 @@ console.log(a);`,
             fs: () =>
                 loadProjectFromFiles({
                     "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
-                    "/src/project/main.ts": Utils.dedent`
+                    "/src/project/main.ts": dedent`
                         import MessageablePerson from './MessageablePerson.js';
                         function logMessage( person: MessageablePerson ) {
                             console.log( person.message );
                         }`,
-                    "/src/project/MessageablePerson.ts": Utils.dedent`
+                    "/src/project/MessageablePerson.ts": dedent`
                         const Messageable = () => {
                             return class MessageableClass {
                                 public message = 'hello';
@@ -609,7 +401,7 @@ console.log(a);`,
                 appendText(
                     fs,
                     "/lib/lib.d.ts",
-                    Utils.dedent`
+                    dedent`
                     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,
                 ),
@@ -630,72 +422,6 @@ console.log(a);`,
     }
     verifyModifierChange(/*declaration*/ false);
     verifyModifierChange(/*declaration*/ true);
-
-    verifyTsc({
-        scenario: "incremental",
-        subScenario: `when declarationMap changes`,
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        noEmitOnError: true,
-                        declaration: true,
-                        composite: true,
-                    },
-                }),
-                "/src/project/a.ts": "const x = 10;",
-                "/src/project/b.ts": "const y = 10;",
-            }),
-        commandLineArgs: ["--p", "/src/project"],
-        edits: [
-            {
-                caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
-                discrepancyExplanation: () => [
-                    `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
-                    `Incremental build has emitSignatures from before, so it will have a.ts with signature since file.version isnt same`,
-                    `Incremental build will also have emitSignatureDtsMapDiffers for both files since the emitSignatures were without declarationMap but currentOptions have declrationMap`,
-                ],
-            },
-            {
-                caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
-            },
-        ],
-    });
-
-    verifyTsc({
-        scenario: "incremental",
-        subScenario: `when declarationMap changes with outFile`,
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        noEmitOnError: true,
-                        declaration: true,
-                        composite: true,
-                        outFile: "../outFile.js",
-                    },
-                }),
-                "/src/project/a.ts": "const x = 10;",
-                "/src/project/b.ts": "const y = 10;",
-            }),
-        commandLineArgs: ["--p", "/src/project"],
-        edits: [
-            {
-                caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
-            },
-            {
-                caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
-            },
-        ],
-    });
 
     describe("different options::", () => {
         function withOptionChange(caption: string, ...options: readonly string[]): TestTscEdit {
@@ -888,28 +614,6 @@ console.log(a);`,
 
     verifyTsc({
         scenario: "incremental",
-        subScenario: "file deleted before fixing error with noEmitOnError",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        outDir: "outDir",
-                        noEmitOnError: true,
-                    },
-                }),
-                "/src/project/file1.ts": `export const x: 30 = "hello";`,
-                "/src/project/file2.ts": `export class D { }`,
-            }),
-        commandLineArgs: ["--p", "/src/project", "-i"],
-        edits: [{
-            caption: "delete file without error",
-            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
-        }],
-        baselinePrograms: true,
-    });
-
-    verifyTsc({
-        scenario: "incremental",
         subScenario: "generates typerefs correctly",
         commandLineArgs: ["-p", `/src/project`],
         fs: () =>
@@ -922,12 +626,12 @@ console.log(a);`,
                     },
                     include: ["src"],
                 }),
-                "/src/project/src/box.ts": Utils.dedent`
+                "/src/project/src/box.ts": dedent`
                     export interface Box<T> {
                         unbox(): T
                     }
                 `,
-                "/src/project/src/bug.js": Utils.dedent`
+                "/src/project/src/bug.js": dedent`
                     import * as B from "./box.js"
                     import * as W from "./wrap.js"
 
@@ -947,7 +651,7 @@ console.log(a);`,
 
                     export const bug = wrap({ n: box(1) });
                 `,
-                "/src/project/src/wrap.ts": Utils.dedent`
+                "/src/project/src/wrap.ts": dedent`
                     export type Wrap<C> = {
                         [K in keyof C]: { wrapped: C[K] }
                     }
@@ -959,48 +663,78 @@ console.log(a);`,
         }],
     });
 
-    verifyTsc({
-        scenario: "incremental",
-        subScenario: "reports dts generation errors",
-        commandLineArgs: ["-p", `/src/project`, "--explainFiles", "--listEmittedFiles"],
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        module: "NodeNext",
-                        moduleResolution: "NodeNext",
-                        composite: true,
-                        skipLibCheck: true,
-                        skipDefaultLibCheck: true,
+    describe("with const enums", () => {
+        enum AliasType {
+            None = "",
+            SameFile = "aliased ",
+            DifferentFile = "aliased in different file ",
+        }
+        function fileWithEnum(withAlias: AliasType) {
+            return withAlias !== AliasType.DifferentFile ? "/src/project/b.d.ts" : "/src/project/worker.d.ts";
+        }
+        function verify(withAlias: AliasType, preserveConstEnums: boolean) {
+            verifyTsc({
+                scenario: "incremental",
+                subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
+                commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
+                fs: () =>
+                    loadProjectFromFiles({
+                        "/src/project/a.ts": dedent`
+                            import {A} from "./c"
+                            let a = A.ONE
+                        `,
+                        "/src/project/b.d.ts": withAlias === AliasType.SameFile ?
+                            dedent`
+                                declare const enum AWorker {
+                                    ONE = 1
+                                }
+                                export { AWorker as A };
+                            ` :
+                            withAlias === AliasType.DifferentFile ?
+                            dedent`
+                                export { AWorker as A } from "./worker";
+                            ` :
+                            dedent`
+                                export const enum A {
+                                    ONE = 1
+                                }
+                            `,
+                        "/src/project/c.ts": dedent`
+                            import {A} from "./b"
+                            let b = A.ONE
+                            export {A}
+                        `,
+                        "/src/project/worker.d.ts": dedent`
+                            export const enum AWorker {
+                                ONE = 1
+                            }
+                        `,
+                    }),
+                edits: [
+                    {
+                        caption: "change enum value",
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "1", "2"),
                     },
-                }),
-                "/src/project/index.ts": Utils.dedent`
-                    import ky from 'ky';
-                    export const api = ky.extend({});
-                `,
-                "/src/project/package.json": jsonToReadableText({
-                    type: "module",
-                }),
-                "/src/project/node_modules/ky/distribution/index.d.ts": Utils.dedent`
-                   type KyInstance = {
-                        extend(options: Record<string,unknown>): KyInstance;
-                    }
-                    declare const ky: KyInstance;
-                    export default ky;
-                `,
-                "/src/project/node_modules/ky/package.json": jsonToReadableText({
-                    name: "ky",
-                    type: "module",
-                    main: "./distribution/index.js",
-                }),
-                "/lib/lib.esnext.full.d.ts": libContent,
-            }),
-        edits: [
-            noChangeRun,
-            {
-                ...noChangeRun,
-                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
-            },
-        ],
+                    {
+                        caption: "change enum value again",
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "2", "3"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing = 10;"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts again",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing2 = 10;"),
+                    },
+                ],
+            });
+        }
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ true);
     });
 });
