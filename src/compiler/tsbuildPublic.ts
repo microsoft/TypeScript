@@ -1452,7 +1452,6 @@ function buildErrors<T extends BuilderProgram>(
     buildResult: BuildResultFlags,
     errorType: string,
 ) {
-    // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
     reportAndStoreErrors(state, resolvedPath, diagnostics);
     state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
     return { buildResult, step: BuildStep.EmitBuildInfo };
