@@ -328,6 +328,7 @@ import {
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getJSXTransformEnabled,
+    getLambdaArgument,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
     getMembersOfDeclaration,
@@ -1106,7 +1107,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    getLambdaArgument,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -28024,7 +28024,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     // Unreachable code errors are reported in the binding phase. Here we
                     // simply return the non-auto declared type to reduce follow-on errors.
-                    type = convertAutoToAny(declaredType);
+                    type = inLambdaArg ? initialType : convertAutoToAny(declaredType);
                 }
                 if (sharedFlow) {
                     // Record visited node and the associated type in the cache.
