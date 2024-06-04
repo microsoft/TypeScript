@@ -8325,5 +8325,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
+        "category": "Error",
+        "code": 18057
     }
 }

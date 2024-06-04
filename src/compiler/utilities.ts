@@ -420,6 +420,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleExportName,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -1218,7 +1219,28 @@ function isJSDocTypeExpressionOrChild(node: Node): boolean {
 
 /** @internal */
 export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
-    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
+    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && moduleExportNameIsDefault(node.exportClause.name));
+}
+
+/** @internal */
+export function moduleExportNameTextUnescaped(node: ModuleExportName): string {
+    return node.kind === SyntaxKind.StringLiteral ? node.text : unescapeLeadingUnderscores(node.escapedText);
+}
+
+/** @internal */
+export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
+    return node.kind === SyntaxKind.StringLiteral ? escapeLeadingUnderscores(node.text) : node.escapedText;
+}
+
+/**
+ * Equality checks against a keyword without underscores don't need to bother
+ * to turn "__" into "___" or vice versa, since they will never be equal in
+ * either case. So we can ignore those cases to improve performance.
+ *
+ * @internal
+ */
+export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
+    return (node.kind === SyntaxKind.StringLiteral ? node.text : node.escapedText) === InternalSymbolName.Default;
 }
 
 /** @internal */
