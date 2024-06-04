@@ -21,6 +21,9 @@
     "javascript.preferences.importModuleSpecifierEnding": "js",
     "typescript.preferences.importModuleSpecifierEnding": "js",
 
+    // Auto-fold imports.
+    // "editor.foldingImportsByDefault": true,
+
     // Match dprint in organize/auto-imports.
     "typescript.unstable": {
         "organizeImportsCollation": "unicode",
