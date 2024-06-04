@@ -30,7 +30,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                 ...noChangeRun,
                 caption: "No Change run with noEmit",
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
-                discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
                     undefined,
             };
@@ -61,7 +61,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                         caption: "Introduce error but still noEmit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },
@@ -85,7 +85,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                         caption: "Fix error and no emit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },
@@ -111,7 +111,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                     {
                         caption: "Fix error and no emit",
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },

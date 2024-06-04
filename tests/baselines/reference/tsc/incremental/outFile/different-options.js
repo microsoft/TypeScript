@@ -62,7 +62,12 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
 
@@ -223,7 +228,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -372,7 +377,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -518,7 +523,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -553,7 +558,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -590,7 +595,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -726,7 +731,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -858,7 +863,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -893,7 +898,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -931,7 +936,12 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project/a.ts
+/src/project/b.ts
+/src/project/c.ts
+/src/project/d.ts
 
 No shapes updated in the builder::
 
@@ -1077,7 +1087,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1113,7 +1123,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1260,7 +1270,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1420,7 +1430,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -1584,7 +1594,7 @@ Program files::
 /src/project/c.ts
 /src/project/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 

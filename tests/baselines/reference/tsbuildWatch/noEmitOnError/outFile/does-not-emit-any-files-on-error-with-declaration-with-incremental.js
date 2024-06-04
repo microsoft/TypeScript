@@ -66,6 +66,82 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"changeFileSet":[1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../a/lib/lib.d.ts",
+      "./noemitonerror/shared/types/db.ts",
+      "./noemitonerror/src/main.ts",
+      "./noemitonerror/src/other.ts"
+    ],
+    "fileInfos": {
+      "../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/shared/types/db.ts": {
+        "original": {
+          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/src/main.ts": {
+        "original": {
+          "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
+          "impliedFormat": 1
+        },
+        "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/src/other.ts": {
+        "original": {
+          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+          "impliedFormat": 1
+        },
+        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./noemitonerror/shared/types/db.ts",
+          "./noemitonerror/src/main.ts",
+          "./noemitonerror/src/other.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "module": 2,
+      "noEmitOnError": true,
+      "outFile": "./dev-build.js"
+    },
+    "changeFileSet": [
+      "../../../a/lib/lib.d.ts",
+      "./noemitonerror/shared/types/db.ts",
+      "./noemitonerror/src/main.ts",
+      "./noemitonerror/src/other.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1086
+}
+
 
 PolledWatches::
 /a/lib/package.json: *new*
@@ -147,7 +223,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -211,43 +287,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-
-
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = {
-        lastName: 'sdsd'
-    };
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts]
-declare module "shared/types/db" {
-    export interface A {
-        name: string;
-    }
-}
-declare module "src/main" { }
-declare module "src/other" {
-    export {};
-}
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
@@ -320,6 +365,37 @@ declare module "src/other" {
   "size": 1059
 }
 
+//// [/user/username/projects/dev-build.js]
+define("shared/types/db", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("src/main", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var a = {
+        lastName: 'sdsd'
+    };
+});
+define("src/other", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    console.log("hi");
+});
+
+
+//// [/user/username/projects/dev-build.d.ts]
+declare module "shared/types/db" {
+    export interface A {
+        name: string;
+    }
+}
+declare module "src/main" { }
+declare module "src/other" {
+    export {};
+}
+
+
 
 
 Program root files: [
@@ -343,7 +419,11 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
 No shapes updated in the builder::
 
@@ -382,6 +462,94 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"semanticDiagnosticsPerFile":[[3,[{"start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"pendingEmit":false},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../a/lib/lib.d.ts",
+      "./noemitonerror/shared/types/db.ts",
+      "./noemitonerror/src/main.ts",
+      "./noemitonerror/src/other.ts"
+    ],
+    "fileInfos": {
+      "../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/shared/types/db.ts": {
+        "original": {
+          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/src/main.ts": {
+        "original": {
+          "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./noemitonerror/src/other.ts": {
+        "original": {
+          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+          "impliedFormat": 1
+        },
+        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./noemitonerror/shared/types/db.ts",
+          "./noemitonerror/src/main.ts",
+          "./noemitonerror/src/other.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "module": 2,
+      "noEmitOnError": true,
+      "outFile": "./dev-build.js"
+    },
+    "semanticDiagnosticsPerFile": [
+      [
+        "./noemitonerror/src/main.ts",
+        [
+          {
+            "start": 46,
+            "length": 1,
+            "code": 2322,
+            "category": 1,
+            "messageText": "Type 'number' is not assignable to type 'string'."
+          }
+        ]
+      ]
+    ],
+    "pendingEmit": [
+      "Js | Dts",
+      false
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1216
+}
+
 
 
 Program root files: [
@@ -405,7 +573,11 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
 No shapes updated in the builder::
 
@@ -428,7 +600,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -464,7 +636,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -490,7 +662,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -498,24 +670,6 @@ Output::
 
 
 
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = "hello";
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts] file written with same contents
 //// [/user/username/projects/dev-build.tsbuildinfo]
 {"program":{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"}},"version":"FakeTSVersion"}
 
@@ -586,6 +740,24 @@ define("src/other", ["require", "exports"], function (require, exports) {
   "size": 1050
 }
 
+//// [/user/username/projects/dev-build.js]
+define("shared/types/db", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("src/main", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var a = "hello";
+});
+define("src/other", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    console.log("hi");
+});
+
+
+//// [/user/username/projects/dev-build.d.ts] file written with same contents
 
 
 Program root files: [
@@ -609,7 +781,11 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
 No shapes updated in the builder::
 

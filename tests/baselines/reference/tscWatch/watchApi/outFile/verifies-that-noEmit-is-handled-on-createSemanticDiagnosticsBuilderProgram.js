@@ -73,7 +73,10 @@ Program files::
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+/user/username/projects/myproject/other.ts
 
 No shapes updated in the builder::
 
@@ -121,7 +124,10 @@ Program files::
 /user/username/projects/myproject/main.ts
 /user/username/projects/myproject/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+/user/username/projects/myproject/other.ts
 
 No shapes updated in the builder::
 

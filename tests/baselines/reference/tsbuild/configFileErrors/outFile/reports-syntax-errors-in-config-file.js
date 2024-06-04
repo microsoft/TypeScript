@@ -50,6 +50,68 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/outFile.tsbuildinfo]
+{"program":{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"4646078106-export function foo() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "./lib/lib.d.ts",
+      "./src/a.ts",
+      "./src/b.ts"
+    ],
+    "fileInfos": {
+      "./lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./src/a.ts": {
+        "original": {
+          "version": "4646078106-export function foo() { }",
+          "impliedFormat": 1
+        },
+        "version": "4646078106-export function foo() { }",
+        "impliedFormat": "commonjs"
+      },
+      "./src/b.ts": {
+        "original": {
+          "version": "1045484683-export function bar() { }",
+          "impliedFormat": 1
+        },
+        "version": "1045484683-export function bar() { }",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./src/a.ts"
+      ],
+      [
+        3,
+        "./src/b.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "changeFileSet": [
+      "./lib/lib.d.ts",
+      "./src/a.ts",
+      "./src/b.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 821
+}
+
 
 
 Change:: reports syntax errors after change to config file
@@ -105,6 +167,69 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+
+//// [/outFile.tsbuildinfo]
+{"program":{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"9819159940-export function foo() { }export function fooBar() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "./lib/lib.d.ts",
+      "./src/a.ts",
+      "./src/b.ts"
+    ],
+    "fileInfos": {
+      "./lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "./src/a.ts": {
+        "original": {
+          "version": "9819159940-export function foo() { }export function fooBar() { }",
+          "impliedFormat": 1
+        },
+        "version": "9819159940-export function foo() { }export function fooBar() { }",
+        "impliedFormat": "commonjs"
+      },
+      "./src/b.ts": {
+        "original": {
+          "version": "1045484683-export function bar() { }",
+          "impliedFormat": 1
+        },
+        "version": "1045484683-export function bar() { }",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./src/a.ts"
+      ],
+      [
+        3,
+        "./src/b.ts"
+      ]
+    ],
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "changeFileSet": [
+      "./lib/lib.d.ts",
+      "./src/a.ts",
+      "./src/b.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 868
+}
 
 
 

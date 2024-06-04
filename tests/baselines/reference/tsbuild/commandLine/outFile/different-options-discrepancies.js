@@ -204,11 +204,9 @@ IncrementalBuild:
   },
   "version": "FakeTSVersion"
 }
-9:: with emitDeclarationOnly should not emit anything
-Clean build tsbuildinfo will have compilerOptions with composite and emitDeclarationOnly
+9:: with declaration should not emit anything
+Clean build tsbuildinfo will have compilerOptions with composite and declaration
 Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only
-Clean build info does not have js section because its fresh build
-Incremental build info has js section from old build
 TsBuild info text without affectedFilesPendingEmit:: /src/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -251,7 +249,7 @@ CleanBuild:
     ],
     "options": {
       "composite": true,
-      "emitDeclarationOnly": true,
+      "declaration": true,
       "module": 2,
       "outFile": "./outFile.js"
     },

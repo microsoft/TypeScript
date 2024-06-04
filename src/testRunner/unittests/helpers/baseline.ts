@@ -74,7 +74,7 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
     if (builderProgram !== oldProgram?.[1]) {
         const state = builderProgram.getState();
         const internalState = state as unknown as ts.BuilderProgramState;
-        if (state.semanticDiagnosticsPerFile?.size) {
+        if (state.semanticDiagnosticsPerFile.size) {
             baseline.push("Semantic diagnostics in builder refreshed for::");
             for (const file of program.getSourceFiles()) {
                 if (!internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
@@ -154,25 +154,53 @@ export type ReadableProgramBuildInfoResolvedRoot = [
     original: ts.ProgramBuildInfoResolvedRoot,
     readable: [resolved: string, root: string],
 ];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "resolvedRoot" | "referencedMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
-    fileNamesList: readonly (readonly string[])[] | undefined;
-    fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
-    root: readonly ReadableProgramBuildInfoRoot[];
-    resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
-    referencedMap: ts.MapLike<string[]> | undefined;
-    semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
-    emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoEmitDiagnostic[] | undefined;
-    affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
-    changeFileSet: readonly string[] | undefined;
-    emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
-};
+export type ReadableProgramMultiFileEmitBuildInfo =
+    & Omit<
+        ts.ProgramMultiFileEmitBuildInfo,
+        | "fileIdsList"
+        | "fileInfos"
+        | "root"
+        | "resolvedRoot"
+        | "referencedMap"
+        | "semanticDiagnosticsPerFile"
+        | "emitDiagnosticsPerFile"
+        | "affectedFilesPendingEmit"
+        | "changeFileSet"
+        | "emitSignatures"
+    >
+    & {
+        fileNamesList: readonly (readonly string[])[] | undefined;
+        fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
+        root: readonly ReadableProgramBuildInfoRoot[];
+        resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
+        referencedMap: ts.MapLike<string[]> | undefined;
+        semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoEmitDiagnostic[] | undefined;
+        affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
+        changeFileSet: readonly string[] | undefined;
+        emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
+    };
 export type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
-export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "resolvedRoot" | "pendingEmit"> & {
-    fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
-    root: readonly ReadableProgramBuildInfoRoot[];
-    resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
-    pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
-};
+export type ReadableProgramBundleEmitBuildInfo =
+    & Omit<
+        ts.ProgramBundleEmitBuildInfo,
+        | "fileInfos"
+        | "root"
+        | "resolvedRoot"
+        | "semanticDiagnosticsPerFile"
+        | "emitDiagnosticsPerFile"
+        | "changeFileSet"
+        | "pendingEmit"
+    >
+    & {
+        fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
+        root: readonly ReadableProgramBuildInfoRoot[];
+        resolvedRoot: readonly ReadableProgramBuildInfoResolvedRoot[] | undefined;
+        semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoEmitDiagnostic[] | undefined;
+        changeFileSet: readonly string[] | undefined;
+        pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
+    };
 
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
@@ -196,6 +224,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             fileInfos,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             resolvedRoot: buildInfo.program.resolvedRoot?.map(toReadableProgramBuildInfoResolvedRoot),
+            semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
+            emitDiagnosticsPerFile: toReadableProgramBuildInfoEmitDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
+            changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
             pendingEmit: pendingEmit === undefined ?
                 undefined :
                 [

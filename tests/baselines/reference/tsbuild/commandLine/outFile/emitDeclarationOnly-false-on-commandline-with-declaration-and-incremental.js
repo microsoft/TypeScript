@@ -114,7 +114,12 @@ Program files::
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
 
 No shapes updated in the builder::
 
@@ -239,6 +244,92 @@ declare module "d" {
   "size": 1067
 }
 
+//// [/src/project2/outFile.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../project1/outfile.d.ts","./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","impliedFormat":1},{"version":"-13789510868-export const e = 10;","impliedFormat":1},{"version":"-4849089835-import { a } from \"a\"; export const f = a;","impliedFormat":1},{"version":"-18341999015-import { b } from \"b\"; export const g = b;","impliedFormat":1}],"root":[[3,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3,4,5]},"version":"FakeTSVersion"}
+
+//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../project1/outfile.d.ts",
+      "./src/e.ts",
+      "./src/f.ts",
+      "./src/g.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "../project1/outfile.d.ts": {
+        "original": {
+          "version": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n",
+        "impliedFormat": "commonjs"
+      },
+      "./src/e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/f.ts": {
+        "original": {
+          "version": "-4849089835-import { a } from \"a\"; export const f = a;",
+          "impliedFormat": 1
+        },
+        "version": "-4849089835-import { a } from \"a\"; export const f = a;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/g.ts": {
+        "original": {
+          "version": "-18341999015-import { b } from \"b\"; export const g = b;",
+          "impliedFormat": 1
+        },
+        "version": "-18341999015-import { b } from \"b\"; export const g = b;",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./src/e.ts",
+          "./src/f.ts",
+          "./src/g.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "changeFileSet": [
+      "../../lib/lib.d.ts",
+      "../project1/outfile.d.ts",
+      "./src/e.ts",
+      "./src/f.ts",
+      "./src/g.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1265
+}
+
 
 
 Change:: no-change-run
@@ -253,7 +344,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/d.ts' is older than output 'src/project1/outFile.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -315,7 +406,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -354,7 +445,12 @@ Program files::
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
 
 No shapes updated in the builder::
 
@@ -481,7 +577,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -520,7 +616,7 @@ Program files::
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -660,6 +756,92 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
   "size": 1082
 }
 
+//// [/src/project2/outFile.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../project1/outfile.d.ts","./src/e.ts","./src/f.ts","./src/g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n","impliedFormat":1},{"version":"-13789510868-export const e = 10;","impliedFormat":1},{"version":"-4849089835-import { a } from \"a\"; export const f = a;","impliedFormat":1},{"version":"-18341999015-import { b } from \"b\"; export const g = b;","impliedFormat":1}],"root":[[3,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3,4,5]},"version":"FakeTSVersion"}
+
+//// [/src/project2/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../project1/outfile.d.ts",
+      "./src/e.ts",
+      "./src/f.ts",
+      "./src/g.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "impliedFormat": 1
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": "commonjs"
+      },
+      "../project1/outfile.d.ts": {
+        "original": {
+          "version": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n",
+          "impliedFormat": 1
+        },
+        "version": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n",
+        "impliedFormat": "commonjs"
+      },
+      "./src/e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/f.ts": {
+        "original": {
+          "version": "-4849089835-import { a } from \"a\"; export const f = a;",
+          "impliedFormat": 1
+        },
+        "version": "-4849089835-import { a } from \"a\"; export const f = a;",
+        "impliedFormat": "commonjs"
+      },
+      "./src/g.ts": {
+        "original": {
+          "version": "-18341999015-import { b } from \"b\"; export const g = b;",
+          "impliedFormat": 1
+        },
+        "version": "-18341999015-import { b } from \"b\"; export const g = b;",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        [
+          3,
+          5
+        ],
+        [
+          "./src/e.ts",
+          "./src/f.ts",
+          "./src/g.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "changeFileSet": [
+      "../../lib/lib.d.ts",
+      "../project1/outfile.d.ts",
+      "./src/e.ts",
+      "./src/f.ts",
+      "./src/g.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1266
+}
+
 
 
 Change:: no-change-run
@@ -674,7 +856,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/outFile.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -731,7 +913,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/outFile.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -793,7 +975,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/outFile.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -832,7 +1014,12 @@ Program files::
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project1/src/a.ts
+/src/project1/src/b.ts
+/src/project1/src/c.ts
+/src/project1/src/d.ts
 
 No shapes updated in the builder::
 

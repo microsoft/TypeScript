@@ -443,16 +443,6 @@ console.log(a);`,
                 ],
             };
         }
-        function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
-            const edit = withOptionChangeAndDiscrepancyExplanation(caption, "--emitDeclarationOnly");
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build info does not have js section because its fresh build`,
-                `Incremental build info has js section from old build`,
-            ];
-            return edit;
-        }
         function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
                 ...noChangeRun,
@@ -461,16 +451,6 @@ console.log(a);`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option declaration and declarationMap`,
                 ],
             };
-        }
-        function nochangeWithIncrementalOutDeclarationFromBeforeExplaination(): TestTscEdit {
-            const edit = nochangeWithIncrementalDeclarationFromBeforeExplaination();
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build does not have dts bundle section`,
-                `Incremental build contains the dts build section from before`,
-            ];
-            return edit;
         }
         function localChange(): TestTscEdit {
             return {
@@ -513,9 +493,7 @@ console.log(a);`,
                     noChangeRun,
                     withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                     noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                    !options.outFile ?
-                        withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly") :
-                        withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
+                    withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
                     noChangeRun,
                     localChange(),
                     withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
@@ -536,14 +514,10 @@ console.log(a);`,
                     noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
                     withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
                     withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                    !options.outFile ?
-                        nochangeWithIncrementalDeclarationFromBeforeExplaination() :
-                        nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
                     localChange(),
                     withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                    !options.outFile ?
-                        nochangeWithIncrementalDeclarationFromBeforeExplaination() :
-                        nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
                     withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
                     withOptionChange("with sourceMap", "--sourceMap"),
                     noChangeWithSubscenario("emit js files"),
