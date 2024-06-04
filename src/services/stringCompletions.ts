@@ -223,7 +223,7 @@ function convertStringLiteralCompletions(
         return undefined;
     }
 
-    const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken);
+    const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken, position);
     switch (completion.kind) {
         case StringLiteralCompletionKind.Paths:
             return convertPathCompletions(completion.paths);
@@ -270,7 +270,7 @@ function convertStringLiteralCompletions(
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
-                replacementSpan: getReplacementSpanForContextToken(contextToken),
+                replacementSpan: getReplacementSpanForContextToken(contextToken, position),
             }));
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
         }
