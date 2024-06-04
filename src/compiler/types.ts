@@ -5744,6 +5744,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
 }
 
 // dprint-ignore
@@ -10270,4 +10271,5 @@ export interface SyntacticTypeNodeBuilderResolver {
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
+    isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
 }
