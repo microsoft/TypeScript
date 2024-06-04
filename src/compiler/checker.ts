@@ -1511,6 +1511,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             Debug.assert(isExpressionNode(node));
             return getSymbolAtLocation(node) === undefinedSymbol;
         },
+        isDefinitelyReferenceToGlobalSymbolObject,
     });
     var evaluate = createEvaluator({
         evaluateElementAccessExpression,
@@ -2349,6 +2350,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     initializeTypeChecker();
 
     return checker;
+
+    function isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean {
+        if (!isPropertyAccessExpression(node)) return false;
+        if (!isIdentifier(node.name)) return false;
+        if (!isPropertyAccessExpression(node.expression) && !isIdentifier(node.expression)) return false;
+        if (isIdentifier(node.expression)) {
+            // Exactly `Symbol.something` and `Symbol` either does not resolve or definitely resolves to the global Symbol
+            return idText(node.expression) === "Symbol" && getResolvedSymbol(node.expression) === (getGlobalSymbol("Symbol" as __String, SymbolFlags.Value | SymbolFlags.ExportValue, /*diagnostic*/ undefined) || unknownSymbol);
+        }
+        if (!isIdentifier(node.expression.expression)) return false;
+        // Exactly `globalThis.Symbol.something` and `globalThis` resolves to the global `globalThis`
+        return idText(node.expression.name) === "Symbol" && idText(node.expression.expression) === "globalThis" && getResolvedSymbol(node.expression.expression) === globalThisSymbol;
+    }
 
     function getCachedType(key: string | undefined) {
         return key ? cachedTypes.get(key) : undefined;
@@ -49738,6 +49752,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker);
             },
             isImportRequiredByAugmentation,
+            isDefinitelyReferenceToGlobalSymbolObject,
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
