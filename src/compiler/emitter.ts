@@ -1153,6 +1153,7 @@ export const notImplementedResolver: EmitResolver = {
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
+    isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
 };
 
 const enum PipelinePhase {
