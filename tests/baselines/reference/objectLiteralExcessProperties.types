@@ -169,7 +169,7 @@ var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still err
 
 function test<T extends IFoo>() {
 >test : <T extends IFoo>() => void
->     : ^^^^^^^^^^^    ^^^^^^^^^^^
+>     : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
     // No excess property checks on generic types
     const obj1: T = { name: "test" };

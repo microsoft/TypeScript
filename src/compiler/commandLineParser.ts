@@ -778,7 +778,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: false,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
+        transpileOptionValue: true,
         defaultValueDescription: false,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,

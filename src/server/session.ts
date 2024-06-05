@@ -1906,6 +1906,26 @@ export class Session<TMessage = string> implements EventSender {
         });
     }
 
+    private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
+        const formatOptions = this.getHostFormatOptions();
+        const preferences = this.getHostPreferences();
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+        const focusLocations = args.mapping.focusLocations?.map(spans => {
+            return spans.map(loc => {
+                const start = scriptInfo.lineOffsetToPosition(loc.start.line, loc.start.offset);
+                const end = scriptInfo.lineOffsetToPosition(loc.end.line, loc.end.offset);
+                return {
+                    start,
+                    length: end - start,
+                };
+            });
+        });
+
+        const changes = languageService.mapCode(file, args.mapping.contents, focusLocations, formatOptions, preferences);
+        return this.mapTextChangesToCodeEdits(changes);
+    }
+
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
         this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
     }
@@ -3609,6 +3629,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
             return this.requiredResponse(this.provideInlayHints(request.arguments));
+        },
+        [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
+            return this.requiredResponse(this.mapCode(request.arguments));
         },
     }));
 

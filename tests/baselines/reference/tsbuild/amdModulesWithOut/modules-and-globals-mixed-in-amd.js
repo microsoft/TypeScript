@@ -76,17 +76,17 @@ const globalConst = 10;
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:16 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:17 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
 
-[[90m12:00:18 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -675,17 +675,17 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:40 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:41 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:00:42 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:49 AM[0m] Project 'src/app/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'src/app/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:50 AM[0m] Updating output timestamps of project '/src/app/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

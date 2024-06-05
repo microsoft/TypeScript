@@ -2317,13 +2317,13 @@ function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, sh
 }
 
 /** @internal */
-export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number) {
     if (!contextToken) return undefined;
 
     switch (contextToken.kind) {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike);
+            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike, position);
         default:
             return createTextSpanFromNode(contextToken);
     }
@@ -2335,12 +2335,12 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = node.getEnd();
+        replacementEnd = Math.min(position, node.getEnd());
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }

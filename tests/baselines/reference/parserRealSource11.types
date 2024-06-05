@@ -1184,11 +1184,11 @@ module TypeScript {
 >name.charAt(i) : string
 >               : ^^^^^^
 >name.charAt : (pos: number) => string
->            : ^   ^^      ^^^^^^^^^^^
+>            : ^   ^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >i : number
 >  : ^^^^^^
 >'\\' : "\\"
@@ -1198,11 +1198,11 @@ module TypeScript {
 >name.charAt(i+1) : string
 >                 : ^^^^^^
 >name.charAt : (pos: number) => string
->            : ^   ^^      ^^^^^^^^^^^
+>            : ^   ^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >i+1 : number
 >    : ^^^^^^
 >i : number
@@ -1218,15 +1218,15 @@ module TypeScript {
 >parseInt(name.substr(i + 2, 4), 16) : number
 >                                    : ^^^^^^
 >parseInt : (string: string, radix?: number) => number
->         : ^      ^^      ^^     ^^^      ^^^^^^^^^^^
+>         : ^      ^^      ^^     ^^^      ^^^^^      
 >name.substr(i + 2, 4) : string
 >                      : ^^^^^^
 >name.substr : (from: number, length?: number) => string
->            : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>            : ^    ^^      ^^      ^^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >i + 2 : number
 >      : ^^^^^^
 >i : number
@@ -1246,11 +1246,11 @@ module TypeScript {
 >name.substr(start, i - start) : string
 >                              : ^^^^^^
 >name.substr : (from: number, length?: number) => string
->            : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>            : ^    ^^      ^^      ^^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >start : number
 >      : ^^^^^^
 >i - start : number
@@ -1268,11 +1268,11 @@ module TypeScript {
 >String.fromCharCode(charCode) : string
 >                              : ^^^^^^
 >String.fromCharCode : (...codes: number[]) => string
->                    : ^^^^     ^^        ^^^^^^^^^^^
+>                    : ^^^^     ^^        ^^^^^      
 >String : StringConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
->             : ^^^^     ^^        ^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^      
 >charCode : number
 >         : ^^^^^^
 
@@ -1309,11 +1309,11 @@ module TypeScript {
 >name.substring(start) : string
 >                      : ^^^^^^
 >name.substring : (start: number, end?: number) => string
->               : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>               : ^     ^^      ^^   ^^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >start : number
 >      : ^^^^^^
 
@@ -1933,11 +1933,11 @@ module TypeScript {
 >AST.getResolvedIdentifierName(actualText) : string
 >                                          : ^^^^^^
 >AST.getResolvedIdentifierName : (name: string) => string
->                              : ^    ^^      ^^^^^^^^^^^
+>                              : ^    ^^      ^^^^^      
 >AST : typeof AST
 >    : ^^^^^^^^^^
 >getResolvedIdentifierName : (name: string) => string
->                          : ^    ^^      ^^^^^^^^^^^
+>                          : ^    ^^      ^^^^^      
 >actualText : string
 >           : ^^^^^^
             }
@@ -2398,11 +2398,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Expression
 >      : ^^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -5770,7 +5770,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^     ^^^      ^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5778,7 +5778,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
             if (this.hasEmptyFraction)
 >this.hasEmptyFraction : boolean
@@ -5837,11 +5837,11 @@ module TypeScript {
 >Math.floor(this.value) : number
 >                       : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5859,11 +5859,11 @@ module TypeScript {
 >this.value.toFixed(2).toString() : string
 >                                 : ^^^^^^
 >this.value.toFixed(2).toString : () => string
->                               : ^^^^^^^^^^^^
+>                               : ^^^^^^      
 >this.value.toFixed(2) : string
 >                      : ^^^^^^
 >this.value.toFixed : (fractionDigits?: number) => string
->                   : ^              ^^^      ^^^^^^^^^^^
+>                   : ^              ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5871,11 +5871,11 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 >2 : 2
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
             }
             else if (this.hasEmptyFraction) {
 >this.hasEmptyFraction : boolean
@@ -5891,7 +5891,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^     ^^^      ^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5899,7 +5899,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >".0" : ".0"
 >     : ^^^^
             }
@@ -5908,7 +5908,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^     ^^^      ^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5916,7 +5916,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
             }
         }
     }
@@ -6645,11 +6645,11 @@ module TypeScript {
 >this.getAliasName(dotExpr.operand1) : string
 >                                    : ^^^^^^
 >this.getAliasName : (aliasAST?: AST) => string
->                  : ^        ^^^   ^^^^^^^^^^^
+>                  : ^        ^^^   ^^^^^      
 >this : this
 >     : ^^^^
 >getAliasName : (aliasAST?: AST) => string
->             : ^        ^^^   ^^^^^^^^^^^
+>             : ^        ^^^   ^^^^^      
 >dotExpr.operand1 : AST
 >                 : ^^^
 >dotExpr : BinaryExpression
@@ -6661,11 +6661,11 @@ module TypeScript {
 >this.getAliasName(dotExpr.operand2) : string
 >                                    : ^^^^^^
 >this.getAliasName : (aliasAST?: AST) => string
->                  : ^        ^^^   ^^^^^^^^^^^
+>                  : ^        ^^^   ^^^^^      
 >this : this
 >     : ^^^^
 >getAliasName : (aliasAST?: AST) => string
->             : ^        ^^^   ^^^^^^^^^^^
+>             : ^        ^^^   ^^^^^      
 >dotExpr.operand2 : AST
 >                 : ^^^
 >dotExpr : BinaryExpression
@@ -7583,11 +7583,11 @@ module TypeScript {
 >outerFnc.addJumpRef(sym) : void
 >                         : ^^^^
 >outerFnc.addJumpRef : (sym: Symbol) => void
->                    : ^   ^^      ^^^^^^^^^
+>                    : ^   ^^      ^^^^^    
 >outerFnc : FuncDecl
 >         : ^^^^^^^^
 >addJumpRef : (sym: Symbol) => void
->           : ^   ^^      ^^^^^^^^^
+>           : ^   ^^      ^^^^^    
 >sym : Symbol
 >    : ^^^^^^
 
@@ -7717,11 +7717,11 @@ module TypeScript {
 >this.addCloRef(id, null) : number
 >                         : ^^^^^^
 >this.addCloRef : (id: Identifier, sym: Symbol) => number
->               : ^  ^^          ^^   ^^      ^^^^^^^^^^^
+>               : ^  ^^          ^^   ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >addCloRef : (id: Identifier, sym: Symbol) => number
->          : ^  ^^          ^^   ^^      ^^^^^^^^^^^
+>          : ^  ^^          ^^   ^^      ^^^^^      
 >id : Identifier
 >   : ^^^^^^^^^^
         }
@@ -7774,11 +7774,11 @@ module TypeScript {
 >ast.addToControlFlow(walker.state) : void
 >                                   : ^^^^
 >ast.addToControlFlow : (context: ControlFlowContext) => void
->                     : ^       ^^                  ^^^^^^^^^
+>                     : ^       ^^                  ^^^^^    
 >ast : AST
 >    : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >walker.state : any
 >             : ^^^
 >walker : IAstWalker
@@ -10663,11 +10663,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12128,7 +12128,7 @@ module TypeScript {
 >this.cond.addToControlFlow(context) : void
 >                                    : ^^^^
 >this.cond.addToControlFlow : (context: ControlFlowContext) => void
->                           : ^       ^^                  ^^^^^^^^^
+>                           : ^       ^^                  ^^^^^    
 >this.cond : AST
 >          : ^^^
 >this : this
@@ -12136,7 +12136,7 @@ module TypeScript {
 >cond : AST
 >     : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12684,11 +12684,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -18551,7 +18551,7 @@ module TypeScript {
 >this.content.split("\n") : string[]
 >                         : ^^^^^^^^
 >this.content.split : (separator: string | RegExp, limit?: number) => string[]
->                   : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>                   : ^         ^^               ^^     ^^^      ^^^^^        
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -18559,7 +18559,7 @@ module TypeScript {
 >content : string
 >        : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^        
 >"\n" : "\n"
 >     : ^^^^
 
@@ -18603,7 +18603,7 @@ module TypeScript {
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
 >this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >this.text[i] : string
 >             : ^^^^^^
 >this.text : string[]
@@ -18615,7 +18615,7 @@ module TypeScript {
 >i : number
 >  : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""
@@ -18639,7 +18639,7 @@ module TypeScript {
 >this.content.replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
 >this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -18647,7 +18647,7 @@ module TypeScript {
 >content : string
 >        : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""

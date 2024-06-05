@@ -59,6 +59,7 @@ import {
     isModifier,
     isModifierLike,
     isModuleBody,
+    isModuleExportName,
     isModuleName,
     isModuleReference,
     isNamedExportBindings,
@@ -1579,7 +1580,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
         );
     },
@@ -1614,8 +1615,8 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateExportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleExportName)),
         );
     },
 

@@ -55,7 +55,7 @@ function g2<
 >isA(a2) : boolean
 >        : ^^^^^^^
 >isA : (a: unknown) => a is A
->    : ^ ^^       ^^^^^^^^^^^
+>    : ^ ^^       ^^^^^      
 >a2 : ReturnType<T[M]>
 >   : ^^^^^^^^^^^^^^^^
 

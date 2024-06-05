@@ -185,7 +185,7 @@ function getValueAsString(value: IntersectionFail): string {
 >value.num : number
 >          : ^^^^^^
 >value : { kind: "int"; num: number; } & ToString
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
     }
@@ -193,7 +193,7 @@ function getValueAsString(value: IntersectionFail): string {
 >value.str : string
 >          : ^^^^^^
 >value : { kind: "string"; str: string; } & ToString
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^        ^^^^^^^      ^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 }

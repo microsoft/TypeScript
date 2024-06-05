@@ -59,11 +59,11 @@ class Point {
 >Math.sqrt(dx * dx + dy * dy) : number
 >                             : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >dx * dx + dy * dy : number
 >                  : ^^^^^^
 >dx * dx : number

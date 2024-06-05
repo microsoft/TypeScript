@@ -17,7 +17,7 @@ class C {
 >Symbol.iterator : symbol
 >                : ^^^^^^
 >Symbol : { iterator: symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^
 >iterator : symbol
 >         : ^^^^^^
 }
@@ -34,7 +34,7 @@ class C {
 >Symbol.iterator : symbol
 >                : ^^^^^^
 >Symbol : { iterator: symbol; }
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^
 >iterator : symbol
 >         : ^^^^^^
 >0 : 0

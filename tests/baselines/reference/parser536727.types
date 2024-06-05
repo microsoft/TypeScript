@@ -13,7 +13,7 @@ function foo(f: (x: string) => string) {
 >f("") : string
 >      : ^^^^^^
 >f : (x: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >"" : ""
 >   : ^^
 }

@@ -87,7 +87,7 @@ export function buildExecutionContext(
 >getVariableValues(rawVariableValues ?? {}) : CoercedVariableValues
 >                                           : ^^^^^^^^^^^^^^^^^^^^^
 >getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
->                  : ^      ^^                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^      ^^                                         ^^^^^                     
 >rawVariableValues ?? {} : { readonly [variable: string]: unknown; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rawVariableValues : Maybe<{ readonly [variable: string]: unknown; }>
@@ -106,8 +106,8 @@ export function buildExecutionContext(
     return coercedVariableValues.errors;
 >coercedVariableValues.errors : readonly GraphQLError[]
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^
->coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: undefined; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: never; }
+>                      : ^^^^^^^^^^                           ^^^^^^^^^^^^     ^^^
 >errors : readonly GraphQLError[]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
   }
@@ -121,8 +121,8 @@ export function buildExecutionContext(
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coercedVariableValues.coerced : { [variable: string]: unknown; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: undefined; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
+>                      : ^^^^^^^^^^^                                ^^^^^^^^^^^     ^^^
 >coerced : { [variable: string]: unknown; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

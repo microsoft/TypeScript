@@ -16,11 +16,11 @@ function f(x: number, y: number, z: number) {
 >Array.from(arguments) : any[]
 >                      : ^^^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->           : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
->     : ^^^ ^^         ^^            ^^^^^^^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^^^^^^^ ^^        ^^                          ^^^^^^^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^^^^^^^
+>     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 }
@@ -50,22 +50,22 @@ m.clear();
 >m.clear() : void
 >          : ^^^^
 >m.clear : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >m : Map<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^
 >clear : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 
 // Using ES6 iterable
 m.keys();
 >m.keys() : IterableIterator<string>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >m.keys : () => IterableIterator<string>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                 ^^^^^^ 
 >m : Map<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^
 >keys : () => IterableIterator<string>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                 ^^^^^^ 
 
 // Using ES6 function
 function Baz() { }
@@ -85,11 +85,11 @@ Math.sign(1);
 >Math.sign(1) : number
 >             : ^^^^^^
 >Math.sign : (x: number) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sign : (x: number) => number
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 
@@ -126,11 +126,11 @@ o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
 >                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -162,11 +162,11 @@ Reflect.isExtensible({});
 >Reflect.isExtensible({}) : boolean
 >                         : ^^^^^^^
 >Reflect.isExtensible : (target: object) => boolean
->                     : ^      ^^      ^^^^^^^^^^^^
+>                     : ^      ^^      ^^^^^       
 >Reflect : typeof Reflect
 >        : ^^^^^^^^^^^^^^
 >isExtensible : (target: object) => boolean
->             : ^      ^^      ^^^^^^^^^^^^
+>             : ^      ^^      ^^^^^       
 >{} : {}
 >   : ^^
 
@@ -200,11 +200,11 @@ str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
 >                         : ^^^^^^^
 >str.includes : (searchString: string, position?: number) => boolean
->             : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
+>             : ^            ^^      ^^        ^^^      ^^^^^       
 >str : string
 >    : ^^^^^^
 >includes : (searchString: string, position?: number) => boolean
->         : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
+>         : ^            ^^      ^^        ^^^      ^^^^^       
 >"hello" : "hello"
 >        : ^^^^^^^
 >0 : 0

@@ -160,11 +160,11 @@ type T53 = any[boolean];  // Error
 
 type T60 = {}["toString"];
 >T60 : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 type T61 = []["toString"];
 >T61 : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 declare let cond: boolean;
 >cond : boolean
@@ -722,7 +722,7 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 
 function f30<T, K extends keyof T>() {
 >f30 : <T, K extends keyof T>() => void
->    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
@@ -733,7 +733,7 @@ function f30<T, K extends keyof T>() {
 
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
->    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]

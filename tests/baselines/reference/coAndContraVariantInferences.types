@@ -45,21 +45,21 @@ foo(a, fab);
 >foo(a, fab) : void
 >            : ^^^^
 >foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
->    : ^ ^^ ^^            ^^ ^^                           ^^^^^^^^^
+>    : ^ ^^ ^^            ^^ ^^                           ^^^^^    
 >a : A
 >  : ^
 >fab : (arg: A | B) => void
->    : ^   ^^     ^^^^^^^^^
+>    : ^   ^^     ^^^^^    
 
 foo(b, fab);
 >foo(b, fab) : void
 >            : ^^^^
 >foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
->    : ^ ^^ ^^            ^^ ^^                           ^^^^^^^^^
+>    : ^ ^^ ^^            ^^ ^^                           ^^^^^    
 >b : B
 >  : ^
 >fab : (arg: A | B) => void
->    : ^   ^^     ^^^^^^^^^
+>    : ^   ^^     ^^^^^    
 
 // Repro from #45603
 
@@ -115,7 +115,7 @@ function call<TName extends string,TPayload>(
   fn(action);
 >fn(action) : any
 >fn : (action: Action<TName, TPayload>) => any
->   : ^      ^^                       ^^^^^^^^
+>   : ^      ^^                       ^^^^^   
 >action : Action<TName, TPayload>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -134,11 +134,11 @@ const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 >console.log(action) : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

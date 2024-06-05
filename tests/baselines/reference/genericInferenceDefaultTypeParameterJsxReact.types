@@ -54,9 +54,9 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 >e.preventDefault() : void
 >                   : ^^^^
 >e.preventDefault : () => void
->                 : ^^^^^^^^^^
+>                 : ^^^^^^    
 >e : React.MouseEvent<HTMLSpanElement>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >preventDefault : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 

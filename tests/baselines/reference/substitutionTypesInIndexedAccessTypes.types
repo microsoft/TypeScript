@@ -35,7 +35,7 @@ const boundaryResult = withBoundary({
 >withBoundary({  select: true,}) : { select: true; }
 >                                : ^^^^^^^^^^^^^^^^^
 >withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs>) => T
->             : ^ ^^^^^^^^^        ^^    ^^^                   ^^^^^^
+>             : ^ ^^^^^^^^^        ^^    ^^^                   ^^^^^ 
 >{  select: true,} : { select: true; }
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,7 @@ const withoutBoundaryResult = withoutBoundary({
 >withoutBoundary({  select: true,}) : { select: true; }
 >                                   : ^^^^^^^^^^^^^^^^^
 >withoutBoundary : <T extends UserArgs>(args?: T) => T
->                : ^ ^^^^^^^^^        ^^    ^^^ ^^^^^^
+>                : ^ ^^^^^^^^^        ^^    ^^^ ^^^^^ 
 >{  select: true,} : { select: true; }
 >                  : ^^^^^^^^^^^^^^^^^
 

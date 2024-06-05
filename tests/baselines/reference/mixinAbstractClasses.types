@@ -55,7 +55,7 @@ class DerivedFromConcrete extends Mixin(ConcreteBase) {
 >Mixin(ConcreteBase) : ConcreteBase & Mixin
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^                                                   
 >ConcreteBase : typeof ConcreteBase
 >             : ^^^^^^^^^^^^^^^^^^^
 }
@@ -82,11 +82,11 @@ wasConcrete.mixinMethod();
 >wasConcrete.mixinMethod() : void
 >                          : ^^^^
 >wasConcrete.mixinMethod : () => void
->                        : ^^^^^^^^^^
+>                        : ^^^^^^    
 >wasConcrete : DerivedFromConcrete
 >            : ^^^^^^^^^^^^^^^^^^^
 >mixinMethod : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 
 class DerivedFromAbstract extends Mixin(AbstractBase) {
 >DerivedFromAbstract : DerivedFromAbstract
@@ -94,7 +94,7 @@ class DerivedFromAbstract extends Mixin(AbstractBase) {
 >Mixin(AbstractBase) : AbstractBase & Mixin
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^                                                   
 >AbstractBase : typeof AbstractBase
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -125,9 +125,9 @@ wasAbstract.mixinMethod();
 >wasAbstract.mixinMethod() : void
 >                          : ^^^^
 >wasAbstract.mixinMethod : () => void
->                        : ^^^^^^^^^^
+>                        : ^^^^^^    
 >wasAbstract : DerivedFromAbstract
 >            : ^^^^^^^^^^^^^^^^^^^
 >mixinMethod : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 

@@ -48,6 +48,7 @@ import {
     findIndex,
     flattenDiagnosticMessageText,
     forEach,
+    forEachEntry,
     forEachKey,
     ForegroundColorEscapeSequences,
     formatColorAndReset,
@@ -70,7 +71,6 @@ import {
     getWatchErrorSummaryDiagnosticMessage,
     hasProperty,
     identity,
-    isArray,
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
     isPackageJsonInfo,
@@ -90,6 +90,7 @@ import {
     PollingInterval,
     Program,
     ProgramBuildInfo,
+    ProgramBundleEmitBuildInfo,
     ProgramHost,
     ProgramMultiFileEmitBuildInfo,
     ProgramUpdateLevel,
@@ -104,7 +105,6 @@ import {
     SemanticDiagnosticsBuilderProgram,
     setGetSourceFileAsHashVersioned,
     SharedExtendedConfigFileWatcher,
-    some,
     SourceFile,
     Status,
     sys,
@@ -1075,8 +1075,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 diagnostics,
                 errorFlags,
                 errorType,
@@ -1133,8 +1131,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 declDiagnostics,
                 BuildResultFlags.DeclarationEmitErrors,
                 "Declaration file",
@@ -1209,8 +1205,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 emitDiagnostics,
                 BuildResultFlags.EmitErrors,
                 "Emit",
@@ -1454,20 +1448,13 @@ function afterProgramDone<T extends BuilderProgram>(
 function buildErrors<T extends BuilderProgram>(
     state: SolutionBuilderState<T>,
     resolvedPath: ResolvedConfigFilePath,
-    program: T | undefined,
-    config: ParsedCommandLine,
     diagnostics: readonly Diagnostic[],
     buildResult: BuildResultFlags,
     errorType: string,
 ) {
-    // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
-    const canEmitBuildInfo = program && !program.getCompilerOptions().outFile;
-
     reportAndStoreErrors(state, resolvedPath, diagnostics);
     state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
-    if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
-    afterProgramDone(state, program);
-    return { buildResult, step: BuildStep.QueueReferencingProjects };
+    return { buildResult, step: BuildStep.EmitBuildInfo };
 }
 
 function isFileWatcherWithModifiedTime(value: FileWatcherWithModifiedTime | Date): value is FileWatcherWithModifiedTime {
@@ -1693,11 +1680,12 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // But if noEmit is true, affectedFilesPendingEmit will have file list even if there are no semantic errors to preserve list of files to be emitted when running with noEmit false
             // So with noEmit set to true, check on semantic diagnostics needs to be explicit as oppose to when it is false when only files pending emit is sufficient
             if (
-                (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
+                buildInfo.program.changeFileSet?.length ||
                 (!project.options.noEmit ?
                     (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
-                    some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
+                    buildInfo.program.emitDiagnosticsPerFile?.length ||
+                    (buildInfo.program as ProgramBundleEmitBuildInfo).pendingEmit !== undefined :
+                    buildInfo.program.semanticDiagnosticsPerFile?.length)
             ) {
                 return {
                     type: UpToDateStatusType.OutOfDateBuildInfo,
@@ -1734,6 +1722,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             };
         }
 
+        const inputPath = buildInfoProgram ? toPath(state, inputFile) : undefined;
         // If an buildInfo is older than the newest input, we can stop checking
         if (buildInfoTime && buildInfoTime < inputTime) {
             let version: string | undefined;
@@ -1741,8 +1730,9 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (buildInfoProgram) {
                 // Read files and see if they are same, read is anyways cached
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-                version = buildInfoVersionMap.fileInfos.get(toPath(state, inputFile));
-                const text = version ? state.readFileWithCache(inputFile) : undefined;
+                const resolvedInputPath = buildInfoVersionMap.roots.get(inputPath!);
+                version = buildInfoVersionMap.fileInfos.get(resolvedInputPath ?? inputPath!);
+                const text = version ? state.readFileWithCache(resolvedInputPath ?? inputFile) : undefined;
                 currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
             }
@@ -1761,20 +1751,22 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             newestInputFileTime = inputTime;
         }
 
-        if (buildInfoProgram) seenRoots.add(toPath(state, inputFile));
+        if (buildInfoProgram) seenRoots.add(inputPath!);
     }
 
     if (buildInfoProgram) {
         if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-        for (const existingRoot of buildInfoVersionMap.roots) {
-            if (!seenRoots.has(existingRoot)) {
-                // File was root file when project was built but its not any more
-                return {
-                    type: UpToDateStatusType.OutOfDateRoots,
-                    buildInfoFile: buildInfoPath!,
-                    inputFile: existingRoot,
-                };
-            }
+        const existingRoot = forEachEntry(
+            buildInfoVersionMap.roots,
+            // File was root file when project was built but its not any more
+            (_resolved, existingRoot) => !seenRoots.has(existingRoot) ? existingRoot : undefined,
+        );
+        if (existingRoot) {
+            return {
+                type: UpToDateStatusType.OutOfDateRoots,
+                buildInfoFile: buildInfoPath!,
+                inputFile: existingRoot,
+            };
         }
     }
 

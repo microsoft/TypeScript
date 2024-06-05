@@ -1,7 +1,10 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import { verifyTsc } from "../helpers/tsc.js";
+import {
+    noChangeOnlyRuns,
+    verifyTsc,
+} from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
@@ -84,6 +87,7 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                 }),
             );
         },
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -108,5 +112,6 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
                 }),
             );
         },
+        edits: noChangeOnlyRuns,
     });
 });

@@ -471,7 +471,7 @@ obj1["x"];
 >obj1["x"] : string
 >          : ^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >"x" : "x"
 >    : ^^^
 
@@ -485,7 +485,7 @@ obj1[y];
 >obj1[y] : number
 >        : ^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >y : "y"
 >  : ^^^
 
@@ -499,7 +499,7 @@ obj1[yy];
 >obj1[yy] : string | number | undefined
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >yy : string
 >   : ^^^^^^
 
@@ -513,7 +513,7 @@ obj1[z];
 >obj1[z] : string | number | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >z : string
 >  : ^^^^^^
 
@@ -556,7 +556,7 @@ const e15: string = symbolMap[s]; // Should OK
 >symbolMap[s] : string
 >             : ^^^^^^
 >symbolMap : { [s]: string; }
->          : ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -566,7 +566,7 @@ symbolMap[s] = undefined; // Should error
 >symbolMap[s] : string
 >             : ^^^^^^
 >symbolMap : { [s]: string; }
->          : ^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 >undefined : undefined
@@ -622,13 +622,13 @@ const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[
 ><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
 >                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 >myRecord1[key] : { a: string; b: string; }[Key]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^^^^^^
 >myRecord1 : { a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 
@@ -638,13 +638,13 @@ const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[
 ><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
 >                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 
@@ -654,7 +654,7 @@ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 ><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends keyof typeof myRecord2>(key: Key) => void
 >                                                                                                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 
@@ -662,9 +662,9 @@ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 >myRecord2[key] = undefined : undefined
 >                           : ^^^^^^^^^
 >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 >undefined : undefined
@@ -676,7 +676,7 @@ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 >myRecord2[key] : undefined
 >               : ^^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
 >    : ^^^
 

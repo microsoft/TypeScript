@@ -2893,7 +2893,7 @@ export class ProjectService {
                 path = normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName);
                 const existingValue = projectRootFilesMap.get(path);
                 if (existingValue) {
-                    if (existingValue.info) {
+                    if (existingValue.info?.path === path) {
                         project.removeFile(existingValue.info, /*fileExists*/ false, /*detachFromProject*/ true);
                         existingValue.info = undefined;
                     }

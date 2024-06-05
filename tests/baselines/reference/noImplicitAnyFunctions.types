@@ -40,7 +40,7 @@ function f5(x: any): any {
 
 function f6(x: string, y: number);
 >f6 : { (x: string, y: number): any; (x: string, y: string): any; }
->   : ^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^   ^^^
 >x : string
 >  : ^^^^^^
 >y : number
@@ -56,7 +56,7 @@ function f6(x: string, y: string): any;
 
 function f6(x: string, y) {
 >f6 : { (x: string, y: number): any; (x: string, y: string): any; }
->   : ^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^^   ^^^
 >x : string
 >  : ^^^^^^
 >y : any

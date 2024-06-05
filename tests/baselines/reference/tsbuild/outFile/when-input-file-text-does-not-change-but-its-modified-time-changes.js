@@ -132,22 +132,22 @@ c.doSomething();
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:18 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:19 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:29 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:30 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:39 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:40 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -447,20 +447,20 @@ Input::
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:52 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:53 AM[0m] Project 'src/first/tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
+[[90mHH:MM:SS AM[0m] Project 'src/first/tsconfig.json' is up to date but needs to update timestamps of output files that are older than input files
 
-[[90m12:00:54 AM[0m] Updating output timestamps of project '/src/first/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/first/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:00:58 AM[0m] Project 'src/third/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:59 AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

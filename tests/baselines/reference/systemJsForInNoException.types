@@ -21,11 +21,11 @@ for (var key in obj)
 >console.log(obj[key]) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj[key] : error
 >obj : { a: number; }
 >    : ^^^^^^^^^^^^^^

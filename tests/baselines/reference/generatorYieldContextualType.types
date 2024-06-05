@@ -11,7 +11,7 @@ f1<0, 0, 1>(function* () {
 >f1<0, 0, 1>(function* () {	const a = yield 0;	return 0;}) : void
 >                                                          : ^^^^
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
->   : ^ ^^ ^^ ^^   ^^                        ^^^^^^^^^
+>   : ^ ^^ ^^ ^^   ^^                        ^^^^^    
 >function* () {	const a = yield 0;	return 0;} : () => Generator<0, 0, 1>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -39,7 +39,7 @@ f2<0, 0, 1>(async function* () {
 >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
 >                                                                : ^^^^
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^^^^^
+>   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^    
 >async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -319,7 +319,7 @@ function* showStep<
 >createPickStep<QuickPickItem>({    title: "",    placeholder: "",  }) : QuickPickStep<QuickPickItem>
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^                
 >{    title: "",    placeholder: "",  } : { title: string; placeholder: string; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -351,7 +351,7 @@ function* showStep<
 >canPickStepContinue(step, state, selection) : boolean
 >                                            : ^^^^^^^
 >canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
->                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
 >step : QuickPickStep<QuickPickItem>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State

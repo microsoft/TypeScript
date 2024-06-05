@@ -25,7 +25,7 @@ function call<T extends object>(obj: T, cb: (val: T) => void) {
 >cb(obj) : void
 >        : ^^^^
 >cb : (val: T) => void
->   : ^   ^^ ^^^^^^^^^
+>   : ^   ^^ ^^^^^    
 >obj : T
 >    : ^
 }
@@ -46,21 +46,21 @@ call(obj, ({foo, ...rest}) => {
 >foo : string
 >    : ^^^^^^
 >rest : { bar: string; }
->     : ^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^
 
   console.log(rest.bar);
 >console.log(rest.bar) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >rest.bar : string
 >         : ^^^^^^
 >rest : { bar: string; }
->     : ^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^
 >bar : string
 >    : ^^^^^^
 

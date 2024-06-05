@@ -21,7 +21,7 @@ void log(foo).toString();
 >log(foo).toString() : string
 >                    : ^^^^^^
 >log(foo).toString : (radix?: number) => string
->                  : ^     ^^^      ^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^      
 >log(foo) : number
 >         : ^^^^^^
 >log : (n: number) => number
@@ -29,5 +29,5 @@ void log(foo).toString();
 >foo : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 

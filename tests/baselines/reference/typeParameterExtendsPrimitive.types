@@ -4,7 +4,7 @@
 // #14473
 function f<T extends number>() {
 >f : <T extends number>() => number
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^      ^^^^^^^^^^^^^
 
     var t: T;
 >t : T

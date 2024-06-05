@@ -114,7 +114,7 @@ var r3: string = a().notHere();
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^    ^^^^^^^^
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >notHere : any
 >        : ^^^
 
@@ -128,7 +128,7 @@ var r3b: string = a()['notHere']();
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^    ^^^^^^^^
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >'notHere' : "notHere"
 >          : ^^^^^^^^^
 

@@ -1416,7 +1416,7 @@ describe("unittests:: tsserver:: projects::", () => {
             });
         }
         catch (e) {
-            assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
+            session.logger.log(e.message);
         }
         baselineTsserverLogs("projects", "assert when removing project", session);
     });

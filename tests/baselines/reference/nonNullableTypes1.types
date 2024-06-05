@@ -43,7 +43,7 @@ function f2<T>(x: T) {  // NonNullable<T>
 >error() : never
 >        : ^^^^^
 >error : () => never
->      : ^^^^^^^^^^^
+>      : ^^^^^^     
 }
 
 function f3(x: unknown) {
@@ -75,7 +75,7 @@ function f4<T extends { x: string } | undefined>(obj: T) {
 >obj?.x : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -89,7 +89,7 @@ function f4<T extends { x: string } | undefined>(obj: T) {
 >obj?.x : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -105,7 +105,7 @@ function f4<T extends { x: string } | undefined>(obj: T) {
 >obj?.x : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >obj : { x: string; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >"string" : "string"

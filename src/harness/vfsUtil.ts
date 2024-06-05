@@ -788,8 +788,8 @@ export class FileSystem {
     }
 
     private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
-        while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
-        while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+        changedNode = walkSameNodes(changedNode);
+        baseNode = walkSameNodes(baseNode);
 
         // no difference if the nodes are the same reference
         if (changedNode === baseNode) return false;
@@ -827,6 +827,15 @@ export class FileSystem {
 
         container[basename] = new File(changedBuffer.data, { encoding: changedBuffer.encoding });
         return true;
+
+        function walkSameNodes(node: FileInode) {
+            while (
+                !node.buffer &&
+                node.shadowRoot &&
+                (!options.includeChangedFileWithSameContent || node.mtimeMs === node.shadowRoot.mtimeMs)
+            ) node = node.shadowRoot;
+            return node;
+        }
     }
 
     private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {

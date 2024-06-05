@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
@@ -1929,5 +1930,57 @@ const b: B = new B();`,
                 baseline(`${scenario}${fileOpenBeforeRevert ? " with file open before revert" : ""}`);
             });
         }
+    });
+
+    it("with dts file next to ts file", () => {
+        const indexDts: File = {
+            path: "/home/src/projects/project/src/index.d.ts",
+            content: dedent`
+                declare global {
+                    interface Window {
+                        electron: ElectronAPI
+                        api: unknown
+                    }
+                }
+            `,
+        };
+        const host = createServerHost({
+            [indexDts.path]: indexDts.content,
+            "/home/src/projects/project/src/index.ts": dedent`
+                const api = {}
+            `,
+            "/home/src/projects/project/tsconfig.json": jsonToReadableText({
+                include: [
+                    "src/*.d.ts",
+                ],
+                references: [{ path: "./tsconfig.node.json" }],
+            }),
+            "/home/src/projects/project/tsconfig.node.json": jsonToReadableText({
+                include: ["src/**/*"],
+                compilerOptions: {
+                    composite: true,
+                },
+            }),
+            [libFile.path]: libContent,
+        });
+        const session = new TestSession(host);
+        openFilesForSession([{ file: indexDts, projectRootPath: "/home/src/projects/project" }], session);
+        session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
+            command: ts.server.protocol.CommandTypes.DocumentHighlights,
+            arguments: {
+                ...protocolFileLocationFromSubstring(indexDts, "global"),
+                filesToSearch: ["/home/src/projects/project/src/index.d.ts"],
+            },
+        });
+        session.executeCommandSeq<ts.server.protocol.EncodedSemanticClassificationsRequest>({
+            command: ts.server.protocol.CommandTypes.EncodedSemanticClassificationsFull,
+            arguments: {
+                file: indexDts.path,
+                start: 0,
+                length: indexDts.content.length,
+                format: "2020",
+            },
+        });
+        baselineTsserverLogs("projectReferences", "with dts file next to ts file", session);
     });
 });
