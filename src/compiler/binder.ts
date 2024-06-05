@@ -1393,7 +1393,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function createFlowMutation(flags: FlowFlags.Assignment | FlowFlags.ArrayMutation, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement) {
         setFlowNodeReferenced(antecedent);
         hasFlowEffects = true;
-        hasFlowMutation = true;
+        if (node.kind !== SyntaxKind.VariableDeclaration && node.kind !== SyntaxKind.BindingElement) hasFlowMutation = true;
         const result = createFlowNode(flags, node, antecedent) as FlowAssignment | FlowArrayMutation;
         if (currentExceptionTarget) {
             addAntecedent(currentExceptionTarget, result);
