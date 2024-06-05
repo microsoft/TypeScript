@@ -180,8 +180,7 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
         sys.dtsSignaures ??= new Map();
         const dtsSignatureData = new Map<string, string>();
         sys.dtsSignaures.set(`${toPathWithSystem(sys, buildInfoPath)}.readable.baseline.txt` as ts.Path, dtsSignatureData);
-        const state = builderProgram.getState();
-        state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
+        builderProgram.state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
             const file = program.getSourceFileByPath(resolvedPath);
             if (!file || file.isDeclarationFile) return;
             // Compute dts and exported map and store it

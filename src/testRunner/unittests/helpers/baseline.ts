@@ -72,9 +72,8 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
 
     if (!builderProgram) return;
     if (builderProgram !== oldProgram?.[1]) {
-        const state = builderProgram.getState();
-        const internalState = state as unknown as ts.BuilderProgramState;
-        if (state.semanticDiagnosticsPerFile.size) {
+        const internalState = builderProgram.state as ts.BuilderProgramState;
+        if (builderProgram.state.semanticDiagnosticsPerFile.size) {
             baseline.push("Semantic diagnostics in builder refreshed for::");
             for (const file of program.getSourceFiles()) {
                 if (!internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
@@ -90,7 +89,7 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
             if (internalState.hasCalledUpdateShapeSignature?.size) {
                 baseline.push("Shape signatures in builder refreshed for::");
                 internalState.hasCalledUpdateShapeSignature.forEach((path: ts.Path) => {
-                    const info = state.fileInfos.get(path);
+                    const info = builderProgram.state.fileInfos.get(path);
                     const signatureInfo = internalState.signatureInfo?.get(path)!;
                     switch (signatureInfo) {
                         case ts.SignatureInfo.ComputedDts:
