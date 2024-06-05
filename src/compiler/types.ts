@@ -6381,7 +6381,6 @@ export const enum ObjectFlags {
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
-    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -6389,6 +6388,8 @@ export const enum ObjectFlags {
     IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
+    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
+    DeferredCallback = 1 << 28,  // Function type with Deferred<T> marker
 
     // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */

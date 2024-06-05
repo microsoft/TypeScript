@@ -1396,6 +1396,7 @@ const enum IntrinsicTypeKind {
     Capitalize,
     Uncapitalize,
     NoInfer,
+    Deferred,
 }
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
@@ -1404,6 +1405,7 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Capitalize: IntrinsicTypeKind.Capitalize,
     Uncapitalize: IntrinsicTypeKind.Uncapitalize,
     NoInfer: IntrinsicTypeKind.NoInfer,
+    Deferred: IntrinsicTypeKind.Deferred,
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -16100,7 +16102,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type === intrinsicMarkerType) {
             const typeKind = intrinsicTypeKinds.get(symbol.escapedName as string);
             if (typeKind !== undefined && typeArguments && typeArguments.length === 1) {
-                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) : getStringMappingType(symbol, typeArguments[0]);
+                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) :
+                    typeKind === IntrinsicTypeKind.Deferred ? getDeferredCallbackType(typeArguments[0], aliasSymbol, aliasTypeArguments) :
+                    getStringMappingType(symbol, typeArguments[0]);
             }
         }
         const links = getSymbolLinks(symbol);
@@ -16111,6 +16115,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))), aliasSymbol, aliasTypeArguments));
         }
         return instantiation;
+    }
+
+    function getDeferredCallbackType(type: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+        if (type.flags & TypeFlags.Object) {
+            const key = `F${getTypeId(type)}${getAliasId(aliasSymbol, aliasTypeArguments)}`;
+            return getCachedType(key) ?? setCachedType(key, createDeferredCallbackType(type as ObjectType, aliasSymbol, aliasTypeArguments));
+        }
+        return type;
+    }
+
+    function createDeferredCallbackType(type: ObjectType, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+        const resolved = resolveStructuredTypeMembers(type);
+        const result = createObjectType(ObjectFlags.Anonymous | ObjectFlags.DeferredCallback, type.symbol);
+        result.members = resolved.members;
+        result.properties = resolved.properties;
+        result.callSignatures = resolved.callSignatures;
+        result.constructSignatures = resolved.constructSignatures;
+        result.indexInfos = resolved.indexInfos;
+        result.aliasSymbol = aliasSymbol;
+        result.aliasTypeArguments = aliasTypeArguments;
+        return result;
     }
 
     /**
@@ -28138,15 +28163,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
+            const signature = getResolvedSignature(flow.node);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             const saveInitialType = initialType;
             const saveInLambdaArg = inLambdaArg;
             initialType = getTypeFromFlowType(flowType);
             inLambdaArg = true;
             let lambdaTypes: Type[] | undefined;
-            for (const arg of flow.node.arguments) {
-                const lambda = getLambdaArgument(arg);
-                if (lambda && lambda.returnFlowNode) {
+            const args = flow.node.arguments;
+            for (let i = 0; i < args.length; i++) {
+                const lambda = getLambdaArgument(args[i]);
+                if (lambda && lambda.returnFlowNode && !(getObjectFlags(getTypeAtPosition(signature, i)) & ObjectFlags.DeferredCallback)) {
                     const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                     if (lambdaType !== initialType) {
                         lambdaTypes ??= [initialType];

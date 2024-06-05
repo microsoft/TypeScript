@@ -11638,7 +11638,7 @@ export function getLambdaArgument(node: Node): FunctionLikeDeclaration | undefin
     switch (node.kind) {
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
-            return node as FunctionLikeDeclaration;
+            return !hasSyntacticModifier(node, ModifierFlags.Async) && !(node as FunctionLikeDeclaration).asteriskToken ? node as FunctionLikeDeclaration : undefined;
         case SyntaxKind.ParenthesizedExpression:
             return getLambdaArgument((node as ParenthesizedExpression).expression);
     }

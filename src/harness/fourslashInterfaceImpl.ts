@@ -1210,6 +1210,7 @@ export namespace Completion {
         typeEntry("Capitalize"),
         typeEntry("Uncapitalize"),
         typeEntry("NoInfer"),
+        typeEntry("Deferred"),
         interfaceEntry("ThisType"),
         varEntry("ArrayBuffer"),
         interfaceEntry("ArrayBufferTypes"),
