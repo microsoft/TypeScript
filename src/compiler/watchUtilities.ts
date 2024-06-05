@@ -30,6 +30,7 @@ import {
     identity,
     insertSorted,
     isArray,
+    isBuilderProgram,
     isDeclarationFileName,
     isExcludedFile,
     isSupportedSourceFileName,
@@ -627,7 +628,7 @@ export function isIgnoredFileFromWildCardWatching({
         return realProgram ?
             !!realProgram.getSourceFileByPath(file) :
             builderProgram ?
-            builderProgram.getState().fileInfos.has(file) :
+            builderProgram.state.fileInfos.has(file) :
             !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 
@@ -649,10 +650,6 @@ export function isIgnoredFileFromWildCardWatching({
                 return false;
         }
     }
-}
-
-function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-    return !!(program as T).getState;
 }
 
 /** @internal */
