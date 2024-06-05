@@ -23,7 +23,7 @@ var f: {
 
 var f2: {
 >f2 : { <T>(x: string): string; <T>(x: number): number; }
->   : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
+>   : ^^^ ^^ ^^      ^^^      ^^^ ^^ ^^      ^^^      ^^^
 
     <T>(x: string): string;
 >x : string

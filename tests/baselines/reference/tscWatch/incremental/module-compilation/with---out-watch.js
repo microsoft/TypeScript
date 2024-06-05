@@ -151,7 +151,10 @@ Program files::
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
 
 No shapes updated in the builder::
 

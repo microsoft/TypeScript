@@ -94,7 +94,7 @@ console.log(
 >[1, 2].map(i => <div key={i}>{i}</div>) : JSX.Element[]
 >                                        : ^^^^^^^^^^^^^
 >[1, 2].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>           : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -102,7 +102,7 @@ console.log(
 >2 : 2
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >i => <div key={i}>{i}</div> : (i: number) => JSX.Element
 >                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >i : number

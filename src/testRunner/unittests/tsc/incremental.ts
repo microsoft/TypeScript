@@ -443,16 +443,6 @@ console.log(a);`,
                 ],
             };
         }
-        function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
-            const edit = withOptionChangeAndDiscrepancyExplanation(caption, "--emitDeclarationOnly");
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build info does not have js section because its fresh build`,
-                `Incremental build info has js section from old build`,
-            ];
-            return edit;
-        }
         function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
                 ...noChangeRun,
@@ -461,16 +451,6 @@ console.log(a);`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option declaration and declarationMap`,
                 ],
             };
-        }
-        function nochangeWithIncrementalOutDeclarationFromBeforeExplaination(): TestTscEdit {
-            const edit = nochangeWithIncrementalDeclarationFromBeforeExplaination();
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build does not have dts bundle section`,
-                `Incremental build contains the dts build section from before`,
-            ];
-            return edit;
         }
         function localChange(): TestTscEdit {
             return {
@@ -497,96 +477,59 @@ console.log(a);`,
                 },
             };
         }
-        verifyTsc({
-            scenario: "incremental",
-            subScenario: "different options",
-            fs: () => fs({ composite: true }),
-            commandLineArgs: ["--p", "/src/project"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                noChangeRun,
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
-                noChangeRun,
-                localChange(),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                enableDeclarationMap(),
-                withOptionChange("with sourceMap should not emit d.ts", "--sourceMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "incremental",
-            subScenario: "different options with outFile",
-            fs: () => fs({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--p", "/src/project"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                noChangeRun,
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
-                noChangeRun,
-                localChange(),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                enableDeclarationMap(),
-                withOptionChange("with sourceMap should not emit d.ts", "--sourceMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "incremental",
-            subScenario: "different options with incremental",
-            fs: () => fs({ incremental: true }),
-            commandLineArgs: ["--p", "/src/project"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                withOptionChange("should re-emit only js so they dont contain sourcemap"),
-                withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalDeclarationFromBeforeExplaination(),
-                localChange(),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalDeclarationFromBeforeExplaination(),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("emit js files"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "incremental",
-            subScenario: "different options with incremental with outFile",
-            fs: () => fs({ incremental: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--p", "/src/project"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
-                localChange(),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("emit js files"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
-            ],
-            baselinePrograms: true,
-        });
+        function verify(options: ts.CompilerOptions) {
+            function scenarioName(text: string) {
+                return `${options.outFile ? "outFile" : "multiFile"}/${text}`;
+            }
+            verifyTsc({
+                scenario: "incremental",
+                subScenario: scenarioName("different options"),
+                fs: () => fs({ composite: true, ...options }),
+                commandLineArgs: ["--p", "/src/project"],
+                edits: [
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
+                    withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
+                    noChangeRun,
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
+                    withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
+                    noChangeRun,
+                    localChange(),
+                    withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
+                    withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    enableDeclarationMap(),
+                    withOptionChange("with sourceMap should not emit d.ts", "--sourceMap"),
+                ],
+                baselinePrograms: true,
+            });
+            verifyTsc({
+                scenario: "incremental",
+                subScenario: scenarioName("different options with incremental"),
+                fs: () => fs({ incremental: true, ...options }),
+                commandLineArgs: ["--p", "/src/project"],
+                edits: [
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
+                    withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
+                    localChange(),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
+                    withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    noChangeWithSubscenario("emit js files"),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                ],
+                baselinePrograms: true,
+            });
+        }
+
+        verify({});
+        verify({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
     });
 
     verifyTsc({

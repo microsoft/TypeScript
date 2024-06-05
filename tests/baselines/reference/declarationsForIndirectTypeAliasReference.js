@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.doSome = void 0;
+exports.doSome = doSome;
 var MAP = {
     a: "a"
 };

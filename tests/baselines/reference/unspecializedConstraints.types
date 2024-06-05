@@ -976,7 +976,7 @@ module ts {
 >arrayContains(b, a[i]) : boolean
 >                       : ^^^^^^^
 >arrayContains : <T_1 extends Equals<T_1>>(a: T_1[], item: T_1) => boolean
->              : ^   ^^^^^^^^^           ^^ ^^     ^^    ^^   ^^^^^       
+>              : ^^^^^^^^^^^^^           ^^ ^^     ^^    ^^   ^^^^^       
 >b : T[]
 >  : ^^^
 >a[i] : T

@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/tslibNotFoundDifferentModules.ts] ////
+
+=== /package1/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : Symbol(foo, Decl(index.ts, 0, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+async function bar(): Promise<void> {}
+>bar : Symbol(bar, Decl(index.ts, 1, 38))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== /package2/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : Symbol(foo, Decl(index.ts, 0, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== /package1/node_modules/tslib/tslib.d.ts ===
+/**
+ * Converts a generator function into a pseudo-async function, by treating each `yield` as an `await`.
+ *
+ * @param thisArg The reference to use as the `this` value in the generator function
+ * @param _arguments The optional arguments array
+ * @param P The optional promise constructor argument, defaults to the `Promise` property of the global object.
+ * @param generator The generator function
+ */
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+>__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
+>_arguments : Symbol(_arguments, Decl(tslib.d.ts, --, --))
+>P : Symbol(P, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>generator : Symbol(generator, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

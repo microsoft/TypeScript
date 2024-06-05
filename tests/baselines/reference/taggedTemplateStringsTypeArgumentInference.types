@@ -19,7 +19,7 @@ noParams ``;
 // Generic tag with parameter which does not use type parameter
 function noGenericParams<T>(n: TemplateStringsArray) { }
 >noGenericParams : <T>(n: TemplateStringsArray) => void
->                : ^^^^ ^^                    ^^^^^^^^^
+>                : ^ ^^ ^^                    ^^^^^^^^^
 >n : TemplateStringsArray
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -27,14 +27,14 @@ noGenericParams ``;
 >noGenericParams `` : void
 >                   : ^^^^
 >noGenericParams : <T>(n: TemplateStringsArray) => void
->                : ^^^^ ^^                    ^^^^^^^^^
+>                : ^ ^^ ^^                    ^^^^^^^^^
 >`` : ""
 >   : ^^
 
 // Generic tag with multiple type parameters and only one used in parameter type annotation
 function someGenerics1a<T, U>(n: T, m: number) { }
 >someGenerics1a : <T, U>(n: T, m: number) => void
->               : ^ ^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >n : T
 >  : ^
 >m : number
@@ -44,7 +44,7 @@ someGenerics1a `${3}`;
 >someGenerics1a `${3}` : void
 >                      : ^^^^
 >someGenerics1a : <T, U>(n: T, m: number) => void
->               : ^ ^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >`${3}` : string
 >       : ^^^^^^
 >3 : 3
@@ -52,7 +52,7 @@ someGenerics1a `${3}`;
 
 function someGenerics1b<T, U>(n: TemplateStringsArray, m: U) { }
 >someGenerics1b : <T, U>(n: TemplateStringsArray, m: U) => void
->               : ^^^^ ^^ ^^                    ^^ ^^ ^^^^^^^^^
+>               : ^ ^^ ^^ ^^                    ^^ ^^ ^^^^^^^^^
 >n : TemplateStringsArray
 >  : ^^^^^^^^^^^^^^^^^^^^
 >m : U
@@ -62,7 +62,7 @@ someGenerics1b `${3}`;
 >someGenerics1b `${3}` : void
 >                      : ^^^^
 >someGenerics1b : <T, U>(n: TemplateStringsArray, m: U) => void
->               : ^^^^ ^^ ^^                    ^^ ^^ ^^^^^^^^^
+>               : ^ ^^ ^^ ^^                    ^^ ^^ ^^^^^^^^^
 >`${3}` : string
 >       : ^^^^^^
 >3 : 3

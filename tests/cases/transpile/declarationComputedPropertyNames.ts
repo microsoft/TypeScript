@@ -6,11 +6,16 @@ export namespace presentNs {
     export const a = Symbol();
 }
 
+const aliasing = Symbol;
+
 export type A = {
     [missing]: number,
     [ns.missing]: number,
     [presentNs.a]: number,
     [Symbol.iterator]: number,
+    [globalThis.Symbol.toStringTag]: number,
+    [(globalThis.Symbol).unscopables]: number,
+    [aliasing.isConcatSpreadable]: number,
     [1]: number,
     ["2"]: number,
     [(missing2)]: number,
@@ -22,6 +27,9 @@ export interface B {
     [ns.missing]: number,
     [presentNs.a]: number,
     [Symbol.iterator]: number,
+    [globalThis.Symbol.toStringTag]: number,
+    [(globalThis.Symbol).unscopables]: number,
+    [aliasing.isConcatSpreadable]: number,
     [1]: number,
     ["2"]: number,
     [(missing2)]: number,
@@ -33,6 +41,9 @@ export class C {
     [ns.missing]: number = 1;
     [presentNs.a]: number = 1;
     [Symbol.iterator]: number = 1;
+    [globalThis.Symbol.toStringTag]: number = 1;
+    [(globalThis.Symbol).unscopables]: number = 1;
+    [aliasing.isConcatSpreadable]: number = 1;
     [1]: number = 1;
     ["2"]: number = 1;
     [(missing2)]: number = 1;
@@ -44,6 +55,9 @@ export const D = {
     [ns.missing]: 1,
     [presentNs.a]: 1,
     [Symbol.iterator]: 1,
+    [globalThis.Symbol.toStringTag]: 1,
+    [(globalThis.Symbol).unscopables]: 1,
+    [aliasing.isConcatSpreadable]: 1,
     [1]: 1,
     ["2"]: 1,
     [(missing2)]: 1,

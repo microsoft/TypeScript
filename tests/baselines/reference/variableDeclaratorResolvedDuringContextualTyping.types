@@ -144,7 +144,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
+>     : ^^^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^           ^^^^^^^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^^^^^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^^^^^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => TPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : V
@@ -158,7 +158,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^                         ^^     ^^^               ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
+>     : ^^^^^^^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^                         ^^     ^^^               ^^        ^^^                ^^^           ^^^^^^^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^^^^^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => TPromise<U>
 >        : ^     ^^ ^^^^^           
 >value : V
@@ -172,7 +172,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^                         ^^        ^^^                ^^^           ^^^   ^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
+>     : ^^^^^^^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^^^^^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^                         ^^        ^^^                ^^^           ^^^^^^^^       ^^^                 ^^     ^^^                 ^^        ^^^                ^^^             ^^^
 >success : (value: V) => U
 >        : ^     ^^ ^^^^^ 
 >value : V
@@ -186,7 +186,7 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->     : ^^^   ^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^   ^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^   ^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^               ^^        ^^^                ^^^           ^^^
+>     : ^^^^^^^^       ^^^                           ^^     ^^^                           ^^        ^^^                ^^^             ^^^^^^^^       ^^^                           ^^     ^^^                 ^^        ^^^                ^^^             ^^^^^^^^       ^^^                 ^^     ^^^                           ^^        ^^^                ^^^             ^^^ ^^       ^^^               ^^     ^^^               ^^        ^^^                ^^^           ^^^
 >success : (value: V) => U
 >        : ^     ^^ ^^^^^ 
 >value : V

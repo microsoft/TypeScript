@@ -17,11 +17,11 @@ const bar = foo.flatMap(bar => bar as Foo);
 >foo.flatMap(bar => bar as Foo) : string[]
 >                               : ^^^^^^^^
 >foo.flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | ReadonlyArray<U>, thisArg?: This | undefined) => U[]
->            : ^^^^^^^^^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^                 ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  
+>            : ^ ^^    ^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^                 ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  
 >foo : unknown[]
 >    : ^^^^^^^^^
 >flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | ReadonlyArray<U>, thisArg?: This | undefined) => U[]
->        : ^^^^^^^^^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^                 ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  
+>        : ^ ^^    ^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^                 ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^  
 >bar => bar as Foo : (this: undefined, bar: unknown) => Foo
 >                  : ^    ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   
 >bar : unknown

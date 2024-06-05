@@ -86,7 +86,7 @@ export function create<T extends AnyTuple>(schemas: {
 >create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K]>; }) => TupleSchema<T | undefined, AnyObject, undefined, "">
 >       : ^ ^^^^^^^^^        ^^       ^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: ISchema<T[K]>;
 }) {
@@ -96,6 +96,6 @@ export function create<T extends AnyTuple>(schemas: {
 >TupleSchema : typeof TupleSchema
 >            : ^^^^^^^^^^^^^^^^^^
 >schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

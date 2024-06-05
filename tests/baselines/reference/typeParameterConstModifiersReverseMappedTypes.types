@@ -5,12 +5,12 @@ declare function test1<const T>(obj: {
 >test1 : <const T>(obj: { [K in keyof T]: T[K]; }) => [T, typeof obj]
 >      : ^^^^^^^ ^^   ^^                         ^^^^^               
 >obj : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: T[K];
 }): [T, typeof obj];
 >obj : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 const result1 = test1({
 >result1 : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
@@ -47,12 +47,12 @@ declare function test2<const T>(obj: {
 >test2 : <const T>(obj: { readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
 >      : ^^^^^^^ ^^   ^^                                  ^^^^^               
 >obj : { readonly [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   readonly [K in keyof T]: T[K];
 }): [T, typeof obj];
 >obj : { readonly [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 const result2 = test2({
 >result2 : [{ prop: "foo"; nested: { readonly nestedProp: "bar"; }; }, { readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }]
@@ -89,12 +89,12 @@ declare function test3<const T>(obj: {
 >test3 : <const T>(obj: { -readonly [K in keyof T]: T[K]; }) => [T, typeof obj]
 >      : ^^^^^^^ ^^   ^^                                   ^^^^^               
 >obj : { -readonly [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   -readonly [K in keyof T]: T[K];
 }): [T, typeof obj];
 >obj : { -readonly [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 const result3 = test3({
 >result3 : [{ readonly prop: "foo"; readonly nested: { readonly nestedProp: "bar"; }; }, { prop: "foo"; nested: { readonly nestedProp: "bar"; }; }]
@@ -131,7 +131,7 @@ declare function test4<const T extends readonly unknown[]>(arr: {
 >test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
 >      : ^^^^^^^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
 >arr : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: T[K];
 }): T;
@@ -156,7 +156,7 @@ declare function test5<const T extends readonly unknown[]>(
 
   ...args: {
 >args : { [K in keyof T]: T[K]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     [K in keyof T]: T[K];
   }

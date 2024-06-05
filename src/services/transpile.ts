@@ -59,6 +59,7 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
  * - noLib = true
  * - noResolve = true
  * - declaration = false
+ * - noCheck = true
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
     return transpileWorker(input, transpileOptions, /*declaration*/ false);
@@ -142,7 +143,6 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         options.declaration = true;
         options.emitDeclarationOnly = true;
         options.isolatedDeclarations = true;
-        options.noCheck = true;
     }
     else {
         options.declaration = false;

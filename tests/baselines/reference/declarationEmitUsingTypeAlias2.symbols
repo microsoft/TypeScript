@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias2.ts] ////
+
+=== node_modules/some-dep/dist/inner.d.ts ===
+export declare type Other = { other: string };
+>Other : Symbol(Other, Decl(inner.d.ts, 0, 0))
+>other : Symbol(other, Decl(inner.d.ts, 0, 29))
+
+export declare type SomeType = { arg: Other };
+>SomeType : Symbol(SomeType, Decl(inner.d.ts, 0, 46))
+>arg : Symbol(arg, Decl(inner.d.ts, 1, 32))
+>Other : Symbol(Other, Decl(inner.d.ts, 0, 0))
+
+=== node_modules/some-dep/dist/other.d.ts ===
+export declare const shouldLookupName: unique symbol;
+>shouldLookupName : Symbol(shouldLookupName, Decl(other.d.ts, 0, 20))
+
+export declare const shouldReuseLocalName: unique symbol;
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(other.d.ts, 1, 20))
+
+export declare const reuseDepName: unique symbol;
+>reuseDepName : Symbol(reuseDepName, Decl(other.d.ts, 2, 20))
+
+export declare const shouldBeElided: unique symbol;
+>shouldBeElided : Symbol(shouldBeElided, Decl(other.d.ts, 3, 20))
+
+export declare const isNotAccessibleShouldError: unique symbol;
+>isNotAccessibleShouldError : Symbol(isNotAccessibleShouldError, Decl(other.d.ts, 4, 20))
+
+=== node_modules/some-dep/dist/index.d.ts ===
+import { Other } from './inner'
+>Other : Symbol(Other, Decl(index.d.ts, 0, 8))
+
+import { shouldLookupName, reuseDepName, shouldReuseLocalName, shouldBeElided } from './other'
+>shouldLookupName : Symbol(shouldLookupName, Decl(index.d.ts, 1, 8))
+>reuseDepName : Symbol(reuseDepName, Decl(index.d.ts, 1, 26))
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(index.d.ts, 1, 40))
+>shouldBeElided : Symbol(shouldBeElided, Decl(index.d.ts, 1, 62))
+
+export declare const goodDeclaration: <T>() => () => { 
+>goodDeclaration : Symbol(goodDeclaration, Decl(index.d.ts, 2, 20))
+>T : Symbol(T, Decl(index.d.ts, 2, 39))
+
+  /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */
+  shouldPrintResult: T extends Other? "O": "N",
+>shouldPrintResult : Symbol(shouldPrintResult, Decl(index.d.ts, 2, 54))
+>T : Symbol(T, Decl(index.d.ts, 2, 39))
+>Other : Symbol(Other, Decl(index.d.ts, 0, 8))
+
+  /** Symbol shouldBeElided should not be present in index.d.ts, it might be since it's tracked before Other is seen and an error reported */ 
+  shouldPrintResult2: T extends typeof shouldBeElided? Other: "N", 
+>shouldPrintResult2 : Symbol(shouldPrintResult2, Decl(index.d.ts, 4, 47))
+>T : Symbol(T, Decl(index.d.ts, 2, 39))
+>shouldBeElided : Symbol(shouldBeElided, Decl(index.d.ts, 1, 62))
+>Other : Symbol(Other, Decl(index.d.ts, 0, 8))
+
+  /** Specifier should come from module, local path should not be reused */ 
+  shouldLookupName: typeof import('./other').shouldLookupName,
+>shouldLookupName : Symbol(shouldLookupName, Decl(index.d.ts, 6, 66))
+>shouldLookupName : Symbol(shouldLookupName, Decl(other.d.ts, 0, 20))
+
+  /** This is imported in index so local name should be reused */ 
+  shouldReuseLocalName: typeof shouldReuseLocalName
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(index.d.ts, 8, 62))
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(index.d.ts, 1, 40))
+
+  /** This is NOT imported in index so import should be created */ 
+  reuseDepName: typeof reuseDepName,
+>reuseDepName : Symbol(reuseDepName, Decl(index.d.ts, 10, 51))
+>reuseDepName : Symbol(reuseDepName, Decl(index.d.ts, 1, 26))
+}
+export { shouldLookupName, shouldReuseLocalName, reuseDepName, shouldBeElided };
+>shouldLookupName : Symbol(shouldLookupName, Decl(index.d.ts, 14, 8))
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(index.d.ts, 14, 26))
+>reuseDepName : Symbol(reuseDepName, Decl(index.d.ts, 14, 48))
+>shouldBeElided : Symbol(shouldBeElided, Decl(index.d.ts, 14, 62))
+
+=== src/index.ts ===
+import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";
+>goodDeclaration : Symbol(goodDeclaration, Decl(index.ts, 0, 8))
+>shouldReuseLocalName : Symbol(shouldReuseLocalName, Decl(index.ts, 0, 25))
+>shouldBeElided : Symbol(shouldBeElided, Decl(index.ts, 0, 47))
+
+export const bar = goodDeclaration<{}>;
+>bar : Symbol(bar, Decl(index.ts, 1, 12))
+>goodDeclaration : Symbol(goodDeclaration, Decl(index.ts, 0, 8))
+
+

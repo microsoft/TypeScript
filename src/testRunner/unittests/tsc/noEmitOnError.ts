@@ -69,7 +69,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes`,
+        subScenario: `multiFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -104,7 +104,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes with outFile`,
+        subScenario: `outFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -124,6 +124,10 @@ const a: string = 10;`,
                 caption: "error and enable declarationMap",
                 edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                discrepancyExplanation: () => [
+                    `Clean build does not emit any file so will not have outSignature`,
+                    `Incremental build has outSignature from before`,
+                ],
             },
             {
                 caption: "fix error declarationMap",
@@ -135,7 +139,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError",
+        subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -157,7 +161,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError with outFile",
+        subScenario: "outFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({

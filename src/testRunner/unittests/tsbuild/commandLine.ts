@@ -13,6 +13,9 @@ import {
 } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
+    function scenarioName(text: string, options: ts.CompilerOptions) {
+        return `${options.outFile ? "outFile" : "multiFile"}/${text}`;
+    }
     describe("different options::", () => {
         function withOptionChange(caption: string, ...options: readonly string[]): TestTscEdit {
             return {
@@ -33,16 +36,6 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 ],
             };
         }
-        function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
-            const edit = withOptionChangeAndDiscrepancyExplanation(caption, "--emitDeclarationOnly");
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build info does not have js section because its fresh build`,
-                `Incremental build info has js section from old build`,
-            ];
-            return edit;
-        }
         function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
                 ...noChangeRun,
@@ -51,16 +44,6 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option declaration and declarationMap`,
                 ],
             };
-        }
-        function nochangeWithIncrementalOutDeclarationFromBeforeExplaination(): TestTscEdit {
-            const edit = nochangeWithIncrementalDeclarationFromBeforeExplaination();
-            const discrepancyExplanation = edit.discrepancyExplanation!;
-            edit.discrepancyExplanation = () => [
-                ...discrepancyExplanation(),
-                `Clean build does not have dts bundle section`,
-                `Incremental build contains the dts build section from before`,
-            ];
-            return edit;
         }
         function localChange(): TestTscEdit {
             return {
@@ -77,92 +60,53 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 "/src/project/d.ts": `import { b } from "./b";export const d = b;`,
             });
         }
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "different options",
-            fs: () => fs({ composite: true }),
-            commandLineArgs: ["--b", "/src/project", "--verbose"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                noChangeRun,
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
-                noChangeRun,
-                localChange(),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "different options with outFile",
-            fs: () => fs({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--b", "/src/project", "--verbose"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                noChangeRun,
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
-                noChangeRun,
-                localChange(),
-                withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "different options with incremental",
-            fs: () => fs({ incremental: true }),
-            commandLineArgs: ["--b", "/src/project", "--verbose"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                withOptionChange("should re-emit only js so they dont contain sourcemap"),
-                withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalDeclarationFromBeforeExplaination(),
-                localChange(),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalDeclarationFromBeforeExplaination(),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("emit js files"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
-            ],
-            baselinePrograms: true,
-        });
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "different options with incremental with outFile",
-            fs: () => fs({ incremental: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--b", "/src/project", "--verbose"],
-            edits: [
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
-                withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
-                localChange(),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                nochangeWithIncrementalOutDeclarationFromBeforeExplaination(),
-                withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
-                withOptionChange("with sourceMap", "--sourceMap"),
-                noChangeWithSubscenario("emit js files"),
-                withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
-            ],
-            baselinePrograms: true,
-        });
+        function verify(options: ts.CompilerOptions) {
+            verifyTsc({
+                scenario: "commandLine",
+                subScenario: scenarioName("different options", options),
+                fs: () => fs({ composite: true, ...options }),
+                commandLineArgs: ["--b", "/src/project", "--verbose"],
+                edits: [
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    noChangeWithSubscenario("should re-emit only js so they dont contain sourcemap"),
+                    withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
+                    noChangeRun,
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
+                    withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
+                    noChangeRun,
+                    localChange(),
+                    withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
+                    withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                ],
+                baselinePrograms: true,
+            });
+            verifyTsc({
+                scenario: "commandLine",
+                subScenario: scenarioName("different options with incremental", options),
+                fs: () => fs({ incremental: true, ...options }),
+                commandLineArgs: ["--b", "/src/project", "--verbose"],
+                edits: [
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    withOptionChange("should re-emit only js so they dont contain sourcemap"),
+                    withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
+                    localChange(),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    nochangeWithIncrementalDeclarationFromBeforeExplaination(),
+                    withOptionChange("with inlineSourceMap", "--inlineSourceMap"),
+                    withOptionChange("with sourceMap", "--sourceMap"),
+                    noChangeWithSubscenario("emit js files"),
+                    withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
+                    withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                ],
+                baselinePrograms: true,
+            });
+        }
+        verify({});
+        verify({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
     });
     describe("emitDeclarationOnly::", () => {
         function fs(options: ts.CompilerOptions) {
@@ -274,7 +218,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 baselinePrograms: true,
             });
             function subScenario(text: string) {
-                return `${text}${options.composite ? "" : " with declaration and incremental"}${options.outFile ? " with outFile" : ""}`;
+                return scenarioName(`${text}${options.composite ? "" : " with declaration and incremental"}`, options);
             }
         }
         verifyWithIncremental({ composite: true });
@@ -282,152 +226,82 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         verifyWithIncremental({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
         verifyWithIncremental({ incremental: true, declaration: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
 
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "emitDeclarationOnly on commandline with declaration",
-            fs: () => fs({ declaration: true }),
-            commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly"],
-            edits: [
-                noChangeRun,
-                {
-                    caption: "local change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
-                },
-                {
-                    caption: "non local change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "export const aaa = 10;"),
-                },
-                {
-                    caption: "emit js files",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-                noChangeRun,
-                {
-                    caption: "js emit with change without emitDeclarationOnly",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const alocal = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-                {
-                    caption: "local change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
-                },
-                {
-                    caption: "non local change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const aaaaa = 10;"),
-                },
-                {
-                    caption: "js emit with change without emitDeclarationOnly",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const a2 = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-            ],
-            baselinePrograms: true,
-        });
+        function verifyNonIncremental(options: ts.CompilerOptions) {
+            verifyTsc({
+                scenario: "commandLine",
+                subScenario: scenarioName("emitDeclarationOnly on commandline with declaration", options),
+                fs: () => fs({ declaration: true, ...options }),
+                commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly"],
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "local change",
+                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                    },
+                    {
+                        caption: "non local change",
+                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "export const aaa = 10;"),
+                    },
+                    {
+                        caption: "emit js files",
+                        edit: ts.noop,
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
+                    },
+                    noChangeRun,
+                    {
+                        caption: "js emit with change without emitDeclarationOnly",
+                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const alocal = 10;"),
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
+                    },
+                    {
+                        caption: "local change",
+                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
+                    },
+                    {
+                        caption: "non local change",
+                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const aaaaa = 10;"),
+                    },
+                    {
+                        caption: "js emit with change without emitDeclarationOnly",
+                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const a2 = 10;"),
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
+                    },
+                ],
+                baselinePrograms: true,
+            });
 
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "emitDeclarationOnly false on commandline with declaration",
-            fs: () => fs({ declaration: true, emitDeclarationOnly: true }),
-            commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-            edits: [
-                noChangeRun,
-                {
-                    caption: "change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
-                },
-                {
-                    caption: "emit js files",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-                noChangeRun,
-                {
-                    caption: "no change run with js emit",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-                {
-                    caption: "js emit with change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const blocal = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-            ],
-            baselinePrograms: true,
-        });
-
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "emitDeclarationOnly on commandline with declaration with outFile",
-            fs: () => fs({ declaration: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly"],
-            edits: [
-                noChangeRun,
-                {
-                    caption: "local change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
-                },
-                {
-                    caption: "non local change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "export const aaa = 10;"),
-                },
-                {
-                    caption: "emit js files",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-                noChangeRun,
-                {
-                    caption: "js emit with change without emitDeclarationOnly",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const alocal = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-                {
-                    caption: "local change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
-                },
-                {
-                    caption: "non local change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const aaaaa = 10;"),
-                },
-                {
-                    caption: "js emit with change without emitDeclarationOnly",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "export const a2 = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-                },
-            ],
-            baselinePrograms: true,
-        });
-
-        verifyTsc({
-            scenario: "commandLine",
-            subScenario: "emitDeclarationOnly false on commandline with declaration with outFile",
-            fs: () => fs({ declaration: true, emitDeclarationOnly: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
-            commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
-            edits: [
-                noChangeRun,
-                {
-                    caption: "change",
-                    edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
-                },
-                {
-                    caption: "emit js files",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-                noChangeRun,
-                {
-                    caption: "no change run with js emit",
-                    edit: ts.noop,
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-                {
-                    caption: "js emit with change",
-                    edit: fs => appendText(fs, "/src/project1/src/b.ts", "const blocal = 10;"),
-                    commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
-                },
-            ],
-            baselinePrograms: true,
-        });
+            verifyTsc({
+                scenario: "commandLine",
+                subScenario: scenarioName("emitDeclarationOnly false on commandline with declaration", options),
+                fs: () => fs({ declaration: true, emitDeclarationOnly: true, ...options }),
+                commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "change",
+                        edit: fs => appendText(fs, "/src/project1/src/a.ts", "const aa = 10;"),
+                    },
+                    {
+                        caption: "emit js files",
+                        edit: ts.noop,
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
+                    },
+                    noChangeRun,
+                    {
+                        caption: "no change run with js emit",
+                        edit: ts.noop,
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
+                    },
+                    {
+                        caption: "js emit with change",
+                        edit: fs => appendText(fs, "/src/project1/src/b.ts", "const blocal = 10;"),
+                        commandLineArgs: ["--b", "/src/project2/src", "--verbose", "--emitDeclarationOnly", "false"],
+                    },
+                ],
+                baselinePrograms: true,
+            });
+        }
+        verifyNonIncremental({});
+        verifyNonIncremental({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
     });
 });

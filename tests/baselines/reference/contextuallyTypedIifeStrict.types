@@ -186,11 +186,11 @@
 >numbers.every(n => n > 0) : boolean
 >                          : ^^^^^^^
 >numbers.every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
->              : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>              : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >numbers : [number, number, number]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >n => n > 0 : (n: number) => boolean
 >           : ^ ^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -220,11 +220,11 @@
 >mixed.every(n => !!n) : boolean
 >                      : ^^^^^^^
 >mixed.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >mixed : [number, string, string]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >n => !!n : (n: string | number) => boolean
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string | number
@@ -290,11 +290,11 @@
 >rest.map(n => n > 0) : boolean[]
 >                     : ^^^^^^^^^
 >rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->         : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>         : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >rest : [number, number]
 >     : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n > 0 : (n: number) => boolean
 >           : ^ ^^^^^^^^^^^^^^^^^^^^
 >n : number

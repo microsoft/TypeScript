@@ -90,6 +90,7 @@ import {
     PollingInterval,
     Program,
     ProgramBuildInfo,
+    ProgramBundleEmitBuildInfo,
     ProgramHost,
     ProgramMultiFileEmitBuildInfo,
     ProgramUpdateLevel,
@@ -1074,8 +1075,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 diagnostics,
                 errorFlags,
                 errorType,
@@ -1132,8 +1131,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 declDiagnostics,
                 BuildResultFlags.DeclarationEmitErrors,
                 "Declaration file",
@@ -1208,8 +1205,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ({ buildResult, step } = buildErrors(
                 state,
                 projectPath,
-                program,
-                config,
                 emitDiagnostics,
                 BuildResultFlags.EmitErrors,
                 "Emit",
@@ -1453,20 +1448,13 @@ function afterProgramDone<T extends BuilderProgram>(
 function buildErrors<T extends BuilderProgram>(
     state: SolutionBuilderState<T>,
     resolvedPath: ResolvedConfigFilePath,
-    program: T | undefined,
-    config: ParsedCommandLine,
     diagnostics: readonly Diagnostic[],
     buildResult: BuildResultFlags,
     errorType: string,
 ) {
-    // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
-    const canEmitBuildInfo = program && !program.getCompilerOptions().outFile;
-
     reportAndStoreErrors(state, resolvedPath, diagnostics);
     state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
-    if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
-    afterProgramDone(state, program);
-    return { buildResult, step: BuildStep.QueueReferencingProjects };
+    return { buildResult, step: BuildStep.EmitBuildInfo };
 }
 
 function isFileWatcherWithModifiedTime(value: FileWatcherWithModifiedTime | Date): value is FileWatcherWithModifiedTime {
@@ -1692,11 +1680,12 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // But if noEmit is true, affectedFilesPendingEmit will have file list even if there are no semantic errors to preserve list of files to be emitted when running with noEmit false
             // So with noEmit set to true, check on semantic diagnostics needs to be explicit as oppose to when it is false when only files pending emit is sufficient
             if (
-                (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
+                buildInfo.program.changeFileSet?.length ||
                 (!project.options.noEmit ?
                     (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile?.length)
+                    buildInfo.program.emitDiagnosticsPerFile?.length ||
+                    (buildInfo.program as ProgramBundleEmitBuildInfo).pendingEmit !== undefined :
+                    buildInfo.program.semanticDiagnosticsPerFile?.length)
             ) {
                 return {
                     type: UpToDateStatusType.OutOfDateBuildInfo,

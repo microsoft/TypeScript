@@ -549,11 +549,11 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
 >                                                                                        : ^^^^
 >document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
->                          : ^^^   ^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
+>                          : ^^^^^^^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
 >document : Document
 >         : ^^^^^^^^
 >addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
->                 : ^^^   ^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
+>                 : ^^^^^^^^^^^^^^^                      ^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^    ^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^    ^^^
 >event.name : K
 >           : ^
 >event : Ev<K>
@@ -822,7 +822,7 @@ function ff1() {
     }
     function apply<K extends Keys>(funKey: K, ...args: ArgMap[K]) {
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^   ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >funKey : K
 >       : ^
 >args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
@@ -854,7 +854,7 @@ function ff1() {
 >apply('sum', 1, 2) : void
 >                   : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^   ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'sum' : "sum"
 >      : ^^^^^
 >1 : 1
@@ -868,7 +868,7 @@ function ff1() {
 >apply('concat', 'str1', 'str2', 'str3' ) : void
 >                                         : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^   ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'concat' : "concat"
 >         : ^^^^^^^^
 >'str1' : "str1"

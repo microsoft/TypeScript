@@ -34,11 +34,11 @@ class A {
 >this.one<T>(source, 42) : T
 >                        : ^
 >this.one : <T_1>(source: T_1, value: number) => T_1
->         : ^   ^^      ^^   ^^     ^^      ^^^^^   
+>         : ^^^^^^      ^^   ^^     ^^      ^^^^^   
 >this : typeof A
 >     : ^^^^^^^^
 >one : <T_1>(source: T_1, value: number) => T_1
->    : ^   ^^      ^^   ^^     ^^      ^^^^^   
+>    : ^^^^^^      ^^   ^^     ^^      ^^^^^   
 >source : T
 >       : ^
 >42 : 42

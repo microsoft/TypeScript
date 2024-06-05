@@ -126,11 +126,11 @@ const Component = () => {
 >categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      )) : any[]
 >                                                                                                           : ^^^^^
 >categories.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->               : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>               : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >categories : string[]
 >           : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >(category) => (        <li key={category}>{category}</li> // Error about 'key' only      ) : (category: string) => any
 >                                                                                           : ^        ^^^^^^^^^^^^^^^^
 >category : string

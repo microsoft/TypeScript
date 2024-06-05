@@ -135,7 +135,7 @@ function f<T>(t: T) {
 >onlyNullablePlease(x) : void
 >                      : ^^^^
 >onlyNullablePlease : <T_1 extends null extends T_1 ? any : never>(value: T_1) => void
->                   : ^   ^^^^^^^^^                              ^^     ^^   ^^^^^    
+>                   : ^^^^^^^^^^^^^                              ^^     ^^   ^^^^^    
 >x : T | null
 >  : ^^^^^^^^
 
@@ -143,7 +143,7 @@ function f<T>(t: T) {
 >onlyNullablePlease2(x) : void
 >                       : ^^^^
 >onlyNullablePlease2 : <T_1 extends [null] extends [T_1] ? any : never>(value: T_1) => void
->                    : ^   ^^^^^^^^^                                  ^^     ^^   ^^^^^    
+>                    : ^^^^^^^^^^^^^                                  ^^     ^^   ^^^^^    
 >x : T | null
 >  : ^^^^^^^^
 }
@@ -225,7 +225,7 @@ type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
 
 function testAssignabilityToConditionalType<T>() {
 >testAssignabilityToConditionalType : <T>() => void
->                                   : ^^^^^^^^^^^^^
+>                                   : ^ ^^^^^^^^^^^
 
   const o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
@@ -292,7 +292,7 @@ function testAssignabilityToConditionalType<T>() {
   // Infer type parameters: no good
   const o2: [T] extends [[infer U]] ? U : { b: number } = o;
 >o2 : [T] extends [[infer U]] ? U : { b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >o : { a: number; b: number; }

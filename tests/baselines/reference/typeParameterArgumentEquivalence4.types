@@ -3,7 +3,7 @@
 === typeParameterArgumentEquivalence4.ts ===
 function foo<T,U>() {
 >foo : <T, U>() => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^
 
     var x: (item) => U;
 >x : (item: any) => U

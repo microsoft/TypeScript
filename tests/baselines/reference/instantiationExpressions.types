@@ -3,13 +3,13 @@
 === instantiationExpressions.ts ===
 declare function fx<T>(x: T): T;
 >fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_1, U>(t: [T_1, U]): [T_1, U]; }
->   : ^^^ ^^ ^^ ^^^ ^^^   ^^ ^^   ^^ ^^      ^^^   ^^^   ^^ ^^ ^^        ^^^        ^^^
+>   : ^^^ ^^ ^^ ^^^ ^^^^^^^^ ^^   ^^ ^^      ^^^   ^^^^^^^^ ^^ ^^        ^^^        ^^^
 >x : T
 >  : ^
 
 declare function fx<T>(x: T, n: number): T;
 >fx : { <T_1>(x: T_1): T_1; <T>(x: T, n: number): T; <T_1, U>(t: [T_1, U]): [T_1, U]; }
->   : ^^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^ ^^      ^^^ ^^^   ^^ ^^ ^^        ^^^        ^^^
+>   : ^^^^^^^^ ^^   ^^^   ^^^ ^^ ^^ ^^ ^^      ^^^ ^^^^^^^^ ^^ ^^        ^^^        ^^^
 >x : T
 >  : ^
 >n : number
@@ -17,7 +17,7 @@ declare function fx<T>(x: T, n: number): T;
 
 declare function fx<T, U>(t: [T, U]): [T, U];
 >fx : { <T_1>(x: T_1): T_1; <T_1>(x: T_1, n: number): T_1; <T, U>(t: [T, U]): [T, U]; }
->   : ^^^   ^^ ^^   ^^^   ^^^   ^^ ^^   ^^ ^^      ^^^   ^^^ ^^ ^^ ^^      ^^^      ^^^
+>   : ^^^^^^^^ ^^   ^^^   ^^^^^^^^ ^^   ^^ ^^      ^^^   ^^^ ^^ ^^ ^^      ^^^      ^^^
 >t : [T, U]
 >  : ^^^^^^
 
@@ -699,7 +699,7 @@ type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
 >BoxFunc : typeof makeBox<T>
 >        :                  
 >makeBox : <T_1>(value: T_1) => { value: T_1; }
->        : ^   ^^     ^^   ^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^
 
 type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
 >StringBoxFunc : StringBoxFunc
@@ -709,7 +709,7 @@ type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
 >Box : { value: T; }
 >    : ^^^^^^^^^^^^^
 >makeBox : <T_1>(value: T_1) => { value: T_1; }
->        : ^   ^^     ^^   ^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^
 
 type StringBox = Box<string>;  // { value: string }
 >StringBox : StringBox
@@ -779,7 +779,7 @@ type T41<U extends number> = typeof g2<U>;  // Error
 
 declare const g3: {
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^ ^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^ ^^^ ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -794,11 +794,11 @@ type T50<U extends string> = typeof g3<U>;  // (a: U) => U
 >T50 : typeof g3<U>
 >    :             
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^ ^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^ ^^^ ^^^
 
 type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 >T51 : typeof g3<U, any>
 >    :                  
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^ ^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^ ^^^ ^^^
 

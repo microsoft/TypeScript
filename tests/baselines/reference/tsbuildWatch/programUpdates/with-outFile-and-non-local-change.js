@@ -222,7 +222,9 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.ts
 
 No shapes updated in the builder::
 
@@ -242,7 +244,10 @@ Program files::
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/logic/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/logic/index.ts
 
 No shapes updated in the builder::
 
@@ -346,7 +351,9 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.ts
 
 No shapes updated in the builder::
 
@@ -440,7 +447,10 @@ Program files::
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/logic/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/logic/index.ts
 
 No shapes updated in the builder::
 
@@ -539,7 +549,9 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.ts
 
 No shapes updated in the builder::
 
