@@ -6647,6 +6647,7 @@ declare namespace ts {
         ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
         SingleSignatureType = 134217728,
+        DeferredCallback = 268435456,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
