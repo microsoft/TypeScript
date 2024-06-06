@@ -8856,8 +8856,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         const type = getWidenedType(getRegularTypeOfExpression(node.expression));
                         const computedPropertyNameType = typeToTypeNodeHelper(type, context);
-                        Debug.assertNode(computedPropertyNameType, isLiteralTypeNode);
-                        const literal = computedPropertyNameType.literal;
+                        let literal;
+                        if (isLiteralTypeNode(computedPropertyNameType)) {
+                            literal = computedPropertyNameType.literal;
+                        }
+                        else {
+                            const evaluated = evaluateEntityNameExpression(node.expression);
+                            const literalNode = typeof evaluated.value === 'string' ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
+                                typeof evaluated.value === 'number' ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
+                                undefined;
+                            Debug.assert(literalNode);
+                            literal = literalNode;
+                        }
                         if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(compilerOptions))) {
                             return factory.createIdentifier(literal.text);
                         }
