@@ -8865,7 +8865,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const literalNode = typeof evaluated.value === "string" ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
                                 typeof evaluated.value === "number" ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
                                 undefined;
-                            Debug.assert(literalNode);
+                            if (!literalNode) {
+                                return node;
+                            }
                             literal = literalNode;
                         }
                         if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(compilerOptions))) {
