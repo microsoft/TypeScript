@@ -1,19 +1,16 @@
-type.ts(2,22): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
-type.ts(4,28): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+index.ts(3,14): error TS4023: Exported variable 'foo' has or is using name 'Foo' from external module "type" but cannot be named.
 
 
-==== type.ts (2 errors) ====
+==== type.ts (0 errors) ====
     namespace Foo {
       export const sym = Symbol();
-                         ~~~~~~
-!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
     }
     export type Type = { x?: { [Foo.sym]: 0 } };
-                               ~~~~~~~~~
-!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
     
-==== index.ts (0 errors) ====
+==== index.ts (1 errors) ====
     import { type Type } from "./type";
     
     export const foo = { ...({} as Type) };
+                 ~~~
+!!! error TS4023: Exported variable 'foo' has or is using name 'Foo' from external module "type" but cannot be named.
     

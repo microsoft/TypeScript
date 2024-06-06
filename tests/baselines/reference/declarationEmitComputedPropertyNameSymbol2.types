@@ -6,26 +6,26 @@ namespace Foo {
 >    : ^^^^^^^^^^
 
   export const sym = Symbol();
->sym : any
->    : ^^^
->Symbol() : any
->         : ^^^
->Symbol : any
->       : ^^^
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }
 export type Type = { x?: { [Foo.sym]: 0 } };
 >Type : Type
 >     : ^^^^
->x : {} | undefined
->  : ^^^^^^^^^^^^^^
+>x : { [Foo.sym]: 0; } | undefined
+>  : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >[Foo.sym] : 0
 >          : ^
->Foo.sym : any
->        : ^^^
+>Foo.sym : unique symbol
+>        : ^^^^^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->sym : any
->    : ^^^
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
 
 === index.ts ===
 import { type Type } from "./type";

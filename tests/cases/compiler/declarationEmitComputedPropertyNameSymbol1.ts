@@ -1,4 +1,5 @@
 // @strict: true
+// @lib: esnext
 // @declaration: true
 // @emitDeclarationOnly: true
 

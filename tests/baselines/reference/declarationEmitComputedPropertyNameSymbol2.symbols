@@ -6,6 +6,7 @@ namespace Foo {
 
   export const sym = Symbol();
 >sym : Symbol(sym, Decl(type.ts, 1, 14))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 }
 export type Type = { x?: { [Foo.sym]: 0 } };
 >Type : Symbol(Type, Decl(type.ts, 2, 1))
