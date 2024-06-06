@@ -12,7 +12,6 @@ var nodeChildrenGet = nodeChildren.get.bind(nodeChildren);
 var nodeChildrenSet = nodeChildren.set.bind(nodeChildren);
 /* eslint-enable no-var */
 
-
 /** @internal */
 export function getNodeChildren(node: Node): readonly Node[] | undefined {
     if (!isNodeKind(node.kind)) return emptyArray;
