@@ -28163,7 +28163,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
-            const signature = getResolvedSignature(flow.node);
+            const signatures = getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             const saveInitialType = initialType;
             const saveInLambdaArg = inLambdaArg;
@@ -28173,7 +28173,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const args = flow.node.arguments;
             for (let i = 0; i < args.length; i++) {
                 const lambda = getLambdaArgument(args[i]);
-                if (lambda && lambda.returnFlowNode && !(getObjectFlags(getTypeAtPosition(signature, i)) & ObjectFlags.DeferredCallback)) {
+                if (lambda && lambda.returnFlowNode && !some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
                     const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                     if (lambdaType !== initialType) {
                         lambdaTypes ??= [initialType];
