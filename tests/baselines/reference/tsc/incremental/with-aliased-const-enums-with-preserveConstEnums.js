@@ -53,86 +53,84 @@ var a = 1 /* A.ONE */;
 
 
 //// [/src/project/a.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/src/project/a.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./b.d.ts",
-      "./c.ts",
-      "./a.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./b.d.ts",
+    "./c.ts",
+    "./a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./c.ts"
     ],
-    "fileNamesList": [
-      [
-        "./c.ts"
-      ],
-      [
-        "./b.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    [
+      "./b.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./b.d.ts": {
-        "original": {
-          "version": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./b.d.ts": {
+      "original": {
         "version": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
-        "signature": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./c.ts": {
-        "original": {
-          "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-          "impliedFormat": 1
-        },
+      "version": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
+      "signature": "-8804827199-declare const enum AWorker {\n    ONE = 1\n}\nexport { AWorker as A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./c.ts": {
+      "original": {
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-        "signature": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./a.ts": {
-        "original": {
-          "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-          "impliedFormat": 1
-        },
+      "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "signature": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "impliedFormat": "commonjs"
+    },
+    "./a.ts": {
+      "original": {
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "preserveConstEnums": true,
-      "tsBuildInfoFile": "./a.tsbuildinfo"
-    },
-    "referencedMap": {
-      "./a.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./b.d.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "impliedFormat": "commonjs"
     }
   },
+  "root": [
+    [
+      4,
+      "./a.ts"
+    ]
+  ],
+  "options": {
+    "preserveConstEnums": true,
+    "tsBuildInfoFile": "./a.tsbuildinfo"
+  },
+  "referencedMap": {
+    "./a.ts": [
+      "./c.ts"
+    ],
+    "./c.ts": [
+      "./b.d.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1052
+  "size": 1040
 }
 
 //// [/src/project/c.js]
@@ -169,88 +167,86 @@ var a = 2 /* A.ONE */;
 
 
 //// [/src/project/a.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/src/project/a.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./b.d.ts",
-      "./c.ts",
-      "./a.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./b.d.ts",
+    "./c.ts",
+    "./a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./c.ts"
     ],
-    "fileNamesList": [
-      [
-        "./c.ts"
-      ],
-      [
-        "./b.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    [
+      "./b.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./b.d.ts": {
-        "original": {
-          "version": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./b.d.ts": {
+      "original": {
         "version": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
-        "signature": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./c.ts": {
-        "original": {
-          "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-          "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-          "impliedFormat": 1
-        },
+      "version": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
+      "signature": "-13802607806-declare const enum AWorker {\n    ONE = 2\n}\nexport { AWorker as A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./c.ts": {
+      "original": {
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./a.ts": {
-        "original": {
-          "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 1
-        },
+      "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./a.ts": {
+      "original": {
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "preserveConstEnums": true,
-      "tsBuildInfoFile": "./a.tsbuildinfo"
-    },
-    "referencedMap": {
-      "./a.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./b.d.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     }
   },
+  "root": [
+    [
+      4,
+      "./a.ts"
+    ]
+  ],
+  "options": {
+    "preserveConstEnums": true,
+    "tsBuildInfoFile": "./a.tsbuildinfo"
+  },
+  "referencedMap": {
+    "./a.ts": [
+      "./c.ts"
+    ],
+    "./c.ts": [
+      "./b.d.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1161
+  "size": 1149
 }
 
 //// [/src/project/c.js]
@@ -287,87 +283,85 @@ var a = 3 /* A.ONE */;
 
 
 //// [/src/project/a.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/src/project/a.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./b.d.ts",
-      "./c.ts",
-      "./a.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./b.d.ts",
+    "./c.ts",
+    "./a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./c.ts"
     ],
-    "fileNamesList": [
-      [
-        "./c.ts"
-      ],
-      [
-        "./b.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    [
+      "./b.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./b.d.ts": {
-        "original": {
-          "version": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./b.d.ts": {
+      "original": {
         "version": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
-        "signature": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./c.ts": {
-        "original": {
-          "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-          "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-          "impliedFormat": 1
-        },
+      "version": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
+      "signature": "-10210453821-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./c.ts": {
+      "original": {
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./a.ts": {
-        "original": {
-          "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-          "impliedFormat": 1
-        },
+      "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./a.ts": {
+      "original": {
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "preserveConstEnums": true,
-      "tsBuildInfoFile": "./a.tsbuildinfo"
-    },
-    "referencedMap": {
-      "./a.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./b.d.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "impliedFormat": "commonjs"
     }
   },
+  "root": [
+    [
+      4,
+      "./a.ts"
+    ]
+  ],
+  "options": {
+    "preserveConstEnums": true,
+    "tsBuildInfoFile": "./a.tsbuildinfo"
+  },
+  "referencedMap": {
+    "./a.ts": [
+      "./c.ts"
+    ],
+    "./c.ts": [
+      "./b.d.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1122
+  "size": 1110
 }
 
 //// [/src/project/c.js]
@@ -399,87 +393,85 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/a.js] file written with same contents
 //// [/src/project/a.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/src/project/a.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./b.d.ts",
-      "./c.ts",
-      "./a.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./b.d.ts",
+    "./c.ts",
+    "./a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./c.ts"
     ],
-    "fileNamesList": [
-      [
-        "./c.ts"
-      ],
-      [
-        "./b.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    [
+      "./b.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./b.d.ts": {
-        "original": {
-          "version": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./b.d.ts": {
+      "original": {
         "version": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
-        "signature": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./c.ts": {
-        "original": {
-          "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-          "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-          "impliedFormat": 1
-        },
+      "version": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
+      "signature": "-11645711104-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;",
+      "impliedFormat": "commonjs"
+    },
+    "./c.ts": {
+      "original": {
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./a.ts": {
-        "original": {
-          "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-          "impliedFormat": 1
-        },
+      "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./a.ts": {
+      "original": {
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "preserveConstEnums": true,
-      "tsBuildInfoFile": "./a.tsbuildinfo"
-    },
-    "referencedMap": {
-      "./a.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./b.d.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "impliedFormat": "commonjs"
     }
   },
+  "root": [
+    [
+      4,
+      "./a.ts"
+    ]
+  ],
+  "options": {
+    "preserveConstEnums": true,
+    "tsBuildInfoFile": "./a.tsbuildinfo"
+  },
+  "referencedMap": {
+    "./a.ts": [
+      "./c.ts"
+    ],
+    "./c.ts": [
+      "./b.d.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1152
+  "size": 1140
 }
 
 //// [/src/project/c.js] file written with same contents
@@ -503,87 +495,85 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/a.js] file written with same contents
 //// [/src/project/a.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;","impliedFormat":1},{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n","impliedFormat":1},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","impliedFormat":1}],"root":[4],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/src/project/a.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./b.d.ts",
-      "./c.ts",
-      "./a.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./b.d.ts",
+    "./c.ts",
+    "./a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./c.ts"
     ],
-    "fileNamesList": [
-      [
-        "./c.ts"
-      ],
-      [
-        "./b.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    [
+      "./b.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./b.d.ts": {
-        "original": {
-          "version": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./b.d.ts": {
+      "original": {
         "version": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
-        "signature": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./c.ts": {
-        "original": {
-          "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
-          "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-          "impliedFormat": 1
-        },
+      "version": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
+      "signature": "-19677125073-declare const enum AWorker {\n    ONE = 3\n}\nexport { AWorker as A };\nexport const randomThing = 10;export const randomThing2 = 10;",
+      "impliedFormat": "commonjs"
+    },
+    "./c.ts": {
+      "original": {
         "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
         "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./a.ts": {
-        "original": {
-          "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-          "impliedFormat": 1
-        },
+      "version": "-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n",
+      "signature": "3259150197-import { A } from \"./b\";\nexport { A };\n",
+      "impliedFormat": "commonjs"
+    },
+    "./a.ts": {
+      "original": {
         "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "preserveConstEnums": true,
-      "tsBuildInfoFile": "./a.tsbuildinfo"
-    },
-    "referencedMap": {
-      "./a.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./b.d.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "signature": "-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n",
+      "impliedFormat": "commonjs"
     }
   },
+  "root": [
+    [
+      4,
+      "./a.ts"
+    ]
+  ],
+  "options": {
+    "preserveConstEnums": true,
+    "tsBuildInfoFile": "./a.tsbuildinfo"
+  },
+  "referencedMap": {
+    "./a.ts": [
+      "./c.ts"
+    ],
+    "./c.ts": [
+      "./b.d.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1183
+  "size": 1171
 }
 
 //// [/src/project/c.js] file written with same contents

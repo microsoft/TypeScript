@@ -13,7 +13,6 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
-    ProgramBuildInfo,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -9597,7 +9596,6 @@ export interface Printer {
 
 /** @internal */
 export interface BuildInfo {
-    program?: ProgramBuildInfo;
     version: string;
 }
 

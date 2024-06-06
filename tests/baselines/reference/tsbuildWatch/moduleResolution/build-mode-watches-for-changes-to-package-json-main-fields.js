@@ -162,91 +162,89 @@ export type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n","impliedFormat":1},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n","impliedFormat":1},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts",
-      "../other.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../const.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../../../a/lib/lib.d.ts",
+    "../const.ts",
+    "../index.ts",
+    "../other.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../const.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../const.ts": {
-        "original": {
-          "version": "-11202312776-export type TheNum = 42;",
-          "signature": "-13194036030-export type TheNum = 42;\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../const.ts": {
+      "original": {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../index.ts": {
-        "original": {
-          "version": "-11225381282-export type { TheNum } from './const.js';",
-          "signature": "-9660329432-export type { TheNum } from './const.js';\n",
-          "impliedFormat": 1
-        },
+      "version": "-11202312776-export type TheNum = 42;",
+      "signature": "-13194036030-export type TheNum = 42;\n",
+      "impliedFormat": "commonjs"
+    },
+    "../index.ts": {
+      "original": {
         "version": "-11225381282-export type { TheNum } from './const.js';",
         "signature": "-9660329432-export type { TheNum } from './const.js';\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../other.ts": {
-        "original": {
-          "version": "-4609154030-export type TheStr = string;",
-          "signature": "-6073194916-export type TheStr = string;\n",
-          "impliedFormat": 1
-        },
+      "version": "-11225381282-export type { TheNum } from './const.js';",
+      "signature": "-9660329432-export type { TheNum } from './const.js';\n",
+      "impliedFormat": "commonjs"
+    },
+    "../other.ts": {
+      "original": {
         "version": "-4609154030-export type TheStr = string;",
         "signature": "-6073194916-export type TheStr = string;\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "../const.ts",
-          "../index.ts",
-          "../other.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
-    },
-    "latestChangedDtsFile": "./other.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-4609154030-export type TheStr = string;",
+      "signature": "-6073194916-export type TheStr = string;\n",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "../const.ts",
+        "../index.ts",
+        "../other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../index.ts": [
+      "../const.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./other.d.ts",
   "version": "FakeTSVersion",
-  "size": 1115
+  "size": 1103
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

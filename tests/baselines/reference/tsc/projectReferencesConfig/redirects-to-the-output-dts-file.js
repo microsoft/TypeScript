@@ -78,85 +78,83 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/beta/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3531955686-export { };","impliedFormat":1},{"version":"-4853599800-import { m } from '../alpha/a'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":1,"messageText":"Module '\"../alpha/a\"' has no exported member 'm'.","category":1,"code":2305}]]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3531955686-export { };","impliedFormat":1},{"version":"-4853599800-import { m } from '../alpha/a'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":1,"messageText":"Module '\"../alpha/a\"' has no exported member 'm'.","category":1,"code":2305}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/beta/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../../alpha/bin/a.d.ts",
-      "../b.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../../alpha/bin/a.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "../../alpha/bin/a.d.ts",
+    "../b.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../../alpha/bin/a.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../../alpha/bin/a.d.ts": {
-        "original": {
-          "version": "-3531955686-export { };",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../../alpha/bin/a.d.ts": {
+      "original": {
         "version": "-3531955686-export { };",
-        "signature": "-3531955686-export { };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../b.ts": {
-        "original": {
-          "version": "-4853599800-import { m } from '../alpha/a'",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 1
-        },
+      "version": "-3531955686-export { };",
+      "signature": "-3531955686-export { };",
+      "impliedFormat": "commonjs"
+    },
+    "../b.ts": {
+      "original": {
         "version": "-4853599800-import { m } from '../alpha/a'",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "../b.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../b.ts": [
-        "../../alpha/bin/a.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../b.ts",
-        [
-          {
-            "start": 9,
-            "length": 1,
-            "messageText": "Module '\"../alpha/a\"' has no exported member 'm'.",
-            "category": 1,
-            "code": 2305
-          }
-        ]
-      ]
-    ],
-    "latestChangedDtsFile": "./b.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-4853599800-import { m } from '../alpha/a'",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "../b.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../b.ts": [
+      "../../alpha/bin/a.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../b.ts",
+      [
+        {
+          "start": 9,
+          "length": 1,
+          "messageText": "Module '\"../alpha/a\"' has no exported member 'm'.",
+          "category": 1,
+          "code": 2305
+        }
+      ]
+    ]
+  ],
+  "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 1075
+  "size": 1063
 }
 
