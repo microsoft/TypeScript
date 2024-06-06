@@ -8866,6 +8866,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 typeof evaluated.value === "number" ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
                                 undefined;
                             if (!literalNode) {
+                                if (isImportTypeNode(computedPropertyNameType)) {
+                                    trackComputedName(node.expression, context.enclosingDeclaration, context);
+                                }
                                 return node;
                             }
                             literal = literalNode;
