@@ -43,92 +43,90 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8089124208-export const x: string = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8089124208-export const x: string = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./main.ts",
-      "./other.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./main.ts",
+    "./other.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./main.ts": {
-        "original": {
-          "version": "-8089124208-export const x: string = 10;",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./main.ts": {
+      "original": {
         "version": "-8089124208-export const x: string = 10;",
-        "signature": "-8089124208-export const x: string = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
+      "version": "-8089124208-export const x: string = 10;",
+      "signature": "-8089124208-export const x: string = 10;",
+      "impliedFormat": "commonjs"
+    },
+    "./other.ts": {
+      "original": {
         "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./main.ts"
-      ],
-      [
-        3,
-        "./other.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-13729955264-export const y = 10;",
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./main.ts"
     ],
-    "options": {
-      "composite": true,
-      "noEmitOnError": true
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "./main.ts",
-        [
-          {
-            "start": 13,
-            "length": 1,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type 'number' is not assignable to type 'string'."
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./main.ts",
-        "Js | Dts"
-      ],
-      [
-        "./other.ts",
-        "Js | Dts"
-      ]
-    ],
-    "emitSignatures": [
-      "./main.ts",
+    [
+      3,
       "./other.ts"
     ]
+  ],
+  "options": {
+    "composite": true,
+    "noEmitOnError": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./main.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'number' is not assignable to type 'string'."
+        }
+      ]
+    ]
+  ],
+  "affectedFilesPendingEmit": [
+    [
+      "./main.ts",
+      "Js | Dts"
+    ],
+    [
+      "./other.ts",
+      "Js | Dts"
+    ]
+  ],
+  "emitSignatures": [
+    "./main.ts",
+    "./other.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 948
+  "size": 936
 }
 
 
@@ -230,93 +228,91 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5691975201-export const x: string = 10;\n// SomeComment","signature":"-10161843860-export declare const x: string;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5691975201-export const x: string = 10;\n// SomeComment","signature":"-10161843860-export declare const x: string;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./main.ts",
-      "./other.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./main.ts",
+    "./other.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./main.ts": {
-        "original": {
-          "version": "-5691975201-export const x: string = 10;\n// SomeComment",
-          "signature": "-10161843860-export declare const x: string;\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./main.ts": {
+      "original": {
         "version": "-5691975201-export const x: string = 10;\n// SomeComment",
         "signature": "-10161843860-export declare const x: string;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
+      "version": "-5691975201-export const x: string = 10;\n// SomeComment",
+      "signature": "-10161843860-export declare const x: string;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./other.ts": {
+      "original": {
         "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./main.ts"
-      ],
-      [
-        3,
-        "./other.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "-13729955264-export const y = 10;",
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./main.ts"
     ],
-    "options": {
-      "composite": true,
-      "noEmitOnError": true
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "./main.ts",
-        [
-          {
-            "start": 13,
-            "length": 1,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type 'number' is not assignable to type 'string'."
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./main.ts",
-        "Js | Dts"
-      ],
-      [
-        "./other.ts",
-        "Js | Dts"
-      ]
-    ],
-    "emitSignatures": [
-      "./main.ts",
+    [
+      3,
       "./other.ts"
     ]
+  ],
+  "options": {
+    "composite": true,
+    "noEmitOnError": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./main.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'number' is not assignable to type 'string'."
+        }
+      ]
+    ]
+  ],
+  "affectedFilesPendingEmit": [
+    [
+      "./main.ts",
+      "Js | Dts"
+    ],
+    [
+      "./other.ts",
+      "Js | Dts"
+    ]
+  ],
+  "emitSignatures": [
+    "./main.ts",
+    "./other.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 1025
+  "size": 1013
 }
 
 
@@ -408,67 +404,65 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"noEmitOnError":true},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./main.ts",
-      "./other.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./main.ts",
+    "./other.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./main.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./main.ts": {
+      "original": {
         "version": "-10726455937-export const x = 10;",
         "signature": "-6821242887-export declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "signature": "-7152472870-export declare const y = 10;\n",
-          "impliedFormat": 1
-        },
+      "version": "-10726455937-export const x = 10;",
+      "signature": "-6821242887-export declare const x = 10;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./other.ts": {
+      "original": {
         "version": "-13729955264-export const y = 10;",
         "signature": "-7152472870-export declare const y = 10;\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./main.ts"
-      ],
-      [
-        3,
-        "./other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "noEmitOnError": true
-    },
-    "latestChangedDtsFile": "./other.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-13729955264-export const y = 10;",
+      "signature": "-7152472870-export declare const y = 10;\n",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./main.ts"
+    ],
+    [
+      3,
+      "./other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "noEmitOnError": true
+  },
+  "latestChangedDtsFile": "./other.d.ts",
   "version": "FakeTSVersion",
-  "size": 885
+  "size": 873
 }
 
 //// [/user/username/projects/myproject/main.js]

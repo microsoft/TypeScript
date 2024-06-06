@@ -66,49 +66,47 @@ No shapes updated in the builder::
 
 
 //// [/outFile.tsbuildinfo]
-{"program":{"fileNames":["./lib/lib.d.ts","./src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"2464268576-const a = \"hello","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[1,2]},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"2464268576-const a = \"hello","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[1,2],"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "./lib/lib.d.ts",
-      "./src/a.ts"
-    ],
-    "fileInfos": {
-      "./lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./src/a.ts": {
-        "original": {
-          "version": "2464268576-const a = \"hello",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./src/a.ts": {
+      "original": {
         "version": "2464268576-const a = \"hello",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./src/a.ts"
-      ]
-    ],
-    "options": {
-      "outFile": "./outFile.js"
-    },
-    "changeFileSet": [
-      "./lib/lib.d.ts",
+        "impliedFormat": 1
+      },
+      "version": "2464268576-const a = \"hello",
+      "impliedFormat": "commonjs"
+    }
+  },
+  "root": [
+    [
+      2,
       "./src/a.ts"
     ]
+  ],
+  "options": {
+    "outFile": "./outFile.js"
   },
+  "changeFileSet": [
+    "./lib/lib.d.ts",
+    "./src/a.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 699
+  "size": 687
 }
 
 
@@ -195,49 +193,47 @@ No shapes updated in the builder::
 
 
 //// [/outFile.tsbuildinfo]
-{"program":{"fileNames":["./lib/lib.d.ts","./src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"4011451714-const a = \"hello\"","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"4011451714-const a = \"hello\"","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "./lib/lib.d.ts",
-      "./src/a.ts"
-    ],
-    "fileInfos": {
-      "./lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./src/a.ts": {
-        "original": {
-          "version": "4011451714-const a = \"hello\"",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./src/a.ts": {
+      "original": {
         "version": "4011451714-const a = \"hello\"",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./src/a.ts"
-      ]
-    ],
-    "options": {
-      "outFile": "./outFile.js"
-    },
-    "pendingEmit": [
-      "Js",
-      false
-    ]
+        "impliedFormat": 1
+      },
+      "version": "4011451714-const a = \"hello\"",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./src/a.ts"
+    ]
+  ],
+  "options": {
+    "outFile": "./outFile.js"
+  },
+  "pendingEmit": [
+    "Js",
+    false
+  ],
   "version": "FakeTSVersion",
-  "size": 699
+  "size": 687
 }
 
 

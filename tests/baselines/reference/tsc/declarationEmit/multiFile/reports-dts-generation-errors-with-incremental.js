@@ -98,89 +98,87 @@ export const api = ky.extend({});
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.","category":1,"code":4023}]]],"emitSignatures":[3]},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.esnext.full.d.ts","./node_modules/ky/distribution/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","impliedFormat":99},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":99}],"root":[3],"options":{"composite":true,"module":199,"skipDefaultLibCheck":true,"skipLibCheck":true},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.","category":1,"code":4023}]]],"emitSignatures":[3],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.esnext.full.d.ts",
-      "./node_modules/ky/distribution/index.d.ts",
-      "./index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/ky/distribution/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.esnext.full.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../lib/lib.esnext.full.d.ts",
+    "./node_modules/ky/distribution/index.d.ts",
+    "./index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./node_modules/ky/distribution/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.esnext.full.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/ky/distribution/index.d.ts": {
-        "original": {
-          "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-          "impliedFormat": 99
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/ky/distribution/index.d.ts": {
+      "original": {
         "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-        "signature": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": 99
       },
-      "./index.ts": {
-        "original": {
-          "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-          "impliedFormat": 99
-        },
+      "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
+      "signature": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
+      "impliedFormat": "esnext"
+    },
+    "./index.ts": {
+      "original": {
         "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-        "signature": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 199,
-      "skipDefaultLibCheck": true,
-      "skipLibCheck": true
-    },
-    "referencedMap": {
-      "./index.ts": [
-        "./node_modules/ky/distribution/index.d.ts"
-      ]
-    },
-    "emitDiagnosticsPerFile": [
-      [
-        "./index.ts",
-        [
-          {
-            "start": 34,
-            "length": 3,
-            "messageText": "Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.",
-            "category": 1,
-            "code": 4023
-          }
-        ]
-      ]
-    ],
-    "emitSignatures": [
+        "impliedFormat": 99
+      },
+      "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
+      "signature": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      3,
       "./index.ts"
     ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 199,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
+  "referencedMap": {
+    "./index.ts": [
+      "./node_modules/ky/distribution/index.d.ts"
+    ]
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./index.ts",
+      [
+        {
+          "start": 34,
+          "length": 3,
+          "messageText": "Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/node_modules/ky/distribution/index\" but cannot be named.",
+          "category": 1,
+          "code": 4023
+        }
+      ]
+    ]
+  ],
+  "emitSignatures": [
+    "./index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 1350
+  "size": 1338
 }
 
 
