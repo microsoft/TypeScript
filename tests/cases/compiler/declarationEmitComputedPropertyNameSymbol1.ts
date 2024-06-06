@@ -4,7 +4,7 @@
 
 // @filename: type.ts
 export namespace Foo {
-  export const sym: unique symbol;
+  export const sym = Symbol();
 }
 export type Type = { x?: { [Foo.sym]: 0 } };
 

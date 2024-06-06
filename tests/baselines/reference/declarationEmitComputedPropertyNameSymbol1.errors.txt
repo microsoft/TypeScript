@@ -1,13 +1,16 @@
-type.ts(2,16): error TS1155: 'const' declarations must be initialized.
+type.ts(2,22): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+type.ts(4,28): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
 
 
-==== type.ts (1 errors) ====
+==== type.ts (2 errors) ====
     export namespace Foo {
-      export const sym: unique symbol;
-                   ~~~
-!!! error TS1155: 'const' declarations must be initialized.
+      export const sym = Symbol();
+                         ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
     }
     export type Type = { x?: { [Foo.sym]: 0 } };
+                               ~~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
     
 ==== index.ts (0 errors) ====
     import { type Type } from "./type";

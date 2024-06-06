@@ -2,7 +2,7 @@
 
 //// [type.ts]
 export namespace Foo {
-  export const sym: unique symbol;
+  export const sym = Symbol();
 }
 export type Type = { x?: { [Foo.sym]: 0 } };
 
@@ -16,12 +16,10 @@ export const foo = { ...({} as Type) };
 
 //// [type.d.ts]
 export declare namespace Foo {
-    const sym: unique symbol;
+    const sym: any;
 }
 export type Type = {
-    x?: {
-        [Foo.sym]: 0;
-    };
+    x?: {};
 };
 //// [index.d.ts]
 export declare const foo: {
