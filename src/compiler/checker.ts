@@ -8862,8 +8862,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         else {
                             const evaluated = evaluateEntityNameExpression(node.expression);
-                            const literalNode = typeof evaluated.value === 'string' ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
-                                typeof evaluated.value === 'number' ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
+                            const literalNode = typeof evaluated.value === "string" ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
+                                typeof evaluated.value === "number" ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
                                 undefined;
                             Debug.assert(literalNode);
                             literal = literalNode;
