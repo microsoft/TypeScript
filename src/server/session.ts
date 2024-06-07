@@ -1299,7 +1299,7 @@ export class Session<TMessage = string> implements EventSender {
     // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
     /** @internal */
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
-        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.getLineCount();
+        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.textStorage.getLineInfo().getLineCount();
         return !!(lineCount && lineCount > 500);
     }
 
@@ -2599,7 +2599,6 @@ export class Session<TMessage = string> implements EventSender {
         }
         const file = normalizePath(fileName);
         this.projectService.closeClientFile(file);
-        this.cleanUpSemanticCheckPerformance([fileName]);
     }
 
     private mapLocationNavigationBarItems(items: NavigationBarItem[], scriptInfo: ScriptInfo): protocol.NavigationBarItem[] {
