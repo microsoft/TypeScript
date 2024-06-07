@@ -1,13 +1,15 @@
 privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
+privateNameInInExpression.ts(23,19): error TS2304: Cannot find name '#fiel'.
 privateNameInInExpression.ts(23,19): error TS2339: Property '#fiel' does not exist on type 'any'.
 privateNameInInExpression.ts(25,20): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 privateNameInInExpression.ts(27,14): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
 privateNameInInExpression.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
-privateNameInInExpression.ts(43,27): error TS18047: 'u' is possibly 'null'.
-privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameInInExpression.ts(31,23): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+privateNameInInExpression.ts(45,27): error TS18047: 'u' is possibly 'null'.
+privateNameInInExpression.ts(116,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== privateNameInInExpression.ts (7 errors) ====
+==== privateNameInInExpression.ts (9 errors) ====
     class Foo {
         #field = 1;
         static #staticField = 2;
@@ -34,6 +36,8 @@ privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not
     
             const b = #fiel in v; // Bad - typo in privateID
                       ~~~~~
+!!! error TS2304: Cannot find name '#fiel'.
+                      ~~~~~
 !!! error TS2339: Property '#fiel' does not exist on type 'any'.
     
             const c = (#field) in v; // Bad - privateID is not an expression on its own
@@ -47,6 +51,10 @@ privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not
             for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
                           ~~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
+    
+            for (let d in #field) { /**/ } // Bad - private field not allowed in expression of forInStatement
+                          ~~~~~~
+!!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
         }
         whitespace(v: any) {
             const a = v && /*0*/#field/*1*/
