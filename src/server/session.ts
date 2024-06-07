@@ -1283,17 +1283,17 @@ export class Session<TMessage = string> implements EventSender {
         tracing?.pop();
     }
 
-    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): boolean {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
         this.diagnosticsTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         let diagnosticsResult;
         if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
             tracing?.pop();
-            return false;
+            return;
         }
         this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.spans);
         tracing?.pop();
-        return true;
+        return;
     }
 
     // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
@@ -1392,16 +1392,11 @@ export class Session<TMessage = string> implements EventSender {
 
             if (ranges) {
                 return next.immediate("regionSemanticCheck", () => {
-                    const didRegionCheck = this.regionSemanticCheck(fileName, project, ranges);
-                    if (didRegionCheck) {
-                        if (this.changeSeq !== seq) {
-                            return;
-                        }
-                        next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
+                    this.regionSemanticCheck(fileName, project, ranges);
+                    if (this.changeSeq !== seq) {
+                        return;
                     }
-                    else {
-                        doSemanticCheck(fileName, project);
-                    }
+                    next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
                 });
             }
 
