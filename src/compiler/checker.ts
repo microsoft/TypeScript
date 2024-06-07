@@ -27928,6 +27928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = tryCast(reference, canHaveFlowNode)?.flowNode) {
         let key: string | undefined;
+        let hasMutation: boolean[] | undefined;
         let isKeySet = false;
         let inLambdaArg = false;
         let flowDepth = 0;
@@ -28163,27 +28164,84 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
-            const signatures = getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
             const flowType = getTypeAtFlowNode(flow.antecedent);
             const saveInitialType = initialType;
             const saveInLambdaArg = inLambdaArg;
             initialType = getTypeFromFlowType(flowType);
             inLambdaArg = true;
             let lambdaTypes: Type[] | undefined;
+            let signatures: readonly Signature[] | undefined;
             const args = flow.node.arguments;
             for (let i = 0; i < args.length; i++) {
                 const lambda = getLambdaArgument(args[i]);
-                if (lambda && lambda.returnFlowNode && !some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
-                    const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
-                    if (lambdaType !== initialType) {
-                        lambdaTypes ??= [initialType];
-                        lambdaTypes.push(lambdaType);
+                if (lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false)) {
+                    signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
+                    if (!some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
+                        const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
+                        if (lambdaType !== initialType) {
+                            lambdaTypes ??= [initialType];
+                            lambdaTypes.push(lambdaType);
+                        }
                     }
                 }
             }
             inLambdaArg = saveInLambdaArg;
             initialType = saveInitialType;
             return lambdaTypes ? createFlowType(getUnionOrEvolvingArrayType(lambdaTypes, UnionReduction.Literal), isIncomplete(flowType)) : flowType;
+        }
+
+        function isMutationFlowNode(flow: FlowNode, noCacheCheck: boolean): boolean {
+            while (true) {
+                const flags = flow.flags;
+                if (flags & FlowFlags.Shared) {
+                    if (!noCacheCheck) {
+                        const id = getFlowNodeId(flow);
+                        const cached = (hasMutation ??= [])[id];
+                        return cached !== undefined ? cached : (hasMutation[id] = isMutationFlowNode(flow, /*noCacheCheck*/ true));
+                    }
+                    noCacheCheck = false;
+                }
+                if (flags & (FlowFlags.Call | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ReduceLabel)) {
+                    flow = (flow as FlowCall | FlowCondition | FlowSwitchClause | FlowReduceLabel).antecedent;
+                }
+                else if (flags & FlowFlags.Assignment) {
+                    if (isOrContainsMatchingReference(reference, (flow as FlowArrayMutation).node)) {
+                        return true;
+                    }
+                    flow = (flow as FlowAssignment).antecedent;
+                }
+                else if (flags & FlowFlags.BranchLabel) {
+                    return some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                }
+                else if (flags & FlowFlags.LoopLabel) {
+                    const id = getFlowNodeId(flow);
+                    const cached = (hasMutation ??= [])[id];
+                    if (cached !== undefined) return cached;
+                    hasMutation[id] = false;
+                    return hasMutation[id] = some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                }
+                else if (flags & FlowFlags.ArrayMutation) {
+                    if (declaredType === autoType || declaredType === autoArrayType) {
+                        const node = (flow as FlowArrayMutation).node;
+                        const expr = node.kind === SyntaxKind.CallExpression ?
+                            (node.expression as PropertyAccessExpression).expression :
+                            (node.left as ElementAccessExpression).expression;
+                        if (isMatchingReference(reference, getReferenceCandidate(expr))) {
+                            return true;
+                        }
+                    }
+                    flow = (flow as FlowArrayMutation).antecedent;
+                }
+                else if (flags & FlowFlags.LambdaArgs) {
+                    return some((flow as FlowCall).node.arguments, arg => {
+                        const lambda = getLambdaArgument(arg);
+                        return !!(lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false));
+                    });
+                }
+                else {
+                    return false;
+                }
+            }
         }
 
         function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType | undefined {
