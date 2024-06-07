@@ -89,49 +89,47 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./Source.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./Source.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./Source.ts": {
-        "original": {
-          "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "impliedFormat": "commonjs"
+    },
+    "./Source.ts": {
+      "original": {
         "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./Source.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0,
-      "outFile": "./Source.js"
-    },
-    "outSignature": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-    "latestChangedDtsFile": "./Source.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./Source.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0,
+    "outFile": "./Source.js"
+  },
+  "outSignature": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+  "latestChangedDtsFile": "./Source.d.ts",
   "version": "FakeTSVersion",
-  "size": 893
+  "size": 881
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
@@ -157,58 +155,56 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","impliedFormat":1},{"version":"-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","impliedFormat":1},{"version":"-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../buttonClass/Source.d.ts",
-      "./Source.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "../buttonClass/Source.d.ts",
+    "./Source.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../buttonClass/Source.d.ts": {
-        "original": {
-          "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "impliedFormat": "commonjs"
+    },
+    "../buttonClass/Source.d.ts": {
+      "original": {
         "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./Source.ts": {
-        "original": {
-          "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
-          "impliedFormat": 1
-        },
+      "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+      "impliedFormat": "commonjs"
+    },
+    "./Source.ts": {
+      "original": {
         "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./Source.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0,
-      "outFile": "./Source.js"
-    },
-    "outSignature": "-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
-    "latestChangedDtsFile": "./Source.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "./Source.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0,
+    "outFile": "./Source.js"
+  },
+  "outSignature": "-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
+  "latestChangedDtsFile": "./Source.d.ts",
   "version": "FakeTSVersion",
-  "size": 1054
+  "size": 1042
 }
 
 

@@ -18,9 +18,9 @@ namespace JSX {
 }
 const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 ><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->                                                                  : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >p : { prop: T; children: (t: T) => T; }
 >  : ^^^^^^^^ ^^^^^^^^^^^^           ^^^
 >prop : T
@@ -40,7 +40,7 @@ Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : JSX.Element
 >                                                  : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >{prop: {a: "x"}, children: i => ({a: "z"})} : { prop: { a: string; }; children: (i: { a: string; }) => { a: string; }; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : { a: string; }
@@ -72,7 +72,7 @@ const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 ><Elem prop={{a: "x"}} children={i => ({a: "z"})} /> : JSX.Element
 >                                                    : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >prop : { a: string; }
 >     : ^^^^^^^^^^^^^^
 >{a: "x"} : { a: string; }
@@ -102,7 +102,7 @@ const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 ><Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem> : JSX.Element
 >                                               : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >prop : { a: string; }
 >     : ^^^^^^^^^^^^^^
 >{a: "x"} : { a: string; }
@@ -124,7 +124,7 @@ const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >"z" : "z"
 >    : ^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 
 interface LitProps<T> { prop: T, children: (x: this) => T }
 >prop : T

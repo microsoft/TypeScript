@@ -79,163 +79,159 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../../src/library/index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../../../a/lib/lib.d.ts",
+    "../../src/library/index.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../../src/library/index.ts": {
-        "original": {
-          "version": "3524703962-export function foo() {}",
-          "signature": "-5677608893-export declare function foo(): void;\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../../src/library/index.ts": {
+      "original": {
         "version": "3524703962-export function foo() {}",
         "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../../src/library/index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "latestChangedDtsFile": "./index.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "3524703962-export function foo() {}",
+      "signature": "-5677608893-export declare function foo(): void;\n",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "../../src/library/index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 776
+  "size": 764
 }
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5677608893-export declare function foo(): void;\n","impliedFormat":1},{"version":"-9677035610-import {foo} from \"shared\";","impliedFormat":1},{"version":"193491849-foo","affectsGlobalScope":true,"impliedFormat":1}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"affectedFilesPendingEmit":[3,4],"emitSignatures":[3,4]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5677608893-export declare function foo(): void;\n","impliedFormat":1},{"version":"-9677035610-import {foo} from \"shared\";","impliedFormat":1},{"version":"193491849-foo","affectsGlobalScope":true,"impliedFormat":1}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"affectedFilesPendingEmit":[3,4],"emitSignatures":[3,4],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../../../shared/bld/library/index.d.ts",
-      "../../src/program/bar.ts",
-      "../../src/program/index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../../../shared/bld/library/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../../../a/lib/lib.d.ts",
+    "../../../shared/bld/library/index.d.ts",
+    "../../src/program/bar.ts",
+    "../../src/program/index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../../../shared/bld/library/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../../../shared/bld/library/index.d.ts": {
-        "original": {
-          "version": "-5677608893-export declare function foo(): void;\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../../../shared/bld/library/index.d.ts": {
+      "original": {
         "version": "-5677608893-export declare function foo(): void;\n",
-        "signature": "-5677608893-export declare function foo(): void;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../../src/program/bar.ts": {
-        "original": {
-          "version": "-9677035610-import {foo} from \"shared\";",
-          "impliedFormat": 1
-        },
+      "version": "-5677608893-export declare function foo(): void;\n",
+      "signature": "-5677608893-export declare function foo(): void;\n",
+      "impliedFormat": "commonjs"
+    },
+    "../../src/program/bar.ts": {
+      "original": {
         "version": "-9677035610-import {foo} from \"shared\";",
-        "signature": "-9677035610-import {foo} from \"shared\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../../src/program/index.ts": {
-        "original": {
-          "version": "193491849-foo",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "version": "-9677035610-import {foo} from \"shared\";",
+      "signature": "-9677035610-import {foo} from \"shared\";",
+      "impliedFormat": "commonjs"
+    },
+    "../../src/program/index.ts": {
+      "original": {
         "version": "193491849-foo",
-        "signature": "193491849-foo",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "../../src/program/bar.ts"
-      ],
-      [
-        4,
-        "../../src/program/index.ts"
-      ]
+        "impliedFormat": 1
+      },
+      "version": "193491849-foo",
+      "signature": "193491849-foo",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
+  },
+  "root": [
+    [
+      3,
+      "../../src/program/bar.ts"
     ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../../src/program/bar.ts": [
-        "../../../shared/bld/library/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../src/program/index.ts",
-        [
-          {
-            "start": 0,
-            "length": 3,
-            "messageText": "Cannot find name 'foo'.",
-            "category": 1,
-            "code": 2304
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "../../src/program/bar.ts",
-        "Js | Dts"
-      ],
-      [
-        "../../src/program/index.ts",
-        "Js | Dts"
-      ]
-    ],
-    "emitSignatures": [
-      "../../src/program/bar.ts",
+    [
+      4,
       "../../src/program/index.ts"
     ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
   },
+  "referencedMap": {
+    "../../src/program/bar.ts": [
+      "../../../shared/bld/library/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../src/program/index.ts",
+      [
+        {
+          "start": 0,
+          "length": 3,
+          "messageText": "Cannot find name 'foo'.",
+          "category": 1,
+          "code": 2304
+        }
+      ]
+    ]
+  ],
+  "affectedFilesPendingEmit": [
+    [
+      "../../src/program/bar.ts",
+      "Js | Dts"
+    ],
+    [
+      "../../src/program/index.ts",
+      "Js | Dts"
+    ]
+  ],
+  "emitSignatures": [
+    "../../src/program/bar.ts",
+    "../../src/program/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 1129
+  "size": 1117
 }
 
 

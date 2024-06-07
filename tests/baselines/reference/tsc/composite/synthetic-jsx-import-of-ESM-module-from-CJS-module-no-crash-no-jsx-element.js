@@ -59,77 +59,75 @@ exports.default = 42;
 
 
 //// [/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["./lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
 
 //// [/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "./lib/lib.d.ts",
-      "./node_modules/solid-js/jsx-runtime.d.ts",
-      "./src/main.ts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/solid-js/jsx-runtime.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "./lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./node_modules/solid-js/jsx-runtime.d.ts",
+    "./src/main.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./node_modules/solid-js/jsx-runtime.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/solid-js/jsx-runtime.d.ts": {
-        "original": {
-          "version": "-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n",
-          "impliedFormat": 99
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/solid-js/jsx-runtime.d.ts": {
+      "original": {
         "version": "-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n",
-        "signature": "-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": 99
       },
-      "./src/main.ts": {
-        "original": {
-          "version": "-1874019635-export default 42;",
-          "signature": "-5660511115-declare const _default: 42;\nexport default _default;\n",
-          "impliedFormat": 1
-        },
+      "version": "-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n",
+      "signature": "-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n",
+      "impliedFormat": "esnext"
+    },
+    "./src/main.ts": {
+      "original": {
         "version": "-1874019635-export default 42;",
         "signature": "-5660511115-declare const _default: 42;\nexport default _default;\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        1,
-        "./lib/lib.d.ts"
-      ],
-      [
-        3,
-        "./src/main.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "jsx": 4,
-      "jsxImportSource": "solid-js",
-      "module": 100
-    },
-    "referencedMap": {
-      "./src/main.ts": [
-        "./node_modules/solid-js/jsx-runtime.d.ts"
-      ]
-    },
-    "latestChangedDtsFile": "./src/main.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-1874019635-export default 42;",
+      "signature": "-5660511115-declare const _default: 42;\nexport default _default;\n",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      1,
+      "./lib/lib.d.ts"
+    ],
+    [
+      3,
+      "./src/main.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "jsx": 4,
+    "jsxImportSource": "solid-js",
+    "module": 100
+  },
+  "referencedMap": {
+    "./src/main.ts": [
+      "./node_modules/solid-js/jsx-runtime.d.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./src/main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1079
+  "size": 1067
 }
 

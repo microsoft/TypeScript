@@ -16,25 +16,25 @@ interface Array<T> {
     // correctly for tuple types that are type parameter constraints
     map<U>(arg: this): void;
 >map : <U>(arg: this) => void
->    : ^^^^   ^^    ^^^^^    
+>    : ^ ^^   ^^    ^^^^^    
 >arg : this
 >    : ^^^^
 
     reduceRight<U>(arg: this): void;
 >reduceRight : <U>(arg: this) => void
->            : ^^^^   ^^    ^^^^^    
+>            : ^ ^^   ^^    ^^^^^    
 >arg : this
 >    : ^^^^
 
     reduce<U>(arg: this): void;
 >reduce : <U>(arg: this) => void
->       : ^^^^   ^^    ^^^^^    
+>       : ^ ^^   ^^    ^^^^^    
 >arg : this
 >    : ^^^^
 
     reduce2<U>(arg: this): void;
 >reduce2 : <U>(arg: this) => void
->        : ^^^^   ^^    ^^^^^    
+>        : ^ ^^   ^^    ^^^^^    
 >arg : this
 >    : ^^^^
 }

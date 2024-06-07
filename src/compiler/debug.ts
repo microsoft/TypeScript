@@ -64,6 +64,7 @@ import {
     ModifierFlags,
     Node,
     NodeArray,
+    NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
     noop,
@@ -453,6 +454,10 @@ export namespace Debug {
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
+    }
+
+    export function formatNodeCheckFlags(flags: NodeCheckFlags | undefined): string {
+        return formatEnum(flags, (ts as any).NodeCheckFlags, /*isFlags*/ true);
     }
 
     export function formatModifierFlags(flags: ModifierFlags | undefined): string {

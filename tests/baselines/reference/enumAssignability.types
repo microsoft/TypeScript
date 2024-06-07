@@ -232,7 +232,7 @@ module Others {
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
 >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
->    : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^^^^^^^^^^^      ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

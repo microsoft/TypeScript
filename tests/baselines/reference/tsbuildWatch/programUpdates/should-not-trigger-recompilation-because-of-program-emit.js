@@ -144,84 +144,82 @@ export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./index.ts",
-      "./some_decl.d.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./anothermodule.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./anothermodule.ts": {
-        "original": {
-          "version": "-3090574810-export const World = \"hello\";",
-          "signature": "-9234818176-export declare const World = \"hello\";\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./anothermodule.ts": {
+      "original": {
         "version": "-3090574810-export const World = \"hello\";",
         "signature": "-9234818176-export declare const World = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.ts": {
-        "original": {
-          "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-          "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-          "impliedFormat": 1
-        },
+      "version": "-3090574810-export const World = \"hello\";",
+      "signature": "-9234818176-export declare const World = \"hello\";\n",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
         "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./some_decl.d.ts": {
-        "original": {
-          "version": "-7959511260-declare const dts: any;",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./some_decl.d.ts": {
+      "original": {
         "version": "-7959511260-declare const dts: any;",
-        "signature": "-7959511260-declare const dts: any;",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "./anothermodule.ts",
-          "./index.ts",
-          "./some_decl.d.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "declarationMap": true,
-      "skipDefaultLibCheck": true
-    },
-    "latestChangedDtsFile": "./index.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-7959511260-declare const dts: any;",
+      "signature": "-7959511260-declare const dts: any;",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./anothermodule.ts",
+        "./index.ts",
+        "./some_decl.d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  },
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1384
+  "size": 1372
 }
 
 
@@ -326,96 +324,94 @@ Output::
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./file3.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./file3.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./anothermodule.ts",
-      "./file3.ts",
-      "./index.ts",
-      "./some_decl.d.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./anothermodule.ts",
+    "./file3.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./anothermodule.ts": {
-        "original": {
-          "version": "-3090574810-export const World = \"hello\";",
-          "signature": "-9234818176-export declare const World = \"hello\";\n",
-          "impliedFormat": 1
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./anothermodule.ts": {
+      "original": {
         "version": "-3090574810-export const World = \"hello\";",
         "signature": "-9234818176-export declare const World = \"hello\";\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./file3.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "signature": "-7152472870-export declare const y = 10;\n",
-          "impliedFormat": 1
-        },
+      "version": "-3090574810-export const World = \"hello\";",
+      "signature": "-9234818176-export declare const World = \"hello\";\n",
+      "impliedFormat": "commonjs"
+    },
+    "./file3.ts": {
+      "original": {
         "version": "-13729955264-export const y = 10;",
         "signature": "-7152472870-export declare const y = 10;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.ts": {
-        "original": {
-          "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-          "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-          "impliedFormat": 1
-        },
+      "version": "-13729955264-export const y = 10;",
+      "signature": "-7152472870-export declare const y = 10;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
         "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
         "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./some_decl.d.ts": {
-        "original": {
-          "version": "-7959511260-declare const dts: any;",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./some_decl.d.ts": {
+      "original": {
         "version": "-7959511260-declare const dts: any;",
-        "signature": "-7959511260-declare const dts: any;",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          5
-        ],
-        [
-          "./anothermodule.ts",
-          "./file3.ts",
-          "./index.ts",
-          "./some_decl.d.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "declarationMap": true,
-      "skipDefaultLibCheck": true
-    },
-    "latestChangedDtsFile": "./file3.d.ts"
+        "impliedFormat": 1
+      },
+      "version": "-7959511260-declare const dts: any;",
+      "signature": "-7959511260-declare const dts: any;",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./anothermodule.ts",
+        "./file3.ts",
+        "./index.ts",
+        "./some_decl.d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true
+  },
+  "latestChangedDtsFile": "./file3.d.ts",
   "version": "FakeTSVersion",
-  "size": 1520
+  "size": 1508
 }
 
 //// [/user/username/projects/sample1/core/file3.js]

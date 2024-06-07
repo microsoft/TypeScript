@@ -13,7 +13,7 @@ type FuncType = (x: <T>(p: T) => T) => typeof x;
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
 >tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
->         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^   ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
+>         : ^^^ ^^            ^^                    ^^ ^^        ^^ ^^ ^^^ ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
 >templateStrs : TemplateStringsArray
 >             : ^^^^^^^^^^^^^^^^^^^^
 >f : FuncType
@@ -23,7 +23,7 @@ function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
 >tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
->         : ^^^   ^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
+>         : ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^ ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
 >templateStrs : TemplateStringsArray
 >             : ^^^^^^^^^^^^^^^^^^^^
 >f : FuncType
@@ -35,7 +35,7 @@ function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncTyp
 
 function tempTag1<T>(...rest: any[]): T {
 >tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
->         : ^^^   ^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^   ^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
+>         : ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^   ^^^   ^^^^^^^^            ^^                    ^^ ^^        ^^ ^^        ^^ ^^   ^^^   ^^^
 >rest : any[]
 >     : ^^^^^
 

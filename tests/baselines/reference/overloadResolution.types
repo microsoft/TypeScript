@@ -163,13 +163,13 @@ fn2('', 0); // OK
 // Generic overloads with differing arity called without type arguments
 function fn3<T>(n: T): string;
 >fn3 : { <T>(n: T): string; <T_1, U>(s: string, t: T_1, u: U): U; <T_1, U, V>(v: V, u: U, t: T_1): number; }
->    : ^^^ ^^ ^^ ^^^      ^^^   ^^ ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^   ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
+>    : ^^^ ^^ ^^ ^^^      ^^^^^^^^ ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
 >n : T
 >  : ^
 
 function fn3<T, U>(s: string, t: T, u: U): U;
 >fn3 : { <T_1>(n: T_1): string; <T, U>(s: string, t: T, u: U): U; <T_1, U_1, V>(v: V, u: U_1, t: T_1): number; }
->    : ^^^   ^^ ^^   ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^   ^^   ^^ ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
+>    : ^^^^^^^^ ^^   ^^^      ^^^ ^^ ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^^^^^ ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
 >s : string
 >  : ^^^^^^
 >t : T
@@ -179,7 +179,7 @@ function fn3<T, U>(s: string, t: T, u: U): U;
 
 function fn3<T, U, V>(v: V, u: U, t: T): number;
 >fn3 : { <T_1>(n: T_1): string; <T_1, U_1>(s: string, t: T_1, u: U_1): U_1; <T, U, V>(v: V, u: U, t: T): number; }
->    : ^^^   ^^ ^^   ^^^      ^^^   ^^   ^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
+>    : ^^^^^^^^ ^^   ^^^      ^^^^^^^^^^^^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >v : V
 >  : ^
 >u : U
@@ -282,7 +282,7 @@ fn3<number, number, number, number>(); // Error
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 function fn4<T extends string, U extends number>(n: T, m: U);
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T_1 extends number, U_1 extends string>(n: T_1, m: U_1): any; }
->    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^
 >n : T
 >  : ^
 >m : U
@@ -290,7 +290,7 @@ function fn4<T extends string, U extends number>(n: T, m: U);
 
 function fn4<T extends number, U extends string>(n: T, m: U);
 >fn4 : { <T_1 extends string, U_1 extends number>(n: T_1, m: U_1): any; <T extends number, U extends string>(n: T, m: U): any; }
->    : ^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >n : T
 >  : ^
 >m : U

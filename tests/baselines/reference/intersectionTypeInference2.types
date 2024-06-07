@@ -45,7 +45,7 @@ declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Ke
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
 >   : ^ ^^   ^^^^^^^^^       ^^   ^^                         ^^   ^^   ^^^^^      
 >obj : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >key : Key
 >    : ^^^
 

@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -16,9 +17,9 @@ describe("unittests:: tsc:: noEmit::", () => {
         verifyNoEmitChanges({ incremental: true });
         verifyNoEmitChanges({ incremental: true, declaration: true });
         verifyNoEmitChanges({ composite: true });
-        verifyNoEmitChanges({ incremental: true, outFile: "../outFile.js" });
-        verifyNoEmitChanges({ incremental: true, declaration: true, outFile: "../outFile.js" });
-        verifyNoEmitChanges({ composite: true, outFile: "../outFile.js" });
+        verifyNoEmitChanges({ incremental: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
+        verifyNoEmitChanges({ incremental: true, declaration: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
+        verifyNoEmitChanges({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
 
         function verifyNoEmitChanges(compilerOptions: ts.CompilerOptions) {
             const discrepancyExplanation = () => [
@@ -29,7 +30,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                 ...noChangeRun,
                 caption: "No Change run with noEmit",
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
-                discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
                     undefined,
             };
@@ -40,14 +41,17 @@ describe("unittests:: tsc:: noEmit::", () => {
             };
             let optionsString = "";
             for (const key in compilerOptions) {
-                if (ts.hasProperty(compilerOptions, key)) {
+                if (ts.hasProperty(compilerOptions, key) && key !== "outFile" && key !== "module") {
                     optionsString += ` ${key}`;
                 }
+            }
+            function scenarioName(text: string) {
+                return `${compilerOptions.outFile ? "outFile" : "multiFile"}/${text}${optionsString}`;
             }
 
             verifyTsc({
                 scenario: "noEmit",
-                subScenario: `changes${optionsString}`,
+                subScenario: scenarioName("changes"),
                 commandLineArgs: ["--p", "src/project"],
                 fs,
                 edits: [
@@ -57,7 +61,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                         caption: "Introduce error but still noEmit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },
@@ -81,7 +85,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                         caption: "Fix error and no emit",
                         commandLineArgs: ["--p", "src/project", "--noEmit"],
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },
@@ -94,7 +98,7 @@ describe("unittests:: tsc:: noEmit::", () => {
 
             verifyTsc({
                 scenario: "noEmit",
-                subScenario: `changes with initial noEmit${optionsString}`,
+                subScenario: scenarioName("changes with initial noEmit"),
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
                 fs,
                 edits: [
@@ -107,7 +111,7 @@ describe("unittests:: tsc:: noEmit::", () => {
                     {
                         caption: "Fix error and no emit",
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: compilerOptions.composite && !compilerOptions.outFile ?
+                        discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
                             undefined,
                     },
@@ -138,7 +142,9 @@ describe("unittests:: tsc:: noEmit::", () => {
                     "/src/project/src/noChangeFileWithEmitSpecificError.ts": dedent`
                             function someFunc(arguments: boolean, ...rest: any[]) {
                             }`,
-                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions }),
+                    "/src/project/tsconfig.json": jsonToReadableText({
+                        compilerOptions: compilerOptionsToConfigJson(compilerOptions),
+                    }),
                 });
             }
         }

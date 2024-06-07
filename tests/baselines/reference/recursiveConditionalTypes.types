@@ -405,7 +405,7 @@ type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
 
 function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^ ^^^^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
 >x : Unpack1<T>
 >  : ^^^^^^^^^^
 >y : Unpack2<T>
@@ -431,7 +431,7 @@ function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20(y, x) : void
 >          : ^^^^
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^ ^^^^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
 >y : Unpack2<T>
 >  : ^^^^^^^^^^
 >x : Unpack1<T>
