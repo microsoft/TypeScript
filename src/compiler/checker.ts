@@ -2265,6 +2265,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var flowLoopStart = 0;
     var flowLoopCount = 0;
     var sharedFlowCount = 0;
+    var mutationFlowCount = 0;
     var flowAnalysisDisabled = false;
     var flowInvocationCount = 0;
     var lastFlowNode: FlowNode | undefined;
@@ -2301,6 +2302,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var flowLoopTypes: Type[][] = [];
     var sharedFlowNodes: FlowNode[] = [];
     var sharedFlowTypes: FlowType[] = [];
+    var mutationFlowNodes: FlowNode[] = [];
+    var mutationFlowStates: boolean[] = [];
     var flowNodeReachable: (boolean | undefined)[] = [];
     var flowNodePostSuper: (boolean | undefined)[] = [];
     var potentialThisCollisions: Node[] = [];
@@ -27928,7 +27931,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = tryCast(reference, canHaveFlowNode)?.flowNode) {
         let key: string | undefined;
-        let hasMutation: boolean[] | undefined;
         let isKeySet = false;
         let inLambdaArg = false;
         let flowDepth = 0;
@@ -27940,8 +27942,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         flowInvocationCount++;
         const sharedFlowStart = sharedFlowCount;
+        const mutationFlowStart = mutationFlowCount;
         const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
         sharedFlowCount = sharedFlowStart;
+        mutationFlowCount = mutationFlowStart;
         // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
         // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
         // on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -28195,30 +28199,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const flags = flow.flags;
                 if (flags & FlowFlags.Shared) {
                     if (!noCacheCheck) {
-                        const id = getFlowNodeId(flow);
-                        const cached = (hasMutation ??= [])[id];
-                        return cached !== undefined ? cached : (hasMutation[id] = isMutationFlowNode(flow, /*noCacheCheck*/ true));
+                        let cached = getMutationStateForFlowNode(flow);
+                        if (cached === undefined) {
+                            setMutationStateForFlowNode(flow, cached = isMutationFlowNode(flow, /*noCacheCheck*/ true));
+                        }
+                        return cached;
                     }
                     noCacheCheck = false;
                 }
-                if (flags & (FlowFlags.Call | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ReduceLabel)) {
-                    flow = (flow as FlowCall | FlowCondition | FlowSwitchClause | FlowReduceLabel).antecedent;
-                }
-                else if (flags & FlowFlags.Assignment) {
+                if (flags & FlowFlags.Assignment) {
                     if (isOrContainsMatchingReference(reference, (flow as FlowArrayMutation).node)) {
                         return true;
                     }
-                    flow = (flow as FlowAssignment).antecedent;
                 }
                 else if (flags & FlowFlags.BranchLabel) {
                     return some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
                 }
                 else if (flags & FlowFlags.LoopLabel) {
-                    const id = getFlowNodeId(flow);
-                    const cached = (hasMutation ??= [])[id];
-                    if (cached !== undefined) return cached;
-                    hasMutation[id] = false;
-                    return hasMutation[id] = some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                    let cached = getMutationStateForFlowNode(flow);
+                    if (cached === undefined) {
+                        const index = setMutationStateForFlowNode(flow, false);
+                        cached = mutationFlowStates[index] = some((flow as FlowLabel).antecedent, f => isMutationFlowNode(f, /*noCacheCheck*/ false));
+                    }
+                    return cached;
                 }
                 else if (flags & FlowFlags.ArrayMutation) {
                     if (declaredType === autoType || declaredType === autoArrayType) {
@@ -28230,18 +28233,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return true;
                         }
                     }
-                    flow = (flow as FlowArrayMutation).antecedent;
                 }
                 else if (flags & FlowFlags.LambdaArgs) {
-                    return some((flow as FlowCall).node.arguments, arg => {
+                    const mutation = some((flow as FlowCall).node.arguments, arg => {
                         const lambda = getLambdaArgument(arg);
                         return !!(lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false));
                     });
+                    if (mutation) {
+                        return true;
+                    }
                 }
-                else {
+                else if (!(flags & (FlowFlags.Call | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ReduceLabel))) {
                     return false;
                 }
+                flow = (flow as FlowAssignment | FlowArrayMutation | FlowCall | FlowCondition | FlowSwitchClause | FlowReduceLabel).antecedent;
             }
+        }
+
+        function getMutationStateForFlowNode(flow: FlowNode) {
+            for (let i = mutationFlowStart; i < mutationFlowCount; i++) {
+                if (mutationFlowNodes[i] === flow) {
+                    return mutationFlowStates[i];
+                }
+            }
+            return undefined;
+        }
+
+        function setMutationStateForFlowNode(flow: FlowNode, state: boolean) {
+            const index = mutationFlowCount;
+            mutationFlowNodes[index] = flow;
+            mutationFlowStates[index] = state;
+            mutationFlowCount++;
+            return index;
         }
 
         function getTypeAtFlowArrayMutation(flow: FlowArrayMutation): FlowType | undefined {
