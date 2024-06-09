@@ -8840,7 +8840,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         node,
                         factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
                         node.attributes,
-                        node.qualifier,
+                        visitNode(node.qualifier, visitExistingNodeTreeSymbols, isEntityName),
                         visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
                         node.isTypeOf,
                     );
