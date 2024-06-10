@@ -28170,26 +28170,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getTypeAtFlowLambdaArgs(flow: FlowCall): FlowType {
             const flowType = getTypeAtFlowNode(flow.antecedent);
             const saveInitialType = initialType;
-            const saveInLambdaArg = inLambdaArg;
             initialType = getTypeFromFlowType(flowType);
-            inLambdaArg = true;
             let lambdaTypes: Type[] | undefined;
-            let signatures: readonly Signature[] | undefined;
-            const args = flow.node.arguments;
-            for (let i = 0; i < args.length; i++) {
-                const lambda = getLambdaArgument(args[i]);
-                if (lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false)) {
-                    signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
-                    if (!some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
-                        const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
-                        if (lambdaType !== initialType) {
-                            lambdaTypes ??= [initialType];
-                            lambdaTypes.push(lambdaType);
+            // We assume that lambda arguments may or may not have executed. Thus, lambda arguments can only have a widening
+            // effect and will have no effect if we already have the declared type (the widest possible type).
+            if (initialType !== declaredType) {
+                const saveInLambdaArg = inLambdaArg;
+                inLambdaArg = true;
+                const args = flow.node.arguments;
+                let signatures: readonly Signature[] | undefined;
+                for (let i = 0; i < args.length; i++) {
+                    const lambda = getLambdaArgument(args[i]);
+                    // We use isMutationFlowNode to quickly check whether the reference is mutated anywhere in the lambda.
+                    // This check doesn't require resolving any types, thus eliminating circularities that would otherwise
+                    // occur for no good reason.
+                    if (lambda && lambda.returnFlowNode && isMutationFlowNode(lambda.returnFlowNode, /*noCacheCheck*/ false)) {
+                        // Only when we know that the reference is actually mutated in the lambda do we resolve types and
+                        // signatures. Note that we don't perform type inference and overload resolution, again to reduce
+                        // circularities. Instead, we simply check if any signature has a deferred callback marker in the
+                        // particular argument position.
+                        signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
+                        if (!some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
+                            const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
+                            if (lambdaType !== initialType) {
+                                lambdaTypes ??= [initialType];
+                                lambdaTypes.push(lambdaType);
+                            }
                         }
                     }
                 }
+                inLambdaArg = saveInLambdaArg;
             }
-            inLambdaArg = saveInLambdaArg;
             initialType = saveInitialType;
             return lambdaTypes ? createFlowType(getUnionOrEvolvingArrayType(lambdaTypes, UnionReduction.Literal), isIncomplete(flowType)) : flowType;
         }
@@ -28208,7 +28219,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     noCacheCheck = false;
                 }
                 if (flags & FlowFlags.Assignment) {
-                    if (isOrContainsMatchingReference(reference, (flow as FlowArrayMutation).node)) {
+                    if (isOrContainsMatchingReference(reference, (flow as FlowAssignment).node)) {
                         return true;
                     }
                 }
