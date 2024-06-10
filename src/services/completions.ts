@@ -336,6 +336,7 @@ import {
     rangeContainsPosition,
     rangeContainsPositionExclusive,
     rangeIsOnSingleLine,
+    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptTarget,
@@ -1842,9 +1843,16 @@ function createCompletionEntry(
     if (parentNamedImportOrExport) {
         const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
         if (!isIdentifierText(name, languageVersion)) {
-            insertText = JSON.stringify(name);
+            insertText = quotePropertyName(sourceFile, preferences, name);
+
             if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
-                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                // check if it is import { ^here as name } from '...'
+                // we have to access the scanner here to check if it is { ^here as name } or { ^here, as, name }.
+                scanner.setText(sourceFile.text);
+                scanner.resetTokenState(position);
+                if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
+                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                }
             }
         }
         else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
@@ -1853,6 +1861,13 @@ function createCompletionEntry(
                 insertText = `${name} as ${name}_`;
             }
         }
+    }
+
+    // TODO: the output code is still invalid (QualifiedName current cannot have form in namespace["invalid text name"] and but is no other way to access it)
+    // generating namespace["invalid text name"] with a type error is better than generating 'namespace.invalid text name' and have a syntax error.
+    if (needsConvertPropertyAccess && contextToken?.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
+        replacementSpan = createTextSpanFromNode(contextToken, sourceFile);
+        insertText = `[${quotePropertyName(sourceFile, preferences, name)}]`;
     }
 
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -4835,7 +4850,10 @@ function getCompletionData(
                 return !isFromObjectTypeDeclaration(contextToken);
 
             case SyntaxKind.Identifier: {
-                if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                if ((
+                    containingNodeKind === SyntaxKind.ImportSpecifier ||
+                    containingNodeKind === SyntaxKind.ExportSpecifier
+                ) &&
                     contextToken === (parent as ImportSpecifier).name &&
                     (contextToken as Identifier).text === "type"
                 ) {
