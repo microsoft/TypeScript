@@ -30,3 +30,20 @@ describe('Marks when enabled', () => {
     performance.disable();
   });
 });
+
+describe('Clearing mark with defined name', () => {
+  const markName = 'testMark';
+  before(() => {
+    performance.enable();
+    performance.mark(markName);
+    performance.clearMarks(markName);
+  }); 
+
+  it('should have the mark with the val 0', () => {
+    expect(performance.getCount(markName)).to.equal(0);
+  });
+
+  after(() => {
+    performance.disable();
+  });
+});
