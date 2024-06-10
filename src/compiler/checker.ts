@@ -10933,7 +10933,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param propertyName The property name that should be used to query the target for its type
      */
     function pushTypeResolution(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
-        const resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName);
+        const resolutionCycleStartIndex = findResolutionCycleStartIndex(target, propertyName, resolutionStart);
         if (resolutionCycleStartIndex >= 0) {
             // A cycle was found
             const { length } = resolutionTargets;
@@ -10948,8 +10948,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
-        for (let i = resolutionTargets.length - 1; i >= resolutionStart; i--) {
+    function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName, start = 0): number {
+        for (let i = resolutionTargets.length - 1; i >= start; i--) {
             if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
                 return -1;
             }
