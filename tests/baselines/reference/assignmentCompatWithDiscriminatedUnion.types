@@ -508,7 +508,7 @@ namespace GH12052 {
 >getAxisType() : IAxisType
 >              : ^^^^^^^^^
 >getAxisType : () => IAxisType
->            : ^^^^^^^^^^^^^^^
+>            : ^^^^^^         
 
     const good: IAxis = { type: undefined };
 >good : IAxis
@@ -532,7 +532,7 @@ namespace GH12052 {
 >getAxisType() : IAxisType
 >              : ^^^^^^^^^
 >getAxisType : () => IAxisType
->            : ^^^^^^^^^^^^^^^
+>            : ^^^^^^         
 }
 
 // https://github.com/Microsoft/TypeScript/issues/18421
@@ -611,7 +611,7 @@ namespace GH15907 {
 >dispatchAction({ type : (active? 'disactivate' : 'activate') }) : void
 >                                                                : ^^^^
 >dispatchAction : (action: Action) => void
->               : ^      ^^      ^^^^^^^^^
+>               : ^      ^^      ^^^^^    
 >{ type : (active? 'disactivate' : 'activate') } : { type: "activate" | "disactivate"; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "activate" | "disactivate"

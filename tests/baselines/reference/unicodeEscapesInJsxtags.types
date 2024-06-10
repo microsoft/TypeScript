@@ -39,7 +39,7 @@ const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >"" : ""
 >   : ^^
 >x : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >div : any
 >    : ^^^
 

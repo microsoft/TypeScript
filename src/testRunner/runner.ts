@@ -249,6 +249,10 @@ function beginTests() {
     }
 }
 
+function importTests() {
+    return import("./tests.js");
+}
+
 export let isWorker: boolean;
 function startTestEnvironment() {
     // For debugging convenience.
@@ -256,20 +260,13 @@ function startTestEnvironment() {
 
     isWorker = handleTestConfig();
     if (isWorker) {
-        return Parallel.Worker.start();
+        return Parallel.Worker.start(importTests);
     }
     else if (taskConfigsFolder && workerCount && workerCount > 1) {
-        return Parallel.Host.start();
+        return Parallel.Host.start(importTests);
     }
     beginTests();
+    importTests();
 }
 
 startTestEnvironment();
-
-// This brings in all of the unittests.
-
-// If running as emitted CJS, we want to start the tests here after startTestEnvironment.
-// If running bundled, we will do this in Harness.ts.
-if (__filename.endsWith("runner.js")) {
-    require("./tests.js");
-}

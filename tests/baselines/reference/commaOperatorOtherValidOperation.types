@@ -62,7 +62,7 @@ var resultIsString = foo(1, "123");
 //TypeParameters
 function foo1<T1, T2>()
 >foo1 : <T1, T2>() => void
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^  ^^  ^^^^^^^^^^^
 {
     var x: T1;
 >x : T1

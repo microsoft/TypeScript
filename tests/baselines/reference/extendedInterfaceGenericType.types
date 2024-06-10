@@ -25,21 +25,21 @@ var betaOfNumber = alpha.makeBetaOfNumber();
 >alpha.makeBetaOfNumber() : Beta<number>
 >                         : ^^^^^^^^^^^^
 >alpha.makeBetaOfNumber : () => Beta<number>
->                       : ^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^            
 >alpha : Alpha<number>
 >      : ^^^^^^^^^^^^^
 >makeBetaOfNumber : () => Beta<number>
->                 : ^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^            
 
 betaOfNumber.takesArgOfT(5);
 >betaOfNumber.takesArgOfT(5) : Alpha<number>
 >                            : ^^^^^^^^^^^^^
 >betaOfNumber.takesArgOfT : (arg: number) => Alpha<number>
->                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^^^^^^^^^^^^      ^^^^^^ 
 >betaOfNumber : Beta<number>
 >             : ^^^^^^^^^^^^
 >takesArgOfT : (arg: number) => Alpha<number>
->            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^^^^^^^      ^^^^^^ 
 >5 : 5
 >  : ^
 

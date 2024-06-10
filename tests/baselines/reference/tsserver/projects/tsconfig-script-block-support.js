@@ -231,7 +231,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/a/b/tsconfig.json",
-        "reason": "User requested reload projects"
+        "reason": "User requested reload projects: Creating possible configured project for /a/b/f1.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {

@@ -123,11 +123,11 @@ var r2: void = i.valueOf();
 >i.valueOf() : void
 >            : ^^^^
 >i.valueOf : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >i : I
 >  : ^
 >valueOf : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 var r2b: B = i.data;
 >r2b : B
@@ -245,9 +245,9 @@ var r4: void = b.valueOf();
 >b.valueOf() : void
 >            : ^^^^
 >b.valueOf : () => void
->          : ^^^^^^^^^^
+>          : ^^^^^^    
 >b : { [x: string]: any; valueOf(): void; data: B; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^ ^^^
 >valueOf : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 

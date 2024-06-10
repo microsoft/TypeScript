@@ -211,6 +211,7 @@ import {
     LinkedEditingInfo,
     LiteralType,
     map,
+    MapCode,
     mapDefined,
     MapLike,
     mapOneOrMany,
@@ -241,6 +242,9 @@ import {
     ParseConfigFileHost,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
+    PasteEdits,
+    pasteEdits,
+    PasteEditsArgs,
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
@@ -1573,6 +1577,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideCallHierarchyOutgoingCalls",
     "provideInlayHints",
     "getSupportedCodeFixes",
+    "getPasteEdits",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2126,6 +2131,23 @@ export function createLanguageService(
             documentation,
             tags,
         };
+    }
+
+    function getPasteEdits(
+        args: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        synchronizeHostData();
+        return pasteEdits.pasteEditsProvider(
+            getValidSourceFile(args.targetFile),
+            args.pastedText,
+            args.pasteLocations,
+            args.copiedFrom ? { file: getValidSourceFile(args.copiedFrom.file), range: args.copiedFrom.range } : undefined,
+            host,
+            args.preferences,
+            formatting.getFormatContext(formatOptions, host),
+            cancellationToken,
+        );
     }
 
     function getNodeForQuickInfo(node: Node): Node {
@@ -3144,6 +3166,17 @@ export function createLanguageService(
         return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
     }
 
+    function mapCode(sourceFile: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): FileTextChanges[] {
+        return MapCode.mapCode(
+            syntaxTreeCache.getCurrentSourceFile(sourceFile),
+            contents,
+            focusLocations,
+            host,
+            formatting.getFormatContext(formatOptions, host),
+            preferences,
+        );
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3214,6 +3247,8 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        getPasteEdits,
+        mapCode,
     };
 
     switch (languageServiceMode) {

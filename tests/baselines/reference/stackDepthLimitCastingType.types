@@ -104,10 +104,10 @@ hoge.fetch(null as any);
 >hoge.fetch(null as any) : JQueryXHR
 >                        : ^^^^^^^^^
 >hoge.fetch : (options?: any) => JQueryXHR
->           : ^       ^^^   ^^^^^^^^^^^^^^
+>           : ^       ^^^   ^^^^^         
 >hoge : Backbone.ModelWithCache
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >fetch : (options?: any) => JQueryXHR
->      : ^       ^^^   ^^^^^^^^^^^^^^
+>      : ^       ^^^   ^^^^^         
 >null as any : any
 

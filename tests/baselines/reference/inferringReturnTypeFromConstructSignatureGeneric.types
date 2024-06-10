@@ -57,7 +57,7 @@ function g<T>(type: new () => T): T {
 >new type() : T
 >           : ^
 >type : new () => T
->     : ^^^^^^^^^^^
+>     : ^^^^^^^^^^ 
 }
 
 const g1 = g(GenericObject);
@@ -66,7 +66,7 @@ const g1 = g(GenericObject);
 >g(GenericObject) : GenericObject<{}>
 >                 : ^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
->  : ^ ^^    ^^           ^^^^^^
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericObject : typeof GenericObject
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -88,7 +88,7 @@ const g2 = g(GenericNumber);
 >g(GenericNumber) : GenericNumber<number>
 >                 : ^^^^^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
->  : ^ ^^    ^^           ^^^^^^
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericNumber : typeof GenericNumber
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -110,7 +110,7 @@ const g3 = g(GenericNumberOrString);
 >g(GenericNumberOrString) : GenericNumberOrString<string | number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
->  : ^ ^^    ^^           ^^^^^^
+>  : ^ ^^    ^^           ^^^^^ 
 >GenericNumberOrString : typeof GenericNumberOrString
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -149,7 +149,7 @@ const g4 = g(C);
 >g(C) : C<unknown>
 >     : ^^^^^^^^^^
 >g : <T>(type: new () => T) => T
->  : ^ ^^    ^^           ^^^^^^
+>  : ^ ^^    ^^           ^^^^^ 
 >C : typeof C
 >  : ^^^^^^^^
 

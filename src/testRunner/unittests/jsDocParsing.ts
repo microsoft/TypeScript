@@ -560,4 +560,22 @@ class Foo  {};
             assert.equal(ts.getTextOfJSDocComment(seeTag.comment), "{@link foo#bar label}");
         });
     });
+
+    describe("getTextOfJSDocComment", () => {
+        it("should preserve link without introducing space", () => {
+            const sourceText = `
+/**
+ *
+ * @see {@link foo}
+ */
+class Foo  {};
+`;
+
+            const root = ts.createSourceFile("foo.ts", sourceText, ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+            const [classDecl] = root.statements;
+            const [seeTag] = ts.getJSDocTags(classDecl);
+
+            assert.equal(ts.getTextOfJSDocComment(seeTag.comment), "{@link foo}");
+        });
+    });
 });

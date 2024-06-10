@@ -84,11 +84,11 @@ const t5 = (m => m.substring(0)) satisfies T2; // Ok
 >m.substring(0) : string
 >               : ^^^^^^
 >m.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >m : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

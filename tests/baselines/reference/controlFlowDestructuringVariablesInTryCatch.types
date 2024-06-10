@@ -22,7 +22,7 @@ try {
 >f1() : string
 >     : ^^^^^^
 >f1 : () => string
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
     var [b] = f2();
 >b : string
@@ -30,15 +30,15 @@ try {
 >f2() : [b: string]
 >     : ^^^^^^^^^^^
 >f2 : () => [b: string]
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^           
 
     var { c } = f3();
 >c : string
 >  : ^^^^^^
 >f3() : { c: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >f3 : () => { c: string; }
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^              
 
     var [d = 1] = [];
 >d : number
@@ -61,11 +61,11 @@ try {
 >console.error("error") : void
 >                       : ^^^^
 >console.error : (...data: any[]) => void
->              : ^^^^    ^^     ^^^^^^^^^
+>              : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >error : (...data: any[]) => void
->      : ^^^^    ^^     ^^^^^^^^^
+>      : ^^^^    ^^     ^^^^^    
 >"error" : "error"
 >        : ^^^^^^^
 }

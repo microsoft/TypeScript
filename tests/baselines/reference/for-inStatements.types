@@ -59,7 +59,7 @@ for (var x in fn()) { }
 >fn() : any
 >     : ^^^
 >fn : () => any
->   : ^^^^^^^^^
+>   : ^^^^^^   
 
 for (var x in /[a-z]/) { }
 >x : string

@@ -219,23 +219,22 @@ after waitForPendingPlugins
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-3: /home/src/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+2: /home/src/projects/project/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json]
 {}
 
 
 Timeout callback:: count: 2
 1: *ensureProjectForOpenFiles* *deleted*
-3: /home/src/projects/project/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+2: /home/src/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
@@ -350,7 +349,7 @@ Info seq  [hh:mm:ss:mss] event:
 after waitForPendingPlugins
 
 Timeout callback:: count: 1
-5: /home/src/projects/project/tsconfig.json *new*
+4: /home/src/projects/project/tsconfig.json *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*

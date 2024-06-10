@@ -25,7 +25,7 @@ foo({ y: match(y => y > 0) })
 >foo({ y: match(y => y > 0) }) : boolean
 >                              : ^^^^^^^
 >foo : (pos: { x?: number; y?: number; }) => boolean
->    : ^   ^^                           ^^^^^^^^^^^^
+>    : ^   ^^                           ^^^^^       
 >{ y: match(y => y > 0) } : { y: number; }
 >                         : ^^^^^^^^^^^^^^
 >y : number
@@ -33,7 +33,7 @@ foo({ y: match(y => y > 0) })
 >match(y => y > 0) : number
 >                  : ^^^^^^
 >match : <T>(cb: (value: T) => boolean) => T
->      : ^ ^^  ^^                     ^^^^^^
+>      : ^ ^^  ^^                     ^^^^^ 
 >y => y > 0 : (y: number) => boolean
 >           : ^ ^^^^^^^^^^^^^^^^^^^^
 >y : number
@@ -55,13 +55,13 @@ foo2([match(y => y > 0)])
 >foo2([match(y => y > 0)]) : boolean
 >                          : ^^^^^^^
 >foo2 : (point: [number?]) => boolean
->     : ^     ^^         ^^^^^^^^^^^^
+>     : ^     ^^         ^^^^^       
 >[match(y => y > 0)] : [number]
 >                    : ^^^^^^^^
 >match(y => y > 0) : number
 >                  : ^^^^^^
 >match : <T>(cb: (value: T) => boolean) => T
->      : ^ ^^  ^^                     ^^^^^^
+>      : ^ ^^  ^^                     ^^^^^ 
 >y => y > 0 : (y: number) => boolean
 >           : ^ ^^^^^^^^^^^^^^^^^^^^
 >y : number

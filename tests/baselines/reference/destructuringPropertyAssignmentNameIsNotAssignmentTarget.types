@@ -16,9 +16,9 @@ function qux(bar: { value: number }) {
 
     ({ value: foo } = bar);
 >({ value: foo } = bar) : { value: number; }
->                       : ^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^      ^^^
 >{ value: foo } = bar : { value: number; }
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^      ^^^
 >{ value: foo } : { value: number; }
 >               : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -26,15 +26,15 @@ function qux(bar: { value: number }) {
 >foo : number
 >    : ^^^^^^
 >bar : { value: number; }
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^      ^^^
 
     let x = () => bar;
 >x : () => { value: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^      ^^^
 >() => bar : () => { value: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^      ^^^
 >bar : { value: number; }
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^      ^^^
 }
 
 

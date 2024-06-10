@@ -24,7 +24,7 @@ namespace n {
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^ ^^ ^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^ 
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
     }
@@ -63,7 +63,7 @@ function templateObjectFactory() {
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^ ^^ ^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^ 
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
 }

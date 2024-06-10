@@ -219,7 +219,8 @@ export function addNewNodeForMemberSymbol(
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+            let flags = NodeBuilderFlags.NoTruncation;
+            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -397,7 +398,7 @@ export function createSignatureDeclarationFromSignature(
 
     let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = isJs ? undefined : signatureDeclaration.type;
+    let type = isJs ? undefined : getSynthesizedDeepClone(signatureDeclaration.type);
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {

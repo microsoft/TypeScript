@@ -61,7 +61,7 @@ declare const Comp: (p: { className?: string }) => null
 ><Comp css="color:hotpink;" /> : jsx.JSX.Element
 >                              : ^^^^^^^^^^^^^^^
 >Comp : (p: { className?: string; }) => null
->     : ^ ^^                       ^^^^^^^^^
+>     : ^ ^^                       ^^^^^    
 >css : string
 >    : ^^^^^^
 

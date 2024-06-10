@@ -26,57 +26,57 @@ use(x.toExponential());
 >use(x.toExponential()) : void
 >                       : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 use(y.toExponential());
 >use(y.toExponential()) : void
 >                       : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >y.toExponential() : string
 >                  : ^^^^^^
 >y.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >y : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 use(z.toExponential());
 >use(z.toExponential()) : void
 >                       : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >z.toExponential() : string
 >                  : ^^^^^^
 >z.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^      ^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^      
 >z : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 use(z1.toExponential());
 >use(z1.toExponential()) : void
 >                        : ^^^^
 >use : (a: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >z1.toExponential() : string
 >                   : ^^^^^^
 >z1.toExponential : (fractionDigits?: number) => string
->                 : ^              ^^^      ^^^^^^^^^^^
+>                 : ^              ^^^      ^^^^^      
 >z1 : number
 >   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
 === c:/root/folder2/file1.ts ===
 export var x = 1;

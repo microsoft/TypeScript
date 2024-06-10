@@ -128,11 +128,11 @@ o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
 >                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^           ^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^       
 >o : { [x: number]: (value: any) => boolean; a: number; }
 >  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 >Symbol.hasInstance : any
 >                   : ^^^
 >Symbol : any

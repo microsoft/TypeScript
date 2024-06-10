@@ -19,7 +19,7 @@ class C {
 >method : (this: C) => void
 >       : ^    ^^ ^^^^^^^^^
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >this : C
 >     : ^
 }
@@ -32,11 +32,11 @@ class C2 {
 >method : (allowed: C2, this: C2) => void
 >       : ^       ^^  ^^    ^^  ^^^^^^^^^
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >allowed : C2
 >        : ^^
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^    
 >this : C2
 >     : ^^
 }

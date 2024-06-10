@@ -420,6 +420,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleExportName,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -1218,7 +1219,28 @@ function isJSDocTypeExpressionOrChild(node: Node): boolean {
 
 /** @internal */
 export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
-    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
+    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && moduleExportNameIsDefault(node.exportClause.name));
+}
+
+/** @internal */
+export function moduleExportNameTextUnescaped(node: ModuleExportName): string {
+    return node.kind === SyntaxKind.StringLiteral ? node.text : unescapeLeadingUnderscores(node.escapedText);
+}
+
+/** @internal */
+export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
+    return node.kind === SyntaxKind.StringLiteral ? escapeLeadingUnderscores(node.text) : node.escapedText;
+}
+
+/**
+ * Equality checks against a keyword without underscores don't need to bother
+ * to turn "__" into "___" or vice versa, since they will never be equal in
+ * either case. So we can ignore those cases to improve performance.
+ *
+ * @internal
+ */
+export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
+    return (node.kind === SyntaxKind.StringLiteral ? node.text : node.escapedText) === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -2309,6 +2331,17 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
             const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
+        case SyntaxKind.Constructor: {
+            const constructorDeclaration = node as ConstructorDeclaration;
+            const start = skipTrivia(sourceFile.text, constructorDeclaration.pos);
+            const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, start);
+            let token = scanner.scan();
+            while (token !== SyntaxKind.ConstructorKeyword && token !== SyntaxKind.EndOfFileToken) {
+                token = scanner.scan();
+            }
+            const end = scanner.getTokenEnd();
+            return createTextSpanFromBounds(start, end);
+        }
     }
 
     if (errorNode === undefined) {
@@ -2474,6 +2507,7 @@ export function getJSDocCommentRanges(node: Node, text: string) {
         getLeadingCommentRanges(text, node.pos);
     // True if the comment starts with '/**' but not if it is '/**/'
     return filter(commentRanges, comment =>
+        comment.end <= node.end && // Due to parse errors sometime empty parameter may get comments assigned to it that end up not in parameter range
         text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
         text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
         text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
@@ -10081,7 +10115,28 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
         options.noCheck ||
-        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
+        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
+        !canIncludeBindAndCheckDiagnsotics(sourceFile, options);
+}
+
+/** @internal */
+export function canIncludeBindAndCheckDiagnsotics(sourceFile: SourceFile, options: CompilerOptions) {
+    if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
+    if (
+        sourceFile.scriptKind === ScriptKind.TS ||
+        sourceFile.scriptKind === ScriptKind.TSX ||
+        sourceFile.scriptKind === ScriptKind.External
+    ) return true;
+
+    const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+    const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+    const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
+
+    // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+    // - plain JS: .js files with no // ts-check and checkJs: undefined
+    // - check JS: .js files with either // ts-check or checkJs: true
+    // - external: files that are added by plugins
+    return isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
 }
 
 /** @internal */
@@ -11106,7 +11161,8 @@ export function createNameResolver({
                         if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDoc) {
                             useResult = result.flags & SymbolFlags.TypeParameter
                                 // type parameters are visible in parameter list, return type and type parameter list
-                                ? lastLocation === (location as FunctionLikeDeclaration).type ||
+                                ? !!(lastLocation.flags & NodeFlags.Synthesized) || // Synthetic fake scopes are added for signatures so type parameters are accessible from them
+                                    lastLocation === (location as FunctionLikeDeclaration).type ||
                                     lastLocation.kind === SyntaxKind.Parameter ||
                                     lastLocation.kind === SyntaxKind.JSDocParameterTag ||
                                     lastLocation.kind === SyntaxKind.JSDocReturnTag ||
@@ -11125,6 +11181,7 @@ export function createNameResolver({
                                 // however it is detected separately when checking initializers of parameters
                                 // to make sure that they reference no variables declared after them.
                                 useResult = lastLocation.kind === SyntaxKind.Parameter ||
+                                    !!(lastLocation.flags & NodeFlags.Synthesized) || // Synthetic fake scopes are added for signatures so parameters are accessible from them
                                     (
                                         lastLocation === (location as FunctionLikeDeclaration).type &&
                                         !!findAncestor(result.valueDeclaration, isParameter)
