@@ -10948,7 +10948,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName, start = 0): number {
+    function isInResolutionStack(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
+        return findResolutionCycleStartIndex(target, propertyName, 0) >= 0;
+    }
+
+    function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName, start: number): number {
         for (let i = resolutionTargets.length - 1; i >= start; i--) {
             if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
                 return -1;
@@ -15907,7 +15911,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isResolvingReturnTypeOfSignature(signature: Signature): boolean {
         return signature.compositeSignatures && some(signature.compositeSignatures, isResolvingReturnTypeOfSignature) ||
-            !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
+            !signature.resolvedReturnType && isInResolutionStack(signature, TypeSystemPropertyName.ResolvedReturnType);
     }
 
     function getRestTypeOfSignature(signature: Signature): Type {
@@ -20184,7 +20188,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!type.declaration.nameType) {
                     let constraint;
                     if (
-                        isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable!, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
+                        isArrayType(t) || t.flags & TypeFlags.Any && !isInResolutionStack(typeVariable!, TypeSystemPropertyName.ImmediateBaseConstraint) &&
                             (constraint = getConstraintOfTypeParameter(typeVariable!)) && everyType(constraint, isArrayOrTupleType)
                     ) {
                         return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable!, t, mapper));
@@ -31482,7 +31486,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isCircularMappedProperty(symbol: Symbol) {
-        return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).links.type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
+        return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).links.type && isInResolutionStack(symbol, TypeSystemPropertyName.Type));
     }
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
