@@ -2537,20 +2537,22 @@ export class Session<TMessage = string> implements EventSender {
         }
 
         if (fileArgs.length > 0) {
-            const files = mapDefined(fileArgs.filter(isString), file => ({ fileName: toNormalizedPath(file) }));
-            const filesWithRange = mapDefined(fileArgs.filter((arg): arg is protocol.FileRangesRequestArgs => !isString(arg)), arg => {
-                const fileName = toNormalizedPath(arg.file);
+            const files = mapDefined(fileArgs, fileArg => {
+                if (isString(fileArg)) {
+                    return { fileName: toNormalizedPath(fileArg) };
+                }
+                const fileName = toNormalizedPath(fileArg.file);
                 const scriptInfo = this.projectService.getScriptInfo(fileName);
                 if (!scriptInfo) {
                     return undefined;
                 }
-                const ranges = arg.ranges.map(range => this.getRange({ file: arg.file, ...range }, scriptInfo));
+                const ranges = fileArg.ranges.map(range => this.getRange({ file: fileArg.file, ...range }, scriptInfo));
                 return {
                     fileName,
                     ranges,
                 };
             });
-            this.updateErrorCheck(next, [...filesWithRange, ...files], delay);
+            this.updateErrorCheck(next, files, delay);
         }
     }
 

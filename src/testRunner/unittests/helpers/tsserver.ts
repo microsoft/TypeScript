@@ -390,15 +390,8 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
-    // Files with region will be checked first.
-    const fileSkips = files
-        .map((_file, i) => skip?.[i])
-        .sort((a, b) => {
-            if (a?.regionSemantic === false && b?.regionSemantic === undefined) return -1;
-            if (b?.regionSemantic === false && a?.regionSemantic === undefined) return 1;
-            return 0;
-        });
-    for (const fileSkip of fileSkips) {
+    for (let i = 0; i < files.length; i++) {
+        const fileSkip = skip?.[i];
         // Run syntax check for next file
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
         if (fileSkip?.regionSemantic === false) {

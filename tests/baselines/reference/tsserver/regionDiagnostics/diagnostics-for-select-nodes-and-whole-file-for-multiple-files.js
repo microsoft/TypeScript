@@ -371,108 +371,6 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Timeout callback:: count: 0
-
-Immedidate callback:: count: 1
-4: regionSemanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-4: regionSemanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "regionSemanticDiag",
-      "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "spans": [
-          {
-            "start": {
-              "line": 4,
-              "offset": 2
-            },
-            "end": {
-              "line": 6,
-              "offset": 16
-            }
-          }
-        ],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 1
-
-Immedidate callback:: count: 1
-5: semanticCheck *new*
-
-Before running Immedidate callback:: count: 1
-5: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "semanticDiag",
-      "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 8,
-              "offset": 10
-            },
-            "end": {
-              "line": 8,
-              "offset": 14
-            },
-            "text": "Argument of type 'number' is not assignable to parameter of type 'string'.",
-            "code": 2345,
-            "category": "error"
-          }
-        ],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 1
-
-Immedidate callback:: count: 1
-6: suggestionCheck *new*
-
-Before running Immedidate callback:: count: 1
-6: suggestionCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "suggestionDiag",
-      "body": {
-        "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "duration": *
-      }
-    }
-After running Immedidate callback:: count: 0
-
-Timeout callback:: count: 1
-3: checkOne *new*
-
-Before running Timeout callback:: count: 1
-3: checkOne
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
         "file": "/a/b/app2.ts",
         "diagnostics": [],
         "duration": *
@@ -481,10 +379,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
-7: semanticCheck *new*
+4: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
-7: semanticCheck
+4: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -514,6 +412,108 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 1
 
 Immedidate callback:: count: 1
+5: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+5: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/app2.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 0
+
+Timeout callback:: count: 1
+3: checkOne *new*
+
+Before running Timeout callback:: count: 1
+3: checkOne
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [],
+        "duration": *
+      }
+    }
+After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+6: regionSemanticCheck *new*
+
+Before running Immedidate callback:: count: 1
+6: regionSemanticCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "regionSemanticDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [],
+        "spans": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 2
+            },
+            "end": {
+              "line": 6,
+              "offset": 16
+            }
+          }
+        ],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 1
+
+Immedidate callback:: count: 1
+7: semanticCheck *new*
+
+Before running Immedidate callback:: count: 1
+7: semanticCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/app3.ts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 8,
+              "offset": 10
+            },
+            "end": {
+              "line": 8,
+              "offset": 14
+            },
+            "text": "Argument of type 'number' is not assignable to parameter of type 'string'.",
+            "code": 2345,
+            "category": "error"
+          }
+        ],
+        "duration": *
+      }
+    }
+After running Immedidate callback:: count: 1
+
+Immedidate callback:: count: 1
 8: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
@@ -525,7 +525,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "suggestionDiag",
       "body": {
-        "file": "/a/b/app2.ts",
+        "file": "/a/b/app3.ts",
         "diagnostics": [],
         "duration": *
       }
