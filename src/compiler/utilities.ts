@@ -11417,7 +11417,7 @@ export function createNameResolver({
                         location = root.parent;
                     }
                     break;
-                case SyntaxKind.Parameter: {
+                case SyntaxKind.Parameter:
                     if (
                         lastLocation && (
                             lastLocation === (location as ParameterDeclaration).initializer ||
@@ -11429,7 +11429,6 @@ export function createNameResolver({
                         }
                     }
                     break;
-                }
                 case SyntaxKind.BindingElement:
                     if (
                         lastLocation && (
