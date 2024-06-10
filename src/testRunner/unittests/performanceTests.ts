@@ -47,3 +47,26 @@ describe('Clearing mark with defined name', () => {
     performance.disable();
   });
 });
+
+describe('Clearing mark with defined name', () => {
+  const markName = 'testMark';
+  const marks: string[] = [];
+  const testFunc: (innerMarkName: string) => void = (innerMarkName) => {
+    marks.push(innerMarkName);
+};
+
+  before(() => {
+    performance.enable();
+    performance.mark(markName);
+    performance.forEachMark(testFunc);
+  }); 
+
+  it('should contain testMark in marks', () => {
+    expect(marks).to.include(markName);
+  });
+
+  after(() => {
+    performance.disable();
+    performance.clearMarks();
+  });
+});
