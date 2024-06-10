@@ -11418,14 +11418,10 @@ export function createNameResolver({
                     }
                     break;
                 case SyntaxKind.Parameter: {
-                    const param = location as ParameterDeclaration;
-                    if (lastLocation === param.name) {
-                        lastSelfReferenceLocation = param;
-                    }
                     if (
                         lastLocation && (
-                            lastLocation === param.initializer ||
-                            lastLocation === param.name && isBindingPattern(lastLocation)
+                            lastLocation === (location as ParameterDeclaration).initializer ||
+                            lastLocation === (location as ParameterDeclaration).name && isBindingPattern(lastLocation)
                         )
                     ) {
                         if (!associatedDeclarationForContainingInitializerOrBindingName) {
@@ -11466,7 +11462,7 @@ export function createNameResolver({
                     }
                     break;
             }
-            if (isSelfReferenceLocation(location)) {
+            if (isSelfReferenceLocation(location, lastLocation)) {
                 lastSelfReferenceLocation = location;
             }
             lastLocation = location;
@@ -11608,8 +11604,10 @@ export function createNameResolver({
         | TypeAliasDeclaration
         | ModuleDeclaration;
 
-    function isSelfReferenceLocation(node: Node): node is SelfReferenceLocation {
+    function isSelfReferenceLocation(node: Node, lastLocation: Node | undefined): node is SelfReferenceLocation {
         switch (node.kind) {
+            case SyntaxKind.Parameter:
+                return !!lastLocation && lastLocation === (node as ParameterDeclaration).name;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
