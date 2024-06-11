@@ -6118,15 +6118,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
-        for (const p in source) {
-            if (hasProperty(node, p) || !hasProperty(source, p)) {
+        copyBaseNodeProperties(source, node);
+        const sourceData = (source as any).data ?? source;
+        const nodeData = (node as any).data ?? node;
+        for (const p in sourceData) {
+            if (hasProperty(nodeData, p) || !hasProperty(sourceData, p)) {
                 continue;
             }
             if (p === "emitNode") {
-                node.emitNode = undefined;
+                nodeData.emitNode = undefined;
                 continue;
             }
-            (node as any)[p] = (source as any)[p];
+            nodeData[p] = sourceData[p];
         }
         return node;
     }
@@ -6376,18 +6379,28 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         (clone as Mutable<T>).flags |= node.flags & ~NodeFlags.Synthesized;
         (clone as Mutable<T>).transformFlags = node.transformFlags;
         setOriginal(clone, node);
-
-        for (const key in node) {
-            if (hasProperty(clone, key) || !hasProperty(node, key)) {
+        copyBaseNodeProperties(node, clone);
+        const nodeData = (node as any).data ?? node;
+        const cloneData = (clone as any).data ?? clone;
+        for (const key in nodeData) {
+            if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
                 continue;
             }
-
-            clone[key] = node[key];
+            cloneData[key] = nodeData[key];
         }
-
         return clone;
     }
-
+    function copyBaseNodeProperties(node: Node, clone: Mutable<Node>) {
+        clone.pos = node.pos;
+        clone.end = node.end;
+        clone.kind = node.kind;
+        clone.id = node.id;
+        clone.modifierFlagsCache = node.modifierFlagsCache;
+        clone.transformFlags = node.transformFlags;
+        clone.parent = node.parent;
+        clone.original = node.original;
+        clone.emitNode = node.emitNode;
+    }
     // compound nodes
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): ImmediatelyInvokedFunctionExpression;
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedFunctionExpression;
