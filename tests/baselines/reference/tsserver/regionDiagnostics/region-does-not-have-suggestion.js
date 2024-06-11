@@ -2,43 +2,45 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
-
 {
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-    }
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true
+  }
 }
 
-
 //// [/index.ts]
-
 import add = require("./other.js");
 
 add(3, "a");
 
 add(1, 2);
 
-
 //// [/other.ts]
-
 function add(a: number, b: number) {
     return a + b
 }
 
 export = add;
 
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "command": "updateOpen",
+      "command": "open",
       "arguments": {
-        "openFiles": [
-          {
-            "file": "/index.ts",
-            "fileContent": "\nimport add = require(\"./other.js\");\n\nadd(3, \"a\");\n\nadd(1, 2);\n"
-          }
-        ]
+        "file": "/index.ts"
       },
       "seq": 1,
       "type": "request"
@@ -59,7 +61,8 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
-  "/other.ts"
+  "/other.ts",
+  "/a/lib/lib.d.ts"
  ],
  "options": {
   "allowSyntheticDefaultImports": true,
@@ -69,19 +72,22 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /other.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/other.ts Text-1 "\nfunction add(a: number, b: number) {\n    return a + b\n}\n\nexport = add;\n"
-	/index.ts SVC-1-0 "\nimport add = require(\"./other.js\");\n\nadd(3, \"a\");\n\nadd(1, 2);\n"
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/other.ts Text-1 "function add(a: number, b: number) {\n    return a + b\n}\n\nexport = add;"
+	/index.ts SVC-1-0 "import add = require(\"./other.js\");\n\nadd(3, \"a\");\n\nadd(1, 2);"
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 
 
 	other.ts
 	  Imported via "./other.js" from file 'index.ts'
 	  Matched by default include pattern '**/*'
 	index.ts
+	  Matched by default include pattern '**/*'
+	a/lib/lib.d.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -109,11 +115,11 @@ Info seq  [hh:mm:ss:mss] event:
             "jsx": 0,
             "jsxSize": 0,
             "ts": 2,
-            "tsSize": 135,
+            "tsSize": 131,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -145,57 +151,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/index.ts",
         "configFile": "/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -203,16 +163,13 @@ Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "response": true,
-      "responseRequired": true
+      "responseRequired": false
     }
 After request
 
-PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /other.ts: *new*
   {}
 /tsconfig.json: *new*
@@ -228,6 +185,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -249,9 +210,9 @@ Info seq  [hh:mm:ss:mss] request:
             "file": "/index.ts",
             "ranges": [
               {
-                "startLine": 4,
+                "startLine": 3,
                 "startOffset": 1,
-                "endLine": 6,
+                "endLine": 5,
                 "endOffset": 11
               }
             ]
@@ -302,11 +263,11 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 4,
+              "line": 3,
               "offset": 8
             },
             "end": {
-              "line": 4,
+              "line": 3,
               "offset": 11
             },
             "text": "Argument of type 'string' is not assignable to parameter of type 'number'.",
@@ -317,11 +278,11 @@ Info seq  [hh:mm:ss:mss] event:
         "spans": [
           {
             "start": {
-              "line": 2,
+              "line": 1,
               "offset": 36
             },
             "end": {
-              "line": 6,
+              "line": 5,
               "offset": 11
             }
           }
@@ -347,11 +308,11 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 4,
+              "line": 3,
               "offset": 8
             },
             "end": {
-              "line": 4,
+              "line": 3,
               "offset": 11
             },
             "text": "Argument of type 'string' is not assignable to parameter of type 'number'.",
@@ -380,11 +341,11 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 2,
+              "line": 1,
               "offset": 8
             },
             "end": {
-              "line": 2,
+              "line": 1,
               "offset": 11
             },
             "text": "Import may be converted to a default import.",

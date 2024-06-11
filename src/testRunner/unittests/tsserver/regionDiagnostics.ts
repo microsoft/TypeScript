@@ -1,36 +1,39 @@
-import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
+    openFilesForSession,
+    protocolTextSpanFromSubstring,
+    protocolTextSpanToFileRange,
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { createServerHost, libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: regionDiagnostics", () => {
     it("diagnostics for select nodes in a single file", () => {
         const file1 = {
             path: "/a/b/app.ts",
-            content: `function foo(x: number, y: string): number {
-    return x + y;
-}
+            content: dedent`
+                function foo(x: number, y: string): number {
+                    return x + y;
+                }
 
 
 
-foo(10, 50);`,
+                foo(10, 50);`,
         };
-        const host = createServerHost([file1]);
+        const host = createServerHost([file1, libFile]);
         const session = new TestSession(host);
 
-        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
-            command: ts.server.protocol.CommandTypes.Open,
-            arguments: { file: file1.path },
-        });
+        openFilesForSession([file1], session);
+        
 
         verifyGetErrRequest({
             session,
             files: [{
                 file: file1.path,
-                ranges: [{ startLine: 6, startOffset: 1, endLine: 7, endOffset: 13 }],
+                ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file1.content, "foo(10, 50);"))],
             }],
             skip: [
                 { regionSemantic: false },
@@ -43,71 +46,62 @@ foo(10, 50);`,
     it("diagnostics for select nodes and whole file for multiple files", () => {
         const file1 = {
             path: "/a/b/app.ts",
-            content: `
-function add(x: number, y: string): number {
-    return x + y;
-}
+            content: dedent`
+                function add(x: number, y: string): number {
+                    return x + y;
+                }
 
-add(10, 50);
-`,
+                add(10, 50);`,
         };
         const file2 = {
             path: "/a/b/app2.ts",
-            content: `
-function booleanNoop(b: boolean): void {
-    b;
-    return;
-}
+            content: dedent`
+                function booleanNoop(b: boolean): void {
+                    b;
+                    return;
+                }
 
-booleanNoop("not a boolean");
-`,
+                booleanNoop("not a boolean");`,
         };
         const file3 = {
             path: "/a/b/app3.ts",
-            content: `
-function stringId(x: string): string {
-    return x;
-}
+            content: dedent`
+                function stringId(x: string): string {
+                    return x;
+                }
 
-stringId("ok");
+                stringId("ok");
 
-stringId(1000);
-`,
+                stringId(1000);`,
         };
 
         const file4 = {
             path: "/a/b/app4.ts",
-            content: `
-function numberId(x: number): number {
-    return x;
-}
+            content: dedent`
+                function numberId(x: number): number {
+                    return x;
+                }
 
-numberId(1000);
-`,
+                numberId(1000);`,
         };
 
         const files = [file1, file2, file3, file4];
-        const host = createServerHost(files);
+        const host = createServerHost([...files, libFile]);
         const session = new TestSession(host);
 
-        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
-            command: ts.server.protocol.CommandTypes.UpdateOpen,
-            arguments: {
-                openFiles: files.map(f => ({ file: f.path, fileContent: f.content })),
-            },
-        });
+        openFilesForSession(files, session);
 
         verifyGetErrRequest({
             session,
             files: [
                 {
                     file: file1.path,
-                    ranges: [{ startLine: 6, startOffset: 1, endLine: 6, endOffset: 13 }], // `add(10, 50);`
+                    ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file1.content, "add(10, 50);"))],
                 },
                 file2.path,
                 {
                     file: file3.path,
-                    ranges: [{ startLine: 6, startOffset: 1, endLine: 6, endOffset: 16 }], // `stringId("ok");`
+                    ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file3.content, "stringId(\"ok\");"))],
                 },
                 file4.path,
             ],
@@ -125,54 +119,48 @@ numberId(1000);
     describe("diagnostics for select nodes when files have suggestion diagnostics", () => {
         const config = {
             path: "/tsconfig.json",
-            content: `
-{
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-    }
-}
-`,
+            content: jsonToReadableText({
+                compilerOptions: {
+                    allowSyntheticDefaultImports: true,
+                }
+            }),
         };
         const indexFile = {
             path: "/index.ts",
-            content: `
-import add = require("./other.js");
+            content: dedent`
+                import add = require("./other.js");
 
-add(3, "a");
+                add(3, "a");
 
-add(1, 2);
-`,
+                add(1, 2);`,
         };
         const otherFile = {
             path: "/other.ts",
-            content: `
-function add(a: number, b: number) {
-    return a + b
-}
+            content: dedent`
+                function add(a: number, b: number) {
+                    return a + b
+                }
 
-export = add;
-`,
+                export = add;`,
         };
 
         it("region has suggestion diagnostics", () => {
-            const files = [config, indexFile, otherFile];
-            const host = createServerHost(files);
+            const host = createServerHost([config, indexFile, otherFile, libFile]);
             const session = new TestSession(host);
-
-            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
-                command: ts.server.protocol.CommandTypes.UpdateOpen,
-                arguments: {
-                    openFiles: [{ file: indexFile.path, fileContent: indexFile.content }],
-                },
-            });
+            
+            openFilesForSession([indexFile], session);
 
             verifyGetErrRequest({
                 session,
                 files: [
                     {
                         file: indexFile.path,
-                        // `import add = require("./other.js"); add(3, "a");`
-                        ranges: [{ startLine: 2, startOffset: 1, endLine: 4, endOffset: 13 }],
+                        ranges: [
+                            protocolTextSpanToFileRange(
+                                protocolTextSpanFromSubstring(
+                                    indexFile.content,
+                                    "import add = require(\"./other.js\");\n\nadd(3, \"a\");"))
+                            ],
                     },
                 ],
                 skip: [
@@ -184,24 +172,22 @@ export = add;
         });
 
         it("region does not have suggestion diagnostics", () => {
-            const files = [config, indexFile, otherFile];
-            const host = createServerHost(files);
+            const host = createServerHost([config, indexFile, otherFile, libFile]);
             const session = new TestSession(host);
 
-            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
-                command: ts.server.protocol.CommandTypes.UpdateOpen,
-                arguments: {
-                    openFiles: [{ file: indexFile.path, fileContent: indexFile.content }],
-                },
-            });
+            openFilesForSession([indexFile], session);
 
             verifyGetErrRequest({
                 session,
                 files: [
                     {
                         file: indexFile.path,
-                        // `add(3, "a"); add(1, 2);`
-                        ranges: [{ startLine: 4, startOffset: 1, endLine: 6, endOffset: 11 }],
+                        ranges: [
+                            protocolTextSpanToFileRange(
+                                protocolTextSpanFromSubstring(
+                                    indexFile.content,
+                                    "add(3, \"a\");\n\nadd(1, 2);"))
+                            ],
                     },
                 ],
                 skip: [

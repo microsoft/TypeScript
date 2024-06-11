@@ -225,6 +225,15 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     return ts.createTextSpan(start, substring.length);
 }
 
+export function protocolTextSpanToFileRange(span: ts.server.protocol.TextSpan): ts.server.protocol.FileRange {
+    return {
+        startLine: span.start.line,
+        startOffset: span.start.offset,
+        endLine: span.end.line,
+        endOffset: span.end.offset
+    };
+}
+
 export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
     return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
 }
