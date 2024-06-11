@@ -13,6 +13,7 @@ import {
     canProduceDiagnostics,
     ClassDeclaration,
     compact,
+    ComputedPropertyName,
     concatenate,
     ConditionalTypeNode,
     ConstructorDeclaration,
@@ -128,6 +129,7 @@ import {
     isOmittedExpression,
     isPrimitiveLiteralValue,
     isPrivateIdentifier,
+    isSatisfiesKeyofExpression,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
     isSourceFile,
@@ -147,6 +149,7 @@ import {
     isVariableDeclaration,
     isVarUsing,
     LateBoundDeclaration,
+    LateBoundName,
     LateVisibilityPaintedStatement,
     length,
     map,
@@ -159,6 +162,7 @@ import {
     ModuleBody,
     ModuleDeclaration,
     ModuleName,
+    Mutable,
     NamedDeclaration,
     NamespaceDeclaration,
     needsScopeMarker,
@@ -1000,7 +1004,7 @@ export function transformDeclarations(context: TransformationContext) {
                 if (isolatedDeclarations) {
                     // Classes and object literals usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-                    if (!resolver.isDefinitelyReferenceToGlobalSymbolObject(input.name.expression)) {
+                    if (!resolver.isDefinitelyReferenceToGlobalSymbolObject(input.name.expression) && !isSatisfiesKeyofExpression(input.name.expression)) {
                         if (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) {
                             context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
                             return;
@@ -1015,7 +1019,7 @@ export function transformDeclarations(context: TransformationContext) {
                         }
                     }
                 }
-                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isEntityNameExpression(input.name.expression)) {
+                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !(isEntityNameExpression(input.name.expression) || isSatisfiesKeyofExpression(input.name.expression))) {
                     return;
                 }
             }
@@ -1259,7 +1263,10 @@ export function transformDeclarations(context: TransformationContext) {
 
         function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
             if (returnValue && canProduceDiagnostic && hasDynamicName(input as Declaration)) {
-                checkName(input);
+                const updated = checkName(input, returnValue);
+                if (updated) {
+                    returnValue = updated;
+                }
             }
             if (isEnclosingDeclaration(input)) {
                 enclosingDeclaration = previousEnclosingDeclaration;
@@ -1782,7 +1789,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function checkName(node: DeclarationDiagnosticProducing) {
+    function checkName<T extends Node>(node: DeclarationDiagnosticProducing, returnValue: T | undefined): T | undefined {
         let oldDiag: typeof getSymbolAccessibilityDiagnostic | undefined;
         if (!suppressNewDiagnosticContexts) {
             oldDiag = getSymbolAccessibilityDiagnostic;
@@ -1792,11 +1799,21 @@ export function transformDeclarations(context: TransformationContext) {
         Debug.assert(hasDynamicName(node as NamedDeclaration)); // Should only be called with dynamic names
         const decl = node as NamedDeclaration as LateBoundDeclaration;
         const entityName = decl.name.expression;
-        checkEntityNameVisibility(entityName, enclosingDeclaration);
+        const nameExpr = isEntityNameExpression(entityName) ? entityName : entityName.expression;
+        checkEntityNameVisibility(nameExpr, enclosingDeclaration);
+        let result = returnValue;
+        if (returnValue && nameExpr !== entityName) {
+            const updated = factory.updateComputedPropertyName(decl.name, nameExpr) as LateBoundName;
+            result = factory.cloneNode(returnValue);
+            (result as Mutable<typeof result & LateBoundDeclaration>).name = updated as Extract<T, {name: ComputedPropertyName}>["name"] & LateBoundName;
+        }
         if (!suppressNewDiagnosticContexts) {
             getSymbolAccessibilityDiagnostic = oldDiag!;
         }
         errorNameNode = undefined;
+        if (result as Node as T !== returnValue) {
+            return result as Node as T;
+        }
     }
 
     function shouldStripInternal(node: Node) {

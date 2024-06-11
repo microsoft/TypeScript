@@ -1109,6 +1109,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isSatisfiesKeyofExpression,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -5863,7 +5864,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             entityName.parent.kind === SyntaxKind.TypeQuery ||
             entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
             entityName.parent.kind === SyntaxKind.ComputedPropertyName ||
-            entityName.parent.kind === SyntaxKind.TypePredicate && (entityName.parent as TypePredicateNode).parameterName === entityName
+            entityName.parent.kind === SyntaxKind.TypePredicate && (entityName.parent as TypePredicateNode).parameterName === entityName ||
+            isSatisfiesKeyofExpression(entityName.parent)
         ) {
             // Typeof value
             meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
@@ -7061,7 +7063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                         else {
-                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
+                            trackComputedName(isEntityNameExpression(decl.name.expression) ? decl.name.expression : decl.name.expression.expression, saveEnclosingDeclaration, context);
                         }
                     }
                 }
@@ -7601,7 +7603,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return elideInitializerAndSetEmitFlags(node) as BindingName;
                 function elideInitializerAndSetEmitFlags(node: Node): Node {
                     if (context.tracker.canTrackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
-                        trackComputedName(node.expression, context.enclosingDeclaration, context);
+                        trackComputedName(isEntityNameExpression(node.expression) ? node.expression : node.expression.expression, context.enclosingDeclaration, context);
                     }
                     let visited = visitEachChildWorker(node, elideInitializerAndSetEmitFlags, /*context*/ undefined, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags);
                     if (isBindingElement(visited)) {
@@ -13204,7 +13206,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
-        const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
+        let expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
+        if (isSatisfiesExpression(expr) && expr.type.kind === SyntaxKind.KeyOfKeyword) {
+            expr = expr.expression;
+        }
         return isEntityNameExpression(expr)
             && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
     }
@@ -19623,6 +19628,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
+    function getUniqueESSymbolTypeForSymbol(symbol: Symbol) {
+        const links = getSymbolLinks(symbol);
+        if (!links.uniqueESSymbolType) {
+            links.uniqueESSymbolType = createUniqueESSymbolType(symbol);
+        }
+        return links.uniqueESSymbolType;
+    }
+
     function getESSymbolLikeTypeForNode(node: Node) {
         if (isInJSFile(node) && isJSDocTypeExpression(node)) {
             const host = getJSDocHost(node);
@@ -19633,8 +19646,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isValidESSymbolDeclaration(node)) {
             const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
             if (symbol) {
-                const links = getSymbolLinks(symbol);
-                return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                return getUniqueESSymbolTypeForSymbol(symbol);
             }
         }
         return esSymbolType;
@@ -19704,6 +19716,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getNodeLinks(node);
         return links.resolvedType || (links.resolvedType = node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
             addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true, !!node.questionToken));
+    }
+
+    function getTypeFromKeyofKeywordTypeNode(node: KeywordTypeNode<SyntaxKind.KeyOfKeyword>) {
+        if (!isSatisfiesExpression(node.parent) || !isComputedPropertyName(node.parent.parent)) {
+            error(node, Diagnostics.keyof_type_must_have_an_operand_type);
+        }
+        return stringNumberSymbolType; // used to contextually type the LHS of the `satisfies` and ensures literals get literal types
     }
 
     function getTypeFromTypeNode(node: TypeNode): Type {
@@ -19807,6 +19826,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.PropertyAccessExpression as TypeNodeSyntaxKind:
                 const symbol = getSymbolAtLocation(node);
                 return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
+            case SyntaxKind.KeyOfKeyword:
+                return getTypeFromKeyofKeywordTypeNode(node as KeywordTypeNode<SyntaxKind.KeyOfKeyword>);
             default:
                 return errorType;
         }
@@ -34552,7 +34573,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
-        return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
+        const result = checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
+        if (!isErrorType(result)) {
+            return result;
+        }
+        // lookup failed, try fallback without error reporting for more accurate type than `any`
+        if (isEntityNameExpression(indexExpression)) {
+            const fallback = getResolvedEntityNameUniqueSymbolType(indexExpression);
+            if (fallback) {
+                const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, fallback, accessFlags) || errorType;
+                // If the lookup simplifies/resolves, return it
+                if (!isErrorType(indexedAccessType) && !(indexedAccessType.flags & TypeFlags.IndexedAccess && (indexedAccessType as IndexedAccessType).objectType === objectType && (indexedAccessType as IndexedAccessType).indexType === fallback)) {
+                    return getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode);
+                }
+            }
+        }
+        return result;
     }
 
     function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
@@ -37163,13 +37199,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return checkSatisfiesExpressionWorker(node.expression, node.type);
     }
 
+    function getResolvedEntityNameUniqueSymbolType(expression: EntityNameExpression): Type | undefined {
+        const links = getNodeLinks(expression);
+        if (!links.uniqueSymbollFallback) {
+            let resolved = resolveEntityName(expression, SymbolFlags.Value | SymbolFlags.ExportValue, /*ignoreErrors*/ true);
+            if (!resolved || resolved === unknownSymbol) {
+                resolved = resolveEntityName(expression, SymbolFlags.Value | SymbolFlags.ExportValue, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+            }
+            if (resolved) {
+                // overwrite to `unique symbol` type for reference, so it actually works as a property, despite the type error
+                links.uniqueSymbollFallback = getUniqueESSymbolTypeForSymbol(resolved);
+            }
+            else {
+                // reference does not resolve, do nothing
+                links.uniqueSymbollFallback = false;
+            }
+        }
+        return links.uniqueSymbollFallback || undefined;
+    }
+
     function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode?: CheckMode) {
         const exprType = checkExpression(expression, checkMode);
+        const errorNode = findAncestor(target.parent, n => n.kind === SyntaxKind.SatisfiesExpression || n.kind === SyntaxKind.JSDocSatisfiesTag);
+        if (target.kind === SyntaxKind.KeyOfKeyword && isComputedPropertyName(expression.parent.parent)) {
+            if (!(exprType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
+                error(expression, Diagnostics.A_satisfies_keyof_computed_property_name_must_be_exactly_a_single_string_number_or_unique_symbol_literal_type);
+                if (isEntityNameExpression(expression)) {
+                    return getResolvedEntityNameUniqueSymbolType(expression) || exprType;
+                }
+            }
+            return exprType;
+        }
         const targetType = getTypeFromTypeNode(target);
         if (isErrorType(targetType)) {
             return targetType;
         }
-        const errorNode = findAncestor(target.parent, n => n.kind === SyntaxKind.SatisfiesExpression || n.kind === SyntaxKind.JSDocSatisfiesTag);
         checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, errorNode, expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
         return exprType;
     }

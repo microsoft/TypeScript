@@ -7030,6 +7030,14 @@
         "category": "Error",
         "code": 9039
     },
+    "`keyof` type must have an operand type.": {
+        "category": "Error",
+        "code": 9040
+    },
+    "A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.": {
+        "category": "Error",
+        "code": 9041
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000

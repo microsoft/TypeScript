@@ -691,7 +691,8 @@ export type KeywordTypeSyntaxKind =
     | SyntaxKind.SymbolKeyword
     | SyntaxKind.UndefinedKeyword
     | SyntaxKind.UnknownKeyword
-    | SyntaxKind.VoidKeyword;
+    | SyntaxKind.VoidKeyword
+    | SyntaxKind.KeyOfKeyword;
 
 /** @internal */
 export type TypeNodeSyntaxKind =
@@ -1791,9 +1792,15 @@ export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
 }
 
 /** @internal */
+export interface SatisfiesKeyofEntityNameExpression extends SatisfiesExpression {
+    readonly expression: EntityNameExpression;
+    readonly type: KeywordTypeNode<SyntaxKind.KeyOfKeyword>;
+}
+
+/** @internal */
 // A name that supports late-binding (used in checker)
 export interface LateBoundName extends ComputedPropertyName {
-    readonly expression: EntityNameExpression;
+    readonly expression: EntityNameExpression | SatisfiesKeyofEntityNameExpression;
 }
 
 export interface Decorator extends Node {
@@ -6176,6 +6183,7 @@ export interface NodeLinks {
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
+    uniqueSymbollFallback?: Type | false;// Cached type of type node
 }
 
 /** @internal */

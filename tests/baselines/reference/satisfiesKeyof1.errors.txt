@@ -1,0 +1,50 @@
+satisfiesKeyof1.ts(13,17): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+satisfiesKeyof1.ts(15,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyof1.ts(25,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyof1.ts(34,30): error TS9040: `keyof` type must have an operand type.
+
+
+==== satisfiesKeyof1.ts (4 errors) ====
+    // intended usage
+    const x = Symbol();
+    
+    export class Foo {
+        [x satisfies keyof]() {
+            return 1;
+        }
+    }
+    
+    export const usage1 = new Foo()[x]();
+    
+    // errors on missing
+    import {y} from "missing";
+                    ~~~~~~~~~
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    export class Bar {
+        [y satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 1;
+        }
+    }
+    
+    export const usage2 = new Bar()[y]();
+    
+    // errors on wrong types
+    const z = Math.random() ? 1 : "a";
+    export class Baz {
+        [z satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 1;
+        }
+    }
+    
+    export const usage3 = new Baz()[z]();
+    
+    // error on satisfies keyof outside computed name
+    
+    export const a = 0 satisfies keyof;
+                                 ~~~~~
+!!! error TS9040: `keyof` type must have an operand type.
+    

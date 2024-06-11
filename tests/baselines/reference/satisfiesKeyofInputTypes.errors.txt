@@ -1,0 +1,266 @@
+satisfiesKeyofInputTypes.ts(50,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(70,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(74,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(78,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(82,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(86,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(90,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(94,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(98,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(102,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(106,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(110,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(114,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(118,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(122,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(126,6): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofInputTypes.ts(136,5): error TS7053: Element implicitly has an 'any' type because expression of type '"answer" | 42' can't be used to index type 'Foo'.
+  Property 'answer' does not exist on type 'Foo'.
+satisfiesKeyofInputTypes.ts(141,5): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Foo'.
+satisfiesKeyofInputTypes.ts(142,10): error TS2538: Type 'unknown' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(143,5): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Foo'.
+  No index signature with a parameter of type 'string' was found on type 'Foo'.
+satisfiesKeyofInputTypes.ts(144,5): error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type 'Foo'.
+  No index signature with a parameter of type 'number' was found on type 'Foo'.
+satisfiesKeyofInputTypes.ts(145,10): error TS2538: Type 'boolean' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(146,10): error TS2538: Type 'true' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(147,10): error TS2538: Type 'false' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(148,10): error TS2538: Type 'null' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(149,10): error TS2538: Type 'undefined' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(150,10): error TS2538: Type 'bigint' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(151,10): error TS2538: Type '22n' cannot be used as an index type.
+satisfiesKeyofInputTypes.ts(152,5): error TS7053: Element implicitly has an 'any' type because expression of type 'symbol' can't be used to index type 'Foo'.
+satisfiesKeyofInputTypes.ts(153,5): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+satisfiesKeyofInputTypes.ts(154,5): error TS7053: Element implicitly has an 'any' type because expression of type '`aaa${string}`' can't be used to index type 'Foo'.
+satisfiesKeyofInputTypes.ts(155,5): error TS7053: Element implicitly has an 'any' type because expression of type 'Lowercase<string>' can't be used to index type 'Foo'.
+
+
+==== satisfiesKeyofInputTypes.ts (32 errors) ====
+    const sym = Symbol();
+    const num = 1;
+    const str = "f";
+    const union = Math.random() > 0.5 ? "answer" : 42;
+    
+    enum NumEnum {
+        A,
+        B,
+    }
+    
+    enum StrEnum {
+        A = "a",
+        B = "b"
+    }
+    
+    enum MixEnum {
+        A = 10,
+        B = "bb",
+    }
+    
+    const anything = null as any;
+    const unk = null as any as unknown;
+    const basestr = "" as string;
+    const basenum = 11 as number;
+    const bool = true as boolean;
+    const t = true;
+    const f = false;
+    const n = null;
+    const u = undefined;
+    const bigbase = 1n as bigint;
+    const biglit = 22n;
+    const symbase = null as any as symbol;
+    const nev = null as never;
+    const templateLit = `aaabb` as `aaa${string}`;
+    const mappingLit = `bbbaa` as Lowercase<string>;
+    
+    export class Foo {
+        [sym satisfies keyof]() {
+            return 1 as const;
+        }
+    
+        [num satisfies keyof]() {
+            return 2 as const;
+        }
+    
+        [str satisfies keyof]() {
+            return 3 as const;
+        }
+    
+        [union satisfies keyof]() {
+         ~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 4 as const;
+        }
+    
+        [NumEnum.A satisfies keyof]() {
+            return 5 as const;
+        }
+    
+        [StrEnum.A satisfies keyof]() {
+            return 6 as const;
+        }
+    
+        [MixEnum.A satisfies keyof]() {
+            return 7 as const;
+        }
+    
+        [MixEnum.B satisfies keyof]() {
+            return 8 as const;
+        }
+    
+        [anything satisfies keyof]() {
+         ~~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 9 as const;
+        }
+    
+        [unk satisfies keyof]() {
+         ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 10 as const;
+        }
+    
+        [basestr satisfies keyof]() {
+         ~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 11 as const;
+        }
+    
+        [basenum satisfies keyof]() {
+         ~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 12 as const;
+        }
+    
+        [bool satisfies keyof]() {
+         ~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 13 as const;
+        }
+    
+        [t satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 14 as const;
+        }
+    
+        [f satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 15 as const;
+        }
+    
+        [n satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 16 as const;
+        }
+    
+        [u satisfies keyof]() {
+         ~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 17 as const;
+        }
+    
+        [bigbase satisfies keyof]() {
+         ~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 18 as const;
+        }
+    
+        [biglit satisfies keyof]() {
+         ~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 19 as const;
+        }
+    
+        [symbase satisfies keyof]() {
+         ~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 20 as const;
+        }
+    
+        [nev satisfies keyof]() {
+         ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 21 as const;
+        }
+    
+        [templateLit satisfies keyof]() {
+         ~~~~~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 22 as const;
+        }
+    
+        [mappingLit satisfies keyof]() {
+         ~~~~~~~~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+            return 23 as const;
+        }
+    }
+    
+    const inst = new Foo();
+    export const results = [
+        inst[sym](),
+        inst[num](),
+        inst[str](),
+        inst[union](),
+        ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"answer" | 42' can't be used to index type 'Foo'.
+!!! error TS7053:   Property 'answer' does not exist on type 'Foo'.
+        inst[NumEnum.A](),
+        inst[StrEnum.A](),
+        inst[MixEnum.A](),
+        inst[MixEnum.B](),
+        inst[anything](),
+        ~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type 'Foo'.
+        inst[unk](),
+             ~~~
+!!! error TS2538: Type 'unknown' cannot be used as an index type.
+        inst[basestr](),
+        ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Foo'.
+!!! error TS7053:   No index signature with a parameter of type 'string' was found on type 'Foo'.
+        inst[basenum](),
+        ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'number' can't be used to index type 'Foo'.
+!!! error TS7053:   No index signature with a parameter of type 'number' was found on type 'Foo'.
+        inst[bool](),
+             ~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+        inst[t](),
+             ~
+!!! error TS2538: Type 'true' cannot be used as an index type.
+        inst[f](),
+             ~
+!!! error TS2538: Type 'false' cannot be used as an index type.
+        inst[n](),
+             ~
+!!! error TS2538: Type 'null' cannot be used as an index type.
+        inst[u](),
+             ~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+        inst[bigbase](),
+             ~~~~~~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+        inst[biglit](),
+             ~~~~~~
+!!! error TS2538: Type '22n' cannot be used as an index type.
+        inst[symbase](),
+        ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'symbol' can't be used to index type 'Foo'.
+        inst[nev](), // indexing by `never` always gives `never`, rather than the fallback index property
+        ~~~~~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'never' has no call signatures.
+        inst[templateLit](),
+        ~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '`aaa${string}`' can't be used to index type 'Foo'.
+        inst[mappingLit](),    
+        ~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'Lowercase<string>' can't be used to index type 'Foo'.
+    ] as const;
+    
+    
+    

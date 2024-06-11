@@ -42,8 +42,8 @@ str = n[null];
 let num: number = s[undefined];
 >num : number
 >    : ^^^^^^
->s[undefined] : any
->             : ^^^
+>s[undefined] : number
+>             : ^^^^^^
 >s : S
 >  : ^
 >undefined : undefined

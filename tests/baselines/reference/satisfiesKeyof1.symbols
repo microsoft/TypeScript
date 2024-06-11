@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyof1.ts] ////
+
+=== satisfiesKeyof1.ts ===
+// intended usage
+const x = Symbol();
+>x : Symbol(x, Decl(satisfiesKeyof1.ts, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(satisfiesKeyof1.ts, 1, 19))
+
+    [x satisfies keyof]() {
+>[x satisfies keyof] : Symbol(Foo[x satisfies keyof], Decl(satisfiesKeyof1.ts, 3, 18))
+>x : Symbol(x, Decl(satisfiesKeyof1.ts, 1, 5))
+
+        return 1;
+    }
+}
+
+export const usage1 = new Foo()[x]();
+>usage1 : Symbol(usage1, Decl(satisfiesKeyof1.ts, 9, 12))
+>Foo : Symbol(Foo, Decl(satisfiesKeyof1.ts, 1, 19))
+>x : Symbol(x, Decl(satisfiesKeyof1.ts, 1, 5))
+
+// errors on missing
+import {y} from "missing";
+>y : Symbol(y, Decl(satisfiesKeyof1.ts, 12, 8))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(satisfiesKeyof1.ts, 12, 26))
+
+    [y satisfies keyof]() {
+>[y satisfies keyof] : Symbol(Bar[y satisfies keyof], Decl(satisfiesKeyof1.ts, 13, 18))
+>y : Symbol(y, Decl(satisfiesKeyof1.ts, 12, 8))
+
+        return 1;
+    }
+}
+
+export const usage2 = new Bar()[y]();
+>usage2 : Symbol(usage2, Decl(satisfiesKeyof1.ts, 19, 12))
+>Bar : Symbol(Bar, Decl(satisfiesKeyof1.ts, 12, 26))
+>y : Symbol(y, Decl(satisfiesKeyof1.ts, 12, 8))
+
+// errors on wrong types
+const z = Math.random() ? 1 : "a";
+>z : Symbol(z, Decl(satisfiesKeyof1.ts, 22, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+export class Baz {
+>Baz : Symbol(Baz, Decl(satisfiesKeyof1.ts, 22, 34))
+
+    [z satisfies keyof]() {
+>[z satisfies keyof] : Symbol(Baz[z satisfies keyof], Decl(satisfiesKeyof1.ts, 23, 18))
+>z : Symbol(z, Decl(satisfiesKeyof1.ts, 22, 5))
+
+        return 1;
+    }
+}
+
+export const usage3 = new Baz()[z]();
+>usage3 : Symbol(usage3, Decl(satisfiesKeyof1.ts, 29, 12))
+>Baz : Symbol(Baz, Decl(satisfiesKeyof1.ts, 22, 34))
+>z : Symbol(z, Decl(satisfiesKeyof1.ts, 22, 5))
+
+// error on satisfies keyof outside computed name
+
+export const a = 0 satisfies keyof;
+>a : Symbol(a, Decl(satisfiesKeyof1.ts, 33, 12))
+

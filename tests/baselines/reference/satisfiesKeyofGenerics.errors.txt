@@ -1,0 +1,183 @@
+satisfiesKeyofGenerics.ts(37,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(40,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(43,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(46,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(49,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(52,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(55,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(58,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(61,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(64,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(67,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(70,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(73,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(76,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(79,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(82,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(85,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(88,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(91,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(94,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(100,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(103,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+satisfiesKeyofGenerics.ts(106,14): error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+
+
+==== satisfiesKeyofGenerics.ts (23 errors) ====
+    export function f<
+        T,
+        U extends string,
+        V extends "onefield",
+        W extends "afield" | "bfield",
+    >(
+        p1: T,
+        p2: T & string,
+        p3: T & "f",
+        p4: T | string,
+        p5: T | "g",
+        p6: Extract<T, "h">,
+    
+        p7: U,
+        p8: U & string,
+        p9: U & "f",
+        p10: U | string,
+        p11: U | "g",
+        p12: Extract<U, "h">,
+    
+        p13: V,
+        p14: V & string,
+        p15: V & "onefield",
+        p16: V | string,
+        p17: V | "onefield",
+        p18: Extract<V, "onefield">,
+    
+        p19: W,
+        p20: W & string,
+        p21: W & "afield", // reduction rules for generics extending unions will simplify this to just "afield" where possible, so should be the only one that works without error
+        p22: W | string,
+        p23: W | "afield",
+        p24: Extract<W, "afield">,
+    ) {
+        return [
+            class Foo {
+                [p1 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 1 as const;
+                }
+                [p2 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 2 as const;
+                }
+                [p3 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 3 as const;
+                }
+                [p4 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 4 as const;
+                }
+                [p5 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 5 as const;
+                }
+                [p6 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 6 as const;
+                }
+                [p7 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 7 as const;
+                }
+                [p8 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 8 as const;
+                }
+                [p9 satisfies keyof]() {
+                 ~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 9 as const;
+                }
+                [p10 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 10 as const;
+                }
+                [p11 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 11 as const;
+                }
+                [p12 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 12 as const;
+                }
+                [p13 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 13 as const;
+                }
+                [p14 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 14 as const;
+                }
+                [p15 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 15 as const;
+                }
+                [p16 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 16 as const;
+                }
+                [p17 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 17 as const;
+                }
+                [p18 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 18 as const;
+                }
+                [p19 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 19 as const;
+                }
+                [p20 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 20 as const;
+                }
+                [p21 satisfies keyof]() {
+                    return 21 as const;
+                }
+                [p22 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 22 as const;
+                }
+                [p23 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 23 as const;
+                }
+                [p24 satisfies keyof]() {
+                 ~~~
+!!! error TS9041: A `satisfies keyof` computed property name must be exactly a single string, number, or unique symbol literal type.
+                    return 24 as const;
+                }
+            }
+        ] as const;
+    }
