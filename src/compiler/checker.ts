@@ -10950,10 +10950,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
         for (let i = resolutionTargets.length - 1; i >= resolutionStart; i--) {
-            if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
-                return -1;
-            }
             if (resolutionTargets[i] === target && resolutionPropertyNames[i] === propertyName) {
+                if (resolutionTargetHasProperty(resolutionTargets[i], resolutionPropertyNames[i])) {
+                    return -1;
+                }
                 return i;
             }
         }
