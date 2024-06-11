@@ -59,6 +59,7 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isImportMeta,
+    isImportOrExportSpecifier,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
@@ -539,7 +540,12 @@ function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | unde
 //   (2) when the aliased symbol is originating from an import.
 //
 function shouldSkipAlias(node: Node, declaration: Node): boolean {
-    if (node.kind !== SyntaxKind.Identifier) {
+    // Note: Import aliases can be strings:
+    //
+    //   import { "an alias" as foo } from "./foo";
+    //   export { foo as "an alias" };
+    //
+    if (node.kind !== SyntaxKind.Identifier && (node.kind !== SyntaxKind.StringLiteral || !isImportOrExportSpecifier(node.parent))) {
         return false;
     }
     if (node.parent === declaration) {

@@ -106,11 +106,11 @@ const payloads2: MappedPayload2 = {
 >console.log(data) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >data : string
 >     : ^^^^^^
 }

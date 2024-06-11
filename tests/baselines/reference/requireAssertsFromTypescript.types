@@ -3,7 +3,7 @@
 === 38379.js ===
 const { art } = require('./ex')
 >art : (value: any, message?: string | Error) => asserts value
->    : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 >require('./ex') : typeof import("ex")
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
@@ -12,9 +12,9 @@ const { art } = require('./ex')
 
 const artoo = require('./ex2')
 >artoo : (value: any, message?: string | Error) => asserts value
->      : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>      : ^     ^^   ^^       ^^^              ^^^^^             
 >require('./ex2') : (value: any, message?: string | Error) => asserts value
->                 : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^   ^^       ^^^              ^^^^^             
 >require : any
 >'./ex2' : "./ex2"
 >        : ^^^^^^^
@@ -29,7 +29,7 @@ art(x)
 >art(x) : void
 >       : ^^^^
 >art : (value: any, message?: string | Error) => asserts value
->    : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 >x : number
 >  : ^^^^^^
 
@@ -43,7 +43,7 @@ artoo(y)
 >artoo(y) : void
 >         : ^^^^
 >artoo : (value: any, message?: string | Error) => asserts value
->      : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>      : ^     ^^   ^^       ^^^              ^^^^^             
 >y : number
 >  : ^^^^^^
 
@@ -66,5 +66,5 @@ declare function art(value: any, message?: string | Error): asserts value;
 
 export = art;
 >art : (value: any, message?: string | Error) => asserts value
->    : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
+>    : ^     ^^   ^^       ^^^              ^^^^^             
 

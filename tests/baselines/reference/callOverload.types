@@ -31,7 +31,7 @@ fn(1) // no error
 >fn(1) : void
 >      : ^^^^
 >fn : (x: any) => void
->   : ^ ^^   ^^^^^^^^^
+>   : ^ ^^   ^^^^^    
 >1 : 1
 >  : ^
 
@@ -39,7 +39,7 @@ fn(1, 2, 3, 4)
 >fn(1, 2, 3, 4) : void
 >               : ^^^^
 >fn : (x: any) => void
->   : ^ ^^   ^^^^^^^^^
+>   : ^ ^^   ^^^^^    
 >1 : 1
 >  : ^
 >2 : 2
@@ -53,7 +53,7 @@ takeTwo(1, 2, 3, 4)
 >takeTwo(1, 2, 3, 4) : void
 >                    : ^^^^
 >takeTwo : (x: any, y: any) => void
->        : ^ ^^   ^^ ^^   ^^^^^^^^^
+>        : ^ ^^   ^^ ^^   ^^^^^    
 >1 : 1
 >  : ^
 >2 : 2
@@ -67,7 +67,7 @@ withRest('a', ...n); // no error
 >withRest('a', ...n) : void
 >                    : ^^^^
 >withRest : (a: any, ...args: Array<any>) => void
->         : ^ ^^   ^^^^^    ^^          ^^^^^^^^^
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 >'a' : "a"
 >    : ^^^
 >...n : number
@@ -79,13 +79,13 @@ withRest();
 >withRest() : void
 >           : ^^^^
 >withRest : (a: any, ...args: Array<any>) => void
->         : ^ ^^   ^^^^^    ^^          ^^^^^^^^^
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 
 withRest(...n); 
 >withRest(...n) : void
 >               : ^^^^
 >withRest : (a: any, ...args: Array<any>) => void
->         : ^ ^^   ^^^^^    ^^          ^^^^^^^^^
+>         : ^ ^^   ^^^^^    ^^          ^^^^^    
 >...n : number
 >     : ^^^^^^
 >n : number[]

@@ -19,17 +19,17 @@ var g: (s: string, b?: boolean) => void;
 
 f = g;
 >f = g : (s: string, b?: boolean) => void
->      : ^ ^^      ^^ ^^^       ^^^^^^^^^
+>      : ^ ^^      ^^ ^^^       ^^^^^    
 >f : (s: string, n?: number) => void
->  : ^ ^^      ^^ ^^^      ^^^^^^^^^
+>  : ^ ^^      ^^ ^^^      ^^^^^    
 >g : (s: string, b?: boolean) => void
->  : ^ ^^      ^^ ^^^       ^^^^^^^^^
+>  : ^ ^^      ^^ ^^^       ^^^^^    
 
 g = f;
 >g = f : (s: string, n?: number) => void
->      : ^ ^^      ^^ ^^^      ^^^^^^^^^
+>      : ^ ^^      ^^ ^^^      ^^^^^    
 >g : (s: string, b?: boolean) => void
->  : ^ ^^      ^^ ^^^       ^^^^^^^^^
+>  : ^ ^^      ^^ ^^^       ^^^^^    
 >f : (s: string, n?: number) => void
->  : ^ ^^      ^^ ^^^      ^^^^^^^^^
+>  : ^ ^^      ^^ ^^^      ^^^^^    
 

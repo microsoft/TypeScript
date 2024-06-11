@@ -37,7 +37,7 @@ app({
 >app({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                       : ^^^^
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->    : ^     ^^       ^^^^^^^^^                    ^^   ^^                       ^^^^^^^^^
+>    : ^     ^^       ^^^^^^^^^                    ^^   ^^                       ^^^^^    
 >{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 >                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -100,7 +100,7 @@ const y = foo({
 >foo({    bar(x) { // Should be typed number => void    }}) : { bar(x: number): void; }
 >                                                           : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >foo : <T extends Bar>(x: string | T) => T
->    : ^ ^^^^^^^^^   ^^ ^^          ^^^^^^
+>    : ^ ^^^^^^^^^   ^^ ^^          ^^^^^ 
 >{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
 >                                                      : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 
@@ -140,7 +140,7 @@ app2({
 >app2({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                        : ^^^^
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^                    ^^   ^^                        ^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                    ^^   ^^                        ^^^^^    
 >{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 >                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -199,7 +199,7 @@ app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                   : ^^^^
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^                   ^^   ^^                       ^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                   ^^   ^^                       ^^^^^    
 >{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ((s: number) => number)[]) => any; }
 >                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -268,7 +268,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 ><App4 state={100} foo={s => s} /> : JSX.Element
 >                                  : ^^^^^^^^^^^
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
->     : ^     ^^       ^^^^^^^^^                      ^^     ^^                                                      ^^^^^^^^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                      ^^     ^^                                                      ^^^^^           
 >state : number
 >      : ^^^^^^
 >100 : 100

@@ -32,11 +32,11 @@ export const run = <E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i);
 >E.something(i) : E.Whatever<E>
 >               : ^^^^^^^^^^^^^
 >E.something : <T>(cb: () => E.Whatever<T>) => E.Whatever<T>
->            : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^   
 >E : typeof E
 >  : ^^^^^^^^
 >something : <T>(cb: () => E.Whatever<T>) => E.Whatever<T>
->          : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^   
 >i : () => E.Whatever<E>
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^             
 

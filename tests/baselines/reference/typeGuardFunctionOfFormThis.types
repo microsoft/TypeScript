@@ -65,41 +65,41 @@ if (a.isLeader()) {
 >a.isLeader() : boolean
 >             : ^^^^^^^
 >a.isLeader : () => this is LeadGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
     a.lead();
 >a.lead() : void
 >         : ^^^^
 >a.lead : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >a : LeadGuard
 >  : ^^^^^^^^^
 >lead : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 }
 else if (a.isFollower()) {
 >a.isFollower() : boolean
 >               : ^^^^^^^
 >a.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
     a.follow();
 >a.follow() : void
 >           : ^^^^
 >a.follow : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >a : FollowerGuard
 >  : ^^^^^^^^^^^^^
 >follow : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 }
 
 interface GuardInterface extends RoyalGuard {}
@@ -112,41 +112,41 @@ if (b.isLeader()) {
 >b.isLeader() : boolean
 >             : ^^^^^^^
 >b.isLeader : () => this is LeadGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >b : GuardInterface
 >  : ^^^^^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
     b.lead();
 >b.lead() : void
 >         : ^^^^
 >b.lead : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >b : LeadGuard
 >  : ^^^^^^^^^
 >lead : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 }
 else if (b.isFollower()) {
 >b.isFollower() : boolean
 >               : ^^^^^^^
 >b.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >b : GuardInterface
 >  : ^^^^^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
     b.follow();
 >b.follow() : void
 >           : ^^^^
 >b.follow : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 >b : FollowerGuard
 >  : ^^^^^^^^^^^^^
 >follow : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 }
 
 // if (((a.isLeader)())) {
@@ -175,7 +175,7 @@ if (holder2.a.isLeader()) {
 >holder2.a.isLeader() : boolean
 >                     : ^^^^^^^
 >holder2.a.isLeader : () => this is LeadGuard
->                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^                 
 >holder2.a : RoyalGuard
 >          : ^^^^^^^^^^
 >holder2 : { a: RoyalGuard; }
@@ -183,7 +183,7 @@ if (holder2.a.isLeader()) {
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
     holder2.a;
 >holder2.a : LeadGuard
@@ -271,41 +271,41 @@ if (guard.isElite()) {
 >guard.isElite() : boolean
 >                : ^^^^^^^
 >guard.isElite : () => this is ArrowElite
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                  
 >guard : ArrowGuard
 >      : ^^^^^^^^^^
 >isElite : () => this is ArrowElite
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                  
 
     guard.defend();
 >guard.defend() : void
 >               : ^^^^
 >guard.defend : () => void
->             : ^^^^^^^^^^
+>             : ^^^^^^    
 >guard : ArrowElite
 >      : ^^^^^^^^^^
 >defend : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 }
 else if (guard.isMedic()) {
 >guard.isMedic() : boolean
 >                : ^^^^^^^
 >guard.isMedic : () => this is ArrowMedic
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                  
 >guard : ArrowGuard
 >      : ^^^^^^^^^^
 >isMedic : () => this is ArrowMedic
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^                  
 
     guard.heal();
 >guard.heal() : void
 >             : ^^^^
 >guard.heal : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >guard : ArrowMedic
 >      : ^^^^^^^^^^
 >heal : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 }
 
 interface Supplies {
@@ -346,11 +346,11 @@ if (crate.isSundries()) {
 >crate.isSundries() : boolean
 >                   : ^^^^^^^
 >crate.isSundries : () => this is Crate<Sundries>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                       
 >crate : Crate<{}>
 >      : ^^^^^^^^^
 >isSundries : () => this is Crate<Sundries>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                       
 
     crate.contents.broken = true;
 >crate.contents.broken = true : true
@@ -372,11 +372,11 @@ else if (crate.isSupplies()) {
 >crate.isSupplies() : boolean
 >                   : ^^^^^^^
 >crate.isSupplies : () => this is Crate<Supplies>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                       
 >crate : Crate<{}>
 >      : ^^^^^^^^^
 >isSupplies : () => this is Crate<Supplies>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                       
 
     crate.contents.spoiled = true;
 >crate.contents.spoiled = true : true
@@ -399,35 +399,35 @@ else if (crate.isSupplies()) {
 
 a.isFollower = b.isFollower;
 >a.isFollower = b.isFollower : () => this is FollowerGuard
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^^^                     
 >a.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 >b.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >b : GuardInterface
 >  : ^^^^^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
 a.isLeader = b.isLeader;
 >a.isLeader = b.isLeader : () => this is LeadGuard
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^                 
 >a.isLeader : () => this is LeadGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 >b.isLeader : () => this is LeadGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >b : GuardInterface
 >  : ^^^^^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 
 class MimicGuard {
 >MimicGuard : MimicGuard
@@ -486,71 +486,71 @@ let mimic = new MimicGuard();
 
 a.isLeader = mimic.isLeader;
 >a.isLeader = mimic.isLeader : () => this is MimicLeader
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^^^^^^                   
 >a.isLeader : () => this is LeadGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isLeader : () => this is LeadGuard
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                 
 >mimic.isLeader : () => this is MimicLeader
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^                   
 >mimic : MimicGuard
 >      : ^^^^^^^^^^
 >isLeader : () => this is MimicLeader
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                   
 
 a.isFollower = mimic.isFollower;
 >a.isFollower = mimic.isFollower : () => this is MimicFollower
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^                     
 >a.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 >mimic.isFollower : () => this is MimicFollower
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                     
 >mimic : MimicGuard
 >      : ^^^^^^^^^^
 >isFollower : () => this is MimicFollower
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
 if (mimic.isFollower()) {
 >mimic.isFollower() : boolean
 >                   : ^^^^^^^
 >mimic.isFollower : () => this is MimicFollower
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                     
 >mimic : MimicGuard
 >      : ^^^^^^^^^^
 >isFollower : () => this is MimicFollower
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 
     mimic.follow();
 >mimic.follow() : void
 >               : ^^^^
 >mimic.follow : () => void
->             : ^^^^^^^^^^
+>             : ^^^^^^    
 >mimic : MimicFollower
 >      : ^^^^^^^^^^^^^
 >follow : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
     mimic.isFollower = a.isFollower;
 >mimic.isFollower = a.isFollower : () => this is FollowerGuard
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^                     
 >mimic.isFollower : () => this is MimicFollower
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                     
 >mimic : MimicFollower
 >      : ^^^^^^^^^^^^^
 >isFollower : () => this is MimicFollower
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 >a.isFollower : () => this is FollowerGuard
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                     
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                     
 }
 
 

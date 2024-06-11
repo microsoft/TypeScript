@@ -7,7 +7,7 @@ import * as t from "anotherLib"; // Include the lib that recursively includes op
 
 import { makeSharedOption } from "@shared/lib/app"; // Includes option as module in shared folder but as module in node_modules folder
 >makeSharedOption : () => import("/shared/lib/app").SharedOption
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^
 
 === /shared/node_modules/troublesome-lib/lib/Option.d.ts ===
 export class Option {

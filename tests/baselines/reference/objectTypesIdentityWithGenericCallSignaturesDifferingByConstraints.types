@@ -146,17 +146,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 >a : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 >a : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -245,9 +245,9 @@ function foo7(x: typeof a); // ok
 >foo7 : { (x: A): any; (x: typeof a): any; }
 >     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 >a : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 
 function foo7(x: any) { }
 >foo7 : { (x: A): any; (x: typeof a): any; }
@@ -298,9 +298,9 @@ function foo10(x: typeof a); // ok
 >foo10 : { (x: B<Array<number>>): any; (x: typeof a): any; }
 >      : ^^^ ^^                ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 >a : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 
 function foo10(x: any) { }
 >foo10 : { (x: B<Array<number>>): any; (x: typeof a): any; }
@@ -370,9 +370,9 @@ function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Number>): any; (x: typeof a): any; }
 >      : ^^^ ^^         ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 >a : { foo<T extends Array<string>>(x: T): string; }
->  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^^^             ^^ ^^ ^^^      ^^^
 
 function foo13(x: any) { }
 >foo13 : { (x: I<Number>): any; (x: typeof a): any; }

@@ -12,6 +12,7 @@ import {
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
     CancellationToken,
+    canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
     CheckJsDirective,
@@ -218,6 +219,7 @@ import {
     LinkedEditingInfo,
     LiteralType,
     map,
+    MapCode,
     mapDefined,
     MapLike,
     mapOneOrMany,
@@ -283,7 +285,6 @@ import {
     SemanticClassificationFormat,
     setNodeChildren,
     setObjectAllocator,
-    shouldIncludeBindAndCheckDiagnostics,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -2068,7 +2069,7 @@ export function createLanguageService(
         // we will skip semantic diagnostics for this file or if we already semantic diagnostics for it.
         if (
             skipTypeChecking(sourceFile, options, program) ||
-            !shouldIncludeBindAndCheckDiagnostics(sourceFile, options) ||
+            !canIncludeBindAndCheckDiagnostics(sourceFile, options) ||
             program.getCachedSemanticDiagnostics(sourceFile)
         ) {
             return undefined;
@@ -3326,6 +3327,17 @@ export function createLanguageService(
         return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
     }
 
+    function mapCode(sourceFile: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): FileTextChanges[] {
+        return MapCode.mapCode(
+            syntaxTreeCache.getCurrentSourceFile(sourceFile),
+            contents,
+            focusLocations,
+            host,
+            formatting.getFormatContext(formatOptions, host),
+            preferences,
+        );
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3398,6 +3410,7 @@ export function createLanguageService(
         provideInlayHints,
         getSupportedCodeFixes,
         getPasteEdits,
+        mapCode,
     };
 
     switch (languageServiceMode) {

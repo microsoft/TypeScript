@@ -12,7 +12,7 @@ export const x = add(import("./sub"));
 >add(import("./sub")) : typeof import("sub")
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >add : <T>(x: Promise<T>) => T
->    : ^ ^^ ^^          ^^^^^^
+>    : ^ ^^ ^^          ^^^^^ 
 >import("./sub") : Promise<typeof import("sub")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./sub" : "./sub"

@@ -30,11 +30,11 @@ export function child1(prototype: ParentThing) {
 >prototype.add = (a: number, b: number) => a + b : (a: number, b: number) => number
 >                                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >prototype.add : (a: number, b: number) => number
->              : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>              : ^ ^^      ^^ ^^      ^^^^^      
 >prototype : ParentThing
 >          : ^^^^^^^^^^^
 >add : (a: number, b: number) => number
->    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >(a: number, b: number) => a + b : (a: number, b: number) => number
 >                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number

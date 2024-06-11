@@ -273,7 +273,7 @@ if (!(maybeBool ?? true)) {
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 
 if (maybeBool ?? true) {
@@ -288,14 +288,14 @@ if (maybeBool ?? true) {
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 else {
     foo();
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 
 if (false ?? true) {
@@ -310,13 +310,13 @@ if (false ?? true) {
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 else {
     foo();
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 }
 

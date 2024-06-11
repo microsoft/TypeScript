@@ -22,7 +22,7 @@ class C<T extends Date> {
 >x['getDate']() : number
 >               : ^^^^^^
 >x['getDate'] : () => number
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >x : T
 >  : ^
 >'getDate' : "getDate"
@@ -36,11 +36,11 @@ class C<T extends Date> {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : T
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
     }
 }
 
@@ -75,7 +75,7 @@ var r2 = i.foo.getDate();
 >i.foo.getDate() : number
 >                : ^^^^^^
 >i.foo.getDate : () => number
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >i.foo : Date
 >      : ^^^^
 >i : I<Date>
@@ -83,7 +83,7 @@ var r2 = i.foo.getDate();
 >foo : Date
 >    : ^^^^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 var r2b = i.foo['getDate']();
 >r2b : number
@@ -91,7 +91,7 @@ var r2b = i.foo['getDate']();
 >i.foo['getDate']() : number
 >                   : ^^^^^^
 >i.foo['getDate'] : () => number
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >i.foo : Date
 >      : ^^^^
 >i : I<Date>
@@ -113,13 +113,13 @@ var r3 = a<Date>().getDate();
 >a<Date>().getDate() : number
 >                    : ^^^^^^
 >a<Date>().getDate : () => number
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >a<Date>() : Date
 >          : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^    ^^^^^^^^
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 var r3b = a()['getDate']();
 >r3b : number
@@ -127,11 +127,11 @@ var r3b = a()['getDate']();
 >a()['getDate']() : number
 >                 : ^^^^^^
 >a()['getDate'] : () => number
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^    ^^^^^^^^
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >'getDate' : "getDate"
 >          : ^^^^^^^^^
 
@@ -155,7 +155,7 @@ var b = {
 >x['getDate']() : number
 >               : ^^^^^^
 >x['getDate'] : () => number
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >x : T
 >  : ^
 >'getDate' : "getDate"
@@ -169,11 +169,11 @@ var b = {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : T
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
     }
 }
 

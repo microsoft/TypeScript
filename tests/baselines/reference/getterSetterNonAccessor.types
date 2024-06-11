@@ -16,11 +16,11 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >Object.defineProperty({}, "0", <PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      })) : {}
 >                                                                                                                                         : ^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >{} : {}
 >   : ^^
 >"0" : "0"
@@ -28,15 +28,15 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 ><PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      }) : PropertyDescriptor
 >                                                                                                         : ^^^^^^^^^^^^^^^^^^
 >({          get: getFunc,          set: setFunc,          configurable: true      }) : { get: () => any; set: (v: any) => void; configurable: true; }
->                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                     : ^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{          get: getFunc,          set: setFunc,          configurable: true      } : { get: () => any; set: (v: any) => void; configurable: true; }
->                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                   : ^^^^^^^^^^^^^   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
           get: getFunc,
 >get : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 >getFunc : () => any
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
           set: setFunc,
 >set : (v: any) => void

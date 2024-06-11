@@ -7,26 +7,28 @@ import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
-        verifyTsc({
-            scenario: "noEmit",
-            subScenario,
-            fs: () =>
-                loadProjectFromFiles({
-                    "/src/a.ts": aTsContent,
-                    "/src/tsconfig.json": jsonToReadableText({
-                        compilerOptions: { noEmit: true },
+        [{}, { outFile: "../outFile.js" }].forEach(options => {
+            verifyTsc({
+                scenario: "noEmit",
+                subScenario: `${options?.outFile ? "outFile" : "multiFile"}/${subScenario}`,
+                fs: () =>
+                    loadProjectFromFiles({
+                        "/src/a.ts": aTsContent,
+                        "/src/tsconfig.json": jsonToReadableText({
+                            compilerOptions: { ...options, noEmit: true },
+                        }),
                     }),
-                }),
-            commandLineArgs,
-            edits: [
-                noChangeRun,
-                {
-                    caption: "Fix error",
-                    edit: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
-                },
-                noChangeRun,
-            ],
-            baselinePrograms: true,
+                commandLineArgs,
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "Fix error",
+                        edit: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
+                    },
+                    noChangeRun,
+                ],
+                baselinePrograms: true,
+            });
         });
     }
 

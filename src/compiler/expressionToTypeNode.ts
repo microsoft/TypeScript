@@ -14,10 +14,12 @@ import {
     Expression,
     forEachReturnStatement,
     FunctionExpression,
+    FunctionFlags,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getFunctionFlags,
     getJSDocTypeAssertionType,
     getStrictOptionValue,
     HasInferredType,
@@ -30,7 +32,6 @@ import {
     isIdentifier,
     isJSDocTypeAssertion,
     isKeyword,
-    isParameter,
     isPrimitiveLiteralValue,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
@@ -74,8 +75,8 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
         serializeReturnTypeForSignature,
         serializeTypeOfExpression,
     };
-    function serializeExistingTypeAnnotation(type: TypeNode | undefined) {
-        return type === undefined ? undefined : !type.parent || !isParameter(type.parent) || !resolver.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
+    function serializeExistingTypeAnnotation(type: TypeNode | undefined, addUndefined?: boolean) {
+        return type !== undefined && (!addUndefined || (type && canAddUndefined(type))) ? true : undefined;
     }
     function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
         return typeFromExpression(expr, context, /*isConstContext*/ false, addUndefined, preserveLiterals) ?? inferExpressionType(expr, context);
@@ -179,12 +180,12 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
         const declaredType = getEffectiveTypeAnnotationNode(node);
         const addUndefined = resolver.requiresAddingImplicitUndefined(node);
         let resultType;
-        if (!addUndefined) {
-            if (declaredType) {
-                return serializeExistingTypeAnnotation(declaredType);
-            }
+        if (declaredType) {
+            resultType = serializeExistingTypeAnnotation(declaredType, addUndefined);
+        }
+        else {
             if (node.initializer && isIdentifier(node.name)) {
-                resultType = typeFromExpression(node.initializer, context);
+                resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, addUndefined);
             }
         }
         return resultType ?? inferTypeOfDeclaration(node, context);
@@ -349,7 +350,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             }
             else if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
                 const expression = prop.name.expression;
-                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
+                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false) && !resolver.isDefinitelyReferenceToGlobalSymbolObject(expression)) {
                     context.tracker.reportInferenceFallback(prop.name);
                     result = false;
                 }
@@ -469,6 +470,8 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
     function typeFromSingleReturnExpression(declaration: FunctionLikeDeclaration | undefined, context: SyntacticTypeNodeBuilderContext): boolean | undefined {
         let candidateExpr: Expression | undefined;
         if (declaration && !nodeIsMissing(declaration.body)) {
+            if (getFunctionFlags(declaration) & FunctionFlags.AsyncGenerator) return undefined;
+
             const body = declaration.body;
             if (body && isBlock(body)) {
                 forEachReturnStatement(body, s => {

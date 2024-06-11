@@ -176,7 +176,7 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
          *  This condition is used in order to show less often the `Move to file` code action */
-        if (context.endPosition !== undefined) {
+        if (context.triggerReason === "implicit" && context.endPosition !== undefined) {
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
             if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
@@ -1149,7 +1149,7 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
     for (const statement of statements) {
         forEachReference(statement, checker, s => {
             const symbol = skipAlias(s, checker);
-            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFile) {
+            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration).path === sourceFile.path) {
                 existingLocals.add(symbol);
             }
         });

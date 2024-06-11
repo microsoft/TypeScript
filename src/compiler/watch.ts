@@ -329,8 +329,8 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
 }
 
 /** @internal */
-export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
-    return !!(program as BuilderProgram).getState;
+export function isBuilderProgram<T extends BuilderProgram>(program: Program | BuilderProgram): program is T {
+    return !!(program as T).state;
 }
 
 /** @internal */

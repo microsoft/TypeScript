@@ -39,7 +39,7 @@ function other<T>(arg: T) {
 >foo(b) : { [x: string]: Object; [x: number]: T; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(x: T_1) => T_1
->    : ^   ^^ ^^   ^^^^^^^^
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -69,7 +69,7 @@ function other3<T extends U, U extends Date>(arg: T) {
 >foo(b) : { [x: string]: Object; [x: number]: T; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(x: T_1) => T_1
->    : ^   ^^ ^^   ^^^^^^^^
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

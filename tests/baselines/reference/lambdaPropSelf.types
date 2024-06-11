@@ -48,7 +48,7 @@ class Person {
 >this.children.push("New child") : number
 >                                : ^^^^^^
 >this.children.push : (...items: string[]) => number
->                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^     ^^^^^^^^^^^^^^^      
 >this.children : string[]
 >              : ^^^^^^^^
 >this : this
@@ -56,7 +56,7 @@ class Person {
 >children : string[]
 >         : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"New child" : "New child"
 >            : ^^^^^^^^^^^
 }

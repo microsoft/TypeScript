@@ -48,7 +48,7 @@ function other<T>(arg: T) {
 >foo(b) : { [x: number]: T; }
 >       : ^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(x: T_1) => T_1
->    : ^   ^^ ^^   ^^^^^^^^
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 }
@@ -71,7 +71,7 @@ function other2<T extends Date>(arg: T) {
 >foo(b) : { [x: number]: T; }
 >       : ^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(x: T_1) => T_1
->    : ^   ^^ ^^   ^^^^^^^^
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -88,7 +88,7 @@ function other2<T extends Date>(arg: T) {
 
 function other3<T extends Date, U extends Date>(arg: T) {
 >other3 : <T extends Date, U extends Date>(arg: T) => void
->       : ^ ^^^^^^^^^    ^^^^^^^^^^^^    ^^   ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -104,7 +104,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
 >foo(b) : { [x: number]: T; }
 >       : ^^^^^^^^^^^^^^^^^^^
 >foo : <T_1>(x: T_1) => T_1
->    : ^   ^^ ^^   ^^^^^^^^
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 

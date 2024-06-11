@@ -35,7 +35,7 @@ f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is
 >f(g, e) : Giraffe
 >        : ^^^^^^^
 >f : <T extends Animal>(x: T, y: T) => T
->  : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^
+>  : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^ 
 >g : Giraffe
 >  : ^^^^^^^
 >e : Elephant

@@ -241,11 +241,11 @@ declare let b1: { a: string, b: string } | { b: string, c: string };
 
 let b2 = { ...b1, z: 55 };
 >b2 : { z: number; a: string; b: string; } | { z: number; b: string; c: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...b1, z: 55 } : { z: number; a: string; b: string; } | { z: number; b: string; c: string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >b1 : { a: string; b: string; } | { b: string; c: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >z : number
 >  : ^^^^^^
 >55 : 55
@@ -253,11 +253,11 @@ let b2 = { ...b1, z: 55 };
 
 let b3 = { ...b2 };
 >b3 : { z: number; a: string; b: string; } | { z: number; b: string; c: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...b2 } : { z: number; a: string; b: string; } | { z: number; b: string; c: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >b2 : { z: number; a: string; b: string; } | { z: number; b: string; c: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 
 // Before widening {} acts like { [x: string]: undefined }, which is a
 // subtype of types with all optional properties
@@ -272,30 +272,30 @@ declare let opts: { foo?: string, bar?: string, baz?: boolean };
 >    : ^^^^^^^^^^^^^^^^^^^
 
 let c1 = !true ? {} : opts;
->c1 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->!true ? {} : opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c1 : { foo?: string; bar?: string; baz?: boolean; }
+>   : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
+>!true ? {} : opts : { foo?: string; bar?: string; baz?: boolean; }
+>                  : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
 >!true : false
 >      : ^^^^^
 >true : true
 >     : ^^^^
 >{} : {}
 >   : ^^
->opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opts : { foo?: string; bar?: string; baz?: boolean; }
+>     : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
 
 let c2 = !true ? opts : {};
->c2 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->!true ? opts : {} : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c2 : { foo?: string; bar?: string; baz?: boolean; }
+>   : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
+>!true ? opts : {} : { foo?: string; bar?: string; baz?: boolean; }
+>                  : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
 >!true : false
 >      : ^^^^^
 >true : true
 >     : ^^^^
->opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>opts : { foo?: string; bar?: string; baz?: boolean; }
+>     : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^       ^^^
 >{} : {}
 >   : ^^
 
@@ -487,7 +487,7 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >f({ a: 1, b: 2 }, { a: "abc" }, {}) : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
->  : ^ ^^^^^     ^^   ^^^^^^
+>  : ^ ^^^^^     ^^   ^^^^^ 
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -513,7 +513,7 @@ let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 >f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
->  : ^ ^^^^^     ^^   ^^^^^^
+>  : ^ ^^^^^     ^^   ^^^^^ 
 >{} : {}
 >   : ^^
 >{ a: "abc" } : { a: string; }
@@ -535,13 +535,13 @@ let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 
 let e3 = f(data, { a: 2 });
 >e3 : { a: 1; b: "abc"; c: true; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^     ^^^^^    ^^^
 >f(data, { a: 2 }) : { a: 1; b: "abc"; c: true; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^ ^^^^^     ^^^^^    ^^^
 >f : <T>(...items: T[]) => T
->  : ^ ^^^^^     ^^   ^^^^^^
+>  : ^ ^^^^^     ^^   ^^^^^ 
 >data : { a: 1; b: "abc"; c: true; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^^^^     ^^^^^    ^^^
 >{ a: 2 } : { a: 2; }
 >         : ^^^^^^^^^
 >a : 2
@@ -551,11 +551,11 @@ let e3 = f(data, { a: 2 });
 
 let e4 = f({ a: 2 }, data);
 >e4 : { a: 1; b: "abc"; c: true; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^ ^^^^^     ^^^^^    ^^^
 >f({ a: 2 }, data) : { a: 1; b: "abc"; c: true; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^ ^^^^^     ^^^^^    ^^^
 >f : <T>(...items: T[]) => T
->  : ^ ^^^^^     ^^   ^^^^^^
+>  : ^ ^^^^^     ^^   ^^^^^ 
 >{ a: 2 } : { a: 2; }
 >         : ^^^^^^^^^
 >a : 2
@@ -563,5 +563,5 @@ let e4 = f({ a: 2 }, data);
 >2 : 2
 >  : ^
 >data : { a: 1; b: "abc"; c: true; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^^^^     ^^^^^    ^^^
 
