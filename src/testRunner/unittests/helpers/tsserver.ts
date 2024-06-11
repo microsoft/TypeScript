@@ -72,6 +72,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
+    alwaysDoRegionDiagnostics?: boolean;
 }
 export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
@@ -89,6 +90,7 @@ export class TestSession extends ts.server.Session {
     public override logger!: LoggerWithInMemoryLogs;
     public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
     public serverCancellationToken: TestServerCancellationToken;
+    private alwaysDoRegionDiagnostics: boolean;
 
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
@@ -121,6 +123,7 @@ export class TestSession extends ts.server.Session {
             this,
             this.logger,
         );
+        this.alwaysDoRegionDiagnostics = !!opts.alwaysDoRegionDiagnostics;
     }
 
     getProjectService() {
@@ -156,8 +159,8 @@ export class TestSession extends ts.server.Session {
         return this.executeCommand(request);
     }
 
-    protected override shouldDoRegionCheck(_file: ts.server.NormalizedPath): boolean {
-        return true;
+    protected override shouldDoRegionCheck(file: ts.server.NormalizedPath): boolean {
+        return this.alwaysDoRegionDiagnostics || super.shouldDoRegionCheck(file);
     }
 }
 
