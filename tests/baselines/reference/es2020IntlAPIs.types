@@ -841,32 +841,32 @@ Intl.getCanonicalLocales(mixed);
 Array.prototype.toLocaleString(locale);
 >Array.prototype.toLocaleString(locale) : string
 >                                       : ^^^^^^
->Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: unknown): string; (locales?: Intl.LocalesArgument, options?: unknown): string; }
->                               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^      ^^^
+>Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >prototype : any[]
 >          : ^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: unknown): string; (locales?: Intl.LocalesArgument, options?: unknown): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 
 Array.prototype.toLocaleString(mixed);
 >Array.prototype.toLocaleString(mixed) : string
 >                                      : ^^^^^^
->Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: unknown): string; (locales?: Intl.LocalesArgument, options?: unknown): string; }
->                               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^      ^^^
+>Array.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >prototype : any[]
 >          : ^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: unknown): string; (locales?: Intl.LocalesArgument, options?: unknown): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >mixed : readonly ["en", Intl.Locale]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

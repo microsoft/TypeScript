@@ -24,12 +24,12 @@ str = arr.toLocaleString(); // OK
 >    : ^^^^^^
 >arr.toLocaleString() : string
 >                     : ^^^^^^
->arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 
 str = arr.toLocaleString('en-US'); // OK
 >str = arr.toLocaleString('en-US') : string
@@ -38,12 +38,12 @@ str = arr.toLocaleString('en-US'); // OK
 >    : ^^^^^^
 >arr.toLocaleString('en-US') : string
 >                            : ^^^^^^
->arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -54,18 +54,18 @@ str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >    : ^^^^^^
 >arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                    : ^^^^^^
->arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>arr.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                   : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >arr : number[]
 >    : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
->{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->style : "currency"
->      : ^^^^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : string
+>      : ^^^^^^
 >'currency' : "currency"
 >           : ^^^^^^^^^^
 >currency : string
@@ -94,12 +94,12 @@ str = dates.toLocaleString(); // OK
 >    : ^^^^^^
 >dates.toLocaleString() : string
 >                       : ^^^^^^
->dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 
 str = dates.toLocaleString('fr'); // OK
 >str = dates.toLocaleString('fr') : string
@@ -108,12 +108,12 @@ str = dates.toLocaleString('fr'); // OK
 >    : ^^^^^^
 >dates.toLocaleString('fr') : string
 >                           : ^^^^^^
->dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'fr' : "fr"
 >     : ^^^^
 
@@ -124,12 +124,12 @@ str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
 >    : ^^^^^^
 >dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
 >                                                : ^^^^^^
->dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>dates.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >dates : readonly Date[]
 >      : ^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'fr' : "fr"
 >     : ^^^^
 >{ timeZone: 'UTC' } : { timeZone: string; }
@@ -164,12 +164,12 @@ str = mixed.toLocaleString(); // OK
 >    : ^^^^^^
 >mixed.toLocaleString() : string
 >                       : ^^^^^^
->mixed.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>mixed.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 
 str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
@@ -178,18 +178,18 @@ str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >    : ^^^^^^
 >mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
 >                                                                   : ^^^^^^
->mixed.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>mixed.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                     : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'de' : "de"
 >     : ^^^^
->{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->style : "currency"
->      : ^^^^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : string
+>      : ^^^^^^
 >'currency' : "currency"
 >           : ^^^^^^^^^^
 >currency : string
@@ -204,26 +204,26 @@ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: '
 >    : ^^^^^^
 >(mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
 >                                                                                                                      : ^^^^^^
->(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->                                                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                                                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >(mixed as ReadonlyArray<number | Date>) : readonly (number | Date)[]
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed as ReadonlyArray<number | Date> : readonly (number | Date)[]
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed : (number | Date)[]
 >      : ^^^^^^^^^^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'de' : "de"
 >     : ^^^^
->{ currency: 'EUR', style: 'currency', timeZone: 'UTC' } : { currency: string; style: "currency"; timeZone: string; }
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ currency: 'EUR', style: 'currency', timeZone: 'UTC' } : { currency: string; style: string; timeZone: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
 >'EUR' : "EUR"
 >      : ^^^^^
->style : "currency"
->      : ^^^^^^^^^^
+>style : string
+>      : ^^^^^^
 >'currency' : "currency"
 >           : ^^^^^^^^^^
 >timeZone : string
@@ -262,12 +262,12 @@ str = bigInts.toLocaleString(); // OK
 >    : ^^^^^^
 >bigInts.toLocaleString() : string
 >                         : ^^^^^^
->bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >bigInts : bigint[]
 >        : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 
 str = bigInts.toLocaleString('en-US'); // OK
 >str = bigInts.toLocaleString('en-US') : string
@@ -276,12 +276,12 @@ str = bigInts.toLocaleString('en-US'); // OK
 >    : ^^^^^^
 >bigInts.toLocaleString('en-US') : string
 >                                : ^^^^^^
->bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >bigInts : bigint[]
 >        : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
 
@@ -292,18 +292,18 @@ str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); /
 >    : ^^^^^^
 >bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >                                                                        : ^^^^^^
->bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>bigInts.toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>                       : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >bigInts : bigint[]
 >        : ^^^^^^^^
->toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^^^^      ^^^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^                    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: object): string; (locales?: Intl.LocalesArgument, options?: object): string; }
+>               : ^^^^^^      ^^^       ^^^                          ^^       ^^^      ^^^      ^^^       ^^^                    ^^       ^^^      ^^^      ^^^
 >'en-US' : "en-US"
 >        : ^^^^^^^
->{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->style : "currency"
->      : ^^^^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : string
+>      : ^^^^^^
 >'currency' : "currency"
 >           : ^^^^^^^^^^
 >currency : string

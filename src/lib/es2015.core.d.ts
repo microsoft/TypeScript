@@ -49,10 +49,7 @@ interface Array<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(
-        locales?: string | readonly string[],
-        options?: (T extends { toLocaleString(locales?: any, options?: infer O): string; } ? (options: O) => void : never) extends (options: infer P) => void ? P : unknown,
-    ): string;
+    toLocaleString(locales?: string | readonly string[], options?: object): string;
 }
 
 interface ArrayConstructor {
@@ -360,10 +357,7 @@ interface ReadonlyArray<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(
-        locales?: string | readonly string[],
-        options?: (T extends { toLocaleString(locales?: any, options?: infer O): string; } ? (options: O) => void : never) extends (options: infer P) => void ? P : unknown,
-    ): string;
+    toLocaleString(locales?: string | readonly string[], options?: object): string;
 }
 
 interface RegExp {

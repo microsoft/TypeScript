@@ -5,10 +5,7 @@ interface Array<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(
-        locales?: Intl.LocalesArgument,
-        options?: (T extends { toLocaleString(locales?: any, options?: infer O): string; } ? (options: O) => void : never) extends (options: infer P) => void ? P : unknown,
-    ): string;
+    toLocaleString(locales?: Intl.LocalesArgument, options?: object): string;
 }
 
 interface ReadonlyArray<T> {
@@ -18,10 +15,7 @@ interface ReadonlyArray<T> {
      * @param locales Passed as the `locales` parameter to each array element's `toLocaleString` method.
      * @param options Passed as the `options` parameter to each array element's `toLocaleString` method.
      */
-    toLocaleString(
-        locales?: Intl.LocalesArgument,
-        options?: (T extends { toLocaleString(locales?: any, options?: infer O): string; } ? (options: O) => void : never) extends (options: infer P) => void ? P : unknown,
-    ): string;
+    toLocaleString(locales?: Intl.LocalesArgument, options?: object): string;
 }
 
 interface Int8Array {
