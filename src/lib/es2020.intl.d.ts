@@ -122,20 +122,20 @@ declare namespace Intl {
     var RelativeTimeFormat: RelativeTimeFormatConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
-        unit: never;
+        unit: "unit";
     }
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
-        narrowSymbol: never;
+        narrowSymbol: "narrowSymbol";
     }
 
     interface NumberFormatOptionsSignDisplayRegistry {
-        auto: never;
-        never: never;
-        always: never;
-        exceptZero: never;
+        auto: "auto";
+        never: "never";
+        always: "always";
+        exceptZero: "exceptZero";
     }
-    type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
+    type NumberFormatOptionsSignDisplay = NumberFormatOptionsSignDisplayRegistry[keyof NumberFormatOptionsSignDisplayRegistry];
 
     type NumberFormatOptionsCompactDisplay = "short" | "long";
     type NumberFormatOptionsNotation = "standard" | "scientific" | "engineering" | "compact";
@@ -162,17 +162,17 @@ declare namespace Intl {
     }
 
     interface NumberFormatPartTypeRegistry {
-        compact: never;
-        exponentInteger: never;
-        exponentMinusSign: never;
-        exponentSeparator: never;
-        unit: never;
-        unknown: never;
+        compact: "compact";
+        exponentInteger: "exponentInteger";
+        exponentMinusSign: "exponentMinusSign";
+        exponentSeparator: "exponentSeparator";
+        unit: "unit";
+        unknown: "unknown";
     }
 
     interface DateTimeFormatPartTypesRegistry {
-        relatedYear: never;
-        yearName: never;
+        relatedYear: "relatedYear";
+        yearName: "yearName";
     }
 
     interface DateTimeFormatOptions {

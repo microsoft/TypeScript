@@ -1,12 +1,12 @@
 declare namespace Intl {
     interface NumberFormatOptionsUseGroupingRegistry {
-        min2: never;
-        auto: never;
-        always: never;
+        min2: "min2";
+        auto: "auto";
+        always: "always";
     }
 
     interface NumberFormatOptionsSignDisplayRegistry {
-        negative: never;
+        negative: "negative";
     }
 
     type NumberFormatOptionsRoundingPriority = "auto" | "morePrecision" | "lessPrecision";

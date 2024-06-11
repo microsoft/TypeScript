@@ -130,8 +130,8 @@ new Intl.DisplayNames(mixed, { type: 'region' });
 const { style, type } = new Intl.DisplayNames('en', { style: 'long', type: 'language' }).resolvedOptions();
 >style : Intl.DisplayNamesOptionsStyle
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->type : keyof Intl.DisplayNamesOptionsTypeRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DisplayNamesOptionsType
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DisplayNames('en', { style: 'long', type: 'language' }).resolvedOptions() : Intl.ResolvedDisplayNamesOptions
 >                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DisplayNames('en', { style: 'long', type: 'language' }).resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
@@ -428,8 +428,8 @@ const { dateStyle, timeStyle, dayPeriod, fractionalSecondDigits } = new Intl.Dat
 new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond';
 >new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond' : "fractionalSecond"
 >                                                                         : ^^^^^^^^^^^^^^^^^^
->new Intl.DateTimeFormat().formatToParts(10)[0].type : keyof Intl.DateTimeFormatPartTypesRegistry
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat().formatToParts(10)[0].type : Intl.DateTimeFormatPartTypes
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts(10)[0] : Intl.DateTimeFormatPart
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatToParts(10) : Intl.DateTimeFormatPart[]
@@ -450,8 +450,8 @@ new Intl.DateTimeFormat().formatToParts(10)[0].type = 'fractionalSecond';
 >   : ^^
 >0 : 0
 >  : ^
->type : keyof Intl.DateTimeFormatPartTypesRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DateTimeFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'fractionalSecond' : "fractionalSecond"
 >                   : ^^^^^^^^^^^^^^^^^^
 

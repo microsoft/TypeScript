@@ -192,8 +192,8 @@ new Intl.RelativeTimeFormat().formatToParts(456, 'month')[0];
 const { notation, style } = new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions();
 >notation : Intl.NumberFormatOptionsNotation
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->style : keyof Intl.NumberFormatOptionsStyleRegistry
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : Intl.NumberFormatOptionsStyle
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { numberingSystem: 'arab' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -320,8 +320,8 @@ const { compactDisplay } = Intl.NumberFormat('en', { notation: 'compact', compac
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions();
->signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : Intl.NumberFormatOptionsSignDisplay
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat('en', { signDisplay: 'always' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -368,8 +368,8 @@ for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponen
   Intl.NumberFormat().formatToParts(123)[0].type = type;
 >Intl.NumberFormat().formatToParts(123)[0].type = type : "compact" | "unit" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unknown"
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.NumberFormat().formatToParts(123)[0].type : keyof Intl.NumberFormatPartTypeRegistry
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat().formatToParts(123)[0].type : Intl.NumberFormatPartTypes
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat().formatToParts(123)[0] : Intl.NumberFormatPart
 >                                          : ^^^^^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat().formatToParts(123) : Intl.NumberFormatPart[]
@@ -390,8 +390,8 @@ for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponen
 >    : ^^^
 >0 : 0
 >  : ^
->type : keyof Intl.NumberFormatPartTypeRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.NumberFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "compact" | "unit" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unknown"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -468,8 +468,8 @@ for (const type of [ 'relatedYear', 'yearName' ] as const) {
   Intl.DateTimeFormat().formatToParts()[0].type = type;
 >Intl.DateTimeFormat().formatToParts()[0].type = type : "relatedYear" | "yearName"
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.DateTimeFormat().formatToParts()[0].type : keyof Intl.DateTimeFormatPartTypesRegistry
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0].type : Intl.DateTimeFormatPartTypes
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat().formatToParts()[0] : Intl.DateTimeFormatPart
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
@@ -488,8 +488,8 @@ for (const type of [ 'relatedYear', 'yearName' ] as const) {
 >              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >0 : 0
 >  : ^
->type : keyof Intl.DateTimeFormatPartTypesRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DateTimeFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "relatedYear" | "yearName"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -1,18 +1,18 @@
 declare namespace Intl {
     interface DateTimeFormatPartTypesRegistry {
-        day: never;
-        dayPeriod: never;
-        era: never;
-        hour: never;
-        literal: never;
-        minute: never;
-        month: never;
-        second: never;
-        timeZoneName: never;
-        weekday: never;
-        year: never;
+        day: "day";
+        dayPeriod: "dayPeriod";
+        era: "era";
+        hour: "hour";
+        literal: "literal";
+        minute: "minute";
+        month: "month";
+        second: "second";
+        timeZoneName: "timeZoneName";
+        weekday: "weekday";
+        year: "year";
     }
-    type DateTimeFormatPartTypes = keyof DateTimeFormatPartTypesRegistry;
+    type DateTimeFormatPartTypes = DateTimeFormatPartTypesRegistry[keyof DateTimeFormatPartTypesRegistry];
 
     interface DateTimeFormatPart {
         type: DateTimeFormatPartTypes;

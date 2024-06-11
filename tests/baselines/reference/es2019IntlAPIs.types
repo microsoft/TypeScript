@@ -4,8 +4,8 @@
 Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
 >Intl.DateTimeFormat().formatToParts()[0].type = 'unknown' : "unknown"
 >                                                          : ^^^^^^^^^
->Intl.DateTimeFormat().formatToParts()[0].type : keyof Intl.DateTimeFormatPartTypesRegistry
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0].type : Intl.DateTimeFormatPartTypes
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat().formatToParts()[0] : Intl.DateTimeFormatPart
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
@@ -24,8 +24,8 @@ Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
 >              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >0 : 0
 >  : ^
->type : keyof Intl.DateTimeFormatPartTypesRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DateTimeFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'unknown' : "unknown"
 >          : ^^^^^^^^^
 

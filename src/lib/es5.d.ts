@@ -4457,22 +4457,22 @@ declare namespace Intl {
     var Collator: CollatorConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
-        decimal: never;
-        percent: never;
-        currency: never;
+        decimal: "decimal";
+        percent: "percent";
+        currency: "currency";
     }
-    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+    type NumberFormatOptionsStyle = NumberFormatOptionsStyleRegistry[keyof NumberFormatOptionsStyleRegistry];
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
-        code: never;
-        symbol: never;
-        name: never;
+        code: "code";
+        symbol: "symbol";
+        name: "name";
     }
-    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+    type NumberFormatOptionsCurrencyDisplay = NumberFormatOptionsCurrencyDisplayRegistry[keyof NumberFormatOptionsCurrencyDisplayRegistry];
 
     interface NumberFormatOptionsUseGroupingRegistry {}
-    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
-    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : NumberFormatOptionsUseGroupingRegistry[keyof NumberFormatOptionsUseGroupingRegistry] | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : NumberFormatOptionsUseGroupingRegistry[keyof NumberFormatOptionsUseGroupingRegistry] | false;
 
     interface NumberFormatOptions {
         localeMatcher?: LocaleMatcherAlgorithm | undefined;
@@ -4538,10 +4538,10 @@ declare namespace Intl {
     type DateTimeFormatOptionsSecond = "2-digit" | "numeric";
 
     interface DateTimeFormatOptionsTimeZoneNameRegistry {
-        short: never;
-        long: never;
+        short: "short";
+        long: "long";
     }
-    type DateTimeFormatOptionsTimeZoneName = keyof DateTimeFormatOptionsTimeZoneNameRegistry;
+    type DateTimeFormatOptionsTimeZoneName = DateTimeFormatOptionsTimeZoneNameRegistry[keyof DateTimeFormatOptionsTimeZoneNameRegistry];
 
     interface DateTimeFormatOptions {
         localeMatcher?: LocaleMatcherAlgorithm | undefined;

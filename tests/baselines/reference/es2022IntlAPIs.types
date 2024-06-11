@@ -200,8 +200,8 @@ for (const timeZoneName of [ 'shortOffset', 'longOffset', 'shortGeneric', 'longG
   new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName = timeZoneName;
 >new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName = timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName : keyof Intl.DateTimeFormatOptionsTimeZoneNameRegistry
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName : Intl.DateTimeFormatOptionsTimeZoneName
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions() : Intl.ResolvedDateTimeFormatOptions
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
@@ -222,8 +222,8 @@ for (const timeZoneName of [ 'shortOffset', 'longOffset', 'shortGeneric', 'longG
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->timeZoneName : keyof Intl.DateTimeFormatOptionsTimeZoneNameRegistry
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>timeZoneName : Intl.DateTimeFormatOptionsTimeZoneName
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >timeZoneName : "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -273,8 +273,8 @@ for (const type of [ 'calendar', 'dateTimeField' ] as const) {
   new Intl.DisplayNames('en', { type }).resolvedOptions().type = type;
 >new Intl.DisplayNames('en', { type }).resolvedOptions().type = type : "calendar" | "dateTimeField"
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.DisplayNames('en', { type }).resolvedOptions().type : keyof Intl.DisplayNamesOptionsTypeRegistry
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DisplayNames('en', { type }).resolvedOptions().type : Intl.DisplayNamesOptionsType
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DisplayNames('en', { type }).resolvedOptions() : Intl.ResolvedDisplayNamesOptions
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DisplayNames('en', { type }).resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
@@ -295,8 +295,8 @@ for (const type of [ 'calendar', 'dateTimeField' ] as const) {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->type : keyof Intl.DisplayNamesOptionsTypeRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DisplayNamesOptionsType
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "calendar" | "dateTimeField"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

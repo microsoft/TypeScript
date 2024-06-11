@@ -28,12 +28,12 @@ new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractional
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >val.type === 'fractionalSecond' : boolean
 >                                : ^^^^^^^
->val.type : keyof Intl.DateTimeFormatPartTypesRegistry
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>val.type : Intl.DateTimeFormatPartTypes
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Intl.DateTimeFormatPart
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
->type : keyof Intl.DateTimeFormatPartTypesRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Intl.DateTimeFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'fractionalSecond' : "fractionalSecond"
 >                   : ^^^^^^^^^^^^^^^^^^
 

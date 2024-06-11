@@ -50,20 +50,20 @@ declare namespace Intl {
     var PluralRules: PluralRulesConstructor;
 
     interface NumberFormatPartTypeRegistry {
-        literal: never;
-        nan: never;
-        infinity: never;
-        percent: never;
-        integer: never;
-        group: never;
-        decimal: never;
-        fraction: never;
-        plusSign: never;
-        minusSign: never;
-        percentSign: never;
-        currency: never;
+        literal: "literal";
+        nan: "nan";
+        infinity: "infinity";
+        percent: "percent";
+        integer: "integer";
+        group: "group";
+        decimal: "decimal";
+        fraction: "fraction";
+        plusSign: "plusSign";
+        minusSign: "minusSign";
+        percentSign: "percentSign";
+        currency: "currency";
     }
-    type NumberFormatPartTypes = keyof NumberFormatPartTypeRegistry;
+    type NumberFormatPartTypes = NumberFormatPartTypeRegistry[keyof NumberFormatPartTypeRegistry];
 
     interface NumberFormatPart {
         type: NumberFormatPartTypes;

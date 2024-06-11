@@ -4,7 +4,7 @@ declare namespace Intl {
     }
 
     interface DateTimeFormatPartTypesRegistry {
-        fractionalSecond: never;
+        fractionalSecond: "fractionalSecond";
     }
 
     type DateTimeFormatOptionsDateStyle = "full" | "long" | "medium" | "short";
@@ -51,12 +51,12 @@ declare namespace Intl {
     type DisplayNamesOptionsFallback = "code" | "none";
 
     interface DisplayNamesOptionsTypeRegistry {
-        language: never;
-        region: never;
-        script: never;
-        currency: never;
+        language: "language";
+        region: "region";
+        script: "script";
+        currency: "currency";
     }
-    type DisplayNamesOptionsType = keyof DisplayNamesOptionsTypeRegistry;
+    type DisplayNamesOptionsType = DisplayNamesOptionsTypeRegistry[keyof DisplayNamesOptionsTypeRegistry];
 
     interface DisplayNamesOptions {
         localeMatcher?: LocaleMatcherAlgorithm | undefined;

@@ -1,14 +1,14 @@
 declare namespace Intl {
     interface DateTimeFormatOptionsTimeZoneNameRegistry {
-        shortOffset: never;
-        longOffset: never;
-        shortGeneric: never;
-        longGeneric: never;
+        shortOffset: "shortOffset";
+        longOffset: "longOffset";
+        shortGeneric: "shortGeneric";
+        longGeneric: "longGeneric";
     }
 
     interface DisplayNamesOptionsTypeRegistry {
-        calendar: never;
-        dateTimeField: never;
+        calendar: "calendar";
+        dateTimeField: "dateTimeField";
     }
 
     type DisplayNamesOptionsLanguageDisplay = "dialect" | "standard";

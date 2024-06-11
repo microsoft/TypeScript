@@ -10,8 +10,8 @@ const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, 
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >trailingZeroDisplay : Intl.NumberFormatOptionsTrailingZeroDisplay
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : false | "auto" | "min2" | "always"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -46,8 +46,8 @@ const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, 
 new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay = 'negative';
 >new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay = 'negative' : "negative"
 >                                                                                                    : ^^^^^^^^^^
->new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signDisplay : Intl.NumberFormatOptionsSignDisplay
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -70,8 +70,8 @@ new Intl.NumberFormat('en', { signDisplay: 'negative' }).resolvedOptions().signD
 >           : ^^^^^^^^^^
 >resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : Intl.NumberFormatOptionsSignDisplay
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'negative' : "negative"
 >           : ^^^^^^^^^^
 
@@ -92,8 +92,8 @@ for (const useGrouping of [ 'min2', 'auto', 'always' ] as const) {
 	new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping = useGrouping;
 >new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping = useGrouping : "auto" | "min2" | "always"
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en', { useGrouping }).resolvedOptions().useGrouping : false | "auto" | "min2" | "always"
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { useGrouping }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en', { useGrouping }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
@@ -114,8 +114,8 @@ for (const useGrouping of [ 'min2', 'auto', 'always' ] as const) {
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : false | "auto" | "min2" | "always"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useGrouping : "auto" | "min2" | "always"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
