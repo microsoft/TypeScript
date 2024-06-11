@@ -48,63 +48,61 @@ Output::
 
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"5381-","impliedFormat":1},{"version":"5381-","impliedFormat":1}],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"5381-","impliedFormat":1},{"version":"5381-","impliedFormat":1}],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/a.js",
-      "./myproject/b.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/a.js",
+    "./myproject/b.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./myproject/a.js": {
-        "original": {
-          "version": "5381-",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./myproject/a.js": {
+      "original": {
         "version": "5381-",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./myproject/b.ts": {
-        "original": {
-          "version": "5381-",
-          "impliedFormat": 1
-        },
+      "version": "5381-",
+      "impliedFormat": "commonjs"
+    },
+    "./myproject/b.ts": {
+      "original": {
         "version": "5381-",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/a.js"
-      ],
-      [
-        3,
-        "./myproject/b.ts"
-      ]
-    ],
-    "options": {
-      "allowJs": true,
-      "outFile": "./out.js"
-    },
-    "pendingEmit": [
-      "Js",
-      false
-    ]
+        "impliedFormat": 1
+      },
+      "version": "5381-",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./myproject/a.js"
+    ],
+    [
+      3,
+      "./myproject/b.ts"
+    ]
+  ],
+  "options": {
+    "allowJs": true,
+    "outFile": "./out.js"
+  },
+  "pendingEmit": [
+    "Js",
+    false
+  ],
   "version": "FakeTSVersion",
-  "size": 759
+  "size": 747
 }
 
 
@@ -218,63 +216,61 @@ Output::
 
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"5029505981-const x = 10;","impliedFormat":1},{"version":"5381-","impliedFormat":1}],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"5029505981-const x = 10;","impliedFormat":1},{"version":"5381-","impliedFormat":1}],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/a.js",
-      "./myproject/b.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/a.js",
+    "./myproject/b.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./myproject/a.js": {
-        "original": {
-          "version": "5029505981-const x = 10;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./myproject/a.js": {
+      "original": {
         "version": "5029505981-const x = 10;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./myproject/b.ts": {
-        "original": {
-          "version": "5381-",
-          "impliedFormat": 1
-        },
+      "version": "5029505981-const x = 10;",
+      "impliedFormat": "commonjs"
+    },
+    "./myproject/b.ts": {
+      "original": {
         "version": "5381-",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/a.js"
-      ],
-      [
-        3,
-        "./myproject/b.ts"
-      ]
-    ],
-    "options": {
-      "allowJs": true,
-      "outFile": "./out.js"
-    },
-    "pendingEmit": [
-      "Js",
-      false
-    ]
+        "impliedFormat": 1
+      },
+      "version": "5381-",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./myproject/a.js"
+    ],
+    [
+      3,
+      "./myproject/b.ts"
+    ]
+  ],
+  "options": {
+    "allowJs": true,
+    "outFile": "./out.js"
+  },
+  "pendingEmit": [
+    "Js",
+    false
+  ],
   "version": "FakeTSVersion",
-  "size": 778
+  "size": 766
 }
 
 

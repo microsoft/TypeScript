@@ -4,84 +4,80 @@ But in clean build because of global diagnostics, semantic diagnostics are not q
 TsBuild info text without affectedFilesPendingEmit:: /src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "../project1/class1.d.ts": {
-        "version": "-3469237238-declare class class1 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "./class2.ts": {
-        "version": "777969115-class class2 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
+  "fileInfos": {
+    "../../../lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "root": [
-      [
-        3,
-        "./class2.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0
+    "../project1/class1.d.ts": {
+      "version": "-3469237238-declare class class1 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "../project1/class1.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./class2.ts",
-        "not cached or not changed"
-      ]
-    ],
-    "latestChangedDtsFile": "FakeFileName"
+    "./class2.ts": {
+      "version": "777969115-class class2 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "./class2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../project1/class1.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./class2.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
 {
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "../project1/class1.d.ts": {
-        "version": "-3469237238-declare class class1 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "./class2.ts": {
-        "version": "777969115-class class2 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
+  "fileInfos": {
+    "../../../lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "root": [
-      [
-        3,
-        "./class2.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0
+    "../project1/class1.d.ts": {
+      "version": "-3469237238-declare class class1 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "latestChangedDtsFile": "FakeFileName"
+    "./class2.ts": {
+      "version": "777969115-class class2 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "./class2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0
+  },
+  "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
 3:: Delete output for class3
@@ -90,93 +86,89 @@ But in clean build because of global diagnostics, semantic diagnostics are not q
 TsBuild info text without affectedFilesPendingEmit:: /src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "../project1/class1.d.ts": {
-        "version": "-3469237238-declare class class1 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "./class2.ts": {
-        "version": "777969115-class class2 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
+  "fileInfos": {
+    "../../../lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "root": [
-      [
-        3,
-        "./class2.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0
+    "../project1/class1.d.ts": {
+      "version": "-3469237238-declare class class1 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "../project1/class1.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./class2.ts",
-        "not cached or not changed"
-      ]
-    ],
-    "latestChangedDtsFile": "FakeFileName"
+    "./class2.ts": {
+      "version": "777969115-class class2 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "./class2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../project1/class1.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./class2.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
 {
-  "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "../project1/class1.d.ts": {
-        "version": "-3469237238-declare class class1 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "./class2.ts": {
-        "version": "777969115-class class2 {}",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
+  "fileInfos": {
+    "../../../lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "root": [
-      [
-        3,
-        "./class2.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0
+    "../project1/class1.d.ts": {
+      "version": "-3469237238-declare class class1 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../project1/class1.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./class2.ts",
-        "not cached or not changed"
-      ]
-    ],
-    "latestChangedDtsFile": "FakeFileName"
+    "./class2.ts": {
+      "version": "777969115-class class2 {}",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      3,
+      "./class2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../project1/class1.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./class2.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }

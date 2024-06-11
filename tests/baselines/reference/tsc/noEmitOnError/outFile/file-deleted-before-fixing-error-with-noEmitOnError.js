@@ -70,78 +70,76 @@ No shapes updated in the builder::
 
 
 //// [/src/outFile.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./project/file1.ts","./project/file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1},{"version":"-7804761415-export class D { }","impliedFormat":1}],"root":[2,3],"options":{"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./project/file1.ts","./project/file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1},{"version":"-7804761415-export class D { }","impliedFormat":1}],"root":[2,3],"options":{"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/src/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./project/file1.ts",
-      "./project/file2.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../lib/lib.d.ts",
+    "./project/file1.ts",
+    "./project/file2.ts"
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./project/file1.ts": {
-        "original": {
-          "version": "-10927263693-export const x: 30 = \"hello\";",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/file1.ts": {
+      "original": {
         "version": "-10927263693-export const x: 30 = \"hello\";",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./project/file2.ts": {
-        "original": {
-          "version": "-7804761415-export class D { }",
-          "impliedFormat": 1
-        },
+      "version": "-10927263693-export const x: 30 = \"hello\";",
+      "impliedFormat": "commonjs"
+    },
+    "./project/file2.ts": {
+      "original": {
         "version": "-7804761415-export class D { }",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./project/file1.ts"
-      ],
-      [
-        3,
-        "./project/file2.ts"
-      ]
-    ],
-    "options": {
-      "module": 2,
-      "noEmitOnError": true,
-      "outFile": "./outFile.js"
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "./project/file1.ts",
-        [
-          {
-            "start": 13,
-            "length": 1,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type '\"hello\"' is not assignable to type '30'."
-          }
-        ]
-      ]
-    ],
-    "pendingEmit": [
-      "Js",
-      false
-    ]
+        "impliedFormat": 1
+      },
+      "version": "-7804761415-export class D { }",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./project/file1.ts"
+    ],
+    [
+      3,
+      "./project/file2.ts"
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./outFile.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./project/file1.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type '\"hello\"' is not assignable to type '30'."
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js",
+    false
+  ],
   "version": "FakeTSVersion",
-  "size": 991
+  "size": 979
 }
 
 
@@ -186,64 +184,62 @@ No shapes updated in the builder::
 
 
 //// [/src/outFile.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./project/file1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1}],"root":[2],"options":{"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./project/file1.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-10927263693-export const x: 30 = \"hello\";","impliedFormat":1}],"root":[2],"options":{"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '\"hello\"' is not assignable to type '30'."}]]],"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/src/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./project/file1.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../lib/lib.d.ts",
+    "./project/file1.ts"
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./project/file1.ts": {
-        "original": {
-          "version": "-10927263693-export const x: 30 = \"hello\";",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/file1.ts": {
+      "original": {
         "version": "-10927263693-export const x: 30 = \"hello\";",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./project/file1.ts"
-      ]
-    ],
-    "options": {
-      "module": 2,
-      "noEmitOnError": true,
-      "outFile": "./outFile.js"
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "./project/file1.ts",
-        [
-          {
-            "start": 13,
-            "length": 1,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type '\"hello\"' is not assignable to type '30'."
-          }
-        ]
-      ]
-    ],
-    "pendingEmit": [
-      "Js",
-      false
-    ]
+        "impliedFormat": 1
+      },
+      "version": "-10927263693-export const x: 30 = \"hello\";",
+      "impliedFormat": "commonjs"
+    }
   },
+  "root": [
+    [
+      2,
+      "./project/file1.ts"
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./outFile.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./project/file1.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type '\"hello\"' is not assignable to type '30'."
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js",
+    false
+  ],
   "version": "FakeTSVersion",
-  "size": 905
+  "size": 893
 }
 
