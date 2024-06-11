@@ -233,7 +233,7 @@ export function protocolTextSpanToFileRange(span: ts.server.protocol.TextSpan): 
         startLine: span.start.line,
         startOffset: span.start.offset,
         endLine: span.end.line,
-        endOffset: span.end.offset
+        endOffset: span.end.offset,
     };
 }
 

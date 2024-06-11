@@ -8,7 +8,10 @@ import {
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
-import { createServerHost, libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    createServerHost,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: regionDiagnostics", () => {
     it("diagnostics for select nodes in a single file", () => {
@@ -27,7 +30,6 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
         const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
 
         openFilesForSession([file1], session);
-        
 
         verifyGetErrRequest({
             session,
@@ -101,7 +103,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 file2.path,
                 {
                     file: file3.path,
-                    ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file3.content, "stringId(\"ok\");"))],
+                    ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file3.content, 'stringId("ok");'))],
                 },
                 file4.path,
             ],
@@ -122,7 +124,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
             content: jsonToReadableText({
                 compilerOptions: {
                     allowSyntheticDefaultImports: true,
-                }
+                },
             }),
         };
         const indexFile = {
@@ -147,7 +149,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
         it("region has suggestion diagnostics", () => {
             const host = createServerHost([config, indexFile, otherFile, libFile]);
             const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
-            
+
             openFilesForSession([indexFile], session);
 
             verifyGetErrRequest({
@@ -159,8 +161,10 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                             protocolTextSpanToFileRange(
                                 protocolTextSpanFromSubstring(
                                     indexFile.content,
-                                    "import add = require(\"./other.js\");\n\nadd(3, \"a\");"))
-                            ],
+                                    'import add = require("./other.js");\n\nadd(3, "a");',
+                                ),
+                            ),
+                        ],
                     },
                 ],
                 skip: [
@@ -186,8 +190,10 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                             protocolTextSpanToFileRange(
                                 protocolTextSpanFromSubstring(
                                     indexFile.content,
-                                    "add(3, \"a\");\n\nadd(1, 2);"))
-                            ],
+                                    'add(3, "a");\n\nadd(1, 2);',
+                                ),
+                            ),
+                        ],
                     },
                 ],
                 skip: [
@@ -215,7 +221,6 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
         const session = new TestSession({ host, alwaysDoRegionDiagnostics: false });
 
         openFilesForSession([file1], session);
-        
 
         verifyGetErrRequest({
             session,
