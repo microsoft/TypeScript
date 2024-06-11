@@ -1805,7 +1805,7 @@ export function transformDeclarations(context: TransformationContext) {
         if (returnValue && nameExpr !== entityName) {
             const updated = factory.updateComputedPropertyName(decl.name, nameExpr) as LateBoundName;
             result = factory.cloneNode(returnValue);
-            (result as Mutable<typeof result & LateBoundDeclaration>).name = updated as Extract<T, {name: ComputedPropertyName}>["name"] & LateBoundName;
+            (result as Mutable<typeof result & LateBoundDeclaration>).name = updated as Extract<T, { name: ComputedPropertyName; }>["name"] & LateBoundName;
         }
         if (!suppressNewDiagnosticContexts) {
             getSymbolAccessibilityDiagnostic = oldDiag!;

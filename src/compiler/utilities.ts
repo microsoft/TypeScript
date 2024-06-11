@@ -494,6 +494,7 @@ import {
     ReturnStatement,
     returnUndefined,
     SatisfiesExpression,
+    SatisfiesKeyofEntityNameExpression,
     ScriptKind,
     ScriptTarget,
     semanticDiagnosticsOptionDeclarations,
@@ -585,7 +586,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
-    SatisfiesKeyofEntityNameExpression,
 } from "./_namespaces/ts.js";
 
 /** @internal */
@@ -11669,5 +11669,4 @@ export function hasInferredType(node: Node): node is HasInferredType {
 /** @internal */
 export function isSatisfiesKeyofExpression(node: Node): node is SatisfiesKeyofEntityNameExpression {
     return node.kind === SyntaxKind.SatisfiesExpression && (node as SatisfiesExpression).type.kind === SyntaxKind.KeyOfKeyword && isEntityNameExpression((node as SatisfiesExpression).expression);
-
 }

@@ -715,6 +715,7 @@ import {
     isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName,
     isSameEntityName,
     isSatisfiesExpression,
+    isSatisfiesKeyofExpression,
     isSetAccessor,
     isSetAccessorDeclaration,
     isShorthandAmbientModuleSymbol,
@@ -1109,7 +1110,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isSatisfiesKeyofExpression,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
