@@ -235,4 +235,36 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
         baselineTsserverLogs("regionDiagnostics", "region diagnostics is skipped for small file", session);
     });
+
+    it("region diagnostics is skipped for @ts-nocheck file", () => {
+        const file1 = {
+            path: "/a/b/app.ts",
+            content: dedent`
+                // @ts-nocheck
+                function foo(x: number, y: string): number {
+                    return x + y;
+                }
+
+
+
+                foo(10, 50);`,
+        };
+        const host = createServerHost([file1, libFile]);
+        const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+
+        openFilesForSession([file1], session);
+
+        verifyGetErrRequest({
+            session,
+            files: [{
+                file: file1.path,
+                ranges: [protocolTextSpanToFileRange(protocolTextSpanFromSubstring(file1.content, "foo(10, 50);"))],
+            }],
+            skip: [
+                { regionSemantic: false },
+            ],
+        });
+
+        baselineTsserverLogs("regionDiagnostics", "region diagnostics is skipped for @ts-nocheck file", session);
+    });
 });
