@@ -1718,7 +1718,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
 
         const inputPath = incrementalBuildInfo ? toPath(state, inputFile) : undefined;
         // If an buildInfo is older than the newest input, we can stop checking
-        if (isIncremental && buildInfoTime < inputTime) {
+        if (buildInfoTime < inputTime) {
             let version: string | undefined;
             let currentVersion: string | undefined;
             if (incrementalBuildInfo) {

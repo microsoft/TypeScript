@@ -250,7 +250,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -353,7 +353,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -650,7 +650,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.js' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -763,7 +763,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -866,7 +866,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -973,7 +973,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.js' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 

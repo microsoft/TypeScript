@@ -129,7 +129,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../out.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../out.tsbuildinfo' is older than input 'a.js'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -182,7 +182,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../out.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../out.tsbuildinfo' is older than input 'a.js'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
