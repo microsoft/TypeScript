@@ -1,0 +1,206 @@
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(22,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(23,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(24,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(25,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(29,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(30,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(33,12): error TS2365: Operator '>' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(34,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(35,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(36,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(38,12): error TS2365: Operator '>' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(39,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(40,12): error TS2365: Operator '>' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(41,12): error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(44,12): error TS2365: Operator '<=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(45,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(46,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(47,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(49,12): error TS2365: Operator '<=' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(50,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(51,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(52,12): error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(55,12): error TS2365: Operator '>=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(56,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(57,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(58,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(60,12): error TS2365: Operator '>=' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(61,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(62,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(63,12): error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+
+
+==== comparisonOperatorWithSubtypeObjectOnIndexSignature.ts (32 errors) ====
+    class Base {
+        public a: string;
+    }
+    
+    class Derived extends Base {
+        public b: string;
+    }
+    
+    var a1: { [a: string]: string };
+    var b1: { [b: string]: string };
+    
+    var a2: { [index: string]: Base };
+    var b2: { [index: string]: Derived };
+    
+    var a3: { [index: number]: string };
+    var b3: { [index: number]: string };
+    
+    var a4: { [index: number]: Base };
+    var b4: { [index: string]: Derived };
+    
+    // operator <
+    var r1a1 = a1 < b1;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+    var r1a1 = a2 < b2;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+    var r1a1 = a3 < b3;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r1a1 = a4 < b4;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+    
+    var r1b1 = b1 < a1;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+    var r1b1 = b2 < a2;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+    var r1b1 = b3 < a3;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r1b1 = b4 < a4;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+    
+    // operator >
+    var r2a1 = a1 > b1;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+    var r2a1 = a2 > b2;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+    var r2a1 = a3 > b3;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r2a1 = a4 > b4;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+    
+    var r2b1 = b1 > a1;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+    var r2b1 = b2 > a2;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+    var r2b1 = b3 > a3;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r2b1 = b4 > a4;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+    
+    // operator <=
+    var r3a1 = a1 <= b1;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+    var r3a1 = a2 <= b2;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+    var r3a1 = a3 <= b3;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r3a1 = a4 <= b4;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+    
+    var r3b1 = b1 <= a1;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+    var r3b1 = b2 <= a2;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+    var r3b1 = b3 <= a3;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r3b1 = b4 <= a4;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+    
+    // operator >=
+    var r4a1 = a1 >= b1;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: string; }'.
+    var r4a1 = a2 >= b2;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: Derived; }'.
+    var r4a1 = a3 >= b3;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r4a1 = a4 >= b4;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: string]: Derived; }'.
+    
+    var r4b1 = b1 >= a1;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [b: string]: string; }' and '{ [a: string]: string; }'.
+    var r4b1 = b2 >= a2;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: string]: Base; }'.
+    var r4b1 = b3 >= a3;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: number]: string; }' and '{ [index: number]: string; }'.
+    var r4b1 = b4 >= a4;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{ [index: string]: Derived; }' and '{ [index: number]: Base; }'.
+    
+    // operator ==
+    var r5a1 = a1 == b1;
+    var r5a1 = a2 == b2;
+    var r5a1 = a3 == b3;
+    var r5a1 = a4 == b4;
+    
+    var r5b1 = b1 == a1;
+    var r5b1 = b2 == a2;
+    var r5b1 = b3 == a3;
+    var r5b1 = b4 == a4;
+    
+    // operator !=
+    var r6a1 = a1 != b1;
+    var r6a1 = a2 != b2;
+    var r6a1 = a3 != b3;
+    var r6a1 = a4 != b4;
+    
+    var r6b1 = b1 != a1;
+    var r6b1 = b2 != a2;
+    var r6b1 = b3 != a3;
+    var r6b1 = b4 != a4;
+    
+    // operator ===
+    var r7a1 = a1 === b1;
+    var r7a1 = a2 === b2;
+    var r7a1 = a3 === b3;
+    var r7a1 = a4 === b4;
+    
+    var r7b1 = b1 === a1;
+    var r7b1 = b2 === a2;
+    var r7b1 = b3 === a3;
+    var r7b1 = b4 === a4;
+    
+    // operator !==
+    var r8a1 = a1 !== b1;
+    var r8a1 = a2 !== b2;
+    var r8a1 = a3 !== b3;
+    var r8a1 = a4 !== b4;
+    
+    var r8b1 = b1 !== a1;
+    var r8b1 = b2 !== a2;
+    var r8b1 = b3 !== a3;
+    var r8b1 = b4 !== a4;
