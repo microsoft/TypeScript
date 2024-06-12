@@ -161,12 +161,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/shared/src 1 undefined Config: /home/src/workspaces/projects/shared/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/shared/src 1 undefined Config: /home/src/workspaces/projects/shared/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/shared/src/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/shared/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/server/src/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/server/package.json 2000 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/server/node_modules/@types 1 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/server/node_modules/@types 1 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/projects/node_modules/@types 1 undefined Project: /home/src/workspaces/projects/server/tsconfig.json WatchType: Type roots
@@ -287,22 +281,10 @@ After request
 PolledWatches::
 /home/src/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/workspaces/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/workspaces/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/workspaces/projects/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/workspaces/projects/server/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/workspaces/projects/server/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/projects/server/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/projects/shared/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/projects/shared/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

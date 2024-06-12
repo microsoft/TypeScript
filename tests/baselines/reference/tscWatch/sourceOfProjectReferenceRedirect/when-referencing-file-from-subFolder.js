@@ -83,7 +83,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"4646078106-export function foo() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1},{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/test.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/test.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -103,41 +103,27 @@ export {};
     "../../../../../../a/lib/lib.d.ts": {
       "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
       "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "../b/src/foo.ts": {
-      "original": {
-        "version": "4646078106-export function foo() { }",
-        "impliedFormat": 1
-      },
       "version": "4646078106-export function foo() { }",
-      "signature": "4646078106-export function foo() { }",
-      "impliedFormat": "commonjs"
+      "signature": "4646078106-export function foo() { }"
     },
     "../b/src/bar/foo.ts": {
-      "original": {
-        "version": "1045484683-export function bar() { }",
-        "impliedFormat": 1
-      },
       "version": "1045484683-export function bar() { }",
-      "signature": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
+      "signature": "1045484683-export function bar() { }"
     },
     "./src/test.ts": {
       "original": {
         "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
-        "signature": "-3531856636-export {};\n",
-        "impliedFormat": 1
+        "signature": "-3531856636-export {};\n"
       },
       "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
-      "signature": "-3531856636-export {};\n",
-      "impliedFormat": "commonjs"
+      "signature": "-3531856636-export {};\n"
     }
   },
   "root": [
@@ -159,37 +145,23 @@ export {};
   },
   "latestChangedDtsFile": "./lib/test.d.ts",
   "version": "FakeTSVersion",
-  "size": 1035
+  "size": 939
 }
 
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/packages/A/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/A/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/A/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/packages/A/src/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/packages/B/src/bar/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/packages/B/src/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

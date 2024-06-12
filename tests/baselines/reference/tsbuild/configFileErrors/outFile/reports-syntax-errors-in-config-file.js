@@ -51,7 +51,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"4646078106-export function foo() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -61,30 +61,9 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "./src/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./src/a.ts": {
-      "original": {
-        "version": "4646078106-export function foo() { }",
-        "impliedFormat": 1
-      },
-      "version": "4646078106-export function foo() { }",
-      "impliedFormat": "commonjs"
-    },
-    "./src/b.ts": {
-      "original": {
-        "version": "1045484683-export function bar() { }",
-        "impliedFormat": 1
-      },
-      "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
-    }
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "4646078106-export function foo() { }",
+    "./src/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
@@ -107,7 +86,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "./src/b.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 809
+  "size": 719
 }
 
 
@@ -167,7 +146,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"9819159940-export function foo() { }export function fooBar() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -177,30 +156,9 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "./src/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./src/a.ts": {
-      "original": {
-        "version": "9819159940-export function foo() { }export function fooBar() { }",
-        "impliedFormat": 1
-      },
-      "version": "9819159940-export function foo() { }export function fooBar() { }",
-      "impliedFormat": "commonjs"
-    },
-    "./src/b.ts": {
-      "original": {
-        "version": "1045484683-export function bar() { }",
-        "impliedFormat": 1
-      },
-      "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
-    }
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
+    "./src/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
@@ -224,7 +182,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "./src/b.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 856
+  "size": 766
 }
 
 
@@ -299,7 +257,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"9819159940-export function foo() { }export function fooBar() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -309,30 +267,9 @@ define("b", ["require", "exports"], function (require, exports) {
     "./src/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./src/a.ts": {
-      "original": {
-        "version": "9819159940-export function foo() { }export function fooBar() { }",
-        "impliedFormat": 1
-      },
-      "version": "9819159940-export function foo() { }export function fooBar() { }",
-      "impliedFormat": "commonjs"
-    },
-    "./src/b.ts": {
-      "original": {
-        "version": "1045484683-export function bar() { }",
-        "impliedFormat": 1
-      },
-      "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
-    }
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
+    "./src/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
@@ -353,6 +290,6 @@ define("b", ["require", "exports"], function (require, exports) {
   "outSignature": "-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "./outFile.d.ts",
   "version": "FakeTSVersion",
-  "size": 1062
+  "size": 972
 }
 

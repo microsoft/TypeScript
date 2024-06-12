@@ -69,18 +69,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
-File '/src/child/package.json' does not exist.
-File '/src/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/src/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/src/child/child2.ts'. ========
-File '/src/child/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/lib/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/child/child2.ts
@@ -92,11 +84,6 @@ src/child/child.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/src/main/tsconfig.json'...
 
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/main/package.json' does not exist.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'child' from '/src/main/main.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/src/main/child.ts' does not exist.
@@ -119,8 +106,6 @@ File '/src/child.jsx' does not exist.
 File '/child.js' does not exist.
 File '/child.jsx' does not exist.
 ======== Module name 'child' was not resolved. ========
-File '/lib/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/childResult.d.ts
@@ -158,7 +143,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
 
 
 //// [/src/childResult.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./child/child2.ts","./child/child.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"6507293504-export function child2() {\n}\n","impliedFormat":1},{"version":"-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./child/child2.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","6507293504-export function child2() {\n}\n","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
 
 //// [/src/childResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -168,30 +153,9 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
     "./child/child.ts"
   ],
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./child/child2.ts": {
-      "original": {
-        "version": "6507293504-export function child2() {\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "6507293504-export function child2() {\n}\n",
-      "impliedFormat": "commonjs"
-    },
-    "./child/child.ts": {
-      "original": {
-        "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./child/child2.ts": "6507293504-export function child2() {\n}\n",
+    "./child/child.ts": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"
   },
   "root": [
     [
@@ -211,7 +175,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
   "outSignature": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
   "latestChangedDtsFile": "./childResult.d.ts",
   "version": "FakeTSVersion",
-  "size": 1085
+  "size": 995
 }
 
 //// [/src/mainResult.d.ts]
@@ -232,7 +196,7 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
 
 
 //// [/src/mainResult.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","impliedFormat":1},{"version":"-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
 
 //// [/src/mainResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -242,30 +206,9 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
     "./main/main.ts"
   ],
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./childresult.d.ts": {
-      "original": {
-        "version": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
-      "impliedFormat": "commonjs"
-    },
-    "./main/main.ts": {
-      "original": {
-        "version": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./childresult.d.ts": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
+    "./main/main.ts": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"
   },
   "root": [
     [
@@ -281,7 +224,7 @@ define("main", ["require", "exports", "child"], function (require, exports, chil
   "outSignature": "7955277823-declare module \"main\" {\n    export function main(): void;\n}\n",
   "latestChangedDtsFile": "./mainResult.d.ts",
   "version": "FakeTSVersion",
-  "size": 1100
+  "size": 1010
 }
 
 
@@ -301,9 +244,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
-File '/src/child/package.json' does not exist.
-File '/src/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/src/child/child2.ts' does not exist.
@@ -312,8 +252,6 @@ File '/src/child/child2.d.ts' does not exist.
 File '/src/child/child2.js' does not exist.
 File '/src/child/child2.jsx' does not exist.
 ======== Module name '../child/child2' was not resolved. ========
-File '/lib/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 [96msrc/child/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2792: [0mCannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import { child2 } from "../child/child2";
@@ -334,7 +272,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/childResult.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/src/childResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -343,22 +281,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "./child/child.ts"
   ],
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./child/child.ts": {
-      "original": {
-        "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./child/child.ts": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"
   },
   "root": [
     [
@@ -392,6 +316,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     false
   ],
   "version": "FakeTSVersion",
-  "size": 1255
+  "size": 1195
 }
 

@@ -5,34 +5,13 @@ TsBuild info text without affectedFilesPendingEmit:: /src/outfile.tsbuildinfo.re
 CleanBuild:
 {
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/nochangefilewithemitspecificerror.ts": {
-      "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/src/class.ts": "545032748-export class classC {\n    prop = 1;\n}",
+    "./project/src/indirectclass.ts": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
+    "./project/src/directuse.ts": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+    "./project/src/indirectuse.ts": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+    "./project/src/nochangefile.ts": "6714567633-export function writeLog(s: string) {\n}",
+    "./project/src/nochangefilewithemitspecificerror.ts": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}"
   },
   "root": [
     [
@@ -75,34 +54,13 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
-    },
-    "./project/src/nochangefilewithemitspecificerror.ts": {
-      "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/src/class.ts": "545032748-export class classC {\n    prop = 1;\n}",
+    "./project/src/indirectclass.ts": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
+    "./project/src/directuse.ts": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+    "./project/src/indirectuse.ts": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+    "./project/src/nochangefile.ts": "6714567633-export function writeLog(s: string) {\n}",
+    "./project/src/nochangefilewithemitspecificerror.ts": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}"
   },
   "root": [
     [
