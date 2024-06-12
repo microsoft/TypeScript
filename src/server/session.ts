@@ -1065,7 +1065,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private sendRequestCompletedEvent(requestId: number): void {
-        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData: this.performanceData }, "requestCompleted");
     }
 
     private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
