@@ -38,16 +38,53 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/noEmit-with-composite-with-semantic-builder-outFile.js
+=======
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-10726455937-export const x = 10;",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "version": "FakeTSVersion",
+  "size": 657
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/outFile/noEmit-with-composite-with-semantic-builder.js
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -102,6 +139,45 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/noEmit-with-composite-with-semantic-builder-outFile.js
+=======
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-10726455937-export const x = 10;",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "version": "FakeTSVersion",
+  "size": 819
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/outFile/noEmit-with-composite-with-semantic-builder.js
 //// [/user/username/projects/outFile.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -189,22 +265,14 @@ declare module "other" {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/package.json:
-  {"pollingInterval":2000} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -274,12 +342,8 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /a/lib/lib.d.ts:
@@ -304,16 +368,55 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/noEmit-with-composite-with-semantic-builder-outFile.js
+=======
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14918944530-export const x = 10;\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":false,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-14918944530-export const x = 10;\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "version": "FakeTSVersion",
+  "size": 855
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/outFile/noEmit-with-composite-with-semantic-builder.js
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -368,6 +471,45 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/noEmit-with-composite-with-semantic-builder-outFile.js
+=======
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14918944530-export const x = 10;\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-14918944530-export const x = 10;\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "version": "FakeTSVersion",
+  "size": 835
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/outFile/noEmit-with-composite-with-semantic-builder.js
 //// [/user/username/projects/outFile.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -447,22 +589,14 @@ define("other", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/package.json:
-  {"pollingInterval":2000} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -533,12 +667,8 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /a/lib/lib.d.ts:
@@ -563,6 +693,45 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/noEmit-with-composite-with-semantic-builder-outFile.js
+=======
+//// [/user/username/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-16105752451-export const x = 10;\n// SomeComment\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-16105752451-export const x = 10;\n// SomeComment\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "version": "FakeTSVersion",
+  "size": 851
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/outFile/noEmit-with-composite-with-semantic-builder.js
 //// [/user/username/projects/outFile.js]
 define("main", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -643,12 +812,8 @@ define("other", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

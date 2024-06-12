@@ -105,7 +105,11 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -122,6 +126,7 @@ export declare class A {
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -147,9 +152,29 @@ export declare class A {
       "composite": true
     },
     "latestChangedDtsFile": "./a.d.ts"
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.ts": {
+      "original": {
+        "version": "-7808316224-export class A {}\n",
+        "signature": "-8728835846-export declare class A {\n}\n"
+      },
+      "version": "-7808316224-export class A {}\n",
+      "signature": "-8728835846-export declare class A {\n}\n"
+    }
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 796
+=======
+  "size": 748
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 //// [/user/username/projects/transitiveReferences/b.js]
@@ -166,7 +191,11 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n","impliedFormat":1}],"root":[3],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -189,6 +218,7 @@ export declare const b: A;
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -228,9 +258,33 @@ export declare const b: A;
       ]
     },
     "latestChangedDtsFile": "./b.d.ts"
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.d.ts": {
+      "version": "-8728835846-export declare class A {\n}\n",
+      "signature": "-8728835846-export declare class A {\n}\n"
+    },
+    "./b.ts": {
+      "original": {
+        "version": "-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n",
+        "signature": "-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"
+      },
+      "version": "-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n",
+      "signature": "-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"
+    }
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 988
+=======
+  "size": 910
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 //// [/user/username/projects/transitiveReferences/c.js]
@@ -248,11 +302,6 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
@@ -269,29 +318,10 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -313,14 +343,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -430,7 +454,11 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n","impliedFormat":1}],"root":[3],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -453,6 +481,7 @@ export declare function gfoo(): void;
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -492,9 +521,33 @@ export declare function gfoo(): void;
       ]
     },
     "latestChangedDtsFile": "./b.d.ts"
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.d.ts": {
+      "version": "-8728835846-export declare class A {\n}\n",
+      "signature": "-8728835846-export declare class A {\n}\n"
+    },
+    "./b.ts": {
+      "original": {
+        "version": "-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }",
+        "signature": "4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"
+      },
+      "version": "-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }",
+      "signature": "4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"
+    }
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1052
+=======
+  "size": 974
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -509,30 +562,6 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -649,11 +678,6 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
@@ -670,29 +694,10 @@ File '/user/username/projects/transitiveReferences/nrefs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -714,18 +719,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/nrefs/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -849,11 +844,6 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
@@ -870,29 +860,10 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -914,18 +885,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json: *new*
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/transitiveReferences/nrefs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1050,37 +1011,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 nrefs/a.d.ts
@@ -1100,16 +1036,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/nrefs/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1234,31 +1162,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
@@ -1277,18 +1186,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/transitiveReferences/nrefs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1384,18 +1283,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
@@ -1407,15 +1296,6 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 [96mtsconfig.c.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m14[0m     {
@@ -1444,14 +1324,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1565,36 +1439,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -1616,14 +1466,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1726,33 +1570,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 [96mtsconfig.b.json[0m:[93m15[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
 [7m15[0m     {
@@ -1782,14 +1602,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1901,33 +1715,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -1948,14 +1738,8 @@ c.ts
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

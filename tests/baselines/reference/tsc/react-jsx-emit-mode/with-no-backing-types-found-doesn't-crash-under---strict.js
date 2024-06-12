@@ -70,6 +70,7 @@ exports.App = App;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../lib/lib.d.ts","./src/index.tsx","./node_modules/@types/react/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","impliedFormat":1},{"version":"-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"code":7016,"category":1,"messageText":"Could not find a declaration file for module 'react/jsx-runtime'. '/src/project/node_modules/react/jsx-runtime.js' implicitly has an 'any' type."}]]]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
@@ -77,6 +78,55 @@ exports.App = App;
   "program": {
     "fileNames": [
       "../../lib/lib.d.ts",
+=======
+{"fileNames":["../../lib/lib.d.ts","./src/index.tsx","./node_modules/@types/react/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14760199789-export const App = () => <div propA={true}></div>;",{"version":"-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}","affectsGlobalScope":true}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"code":7016,"category":1,"messageText":"Could not find a declaration file for module 'react/jsx-runtime'. '/src/project/node_modules/react/jsx-runtime.js' implicitly has an 'any' type."}]]],"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./src/index.tsx",
+    "./node_modules/@types/react/index.d.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/index.tsx": {
+      "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+      "signature": "-14760199789-export const App = () => <div propA={true}></div>;"
+    },
+    "./node_modules/@types/react/index.d.ts": {
+      "original": {
+        "version": "-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}",
+        "affectsGlobalScope": true
+      },
+      "version": "-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}",
+      "signature": "-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
+      "./src/index.tsx"
+    ]
+  ],
+  "options": {
+    "jsx": 4,
+    "jsxImportSource": "react",
+    "module": 1,
+    "strict": true
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       "./src/index.tsx",
       "./node_modules/@types/react/index.d.ts"
     ],
@@ -141,6 +191,10 @@ exports.App = App;
     ]
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1353
+=======
+  "size": 1275
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 

@@ -51,14 +51,6 @@ define(["require", "exports"], function (require, exports) {
 
 
 
-PolledWatches::
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/d/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
@@ -200,14 +192,6 @@ define(["require", "exports"], function (require, exports) {
 
 
 
-PolledWatches::
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/d/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/lib/lib.d.ts:
   {}
@@ -277,14 +261,6 @@ Output::
 
 //// [/users/username/projects/project/f1.js] file written with same contents
 //// [/users/username/projects/project/d/f0.js] file written with same contents
-
-PolledWatches::
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/d/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

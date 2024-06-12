@@ -61,9 +61,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
@@ -161,14 +158,8 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/sub/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -233,14 +224,8 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/sub/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -360,7 +345,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/a.ts ProjectRootPath: /users/username/projects/project:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -391,30 +375,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/users/username/projects/project/sub/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
 
 Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
@@ -618,16 +578,12 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/a.ts: *new*
   {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/sub/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/sub/node_modules/@types: *new*
@@ -826,12 +782,8 @@ After running Timeout callback:: count: 2
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/sub/node_modules/@types:
   {"pollingInterval":500}
 

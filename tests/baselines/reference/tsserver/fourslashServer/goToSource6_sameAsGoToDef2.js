@@ -114,7 +114,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/foo/types/a.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/foo/types/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -160,8 +159,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/foo/types/a.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/foo/types/package.json: *new*
-  {"pollingInterval":2000}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -256,8 +253,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/foo/types/a.d.ts.map: *new*
   {"pollingInterval":500}
-/node_modules/foo/types/package.json:
-  {"pollingInterval":2000}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)

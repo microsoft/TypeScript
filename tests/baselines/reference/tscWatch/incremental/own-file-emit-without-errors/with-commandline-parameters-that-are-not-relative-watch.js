@@ -45,6 +45,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"5029505981-const x = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"2026007743-const y = 20;","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
@@ -53,6 +54,53 @@ var y = 20;
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","affectsGlobalScope":true},{"version":"2026007743-const y = 20;","affectsGlobalScope":true}],"root":[2,3],"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./file1.ts": {
+      "original": {
+        "version": "5029505981-const x = 10;",
+        "affectsGlobalScope": true
+      },
+      "version": "5029505981-const x = 10;",
+      "signature": "5029505981-const x = 10;",
+      "affectsGlobalScope": true
+    },
+    "./file2.ts": {
+      "original": {
+        "version": "2026007743-const y = 20;",
+        "affectsGlobalScope": true
+      },
+      "version": "2026007743-const y = 20;",
+      "signature": "2026007743-const y = 20;",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
+      "./file1.ts"
+    ],
+    [
+      3,
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       "./file2.ts"
     ],
     "fileInfos": {
@@ -102,7 +150,11 @@ var y = 20;
     ]
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 718
+=======
+  "size": 652
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -195,7 +247,11 @@ var z = 10;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3]},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true}],"root":[2,3],"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -213,6 +269,7 @@ var z = 10;
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+<<<<<<< HEAD
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -251,10 +308,51 @@ var z = 10;
         3,
         "./file2.ts"
       ]
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./file1.ts": {
+      "original": {
+        "version": "5029505981-const x = 10;",
+        "signature": "-4001438729-declare const x = 10;\n",
+        "affectsGlobalScope": true
+      },
+      "version": "5029505981-const x = 10;",
+      "signature": "-4001438729-declare const x = 10;\n",
+      "affectsGlobalScope": true
+    },
+    "./file2.ts": {
+      "original": {
+        "version": "3317474623-const z = 10;",
+        "signature": "-368931399-declare const z = 10;\n",
+        "affectsGlobalScope": true
+      },
+      "version": "3317474623-const z = 10;",
+      "signature": "-368931399-declare const z = 10;\n",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
+      "./file1.ts"
+    ],
+    [
+      3,
+      "./file2.ts"
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ]
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 817
+=======
+  "size": 751
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 

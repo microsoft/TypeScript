@@ -1818,8 +1818,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/other.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -2312,8 +2310,6 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/shared/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/app/package.json:
@@ -2321,8 +2317,6 @@ FsWatches::
 /user/username/projects/app/tsconfig.json:
   {}
 /user/username/projects/mylib/tsconfig.json:
-  {}
-/user/username/projects/shared/package.json: *new*
   {}
 /user/username/projects/shared/src/helper.ts: *new*
   {}

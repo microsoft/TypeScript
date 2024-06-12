@@ -45,7 +45,11 @@ var classnames_1 = require("classnames");
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1239706283-export interface Result {} export default function classNames(): Result;","impliedFormat":1},{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","impliedFormat":1},{"version":"-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }","impliedFormat":1}],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]]},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileIdsList":[[2,4],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;","-5756287633-import classNames from \"classnames\"; classNames().foo;","-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"],"root":[3,4],"options":{"module":1},"referencedMap":[[3,1],[4,2]],"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -73,6 +77,7 @@ var classnames_1 = require("classnames");
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -126,10 +131,33 @@ var classnames_1 = require("classnames");
       "./src/types/classnames.d.ts": [
         "./node_modules/classnames/index.d.ts"
       ]
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./node_modules/classnames/index.d.ts": {
+      "version": "1239706283-export interface Result {} export default function classNames(): Result;",
+      "signature": "1239706283-export interface Result {} export default function classNames(): Result;"
+    },
+    "./src/index.ts": {
+      "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
+      "signature": "-5756287633-import classNames from \"classnames\"; classNames().foo;"
+    },
+    "./src/types/classnames.d.ts": {
+      "version": "-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }",
+      "signature": "-16510108606-export {}; declare module \"classnames\" { interface Result { foo } }"
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     }
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1103
+=======
+  "size": 983
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -183,7 +211,11 @@ Found 1 error in src/index.ts[90m:1[0m
 
 //// [/users/username/projects/project/src/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1239706283-export interface Result {} export default function classNames(): Result;","impliedFormat":1},{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-14890340642-export {}; declare module \"classnames\" { interface Result {} }","impliedFormat":1}],"root":[3,4],"options":{"module":1},"fileIdsList":[[2,4],[2]],"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[3,[{"start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]]]},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/classnames/index.d.ts","./src/index.ts","./src/types/classnames.d.ts"],"fileIdsList":[[2,4],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1239706283-export interface Result {} export default function classNames(): Result;",{"version":"-5756287633-import classNames from \"classnames\"; classNames().foo;","signature":"-3531856636-export {};\n"},"-14890340642-export {}; declare module \"classnames\" { interface Result {} }"],"root":[3,4],"options":{"module":1},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[3,[{"start":50,"length":3,"code":2339,"category":1,"messageText":"Property 'foo' does not exist on type 'Result'."}]]],"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -211,6 +243,7 @@ Found 1 error in src/index.ts[90m:1[0m
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -245,6 +278,56 @@ Found 1 error in src/index.ts[90m:1[0m
       }
     },
     "root": [
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./node_modules/classnames/index.d.ts": {
+      "version": "1239706283-export interface Result {} export default function classNames(): Result;",
+      "signature": "1239706283-export interface Result {} export default function classNames(): Result;"
+    },
+    "./src/index.ts": {
+      "original": {
+        "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
+        "signature": "-3531856636-export {};\n"
+      },
+      "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
+      "signature": "-3531856636-export {};\n"
+    },
+    "./src/types/classnames.d.ts": {
+      "version": "-14890340642-export {}; declare module \"classnames\" { interface Result {} }",
+      "signature": "-14890340642-export {}; declare module \"classnames\" { interface Result {} }"
+    }
+  },
+  "root": [
+    [
+      3,
+      "./src/index.ts"
+    ],
+    [
+      4,
+      "./src/types/classnames.d.ts"
+    ]
+  ],
+  "options": {
+    "module": 1
+  },
+  "referencedMap": {
+    "./src/index.ts": [
+      "./node_modules/classnames/index.d.ts",
+      "./src/types/classnames.d.ts"
+    ],
+    "./src/types/classnames.d.ts": [
+      "./node_modules/classnames/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/index.ts",
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       [
         3,
         "./src/index.ts"
@@ -282,7 +365,11 @@ Found 1 error in src/index.ts[90m:1[0m
     ]
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1287
+=======
+  "size": 1179
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 

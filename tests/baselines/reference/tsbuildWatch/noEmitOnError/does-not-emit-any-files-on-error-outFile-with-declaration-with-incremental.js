@@ -66,28 +66,55 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/noEmitOnError/does-not-emit-any-files-on-error-outFile-with-declaration-with-incremental.js
+=======
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"changeFileSet":[1,2,3,4],"version":"FakeTSVersion"}
 
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/src/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "changeFileSet": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 954
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/noEmitOnError/outFile/does-not-emit-any-files-on-error-with-declaration-with-incremental.js
 
 FsWatches::
 /user/username/projects/noEmitOnError/shared/types/db.ts: *new*
@@ -219,6 +246,49 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/noEmitOnError/does-not-emit-any-files-on-error-outFile-with-declaration-with-incremental.js
+=======
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 927
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/noEmitOnError/outFile/does-not-emit-any-files-on-error-with-declaration-with-incremental.js
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -382,6 +452,67 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/noEmitOnError/does-not-emit-any-files-on-error-outFile-with-declaration-with-incremental.js
+=======
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"semanticDiagnosticsPerFile":[[3,[{"start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"pendingEmit":false,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./noemitonerror/src/main.ts",
+      [
+        {
+          "start": 46,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'number' is not assignable to type 'string'."
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "version": "FakeTSVersion",
+  "size": 1084
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/noEmitOnError/outFile/does-not-emit-any-files-on-error-with-declaration-with-incremental.js
 
 
 Program root files: [
@@ -498,6 +629,49 @@ Output::
 
 
 
+<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/noEmitOnError/does-not-emit-any-files-on-error-outFile-with-declaration-with-incremental.js
+=======
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 918
+}
+
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/noEmitOnError/outFile/does-not-emit-any-files-on-error-with-declaration-with-incremental.js
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
     "use strict";

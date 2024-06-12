@@ -105,7 +105,11 @@ export interface C {
 {"version":3,"file":"c.d.ts","sourceRoot":"","sources":["../src/c.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IACd,CAAC,EAAE,CAAC,CAAC;CACR"}
 
 //// [/src/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"12550013887-export class B { prop = \"hello\"; }\n\nexport interface A {\n    b: B;\n}\n","signature":"-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n","impliedFormat":1},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedFormat":1},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedFormat":1}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/b.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"12550013887-export class B { prop = \"hello\"; }\n\nexport interface A {\n    b: B;\n}\n","signature":"-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/b.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -116,7 +120,51 @@ export interface C {
       "./src/c.ts",
       "./src/b.ts"
     ],
+<<<<<<< HEAD
     "fileNamesList": [
+=======
+    [
+      "./src/a.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/a.ts": {
+      "original": {
+        "version": "12550013887-export class B { prop = \"hello\"; }\n\nexport interface A {\n    b: B;\n}\n",
+        "signature": "-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"
+      },
+      "version": "12550013887-export class B { prop = \"hello\"; }\n\nexport interface A {\n    b: B;\n}\n",
+      "signature": "-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"
+    },
+    "./src/c.ts": {
+      "original": {
+        "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+      },
+      "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+      "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+    },
+    "./src/b.ts": {
+      "original": {
+        "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+      },
+      "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+      "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+    }
+  },
+  "root": [
+    [
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       [
         "./src/c.ts"
       ],
@@ -205,7 +253,11 @@ export interface C {
     "latestChangedDtsFile": "./lib/b.d.ts"
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1591
+=======
+  "size": 1507
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -239,7 +291,11 @@ exitCode:: ExitStatus.Success
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IAAG,IAAI,SAAW;CAAE;AAGlC,MAAM,WAAW,CAAC;IACd,CAAC,EAAE,CAAC,CAAC;CACR"}
 
 //// [/src/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"12921437274-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B;\n}\n","signature":"-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n","impliedFormat":1},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedFormat":1},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedFormat":1}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/b.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"12921437274-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B;\n}\n","signature":"-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/b.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -250,7 +306,51 @@ exitCode:: ExitStatus.Success
       "./src/c.ts",
       "./src/b.ts"
     ],
+<<<<<<< HEAD
     "fileNamesList": [
+=======
+    [
+      "./src/a.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/a.ts": {
+      "original": {
+        "version": "12921437274-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B;\n}\n",
+        "signature": "-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"
+      },
+      "version": "12921437274-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B;\n}\n",
+      "signature": "-15427030283-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n}\n"
+    },
+    "./src/c.ts": {
+      "original": {
+        "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+      },
+      "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+      "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+    },
+    "./src/b.ts": {
+      "original": {
+        "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+      },
+      "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+      "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+    }
+  },
+  "root": [
+    [
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       [
         "./src/c.ts"
       ],
@@ -339,7 +439,11 @@ exitCode:: ExitStatus.Success
     "latestChangedDtsFile": "./lib/b.d.ts"
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1604
+=======
+  "size": 1520
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -385,7 +489,11 @@ export interface A {
 //// [/src/lib/b.d.ts.map] file written with same contents
 //// [/src/lib/c.d.ts.map] file written with same contents
 //// [/src/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"17511804123-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B; foo: any;\n}\n","signature":"-21227085920-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n    foo: any;\n}\n","impliedFormat":1},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedFormat":1},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedFormat":1}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/a.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../lib/lib.d.ts","./src/a.ts","./src/c.ts","./src/b.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"17511804123-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B; foo: any;\n}\n","signature":"-21227085920-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n    foo: any;\n}\n"},{"version":"3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n","signature":"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"},{"version":"-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n","signature":"2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"}],"root":[[2,4]],"options":{"alwaysStrict":true,"composite":true,"declaration":true,"declarationMap":true,"emitDeclarationOnly":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","sourceMap":true,"strict":true,"target":1},"referencedMap":[[4,1],[3,2]],"latestChangedDtsFile":"./lib/a.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -396,7 +504,51 @@ export interface A {
       "./src/c.ts",
       "./src/b.ts"
     ],
+<<<<<<< HEAD
     "fileNamesList": [
+=======
+    [
+      "./src/a.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/a.ts": {
+      "original": {
+        "version": "17511804123-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B; foo: any;\n}\n",
+        "signature": "-21227085920-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n    foo: any;\n}\n"
+      },
+      "version": "17511804123-export class B { prop = \"hello\"; }\n\nclass C { }\nexport interface A {\n    b: B; foo: any;\n}\n",
+      "signature": "-21227085920-export declare class B {\n    prop: string;\n}\nexport interface A {\n    b: B;\n    foo: any;\n}\n"
+    },
+    "./src/c.ts": {
+      "original": {
+        "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+      },
+      "version": "3086446657-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}\n",
+      "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
+    },
+    "./src/b.ts": {
+      "original": {
+        "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+      },
+      "version": "-5791025721-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}\n",
+      "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
+    }
+  },
+  "root": [
+    [
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       [
         "./src/c.ts"
       ],
@@ -485,6 +637,10 @@ export interface A {
     "latestChangedDtsFile": "./lib/a.d.ts"
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 1629
+=======
+  "size": 1545
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 

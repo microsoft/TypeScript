@@ -69,7 +69,11 @@ No shapes updated in the builder::
 
 
 //// [/src/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"8018408675-const err: number = \"error\";\nconst a = \"hello","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true,"noCheck":true},"changeFileSet":[1,2]},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"8018408675-const err: number = \"error\";\nconst a = \"hello","signature":false,"affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true,"noCheck":true},"changeFileSet":[1,2],"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -87,6 +91,7 @@ No shapes updated in the builder::
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
@@ -115,11 +120,36 @@ No shapes updated in the builder::
     },
     "changeFileSet": [
       "../lib/lib.d.ts",
+=======
+        "signature": false,
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.ts": {
+      "original": {
+        "version": "8018408675-const err: number = \"error\";\nconst a = \"hello",
+        "signature": false,
+        "affectsGlobalScope": true
+      },
+      "version": "8018408675-const err: number = \"error\";\nconst a = \"hello",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       "./a.ts"
     ]
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 852
+=======
+  "size": 804
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 
@@ -216,7 +246,11 @@ declare const a = "hello";
 
 
 //// [/src/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"6909448549-const err: number = \"error\";\nconst a = \"hello\"","signature":"-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true,"noCheck":true}},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6909448549-const err: number = \"error\";\nconst a = \"hello\"","signature":"-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true,"noCheck":true},"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -233,6 +267,7 @@ declare const a = "hello";
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -260,10 +295,31 @@ declare const a = "hello";
       "declaration": true,
       "emitDeclarationOnly": true,
       "noCheck": true
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.ts": {
+      "original": {
+        "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
+        "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
+        "affectsGlobalScope": true
+      },
+      "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
+      "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
+      "affectsGlobalScope": true
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     }
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 882
+=======
+  "size": 834
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 

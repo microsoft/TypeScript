@@ -66,7 +66,11 @@ export {};
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../lib/lib.esnext.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"module":99,"outDir":"./dist","rootDir":"./src","target":99}},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../lib/lib.esnext.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n","affectsGlobalScope":true}],"root":[2],"options":{"module":99,"outDir":"./dist","rootDir":"./src","target":99},"version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -83,6 +87,7 @@ export {};
           "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -110,9 +115,29 @@ export {};
       "outDir": "./dist",
       "rootDir": "./src",
       "target": 99
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./src/main.ts": {
+      "original": {
+        "version": "-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n",
+        "affectsGlobalScope": true
+      },
+      "version": "-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n",
+      "signature": "-2443389309-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />\n\ndeclare global {\n    interface Test {\n    }\n}\n\nexport {};\n",
+      "affectsGlobalScope": true
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     }
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 904
+=======
+  "size": 856
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 

@@ -43,6 +43,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"5029505981-const x = 10;","impliedFormat":1},{"version":"2026007743-const y = 20;","impliedFormat":1}],"root":[2,3],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
@@ -92,9 +93,28 @@ var y = 20;
     "options": {
       "outFile": "./out.js"
     }
+=======
+{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./file1.ts": "5029505981-const x = 10;",
+    "./file2.ts": "2026007743-const y = 20;"
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 673
+=======
+  "size": 571
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 

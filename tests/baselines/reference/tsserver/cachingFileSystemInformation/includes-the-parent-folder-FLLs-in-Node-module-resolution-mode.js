@@ -70,11 +70,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo/boo/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo/boo/moo/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
@@ -189,20 +184,10 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/moo/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/package.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/proj/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/proj/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/proj/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -264,18 +249,8 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/moo/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/proj/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/proj/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/proj/node_modules:
@@ -321,8 +296,6 @@ Info seq  [hh:mm:ss:mss] Running: /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/debug/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/package.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -379,22 +352,8 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/moo/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/boo/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/proj/foo/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/proj/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/proj/node_modules/debug/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/proj/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/proj/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:

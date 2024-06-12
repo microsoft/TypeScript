@@ -63,8 +63,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
@@ -72,20 +70,17 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+<<<<<<< HEAD
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+=======
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
-File '/user/username/projects/myproject/packages/pkg1/package.json' does not exist.
-File '/user/username/projects/myproject/packages/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -107,8 +102,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node10'.
@@ -117,11 +110,6 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
@@ -143,7 +131,11 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
+<<<<<<< HEAD
 {"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+=======
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -166,6 +158,7 @@ export type { TheNum } from 'const';
           "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+<<<<<<< HEAD
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
@@ -200,6 +193,35 @@ export type { TheNum } from 'const';
         3,
         "../index.ts"
       ]
+=======
+        "affectsGlobalScope": true
+      },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "../const.ts": {
+      "original": {
+        "version": "-11202312776-export type TheNum = 42;",
+        "signature": "-13194036030-export type TheNum = 42;\n"
+      },
+      "version": "-11202312776-export type TheNum = 42;",
+      "signature": "-13194036030-export type TheNum = 42;\n"
+    },
+    "../index.ts": {
+      "original": {
+        "version": "-10837689162-export type { TheNum } from 'const';",
+        "signature": "-9751391360-export type { TheNum } from 'const';\n"
+      },
+      "version": "-10837689162-export type { TheNum } from 'const';",
+      "signature": "-9751391360-export type { TheNum } from 'const';\n"
+    }
+  },
+  "root": [
+    [
+      2,
+      "../const.ts"
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ],
     "options": {
       "composite": true,
@@ -213,7 +235,11 @@ export type { TheNum } from 'const';
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
+<<<<<<< HEAD
   "size": 959
+=======
+  "size": 893
+>>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
