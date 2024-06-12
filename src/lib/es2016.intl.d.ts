@@ -1,13 +1,8 @@
 declare namespace Intl {
     /**
-     * The `Intl.getCanonicalLocales()` method returns an array containing
-     * the canonical locale names. Duplicates will be omitted and elements
-     * will be validated as structurally valid language tags.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales)
-     *
-     * @param locale A list of String values for which to get the canonical locale names
-     * @returns An array containing the canonical and validated locale names.
+     * Takes a list of locale identifiers, and returns a deduplicated list of their canonical names.
+     * Structurally invalid identifiers will cause an error to be thrown.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
      */
-    function getCanonicalLocales(locale?: string | readonly string[]): string[];
+    function getCanonicalLocales(locales?: string | readonly string[]): string[];
 }

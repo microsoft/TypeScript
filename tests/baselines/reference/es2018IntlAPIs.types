@@ -1,73 +1,179 @@
 //// [tests/cases/conformance/es2018/es2018IntlAPIs.ts] ////
 
 === es2018IntlAPIs.ts ===
-// Sample from
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
-const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
->locales : string[]
->        : ^^^^^^^^
->['ban', 'id-u-co-pinyin', 'de-ID'] : string[]
->                                   : ^^^^^^^^
->'ban' : "ban"
->      : ^^^^^
->'id-u-co-pinyin' : "id-u-co-pinyin"
->                 : ^^^^^^^^^^^^^^^^
->'de-ID' : "de-ID"
->        : ^^^^^^^
-
-const options = { localeMatcher: 'lookup' } as const;
->options : { readonly localeMatcher: "lookup"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ localeMatcher: 'lookup' } as const : { readonly localeMatcher: "lookup"; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ localeMatcher: 'lookup' } : { readonly localeMatcher: "lookup"; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->localeMatcher : "lookup"
->              : ^^^^^^^^
->'lookup' : "lookup"
->         : ^^^^^^^^
-
-console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
->console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', ')) : void
->                                                                              : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^    
->Intl.PluralRules.supportedLocalesOf(locales, options).join(', ') : string
->                                                                 : ^^^^^^
->Intl.PluralRules.supportedLocalesOf(locales, options).join : (separator?: string) => string
->                                                           : ^         ^^^      ^^^^^      
->Intl.PluralRules.supportedLocalesOf(locales, options) : string[]
->                                                      : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
->                                    : ^       ^^                          ^^       ^^^                                          ^^^^^        
+Intl.PluralRules(); // expect error
+>Intl.PluralRules() : any
+>                   : ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
->                   : ^       ^^                          ^^       ^^^                                          ^^^^^        
->locales : string[]
->        : ^^^^^^^^
->options : { readonly localeMatcher: "lookup"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->join : (separator?: string) => string
->     : ^         ^^^      ^^^^^      
->', ' : ", "
+
+new Intl.PluralRules();
+>new Intl.PluralRules() : Intl.PluralRules
+>                       : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.PluralRules('en');
+>new Intl.PluralRules('en') : Intl.PluralRules
+>                           : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
 >     : ^^^^
 
-const [ part ] = new Intl.NumberFormat().formatToParts();
->part : Intl.NumberFormatPart
->     : ^^^^^^^^^^^^^^^^^^^^^
+new Intl.PluralRules([ 'en' ] as const);
+>new Intl.PluralRules([ 'en' ] as const) : Intl.PluralRules
+>                                        : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ 'en' ] as const : readonly ["en"]
+>                  : ^^^^^^^^^^^^^^^
+>[ 'en' ] : readonly ["en"]
+>         : ^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+
+const { pluralCategories } = new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
+>pluralCategories : Intl.LDMLPluralRule[]
+>                 : ^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions() : Intl.ResolvedPluralRulesOptions
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions : () => Intl.ResolvedPluralRulesOptions
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }) : Intl.PluralRules
+>                                                                           : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ localeMatcher: 'best fit', type: 'ordinal' } : { localeMatcher: "best fit"; type: "ordinal"; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>localeMatcher : "best fit"
+>              : ^^^^^^^^^^
+>'best fit' : "best fit"
+>           : ^^^^^^^^^^
+>type : "ordinal"
+>     : ^^^^^^^^^
+>'ordinal' : "ordinal"
+>          : ^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedPluralRulesOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.PluralRules().select(10);
+>new Intl.PluralRules().select(10) : Intl.LDMLPluralRule
+>                                  : ^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules().select : (n: number) => Intl.LDMLPluralRule
+>                              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules() : Intl.PluralRules
+>                       : ^^^^^^^^^^^^^^^^
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>select : (n: number) => Intl.LDMLPluralRule
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+Intl.PluralRules.supportedLocalesOf('en');
+>Intl.PluralRules.supportedLocalesOf('en') : string[]
+>                                          : ^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                                    : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>'en' : "en"
+>     : ^^^^
+
+Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' });
+>Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' }) : string[]
+>                                                                                          : ^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                                    : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>[ 'en', 'de' ] as const : readonly ["en", "de"]
+>                        : ^^^^^^^^^^^^^^^^^^^^^
+>[ 'en', 'de' ] : readonly ["en", "de"]
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>'de' : "de"
+>     : ^^^^
+>{ localeMatcher: 'lookup' } : { localeMatcher: "lookup"; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>localeMatcher : "lookup"
+>              : ^^^^^^^^
+>'lookup' : "lookup"
+>         : ^^^^^^^^
+
+const { hourCycle } = Intl.DateTimeFormat('en', { hourCycle: 'h23' }).resolvedOptions();
+>hourCycle : Intl.DateTimeFormatOptionsHourCycle
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en', { hourCycle: 'h23' }).resolvedOptions() : Intl.ResolvedDateTimeFormatOptions
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en', { hourCycle: 'h23' }).resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en', { hourCycle: 'h23' }) : Intl.DateTimeFormat
+>                                                : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en' : "en"
+>     : ^^^^
+>{ hourCycle: 'h23' } : { hourCycle: "h23"; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
+>hourCycle : "h23"
+>          : ^^^^^
+>'h23' : "h23"
+>      : ^^^^^
+>resolvedOptions : () => Intl.ResolvedDateTimeFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new Intl.NumberFormat().formatToParts()[0];
+>new Intl.NumberFormat().formatToParts()[0] : Intl.NumberFormatPart
+>                                           : ^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat().formatToParts() : Intl.NumberFormatPart[]
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.NumberFormat().formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
->                                      : ^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.NumberFormat().formatToParts : (value?: number) => Intl.NumberFormatPart[]
+>                                      : ^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  
 >new Intl.NumberFormat() : Intl.NumberFormat
 >                        : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -76,28 +182,8 @@ const [ part ] = new Intl.NumberFormat().formatToParts();
 >     : ^^^^^^^^^^^
 >NumberFormat : Intl.NumberFormatConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
->              : ^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^  
-
-console.log(part.type, part.value);
->console.log(part.type, part.value) : void
->                                   : ^^^^
->console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^    
->part.type : keyof Intl.NumberFormatPartTypeRegistry
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->part : Intl.NumberFormatPart
->     : ^^^^^^^^^^^^^^^^^^^^^
->type : keyof Intl.NumberFormatPartTypeRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->part.value : string
->           : ^^^^^^
->part : Intl.NumberFormatPart
->     : ^^^^^^^^^^^^^^^^^^^^^
->value : string
->      : ^^^^^^
+>formatToParts : (value?: number) => Intl.NumberFormatPart[]
+>              : ^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>0 : 0
+>  : ^
 

@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/es2017/es2017IntlAPIs.ts] ////
+
+=== es2017IntlAPIs.ts ===
+Intl.DateTimeFormat('en').formatToParts()[0];
+>Intl.DateTimeFormat('en').formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+
+Intl.DateTimeFormat('en').formatToParts(new Date())[0];
+>Intl.DateTimeFormat('en').formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+Intl.DateTimeFormat('en').formatToParts(Date.now())[0];
+>Intl.DateTimeFormat('en').formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+

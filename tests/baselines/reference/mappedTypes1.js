@@ -140,9 +140,9 @@ declare let x2: string;
 declare let x3: number;
 declare let x4: {
     toString: void;
+    toLocaleString: void;
     toFixed: void;
     toExponential: void;
     toPrecision: void;
     valueOf: void;
-    toLocaleString: void;
 };

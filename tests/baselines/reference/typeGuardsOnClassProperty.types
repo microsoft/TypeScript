@@ -175,10 +175,10 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >         : ^^^^^^^^
 >prop1.toLocaleLowerCase() : string
 >                          : ^^^^^^
->prop1.toLocaleLowerCase : (locales?: string | string[]) => string
->                        : ^       ^^^                 ^^^^^      
+>prop1.toLocaleLowerCase : () => string
+>                        : ^^^^^^      
 >prop1 : string
 >      : ^^^^^^
->toLocaleLowerCase : (locales?: string | string[]) => string
->                  : ^       ^^^                 ^^^^^      
+>toLocaleLowerCase : () => string
+>                  : ^^^^^^      
 

@@ -1,10 +1,14 @@
 // @target: es2018
 
-// Sample from
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
-const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
-const options = { localeMatcher: 'lookup' } as const;
-console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
+Intl.PluralRules(); // expect error
+new Intl.PluralRules();
+new Intl.PluralRules('en');
+new Intl.PluralRules([ 'en' ] as const);
+const { pluralCategories } = new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
+new Intl.PluralRules().select(10);
+Intl.PluralRules.supportedLocalesOf('en');
+Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' });
 
-const [ part ] = new Intl.NumberFormat().formatToParts();
-console.log(part.type, part.value);
+const { hourCycle } = Intl.DateTimeFormat('en', { hourCycle: 'h23' }).resolvedOptions();
+
+new Intl.NumberFormat().formatToParts()[0];

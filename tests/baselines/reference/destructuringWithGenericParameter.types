@@ -60,12 +60,12 @@ genericFunction(genericObject, ({greeting}) => {
 >  : ^^^^^^
 >greeting.toLocaleLowerCase() : string
 >                             : ^^^^^^
->greeting.toLocaleLowerCase : (locales?: string | string[]) => string
->                           : ^       ^^^                 ^^^^^      
+>greeting.toLocaleLowerCase : () => string
+>                           : ^^^^^^      
 >greeting : string
 >         : ^^^^^^
->toLocaleLowerCase : (locales?: string | string[]) => string
->                  : ^       ^^^                 ^^^^^      
+>toLocaleLowerCase : () => string
+>                  : ^^^^^^      
 
 });
 

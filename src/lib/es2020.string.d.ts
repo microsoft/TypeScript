@@ -8,17 +8,27 @@ interface String {
      */
     matchAll(regexp: RegExp): IterableIterator<RegExpExecArray>;
 
-    /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
+    /**
+     * Converts all alphabetic characters to lowercase, using locale-sensitive case mapping.
+     * @param locales The preferred locale, or list of preferred locales, to use for the conversation.
+     * This method does not perform locale matching; instead, it always selects the first supported locale.
+     * If omitted, the default locale is used.
+     */
     toLocaleLowerCase(locales?: Intl.LocalesArgument): string;
 
-    /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
+    /**
+     * Converts all alphabetic characters to uppercase, using locale-sensitive case mapping.
+     * @param locales The preferred locale, or list of preferred locales, to use for the conversation.
+     * This method does not perform locale matching; instead, it always selects the first supported locale.
+     * If omitted, the default locale is used.
+     */
     toLocaleUpperCase(locales?: Intl.LocalesArgument): string;
 
     /**
-     * Determines whether two strings are equivalent in the current or specified locale.
-     * @param that String to compare to target string
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-     * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
+     * Determines whether two strings are equivalent, according to the specified locale.
+     * @param that String to compare to the target string.
+     * @param locales The preferred locale, or list of preferred locales, to use for the comparison. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.Collator` constructor.
      */
     localeCompare(that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number;
 }

@@ -1,4 +1,5 @@
 /// <reference lib="es2019" />
+/// <reference lib="es2020.array" />
 /// <reference lib="es2020.bigint" />
 /// <reference lib="es2020.date" />
 /// <reference lib="es2020.number" />

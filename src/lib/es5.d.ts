@@ -109,7 +109,7 @@ interface Object {
     /** Returns a string representation of an object. */
     toString(): string;
 
-    /** Returns a date converted to a string using the current locale. */
+    /** Returns a locale-specific string representation of an object. Intended to be overridden by derived objects. */
     toLocaleString(): string;
 
     /** Returns the primitive value of the specified object. */
@@ -483,14 +483,14 @@ interface String {
     /** Converts all the alphabetic characters in a string to lowercase. */
     toLowerCase(): string;
 
-    /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
-    toLocaleLowerCase(locales?: string | string[]): string;
+    /** Converts all the alphabetic characters in a string to lowercase, using the current locale's case mappings. */
+    toLocaleLowerCase(): string;
 
     /** Converts all the alphabetic characters in a string to uppercase. */
     toUpperCase(): string;
 
-    /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-    toLocaleUpperCase(locales?: string | string[]): string;
+    /** Converts all the alphabetic characters in a string to uppercase, using the current locale's case mappings. */
+    toLocaleUpperCase(): string;
 
     /** Removes the leading and trailing white space and line terminator characters from a string. */
     trim(): string;
@@ -540,10 +540,15 @@ declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
-     * Returns a string representation of an object.
+     * Returns a string representation of a number.
      * @param radix Specifies a radix for converting numeric values to strings. This value is only used for numbers.
      */
     toString(radix?: number): string;
+
+    /**
+     * Returns a string representation of a number according to the host environment's current locale.
+     */
+    toLocaleString(): string;
 
     /**
      * Returns a string representing a number in fixed-point notation.
@@ -758,11 +763,11 @@ interface Date {
     toDateString(): string;
     /** Returns a time as a string value. */
     toTimeString(): string;
-    /** Returns a value as a string value appropriate to the host environment's current locale. */
+    /** Returns the date and time as a string value according to the host environment's current locale. */
     toLocaleString(): string;
-    /** Returns a date as a string value appropriate to the host environment's current locale. */
+    /** Returns a date as a string value according to the host environment's current locale. */
     toLocaleDateString(): string;
-    /** Returns a time as a string value appropriate to the host environment's current locale. */
+    /** Returns a time as a string value according to the host environment's current locale. */
     toLocaleTimeString(): string;
     /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     valueOf(): number;
@@ -1177,7 +1182,8 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
     /**
@@ -1311,7 +1317,8 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
     /**
@@ -2085,7 +2092,8 @@ interface Int8Array {
     subarray(begin?: number, end?: number): Int8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2365,7 +2373,8 @@ interface Uint8Array {
     subarray(begin?: number, end?: number): Uint8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2646,7 +2655,8 @@ interface Uint8ClampedArray {
     subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2926,7 +2936,8 @@ interface Int16Array {
     subarray(begin?: number, end?: number): Int16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3207,7 +3218,8 @@ interface Uint16Array {
     subarray(begin?: number, end?: number): Uint16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3487,7 +3499,8 @@ interface Int32Array {
     subarray(begin?: number, end?: number): Int32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3767,7 +3780,8 @@ interface Uint32Array {
     subarray(begin?: number, end?: number): Uint32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -4048,7 +4062,8 @@ interface Float32Array {
     subarray(begin?: number, end?: number): Float32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -4329,7 +4344,8 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -4382,62 +4398,84 @@ declare var Float64Array: Float64ArrayConstructor;
 /////////////////////////////
 
 declare namespace Intl {
+    type LocaleMatcherAlgorithm = "lookup" | "best fit";
+
+    interface SupportedLocalesOptions {
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
+    }
+
+    type CollatorOptionsUsage = "sort" | "search";
+    type CollatorOptionsCaseFirst = "upper" | "lower" | "false";
+    type CollatorOptionsSensitivity = "base" | "accent" | "case" | "variant";
+
     interface CollatorOptions {
-        usage?: "sort" | "search" | undefined;
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        usage?: CollatorOptionsUsage | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         numeric?: boolean | undefined;
-        caseFirst?: "upper" | "lower" | "false" | undefined;
-        sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
-        collation?: "big5han" | "compat" | "dict" | "direct" | "ducet" | "emoji" | "eor" | "gb2312" | "phonebk" | "phonetic" | "pinyin" | "reformed" | "searchjl" | "stroke" | "trad" | "unihan" | "zhuyin" | undefined;
+        caseFirst?: CollatorOptionsCaseFirst | undefined;
+        sensitivity?: CollatorOptionsSensitivity | undefined;
         ignorePunctuation?: boolean | undefined;
     }
 
     interface ResolvedCollatorOptions {
         locale: string;
-        usage: string;
-        sensitivity: string;
+        usage: CollatorOptionsUsage;
+        sensitivity: CollatorOptionsSensitivity;
         ignorePunctuation: boolean;
         collation: string;
-        caseFirst: string;
-        numeric: boolean;
+        caseFirst?: CollatorOptionsCaseFirst;
+        numeric?: boolean;
     }
 
     interface Collator {
+        /**
+         * Returns the sort order of two strings, according to the selected locale.
+         * This function is bound to its `Collator` instance, so it can be passed directly as an argument to `Array.prototype.sort`.
+         * @param x The first string to compare.
+         * @param y The second string to compare.
+         */
         compare(x: string, y: string): number;
+
+        /** Returns the locale and options computed during initialization of the `Collator`. */
         resolvedOptions(): ResolvedCollatorOptions;
     }
 
     interface CollatorConstructor {
-        new (locales?: string | string[], options?: CollatorOptions): Collator;
-        (locales?: string | string[], options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
+        new (locales?: string | readonly string[], options?: CollatorOptions): Collator;
+        (locales?: string | readonly string[], options?: CollatorOptions): Collator;
+        readonly prototype: Collator;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `Collator`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var Collator: CollatorConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
-        decimal: never;
-        percent: never;
-        currency: never;
+        decimal: "decimal";
+        percent: "percent";
+        currency: "currency";
     }
-
-    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+    type NumberFormatOptionsStyle = NumberFormatOptionsStyleRegistry[keyof NumberFormatOptionsStyleRegistry];
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
-        code: never;
-        symbol: never;
-        name: never;
+        code: "code";
+        symbol: "symbol";
+        name: "name";
     }
-
-    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+    type NumberFormatOptionsCurrencyDisplay = NumberFormatOptionsCurrencyDisplayRegistry[keyof NumberFormatOptionsCurrencyDisplayRegistry];
 
     interface NumberFormatOptionsUseGroupingRegistry {}
-
-    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
-    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : NumberFormatOptionsUseGroupingRegistry[keyof NumberFormatOptionsUseGroupingRegistry] | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : NumberFormatOptionsUseGroupingRegistry[keyof NumberFormatOptionsUseGroupingRegistry] | false;
 
     interface NumberFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
         currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
@@ -4464,31 +4502,59 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
-        format(value: number): string;
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options.
+         * @param value The value to be formatted.
+         */
+        format(value?: number): string;
+
+        /** Returns the locale and options computed during initialization of this `NumberFormat` instance. */
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
 
     interface NumberFormatConstructor {
-        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
-        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+        new (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | readonly string[], options?: NumberFormatOptions): NumberFormat;
         readonly prototype: NumberFormat;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `NumberFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var NumberFormat: NumberFormatConstructor;
 
+    type DateTimeFormatOptionsWeekday = "narrow" | "short" | "long";
+    type DateTimeFormatOptionsEra = "narrow" | "short" | "long";
+    type DateTimeFormatOptionsYear = "2-digit" | "numeric";
+    type DateTimeFormatOptionsMonth = "2-digit" | "numeric" | "narrow" | "short" | "long";
+    type DateTimeFormatOptionsDay = "2-digit" | "numeric";
+    type DateTimeFormatOptionsHour = "2-digit" | "numeric";
+    type DateTimeFormatOptionsMinute = "2-digit" | "numeric";
+    type DateTimeFormatOptionsSecond = "2-digit" | "numeric";
+
+    interface DateTimeFormatOptionsTimeZoneNameRegistry {
+        short: "short";
+        long: "long";
+    }
+    type DateTimeFormatOptionsTimeZoneName = DateTimeFormatOptionsTimeZoneNameRegistry[keyof DateTimeFormatOptionsTimeZoneNameRegistry];
+
     interface DateTimeFormatOptions {
-        localeMatcher?: "best fit" | "lookup" | undefined;
-        weekday?: "long" | "short" | "narrow" | undefined;
-        era?: "long" | "short" | "narrow" | undefined;
-        year?: "numeric" | "2-digit" | undefined;
-        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
-        day?: "numeric" | "2-digit" | undefined;
-        hour?: "numeric" | "2-digit" | undefined;
-        minute?: "numeric" | "2-digit" | undefined;
-        second?: "numeric" | "2-digit" | undefined;
-        timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
-        formatMatcher?: "best fit" | "basic" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
+        weekday?: DateTimeFormatOptionsWeekday | undefined;
+        era?: DateTimeFormatOptionsEra | undefined;
+        year?: DateTimeFormatOptionsYear | undefined;
+        month?: DateTimeFormatOptionsMonth | undefined;
+        day?: DateTimeFormatOptionsDay | undefined;
+        hour?: DateTimeFormatOptionsHour | undefined;
+        minute?: DateTimeFormatOptionsMinute | undefined;
+        second?: DateTimeFormatOptionsSecond | undefined;
+        timeZoneName?: DateTimeFormatOptionsTimeZoneName | undefined;
+        formatMatcher?: "basic" | "best fit" | undefined;
         hour12?: boolean | undefined;
         timeZone?: string | undefined;
     }
@@ -4499,27 +4565,41 @@ declare namespace Intl {
         numberingSystem: string;
         timeZone: string;
         hour12?: boolean;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
+        weekday?: DateTimeFormatOptionsWeekday;
+        era?: DateTimeFormatOptionsEra;
+        year?: DateTimeFormatOptionsYear;
+        month?: DateTimeFormatOptionsMonth;
+        day?: DateTimeFormatOptionsDay;
+        hour?: DateTimeFormatOptionsHour;
+        minute?: DateTimeFormatOptionsMinute;
+        second?: DateTimeFormatOptionsSecond;
+        timeZoneName?: DateTimeFormatOptionsTimeZoneName;
     }
 
     interface DateTimeFormat {
+        /**
+         * Formats a date as a string, according to the selected locale and formatting options.
+         * This function is bound to its `DateTimeFormat` instance, so it can be passed directly as an argument to functions like `Array.prototype.map`.
+         * @param date A `Date` object or timestamp. If undefined, defaults to the value of `Date.now()`.
+         */
         format(date?: Date | number): string;
+
+        /** Returns the locale and options computed during initialization of this `DateTimeFormat` instance. */
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
 
     interface DateTimeFormatConstructor {
-        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+        new (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | readonly string[], options?: DateTimeFormatOptions): DateTimeFormat;
         readonly prototype: DateTimeFormat;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `DateTimeFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
     var DateTimeFormat: DateTimeFormatConstructor;
@@ -4527,41 +4607,41 @@ declare namespace Intl {
 
 interface String {
     /**
-     * Determines whether two strings are equivalent in the current or specified locale.
-     * @param that String to compare to target string
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-     * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
+     * Determines whether two strings are equivalent, according to the specified locale.
+     * @param that String to compare to the target string.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the comparison. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.Collator` constructor.
      */
-    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
-     * Converts a number to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a number to a string, according to the current or specified locale.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
-     * Converts a date and time to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a date and time to a string, according to the specified locale.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
     /**
-     * Converts a date to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a date to a string, according to the specified locale.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
-     * Converts a time to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a time to a string, according to the specified locale.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
-    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
 }

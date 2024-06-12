@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/es2019/es2019IntlAPIs.ts] ////
+
+=== es2019IntlAPIs.ts ===
+Intl.DateTimeFormat().formatToParts()[0].type = 'unknown';
+>Intl.DateTimeFormat().formatToParts()[0].type = 'unknown' : "unknown"
+>                                                          : ^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0].type : Intl.DateTimeFormatPartTypes
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts()[0] : Intl.DateTimeFormatPart
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts() : Intl.DateTimeFormatPart[]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat().formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>                                    : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>Intl.DateTimeFormat() : Intl.DateTimeFormat
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>0 : 0
+>  : ^
+>type : Intl.DateTimeFormatPartTypes
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'unknown' : "unknown"
+>          : ^^^^^^^^^
+

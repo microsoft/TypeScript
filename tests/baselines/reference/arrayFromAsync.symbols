@@ -82,14 +82,14 @@ for await (const v of asyncGen(4)) {
 const sameArr1 = await Array.fromAsync(arrLike);
 >sameArr1 : Symbol(sameArr1, Decl(arrayFromAsync.ts, 25, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >arrLike : Symbol(arrLike, Decl(arrayFromAsync.ts, 12, 5))
 
 const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
 >sameArr2 : Symbol(sameArr2, Decl(arrayFromAsync.ts, 26, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
@@ -107,14 +107,14 @@ const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), 
 const sameArr3 = await Array.fromAsync(genPromises(4));
 >sameArr3 : Symbol(sameArr3, Decl(arrayFromAsync.ts, 27, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >genPromises : Symbol(genPromises, Decl(arrayFromAsync.ts, 4, 3))
 
 const sameArr4 = await Array.fromAsync(asyncGen(4));
 >sameArr4 : Symbol(sameArr4, Decl(arrayFromAsync.ts, 28, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
 
@@ -127,7 +127,7 @@ Data.fromAsync = Array.fromAsync;
 >Data : Symbol(Data, Decl(arrayFromAsync.ts, 28, 52), Decl(arrayFromAsync.ts, 30, 20))
 >fromAsync : Symbol(Data.fromAsync, Decl(arrayFromAsync.ts, 30, 20))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 
 const sameArr5 = await Data.fromAsync(asyncGen(4));
@@ -140,7 +140,7 @@ const sameArr5 = await Data.fromAsync(asyncGen(4));
 const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
 >mapArr1 : Symbol(mapArr1, Decl(arrayFromAsync.ts, 34, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
 >v : Symbol(v, Decl(arrayFromAsync.ts, 34, 50))
@@ -149,7 +149,7 @@ const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
 const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
 >mapArr2 : Symbol(mapArr2, Decl(arrayFromAsync.ts, 35, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >v : Symbol(v, Decl(arrayFromAsync.ts, 35, 48))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -160,7 +160,7 @@ const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
 const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
 >mapArr3 : Symbol(mapArr3, Decl(arrayFromAsync.ts, 36, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >v : Symbol(v, Decl(arrayFromAsync.ts, 36, 48))
 >v : Symbol(v, Decl(arrayFromAsync.ts, 36, 48))
@@ -181,7 +181,7 @@ const badIterable = { [Symbol.iterator] () { throw err; } };
 const badArray = await Array.fromAsync(badIterable);
 >badArray : Symbol(badArray, Decl(arrayFromAsync.ts, 41, 5))
 >Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
 >fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
 >badIterable : Symbol(badIterable, Decl(arrayFromAsync.ts, 39, 5))
 

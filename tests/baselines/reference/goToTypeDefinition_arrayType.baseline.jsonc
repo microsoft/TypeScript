@@ -23,7 +23,8 @@
 //      */
 //     toString(): string;
 //     /**
-//      * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+//      * Returns a string representation of an array.
+//      * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
 //      */
 //     toLocaleString(): string;
 //     /**
@@ -276,7 +277,8 @@
 //      */
 //     toString(): string;
 //     /**
-//      * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+//      * Returns a string representation of an array.
+//      * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
 //      */
 //     toLocaleString(): string;
 //     /**

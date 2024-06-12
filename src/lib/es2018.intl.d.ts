@@ -1,10 +1,9 @@
 declare namespace Intl {
-    // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
     type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";
     type PluralRuleType = "cardinal" | "ordinal";
 
     interface PluralRulesOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         type?: PluralRuleType | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
@@ -18,41 +17,53 @@ declare namespace Intl {
         pluralCategories: LDMLPluralRule[];
         type: PluralRuleType;
         minimumIntegerDigits: number;
-        minimumFractionDigits: number;
-        maximumFractionDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
     }
 
     interface PluralRules {
-        resolvedOptions(): ResolvedPluralRulesOptions;
+        /**
+         * Returns the plural rule identifier for the given number, according to the selected locale and parsing options.
+         * @param n The number to parse.
+         */
         select(n: number): LDMLPluralRule;
+
+        /** Returns the locale and options computed during initialization of this `PluralRules` instance. */
+        resolvedOptions(): ResolvedPluralRulesOptions;
     }
 
     interface PluralRulesConstructor {
         new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+        readonly prototype: PluralRules;
+
+        /**
+         * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `PluralRules`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
     }
 
-    const PluralRules: PluralRulesConstructor;
+    var PluralRules: PluralRulesConstructor;
 
     interface NumberFormatPartTypeRegistry {
-        literal: never;
-        nan: never;
-        infinity: never;
-        percent: never;
-        integer: never;
-        group: never;
-        decimal: never;
-        fraction: never;
-        plusSign: never;
-        minusSign: never;
-        percentSign: never;
-        currency: never;
+        literal: "literal";
+        nan: "nan";
+        infinity: "infinity";
+        percent: "percent";
+        integer: "integer";
+        group: "group";
+        decimal: "decimal";
+        fraction: "fraction";
+        plusSign: "plusSign";
+        minusSign: "minusSign";
+        percentSign: "percentSign";
+        currency: "currency";
     }
-
-    type NumberFormatPartTypes = keyof NumberFormatPartTypeRegistry;
+    type NumberFormatPartTypes = NumberFormatPartTypeRegistry[keyof NumberFormatPartTypeRegistry];
 
     interface NumberFormatPart {
         type: NumberFormatPartTypes;
@@ -60,6 +71,21 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
-        formatToParts(number?: number | bigint): NumberFormatPart[];
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param value The value to be formatted.
+         */
+        formatToParts(value?: number): NumberFormatPart[];
+    }
+
+    type DateTimeFormatOptionsHourCycle = "h11" | "h12" | "h23" | "h24";
+
+    interface DateTimeFormatOptions {
+        hourCycle?: DateTimeFormatOptionsHourCycle | undefined;
+    }
+
+    interface ResolvedDateTimeFormatOptions {
+        hourCycle?: DateTimeFormatOptionsHourCycle;
     }
 }

@@ -1,14 +1,29 @@
 declare namespace Intl {
-    interface DateTimeFormatPartTypesRegistry {
-        fractionalSecond: any;
+    interface CollatorOptions {
+        collation?: string | undefined;
     }
 
+    interface DateTimeFormatPartTypesRegistry {
+        fractionalSecond: "fractionalSecond";
+    }
+
+    type DateTimeFormatOptionsDateStyle = "full" | "long" | "medium" | "short";
+    type DateTimeFormatOptionsTimeStyle = "full" | "long" | "medium" | "short";
+    type DateTimeFormatOptionsDayPeriod = "narrow" | "short" | "long";
+    type DateTimeFormatOptionsFractionalSecondDigits = 1 | 2 | 3;
+
     interface DateTimeFormatOptions {
-        formatMatcher?: "basic" | "best fit" | "best fit" | undefined;
-        dateStyle?: "full" | "long" | "medium" | "short" | undefined;
-        timeStyle?: "full" | "long" | "medium" | "short" | undefined;
-        dayPeriod?: "narrow" | "short" | "long" | undefined;
-        fractionalSecondDigits?: 1 | 2 | 3 | undefined;
+        dateStyle?: DateTimeFormatOptionsDateStyle | undefined;
+        timeStyle?: DateTimeFormatOptionsTimeStyle | undefined;
+        dayPeriod?: DateTimeFormatOptionsDayPeriod | undefined;
+        fractionalSecondDigits?: DateTimeFormatOptionsFractionalSecondDigits | undefined;
+    }
+
+    interface ResolvedDateTimeFormatOptions {
+        dateStyle?: DateTimeFormatOptionsDateStyle;
+        timeStyle?: DateTimeFormatOptionsTimeStyle;
+        dayPeriod?: DateTimeFormatOptionsDayPeriod;
+        fractionalSecondDigits?: DateTimeFormatOptionsFractionalSecondDigits;
     }
 
     interface DateTimeRangeFormatPart extends DateTimeFormatPart {
@@ -16,133 +31,123 @@ declare namespace Intl {
     }
 
     interface DateTimeFormat {
-        formatRange(startDate: Date | number | bigint, endDate: Date | number | bigint): string;
-        formatRangeToParts(startDate: Date | number | bigint, endDate: Date | number | bigint): DateTimeRangeFormatPart[];
+        /**
+         * Formats a date range as a string, according to the selected locale and formatting options.
+         * @param startDate A `Date` object or timestamp representing the start of the range.
+         * @param endDate A `Date` object or timestamp representing the end of the range.
+         */
+        formatRange(startDate: Date | number, endDate: Date | number): string;
+
+        /**
+         * Formats a date range as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param startDate A `Date` object or timestamp representing the start of the range.
+         * @param endDate A `Date` object or timestamp representing the end of the range.
+         */
+        formatRangeToParts(startDate: Date | number, endDate: Date | number): DateTimeRangeFormatPart[];
     }
 
-    interface ResolvedDateTimeFormatOptions {
-        formatMatcher?: "basic" | "best fit" | "best fit";
-        dateStyle?: "full" | "long" | "medium" | "short";
-        timeStyle?: "full" | "long" | "medium" | "short";
-        hourCycle?: "h11" | "h12" | "h23" | "h24";
-        dayPeriod?: "narrow" | "short" | "long";
-        fractionalSecondDigits?: 1 | 2 | 3;
+    type DisplayNamesOptionsStyle = "narrow" | "short" | "long";
+    type DisplayNamesOptionsFallback = "code" | "none";
+
+    interface DisplayNamesOptionsTypeRegistry {
+        language: "language";
+        region: "region";
+        script: "script";
+        currency: "currency";
+    }
+    type DisplayNamesOptionsType = DisplayNamesOptionsTypeRegistry[keyof DisplayNamesOptionsTypeRegistry];
+
+    interface DisplayNamesOptions {
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
+        style?: DisplayNamesOptionsStyle | undefined;
+        type: DisplayNamesOptionsType;
+        fallback?: DisplayNamesOptionsFallback | undefined;
     }
 
-    /**
-     * The locale matching algorithm to use.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
-     */
-    type ListFormatLocaleMatcher = "lookup" | "best fit";
+    interface ResolvedDisplayNamesOptions {
+        locale: string;
+        style: DisplayNamesOptionsStyle;
+        type: DisplayNamesOptionsType;
+        fallback: DisplayNamesOptionsFallback;
+    }
 
-    /**
-     * The format of output message.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
-     */
-    type ListFormatType = "conjunction" | "disjunction" | "unit";
+    interface DisplayNames {
+        /**
+         * Converts a locale data code to a human-readable string, according to the selected locale and formatting options.
+         * @param code The code to convert.
+         */
+        of(code: string): string | undefined;
 
-    /**
-     * The length of the formatted message.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
-     */
-    type ListFormatStyle = "long" | "short" | "narrow";
+        /** Returns the locale and options computed during initialization of this `DisplayNames` instance. */
+        resolvedOptions(): ResolvedDisplayNamesOptions;
+    }
 
-    /**
-     * An object with some or all properties of the `Intl.ListFormat` constructor `options` parameter.
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
-     */
+    interface DisplayNamesConstructor {
+        new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames;
+        readonly prototype: DisplayNames;
+
+        /**
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `DisplayNames`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
+         */
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
+    }
+
+    var DisplayNames: DisplayNamesConstructor;
+
+    type ListFormatOptionsType = "conjunction" | "disjunction" | "unit";
+    type ListFormatOptionsStyle = "long" | "short" | "narrow";
+
     interface ListFormatOptions {
-        /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
-        localeMatcher?: ListFormatLocaleMatcher | undefined;
-        /** The format of output message. */
-        type?: ListFormatType | undefined;
-        /** The length of the internationalized message. */
-        style?: ListFormatStyle | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
+        type?: ListFormatOptionsType | undefined;
+        style?: ListFormatOptionsStyle | undefined;
     }
 
     interface ResolvedListFormatOptions {
         locale: string;
-        style: ListFormatStyle;
-        type: ListFormatType;
+        style: ListFormatOptionsStyle;
+        type: ListFormatOptionsType;
+    }
+
+    interface ListFormatPart {
+        type: "element" | "literal";
+        value: string;
     }
 
     interface ListFormat {
         /**
-         * Returns a string with a language-specific representation of the list.
-         *
-         * @param list - An iterable object, such as an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
-         *
-         * @throws `TypeError` if `list` includes something other than the possible values.
-         *
-         * @returns {string} A language-specific formatted string representing the elements of the list.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/format).
+         * Converts a list of strings to a single formatted string, according to the selected locale and formatting options.
+         * @param list The list of string elements to format.
          */
         format(list: Iterable<string>): string;
 
         /**
-         * Returns an Array of objects representing the different components that can be used to format a list of values in a locale-aware fashion.
-         *
-         * @param list - An iterable object, such as an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), to be formatted according to a locale.
-         *
-         * @throws `TypeError` if `list` includes something other than the possible values.
-         *
-         * @returns {{ type: "element" | "literal", value: string; }[]} An Array of components which contains the formatted parts from the list.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/formatToParts).
+         * Converts a list of strings to a single formatted string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param list The list of string elements to format.
          */
-        formatToParts(list: Iterable<string>): { type: "element" | "literal"; value: string; }[];
+        formatToParts(list: Iterable<string>): ListFormatPart[];
 
-        /**
-         * Returns a new object with properties reflecting the locale and style
-         * formatting options computed during the construction of the current
-         * `Intl.ListFormat` object.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/resolvedOptions).
-         */
+        /** Returns the locale and options computed during initialization of this `ListFormat` instance. */
         resolvedOptions(): ResolvedListFormatOptions;
     }
 
-    const ListFormat: {
-        prototype: ListFormat;
-
-        /**
-         * Creates [Intl.ListFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat) objects that
-         * enable language-sensitive list formatting.
-         *
-         * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
-         *  For the general form and interpretation of the `locales` argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-         *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters)
-         *  with some or all options of `ListFormatOptions`.
-         *
-         * @returns [Intl.ListFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat) object.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat).
-         */
+    interface ListFormatConstructor {
         new (locales?: LocalesArgument, options?: ListFormatOptions): ListFormat;
+        readonly prototype: ListFormat;
 
         /**
-         * Returns an array containing those of the provided locales that are
-         * supported in list formatting without having to fall back to the runtime's default locale.
-         *
-         * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
-         *  For the general form and interpretation of the `locales` argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-         *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/supportedLocalesOf#parameters).
-         *  with some or all possible options.
-         *
-         * @returns An array of strings representing a subset of the given locale tags that are supported in list
-         *  formatting without having to fall back to the runtime's default locale.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/supportedLocalesOf).
+         * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `ListFormat`.
+         * If none of the provided locales are supported, an empty array is returned.
+         * @param locales A locale, or list of locales.
+         * @param options Options for the locale matching algorithm.
          */
-        supportedLocalesOf(locales: LocalesArgument, options?: Pick<ListFormatOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
-    };
+        supportedLocalesOf(locales?: LocalesArgument, options?: SupportedLocalesOptions): string[];
+    }
+
+    var ListFormat: ListFormatConstructor;
 }

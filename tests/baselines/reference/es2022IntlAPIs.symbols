@@ -1,44 +1,122 @@
 //// [tests/cases/conformance/es2022/es2022IntlAPIs.ts] ////
 
 === es2022IntlAPIs.ts ===
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
-const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;
->timezoneNames : Symbol(timezoneNames, Decl(es2022IntlAPIs.ts, 1, 5))
+const locale = new Intl.Locale('en');
+>locale : Symbol(locale, Decl(es2022IntlAPIs.ts, 0, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const mixed = [ 'en', locale ] as const;
+>mixed : Symbol(mixed, Decl(es2022IntlAPIs.ts, 1, 5))
+>locale : Symbol(locale, Decl(es2022IntlAPIs.ts, 0, 5))
 >const : Symbol(const)
 
-for (const zoneName of timezoneNames) {
->zoneName : Symbol(zoneName, Decl(es2022IntlAPIs.ts, 2, 10))
->timezoneNames : Symbol(timezoneNames, Decl(es2022IntlAPIs.ts, 1, 5))
+Intl.Segmenter(); // expect error
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
 
-  var formatter = new Intl.DateTimeFormat('en-US', {
->formatter : Symbol(formatter, Decl(es2022IntlAPIs.ts, 3, 5))
+new Intl.Segmenter();
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+
+new Intl.Segmenter('en');
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+
+new Intl.Segmenter(locale);
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2022IntlAPIs.ts, 0, 5))
+
+new Intl.Segmenter(mixed);
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(es2022IntlAPIs.ts, 1, 5))
+
+const { granularity } = new Intl.Segmenter('en', { granularity: 'grapheme' }).resolvedOptions();
+>granularity : Symbol(granularity, Decl(es2022IntlAPIs.ts, 8, 7))
+>new Intl.Segmenter('en', { granularity: 'grapheme' }).resolvedOptions : Symbol(Intl.Segmenter.resolvedOptions, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>granularity : Symbol(granularity, Decl(es2022IntlAPIs.ts, 8, 50))
+>resolvedOptions : Symbol(Intl.Segmenter.resolvedOptions, Decl(lib.es2022.intl.d.ts, --, --))
+
+const segments = new Intl.Segmenter().segment('foo');
+>segments : Symbol(segments, Decl(es2022IntlAPIs.ts, 9, 5))
+>new Intl.Segmenter().segment : Symbol(Intl.Segmenter.segment, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>segment : Symbol(Intl.Segmenter.segment, Decl(lib.es2022.intl.d.ts, --, --))
+
+segments.containing();
+>segments.containing : Symbol(Intl.Segments.containing, Decl(lib.es2022.intl.d.ts, --, --))
+>segments : Symbol(segments, Decl(es2022IntlAPIs.ts, 9, 5))
+>containing : Symbol(Intl.Segments.containing, Decl(lib.es2022.intl.d.ts, --, --))
+
+segments.containing(0);
+>segments.containing : Symbol(Intl.Segments.containing, Decl(lib.es2022.intl.d.ts, --, --))
+>segments : Symbol(segments, Decl(es2022IntlAPIs.ts, 9, 5))
+>containing : Symbol(Intl.Segments.containing, Decl(lib.es2022.intl.d.ts, --, --))
+
+[ ...segments ];
+>segments : Symbol(segments, Decl(es2022IntlAPIs.ts, 9, 5))
+
+Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
+>Intl.Segmenter.supportedLocalesOf : Symbol(Intl.SegmenterConstructor.supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(Intl.SegmenterConstructor.supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2022IntlAPIs.ts, 0, 5))
+>localeMatcher : Symbol(localeMatcher, Decl(es2022IntlAPIs.ts, 13, 43))
+
+for (const timeZoneName of [ 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric' ] as const) {
+>timeZoneName : Symbol(timeZoneName, Decl(es2022IntlAPIs.ts, 15, 10))
+>const : Symbol(const)
+
+  new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName = timeZoneName;
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions().timeZoneName : Symbol(Intl.ResolvedDateTimeFormatOptions.timeZoneName, Decl(lib.es5.d.ts, --, --))
+>new Intl.DateTimeFormat('en', { timeZoneName }).resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
-
-    timeZone: 'America/Los_Angeles',
->timeZone : Symbol(timeZone, Decl(es2022IntlAPIs.ts, 3, 52))
-
-    timeZoneName: zoneName,
->timeZoneName : Symbol(timeZoneName, Decl(es2022IntlAPIs.ts, 4, 36))
->zoneName : Symbol(zoneName, Decl(es2022IntlAPIs.ts, 2, 10))
-
-  });
+>timeZoneName : Symbol(timeZoneName, Decl(es2022IntlAPIs.ts, 16, 33))
+>resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>timeZoneName : Symbol(Intl.ResolvedDateTimeFormatOptions.timeZoneName, Decl(lib.es5.d.ts, --, --))
+>timeZoneName : Symbol(timeZoneName, Decl(es2022IntlAPIs.ts, 15, 10))
 }
 
-const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const;
->enumerationKeys : Symbol(enumerationKeys, Decl(es2022IntlAPIs.ts, 9, 5))
+const { languageDisplay } = new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }).resolvedOptions();
+>languageDisplay : Symbol(languageDisplay, Decl(es2022IntlAPIs.ts, 19, 7))
+>new Intl.DisplayNames('en', { type: 'region', languageDisplay: 'dialect' }).resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2022IntlAPIs.ts, 19, 57))
+>languageDisplay : Symbol(languageDisplay, Decl(es2022IntlAPIs.ts, 19, 73))
+>resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+
+for (const type of [ 'calendar', 'dateTimeField' ] as const) {
+>type : Symbol(type, Decl(es2022IntlAPIs.ts, 20, 10))
 >const : Symbol(const)
 
-for (const key of enumerationKeys) {
->key : Symbol(key, Decl(es2022IntlAPIs.ts, 10, 10))
->enumerationKeys : Symbol(enumerationKeys, Decl(es2022IntlAPIs.ts, 9, 5))
-
-  var supported = Intl.supportedValuesOf(key);
->supported : Symbol(supported, Decl(es2022IntlAPIs.ts, 11, 5))
->Intl.supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2022.intl.d.ts, --, --))
+  new Intl.DisplayNames('en', { type }).resolvedOptions().type = type;
+>new Intl.DisplayNames('en', { type }).resolvedOptions().type : Symbol(Intl.ResolvedDisplayNamesOptions.type, Decl(lib.es2021.intl.d.ts, --, --))
+>new Intl.DisplayNames('en', { type }).resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
->supportedValuesOf : Symbol(Intl.supportedValuesOf, Decl(lib.es2022.intl.d.ts, --, --))
->key : Symbol(key, Decl(es2022IntlAPIs.ts, 10, 10))
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2022IntlAPIs.ts, 21, 31))
+>resolvedOptions : Symbol(Intl.DisplayNames.resolvedOptions, Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(Intl.ResolvedDisplayNamesOptions.type, Decl(lib.es2021.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2022IntlAPIs.ts, 20, 10))
 }
 

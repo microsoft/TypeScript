@@ -39,7 +39,7 @@ type CoercedVariableValues =
 
   | { errors: ReadonlyArray<GraphQLError>; coerced?: never }
 >errors : Symbol(errors, Decl(discriminateWithOptionalProperty3.ts, 17, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 4 more)
 >GraphQLError : Symbol(GraphQLError, Decl(discriminateWithOptionalProperty3.ts, 2, 37))
 >coerced : Symbol(coerced, Decl(discriminateWithOptionalProperty3.ts, 17, 42))
 
@@ -66,7 +66,7 @@ export function buildExecutionContext(
 >ExecutionArgs : Symbol(ExecutionArgs, Decl(discriminateWithOptionalProperty3.ts, 6, 1))
 
 ): ReadonlyArray<GraphQLError> | ExecutionContext {
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 4 more)
 >GraphQLError : Symbol(GraphQLError, Decl(discriminateWithOptionalProperty3.ts, 2, 37))
 >ExecutionContext : Symbol(ExecutionContext, Decl(discriminateWithOptionalProperty3.ts, 10, 1))
 

@@ -68,9 +68,9 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x.toLocaleString;
->x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     if (!!true) {
         assert(isArrayOfStrings(x));
