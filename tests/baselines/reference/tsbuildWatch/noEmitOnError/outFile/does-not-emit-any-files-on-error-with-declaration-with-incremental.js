@@ -139,6 +139,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -198,6 +199,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -328,6 +330,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -452,6 +455,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -515,6 +519,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -630,6 +635,7 @@ Program options: {
   "incremental": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not

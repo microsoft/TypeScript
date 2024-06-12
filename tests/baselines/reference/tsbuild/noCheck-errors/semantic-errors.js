@@ -35,7 +35,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -54,6 +54,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -65,6 +66,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+
+//// [/src/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 
@@ -96,6 +106,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -108,6 +119,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix `a` error
@@ -123,7 +136,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/tsconfig.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -142,6 +155,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -154,6 +168,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -184,6 +200,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -196,6 +213,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Disable noCheck
@@ -234,6 +253,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -250,6 +270,8 @@ Shape signatures in builder refreshed for::
 /src/a.ts (used version)
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -280,6 +302,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -296,3 +319,5 @@ Shape signatures in builder refreshed for::
 /src/a.ts (used version)
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

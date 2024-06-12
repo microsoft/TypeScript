@@ -248,6 +248,15 @@ b_1.b;
 a_1.X;
 
 
+//// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 /a/lib/tsc.js -w -p tsconfig.c.json --traceResolution --explainFiles
 Output::

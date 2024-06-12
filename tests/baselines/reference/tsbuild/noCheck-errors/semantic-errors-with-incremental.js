@@ -55,6 +55,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -145,6 +146,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -192,6 +194,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -282,6 +285,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -333,6 +337,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -444,6 +449,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not

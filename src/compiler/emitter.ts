@@ -21,7 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
-    canIncludeBindAndCheckDiagnsotics,
+    canIncludeBindAndCheckDiagnostics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -479,7 +479,7 @@ export function forEachEmittedFile<T>(
 
 export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     const configFile = options.configFilePath;
-    if (!isIncrementalCompilation(options)) return undefined;
+    if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
     const outPath = options.outFile;
     let buildInfoExtensionLess: string;
@@ -496,6 +496,11 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
             configFileExtensionLess;
     }
     return buildInfoExtensionLess + Extension.TsBuildInfo;
+}
+
+/** @internal */
+export function canEmitTsBuildInfo(options: CompilerOptions) {
+    return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
 /** @internal */
@@ -811,7 +816,7 @@ export function emitFiles(
             sourceFile => {
                 if (
                     compilerOptions.noCheck ||
-                    !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                    !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
                 ) markLinkedReferences(sourceFile);
             },
         );
@@ -878,7 +883,7 @@ export function emitFiles(
                 (emitOnly && !getEmitDeclarations(compilerOptions)) ||
                 compilerOptions.noCheck ||
                 emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit) ||
-                !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
             ) {
                 collectLinkedAliases(sourceFile);
             }

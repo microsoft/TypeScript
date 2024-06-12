@@ -70,7 +70,7 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -196,6 +196,15 @@ exports.theNum = void 0;
 exports.theNum = 42;
 
 
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Program root files: [
   "/user/username/projects/myproject/packages/pkg2/const.ts",
@@ -206,6 +215,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg2/build",
   "baseUrl": "/user/username/projects/myproject/packages/pkg2",
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
 }
 Program structureReused: Not
@@ -230,6 +240,7 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
 }
 Program structureReused: Not

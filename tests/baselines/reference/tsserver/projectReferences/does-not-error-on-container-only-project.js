@@ -151,6 +151,15 @@ var container;
 })(container || (container = {}));
 
 
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 //// [/user/username/projects/container/built/local/compositeExec.js]
 var container;
 (function (container) {

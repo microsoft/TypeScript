@@ -91,6 +91,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 24
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 25
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 /a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics
 Output::
@@ -152,12 +161,12 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/packag
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 25
+//// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 27
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 28
 export {};
 
 
@@ -196,7 +205,7 @@ FsWatches::
 /home/src/projects/project/packages/package2: *new*
   {"inode":11}
 /home/src/projects/project/packages/package2/dist: *new*
-  {"inode":24}
+  {"inode":26}
 /home/src/projects/project/packages/package2/src: *new*
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts: *new*
@@ -296,7 +305,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":26}
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -415,8 +424,8 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 27
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 28
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -456,7 +465,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":26}
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -642,12 +651,14 @@ exitCode:: ExitStatus.undefined
 Change:: Build package1
 
 Input::
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 28
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 24
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 25
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 30
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 29
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 31
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -696,7 +707,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":27}
+  {"inode":29}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -704,7 +715,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":26}
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -769,8 +780,8 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
 
 
 
-//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 26
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 27
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 28
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -800,9 +811,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":27}
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":29}
+/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
+  {"inode":31}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -810,7 +821,7 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
-  {"inode":24}
+  {"inode":26}
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:

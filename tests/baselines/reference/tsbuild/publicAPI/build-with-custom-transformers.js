@@ -83,6 +83,7 @@ Program root files: [
 ]
 Program options: {
   "composite": true,
+  "tscBuild": true,
   "configFilePath": "/src/shared/tsconfig.json"
 }
 Program structureReused: Not
@@ -103,6 +104,7 @@ Program root files: [
 ]
 Program options: {
   "composite": true,
+  "tscBuild": true,
   "configFilePath": "/src/webpack/tsconfig.json"
 }
 Program structureReused: Not

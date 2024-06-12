@@ -156,6 +156,7 @@ Program options: {
   "declaration": true,
   "outFile": "/user/username/projects/sample1/core/index.js",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
 }
 Program structureReused: Not
@@ -177,6 +178,7 @@ Program options: {
   "declaration": true,
   "outFile": "/user/username/projects/sample1/logic/index.js",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
 }
 Program structureReused: Not
@@ -269,6 +271,7 @@ Program options: {
   "declaration": true,
   "outFile": "/user/username/projects/sample1/core/index.js",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
 }
 Program structureReused: Not
@@ -341,6 +344,7 @@ Program options: {
   "declaration": true,
   "outFile": "/user/username/projects/sample1/logic/index.js",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
 }
 Program structureReused: Not
@@ -428,6 +432,7 @@ Program options: {
   "declaration": true,
   "outFile": "/user/username/projects/sample1/core/index.js",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
 }
 Program structureReused: Not

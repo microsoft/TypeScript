@@ -92,6 +92,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 24
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 25
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -983,12 +992,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 25
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 24
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 25
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 27
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 26
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 28
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1024,7 +1035,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":26}
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1090,9 +1101,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":26}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1232,9 +1243,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":26}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:

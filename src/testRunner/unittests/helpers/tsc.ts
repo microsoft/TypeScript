@@ -379,7 +379,7 @@ function verifyTscEditDiscrepancies({
             }
         }
     }
-    if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt file any difference");
+    if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt find any difference");
     return baselines;
 
     function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {

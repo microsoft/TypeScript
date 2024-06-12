@@ -105,19 +105,19 @@ Output::
     * pkg3/tsconfig.json
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output file 'pkg0/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output file 'pkg0/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output file 'pkg1/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output file 'pkg2/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'pkg3/tsconfig.json' is out of date because output file 'pkg3/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
@@ -132,12 +132,30 @@ exports.pkg0 = void 0;
 exports.pkg0 = 0;
 
 
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 //// [/user/username/projects/myproject/pkg1/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg1 = void 0;
 exports.pkg1 = 1;
 
+
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 //// [/user/username/projects/myproject/pkg2/index.js]
 "use strict";
@@ -146,12 +164,30 @@ exports.pkg2 = void 0;
 exports.pkg2 = 2;
 
 
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 //// [/user/username/projects/myproject/pkg3/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg3 = void 0;
 exports.pkg3 = 3;
 
+
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 FsWatches::
@@ -192,6 +228,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
 }
 Program structureReused: Not
@@ -216,6 +253,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
 }
 Program structureReused: Not
@@ -240,6 +278,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
 }
 Program structureReused: Not
@@ -264,6 +303,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
 }
 Program structureReused: Not
@@ -303,7 +343,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
@@ -312,6 +352,8 @@ Output::
 
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Timeout callback:: count: 1
 5: timerToBuildInvalidatedProject *new*
@@ -322,19 +364,19 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
@@ -345,8 +387,14 @@ Output::
 
 
 //// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -355,6 +403,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
 }
 Program structureReused: Not
@@ -375,6 +424,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
 }
 Program structureReused: Not
@@ -395,6 +445,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
 }
 Program structureReused: Not
@@ -415,6 +466,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg3/tsconfig.json"
 }
 Program structureReused: Not
@@ -527,7 +579,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
@@ -536,6 +588,8 @@ Output::
 
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 Timeout callback:: count: 1
 10: timerToBuildInvalidatedProject *new*
@@ -546,13 +600,13 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/tsconfig.tsbuildinfo' is older than input 'typings/xterm.d.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
@@ -563,7 +617,11 @@ Output::
 
 
 //// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -572,6 +630,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg0/tsconfig.json"
 }
 Program structureReused: Not
@@ -592,6 +651,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg1/tsconfig.json"
 }
 Program structureReused: Not
@@ -612,6 +672,7 @@ Program root files: [
 ]
 Program options: {
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/pkg2/tsconfig.json"
 }
 Program structureReused: Not

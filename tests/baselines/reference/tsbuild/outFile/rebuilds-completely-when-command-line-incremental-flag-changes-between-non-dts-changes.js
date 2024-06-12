@@ -456,6 +456,7 @@ function f() {
 //// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time
 
 
 Change:: Make incremental build with change in file that doesnt affect dts

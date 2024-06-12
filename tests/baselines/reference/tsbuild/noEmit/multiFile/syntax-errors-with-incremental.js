@@ -51,6 +51,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -136,6 +137,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -173,6 +175,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
