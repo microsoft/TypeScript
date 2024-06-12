@@ -8,6 +8,7 @@ import {
     AsExpression,
     BuilderProgram,
     CancellationToken,
+    canEmitTsBuildInfo,
     canHaveDecorators,
     canHaveIllegalDecorators,
     chainDiagnosticMessages,
@@ -195,7 +196,6 @@ import {
     isImportEqualsDeclaration,
     isImportSpecifier,
     isImportTypeNode,
-    isIncrementalCompilation,
     isInJSFile,
     isJSDocImportTag,
     isLiteralImportTypeNode,
@@ -4324,8 +4324,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const outputFile = options.outFile;
         if (options.tsBuildInfoFile) {
-            if (!isIncrementalCompilation(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
+            if (!canEmitTsBuildInfo(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if_not_running_tsc_b, "tsBuildInfoFile");
             }
         }
         else if (options.incremental && !outputFile && !options.configFilePath) {

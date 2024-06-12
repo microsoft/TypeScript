@@ -52,7 +52,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -64,6 +64,15 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 PolledWatches::
@@ -113,6 +122,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -145,7 +155,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -171,6 +181,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -208,7 +219,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -216,6 +227,8 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -260,6 +273,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -299,7 +313,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -312,6 +326,8 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -325,6 +341,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -361,7 +378,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -387,6 +404,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -422,7 +440,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -430,6 +448,8 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -461,6 +481,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -497,7 +518,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -507,6 +528,7 @@ Output::
 
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/dev-build.js] file changed its modified time
 //// [/user/username/projects/dev-build.d.ts] file changed its modified time
 
@@ -522,6 +544,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not

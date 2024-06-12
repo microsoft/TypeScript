@@ -299,6 +299,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Output::
 File '/home/src/projects/project/packages/package1/src/package.json' does not exist.
@@ -315,13 +324,19 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 
 
 Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions *new*
+5: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions
+5: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -331,10 +346,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -498,12 +513,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 
 
 Timeout callback:: count: 2
-5: timerToUpdateProgram *new*
-8: timerToInvalidateFailedLookupResolutions *new*
+7: timerToUpdateProgram *new*
+10: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-5: timerToUpdateProgram
-8: timerToInvalidateFailedLookupResolutions
+7: timerToUpdateProgram
+10: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -657,7 +672,7 @@ FsWatchesRecursive::
   {}
 
 Timeout callback:: count: 0
-8: timerToInvalidateFailedLookupResolutions *deleted*
+10: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -702,6 +717,8 @@ exitCode:: ExitStatus.undefined
 Change:: Build package1
 
 Input::
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/packages/package1/dist/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -731,12 +748,11 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 
 
 Timeout callback:: count: 1
-11: timerToInvalidateFailedLookupResolutions *new*
+13: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-11: timerToInvalidateFailedLookupResolutions
+13: timerToInvalidateFailedLookupResolutions
 
-Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -744,10 +760,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-12: timerToUpdateProgram *new*
+14: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-12: timerToUpdateProgram
+14: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0

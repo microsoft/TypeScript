@@ -435,6 +435,7 @@ Program options: {
   "outDir": "/user/username/projects/demo/lib/core",
   "rootDir": "/user/username/projects/demo/core",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/demo/core/tsconfig.json"
 }
 Program structureReused: Not
@@ -719,6 +720,7 @@ Program options: {
   "outDir": "/user/username/projects/demo/lib/core",
   "rootDir": "/user/username/projects/demo/core",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/demo/core/tsconfig.json"
 }
 Program structureReused: Not

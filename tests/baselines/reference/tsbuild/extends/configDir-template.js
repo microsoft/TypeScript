@@ -105,7 +105,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
@@ -206,6 +206,15 @@ exports.z = void 0;
 // some comment
 exports.z = 10;
 
+
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
 "use strict";

@@ -38,6 +38,15 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 PolledWatches::
 /a/lib/package.json: *new*
@@ -71,6 +80,7 @@ Program root files: [
 Program options: {
   "noUnusedParameters": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
@@ -115,6 +125,8 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/myproject/index.js]
 var fn = function (a, b) { return b; };
 
@@ -127,6 +139,7 @@ Program root files: [
 Program options: {
   "noUnusedParameters": false,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not

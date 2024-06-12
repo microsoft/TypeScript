@@ -145,7 +145,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
@@ -363,4 +363,13 @@ c.doSomething();
 
 //// [/src/third/thirdjs/output/third-output.js.map]
 {"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 

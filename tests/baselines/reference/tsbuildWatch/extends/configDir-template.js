@@ -91,7 +91,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
@@ -221,6 +221,15 @@ exports.z = 10;
 export declare const z = 10;
 
 
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 PolledWatches::
 /a/lib/package.json: *new*
@@ -290,6 +299,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
@@ -431,6 +441,7 @@ src/secondary.ts
 //// [/home/src/projects/myproject/decls/main.d.ts] file changed its modified time
 //// [/home/src/projects/myproject/outDir/src/secondary.js] file changed its modified time
 //// [/home/src/projects/myproject/decls/src/secondary.d.ts] file changed its modified time
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Program root files: [
@@ -459,6 +470,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not

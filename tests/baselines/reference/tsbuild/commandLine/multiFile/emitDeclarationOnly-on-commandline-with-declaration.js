@@ -63,11 +63,11 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output file 'src/project1/src/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/src/e.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because output file 'src/project2/src/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
@@ -93,6 +93,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -125,6 +126,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -156,6 +158,24 @@ export declare const c = 10;
 //// [/src/project1/src/d.d.ts]
 export declare const d = 10;
 
+
+//// [/src/project1/src/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 
@@ -196,6 +216,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -212,6 +233,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: local change
@@ -227,7 +250,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -257,6 +280,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -289,6 +313,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -309,6 +334,10 @@ No shapes updated in the builder::
 //// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: non local change
@@ -324,7 +353,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -354,6 +383,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -386,6 +416,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -410,6 +441,10 @@ export declare const aaa = 10;
 //// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: emit js files
@@ -451,6 +486,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -482,6 +518,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -536,6 +573,10 @@ var b_1 = require("./b");
 exports.d = b_1.b;
 
 
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -575,6 +616,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -591,6 +633,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: js emit with change without emitDeclarationOnly
@@ -606,7 +650,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.js' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -635,6 +679,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -666,6 +711,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -698,6 +744,10 @@ var alocal = 10;
 //// [/src/project1/src/c.js] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/d.js] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: local change
@@ -713,7 +763,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -743,6 +793,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -775,6 +826,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -795,6 +847,10 @@ No shapes updated in the builder::
 //// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: non local change
@@ -810,7 +866,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.d.ts' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -840,6 +896,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -872,6 +929,7 @@ Program root files: [
 Program options: {
   "declaration": true,
   "emitDeclarationOnly": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -896,6 +954,10 @@ export declare const aaaaa = 10;
 
 //// [/src/project1/src/c.d.ts] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: js emit with change without emitDeclarationOnly
@@ -911,7 +973,7 @@ Output::
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/a.js' is older than input 'src/project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
@@ -940,6 +1002,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project1/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -971,6 +1034,7 @@ Program root files: [
 ]
 Program options: {
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/project2/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -1011,3 +1075,7 @@ exports.a2 = 10;
 //// [/src/project1/src/c.js] file written with same contents
 //// [/src/project1/src/d.d.ts] file written with same contents
 //// [/src/project1/src/d.js] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

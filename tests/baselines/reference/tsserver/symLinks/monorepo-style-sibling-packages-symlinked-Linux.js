@@ -505,7 +505,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateChildWatches
+7: timerToUpdateChildWatches
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 22
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -516,10 +516,20 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 24
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 25
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Timeout callback:: count: 1
-3: timerToUpdateChildWatches *new*
+7: timerToUpdateChildWatches *new*
 
+Host is moving to new time
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
@@ -571,10 +581,10 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-5: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Before running Timeout callback:: count: 1
-5: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -582,8 +592,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-6: /home/src/projects/project/packages/package2/tsconfig.json *new*
-7: *ensureProjectForOpenFiles* *new*
+10: /home/src/projects/project/packages/package2/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -592,8 +602,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-6: /home/src/projects/project/packages/package2/tsconfig.json
-7: *ensureProjectForOpenFiles*
+10: /home/src/projects/project/packages/package2/tsconfig.json
+11: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
@@ -771,10 +781,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-8: checkOne *new*
+12: checkOne *new*
 
 Before running Timeout callback:: count: 1
-8: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -867,9 +877,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 3
-9: /home/src/projects/project/packages/package2/tsconfig.json
-10: *ensureProjectForOpenFiles*
-14: timerToUpdateChildWatches
+13: /home/src/projects/project/packages/package2/tsconfig.json
+14: *ensureProjectForOpenFiles*
+18: timerToUpdateChildWatches
 //// [/home/src/projects/project/packages/package1/dist/index.js] deleted
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] deleted
 
@@ -924,9 +934,9 @@ FsWatches *deleted*::
   {"inode":23}
 
 Timeout callback:: count: 3
-9: /home/src/projects/project/packages/package2/tsconfig.json *new*
-10: *ensureProjectForOpenFiles* *new*
-14: timerToUpdateChildWatches *new*
+13: /home/src/projects/project/packages/package2/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
+18: timerToUpdateChildWatches *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1132,7 +1142,7 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+20: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1141,7 +1151,7 @@ Projects::
     dirty: false *changed*
 
 Before running Timeout callback:: count: 1
-16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+20: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1149,8 +1159,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-17: /home/src/projects/project/packages/package2/tsconfig.json *new*
-18: *ensureProjectForOpenFiles* *new*
+21: /home/src/projects/project/packages/package2/tsconfig.json *new*
+22: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1159,8 +1169,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-17: /home/src/projects/project/packages/package2/tsconfig.json
-18: *ensureProjectForOpenFiles*
+21: /home/src/projects/project/packages/package2/tsconfig.json
+22: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1308,10 +1318,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-19: checkOne *new*
+23: checkOne *new*
 
 Before running Timeout callback:: count: 1
-19: checkOne
+23: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1418,13 +1428,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/pr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
-21: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 25
+25: timerToUpdateChildWatches
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 24
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 25
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 27
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 26
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 28
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1462,7 +1474,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":26}
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1477,7 +1489,7 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-21: timerToUpdateChildWatches *new*
+25: timerToUpdateChildWatches *new*
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts
@@ -1530,9 +1542,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":26}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1547,10 +1559,10 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+27: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Before running Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+27: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1558,8 +1570,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
+28: /home/src/projects/project/packages/package2/tsconfig.json *new*
+29: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -1568,8 +1580,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json
-25: *ensureProjectForOpenFiles*
+28: /home/src/projects/project/packages/package2/tsconfig.json
+29: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1689,9 +1701,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":26}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":28}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1747,10 +1759,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-26: checkOne *new*
+30: checkOne *new*
 
 Before running Timeout callback:: count: 1
-26: checkOne
+30: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

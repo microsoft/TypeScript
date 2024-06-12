@@ -72,6 +72,7 @@ Program options: {
   "declaration": true,
   "incremental": true,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -211,6 +212,7 @@ Program options: {
   "declaration": true,
   "incremental": true,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -256,6 +258,7 @@ Program options: {
   "declaration": true,
   "incremental": true,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not

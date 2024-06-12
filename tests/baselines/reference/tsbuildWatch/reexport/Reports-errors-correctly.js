@@ -91,7 +91,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
@@ -215,6 +215,15 @@ exports.session = {
 };
 
 
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 PolledWatches::
 /a/lib/package.json: *new*
@@ -271,6 +280,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/pure/tsconfig.json"
 }
 Program structureReused: Not
@@ -296,6 +306,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/main/tsconfig.json"
 }
 Program structureReused: Not
@@ -456,6 +467,8 @@ Output::
 
 
 
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -467,6 +480,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/pure/tsconfig.json"
 }
 Program structureReused: Not
@@ -490,6 +504,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/main/tsconfig.json"
 }
 Program structureReused: Not
@@ -641,6 +656,8 @@ Output::
 
 
 //// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/reexport/out/main/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -652,6 +669,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/pure/tsconfig.json"
 }
 Program structureReused: Not
@@ -675,6 +693,7 @@ Program options: {
   "outDir": "/user/username/projects/reexport/out",
   "rootDir": "/user/username/projects/reexport/src",
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/reexport/src/main/tsconfig.json"
 }
 Program structureReused: Not

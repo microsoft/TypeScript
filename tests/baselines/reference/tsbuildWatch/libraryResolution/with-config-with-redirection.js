@@ -1099,6 +1099,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/project1/tsconfig.json"
 }
 Program structureReused: Not
@@ -1152,6 +1153,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/project2/tsconfig.json"
 }
 Program structureReused: Not
@@ -1187,6 +1189,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/project3/tsconfig.json"
 }
 Program structureReused: Not
@@ -1223,6 +1226,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/project4/tsconfig.json"
 }
 Program structureReused: Not

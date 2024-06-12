@@ -249,3 +249,12 @@ a_1.X;
   "size": 964
 }
 
+//// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+

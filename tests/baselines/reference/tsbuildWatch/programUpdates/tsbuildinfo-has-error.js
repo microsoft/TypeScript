@@ -109,6 +109,7 @@ Program root files: [
 Program options: {
   "watch": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/project/tsconfig.json"
 }
 Program structureReused: Not

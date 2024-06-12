@@ -53,6 +53,15 @@ function foo() { }
 export declare function foo(): void;
 
 
+//// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
