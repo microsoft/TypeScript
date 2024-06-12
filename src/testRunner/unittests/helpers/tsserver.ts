@@ -395,6 +395,7 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
 interface SkipErrors {
     semantic?: true;
     suggestion?: true;
+    /** Region semantic checking will only happen if this is */
     regionSemantic?: false;
 }
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
@@ -403,17 +404,10 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     for (let i = 0; i < files.length; i++) {
-        const fileSkip = skip?.[i];
-        // Run syntax check for next file
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
-        if (fileSkip?.regionSemantic === false) {
-            // Run region check
-            session.host.runQueuedImmediateCallbacks();
-        }
-        // Run semantic check
-        if (!fileSkip?.semantic) session.host.runQueuedImmediateCallbacks();
-        // Run suggestion check
-        if (!fileSkip?.suggestion) session.host.runQueuedImmediateCallbacks();
+        if (skip?.[i]?.regionSemantic === false) session.host.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }
 }
 

@@ -405,7 +405,11 @@ export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan
     return start <= end ? createTextSpanFromBounds(start, end) : undefined;
 }
 
-/** @internal */
+/**
+ * Given an array of text spans, returns an equivalent sorted array of text spans
+ * where no span overlaps or is adjacent to another span in the array.
+ * @internal
+ */
 export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
     spans = spans.filter(span => span.length > 0).sort((a, b) => {
         return a.start !== b.start ? a.start - b.start : a.length - b.length;
