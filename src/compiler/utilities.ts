@@ -10116,11 +10116,11 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
         options.noCheck ||
         host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
-        !canIncludeBindAndCheckDiagnsotics(sourceFile, options);
+        !canIncludeBindAndCheckDiagnostics(sourceFile, options);
 }
 
 /** @internal */
-export function canIncludeBindAndCheckDiagnsotics(sourceFile: SourceFile, options: CompilerOptions) {
+export function canIncludeBindAndCheckDiagnostics(sourceFile: SourceFile, options: CompilerOptions) {
     if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
     if (
         sourceFile.scriptKind === ScriptKind.TS ||

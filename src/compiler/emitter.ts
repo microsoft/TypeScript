@@ -21,7 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
-    canIncludeBindAndCheckDiagnsotics,
+    canIncludeBindAndCheckDiagnostics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -811,7 +811,7 @@ export function emitFiles(
             sourceFile => {
                 if (
                     compilerOptions.noCheck ||
-                    !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                    !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
                 ) markLinkedReferences(sourceFile);
             },
         );
@@ -878,7 +878,7 @@ export function emitFiles(
                 (emitOnly && !getEmitDeclarations(compilerOptions)) ||
                 compilerOptions.noCheck ||
                 emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit) ||
-                !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+                !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
             ) {
                 collectLinkedAliases(sourceFile);
             }
