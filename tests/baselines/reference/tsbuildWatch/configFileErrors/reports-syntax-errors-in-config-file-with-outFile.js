@@ -48,48 +48,6 @@ Output::
 
 
 
-<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/configFileErrors/reports-syntax-errors-in-config-file-with-outFile.js
-=======
-//// [/user/username/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
-
-//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
-  "fileInfos": {
-    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-    "./myproject/a.ts": "4646078106-export function foo() { }",
-    "./myproject/b.ts": "1045484683-export function bar() { }"
-  },
-  "root": [
-    [
-      2,
-      "./myproject/a.ts"
-    ],
-    [
-      3,
-      "./myproject/b.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "module": 2,
-    "outFile": "./outFile.js"
-  },
-  "changeFileSet": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 660
-}
-
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/configFileErrors/outFile/reports-syntax-errors-in-config-file.js
 
 FsWatches::
 /user/username/projects/myproject/a.ts: *new*
@@ -216,49 +174,6 @@ Output::
 
 
 
-<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/configFileErrors/reports-syntax-errors-in-config-file-with-outFile.js
-=======
-//// [/user/username/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3260843409-export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
-
-//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
-  "fileInfos": {
-    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-    "./myproject/a.ts": "-3260843409-export function fooBar() { }",
-    "./myproject/b.ts": "1045484683-export function bar() { }"
-  },
-  "root": [
-    [
-      2,
-      "./myproject/a.ts"
-    ],
-    [
-      3,
-      "./myproject/b.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "declaration": true,
-    "module": 2,
-    "outFile": "./outFile.js"
-  },
-  "changeFileSet": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 683
-}
-
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/configFileErrors/outFile/reports-syntax-errors-in-config-file.js
 
 
 Program root files: [
@@ -371,46 +286,6 @@ Output::
 
 
 
-<<<<<<< HEAD:tests/baselines/reference/tsbuildWatch/configFileErrors/reports-syntax-errors-in-config-file-with-outFile.js
-=======
-//// [/user/username/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3260843409-export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
-  "fileInfos": {
-    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-    "./myproject/a.ts": "-3260843409-export function fooBar() { }",
-    "./myproject/b.ts": "1045484683-export function bar() { }"
-  },
-  "root": [
-    [
-      2,
-      "./myproject/a.ts"
-    ],
-    [
-      3,
-      "./myproject/b.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "declaration": true,
-    "module": 2,
-    "outFile": "./outFile.js"
-  },
-  "outSignature": "771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
-  "latestChangedDtsFile": "./outFile.d.ts",
-  "version": "FakeTSVersion",
-  "size": 852
-}
-
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tsbuildWatch/configFileErrors/outFile/reports-syntax-errors-in-config-file.js
 //// [/user/username/projects/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -436,7 +311,7 @@ declare module "b" {
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-3260843409-export function fooBar() { }","impliedFormat":1},{"version":"1045484683-export function bar() { }","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3260843409-export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -447,30 +322,9 @@ declare module "b" {
       "./myproject/b.ts"
     ],
     "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/a.ts": {
-        "original": {
-          "version": "-3260843409-export function fooBar() { }",
-          "impliedFormat": 1
-        },
-        "version": "-3260843409-export function fooBar() { }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/b.ts": {
-        "original": {
-          "version": "1045484683-export function bar() { }",
-          "impliedFormat": 1
-        },
-        "version": "1045484683-export function bar() { }",
-        "impliedFormat": "commonjs"
-      }
+      "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "./myproject/a.ts": "-3260843409-export function fooBar() { }",
+      "./myproject/b.ts": "1045484683-export function bar() { }"
     },
     "root": [
       [
@@ -492,7 +346,7 @@ declare module "b" {
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 954
+  "size": 864
 }
 
 

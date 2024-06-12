@@ -87,11 +87,7 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n","impliedFormat":1},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg1_index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg1_index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-11475605505-export declare const theNum: TheNum;\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg1_index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -105,35 +101,28 @@ exitCode:: ExitStatus.Success
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./pkg1_index.ts": {
         "original": {
           "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-          "signature": "-11475605505-export declare const theNum: TheNum;\n",
-          "impliedFormat": 1
+          "signature": "-11475605505-export declare const theNum: TheNum;\n"
         },
         "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-        "signature": "-11475605505-export declare const theNum: TheNum;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-11475605505-export declare const theNum: TheNum;\n"
       },
       "./typeroot1/sometype/index.d.ts": {
         "original": {
           "version": "-4557394441-declare type TheNum = \"type1\";",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-4557394441-declare type TheNum = \"type1\";",
         "signature": "-4557394441-declare type TheNum = \"type1\";",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       }
     },
     "root": [
@@ -146,38 +135,9 @@ exitCode:: ExitStatus.Success
       "composite": true
     },
     "latestChangedDtsFile": "./pkg1_index.d.ts"
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./pkg1_index.ts": {
-      "original": {
-        "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-        "signature": "-11475605505-export declare const theNum: TheNum;\n"
-      },
-      "version": "-9601687719-export const theNum: TheNum = \"type1\";",
-      "signature": "-11475605505-export declare const theNum: TheNum;\n"
-    },
-    "./typeroot1/sometype/index.d.ts": {
-      "original": {
-        "version": "-4557394441-declare type TheNum = \"type1\";",
-        "affectsGlobalScope": true
-      },
-      "version": "-4557394441-declare type TheNum = \"type1\";",
-      "signature": "-4557394441-declare type TheNum = \"type1\";",
-      "affectsGlobalScope": true
-    }
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 974
-=======
-  "size": 908
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 920
 }
 
 //// [/src/packages/pkg1_index.d.ts]
@@ -192,11 +152,7 @@ exports.theNum = "type1";
 
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n","impliedFormat":1},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg2_index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg2_index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12823281204-export const theNum: TheNum2 = \"type2\";","signature":"-13622769679-export declare const theNum: TheNum2;\n"},{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./pkg2_index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -210,35 +166,28 @@ exports.theNum = "type1";
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./pkg2_index.ts": {
         "original": {
           "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-          "signature": "-13622769679-export declare const theNum: TheNum2;\n",
-          "impliedFormat": 1
+          "signature": "-13622769679-export declare const theNum: TheNum2;\n"
         },
         "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-        "signature": "-13622769679-export declare const theNum: TheNum2;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-13622769679-export declare const theNum: TheNum2;\n"
       },
       "./typeroot2/sometype/index.d.ts": {
         "original": {
           "version": "-980425686-declare type TheNum2 = \"type2\";",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-980425686-declare type TheNum2 = \"type2\";",
         "signature": "-980425686-declare type TheNum2 = \"type2\";",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       }
     },
     "root": [
@@ -251,38 +200,9 @@ exports.theNum = "type1";
       "composite": true
     },
     "latestChangedDtsFile": "./pkg2_index.d.ts"
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./pkg2_index.ts": {
-      "original": {
-        "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-        "signature": "-13622769679-export declare const theNum: TheNum2;\n"
-      },
-      "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
-      "signature": "-13622769679-export declare const theNum: TheNum2;\n"
-    },
-    "./typeroot2/sometype/index.d.ts": {
-      "original": {
-        "version": "-980425686-declare type TheNum2 = \"type2\";",
-        "affectsGlobalScope": true
-      },
-      "version": "-980425686-declare type TheNum2 = \"type2\";",
-      "signature": "-980425686-declare type TheNum2 = \"type2\";",
-      "affectsGlobalScope": true
-    }
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 977
-=======
-  "size": 911
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 923
 }
 
 //// [/src/packages/pkg2_index.d.ts]

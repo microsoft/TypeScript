@@ -82,15 +82,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-<<<<<<< HEAD
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
-=======
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -156,11 +148,7 @@ export type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n","impliedFormat":1},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n","impliedFormat":1},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -180,82 +168,38 @@ export type TheStr = string;
       "../../../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-<<<<<<< HEAD
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../const.ts": {
         "original": {
           "version": "-11202312776-export type TheNum = 42;",
-          "signature": "-13194036030-export type TheNum = 42;\n",
-          "impliedFormat": 1
+          "signature": "-13194036030-export type TheNum = 42;\n"
         },
         "version": "-11202312776-export type TheNum = 42;",
-        "signature": "-13194036030-export type TheNum = 42;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-13194036030-export type TheNum = 42;\n"
       },
       "../index.ts": {
         "original": {
           "version": "-11225381282-export type { TheNum } from './const.js';",
-          "signature": "-9660329432-export type { TheNum } from './const.js';\n",
-          "impliedFormat": 1
+          "signature": "-9660329432-export type { TheNum } from './const.js';\n"
         },
         "version": "-11225381282-export type { TheNum } from './const.js';",
-        "signature": "-9660329432-export type { TheNum } from './const.js';\n",
-        "impliedFormat": "commonjs"
+        "signature": "-9660329432-export type { TheNum } from './const.js';\n"
       },
       "../other.ts": {
         "original": {
           "version": "-4609154030-export type TheStr = string;",
-          "signature": "-6073194916-export type TheStr = string;\n",
-          "impliedFormat": 1
+          "signature": "-6073194916-export type TheStr = string;\n"
         },
         "version": "-4609154030-export type TheStr = string;",
-        "signature": "-6073194916-export type TheStr = string;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-6073194916-export type TheStr = string;\n"
       }
     },
     "root": [
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true
-    },
-    "../const.ts": {
-      "original": {
-        "version": "-11202312776-export type TheNum = 42;",
-        "signature": "-13194036030-export type TheNum = 42;\n"
-      },
-      "version": "-11202312776-export type TheNum = 42;",
-      "signature": "-13194036030-export type TheNum = 42;\n"
-    },
-    "../index.ts": {
-      "original": {
-        "version": "-11225381282-export type { TheNum } from './const.js';",
-        "signature": "-9660329432-export type { TheNum } from './const.js';\n"
-      },
-      "version": "-11225381282-export type { TheNum } from './const.js';",
-      "signature": "-9660329432-export type { TheNum } from './const.js';\n"
-    },
-    "../other.ts": {
-      "original": {
-        "version": "-4609154030-export type TheStr = string;",
-        "signature": "-6073194916-export type TheStr = string;\n"
-      },
-      "version": "-4609154030-export type TheStr = string;",
-      "signature": "-6073194916-export type TheStr = string;\n"
-    }
-  },
-  "root": [
-    [
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       [
         [
           2,
@@ -280,11 +224,7 @@ export type TheStr = string;
     "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1115
-=======
-  "size": 1031
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1043
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -436,8 +376,6 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 
 
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -447,12 +385,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "watch": true,
   "traceResolution": true,
-<<<<<<< HEAD
-  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
-=======
-  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 Program structureReused: Not
 Program files::
@@ -532,8 +465,6 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -543,12 +474,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "watch": true,
   "traceResolution": true,
-<<<<<<< HEAD
-  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
-=======
-  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
 }
 Program structureReused: Not
 Program files::

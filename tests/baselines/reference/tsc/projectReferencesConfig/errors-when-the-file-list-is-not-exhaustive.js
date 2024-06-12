@@ -67,11 +67,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/primary/bin/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -90,34 +86,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../b.ts": {
         "original": {
           "version": "-2704852577-export {}",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 1
+          "signature": "-3531856636-export {};\n"
         },
         "version": "-2704852577-export {}",
-        "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "signature": "-3531856636-export {};\n"
       },
       "../a.ts": {
         "original": {
           "version": "-4190788607-import * as b from './b'",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 1
+          "signature": "-3531856636-export {};\n"
         },
         "version": "-4190788607-import * as b from './b'",
-        "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "signature": "-3531856636-export {};\n"
       }
     },
     "root": [
@@ -136,36 +125,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
       ]
     },
     "latestChangedDtsFile": "./a.d.ts"
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../b.ts": {
-      "original": {
-        "version": "-2704852577-export {}",
-        "signature": "-3531856636-export {};\n"
-      },
-      "version": "-2704852577-export {}",
-      "signature": "-3531856636-export {};\n"
-    },
-    "../a.ts": {
-      "original": {
-        "version": "-4190788607-import * as b from './b'",
-        "signature": "-3531856636-export {};\n"
-      },
-      "version": "-4190788607-import * as b from './b'",
-      "signature": "-3531856636-export {};\n"
-    }
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 938
-=======
-  "size": 872
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 884
 }
 

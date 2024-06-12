@@ -137,11 +137,7 @@ export * from "./subfolder";
 //# sourceMappingURL=index.d.ts.map
 
 //// [/home/src/projects/project/packages/package-a/build/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../src/subfolder/index.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11228512861-export const FOO = \"bar\";","signature":"-8746013027-export declare const FOO = \"bar\";\n","impliedFormat":99},{"version":"-16576232793-export * from \"./subfolder\";","signature":"-14439737455-export * from \"./subfolder\";\n","impliedFormat":99}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../src/subfolder/index.ts","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11228512861-export const FOO = \"bar\";","signature":"-8746013027-export declare const FOO = \"bar\";\n"},{"version":"-16576232793-export * from \"./subfolder\";","signature":"-14439737455-export * from \"./subfolder\";\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../src/subfolder/index.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11228512861-export const FOO = \"bar\";","signature":"-8746013027-export declare const FOO = \"bar\";\n"},{"version":"-16576232793-export * from \"./subfolder\";","signature":"-14439737455-export * from \"./subfolder\";\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package-a/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -160,34 +156,27 @@ export * from "./subfolder";
       "../../../../../../../a/lib/lib.es2021.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../src/subfolder/index.ts": {
         "original": {
           "version": "-11228512861-export const FOO = \"bar\";",
-          "signature": "-8746013027-export declare const FOO = \"bar\";\n",
-          "impliedFormat": 99
+          "signature": "-8746013027-export declare const FOO = \"bar\";\n"
         },
         "version": "-11228512861-export const FOO = \"bar\";",
-        "signature": "-8746013027-export declare const FOO = \"bar\";\n",
-        "impliedFormat": "esnext"
+        "signature": "-8746013027-export declare const FOO = \"bar\";\n"
       },
       "../src/index.ts": {
         "original": {
           "version": "-16576232793-export * from \"./subfolder\";",
-          "signature": "-14439737455-export * from \"./subfolder\";\n",
-          "impliedFormat": 99
+          "signature": "-14439737455-export * from \"./subfolder\";\n"
         },
         "version": "-16576232793-export * from \"./subfolder\";",
-        "signature": "-14439737455-export * from \"./subfolder\";\n",
-        "impliedFormat": "esnext"
+        "signature": "-14439737455-export * from \"./subfolder\";\n"
       }
     },
     "root": [
@@ -199,35 +188,6 @@ export * from "./subfolder";
         3,
         "../src/index.ts"
       ]
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../src/subfolder/index.ts": {
-      "original": {
-        "version": "-11228512861-export const FOO = \"bar\";",
-        "signature": "-8746013027-export declare const FOO = \"bar\";\n"
-      },
-      "version": "-11228512861-export const FOO = \"bar\";",
-      "signature": "-8746013027-export declare const FOO = \"bar\";\n"
-    },
-    "../src/index.ts": {
-      "original": {
-        "version": "-16576232793-export * from \"./subfolder\";",
-        "signature": "-14439737455-export * from \"./subfolder\";\n"
-      },
-      "version": "-16576232793-export * from \"./subfolder\";",
-      "signature": "-14439737455-export * from \"./subfolder\";\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "../src/subfolder/index.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ],
     "options": {
       "allowSyntheticDefaultImports": true,
@@ -248,11 +208,7 @@ export * from "./subfolder";
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1234
-=======
-  "size": 1166
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1178
 }
 
 //// [/home/src/projects/project/packages/package-b/build/index.js]
@@ -268,11 +224,7 @@ export {};
 //# sourceMappingURL=index.d.ts.map
 
 //// [/home/src/projects/project/packages/package-b/build/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../../package-a/build/subfolder/index.d.ts","../../package-a/build/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8746013027-export declare const FOO = \"bar\";\n","impliedFormat":99},{"version":"-14439737455-export * from \"./subfolder\";\n","impliedFormat":99},{"version":"-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"fileIdsList":[[2],[3]],"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../../package-a/build/subfolder/index.d.ts","../../package-a/build/index.d.ts","../src/index.ts"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8746013027-export declare const FOO = \"bar\";\n","-14439737455-export * from \"./subfolder\";\n",{"version":"-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2021.d.ts","../../package-a/build/subfolder/index.d.ts","../../package-a/build/index.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8746013027-export declare const FOO = \"bar\";\n","-14439737455-export * from \"./subfolder\";\n",{"version":"-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"allowSyntheticDefaultImports":true,"composite":true,"declarationMap":true,"esModuleInterop":true,"module":99,"outDir":"./","rootDir":"../src","target":8,"tsBuildInfoFile":"./tsconfig.tsbuildinfo"},"fileIdsList":[[2],[3]],"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package-b/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -295,42 +247,27 @@ export {};
       "../../../../../../../a/lib/lib.es2021.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../../package-a/build/subfolder/index.d.ts": {
-        "original": {
-          "version": "-8746013027-export declare const FOO = \"bar\";\n",
-          "impliedFormat": 99
-        },
         "version": "-8746013027-export declare const FOO = \"bar\";\n",
-        "signature": "-8746013027-export declare const FOO = \"bar\";\n",
-        "impliedFormat": "esnext"
+        "signature": "-8746013027-export declare const FOO = \"bar\";\n"
       },
       "../../package-a/build/index.d.ts": {
-        "original": {
-          "version": "-14439737455-export * from \"./subfolder\";\n",
-          "impliedFormat": 99
-        },
         "version": "-14439737455-export * from \"./subfolder\";\n",
-        "signature": "-14439737455-export * from \"./subfolder\";\n",
-        "impliedFormat": "esnext"
+        "signature": "-14439737455-export * from \"./subfolder\";\n"
       },
       "../src/index.ts": {
         "original": {
           "version": "-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
+          "signature": "-3531856636-export {};\n"
         },
         "version": "-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n",
-        "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
+        "signature": "-3531856636-export {};\n"
       }
     },
     "root": [
@@ -338,51 +275,6 @@ export {};
         4,
         "../src/index.ts"
       ]
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../../package-a/build/subfolder/index.d.ts": {
-      "version": "-8746013027-export declare const FOO = \"bar\";\n",
-      "signature": "-8746013027-export declare const FOO = \"bar\";\n"
-    },
-    "../../package-a/build/index.d.ts": {
-      "version": "-14439737455-export * from \"./subfolder\";\n",
-      "signature": "-14439737455-export * from \"./subfolder\";\n"
-    },
-    "../src/index.ts": {
-      "original": {
-        "version": "-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n",
-        "signature": "-3531856636-export {};\n"
-      },
-      "version": "-5331409584-import { FOO } from \"package-a\";\nconsole.log(FOO);\n",
-      "signature": "-3531856636-export {};\n"
-    }
-  },
-  "root": [
-    [
-      4,
-      "../src/index.ts"
-    ]
-  ],
-  "options": {
-    "allowSyntheticDefaultImports": true,
-    "composite": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "module": 99,
-    "outDir": "./",
-    "rootDir": "../src",
-    "target": 8,
-    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
-  },
-  "referencedMap": {
-    "../../package-a/build/index.d.ts": [
-      "../../package-a/build/subfolder/index.d.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ],
     "options": {
       "allowSyntheticDefaultImports": true,
@@ -406,11 +298,7 @@ export {};
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1321
-=======
-  "size": 1210
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1222
 }
 
 

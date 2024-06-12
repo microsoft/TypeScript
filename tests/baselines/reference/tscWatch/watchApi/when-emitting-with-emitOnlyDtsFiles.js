@@ -60,8 +60,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-11268290852-export const y: 10 = 20;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[3,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '20' is not assignable to type '10'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;","-11268290852-export const y: 10 = 20;"],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[3,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '20' is not assignable to type '10'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -70,70 +69,24 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
       "../../../../a/lib/lib.d.ts",
       "./a.ts",
       "./b.ts"
-=======
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;","-11268290852-export const y: 10 = 20;"],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"semanticDiagnosticsPerFile":[[3,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type '20' is not assignable to type '10'."}]]],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3],"version":"FakeTSVersion"}
-
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../a/lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
-  "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
-      "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
-      },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true
-    },
-    "./a.ts": {
-      "version": "-10726455937-export const x = 10;",
-      "signature": "-10726455937-export const x = 10;"
-    },
-    "./b.ts": {
-      "version": "-11268290852-export const y: 10 = 20;",
-      "signature": "-11268290852-export const y: 10 = 20;"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./a.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./a.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "impliedFormat": 1
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
+        "signature": "-10726455937-export const x = 10;"
       },
       "./b.ts": {
-        "original": {
-          "version": "-11268290852-export const y: 10 = 20;",
-          "impliedFormat": 1
-        },
         "version": "-11268290852-export const y: 10 = 20;",
-        "signature": "-11268290852-export const y: 10 = 20;",
-        "impliedFormat": "commonjs"
+        "signature": "-11268290852-export const y: 10 = 20;"
       }
     },
     "root": [
@@ -181,11 +134,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
     ]
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-  "size": 941
-=======
-  "size": 851
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
+  "size": 863
 }
 
 
@@ -265,11 +214,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"affectedFilesPendingEmit":[[2,1],[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"affectedFilesPendingEmit":[[2,1],[3,1]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"affectedFilesPendingEmit":[[2,1],[3,1]],"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -283,79 +228,30 @@ CreatingProgramWith::
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./a.ts": {
         "original": {
           "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n",
-          "impliedFormat": 1
+          "signature": "-6821242887-export declare const x = 10;\n"
         },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-6821242887-export declare const x = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-13729955264-export const y = 10;",
-          "signature": "-7152472870-export declare const y = 10;\n",
-          "impliedFormat": 1
+          "signature": "-7152472870-export declare const y = 10;\n"
         },
         "version": "-13729955264-export const y = 10;",
-        "signature": "-7152472870-export declare const y = 10;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-7152472870-export declare const y = 10;\n"
       }
     },
     "root": [
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true
-    },
-    "./a.ts": {
-      "original": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
-      },
-      "version": "-10726455937-export const x = 10;",
-      "signature": "-6821242887-export declare const x = 10;\n"
-    },
-    "./b.ts": {
-      "original": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-7152472870-export declare const y = 10;\n"
-      },
-      "version": "-13729955264-export const y = 10;",
-      "signature": "-7152472870-export declare const y = 10;\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./a.ts"
-    ],
-    [
-      3,
-      "./b.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "module": 2,
-    "noEmitOnError": true
-  },
-  "affectedFilesPendingEmit": [
-    [
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
       [
         2,
         "./a.ts"
@@ -387,11 +283,7 @@ CreatingProgramWith::
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-  "size": 926
-=======
-  "size": 860
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
+  "size": 872
 }
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -444,11 +336,7 @@ Change:: Emit all files
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true},"latestChangedDtsFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -462,34 +350,27 @@ Input::
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./a.ts": {
         "original": {
           "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n",
-          "impliedFormat": 1
+          "signature": "-6821242887-export declare const x = 10;\n"
         },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-6821242887-export declare const x = 10;\n"
       },
       "./b.ts": {
         "original": {
           "version": "-13729955264-export const y = 10;",
-          "signature": "-7152472870-export declare const y = 10;\n",
-          "impliedFormat": 1
+          "signature": "-7152472870-export declare const y = 10;\n"
         },
         "version": "-13729955264-export const y = 10;",
-        "signature": "-7152472870-export declare const y = 10;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-7152472870-export declare const y = 10;\n"
       }
     },
     "root": [
@@ -501,35 +382,6 @@ Input::
         3,
         "./b.ts"
       ]
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true
-    },
-    "./a.ts": {
-      "original": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
-      },
-      "version": "-10726455937-export const x = 10;",
-      "signature": "-6821242887-export declare const x = 10;\n"
-    },
-    "./b.ts": {
-      "original": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-7152472870-export declare const y = 10;\n"
-      },
-      "version": "-13729955264-export const y = 10;",
-      "signature": "-7152472870-export declare const y = 10;\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./a.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
     ],
     "options": {
       "composite": true,
@@ -539,11 +391,7 @@ Input::
     "latestChangedDtsFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD:tests/baselines/reference/tscWatch/watchApi/when-emitting-with-emitOnlyDtsFiles.js
-  "size": 885
-=======
-  "size": 819
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82):tests/baselines/reference/tscWatch/watchApi/multiFile/when-emitting-with-emitOnlyDtsFiles.js
+  "size": 831
 }
 
 //// [/user/username/projects/myproject/a.js]

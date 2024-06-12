@@ -135,11 +135,7 @@ export * from "./session";
 
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -158,33 +154,23 @@ export * from "./session";
       "../../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
         "original": {
           "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-          "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
-          "impliedFormat": 1
+          "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
         },
         "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
-        "impliedFormat": "commonjs"
+        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
       },
       "../../src/pure/index.ts": {
-        "original": {
-          "version": "-5356193041-export * from \"./session\";\n",
-          "impliedFormat": 1
-        },
         "version": "-5356193041-export * from \"./session\";\n",
-        "signature": "-5356193041-export * from \"./session\";\n",
-        "impliedFormat": "commonjs"
+        "signature": "-5356193041-export * from \"./session\";\n"
       }
     },
     "root": [
@@ -196,31 +182,6 @@ export * from "./session";
         3,
         "../../src/pure/index.ts"
       ]
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../../src/pure/session.ts": {
-      "original": {
-        "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
-      },
-      "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-      "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
-    },
-    "../../src/pure/index.ts": {
-      "version": "-5356193041-export * from \"./session\";\n",
-      "signature": "-5356193041-export * from \"./session\";\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "../../src/pure/session.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ],
     "options": {
       "composite": true,
@@ -235,11 +196,7 @@ export * from "./session";
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1078
-=======
-  "size": 1000
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1012
 }
 
 //// [/user/username/projects/reexport/out/main/index.js]
@@ -372,8 +329,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -381,48 +337,6 @@ export interface Session {
     "fileNames": [
       "../../../../../../a/lib/lib.d.ts",
       "../../src/pure/session.ts",
-=======
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n","-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
-    "../../src/pure/session.ts",
-    "../../src/pure/index.ts"
-  ],
-  "fileIdsList": [
-    [
-      "../../src/pure/session.ts"
-    ]
-  ],
-  "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../../src/pure/session.ts": {
-      "version": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
-      "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n"
-    },
-    "../../src/pure/index.ts": {
-      "version": "-5356193041-export * from \"./session\";\n",
-      "signature": "-5356193041-export * from \"./session\";\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "../../src/pure/session.ts"
-    ],
-    [
-      3,
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
       "../../src/pure/index.ts"
     ],
     "fileNamesList": [
@@ -434,31 +348,19 @@ export interface Session {
       "../../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
-        "original": {
-          "version": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
-          "impliedFormat": 1
-        },
         "version": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
-        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
-        "impliedFormat": "commonjs"
+        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n"
       },
       "../../src/pure/index.ts": {
-        "original": {
-          "version": "-5356193041-export * from \"./session\";\n",
-          "impliedFormat": 1
-        },
         "version": "-5356193041-export * from \"./session\";\n",
-        "signature": "-5356193041-export * from \"./session\";\n",
-        "impliedFormat": "commonjs"
+        "signature": "-5356193041-export * from \"./session\";\n"
       }
     },
     "root": [
@@ -484,11 +386,7 @@ export interface Session {
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1000
-=======
-  "size": 910
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 922
 }
 
 
@@ -612,11 +510,7 @@ export interface Session {
 
 //// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n","impliedFormat":1},{"version":"-5356193041-export * from \"./session\";\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../src/pure/session.ts","../../src/pure/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n","signature":"-1218067212-export interface Session {\n    foo: number;\n}\n"},"-5356193041-export * from \"./session\";\n"],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../../src"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./session.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -635,33 +529,23 @@ export interface Session {
       "../../../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-<<<<<<< HEAD
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
         "original": {
           "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-          "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
-          "impliedFormat": 1
+          "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
         },
         "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
-        "impliedFormat": "commonjs"
+        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
       },
       "../../src/pure/index.ts": {
-        "original": {
-          "version": "-5356193041-export * from \"./session\";\n",
-          "impliedFormat": 1
-        },
         "version": "-5356193041-export * from \"./session\";\n",
-        "signature": "-5356193041-export * from \"./session\";\n",
-        "impliedFormat": "commonjs"
+        "signature": "-5356193041-export * from \"./session\";\n"
       }
     },
     "root": [
@@ -673,31 +557,6 @@ export interface Session {
         3,
         "../../src/pure/index.ts"
       ]
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../../src/pure/session.ts": {
-      "original": {
-        "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
-      },
-      "version": "1782339311-export interface Session {\n    foo: number;\n    // bar: number;\n}\n",
-      "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n"
-    },
-    "../../src/pure/index.ts": {
-      "version": "-5356193041-export * from \"./session\";\n",
-      "signature": "-5356193041-export * from \"./session\";\n"
-    }
-  },
-  "root": [
-    [
-      2,
-      "../../src/pure/session.ts"
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
     ],
     "options": {
       "composite": true,
@@ -712,11 +571,7 @@ export interface Session {
     "latestChangedDtsFile": "./session.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1080
-=======
-  "size": 1002
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1014
 }
 
 

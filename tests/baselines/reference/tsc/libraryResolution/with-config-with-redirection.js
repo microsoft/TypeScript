@@ -373,11 +373,7 @@ exports.x = "type1";
 
 
 //// [/home/src/projects/project1/tsconfig.tsbuildinfo]
-<<<<<<< HEAD
-{"program":{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-7827135529-interface WebworkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15683237936-export const core = 10;","impliedFormat":1},{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n","impliedFormat":1},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-","impliedFormat":1},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1},{"version":"-12476477079-export type TheNum = \"type1\";","impliedFormat":1}],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-=======
-{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-7827135529-interface WebworkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+{"program":{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-7827135529-interface WebworkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -398,181 +394,77 @@ exports.x = "type1";
       "../node_modules/@typescript/lib-webworker/index.d.ts": {
         "original": {
           "version": "-7827135529-interface WebworkerInterface { }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-7827135529-interface WebworkerInterface { }",
-<<<<<<< HEAD
         "signature": "-7827135529-interface WebworkerInterface { }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../node_modules/@typescript/lib-scripthost/index.d.ts": {
         "original": {
           "version": "-5403980302-interface ScriptHostInterface { }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-5403980302-interface ScriptHostInterface { }",
         "signature": "-5403980302-interface ScriptHostInterface { }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../node_modules/@typescript/lib-es5/index.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "../node_modules/@typescript/lib-dom/index.d.ts": {
         "original": {
           "version": "-8673759361-interface DOMInterface { }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
+          "affectsGlobalScope": true
         },
         "version": "-8673759361-interface DOMInterface { }",
         "signature": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
       "./core.d.ts": {
-        "original": {
-          "version": "-15683237936-export const core = 10;",
-          "impliedFormat": 1
-        },
         "version": "-15683237936-export const core = 10;",
-        "signature": "-15683237936-export const core = 10;",
-        "impliedFormat": "commonjs"
+        "signature": "-15683237936-export const core = 10;"
       },
       "./file.ts": {
         "original": {
           "version": "-16628394009-export const file = 10;",
-          "signature": "-9025507999-export declare const file = 10;\n",
-          "impliedFormat": 1
+          "signature": "-9025507999-export declare const file = 10;\n"
         },
         "version": "-16628394009-export const file = 10;",
-        "signature": "-9025507999-export declare const file = 10;\n",
-        "impliedFormat": "commonjs"
+        "signature": "-9025507999-export declare const file = 10;\n"
       },
       "./file2.ts": {
         "original": {
           "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-          "signature": "5381-",
-          "impliedFormat": 1
+          "signature": "5381-"
         },
         "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-        "signature": "5381-",
-        "impliedFormat": "commonjs"
+        "signature": "5381-"
       },
       "./index.ts": {
         "original": {
           "version": "-11532698187-export const x = \"type1\";",
-          "signature": "-5899226897-export declare const x = \"type1\";\n",
-          "impliedFormat": 1
+          "signature": "-5899226897-export declare const x = \"type1\";\n"
         },
-        "version": "-11532698187-export const x = \"type1\";",
-        "signature": "-5899226897-export declare const x = \"type1\";\n",
-        "impliedFormat": "commonjs"
-      },
-      "./utils.d.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      },
-      "./typeroot1/sometype/index.d.ts": {
-        "original": {
-          "version": "-12476477079-export type TheNum = \"type1\";",
-          "impliedFormat": 1
-        },
-        "version": "-12476477079-export type TheNum = \"type1\";",
-        "signature": "-12476477079-export type TheNum = \"type1\";",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-=======
-        "affectsGlobalScope": true
-      },
-      "version": "-7827135529-interface WebworkerInterface { }",
-      "signature": "-7827135529-interface WebworkerInterface { }",
-      "affectsGlobalScope": true
-    },
-    "../node_modules/@typescript/lib-scripthost/index.d.ts": {
-      "original": {
-        "version": "-5403980302-interface ScriptHostInterface { }",
-        "affectsGlobalScope": true
-      },
-      "version": "-5403980302-interface ScriptHostInterface { }",
-      "signature": "-5403980302-interface ScriptHostInterface { }",
-      "affectsGlobalScope": true
-    },
-    "../node_modules/@typescript/lib-es5/index.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "../node_modules/@typescript/lib-dom/index.d.ts": {
-      "original": {
-        "version": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true
-      },
-      "version": "-8673759361-interface DOMInterface { }",
-      "signature": "-8673759361-interface DOMInterface { }",
-      "affectsGlobalScope": true
-    },
-    "./core.d.ts": {
-      "version": "-15683237936-export const core = 10;",
-      "signature": "-15683237936-export const core = 10;"
-    },
-    "./file.ts": {
-      "original": {
-        "version": "-16628394009-export const file = 10;",
-        "signature": "-9025507999-export declare const file = 10;\n"
-      },
-      "version": "-16628394009-export const file = 10;",
-      "signature": "-9025507999-export declare const file = 10;\n"
-    },
-    "./file2.ts": {
-      "original": {
-        "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-        "signature": "5381-"
-      },
-      "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-      "signature": "5381-"
-    },
-    "./index.ts": {
-      "original": {
         "version": "-11532698187-export const x = \"type1\";",
         "signature": "-5899226897-export declare const x = \"type1\";\n"
       },
-      "version": "-11532698187-export const x = \"type1\";",
-      "signature": "-5899226897-export declare const x = \"type1\";\n"
+      "./utils.d.ts": {
+        "version": "-13729955264-export const y = 10;",
+        "signature": "-13729955264-export const y = 10;"
+      },
+      "./typeroot1/sometype/index.d.ts": {
+        "version": "-12476477079-export type TheNum = \"type1\";",
+        "signature": "-12476477079-export type TheNum = \"type1\";"
+      }
     },
-    "./utils.d.ts": {
-      "version": "-13729955264-export const y = 10;",
-      "signature": "-13729955264-export const y = 10;"
-    },
-    "./typeroot1/sometype/index.d.ts": {
-      "version": "-12476477079-export type TheNum = \"type1\";",
-      "signature": "-12476477079-export type TheNum = \"type1\";"
-    }
-  },
-  "root": [
-    [
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+    "root": [
       [
         [
           5,
@@ -594,10 +486,6 @@ exports.x = "type1";
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-<<<<<<< HEAD
-  "size": 1908
-=======
-  "size": 1680
->>>>>>> c4daafb597 (Merge 1ab44d1ef58360d56e708c6d9f422205d116c199 into 1948e92e3a102b40800fdc731ddf67f5dc8bda82)
+  "size": 1692
 }
 
