@@ -2752,7 +2752,10 @@ export function createStackSet<T>(): StackSet<T> {
         },
         push(value) {
             array = append(array, value);
-            if (!set && array!.length > 8) {
+            if (set) {
+                set.add(value);
+            }
+            else if (array!.length > 8) {
                 set = new Set(array);
             }
         },
