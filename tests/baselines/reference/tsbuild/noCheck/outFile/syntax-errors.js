@@ -98,7 +98,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -107,8 +107,9 @@ define("b", ["require", "exports"], function (require, exports) {
     "./src/b.ts"
   ],
   "errors": true,
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 76
+  "size": 96
 }
 
 
@@ -122,19 +123,30 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/b.ts' is older than output 'outFile.js'
+
+exitCode:: ExitStatus.Success
+
+
+
+
+Change:: Fix `a` error with noCheck
+Input::
+//// [/src/a.ts]
+export const a = "hello";
+
+
+
+Output::
+/lib/tsc -b /src/tsconfig.json -v --noCheck
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
-
-[7m1[0m export const a = "hello
-[7m [0m [91m                       [0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
   "/src/b.ts"
@@ -159,55 +171,6 @@ No shapes updated in the builder::
 
 
 //// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
-//// [/outFile.tsbuildinfo] file written with same contents
-//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
-
-
-Change:: Fix `a` error with noCheck
-Input::
-//// [/src/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "noCheck": true,
-  "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-No shapes updated in the builder::
-
-
-//// [/outFile.d.ts] file written with same contents
 //// [/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -224,7 +187,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts"],"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -232,8 +195,9 @@ define("b", ["require", "exports"], function (require, exports) {
     "./src/a.ts",
     "./src/b.ts"
   ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 62
+  "size": 82
 }
 
 
@@ -263,10 +227,50 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
 
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts","./src/b.ts"],"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 62
+}
 
 
 
@@ -367,7 +371,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts"],"errors":true,"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -376,8 +380,9 @@ define("b", ["require", "exports"], function (require, exports) {
     "./src/b.ts"
   ],
   "errors": true,
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 76
+  "size": 96
 }
 
 
@@ -391,46 +396,11 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.js'
 
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
-
-[96msrc/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
-
-[7m1[0m export const a = "hello
-[7m [0m [91m                       [0m
+exitCode:: ExitStatus.Success
 
 
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/src/a.ts",
-  "/src/b.ts"
-]
-Program options: {
-  "declaration": true,
-  "module": 2,
-  "outFile": "/outFile.js",
-  "noCheck": true,
-  "tscBuild": true,
-  "configFilePath": "/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-
-//// [/outFile.d.ts] file written with same contents
-//// [/outFile.js] file written with same contents
-//// [/outFile.tsbuildinfo] file written with same contents
-//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: No Change run with checking
@@ -479,8 +449,20 @@ No shapes updated in the builder::
 
 //// [/outFile.d.ts] file written with same contents
 //// [/outFile.js] file written with same contents
-//// [/outFile.tsbuildinfo] file written with same contents
-//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts","./src/b.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 76
+}
+
 
 
 Change:: Fix `a` error with noCheck
@@ -495,7 +477,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -518,10 +500,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -543,7 +522,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts"],"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -551,8 +530,9 @@ define("b", ["require", "exports"], function (require, exports) {
     "./src/a.ts",
     "./src/b.ts"
   ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 62
+  "size": 82
 }
 
 
@@ -566,10 +546,50 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
 
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts","./src/b.ts"],"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 62
+}
 
 
 
@@ -688,7 +708,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -748,8 +768,22 @@ define("c", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/outFile.tsbuildinfo] file written with same contents
-//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts","./src/b.ts","./src/c.ts"],"errors":true,"checkPending":true,"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts",
+    "./src/b.ts",
+    "./src/c.ts"
+  ],
+  "errors": true,
+  "checkPending": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
+
 
 
 Change:: Fix `a` error with noCheck
@@ -764,7 +798,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -789,11 +823,7 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -821,7 +851,7 @@ define("c", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts","./src/c.ts"],"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts","./src/c.ts"],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -830,8 +860,9 @@ define("c", ["require", "exports"], function (require, exports) {
     "./src/b.ts",
     "./src/c.ts"
   ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 75
+  "size": 95
 }
 
 
@@ -845,10 +876,63 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts","./src/b.ts","./src/c.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts",
+    "./src/b.ts",
+    "./src/c.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 89
+}
 
 
 
@@ -877,8 +961,48 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
 
 
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.d.ts] file written with same contents
+//// [/outFile.js] file written with same contents
+//// [/outFile.tsbuildinfo] file written with same contents
+//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents

@@ -76,7 +76,7 @@ import {
     SemanticDiagnosticsBuilderProgram,
     SignatureInfo,
     skipAlias,
-    skipTypeChecking,
+    skipTypeCheckingIgnoringNoCheck,
     some,
     SourceFile,
     sourceFileMayBeEmitted,
@@ -158,6 +158,8 @@ export interface ReusableBuilderProgramState extends BuilderState {
      * emitKind pending for a program with --out
      */
     programEmitPending?: BuilderFileEmit;
+    /** If semantic diagnsotic check is pending */
+    checkPending?: true;
     /*
      * true if semantic diagnostics are ReusableDiagnostic instead of Diagnostic
      */
@@ -329,6 +331,7 @@ function createBuilderProgramState(
     }
     state.changedFilesSet = new Set();
     state.latestChangedDtsFile = compilerOptions.composite ? oldState?.latestChangedDtsFile : undefined;
+    state.checkPending = state.compilerOptions.noCheck ? true : undefined;
 
     const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
     const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -470,9 +473,15 @@ function createBuilderProgramState(
                     state.programEmitPending | pendingEmitKind :
                     pendingEmitKind;
             }
+            // if (!state.compilerOptions.noCheck)
             state.buildInfoEmitPending = true;
         }
     }
+    if (
+        useOldState &&
+        state.semanticDiagnosticsPerFile.size !== state.fileInfos.size &&
+        oldState!.checkPending !== state.checkPending
+    ) state.buildInfoEmitPending = true;
     return state;
 
     function addFileToChangeSet(path: Path) {
@@ -741,7 +750,7 @@ function removeDiagnosticsOfLibraryFiles(state: BuilderProgramStateWithDefinedPr
         const options = state.program.getCompilerOptions();
         forEach(state.program.getSourceFiles(), f =>
             state.program.isSourceFileDefaultLibrary(f) &&
-            !skipTypeChecking(f, options, state.program) &&
+            !skipTypeCheckingIgnoringNoCheck(f, options, state.program) &&
             removeSemanticDiagnosticsOf(state, f.resolvedPath));
     }
 }
@@ -986,6 +995,7 @@ function getSemanticDiagnosticsOfFile(
     cancellationToken: CancellationToken | undefined,
     semanticDiagnosticsPerFile?: BuilderProgramState["semanticDiagnosticsPerFile"],
 ): readonly Diagnostic[] {
+    if (state.compilerOptions.noCheck) return emptyArray;
     return concatenate(
         getBinderAndCheckerDiagnosticsOfFile(state, sourceFile, cancellationToken, semanticDiagnosticsPerFile),
         state.program.getProgramDiagnostics(sourceFile),
@@ -1084,6 +1094,7 @@ export interface IncrementalBuildInfoBase extends BuildInfo {
     // Because this is only output file in the program, we dont need fileId to deduplicate name
     latestChangedDtsFile?: string | undefined;
     errors: true | undefined;
+    checkPending: true | undefined;
 }
 
 /** @internal */
@@ -1131,6 +1142,7 @@ export function isIncrementalBuildInfo(info: BuildInfo): info is IncrementalBuil
 export interface NonIncrementalBuildInfo extends BuildInfo {
     root: readonly string[];
     errors: true | undefined;
+    checkPending: true | undefined;
 }
 
 /** @internal */
@@ -1190,6 +1202,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         const buildInfo: NonIncrementalBuildInfo = {
             root: arrayFrom(rootFileNames, r => relativeToBuildInfo(r)),
             errors: state.hasErrors ? true : undefined,
+            checkPending: state.checkPending,
             version,
         };
         return buildInfo;
@@ -1223,6 +1236,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
                 false : // Pending emit is same as deteremined by compilerOptions
                 state.programEmitPending, // Actual value
             errors: state.hasErrors ? true : undefined,
+            checkPending: state.checkPending,
             version,
         };
         return buildInfo;
@@ -1313,6 +1327,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         emitSignatures,
         latestChangedDtsFile,
         errors: state.hasErrors ? true : undefined,
+        checkPending: state.checkPending,
         version,
     };
     return buildInfo;
@@ -1952,7 +1967,13 @@ export function createBuilderProgram(
         while (true) {
             const affected = getNextAffectedFile(state, cancellationToken, host);
             let result;
-            if (!affected) return undefined; // Done
+            if (!affected) {
+                if (state.checkPending && !state.compilerOptions.noCheck) {
+                    state.checkPending = undefined;
+                    state.buildInfoEmitPending = true;
+                }
+                return undefined; // Done
+            }
             else if (affected !== state.program) {
                 // Get diagnostics for the affected file if its not ignored
                 const affectedSourceFile = affected as SourceFile;
@@ -1984,6 +2005,7 @@ export function createBuilderProgram(
                 result = diagnostics || emptyArray;
                 state.changedFilesSet.clear();
                 state.programEmitPending = getBuilderFileEmit(state.compilerOptions);
+                if (!state.compilerOptions.noCheck) state.checkPending = undefined;
                 state.buildInfoEmitPending = true;
             }
             return { result, affected };
@@ -2020,6 +2042,10 @@ export function createBuilderProgram(
         let diagnostics: Diagnostic[] | undefined;
         for (const sourceFile of state.program.getSourceFiles()) {
             diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
+        }
+        if (state.checkPending && !state.compilerOptions.noCheck) {
+            state.checkPending = undefined;
+            state.buildInfoEmitPending = true;
         }
         return diagnostics || emptyArray;
     }
@@ -2089,6 +2115,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             outSignature: buildInfo.outSignature,
             programEmitPending: buildInfo.pendingEmit === undefined ? undefined : toProgramEmitPending(buildInfo.pendingEmit, buildInfo.options),
             hasErrors: buildInfo.errors,
+            checkPending: buildInfo.checkPending,
         };
     }
     else {
@@ -2125,6 +2152,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             latestChangedDtsFile,
             emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             hasErrors: buildInfo.errors,
+            checkPending: buildInfo.checkPending,
         };
     }
 

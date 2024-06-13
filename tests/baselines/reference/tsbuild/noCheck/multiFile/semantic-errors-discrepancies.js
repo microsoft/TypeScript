@@ -1,5 +1,6 @@
-8:: No Change run with checking
-*** Needs explanation
+5:: no-change-run
+Clean build will have check pending since it didnt type check
+Incremental build has typechecked before this so wont have checkPending
 TsBuild info text without affectedFilesPendingEmit:: /src/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -7,7 +8,7 @@ CleanBuild:
     "./a.ts",
     "./b.ts"
   ],
-  "errors": true,
+  "checkPending": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -18,8 +19,9 @@ IncrementalBuild:
   ],
   "version": "FakeTSVersion"
 }
-14:: No Change run with checking
-*** Needs explanation
+15:: no-change-run
+Clean build will have check pending since it didnt type check
+Incremental build has typechecked before this so wont have checkPending
 TsBuild info text without affectedFilesPendingEmit:: /src/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
@@ -28,7 +30,7 @@ CleanBuild:
     "./b.ts",
     "./c.ts"
   ],
-  "errors": true,
+  "checkPending": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -38,27 +40,6 @@ IncrementalBuild:
     "./b.ts",
     "./c.ts"
   ],
-  "version": "FakeTSVersion"
-}
-16:: No Change run with checking
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /src/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "root": [
-    "./a.ts",
-    "./b.ts",
-    "./c.ts"
-  ],
   "errors": true,
-  "version": "FakeTSVersion"
-}
-IncrementalBuild:
-{
-  "root": [
-    "./a.ts",
-    "./b.ts",
-    "./c.ts"
-  ],
   "version": "FakeTSVersion"
 }

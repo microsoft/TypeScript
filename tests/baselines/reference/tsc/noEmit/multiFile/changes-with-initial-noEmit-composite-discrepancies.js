@@ -59,21 +59,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -141,21 +126,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     [
       "./src/class.ts",

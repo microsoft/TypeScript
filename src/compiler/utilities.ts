@@ -10108,13 +10108,35 @@ export interface HostWithIsSourceOfProjectReferenceRedirect {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 }
 /** @internal */
-export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions, host: HostWithIsSourceOfProjectReferenceRedirect) {
+export function skipTypeChecking(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+) {
+    return skipTypeCheckingWorker(sourceFile, options, host, /*ignoreNoCheck*/ false);
+}
+
+/** @internal */
+export function skipTypeCheckingIgnoringNoCheck(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+) {
+    return skipTypeCheckingWorker(sourceFile, options, host, /*ignoreNoCheck*/ true);
+}
+
+function skipTypeCheckingWorker(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+    ignoreNoCheck: boolean,
+) {
     // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
     // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
     // '/// <reference no-default-lib="true"/>' directive.
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
-        options.noCheck ||
+        (!ignoreNoCheck && options.noCheck) ||
         host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
         !canIncludeBindAndCheckDiagnostics(sourceFile, options);
 }

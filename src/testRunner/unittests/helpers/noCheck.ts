@@ -28,6 +28,13 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
             caption: "Introduce error with noCheck",
             edit: fs => fs.writeFileSync("/src/a.ts", aText),
         };
+        const noChangeRunWithCheckPendingDiscrepancy: TestTscEdit = {
+            ...noChangeRun,
+            discrepancyExplanation: () => [
+                "Clean build will have check pending since it didnt type check",
+                "Incremental build has typechecked before this so wont have checkPending",
+            ],
+        };
 
         [undefined, true].forEach(incremental => {
             [{}, { module: "amd", outFile: "../outFile.js" }].forEach(options => {
@@ -53,7 +60,9 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                         noChangeRun, // Should be no op
                         checkNoChangeRun, // Check errors - should not report any errors - update buildInfo
                         checkNoChangeRun, // Should be no op
-                        noChangeRun, // Should be no op
+                        incremental || buildType === "-b" ?
+                            noChangeRunWithCheckPendingDiscrepancy : // Should be no op
+                            noChangeRun, // Should be no op
                         noCheckError,
                         noChangeRun, // Should be no op
                         checkNoChangeRun, // Should check errors and update buildInfo
@@ -67,7 +76,9 @@ export function forEachTscScenarioWithNoCheck(buildType: "-b" | "-p") {
                         noCheckError,
                         noCheckFixError,
                         checkNoChangeRun,
-                        noChangeRun, // Should be no op
+                        incremental || buildType === "-b" ?
+                            noChangeRunWithCheckPendingDiscrepancy : // Should be no op
+                            noChangeRun, // Should be no op
                         checkNoChangeRun, // Should be no op
                     ],
                     baselinePrograms: true,

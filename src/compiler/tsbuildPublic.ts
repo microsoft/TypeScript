@@ -1535,7 +1535,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         };
     }
 
-    if ((buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).errors) {
+    if (
+        !project.options.noCheck &&
+        ((buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).errors || // TODO: syntax errors????
+            (buildInfo as IncrementalBuildInfo | NonIncrementalBuildInfo).checkPending)
+    ) {
         return {
             type: UpToDateStatusType.OutOfDateBuildInfoWithErrors,
             buildInfoFile: buildInfoPath,
@@ -1545,8 +1549,9 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (incrementalBuildInfo) {
         // If there are errors, we need to build project again to report it
         if (
-            incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
-            (!project.options.noEmit && getEmitDeclarations(project.options) && incrementalBuildInfo.emitDiagnosticsPerFile?.length)
+            !project.options.noCheck &&
+            (incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
+                (!project.options.noEmit && getEmitDeclarations(project.options) && incrementalBuildInfo.emitDiagnosticsPerFile?.length))
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithErrors,

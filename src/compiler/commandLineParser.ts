@@ -510,8 +510,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
         transpileOptionValue: true,
         defaultValueDescription: false,
-        affectsSemanticDiagnostics: true,
-        affectsBuildInfo: true,
+        // Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
     },
     {
         name: "noEmit",

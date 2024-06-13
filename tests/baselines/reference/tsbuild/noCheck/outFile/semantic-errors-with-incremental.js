@@ -62,10 +62,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -95,7 +92,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -122,11 +119,25 @@ define("b", ["require", "exports"], function (require, exports) {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 721
+  "size": 763
 }
 
 
@@ -183,10 +194,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -202,7 +210,7 @@ declare module "b" {
 
 //// [/outFile.js] file written with same contents
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -229,11 +237,25 @@ declare module "b" {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 713
+  "size": 755
 }
 
 
@@ -263,10 +285,70 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
 
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.tsbuildinfo]
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "-16641552193-export const a = \"hello\";",
+    "./src/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./src/a.ts"
+    ],
+    [
+      3,
+      "./src/b.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 698
+}
 
 
 
@@ -338,10 +420,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -357,7 +436,7 @@ declare module "b" {
 
 //// [/outFile.js] file written with same contents
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -384,11 +463,25 @@ declare module "b" {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 721
+  "size": 763
 }
 
 
@@ -418,10 +511,92 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const a: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.tsbuildinfo]
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[2,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "-11705693502-export const a: number = \"hello\";",
+    "./src/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./src/a.ts"
+    ],
+    [
+      3,
+      "./src/b.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/a.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
+    ]
+  ],
+  "version": "FakeTSVersion",
+  "size": 858
+}
 
 
 
@@ -461,10 +636,7 @@ Program files::
 /src/a.ts
 /src/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -480,7 +652,7 @@ declare module "b" {
 
 //// [/outFile.js] file written with same contents
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -507,11 +679,25 @@ declare module "b" {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 713
+  "size": 755
 }
 
 
@@ -525,10 +711,70 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
 
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.tsbuildinfo]
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts",
+    "./src/b.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "-16641552193-export const a = \"hello\";",
+    "./src/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./src/a.ts"
+    ],
+    [
+      3,
+      "./src/b.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 698
+}
 
 
 
@@ -686,7 +932,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -712,11 +958,7 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -735,7 +977,7 @@ declare module "c" {
 
 //// [/outFile.js] file written with same contents
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -767,11 +1009,29 @@ declare module "c" {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ],
+    [
+      "./src/c.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 786
+  "size": 830
 }
 
 
@@ -814,11 +1074,7 @@ Program files::
 /src/b.ts
 /src/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
-/src/b.ts
-/src/c.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -837,7 +1093,7 @@ declare module "c" {
 
 //// [/outFile.js] file written with same contents
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noCheck":true,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -869,11 +1125,29 @@ declare module "c" {
   "options": {
     "declaration": true,
     "module": 2,
-    "noCheck": true,
     "outFile": "./outFile.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib/lib.d.ts",
+      "not cached"
+    ],
+    [
+      "./src/a.ts",
+      "not cached"
+    ],
+    [
+      "./src/b.ts",
+      "not cached"
+    ],
+    [
+      "./src/c.ts",
+      "not cached"
+    ]
+  ],
+  "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 778
+  "size": 822
 }
 
 
@@ -887,10 +1161,100 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+No shapes updated in the builder::
+
+
+//// [/outFile.tsbuildinfo]
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[[4,[{"start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "./lib/lib.d.ts",
+    "./src/a.ts",
+    "./src/b.ts",
+    "./src/c.ts"
+  ],
+  "fileInfos": {
+    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./src/a.ts": "-16641552193-export const a = \"hello\";",
+    "./src/b.ts": "-13368947479-export const b = 10;",
+    "./src/c.ts": "-9150421116-export const c: number = \"hello\";"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./src/a.ts",
+        "./src/b.ts",
+        "./src/c.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/c.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
+    ]
+  ],
+  "version": "FakeTSVersion",
+  "size": 915
+}
 
 
 
@@ -919,8 +1283,41 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/a.ts' is older than output 'outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m export const c: number = "hello";
+[7m [0m [91m             ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/src/a.ts",
+  "/src/b.ts",
+  "/src/c.ts"
+]
+Program options: {
+  "declaration": true,
+  "incremental": true,
+  "module": 2,
+  "outFile": "/outFile.js",
+  "tscBuild": true,
+  "configFilePath": "/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/src/a.ts
+/src/b.ts
+/src/c.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 
