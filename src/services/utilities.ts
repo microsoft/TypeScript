@@ -4024,13 +4024,22 @@ export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
     return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
 }
 
-/**
- * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
- * instead, which searches for names of re-exported defaults/namespaces in target files.
- * @internal
- */
+/** @internal */
+export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
+    if (needsNameFromDeclaration(symbol)) {
+        const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
+        if (fromDeclaration) return fromDeclaration;
+        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
+        if (fileNameCase === capitalized) return fileNameCase;
+        return [fileNameCase, capitalized];
+    }
+    return symbol.name;
+}
+
+/** @internal */
 export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
-    if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
+    if (needsNameFromDeclaration(symbol)) {
         // Names for default exports:
         // - export default foo => foo
         // - export { foo as default } => foo
@@ -4041,11 +4050,11 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
     return symbol.name;
 }
 
-/**
- * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
- * instead, which searches for names of re-exported defaults/namespaces in target files.
- * @internal
- */
+function needsNameFromDeclaration(symbol: Symbol) {
+    return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
+}
+
+/** @internal */
 export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d => {
         // "export default" in this case. See `ExportAssignment`for more details.
