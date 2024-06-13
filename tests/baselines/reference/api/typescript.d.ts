@@ -584,23 +584,7 @@ declare namespace ts {
             }
             export interface ApplyCodeActionCommandResponse extends Response {
             }
-            export interface FileRangeRequestArgs extends FileRequestArgs {
-                /**
-                 * The line number for the request (1-based).
-                 */
-                startLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                startOffset: number;
-                /**
-                 * The line number for the request (1-based).
-                 */
-                endLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                endOffset: number;
+            export interface FileRangeRequestArgs extends FileRequestArgs, FileRange {
             }
             /**
              * Instances of this interface specify errorcodes on a specific location in a sourcefile.
@@ -1866,7 +1850,7 @@ declare namespace ts {
                  * List of file names for which to compute compiler errors.
                  * The files will be checked in list order.
                  */
-                files: string[];
+                files: (string | FileRangesRequestArgs)[];
                 /**
                  * Delay in milliseconds to wait before starting to compute
                  * errors for the files in the file list
@@ -1886,6 +1870,27 @@ declare namespace ts {
             export interface GeterrRequest extends Request {
                 command: CommandTypes.Geterr;
                 arguments: GeterrRequestArgs;
+            }
+            export interface FileRange {
+                /**
+                 * The line number for the request (1-based).
+                 */
+                startLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                startOffset: number;
+                /**
+                 * The line number for the request (1-based).
+                 */
+                endLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                endOffset: number;
+            }
+            export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
+                ranges: FileRange[];
             }
             export type RequestCompletedEventName = "requestCompleted";
             /**
@@ -1969,8 +1974,16 @@ declare namespace ts {
                  * An array of diagnostic information items.
                  */
                 diagnostics: Diagnostic[];
+                /**
+                 * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+                 */
+                spans?: TextSpan[];
+                /**
+                 * Time spent computing the diagnostics, in milliseconds.
+                 */
+                duration?: number;
             }
-            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
              * Event message for DiagnosticEventKind event types.
              * These events provide syntactic and semantic errors for a file.
@@ -3386,10 +3399,6 @@ declare namespace ts {
             resetRequest(requestId: number): void;
         }
         const nullCancellationToken: ServerCancellationToken;
-        interface PendingErrorCheck {
-            fileName: NormalizedPath;
-            project: Project;
-        }
         /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
@@ -3460,6 +3469,7 @@ declare namespace ts {
             private semanticCheck;
             private syntacticCheck;
             private suggestionCheck;
+            private regionSemanticCheck;
             private sendDiagnosticsEvent;
             /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;

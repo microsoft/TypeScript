@@ -10921,6 +10921,107 @@ export function getNameFromImportAttribute(node: ImportAttribute) {
 }
 
 /** @internal */
+export function isSourceElement(node: Node): boolean {
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.TypeReference:
+        case SyntaxKind.TypePredicate:
+        case SyntaxKind.TypeQuery:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.ArrayType:
+        case SyntaxKind.TupleType:
+        case SyntaxKind.UnionType:
+        case SyntaxKind.IntersectionType:
+        case SyntaxKind.ParenthesizedType:
+        case SyntaxKind.OptionalType:
+        case SyntaxKind.RestType:
+        case SyntaxKind.ThisType:
+        case SyntaxKind.TypeOperator:
+        case SyntaxKind.ConditionalType:
+        case SyntaxKind.InferType:
+        case SyntaxKind.TemplateLiteralType:
+        case SyntaxKind.ImportType:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.JSDocAugmentsTag:
+        case SyntaxKind.JSDocImplementsTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocEnumTag:
+        case SyntaxKind.JSDocTemplateTag:
+        case SyntaxKind.JSDocTypeTag:
+        case SyntaxKind.JSDocLink:
+        case SyntaxKind.JSDocLinkCode:
+        case SyntaxKind.JSDocLinkPlain:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocNonNullableType:
+        case SyntaxKind.JSDocNullableType:
+        case SyntaxKind.JSDocAllType:
+        case SyntaxKind.JSDocUnknownType:
+        case SyntaxKind.JSDocTypeLiteral:
+        case SyntaxKind.JSDocVariadicType:
+        case SyntaxKind.JSDocTypeExpression:
+        case SyntaxKind.JSDocPublicTag:
+        case SyntaxKind.JSDocProtectedTag:
+        case SyntaxKind.JSDocPrivateTag:
+        case SyntaxKind.JSDocSatisfiesTag:
+        case SyntaxKind.JSDocThisTag:
+        case SyntaxKind.IndexedAccessType:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.Block:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.LabeledStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.TryStatement:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.EmptyStatement:
+        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.MissingDeclaration:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
 export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false, hasExternalReferences = false): EvaluatorResult<T> {
     return { value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences };
 }

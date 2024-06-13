@@ -206,6 +206,7 @@ export * from "./unittests/tsserver/projectRootFiles.js";
 export * from "./unittests/tsserver/projects.js";
 export * from "./unittests/tsserver/projectsWithReferences.js";
 export * from "./unittests/tsserver/refactors.js";
+export * from "./unittests/tsserver/regionDiagnostics.js";
 export * from "./unittests/tsserver/reload.js";
 export * from "./unittests/tsserver/reloadProjects.js";
 export * from "./unittests/tsserver/rename.js";

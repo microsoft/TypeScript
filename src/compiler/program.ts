@@ -2961,8 +2961,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
     }
 
-    function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+    function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, nodesToCheck?: Node[]): readonly Diagnostic[] {
+        return getDiagnosticsHelper(
+            sourceFile,
+            (sourceFile, cancellationToken) => getSemanticDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck),
+            cancellationToken,
+        );
     }
 
     function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -2972,7 +2976,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-        return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
+        return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, /*nodesToCheck*/ undefined);
     }
 
     function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
@@ -3026,18 +3030,33 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getSemanticDiagnosticsForFile(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck: Node[] | undefined,
+    ): readonly Diagnostic[] {
         return concatenate(
-            filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
+            filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck), options),
             getProgramDiagnostics(sourceFile),
         );
     }
 
-    function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getBindAndCheckDiagnosticsForFile(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck: Node[] | undefined,
+    ): readonly Diagnostic[] {
+        if (nodesToCheck) {
+            return getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken, nodesToCheck);
+        }
         return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
     }
 
-    function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+    function getBindAndCheckDiagnosticsForFileNoCache(
+        sourceFile: SourceFile,
+        cancellationToken: CancellationToken | undefined,
+        nodesToCheck?: Node[],
+    ): readonly Diagnostic[] {
         return runWithCancellationToken(() => {
             if (skipTypeChecking(sourceFile, options, program)) {
                 return emptyArray;
@@ -3048,31 +3067,39 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             Debug.assert(!!sourceFile.bindDiagnostics);
 
             const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
-            const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
             const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
+            const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
 
-            // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
-            // - plain JS: .js files with no // ts-check and checkJs: undefined
-            // - check JS: .js files with either // ts-check or checkJs: true
-            // - external: files that are added by plugins
             let bindDiagnostics = sourceFile.bindDiagnostics;
-            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
+            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken, nodesToCheck);
             if (isPlainJs) {
                 bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(
+                sourceFile,
+                !isPlainJs,
+                !!nodesToCheck,
+                bindDiagnostics,
+                checkDiagnostics,
+                isCheckJs ? sourceFile.jsDocDiagnostics : undefined,
+            );
         });
     }
 
-    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+    function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, partialCheck: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
         const flatDiagnostics = flatten(allDiagnostics);
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
         }
 
         const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
+
+        // When doing a partial check, we can't be sure a directive is unused.
+        if (partialCheck) {
+            return diagnostics;
+        }
 
         for (const errorExpectation of directives.getUnusedExpectations()) {
             diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));

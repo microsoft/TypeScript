@@ -47502,6 +47502,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSourceElementWorker(node: Node): void {
+        if (getNodeCheckFlags(node) & NodeCheckFlags.PartiallyTypeChecked) {
+            return;
+        }
+
         if (canHaveJSDoc(node)) {
             forEach(node.jsDoc, ({ comment, tags }) => {
                 checkJSDocCommentWorker(comment);
@@ -47530,6 +47534,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
         }
 
+        // If editing this, keep `isSourceElement` in utilities up to date.
         switch (kind) {
             case SyntaxKind.TypeParameter:
                 return checkTypeParameter(node as TypeParameterDeclaration);
@@ -47894,12 +47899,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tracing?.pop();
     }
 
-    function checkSourceFile(node: SourceFile) {
-        tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
-        performance.mark("beforeCheck");
-        checkSourceFileWorker(node);
-        performance.mark("afterCheck");
-        performance.measure("Check", "beforeCheck", "afterCheck");
+    function checkSourceFile(node: SourceFile, nodesToCheck: Node[] | undefined) {
+        tracing?.push(tracing.Phase.Check, nodesToCheck ? "checkSourceFileNodes" : "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
+        const beforeMark = nodesToCheck ? "beforeCheckNodes" : "beforeCheck";
+        const afterMark = nodesToCheck ? "afterCheckNodes" : "afterCheck";
+        performance.mark(beforeMark);
+        nodesToCheck ? checkSourceFileNodesWorker(node, nodesToCheck) : checkSourceFileWorker(node);
+        performance.mark(afterMark);
+        performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
     }
 
@@ -47937,6 +47944,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             clear(potentialWeakMapSetCollisions);
             clear(potentialReflectCollisions);
             clear(potentialUnusedRenamedBindingElementsInTypes);
+
+            if (links.flags & NodeCheckFlags.PartiallyTypeChecked) {
+                potentialThisCollisions = links.potentialThisCollisions!;
+                potentialNewTargetCollisions = links.potentialNewTargetCollisions!;
+                potentialWeakMapSetCollisions = links.potentialWeakMapSetCollisions!;
+                potentialReflectCollisions = links.potentialReflectCollisions!;
+                potentialUnusedRenamedBindingElementsInTypes = links.potentialUnusedRenamedBindingElementsInTypes!;
+            }
 
             forEach(node.statements, checkSourceElement);
             checkSourceElement(node.endOfFileToken);
@@ -47989,13 +48004,49 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
+    function checkSourceFileNodesWorker(file: SourceFile, nodes: readonly Node[]) {
+        const links = getNodeLinks(file);
+        if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+            if (skipTypeChecking(file, compilerOptions, host)) {
+                return;
+            }
+
+            // Grammar checking
+            checkGrammarSourceFile(file);
+
+            clear(potentialThisCollisions);
+            clear(potentialNewTargetCollisions);
+            clear(potentialWeakMapSetCollisions);
+            clear(potentialReflectCollisions);
+            clear(potentialUnusedRenamedBindingElementsInTypes);
+
+            forEach(nodes, checkSourceElement);
+
+            checkDeferredNodes(file);
+
+            (links.potentialThisCollisions || (links.potentialThisCollisions = [])).push(...potentialThisCollisions);
+            (links.potentialNewTargetCollisions || (links.potentialNewTargetCollisions = [])).push(...potentialNewTargetCollisions);
+            (links.potentialWeakMapSetCollisions || (links.potentialWeakMapSetCollisions = [])).push(...potentialWeakMapSetCollisions);
+            (links.potentialReflectCollisions || (links.potentialReflectCollisions = [])).push(...potentialReflectCollisions);
+            (links.potentialUnusedRenamedBindingElementsInTypes || (links.potentialUnusedRenamedBindingElementsInTypes = [])).push(
+                ...potentialUnusedRenamedBindingElementsInTypes,
+            );
+
+            links.flags |= NodeCheckFlags.PartiallyTypeChecked;
+            for (const node of nodes) {
+                const nodeLinks = getNodeLinks(node);
+                nodeLinks.flags |= NodeCheckFlags.PartiallyTypeChecked;
+            }
+        }
+    }
+
+    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken, nodesToCheck?: Node[]): Diagnostic[] {
         try {
             // Record the cancellation token so it can be checked later on during checkSourceElement.
             // Do this in a finally block so we can ensure that it gets reset back to nothing after
             // this call is done.
             cancellationToken = ct;
-            return getDiagnosticsWorker(sourceFile);
+            return getDiagnosticsWorker(sourceFile, nodesToCheck);
         }
         finally {
             cancellationToken = undefined;
@@ -48010,7 +48061,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         deferredDiagnosticsCallbacks = [];
     }
 
-    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile) {
+    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile, nodesToCheck?: Node[]) {
         ensurePendingDiagnosticWorkComplete();
         // then setup diagnostics for immediate invocation (as we are about to collect them, and
         // this avoids the overhead of longer-lived callbacks we don't need to allocate)
@@ -48019,11 +48070,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // thus much more likely retaining the same union ordering as before we had lazy diagnostics)
         const oldAddLazyDiagnostics = addLazyDiagnostic;
         addLazyDiagnostic = cb => cb();
-        checkSourceFile(sourceFile);
+        checkSourceFile(sourceFile, nodesToCheck);
         addLazyDiagnostic = oldAddLazyDiagnostics;
     }
 
-    function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
+    function getDiagnosticsWorker(sourceFile: SourceFile, nodesToCheck: Node[] | undefined): Diagnostic[] {
         if (sourceFile) {
             ensurePendingDiagnosticWorkComplete();
             // Some global diagnostics are deferred until they are needed and
@@ -48032,9 +48083,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-            checkSourceFileWithEagerDiagnostics(sourceFile);
-
+            checkSourceFileWithEagerDiagnostics(sourceFile, nodesToCheck);
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
+            if (nodesToCheck) {
+                // No need to get global diagnostics.
+                return semanticDiagnostics;
+            }
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             if (currentGlobalDiagnostics !== previousGlobalDiagnostics) {
                 // If the arrays are not the same reference, new diagnostics were added.
@@ -48053,7 +48107,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Global diagnostics are always added when a file is not provided to
         // getDiagnostics
-        forEach(host.getSourceFiles(), checkSourceFileWithEagerDiagnostics);
+        forEach(host.getSourceFiles(), file => checkSourceFileWithEagerDiagnostics(file));
         return diagnostics.getDiagnostics();
     }
 

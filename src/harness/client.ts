@@ -57,6 +57,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     RenameInfo,
     RenameInfoFailure,
     RenameInfoSuccess,
@@ -500,6 +501,9 @@ export class SessionClient implements LanguageService {
     }
     getSuggestionDiagnostics(file: string): DiagnosticWithLocation[] {
         return this.getDiagnostics(file, protocol.CommandTypes.SuggestionDiagnosticsSync);
+    }
+    getRegionSemanticDiagnostics(_file: string, _ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        throw new Error("Method not implemented.");
     }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
