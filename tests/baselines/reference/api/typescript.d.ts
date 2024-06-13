@@ -3455,7 +3455,7 @@ declare namespace ts {
             private suppressDiagnosticEvents?;
             private eventHandler;
             private readonly noGetErrOnBackgroundUpdate?;
-            private diagnosticsTime;
+            protected regionDiagLineCountThreshold: number;
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;

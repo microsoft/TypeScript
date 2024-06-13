@@ -27,7 +27,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 foo(10, 50);`,
         };
         const host = createServerHost([file1, libFile]);
-        const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+        const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession([file1], session);
 
@@ -89,7 +89,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
         const files = [file1, file2, file3, file4];
         const host = createServerHost([...files, libFile]);
-        const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+        const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession(files, session);
 
@@ -148,7 +148,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
         it("region has suggestion diagnostics", () => {
             const host = createServerHost([config, indexFile, otherFile, libFile]);
-            const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+            const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
             openFilesForSession([indexFile], session);
 
@@ -177,7 +177,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
         it("region does not have suggestion diagnostics", () => {
             const host = createServerHost([config, indexFile, otherFile, libFile]);
-            const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+            const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
             openFilesForSession([indexFile], session);
 
@@ -218,7 +218,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 foo(10, 50);`,
         };
         const host = createServerHost([file1, libFile]);
-        const session = new TestSession({ host, alwaysDoRegionDiagnostics: false });
+        const session = new TestSession({ host });
 
         openFilesForSession([file1], session);
 
@@ -250,7 +250,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 foo(10, 50);`,
         };
         const host = createServerHost([file1, libFile]);
-        const session = new TestSession({ host, alwaysDoRegionDiagnostics: true });
+        const session = new TestSession({ host, regionDiagLineCountThreshold: 0 });
 
         openFilesForSession([file1], session);
 

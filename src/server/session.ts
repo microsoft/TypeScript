@@ -994,7 +994,8 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
-    private diagnosticsTime: [number, number] | undefined;
+    // Minimum number of lines for attempting to use region diagnostics for a file.
+    protected regionDiagLineCountThreshold = 500;
 
     constructor(opts: SessionOptions) {
         this.host = opts.host;
@@ -1260,53 +1261,61 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
-        this.diagnosticsTime = this.hrtime();
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
             : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
-        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
-        this.diagnosticsTime = this.hrtime();
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
-        this.diagnosticsTime = this.hrtime();
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
-        this.diagnosticsTime = this.hrtime();
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         let diagnosticsResult;
         if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
             tracing?.pop();
             return;
         }
-        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsResult.spans);
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, diagnosticsResult.spans);
         tracing?.pop();
         return;
     }
 
-    // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
+    // We should only do the region-based semantic check if we think it would be
+    // considerably faster than a whole-file semantic check.
     /** @internal */
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
         const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.textStorage.getLineInfo().getLineCount();
-        return !!(lineCount && lineCount > 500);
+        return !!(lineCount && lineCount >= this.regionDiagLineCountThreshold);
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
+    private sendDiagnosticsEvent(
+        file: NormalizedPath,
+        project: Project,
+        diagnostics: readonly Diagnostic[],
+        kind: protocol.DiagnosticEventKind,
+        diagnosticsStartTime: [number, number],
+        spans?: TextSpan[],
+    ): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-            const duration = hrTimeToMilliseconds(this.hrtime(this.diagnosticsTime));
+            const duration = hrTimeToMilliseconds(this.hrtime(diagnosticsStartTime));
 
             const body: protocol.DiagnosticEventBody = {
                 file,
