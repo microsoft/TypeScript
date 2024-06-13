@@ -473,7 +473,6 @@ function createBuilderProgramState(
                     state.programEmitPending | pendingEmitKind :
                     pendingEmitKind;
             }
-            // if (!state.compilerOptions.noCheck)
             state.buildInfoEmitPending = true;
         }
     }
