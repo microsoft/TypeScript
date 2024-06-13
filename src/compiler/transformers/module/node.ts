@@ -14,7 +14,7 @@ import {
 } from "../../_namespaces/ts.js";
 
 /** @internal */
-export function transformImpliedNodeFormatDependentModule(context: TransformationContext) {
+export function transformNodeModule(context: TransformationContext) {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
 
@@ -30,7 +30,6 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
 
     const cjsOnSubstituteNode = context.onSubstituteNode;
     const cjsOnEmitNode = context.onEmitNode;
-    const getEmitModuleFormatOfFile = (file: SourceFile) => context.getEmitHost().getEmitModuleFormatOfFile(file);
 
     context.onSubstituteNode = onSubstituteNode;
     context.onEmitNode = onEmitNode;
@@ -52,7 +51,7 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
             if (!currentSourceFile) {
                 return previousOnSubstituteNode(hint, node);
             }
-            if (getEmitModuleFormatOfFile(currentSourceFile) >= ModuleKind.ES2015) {
+            if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                 return esmOnSubstituteNode(hint, node);
             }
             return cjsOnSubstituteNode(hint, node);
@@ -66,14 +65,14 @@ export function transformImpliedNodeFormatDependentModule(context: Transformatio
         if (!currentSourceFile) {
             return previousOnEmitNode(hint, node, emitCallback);
         }
-        if (getEmitModuleFormatOfFile(currentSourceFile) >= ModuleKind.ES2015) {
+        if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
             return esmOnEmitNode(hint, node, emitCallback);
         }
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
     function getModuleTransformForFile(file: SourceFile): typeof esmTransform {
-        return getEmitModuleFormatOfFile(file) >= ModuleKind.ES2015 ? esmTransform : cjsTransform;
+        return file.impliedNodeFormat === ModuleKind.ESNext ? esmTransform : cjsTransform;
     }
 
     function transformSourceFile(node: SourceFile) {
