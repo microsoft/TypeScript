@@ -42,22 +42,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
-File '/src/child/package.json' does not exist.
-File '/src/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/src/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/src/child/child2.ts'. ========
-File '/src/child/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/lib/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/child/child2.ts
@@ -85,6 +77,15 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
     }
 });
 
+
+//// [/src/childResult.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/childResult.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 

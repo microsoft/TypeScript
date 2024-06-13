@@ -177,19 +177,19 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     version: system.createHash(libFile.content),
                     signature: system.createHash(libFile.content),
                     affectsGlobalScope: true,
-                    impliedFormat: ts.ModuleKind.CommonJS,
+                    impliedFormat: undefined,
                 });
                 assert.deepEqual(builderProgram.state.fileInfos.get(file1.path as ts.Path), {
                     version: system.createHash(file1.content),
                     signature: system.createHash(file1.content),
                     affectsGlobalScope: undefined,
-                    impliedFormat: ts.ModuleKind.CommonJS,
+                    impliedFormat: undefined,
                 });
                 assert.deepEqual(builderProgram.state.fileInfos.get(file2.path as ts.Path), {
                     version: system.createHash(fileModified.content),
                     signature: system.createHash(fileModified.content),
                     affectsGlobalScope: undefined,
-                    impliedFormat: ts.ModuleKind.CommonJS,
+                    impliedFormat: undefined,
                 });
 
                 assert.deepEqual(builderProgram.state.compilerOptions, {

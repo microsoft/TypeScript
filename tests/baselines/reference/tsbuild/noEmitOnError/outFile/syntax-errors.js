@@ -49,7 +49,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -71,6 +71,7 @@ Program options: {
   "outFile": "/user/username/projects/dev-build.js",
   "module": 2,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -84,6 +85,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 
@@ -118,6 +128,7 @@ Program options: {
   "outFile": "/user/username/projects/dev-build.js",
   "module": 2,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -132,6 +143,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
@@ -149,7 +162,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../dev-build.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -163,6 +176,7 @@ Program options: {
   "outFile": "/user/username/projects/dev-build.js",
   "module": 2,
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -200,6 +214,8 @@ define("src/other", ["require", "exports"], function (require, exports) {
 });
 
 
+//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run

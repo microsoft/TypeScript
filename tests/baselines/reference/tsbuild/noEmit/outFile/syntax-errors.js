@@ -33,7 +33,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'outFile.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -52,6 +52,7 @@ Program root files: [
 Program options: {
   "outFile": "/outFile.js",
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -63,6 +64,15 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+
+//// [/outFile.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 
@@ -94,6 +104,7 @@ Program root files: [
 Program options: {
   "outFile": "/outFile.js",
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -106,6 +117,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/outFile.tsbuildinfo] file written with same contents
+//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
@@ -120,7 +133,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'outFile.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -131,6 +144,7 @@ Program root files: [
 Program options: {
   "outFile": "/outFile.js",
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -145,6 +159,8 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 
+//// [/outFile.tsbuildinfo] file written with same contents
+//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -167,6 +183,7 @@ Program root files: [
 Program options: {
   "outFile": "/outFile.js",
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -181,3 +198,5 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 
+//// [/outFile.tsbuildinfo] file written with same contents
+//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents

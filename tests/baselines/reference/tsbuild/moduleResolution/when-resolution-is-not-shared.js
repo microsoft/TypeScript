@@ -228,7 +228,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'packages/a/tsconfig.json' is up to date because newest input 'packages/a/test/index.js' is older than output 'packages/a/types/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output 'packages/b/index.js' is older than input 'packages/b/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output file 'packages/b/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/projects/project/packages/b/tsconfig.json'...
 
@@ -265,4 +265,13 @@ packages/b/index.js
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 exitCode:: ExitStatus.Success
 
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 

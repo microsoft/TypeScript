@@ -479,7 +479,7 @@ export function forEachEmittedFile<T>(
 
 export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     const configFile = options.configFilePath;
-    if (!isIncrementalCompilation(options)) return undefined;
+    if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
     const outPath = options.outFile;
     let buildInfoExtensionLess: string;
@@ -496,6 +496,11 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
             configFileExtensionLess;
     }
     return buildInfoExtensionLess + Extension.TsBuildInfo;
+}
+
+/** @internal */
+export function canEmitTsBuildInfo(options: CompilerOptions) {
+    return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
 /** @internal */

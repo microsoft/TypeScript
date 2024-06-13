@@ -55,6 +55,7 @@ import {
     HostForComputeHash,
     isArray,
     isDeclarationFileName,
+    isIncrementalCompilation,
     isJsonSourceFile,
     isNumber,
     isString,
@@ -376,7 +377,7 @@ function createBuilderProgramState(
     }
     else {
         // We arent using old state, so atleast emit buildInfo with current information
-        state.buildInfoEmitPending = true;
+        state.buildInfoEmitPending = isIncrementalCompilation(compilerOptions);
     }
 
     // Update changed files and copy semantic diagnostics if we can
@@ -1184,7 +1185,7 @@ export function isIncrementalBuildInfo(info: BuildInfo): info is IncrementalBuil
 /**
  * Gets the program information to be emitted in buildInfo so that we can use it to create new program
  */
-function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): IncrementalBuildInfo {
+function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
     const currentDirectory = state.program.getCurrentDirectory();
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
@@ -1192,6 +1193,9 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): Incremental
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, IncrementalBuildInfoFileId>();
     const rootFileNames = new Set(state.program.getRootFileNames().map(f => toPath(f, currentDirectory, state.program.getCanonicalFileName)));
+
+    if (!isIncrementalCompilation(state.compilerOptions)) return { version };
+
     const root: IncrementalBuildInfoRoot[] = [];
     if (state.compilerOptions.outFile) {
         // Copy all fileInfo, version and impliedFormat
@@ -1204,7 +1208,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): Incremental
                 { version: value.version, impliedFormat: value.impliedFormat, signature: undefined, affectsGlobalScope: undefined } :
                 value.version;
         });
-        return {
+        const buildInfo: IncrementalBundleEmitBuildInfo = {
             fileNames,
             fileInfos,
             root,
@@ -1221,7 +1225,8 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): Incremental
                 false : // Pending emit is same as deteremined by compilerOptions
                 state.programEmitPending, // Actual value
             version,
-        } satisfies IncrementalBundleEmitBuildInfo;
+        };
+        return buildInfo;
     }
 
     let fileIdsList: (readonly IncrementalBuildInfoFileId[])[] | undefined;
@@ -1295,7 +1300,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): Incremental
         }
     }
 
-    return {
+    const buildInfo: IncrementalMultiFileEmitBuildInfo = {
         fileNames,
         fileIdsList,
         fileInfos,
@@ -1310,7 +1315,8 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): Incremental
         emitSignatures,
         latestChangedDtsFile,
         version,
-    } satisfies IncrementalMultiFileEmitBuildInfo;
+    };
+    return buildInfo;
 
     function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
         return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));

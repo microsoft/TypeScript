@@ -91,15 +91,10 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'outDir/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
-File '/home/src/projects/myproject/package.json' does not exist.
-File '/home/src/projects/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -109,18 +104,6 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-File '/home/src/projects/myproject/types/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/src/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
@@ -142,17 +125,6 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/root2/other/package.json' does not exist.
-File '/home/src/projects/myproject/root2/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -172,18 +144,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"exclu
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Wild card directory /home/src/projects/myproject/tsconfig.json
 ExcludeWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file /home/src/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/secondary.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
 
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
@@ -221,31 +182,18 @@ exports.z = 10;
 export declare const z = 10;
 
 
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/home/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/myproject/root2/other/sometype2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/types/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -290,6 +238,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
@@ -354,11 +303,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
-File '/home/src/projects/myproject/package.json' does not exist.
-File '/home/src/projects/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -368,18 +312,6 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-File '/home/src/projects/myproject/types/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/src/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
@@ -400,17 +332,6 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/myproject/root2/other/package.json' does not exist.
-File '/home/src/projects/myproject/root2/package.json' does not exist.
-File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/projects/myproject/tsconfig.json'...
 
 ../../../../a/lib/lib.d.ts
@@ -431,6 +352,7 @@ src/secondary.ts
 //// [/home/src/projects/myproject/decls/main.d.ts] file changed its modified time
 //// [/home/src/projects/myproject/outDir/src/secondary.js] file changed its modified time
 //// [/home/src/projects/myproject/decls/src/secondary.d.ts] file changed its modified time
+//// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Program root files: [
@@ -459,6 +381,7 @@ Program options: {
   "watch": true,
   "explainFiles": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/home/src/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not

@@ -163,8 +163,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     {
                         caption: "local change",
                         edit: fs => appendText(fs, "/src/project1/src/b.ts", "const aaaa = 10;"),
-                        // --out without composite doesnt emit buildInfo without emitting program so it wouldnt have project2 tsbuildInfo so no mismatch
-                        discrepancyExplanation: options.incremental && options.outFile ? undefined : () => [
+                        discrepancyExplanation: () => [
                             `Clean build tsbuildinfo for project2 will have compilerOptions with composite and emitDeclarationOnly`,
                             `Incremental build will detect that it doesnt need to rebuild project2 so tsbuildinfo for it is from before which has option composite only`,
                         ],

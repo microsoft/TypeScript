@@ -77,7 +77,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /third_party/marked/src/defaults.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /third_party/marked/src/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -171,8 +170,6 @@ watchedFiles::
   {"pollingInterval":500}
 /third_party/marked/src/defaults.js: *new*
   {"pollingInterval":500}
-/third_party/marked/src/package.json: *new*
-  {"pollingInterval":2000}
 /tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -293,8 +290,6 @@ watchedFiles::
   {"pollingInterval":500}
 /third_party/marked/src/defaults.js:
   {"pollingInterval":500}
-/third_party/marked/src/package.json:
-  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 
@@ -380,7 +375,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1055,6 +1050,19 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/third_party/marked/src/defaults",
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
@@ -1257,7 +1265,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1940,6 +1948,19 @@ Info seq  [hh:mm:ss:mss] response:
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/third_party/marked/src/defaults",
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
               "fileName": "/third_party/marked/src/defaults.js"
             }
           },
