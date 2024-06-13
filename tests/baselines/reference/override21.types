@@ -3,18 +3,26 @@
 === override21.ts ===
 const foo = Symbol();
 >foo : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 class A { }
 >A : A
+>  : ^
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     override [foo]() { }
 >[foo] : () => void
+>      : ^^^^^^^^^^
 >foo : unique symbol
+>    : ^^^^^^^^^^^^^
 }
 
