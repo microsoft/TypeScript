@@ -107,7 +107,7 @@ import {
     returnFalse,
     returnNoopFileWatcher,
     ScriptKind,
-    SharedExtendedConfigFileWatcher,
+    SharedFileWatcher,
     some,
     SourceFile,
     SourceFileLike,
@@ -1269,7 +1269,7 @@ export class ProjectService {
     readonly watchFactory: WatchFactory<WatchType, Project | NormalizedPath>;
 
     /** @internal */
-    private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
+    private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedFileWatcher<NormalizedPath>>();
     /** @internal */
     private readonly extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
 

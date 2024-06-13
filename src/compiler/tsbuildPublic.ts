@@ -1,6 +1,5 @@
 import {
     AffectedFileResult,
-    arrayFrom,
     assertType,
     BuilderProgram,
     BuildInfo,
@@ -10,7 +9,6 @@ import {
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
-    combinePaths,
     commonOptionsWithBuild,
     CompilerHost,
     CompilerOptions,
@@ -78,7 +76,6 @@ import {
     isIgnoredFileFromWildCardWatching,
     isIncrementalBuildInfo,
     isIncrementalCompilation,
-    isPackageJsonInfo,
     loadWithModeAwareCache,
     maybeBind,
     missingFileModifiedTime,
@@ -105,7 +102,7 @@ import {
     returnUndefined,
     SemanticDiagnosticsBuilderProgram,
     setGetSourceFileAsHashVersioned,
-    SharedExtendedConfigFileWatcher,
+    SharedFileWatcher,
     SourceFile,
     Status,
     sys,
@@ -115,6 +112,7 @@ import {
     unorderedRemoveItem,
     updateErrorForNoInputFiles,
     updateSharedExtendedConfigFileWatcher,
+    updateSharedFileWatcher,
     updateWatchingWildcardDirectories,
     UpToDateStatus,
     UpToDateStatusType,
@@ -370,7 +368,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly rootNames: readonly string[];
     readonly baseWatchOptions: WatchOptions | undefined;
 
-    readonly resolvedConfigFilePaths: Map<string, ResolvedConfigFilePath>;
+    readonly resolvedConfigFilePaths: Map<ResolvedConfigFileName, ResolvedConfigFilePath>;
     readonly configFileCache: Map<ResolvedConfigFilePath, ConfigFileCacheEntry>;
     /** Map from config file name to up-to-date status */
     readonly projectStatus: Map<ResolvedConfigFilePath, UpToDateStatus>;
@@ -401,12 +399,10 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly allWatchedWildcardDirectories: Map<ResolvedConfigFilePath, Map<string, WildcardDirectoryWatcher>>;
     readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<string, FileWatcher>>;
     readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
-    readonly allWatchedExtendedConfigFiles: Map<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
-    readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly allWatchedExtendedConfigFiles: Map<ResolvedConfigFilePath, SharedFileWatcher<ResolvedConfigFilePath>>;
+    readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, SharedFileWatcher<ResolvedConfigFilePath>>;
     readonly filesWatched: Map<Path, FileWatcherWithModifiedTime | Date>;
     readonly outputTimeStamps: Map<ResolvedConfigFilePath, Map<Path, Date>>;
-
-    readonly lastCachedPackageJsonLookups: Map<ResolvedConfigFilePath, Set<string> | undefined>;
 
     timerToBuildInvalidatedProject: any;
     reportFileChangeDetected: boolean;
@@ -526,8 +522,6 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         allWatchedExtendedConfigFiles: new Map(),
         allWatchedPackageJsonFiles: new Map(),
         filesWatched: new Map(),
-
-        lastCachedPackageJsonLookups: new Map(),
 
         timerToBuildInvalidatedProject: undefined,
         reportFileChangeDetected: false,
@@ -666,7 +660,6 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
     mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.buildInfoCache, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.outputTimeStamps, currentProjects, noopOnDelete);
-    mutateMapSkippingNewValues(state.lastCachedPackageJsonLookups, currentProjects, noopOnDelete);
 
     // Remove watches for the program no longer in the solution
     if (state.watch) {
@@ -676,14 +669,7 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
             { onDeleteValue: closeFileWatcher },
         );
 
-        state.allWatchedExtendedConfigFiles.forEach(watcher => {
-            watcher.projects.forEach(project => {
-                if (!currentProjects.has(project)) {
-                    watcher.projects.delete(project);
-                }
-            });
-            watcher.close();
-        });
+        state.allWatchedExtendedConfigFiles.forEach(closeSharedWatcherOfUnknownProjects);
 
         mutateMapSkippingNewValues(
             state.allWatchedWildcardDirectories,
@@ -697,13 +683,18 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
             { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) },
         );
 
-        mutateMapSkippingNewValues(
-            state.allWatchedPackageJsonFiles,
-            currentProjects,
-            { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) },
-        );
+        state.allWatchedPackageJsonFiles.forEach(closeSharedWatcherOfUnknownProjects);
     }
     return state.buildOrder = buildOrder;
+
+    function closeSharedWatcherOfUnknownProjects(watcher: SharedFileWatcher<ResolvedConfigFilePath>) {
+        watcher.projects.forEach(project => {
+            if (!currentProjects.has(project)) {
+                watcher.projects.delete(project);
+            }
+        });
+        watcher.close();
+    }
 }
 
 function getBuildOrderFor<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: string | undefined, onlyReferences: boolean | undefined): AnyBuildOrder | undefined {
@@ -1041,20 +1032,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             getConfigFileParsingDiagnostics(config),
             config.projectReferences,
         );
-        if (state.watch) {
-            const internalMap = state.moduleResolutionCache?.getPackageJsonInfoCache().getInternalMap();
-            state.lastCachedPackageJsonLookups.set(
-                projectPath,
-                internalMap && new Set(arrayFrom(
-                    internalMap.values(),
-                    data =>
-                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists) ?
-                            state.host.realpath(combinePaths(data.packageDirectory, "package.json")) :
-                            combinePaths(data.packageDirectory, "package.json"),
-                )),
-            );
-            state.builderPrograms.set(projectPath, program);
-        }
+        if (state.watch) state.builderPrograms.set(projectPath, program);
         step++;
     }
 
@@ -1226,7 +1204,6 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
             updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
             watchInputFiles(state, project, projectPath, config);
-            watchPackageJsonFiles(state, project, projectPath, config);
         }
 
         const status = getUpToDateStatus(state, config, projectPath);
@@ -1736,6 +1713,8 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (extendedConfigStatus) return extendedConfigStatus;
 
     // Check package file time
+    buildInfoCacheEntry ??= state.buildInfoCache.get(resolvedPath)!;
+    // TODO: sheetal how to calculate packageJsons - do we store in buildInfo only for tsc -b or always?
     const packageJsonLookups = state.lastCachedPackageJsonLookups.get(resolvedPath);
     const dependentPackageFileStatus = packageJsonLookups && forEachKey(
         packageJsonLookups,
@@ -1958,7 +1937,11 @@ function clean<T extends BuilderProgram>(state: SolutionBuilderState<T>, project
     return result;
 }
 
-function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: string | undefined, onlyReferences: boolean | undefined) {
+function cleanWorker<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    project: string | undefined,
+    onlyReferences: boolean | undefined,
+) {
     const buildOrder = getBuildOrderFor(state, project, onlyReferences);
     if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -2002,7 +1985,11 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
     return ExitStatus.Success;
 }
 
-function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
+function invalidateProject<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFilePath,
+    updateLevel: ProgramUpdateLevel,
+) {
     // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
     if (state.host.getParsedCommandLine && updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
         updateLevel = ProgramUpdateLevel.Full;
@@ -2017,13 +2004,35 @@ function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState
     enableCache(state);
 }
 
-function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
+function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolvedPath: ResolvedConfigFilePath,
+    updateLevel: ProgramUpdateLevel,
+) {
     state.reportFileChangeDetected = true;
     invalidateProject(state, resolvedPath, updateLevel);
     scheduleBuildInvalidatedProject(state, 250, /*changeDetected*/ true);
 }
 
-function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, time: number, changeDetected: boolean) {
+function invalidateProjectAndScheduledBuildsOfSharedFileWacher<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    sharedWatcher: SharedFileWatcher<ResolvedConfigFilePath> | undefined,
+    reloadLevel: ProgramUpdateLevel,
+) {
+    sharedWatcher?.projects.forEach(projectConfigFilePath =>
+        invalidateProjectAndScheduleBuilds(
+            state,
+            projectConfigFilePath,
+            reloadLevel,
+        )
+    );
+}
+
+function scheduleBuildInvalidatedProject<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    time: number,
+    changeDetected: boolean,
+) {
     const { hostWithWatch } = state;
     if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
         return;
@@ -2034,7 +2043,11 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, "timerToBuildInvalidatedProject", state, changeDetected);
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(
+    _timeoutType: string,
+    state: SolutionBuilderState<T>,
+    changeDetected: boolean,
+) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");
@@ -2042,7 +2055,10 @@ function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: str
     if (buildOrder) reportErrorSummary(state, buildOrder);
 }
 
-function buildNextInvalidatedProjectWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProjectWorker<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    changeDetected: boolean,
+) {
     state.timerToBuildInvalidatedProject = undefined;
     if (state.reportFileChangeDetected) {
         state.reportFileChangeDetected = false;
@@ -2075,7 +2091,12 @@ function buildNextInvalidatedProjectWorker<T extends BuilderProgram>(state: Solu
     return buildOrder;
 }
 
-function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+function watchConfigFile<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFileName,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine | undefined,
+) {
     if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
     state.allWatchedConfigFiles.set(
         resolvedPath,
@@ -2091,7 +2112,11 @@ function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T
     );
 }
 
-function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+function watchExtendedConfigFiles<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine | undefined,
+) {
     updateSharedExtendedConfigFileWatcher(
         resolvedPath,
         parsed?.options,
@@ -2100,12 +2125,17 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
             watchFile(
                 state,
                 extendedConfigFileName,
-                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ProgramUpdateLevel.Full)),
+                () =>
+                    invalidateProjectAndScheduledBuildsOfSharedFileWacher(
+                        state,
+                        state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath),
+                        ProgramUpdateLevel.Full,
+                    ),
                 PollingInterval.High,
                 parsed?.watchOptions,
                 WatchType.ExtendedConfigFile,
             ),
-        fileName => toPath(state, fileName),
+        fileName => toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName),
     );
 }
 
@@ -2165,23 +2195,27 @@ function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T
 }
 
 function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-    if (!state.watch || !state.lastCachedPackageJsonLookups) return;
-    mutateMap(
-        getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
-        state.lastCachedPackageJsonLookups.get(resolvedPath),
-        {
-            createNewValue: input =>
-                watchFile(
-                    state,
-                    input,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Update),
-                    PollingInterval.High,
-                    parsed?.watchOptions,
-                    WatchType.PackageJson,
-                    resolved,
-                ),
-            onDeleteValue: closeFileWatcher,
-        },
+    if (!state.watch) return;
+    updateSharedFileWatcher(
+        resolvedPath,
+        getPackageJsonDependencies(state, resolvedPath, parsed),
+        state.allWatchedPackageJsonFiles,
+        (file, path) =>
+            watchFile(
+                state,
+                file,
+                () =>
+                    invalidateProjectAndScheduledBuildsOfSharedFileWacher(
+                        state,
+                        state.allWatchedPackageJsonFiles.get(path),
+                        ProgramUpdateLevel.Update,
+                    ),
+                PollingInterval.High,
+                parsed?.watchOptions,
+                WatchType.PackageJson,
+                resolved,
+            ),
+        fileName => toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName),
     );
 }
 
@@ -2215,7 +2249,7 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
     clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
     clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
     clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
-    clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
+    clearMap(state.allWatchedPackageJsonFiles, closeFileWatcherOf);
 }
 
 /**
