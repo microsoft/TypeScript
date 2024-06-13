@@ -3,6 +3,7 @@
 === /node_modules/tslib/tslib.d.ts ===
 export declare var __rest: any;
 >__rest : any
+>       : ^^^
 
 === /node_modules/tslib/modules/index.d.ts ===
 
@@ -13,6 +14,7 @@ function foo(args: any) {
 >foo : (args: any) => any
 >    : ^    ^^   ^^^^^^^^
 >args : any
+>     : ^^^
 
   const { bar, ...extraArgs } = args;
 >bar : any
@@ -20,9 +22,11 @@ function foo(args: any) {
 >extraArgs : any
 >          : ^^^
 >args : any
+>     : ^^^
 
   return extraArgs;
 >extraArgs : any
+>          : ^^^
 }
 export = foo;
 >foo : (args: any) => any

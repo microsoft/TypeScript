@@ -51,6 +51,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -58,13 +59,17 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (used version)
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"2464268576-const a = \"hello","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"changeFileSet":[1,2],"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2464268576-const a = \"hello","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"errors":true,"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -76,24 +81,20 @@ No shapes updated in the builder::
     "../lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": false,
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
     },
     "./a.ts": {
       "original": {
         "version": "2464268576-const a = \"hello",
-        "signature": false,
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "2464268576-const a = \"hello",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "signature": "2464268576-const a = \"hello",
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -102,12 +103,15 @@ No shapes updated in the builder::
       "./a.ts"
     ]
   ],
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./a.ts"
+  "affectedFilesPendingEmit": [
+    [
+      "./a.ts",
+      "Js"
+    ]
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 735
+  "size": 686
 }
 
 
@@ -121,7 +125,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -140,6 +144,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -147,7 +152,7 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -166,7 +171,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -177,6 +182,7 @@ Program root files: [
 Program options: {
   "noEmit": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -189,12 +195,11 @@ Semantic diagnostics in builder refreshed for::
 /src/a.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
 /src/a.ts (computed .d.ts)
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"4011451714-const a = \"hello\"","signature":"-5460434953-declare const a = \"hello\";\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4011451714-const a = \"hello\"","signature":"-5460434953-declare const a = \"hello\";\n","affectsGlobalScope":true}],"root":[2],"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -206,25 +211,21 @@ Shape signatures in builder refreshed for::
     "../lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
       "original": {
         "version": "4011451714-const a = \"hello\"",
         "signature": "-5460434953-declare const a = \"hello\";\n",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "4011451714-const a = \"hello\"",
       "signature": "-5460434953-declare const a = \"hello\";\n",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -240,7 +241,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 767
+  "size": 731
 }
 
 

@@ -52,7 +52,7 @@ var x = data_json_1.default;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"2718060498-declare var val: string; export default val;","impliedFormat":1},{"version":"6961905452-import data from \"./data.json\"; let x: string = data;","impliedFormat":1}],"root":[2,3],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -65,31 +65,19 @@ var x = data_json_1.default;
     "../../a/lib/lib.d.ts": {
       "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
       "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./data.d.json.ts": {
-      "original": {
-        "version": "2718060498-declare var val: string; export default val;",
-        "impliedFormat": 1
-      },
       "version": "2718060498-declare var val: string; export default val;",
-      "signature": "2718060498-declare var val: string; export default val;",
-      "impliedFormat": "commonjs"
+      "signature": "2718060498-declare var val: string; export default val;"
     },
     "./main.ts": {
-      "original": {
-        "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
-        "impliedFormat": 1
-      },
       "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
-      "signature": "6961905452-import data from \"./data.json\"; let x: string = data;",
-      "impliedFormat": "commonjs"
+      "signature": "6961905452-import data from \"./data.json\"; let x: string = data;"
     }
   },
   "root": [
@@ -117,7 +105,7 @@ var x = data_json_1.default;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 942
+  "size": 864
 }
 
 

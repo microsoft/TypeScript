@@ -51,7 +51,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -64,28 +64,21 @@ Output::
 
 
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
 
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/src/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
+
 
 FsWatches::
 /user/username/projects/noEmitOnError/shared/types/db.ts: *new*
@@ -111,6 +104,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -120,9 +114,17 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (used version)
+/user/username/projects/noemitonerror/src/other.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -143,7 +145,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -168,6 +170,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -177,7 +180,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -205,13 +208,27 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
@@ -258,6 +275,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -268,16 +286,10 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/noemitonerror/shared/types/db.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
-/user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -301,7 +313,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -313,6 +325,21 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
 
 
 
@@ -326,6 +353,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -360,7 +388,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -385,6 +413,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -420,7 +449,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -429,6 +458,20 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] file changed its modified time
@@ -453,6 +496,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -487,7 +531,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -497,6 +541,7 @@ Output::
 
 
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file changed its modified time
@@ -515,6 +560,7 @@ Program options: {
   "declaration": true,
   "noEmitOnError": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not

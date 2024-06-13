@@ -45,7 +45,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -66,6 +66,7 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -87,6 +88,21 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 109
+}
 
 
 
@@ -99,7 +115,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -120,6 +136,7 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -142,6 +159,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
@@ -157,7 +176,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -170,6 +189,7 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/noEmitOnError/dev-build",
   "noEmitOnError": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
 }
 Program structureReused: Not
@@ -208,6 +228,20 @@ var a = "hello";
 Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
 
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{"root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 95
+}
 
 
 

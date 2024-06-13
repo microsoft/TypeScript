@@ -102,7 +102,6 @@ import {
     OutliningSpan,
     PasteEdits,
     Path,
-    perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
     Program,
@@ -1206,7 +1205,6 @@ export class Session<TMessage = string> implements EventSender {
 
     protected writeMessage(msg: protocol.Message) {
         const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
-        perfLogger?.logEvent(`Response message size: ${msgText.length}`);
         this.host.write(msgText);
     }
 
@@ -3698,7 +3696,6 @@ export class Session<TMessage = string> implements EventSender {
             relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-            perfLogger?.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
             tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
             const { response, responseRequired } = this.executeCommand(request);
@@ -3715,7 +3712,6 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             // Note: Log before writing the response, else the editor can complete its activity before the server does
-            perfLogger?.logStopCommand("" + request.command, "Success");
             tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
             if (response) {
                 this.doOutput(response, request.command, request.seq, /*success*/ true);
@@ -3730,14 +3726,12 @@ export class Session<TMessage = string> implements EventSender {
 
             if (err instanceof OperationCanceledException) {
                 // Handle cancellation exceptions
-                perfLogger?.logStopCommand("" + (request && request.command), "Canceled: " + err);
                 tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
                 this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                 return;
             }
 
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
-            perfLogger?.logStopCommand("" + (request && request.command), "Error: " + err);
             tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
 
             this.doOutput(

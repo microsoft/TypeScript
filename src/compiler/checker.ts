@@ -62,7 +62,7 @@ import {
     canHaveModifiers,
     canHaveModuleSpecifier,
     canHaveSymbol,
-    canIncludeBindAndCheckDiagnsotics,
+    canIncludeBindAndCheckDiagnostics,
     canUsePropertyAccess,
     cartesianProduct,
     CaseBlock,
@@ -8882,8 +8882,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         const type = getWidenedType(getRegularTypeOfExpression(node.expression));
                         const computedPropertyNameType = typeToTypeNodeHelper(type, context);
-                        Debug.assertNode(computedPropertyNameType, isLiteralTypeNode);
-                        const literal = computedPropertyNameType.literal;
+                        let literal;
+                        if (isLiteralTypeNode(computedPropertyNameType)) {
+                            literal = computedPropertyNameType.literal;
+                        }
+                        else {
+                            const evaluated = evaluateEntityNameExpression(node.expression);
+                            const literalNode = typeof evaluated.value === "string" ? factory.createStringLiteral(evaluated.value, /*isSingleQuote*/ undefined) :
+                                typeof evaluated.value === "number" ? factory.createNumericLiteral(evaluated.value, /*numericLiteralFlags*/ 0) :
+                                undefined;
+                            if (!literalNode) {
+                                if (isImportTypeNode(computedPropertyNameType)) {
+                                    trackComputedName(node.expression, context.enclosingDeclaration, context);
+                                }
+                                return node;
+                            }
+                            literal = literalNode;
+                        }
                         if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(compilerOptions))) {
                             return factory.createIdentifier(literal.text);
                         }
@@ -45809,7 +45824,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             memberIsParameterProperty,
-            symbolName(declaredProp),
+            declaredProp,
             reportErrors ? member : undefined,
         );
     }
@@ -45833,22 +45848,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         memberHasAbstractModifier: boolean,
         memberIsStatic: boolean,
         memberIsParameterProperty: boolean,
-        memberName: string,
+        member: Symbol,
         errorNode?: Node,
     ): MemberOverrideStatus {
         const isJs = isInJSFile(node);
         const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
         if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
-            const memberEscapedName = escapeLeadingUnderscores(memberName);
             const thisType = memberIsStatic ? staticType : typeWithThis;
             const baseType = memberIsStatic ? baseStaticType : baseWithThis;
-            const prop = getPropertyOfType(thisType, memberEscapedName);
-            const baseProp = getPropertyOfType(baseType, memberEscapedName);
+            const prop = getPropertyOfType(thisType, member.escapedName);
+            const baseProp = getPropertyOfType(baseType, member.escapedName);
 
             const baseClassName = typeToString(baseWithThis);
             if (prop && !baseProp && memberHasOverrideModifier) {
                 if (errorNode) {
-                    const suggestion = getSuggestedSymbolForNonexistentClassMember(memberName, baseType); // Again, using symbol name: note that's different from `symbol.escapedName`
+                    const suggestion = getSuggestedSymbolForNonexistentClassMember(symbolName(member), baseType); // Again, using symbol name: note that's different from `symbol.escapedName`
                     suggestion ?
                         error(
                             errorNode,
@@ -45994,7 +46008,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             /*memberIsParameterProperty*/ false,
-            symbolName(memberSymbol),
+            memberSymbol,
         );
     }
 
@@ -49209,7 +49223,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function calculateNodeCheckFlagWorker(node: Node, flag: LazyNodeCheckFlags) {
-        if (!compilerOptions.noCheck && canIncludeBindAndCheckDiagnsotics(getSourceFileOfNode(node), compilerOptions)) {
+        if (!compilerOptions.noCheck && canIncludeBindAndCheckDiagnostics(getSourceFileOfNode(node), compilerOptions)) {
             // Unless noCheck is passed, assume calculation of node check flags has been done eagerly.
             // This saves needing to mark up where in the eager traversal certain results are "done",
             // just to reconcile the eager and lazy results. This wouldn't be hard if an eager typecheck

@@ -333,8 +333,7 @@ export function isBuilderProgram<T extends BuilderProgram>(program: Program | Bu
     return !!(program as T).state;
 }
 
-/** @internal */
-export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
+function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
     const options = program.getCompilerOptions();
     if (options.explainFiles) {
         explainFiles(isBuilderProgram(program) ? program.getProgram() : program, write);
@@ -598,14 +597,13 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     const emitResult = isListFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
         : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-    const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
-    addRange(allDiagnostics, emitDiagnostics);
+    addRange(allDiagnostics, emitResult.diagnostics);
 
     const diagnostics = sortAndDeduplicateDiagnostics(allDiagnostics);
     diagnostics.forEach(reportDiagnostic);
     if (write) {
         const currentDir = program.getCurrentDirectory();
-        forEach(emittedFiles, file => {
+        forEach(emitResult.emittedFiles, file => {
             const filepath = getNormalizedAbsolutePath(file, currentDir);
             write(`TSFILE: ${filepath}`);
         });

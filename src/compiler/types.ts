@@ -4523,6 +4523,7 @@ export interface WriteFileCallbackData {
     /** @internal */ buildInfo?: BuildInfo;
     /** @internal */ diagnostics?: readonly DiagnosticWithLocation[];
     /** @internal */ differsOnlyInMap?: true;
+    /** @internal */ skippedDtsWrite?: true;
 }
 export type WriteFileCallback = (
     fileName: string,
@@ -7410,6 +7411,7 @@ export interface CompilerOptions {
     esModuleInterop?: boolean;
     /** @internal */ showConfig?: boolean;
     useDefineForClassFields?: boolean;
+    /** @internal */ tscBuild?: boolean;
 
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 }

@@ -7,16 +7,13 @@ CleanBuild:
   "fileInfos": {
     "../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
-      "version": "4646078106-export function foo() { }",
-      "impliedFormat": "commonjs"
+      "version": "4646078106-export function foo() { }"
     },
     "./b.ts": {
-      "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
+      "version": "1045484683-export function bar() { }"
     }
   },
   "root": [
@@ -33,11 +30,8 @@ CleanBuild:
     "composite": true,
     "declaration": true
   },
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -45,16 +39,13 @@ IncrementalBuild:
   "fileInfos": {
     "../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
-      "version": "4646078106-export function foo() { }",
-      "impliedFormat": "commonjs"
+      "version": "4646078106-export function foo() { }"
     },
     "./b.ts": {
-      "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
+      "version": "1045484683-export function bar() { }"
     }
   },
   "root": [
@@ -70,10 +61,7 @@ IncrementalBuild:
   "options": {
     "composite": true
   },
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }
