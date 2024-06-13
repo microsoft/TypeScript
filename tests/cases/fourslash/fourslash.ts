@@ -132,6 +132,11 @@ declare module ts {
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
+
+    interface TextRange {
+        pos: number;
+        end: number;
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -212,6 +217,10 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
+    interface TextRange {
+        pos: number;
+        end: number;
+    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -224,6 +233,7 @@ declare namespace FourSlashInterface {
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
+        getSemanticDiagnostics(): Diagnostic[];
     }
     class config {
         configurePlugin(pluginName: string, configuration: any): void;
@@ -417,6 +427,10 @@ declare namespace FourSlashInterface {
         baselineInlayHints(span?: { start: number; length: number; }, preferences?: InlayHintsOptions): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
+        getRegionSemanticDiagnostics(
+            ranges: ts.TextRange[],
+            expectedDiagnostics: ReadonlyArray<Diagnostic> | undefined,
+            expectedRanges?: ReadonlyArray<TextRange>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         getEditsForFileRename(options: {

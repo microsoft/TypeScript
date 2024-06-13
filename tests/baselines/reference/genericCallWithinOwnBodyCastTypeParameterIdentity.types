@@ -98,11 +98,11 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 
         return {
 >{            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        } : { then<V>(onFulfilled: (value: Result) => V | Thenable<V>): Thenable<V>; }
->                                                                                                                               : ^^^^^^^^^^           ^^^     ^^^^^^^^^^^^^^            ^ ^^^^^^^^^^^^^^^^^
+>                                                                                                                               : ^^^^^^^ ^^           ^^^     ^^^^^^^^^^^^^^            ^ ^^^^^^^^^^^^^^^^^
 
             then(onFulfilled) {
 >then : <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>
->     : ^^^^           ^^^     ^^^^^^^^^^^^^^            ^ ^^^^^^^^^^^^^^^^
+>     : ^ ^^           ^^^     ^^^^^^^^^^^^^^            ^ ^^^^^^^^^^^^^^^^
 >onFulfilled : (value: Result) => V | Thenable<V>
 >            : ^     ^^^^^^^^^^^^^^            ^ 
 

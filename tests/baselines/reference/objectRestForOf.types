@@ -61,11 +61,11 @@ for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 >array.map(a => ({ ...a, x: 'a string' })) : { x: string; y: string; }[]
 >                                          : ^^^^^^^^^^^^^^^^      ^^^^^
 >array.map : <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any) => U[]
->          : ^^^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >array : { x: number; y: string; }[]
 >      : ^^^^^      ^^^^^      ^^^^^
 >map : <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >a => ({ ...a, x: 'a string' }) : (a: { x: number; y: string; }) => { x: string; y: string; }
 >                               : ^ ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a : { x: number; y: string; }

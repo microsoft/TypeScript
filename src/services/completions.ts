@@ -170,6 +170,8 @@ import {
     isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isIdentifierText,
     isImportableFile,
     isImportAttributes,
@@ -297,6 +299,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -1158,13 +1161,11 @@ function getJSDocParamAnnotation(
                             ? createSnippetPrinter({
                                 removeComments: true,
                                 module: options.module,
-                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             })
                             : createPrinter({
                                 removeComments: true,
                                 module: options.module,
-                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             });
                         setEmitFlags(typeNode, EmitFlags.SingleLine);
@@ -1458,7 +1459,6 @@ function getExhaustiveCaseSnippets(
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
-            moduleResolution: options.moduleResolution,
             target: options.target,
             newLine: getNewLineKind(newLineChar),
         });
@@ -1661,7 +1661,7 @@ function createCompletionEntry(
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let filterText: string | undefined;
-    let replacementSpan = getReplacementSpanForContextToken(replacementToken);
+    let replacementSpan = getReplacementSpanForContextToken(replacementToken, position);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
     let source = getSourceFromOrigin(origin);
@@ -1720,7 +1720,7 @@ function createCompletionEntry(
     if (originIsResolvedExport(origin)) {
         sourceDisplay = [textPart(origin.moduleSpecifier)];
         if (importStatementCompletion) {
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, program, preferences));
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, options, preferences));
             isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
         }
     }
@@ -1836,10 +1836,19 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = JSON.stringify(name);
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -1870,6 +1879,29 @@ function createCompletionEntry(
         data,
         ...includeSymbol ? { symbol } : undefined,
     };
+}
+
+function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number | undefined;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
+        ch = text.codePointAt(i);
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -1946,7 +1978,6 @@ function getEntryForMemberCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
-        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2173,7 +2204,6 @@ function getEntryForObjectLiteralMethodCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
-        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2188,7 +2218,6 @@ function getEntryForObjectLiteralMethodCompletion(
     const signaturePrinter = createPrinter({
         removeComments: true,
         module: options.module,
-        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: true,
     });
@@ -2491,14 +2520,14 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
     return unresolvedOrigin;
 }
 
-function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, program: Program, preferences: UserPreferences) {
+function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
     const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind = origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
         ExportKind.Named;
     const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
-    const importKind = codefix.getImportKind(sourceFile, exportKind, program, /*forceImportKeyword*/ true);
+    const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
     const isImportSpecifierTypeOnly = importStatementCompletion.couldBeTypeOnlyImportSpecifier;
     const topLevelTypeOnlyText = importStatementCompletion.isTopLevelTypeOnly ? ` ${tokenToString(SyntaxKind.TypeKeyword)} ` : " ";
     const importSpecifierTypeOnlyText = isImportSpecifierTypeOnly ? `${tokenToString(SyntaxKind.TypeKeyword)} ` : "";
@@ -4497,7 +4526,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -5249,6 +5278,10 @@ function getCompletionEntryDisplayNameForSymbol(
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
+    }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
     }
     switch (kind) {
         case CompletionKind.MemberLike:

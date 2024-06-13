@@ -49,7 +49,7 @@ export interface C<T, U> {
 
     method<Q = number>(): number;
 >method : { <Q = number>(): number; <Q_1>(a: T & Q_1): Q_1 & number; (a?: number): number; (...args: any[]): number; }
->       : ^^^^^^^^^^^^^^^^^^      ^^^   ^^ ^^       ^^^            ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^^^^^^ ^^       ^^^            ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 
     method<Q>(a: T & Q): Q & number;
 >method : { <Q_1 = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
@@ -59,13 +59,13 @@ export interface C<T, U> {
 
     method(a?: number): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
->       : ^^^^^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     method(...args: any[]): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
->       : ^^^^^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
+>       : ^^^ ^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
 >args : any[]
 >     : ^^^^^
 

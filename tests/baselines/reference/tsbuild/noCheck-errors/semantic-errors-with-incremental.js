@@ -39,13 +39,23 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
+
+[96msrc/a.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m2[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
+
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
 [7m3[0m     "noCheck": true,
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -55,6 +65,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -62,62 +73,83 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (computed .d.ts during emit)
+
+
+//// [/src/a.d.ts]
+declare const err: number;
+declare const a: number;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"9312413704-const err: number = \"error\";\nconst a: number = \"hello\"","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true},"changeFileSet":[1,2]},"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"9312413704-const err: number = \"error\";\nconst a: number = \"hello\"","signature":"-22763377875-declare const err: number;\ndeclare const a: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true},"semanticDiagnosticsPerFile":[[2,[{"start":6,"length":3,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."},{"start":35,"length":1,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./a.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "signature": false,
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../lib/lib.d.ts",
+    "./a.ts"
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
-      "./a.ts": {
-        "original": {
-          "version": "9312413704-const err: number = \"error\";\nconst a: number = \"hello\"",
-          "signature": false,
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.ts": {
+      "original": {
         "version": "9312413704-const err: number = \"error\";\nconst a: number = \"hello\"",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "changeFileSet": [
-      "../lib/lib.d.ts",
+        "signature": "-22763377875-declare const err: number;\ndeclare const a: number;\n",
+        "affectsGlobalScope": true
+      },
+      "version": "9312413704-const err: number = \"error\";\nconst a: number = \"hello\"",
+      "signature": "-22763377875-declare const err: number;\ndeclare const a: number;\n",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
       "./a.ts"
     ]
+  ],
+  "options": {
+    "declaration": true,
+    "emitDeclarationOnly": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./a.ts",
+      [
+        {
+          "start": 6,
+          "length": 3,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        },
+        {
+          "start": 35,
+          "length": 1,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 847
+  "size": 1089
 }
 
 
@@ -131,9 +163,19 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
+
+[96msrc/a.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m2[0m const a: number = "hello"
+[7m [0m [91m      ~[0m
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -141,7 +183,7 @@ Output::
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 3 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -151,6 +193,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -158,7 +201,7 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -178,9 +221,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -188,7 +236,7 @@ Output::
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -198,6 +246,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -205,62 +254,75 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/src/a.ts (computed .d.ts)
+
+
+//// [/src/a.d.ts]
+declare const err: number;
+declare const a = "hello";
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"6909448549-const err: number = \"error\";\nconst a = \"hello\"","signature":false,"affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true},"changeFileSet":[1,2]},"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6909448549-const err: number = \"error\";\nconst a = \"hello\"","signature":"-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true},"semanticDiagnosticsPerFile":[[2,[{"start":6,"length":3,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./a.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "signature": false,
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../lib/lib.d.ts",
+    "./a.ts"
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
-      "./a.ts": {
-        "original": {
-          "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
-          "signature": false,
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./a.ts": {
+      "original": {
         "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "changeFileSet": [
-      "../lib/lib.d.ts",
+        "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
+        "affectsGlobalScope": true
+      },
+      "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
+      "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
+      "affectsGlobalScope": true
+    }
+  },
+  "root": [
+    [
+      2,
       "./a.ts"
     ]
+  ],
+  "options": {
+    "declaration": true,
+    "emitDeclarationOnly": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./a.ts",
+      [
+        {
+          "start": 6,
+          "length": 3,
+          "code": 2322,
+          "category": 1,
+          "messageText": "Type 'string' is not assignable to type 'number'."
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 839
+  "size": 970
 }
 
 
@@ -274,9 +336,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -284,7 +351,7 @@ Output::
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -294,6 +361,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -301,7 +369,7 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -325,7 +393,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -345,6 +413,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -353,83 +422,9 @@ Program files::
 /src/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/src/a.ts
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/src/a.ts (computed .d.ts)
+No shapes updated in the builder::
 
-
-//// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"6909448549-const err: number = \"error\";\nconst a = \"hello\"","signature":"-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"declaration":true,"emitDeclarationOnly":true},"semanticDiagnosticsPerFile":[[2,[{"start":6,"length":3,"code":2322,"category":1,"messageText":"Type 'string' is not assignable to type 'number'."}]]],"affectedFilesPendingEmit":[2]},"version":"FakeTSVersion"}
-
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./a.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      },
-      "./a.ts": {
-        "original": {
-          "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
-          "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
-        "version": "6909448549-const err: number = \"error\";\nconst a = \"hello\"",
-        "signature": "-22441876417-declare const err: number;\ndeclare const a = \"hello\";\n",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./a.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true,
-      "emitDeclarationOnly": true
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "./a.ts",
-        [
-          {
-            "start": 6,
-            "length": 3,
-            "code": 2322,
-            "category": 1,
-            "messageText": "Type 'string' is not assignable to type 'number'."
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./a.ts",
-        "Dts"
-      ]
-    ]
-  },
-  "version": "FakeTSVersion",
-  "size": 1049
-}
 
 
 
@@ -442,7 +437,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -462,6 +457,7 @@ Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
   "incremental": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not

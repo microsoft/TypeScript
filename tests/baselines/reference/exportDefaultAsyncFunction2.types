@@ -3,7 +3,7 @@
 === asyncawait.ts ===
 export function async<T>(...args: any[]): any { }
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 
@@ -16,7 +16,7 @@ export function await(...args: any[]): any { }
 === a.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
 >      : ^^^^    ^^     ^^^^^   
 
@@ -24,7 +24,7 @@ export default async(() => await(Promise.resolve(1)));
 >async(() => await(Promise.resolve(1))) : any
 >                                       : ^^^
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >() => await(Promise.resolve(1)) : () => any
 >                                : ^^^^^^^^^
 >await(Promise.resolve(1)) : any
@@ -52,7 +52,7 @@ export default async () => { return 0; };
 === c.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
 >      : ^^^^    ^^     ^^^^^   
 
@@ -60,29 +60,29 @@ export default async<number>();
 >async<number>() : any
 >                : ^^^
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 
 === d.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
 >      : ^^^^    ^^     ^^^^^   
 
 export default async;
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 
 === e.ts ===
 import { async, await } from 'asyncawait';
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 >await : (...args: any[]) => any
 >      : ^^^^    ^^     ^^^^^   
 
 export default async
 >async : <T>(...args: any[]) => any
->      : ^^^^^^^    ^^     ^^^^^   
+>      : ^ ^^^^^    ^^     ^^^^^   
 
 export function foo() { }
 >foo : () => void

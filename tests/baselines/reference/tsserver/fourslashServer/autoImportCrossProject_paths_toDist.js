@@ -131,10 +131,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/folder/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/src/package.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -229,9 +225,6 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/dep/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/folder/package.json 2000 undefined Project: /packages/dep/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/package.json 2000 undefined Project: /packages/dep/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/package.json 2000 undefined Project: /packages/dep/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/dep/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/dep/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -325,25 +318,14 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/app/src/index.ts: *new*
   {"pollingInterval":500}
-/packages/app/src/package.json: *new*
-  {"pollingInterval":2000}
 /packages/app/src/utils.ts: *new*
   {"pollingInterval":500}
 /packages/app/tsconfig.json: *new*
   {"pollingInterval":2000}
 /packages/dep/src/main.ts: *new*
   {"pollingInterval":500}
-/packages/dep/src/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/src/sub/folder/index.ts: *new*
   {"pollingInterval":500}
-/packages/dep/src/sub/folder/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/packages/dep/src/sub/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -455,25 +437,14 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/app/src/a.ts:
   {"pollingInterval":500}
-/packages/app/src/package.json:
-  {"pollingInterval":2000}
 /packages/app/src/utils.ts:
   {"pollingInterval":500}
 /packages/app/tsconfig.json:
   {"pollingInterval":2000}
 /packages/dep/src/main.ts:
   {"pollingInterval":500}
-/packages/dep/src/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/src/sub/folder/index.ts:
   {"pollingInterval":500}
-/packages/dep/src/sub/folder/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/packages/dep/src/sub/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -878,23 +849,12 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/app/src/a.ts:
   {"pollingInterval":500}
-/packages/app/src/package.json:
-  {"pollingInterval":2000}
 /packages/app/tsconfig.json:
   {"pollingInterval":2000}
 /packages/dep/src/main.ts:
   {"pollingInterval":500}
-/packages/dep/src/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/src/sub/folder/index.ts:
   {"pollingInterval":500}
-/packages/dep/src/sub/folder/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/packages/dep/src/sub/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /packages/dep/tsconfig.json:
   {"pollingInterval":2000}
 

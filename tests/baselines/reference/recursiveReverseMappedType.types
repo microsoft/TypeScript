@@ -39,7 +39,7 @@ function a<T>(l: Recur<T>[]): void {
 >join(l) : Recur<T>
 >        : ^^^^^^^^
 >join : <T_1>(l: Recur<T_1>[]) => Recur<T_1>
->     : ^   ^^ ^^            ^^^^^          
+>     : ^^^^^^ ^^            ^^^^^          
 >l : Recur<T>[]
 >  : ^^^^^^^^^^
 }

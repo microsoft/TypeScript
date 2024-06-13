@@ -282,16 +282,16 @@ const textToToken = new Map(Object.entries({
     "`": SyntaxKind.BacktickToken,
 }));
 
-const charToRegExpFlag = new Map(Object.entries({
-    d: RegularExpressionFlags.HasIndices,
-    g: RegularExpressionFlags.Global,
-    i: RegularExpressionFlags.IgnoreCase,
-    m: RegularExpressionFlags.Multiline,
-    s: RegularExpressionFlags.DotAll,
-    u: RegularExpressionFlags.Unicode,
-    v: RegularExpressionFlags.UnicodeSets,
-    y: RegularExpressionFlags.Sticky,
-}));
+const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
+    [CharacterCodes.d, RegularExpressionFlags.HasIndices],
+    [CharacterCodes.g, RegularExpressionFlags.Global],
+    [CharacterCodes.i, RegularExpressionFlags.IgnoreCase],
+    [CharacterCodes.m, RegularExpressionFlags.Multiline],
+    [CharacterCodes.s, RegularExpressionFlags.DotAll],
+    [CharacterCodes.u, RegularExpressionFlags.Unicode],
+    [CharacterCodes.v, RegularExpressionFlags.UnicodeSets],
+    [CharacterCodes.y, RegularExpressionFlags.Sticky],
+]);
 
 const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
@@ -394,8 +394,8 @@ function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | u
         lookupInUnicodeMap(code, unicodeES5IdentifierPart);
 }
 
-function makeReverseMap(source: Map<string, number>): string[] {
-    const result: string[] = [];
+function makeReverseMap<T>(source: Map<T, number>): T[] {
+    const result: T[] = [];
     source.forEach((value, name) => {
         result[value] = name;
     });
@@ -416,16 +416,16 @@ export function stringToToken(s: string): SyntaxKind | undefined {
     return textToToken.get(s);
 }
 
-const regExpFlagChars = makeReverseMap(charToRegExpFlag);
+const regExpFlagCharCodes = makeReverseMap(charCodeToRegExpFlag);
 
 /** @internal */
-export function regularExpressionFlagToCharacter(f: RegularExpressionFlags): string | undefined {
-    return regExpFlagChars[f];
+export function regularExpressionFlagToCharacterCode(f: RegularExpressionFlags): CharacterCodes | undefined {
+    return regExpFlagCharCodes[f];
 }
 
 /** @internal */
-export function characterToRegularExpressionFlag(c: string): RegularExpressionFlags | undefined {
-    return charToRegExpFlag.get(c);
+export function characterCodeToRegularExpressionFlag(ch: CharacterCodes): RegularExpressionFlags | undefined {
+    return charCodeToRegExpFlag.get(ch);
 }
 
 /** @internal */
@@ -997,6 +997,19 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
     return true;
 }
 
+const enum EscapeSequenceScanningFlags {
+    String = 1 << 0,
+    ReportErrors = 1 << 1,
+
+    RegularExpression = 1 << 2,
+    AnnexB = 1 << 3,
+    AnyUnicodeMode = 1 << 4,
+    AtomEscape = 1 << 5,
+
+    ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
+    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+}
+
 const enum ClassSetExpressionType {
     Unknown,
     ClassUnion,
@@ -1416,7 +1429,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
             if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                 result += text.substring(start, pos);
-                result += scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ true, /*isRegularExpression*/ false);
+                result += scanEscapeSequence(EscapeSequenceScanningFlags.String | EscapeSequenceScanningFlags.ReportErrors);
                 start = pos;
                 continue;
             }
@@ -1474,7 +1487,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // Escape character
             if (currChar === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
-                contents += scanEscapeSequence(shouldEmitInvalidEscapeError, /*isRegularExpression*/ false);
+                contents += scanEscapeSequence(EscapeSequenceScanningFlags.String | (shouldEmitInvalidEscapeError ? EscapeSequenceScanningFlags.ReportErrors : 0));
                 start = pos;
                 continue;
             }
@@ -1517,7 +1530,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     //     | [0-3] [0-7] [0-7]?
     //     | [4-7] [0-7]
     // NonOctalDecimalEscapeSequence ::= [89]
-    function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean | "annex-b"): string {
+    function scanEscapeSequence(flags: EscapeSequenceScanningFlags): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1554,9 +1567,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 // '\47'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    if (isRegularExpression !== "annex-b") {
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape) && ch !== CharacterCodes._0) {
+                        error(Diagnostics.Octal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class_If_this_was_intended_as_an_escape_sequence_use_the_syntax_0_instead, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    }
+                    else {
                         error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     }
                     return String.fromCharCode(code);
@@ -1566,8 +1582,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes._9:
                 // the invalid '\8' and '\9'
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                if (isRegularExpression || shouldEmitInvalidEscapeError) {
-                    error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                    if (flags & EscapeSequenceScanningFlags.RegularExpression && !(flags & EscapeSequenceScanningFlags.AtomEscape)) {
+                        error(Diagnostics.Decimal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class, start, pos - start);
+                    }
+                    else {
+                        error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                    }
                     return String.fromCharCode(ch);
                 }
                 return text.substring(start, pos);
@@ -1589,18 +1610,18 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return '"';
             case CharacterCodes.u:
                 if (
-                    (!isRegularExpression || shouldEmitInvalidEscapeError) &&
+                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
                     pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
                 ) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!isRegularExpression || shouldEmitInvalidEscapeError);
+                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1610,7 +1631,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const escapedValue = parseInt(text.substring(start + 2, pos), 16);
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
-                    isRegularExpression && shouldEmitInvalidEscapeError && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
                     pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in any Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
@@ -1637,7 +1658,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 for (; pos < start + 4; pos++) {
                     if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        if (isRegularExpression || shouldEmitInvalidEscapeError) {
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
                             error(Diagnostics.Hexadecimal_digit_expected);
                         }
                         return text.substring(start, pos);
@@ -1658,7 +1679,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.paragraphSeparator:
                 return "";
             default:
-                if (isRegularExpression === true && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
+                if (
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode
+                    || flags & EscapeSequenceScanningFlags.RegularExpression
+                        && !(flags & EscapeSequenceScanningFlags.AnnexB)
+                        && isIdentifierPart(ch, languageVersion)
+                ) {
                     error(Diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, pos - 2, 2);
                 }
                 return String.fromCharCode(ch);
@@ -2427,8 +2453,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             const startOfRegExpBody = tokenStart + 1;
             pos = startOfRegExpBody;
             let inEscape = false;
+            let namedCaptureGroups = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in any Unicode mode.
+            // This is indicated by Section 12.9.5 Regular Expression Literals of the specification,
+            // where nested character classes are not considered at all. (A `[` RegularExpressionClassChar
+            // does nothing in a RegularExpressionClass, and a `]` always closes the class.)
             // Additionally, parsing nested character classes will misinterpret regexes like `/[[]/`
             // as unterminated, consuming characters beyond the slash. (This even applies to `/[[]/v`,
             // which should be parsed as a well-terminated regex with an incomplete character class.)
@@ -2461,6 +2491,16 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 else if (ch === CharacterCodes.closeBracket) {
                     inCharacterClass = false;
+                }
+                else if (
+                    !inCharacterClass
+                    && ch === CharacterCodes.openParen
+                    && charCodeChecked(pos + 1) === CharacterCodes.question
+                    && charCodeChecked(pos + 2) === CharacterCodes.lessThan
+                    && charCodeChecked(pos + 3) !== CharacterCodes.equals
+                    && charCodeChecked(pos + 3) !== CharacterCodes.exclamation
+                ) {
+                    namedCaptureGroups = true;
                 }
                 pos++;
             }
@@ -2522,27 +2562,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                         break;
                     }
+                    const size = charSize(ch);
                     if (reportErrors) {
-                        const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                        const flag = characterCodeToRegularExpressionFlag(ch);
                         if (flag === undefined) {
-                            error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                            error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                         }
                         else if (regExpFlags & flag) {
-                            error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                            error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
                         }
                         else if (((regExpFlags | flag) & RegularExpressionFlags.AnyUnicodeMode) === RegularExpressionFlags.AnyUnicodeMode) {
-                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, 1);
+                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, size);
                         }
                         else {
                             regExpFlags |= flag;
-                            checkRegularExpressionFlagAvailable(flag, pos);
+                            checkRegularExpressionFlagAvailability(flag, size);
                         }
                     }
-                    pos++;
+                    pos += size;
                 }
                 if (reportErrors) {
                     scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
-                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true);
+                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true, namedCaptureGroups);
                     });
                 }
             }
@@ -2552,7 +2593,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token;
     }
 
-    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean) {
+    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean, namedCaptureGroups: boolean) {
         // Why var? It avoids TDZ checks in the runtime which can be costly.
         // See: https://github.com/microsoft/TypeScript/issues/52924
         /* eslint-disable no-var */
@@ -2562,10 +2603,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         /** Grammar parameter */
         var anyUnicodeMode = !!(regExpFlags & RegularExpressionFlags.AnyUnicodeMode);
 
-        if (anyUnicodeMode) {
-            // Annex B treats any unicode mode as the strict syntax.
-            annexB = false;
-        }
+        // Regular expressions are checked more strictly when either in 'u' or 'v' mode, or
+        // when not using the looser interpretation of the syntax from ECMA-262 Annex B.
+        var anyUnicodeModeOrNonAnnexB = anyUnicodeMode || !annexB;
 
         /** @see {scanClassSetExpression} */
         var mayContainStrings = false;
@@ -2661,7 +2701,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 case CharacterCodes.exclamation:
                                     pos++;
                                     // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
-                                    isPreviousTermQuantifiable = annexB;
+                                    isPreviousTermQuantifiable = !anyUnicodeModeOrNonAnnexB;
                                     break;
                                 case CharacterCodes.lessThan:
                                     const groupNameStart = pos;
@@ -2710,6 +2750,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         const digitsStart = pos;
                         scanDigits();
                         const min = tokenValue;
+                        if (!anyUnicodeModeOrNonAnnexB && !min) {
+                            isPreviousTermQuantifiable = true;
+                            break;
+                        }
                         if (charCodeChecked(pos) === CharacterCodes.comma) {
                             pos++;
                             scanDigits();
@@ -2719,26 +2763,32 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
                                 }
                                 else {
-                                    if (anyUnicodeMode) {
-                                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                    }
+                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                                     isPreviousTermQuantifiable = true;
                                     break;
                                 }
                             }
-                            if (max && Number.parseInt(min) > Number.parseInt(max)) {
+                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || charCodeChecked(pos) === CharacterCodes.closeBrace)) {
                                 error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                             }
                         }
                         else if (!min) {
-                            if (anyUnicodeMode) {
+                            if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                             }
                             isPreviousTermQuantifiable = true;
                             break;
                         }
-                        scanExpectedChar(CharacterCodes.closeBrace);
-                        pos--;
+                        if (charCodeChecked(pos) !== CharacterCodes.closeBrace) {
+                            if (anyUnicodeModeOrNonAnnexB) {
+                                error(Diagnostics._0_expected, pos, 0, String.fromCharCode(CharacterCodes.closeBrace));
+                                pos--;
+                            }
+                            else {
+                                isPreviousTermQuantifiable = true;
+                                break;
+                            }
+                        }
                     // falls through
                     case CharacterCodes.asterisk:
                     case CharacterCodes.plus:
@@ -2775,7 +2825,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     // falls through
                     case CharacterCodes.closeBracket:
                     case CharacterCodes.closeBrace:
-                        if (anyUnicodeMode || ch === CharacterCodes.closeParen) {
+                        if (anyUnicodeModeOrNonAnnexB || ch === CharacterCodes.closeParen) {
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                         }
                         pos++;
@@ -2794,25 +2844,26 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
             while (true) {
-                const ch = charCodeChecked(pos);
+                const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
-                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                const size = charSize(ch);
+                const flag = characterCodeToRegularExpressionFlag(ch);
                 if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                 }
                 else if (currFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
                 }
                 else if (!(flag & RegularExpressionFlags.Modifiers)) {
-                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
+                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, size);
                 }
                 else {
                     currFlags |= flag;
-                    checkRegularExpressionFlagAvailable(flag, pos);
+                    checkRegularExpressionFlagAvailability(flag, size);
                 }
-                pos++;
+                pos += size;
             }
             return currFlags;
         }
@@ -2832,7 +2883,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         scanGroupName(/*isReference*/ true);
                         scanExpectedChar(CharacterCodes.greaterThan);
                     }
-                    else if (anyUnicodeMode) {
+                    else if (anyUnicodeModeOrNonAnnexB || namedCaptureGroups) {
                         error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                     }
                     break;
@@ -2885,10 +2936,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         pos++;
                         return String.fromCharCode(ch & 0x1f);
                     }
-                    if (anyUnicodeMode) {
+                    if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
                     }
-                    else if (atomEscape && annexB) {
+                    else if (atomEscape) {
                         // Annex B treats
                         //
                         //  ExtendedAtom : `\` [lookahead = `c`]
@@ -2917,7 +2968,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return String.fromCharCode(ch);
                 default:
                     pos--;
-                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ anyUnicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
+                    return scanEscapeSequence(
+                        EscapeSequenceScanningFlags.RegularExpression
+                            | (annexB ? EscapeSequenceScanningFlags.AnnexB : 0)
+                            | (anyUnicodeMode ? EscapeSequenceScanningFlags.AnyUnicodeMode : 0)
+                            | (atomEscape ? EscapeSequenceScanningFlags.AtomEscape : 0),
+                    );
             }
         }
 
@@ -2966,12 +3022,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (isClassContentExit(ch)) {
                         return;
                     }
-                    if (!minCharacter && !annexB) {
+                    if (!minCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
                     }
                     const maxStart = pos;
                     const maxCharacter = scanClassAtom();
-                    if (!maxCharacter && !annexB) {
+                    if (!maxCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
                         continue;
                     }
@@ -3467,8 +3523,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                         }
                     }
-                    else if (anyUnicodeMode) {
+                    else if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                    }
+                    else {
+                        pos--;
+                        return false;
                     }
                     return true;
             }
@@ -3508,26 +3568,33 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         forEach(groupNameReferences, reference => {
             if (!groupSpecifiers?.has(reference.name)) {
                 error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
+                if (groupSpecifiers) {
+                    const suggestion = getSpellingSuggestion(reference.name, groupSpecifiers, identity);
+                    if (suggestion) {
+                        error(Diagnostics.Did_you_mean_0, reference.pos, reference.end - reference.pos, suggestion);
+                    }
+                }
             }
         });
         forEach(decimalEscapes, escape => {
-            // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
-            // either a LegacyOctalEscapeSequence or IdentityEscape
-            if (!annexB && escape.value > numberOfCapturingGroups) {
+            // Although a DecimalEscape with a value greater than the number of capturing groups
+            // is treated as either a LegacyOctalEscapeSequence or an IdentityEscape in Annex B,
+            // an error is nevertheless reported since it's most likely a mistake.
+            if (escape.value > numberOfCapturingGroups) {
                 if (numberOfCapturingGroups) {
                     error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                 }
                 else {
-                    error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
+                    error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_no_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos);
                 }
             }
         });
     }
 
-    function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+    function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, size: number) {
         const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
         if (availableFrom && languageVersion < availableFrom) {
-            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
         }
     }
 
@@ -4009,6 +4076,9 @@ const binaryUnicodePropertiesOfStrings = new Set(["Basic_Emoji", "Emoji_Keycap_S
 // dprint-ignore
 const valuesOfNonBinaryUnicodeProperties = {
     General_Category: new Set(["C", "Other", "Cc", "Control", "cntrl", "Cf", "Format", "Cn", "Unassigned", "Co", "Private_Use", "Cs", "Surrogate", "L", "Letter", "LC", "Cased_Letter", "Ll", "Lowercase_Letter", "Lm", "Modifier_Letter", "Lo", "Other_Letter", "Lt", "Titlecase_Letter", "Lu", "Uppercase_Letter", "M", "Mark", "Combining_Mark", "Mc", "Spacing_Mark", "Me", "Enclosing_Mark", "Mn", "Nonspacing_Mark", "N", "Number", "Nd", "Decimal_Number", "digit", "Nl", "Letter_Number", "No", "Other_Number", "P", "Punctuation", "punct", "Pc", "Connector_Punctuation", "Pd", "Dash_Punctuation", "Pe", "Close_Punctuation", "Pf", "Final_Punctuation", "Pi", "Initial_Punctuation", "Po", "Other_Punctuation", "Ps", "Open_Punctuation", "S", "Symbol", "Sc", "Currency_Symbol", "Sk", "Modifier_Symbol", "Sm", "Math_Symbol", "So", "Other_Symbol", "Z", "Separator", "Zl", "Line_Separator", "Zp", "Paragraph_Separator", "Zs", "Space_Separator"]),
-    Script: new Set(["Adlm", "Adlam", "Aghb", "Caucasian_Albanian", "Ahom", "Ahom", "Arab", "Arabic", "Armi", "Imperial_Aramaic", "Armn", "Armenian", "Avst", "Avestan", "Bali", "Balinese", "Bamu", "Bamum", "Bass", "Bassa_Vah", "Batk", "Batak", "Beng", "Bengali", "Bhks", "Bhaiksuki", "Bopo", "Bopomofo", "Brah", "Brahmi", "Brai", "Braille", "Bugi", "Buginese", "Buhd", "Buhid", "Cakm", "Chakma", "Cans", "Canadian_Aboriginal", "Cari", "Carian", "Cham", "Cham", "Cher", "Cherokee", "Chrs", "Chorasmian", "Copt", "Coptic", "Qaac", "Cpmn", "Cypro_Minoan", "Cprt", "Cypriot", "Cyrl", "Cyrillic", "Deva", "Devanagari", "Diak", "Dives_Akuru", "Dogr", "Dogra", "Dsrt", "Deseret", "Dupl", "Duployan", "Egyp", "Egyptian_Hieroglyphs", "Elba", "Elbasan", "Elym", "Elymaic", "Ethi", "Ethiopic", "Geor", "Georgian", "Glag", "Glagolitic", "Gong", "Gunjala_Gondi", "Gonm", "Masaram_Gondi", "Goth", "Gothic", "Gran", "Grantha", "Grek", "Greek", "Gujr", "Gujarati", "Guru", "Gurmukhi", "Hang", "Hangul", "Hani", "Han", "Hano", "Hanunoo", "Hatr", "Hatran", "Hebr", "Hebrew", "Hira", "Hiragana", "Hluw", "Anatolian_Hieroglyphs", "Hmng", "Pahawh_Hmong", "Hmnp", "Nyiakeng_Puachue_Hmong", "Hrkt", "Katakana_Or_Hiragana", "Hung", "Old_Hungarian", "Ital", "Old_Italic", "Java", "Javanese", "Kali", "Kayah_Li", "Kana", "Katakana", "Kawi", "Kawi", "Khar", "Kharoshthi", "Khmr", "Khmer", "Khoj", "Khojki", "Kits", "Khitan_Small_Script", "Knda", "Kannada", "Kthi", "Kaithi", "Lana", "Tai_Tham", "Laoo", "Lao", "Latn", "Latin", "Lepc", "Lepcha", "Limb", "Limbu", "Lina", "Linear_A", "Linb", "Linear_B", "Lisu", "Lisu", "Lyci", "Lycian", "Lydi", "Lydian", "Mahj", "Mahajani", "Maka", "Makasar", "Mand", "Mandaic", "Mani", "Manichaean", "Marc", "Marchen", "Medf", "Medefaidrin", "Mend", "Mende_Kikakui", "Merc", "Meroitic_Cursive", "Mero", "Meroitic_Hieroglyphs", "Mlym", "Malayalam", "Modi", "Modi", "Mong", "Mongolian", "Mroo", "Mro", "Mtei", "Meetei_Mayek", "Mult", "Multani", "Mymr", "Myanmar", "Nagm", "Nag_Mundari", "Nand", "Nandinagari", "Narb", "Old_North_Arabian", "Nbat", "Nabataean", "Newa", "Newa", "Nkoo", "Nko", "Nshu", "Nushu", "Ogam", "Ogham", "Olck", "Ol_Chiki", "Orkh", "Old_Turkic", "Orya", "Oriya", "Osge", "Osage", "Osma", "Osmanya", "Ougr", "Old_Uyghur", "Palm", "Palmyrene", "Pauc", "Pau_Cin_Hau", "Perm", "Old_Permic", "Phag", "Phags_Pa", "Phli", "Inscriptional_Pahlavi", "Phlp", "Psalter_Pahlavi", "Phnx", "Phoenician", "Plrd", "Miao", "Prti", "Inscriptional_Parthian", "Rjng", "Rejang", "Rohg", "Hanifi_Rohingya", "Runr", "Runic", "Samr", "Samaritan", "Sarb", "Old_South_Arabian", "Saur", "Saurashtra", "Sgnw", "SignWriting", "Shaw", "Shavian", "Shrd", "Sharada", "Sidd", "Siddham", "Sind", "Khudawadi", "Sinh", "Sinhala", "Sogd", "Sogdian", "Sogo", "Old_Sogdian", "Sora", "Sora_Sompeng", "Soyo", "Soyombo", "Sund", "Sundanese", "Sylo", "Syloti_Nagri", "Syrc", "Syriac", "Tagb", "Tagbanwa", "Takr", "Takri", "Tale", "Tai_Le", "Talu", "New_Tai_Lue", "Taml", "Tamil", "Tang", "Tangut", "Tavt", "Tai_Viet", "Telu", "Telugu", "Tfng", "Tifinagh", "Tglg", "Tagalog", "Thaa", "Thaana", "Thai", "Thai", "Tibt", "Tibetan", "Tirh", "Tirhuta", "Tnsa", "Tangsa", "Toto", "Toto", "Ugar", "Ugaritic", "Vaii", "Vai", "Vith", "Vithkuqi", "Wara", "Warang_Citi", "Wcho", "Wancho", "Xpeo", "Old_Persian", "Xsux", "Cuneiform", "Yezi", "Yezidi", "Yiii", "Yi", "Zanb", "Zanabazar_Square", "Zinh", "Inherited", "Qaai", "Zyyy", "Common", "Zzzz", "Unknown"]),
-    Script_Extensions: new Set<string>(), // Currently empty
+    Script: new Set(["Adlm", "Adlam", "Aghb", "Caucasian_Albanian", "Ahom", "Arab", "Arabic", "Armi", "Imperial_Aramaic", "Armn", "Armenian", "Avst", "Avestan", "Bali", "Balinese", "Bamu", "Bamum", "Bass", "Bassa_Vah", "Batk", "Batak", "Beng", "Bengali", "Bhks", "Bhaiksuki", "Bopo", "Bopomofo", "Brah", "Brahmi", "Brai", "Braille", "Bugi", "Buginese", "Buhd", "Buhid", "Cakm", "Chakma", "Cans", "Canadian_Aboriginal", "Cari", "Carian", "Cham", "Cher", "Cherokee", "Chrs", "Chorasmian", "Copt", "Coptic", "Qaac", "Cpmn", "Cypro_Minoan", "Cprt", "Cypriot", "Cyrl", "Cyrillic", "Deva", "Devanagari", "Diak", "Dives_Akuru", "Dogr", "Dogra", "Dsrt", "Deseret", "Dupl", "Duployan", "Egyp", "Egyptian_Hieroglyphs", "Elba", "Elbasan", "Elym", "Elymaic", "Ethi", "Ethiopic", "Geor", "Georgian", "Glag", "Glagolitic", "Gong", "Gunjala_Gondi", "Gonm", "Masaram_Gondi", "Goth", "Gothic", "Gran", "Grantha", "Grek", "Greek", "Gujr", "Gujarati", "Guru", "Gurmukhi", "Hang", "Hangul", "Hani", "Han", "Hano", "Hanunoo", "Hatr", "Hatran", "Hebr", "Hebrew", "Hira", "Hiragana", "Hluw", "Anatolian_Hieroglyphs", "Hmng", "Pahawh_Hmong", "Hmnp", "Nyiakeng_Puachue_Hmong", "Hrkt", "Katakana_Or_Hiragana", "Hung", "Old_Hungarian", "Ital", "Old_Italic", "Java", "Javanese", "Kali", "Kayah_Li", "Kana", "Katakana", "Kawi", "Khar", "Kharoshthi", "Khmr", "Khmer", "Khoj", "Khojki", "Kits", "Khitan_Small_Script", "Knda", "Kannada", "Kthi", "Kaithi", "Lana", "Tai_Tham", "Laoo", "Lao", "Latn", "Latin", "Lepc", "Lepcha", "Limb", "Limbu", "Lina", "Linear_A", "Linb", "Linear_B", "Lisu", "Lyci", "Lycian", "Lydi", "Lydian", "Mahj", "Mahajani", "Maka", "Makasar", "Mand", "Mandaic", "Mani", "Manichaean", "Marc", "Marchen", "Medf", "Medefaidrin", "Mend", "Mende_Kikakui", "Merc", "Meroitic_Cursive", "Mero", "Meroitic_Hieroglyphs", "Mlym", "Malayalam", "Modi", "Mong", "Mongolian", "Mroo", "Mro", "Mtei", "Meetei_Mayek", "Mult", "Multani", "Mymr", "Myanmar", "Nagm", "Nag_Mundari", "Nand", "Nandinagari", "Narb", "Old_North_Arabian", "Nbat", "Nabataean", "Newa", "Nkoo", "Nko", "Nshu", "Nushu", "Ogam", "Ogham", "Olck", "Ol_Chiki", "Orkh", "Old_Turkic", "Orya", "Oriya", "Osge", "Osage", "Osma", "Osmanya", "Ougr", "Old_Uyghur", "Palm", "Palmyrene", "Pauc", "Pau_Cin_Hau", "Perm", "Old_Permic", "Phag", "Phags_Pa", "Phli", "Inscriptional_Pahlavi", "Phlp", "Psalter_Pahlavi", "Phnx", "Phoenician", "Plrd", "Miao", "Prti", "Inscriptional_Parthian", "Rjng", "Rejang", "Rohg", "Hanifi_Rohingya", "Runr", "Runic", "Samr", "Samaritan", "Sarb", "Old_South_Arabian", "Saur", "Saurashtra", "Sgnw", "SignWriting", "Shaw", "Shavian", "Shrd", "Sharada", "Sidd", "Siddham", "Sind", "Khudawadi", "Sinh", "Sinhala", "Sogd", "Sogdian", "Sogo", "Old_Sogdian", "Sora", "Sora_Sompeng", "Soyo", "Soyombo", "Sund", "Sundanese", "Sylo", "Syloti_Nagri", "Syrc", "Syriac", "Tagb", "Tagbanwa", "Takr", "Takri", "Tale", "Tai_Le", "Talu", "New_Tai_Lue", "Taml", "Tamil", "Tang", "Tangut", "Tavt", "Tai_Viet", "Telu", "Telugu", "Tfng", "Tifinagh", "Tglg", "Tagalog", "Thaa", "Thaana", "Thai", "Tibt", "Tibetan", "Tirh", "Tirhuta", "Tnsa", "Tangsa", "Toto", "Ugar", "Ugaritic", "Vaii", "Vai", "Vith", "Vithkuqi", "Wara", "Warang_Citi", "Wcho", "Wancho", "Xpeo", "Old_Persian", "Xsux", "Cuneiform", "Yezi", "Yezidi", "Yiii", "Yi", "Zanb", "Zanabazar_Square", "Zinh", "Inherited", "Qaai", "Zyyy", "Common", "Zzzz", "Unknown"]),
+    Script_Extensions: undefined! as Set<string>,
 };
+// The Script_Extensions property of a character contains one or more Script values. See https://www.unicode.org/reports/tr24/#Script_Extensions
+// Here since each Unicode property value expression only allows a single value, its values can be considered the same as those of the Script property.
+valuesOfNonBinaryUnicodeProperties.Script_Extensions = valuesOfNonBinaryUnicodeProperties.Script;

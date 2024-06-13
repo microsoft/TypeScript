@@ -249,6 +249,10 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 caption: "Make non incremental build with change in file that doesnt affect dts",
                 edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
+                discrepancyExplanation: () => [
+                    "Clean build is non incremental so it will have non incremental tsbuildInfo for third project",
+                    "The incremental build does not build third so will only update timestamps for third tsbuildInfo and hence its from incremental build before",
+                ],
             },
             {
                 caption: "Make incremental build with change in file that doesnt affect dts",

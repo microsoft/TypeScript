@@ -29,7 +29,7 @@ const inJsArrow = (j) => {
 >inJsArrow : IFn
 >          : ^^^
 >(j) => {    return j;} : <T>(j: T) => T
->                       : ^^^^ ^^^^^^^^^
+>                       : ^ ^^ ^^^^^^^^^
 >j : T
 >  : ^
 

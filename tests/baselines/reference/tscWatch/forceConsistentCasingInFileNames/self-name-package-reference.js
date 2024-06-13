@@ -79,64 +79,62 @@ export declare function thing(): void;
 
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.esnext.full.d.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"root":[2],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"latestChangedDtsFile":"../types/index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.esnext.full.d.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n","signature":"-2724770439-export declare function thing(): void;\n","impliedFormat":99}],"root":[2],"options":{"composite":true,"declarationDir":"../types","module":199,"outDir":"./"},"referencedMap":[[2,1]],"latestChangedDtsFile":"../types/index.d.ts","version":"FakeTSVersion"}
 
 //// [/Users/name/projects/web/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.esnext.full.d.ts",
+  "fileNames": [
+    "../../../../../a/lib/lib.esnext.full.d.ts",
+    "../index.ts"
+  ],
+  "fileIdsList": [
+    [
       "../index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../index.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.esnext.full.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.esnext.full.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../index.ts": {
-        "original": {
-          "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
-          "signature": "-2724770439-export declare function thing(): void;\n",
-          "impliedFormat": 99
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../index.ts": {
+      "original": {
         "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
         "signature": "-2724770439-export declare function thing(): void;\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationDir": "../types",
-      "module": 199,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../index.ts": [
-        "../index.ts"
-      ]
-    },
-    "latestChangedDtsFile": "../types/index.d.ts"
+        "impliedFormat": 99
+      },
+      "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
+      "signature": "-2724770439-export declare function thing(): void;\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      2,
+      "../index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationDir": "../types",
+    "module": 199,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../index.ts": [
+      "../index.ts"
+    ]
+  },
+  "latestChangedDtsFile": "../types/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 926
+  "size": 914
 }
 
 

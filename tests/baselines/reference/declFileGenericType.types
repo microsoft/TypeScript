@@ -152,7 +152,7 @@ export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 
 export function f<T extends C.A<C.B>>() { }
 >f : <T extends C.A<C.B>>() => void
->  : ^^^^^^^^^^^        ^^^^^^^^^^^
+>  : ^ ^^^^^^^^^        ^^^^^^^^^^^
 >C : any
 >  : ^^^
 >C : any

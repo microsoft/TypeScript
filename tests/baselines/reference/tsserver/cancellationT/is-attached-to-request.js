@@ -143,7 +143,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
@@ -163,7 +164,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
@@ -183,7 +185,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

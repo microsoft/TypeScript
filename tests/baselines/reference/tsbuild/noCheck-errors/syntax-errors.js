@@ -35,19 +35,19 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
-
-[96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
-
-[7m3[0m     "noCheck": true,
-[7m [0m [91m               ~~~~[0m
 
 [96msrc/a.ts[0m:[93m2[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m2[0m const a = "hello
 [7m [0m [91m                [0m
+
+[96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
+
+[7m3[0m     "noCheck": true,
+[7m [0m [91m               ~~~~[0m
 
 
 Found 2 errors.
@@ -59,6 +59,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -68,8 +69,28 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
+
+//// [/src/a.d.ts]
+declare const err: number;
+declare const a = "hello";
+
+
+//// [/src/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 59
+}
 
 
 
@@ -82,19 +103,19 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
-
-[96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
-
-[7m3[0m     "noCheck": true,
-[7m [0m [91m               ~~~~[0m
 
 [96msrc/a.ts[0m:[93m2[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m2[0m const a = "hello
 [7m [0m [91m                [0m
+
+[96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
+
+[7m3[0m     "noCheck": true,
+[7m [0m [91m               ~~~~[0m
 
 
 Found 2 errors.
@@ -106,6 +127,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -115,9 +137,14 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
 
+//// [/src/a.d.ts] file written with same contents
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix `a` error
@@ -133,9 +160,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -143,7 +175,7 @@ Output::
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -152,6 +184,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -159,11 +192,18 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
 
+//// [/src/a.d.ts] file written with same contents
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -175,9 +215,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
+
+[7m1[0m const err: number = "error";
+[7m [0m [91m      ~~~[0m
 
 [96msrc/tsconfig.json[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'noCheck'.
 
@@ -185,7 +230,7 @@ Output::
 [7m [0m [91m               ~~~~[0m
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
@@ -194,6 +239,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -201,11 +247,18 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
 
+//// [/src/a.d.ts] file written with same contents
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Disable noCheck
@@ -225,7 +278,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -244,6 +297,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -257,9 +311,12 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
 
+//// [/src/a.d.ts] file written with same contents
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: no-change-run
@@ -271,7 +328,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.d.ts' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -290,6 +347,7 @@ Program root files: [
 Program options: {
   "emitDeclarationOnly": true,
   "declaration": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -303,6 +361,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
-/src/a.ts (used version)
+/src/a.ts (computed .d.ts during emit)
 
 
+//// [/src/a.d.ts] file written with same contents
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

@@ -5,18 +5,21 @@ import {
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
+    BlockLike,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
     CancellationToken,
+    canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
     CheckJsDirective,
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
+    ClassLikeDeclaration,
     CodeActionCommand,
     codefix,
     CodeFixAction,
@@ -76,6 +79,7 @@ import {
     findAncestor,
     findChildOfKind,
     findPrecedingToken,
+    findTokenOnLeftOfPosition,
     first,
     firstDefined,
     firstOrOnly,
@@ -145,6 +149,8 @@ import {
     IntersectionType,
     isArray,
     isBindingPattern,
+    isBlockLike,
+    isClassLike,
     isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
@@ -184,6 +190,8 @@ import {
     isRightSideOfPropertyAccess,
     isRightSideOfQualifiedName,
     isSetAccessor,
+    isSourceElement,
+    isSourceFile,
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
@@ -227,6 +235,7 @@ import {
     NodeFlags,
     noop,
     normalizePath,
+    normalizeSpans,
     NumberLiteralType,
     NumericLiteral,
     ObjectAllocator,
@@ -260,6 +269,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     Rename,
     RenameInfo,
     RenameInfoOptions,
@@ -283,7 +293,9 @@ import {
     SignatureHelpItemsOptions,
     SignatureKind,
     singleElementArray,
+    skipTypeChecking,
     SmartSelectionRange,
+    some,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -308,7 +320,10 @@ import {
     TextChangeRange,
     TextInsertion,
     TextRange,
+    textRangeContainsTextSpan,
+    textRangeIntersectsWithTextSpan,
     TextSpan,
+    textSpanContainsTextRange,
     textSpanEnd,
     timestamp,
     TodoComment,
@@ -2044,6 +2059,152 @@ export function createLanguageService(
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
+    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        synchronizeHostData();
+
+        const sourceFile = getValidSourceFile(fileName);
+
+        const options = program.getCompilerOptions();
+        // This is an optimization to avoid computing the nodes in the range if either
+        // we will skip semantic diagnostics for this file or if we already semantic diagnostics for it.
+        if (
+            skipTypeChecking(sourceFile, options, program) ||
+            !canIncludeBindAndCheckDiagnostics(sourceFile, options) ||
+            program.getCachedSemanticDiagnostics(sourceFile)
+        ) {
+            return undefined;
+        }
+
+        const nodes = getNodesForRanges(sourceFile, ranges);
+        if (!nodes) {
+            return undefined;
+        }
+        const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
+        const semanticDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken, nodes);
+        return {
+            diagnostics: semanticDiagnostics.slice(),
+            spans: checkedSpans,
+        };
+    }
+
+    function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
+        const nodes: Node[] = [];
+        const spans = normalizeSpans(ranges.map(range => createTextSpanFromRange(range)));
+        for (const span of spans) {
+            const nodesForSpan = getNodesForSpan(file, span);
+            if (!nodesForSpan) {
+                return undefined;
+            }
+            nodes.push(...nodesForSpan);
+        }
+        if (!nodes.length) {
+            return undefined;
+        }
+        return nodes;
+    }
+
+    /**
+     * Gets nodes that overlap the given span to be partially checked.
+     * @returns an array of nodes that overlap the span and are source element nodes (c.f. {@link isSourceElement}),
+     * or undefined if a partial check would be the same as a whole file check.
+     */
+    function getNodesForSpan(file: SourceFile, span: TextSpan): Node[] | undefined {
+        // Span is the whole file
+        if (textSpanContainsTextRange(span, file)) {
+            return undefined;
+        }
+
+        const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
+        const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
+
+        const nodes: Node[] = [];
+        chooseOverlappingNodes(span, enclosingNode, nodes);
+
+        if (file.end === span.start + span.length) {
+            nodes.push(file.endOfFileToken);
+        }
+
+        // Span would include the whole file
+        if (some(nodes, isSourceFile)) {
+            return undefined;
+        }
+
+        return nodes;
+    }
+
+    // The algorithm is the following:
+    // Starting from a node that contains the whole input span, we consider its children.
+    // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
+    // If a child node does not overlap the input span, it should not be included.
+    // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
+    // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
+    // we try to filter out the child statements that do not overlap the span.
+    // For boundary nodes that are not block-like or class-like,
+    // we simply include them (or their source element ancestor).
+    /** @returns whether the argument node was included in the result */
+    function chooseOverlappingNodes(span: TextSpan, node: Node, result: Node[]): boolean {
+        if (!nodeOverlapsWithSpan(node, span)) {
+            return false;
+        }
+        if (textSpanContainsTextRange(span, node)) {
+            addSourceElement(node, result);
+            return true;
+        }
+        if (isBlockLike(node)) {
+            return chooseOverlappingBlockLike(span, node, result);
+        }
+        if (isClassLike(node)) {
+            return chooseOverlappingClassLike(span, node, result);
+        }
+        addSourceElement(node, result);
+        return true;
+    }
+
+    /** Similar to {@link textRangeIntersectsWithTextSpan}, but treats ends as actually exclusive. */
+    function nodeOverlapsWithSpan(node: Node, span: TextSpan): boolean {
+        const spanEnd = span.start + span.length;
+        return node.pos < spanEnd && node.end > span.start;
+    }
+
+    function addSourceElement(node: Node, result: Node[]): void {
+        while (node.parent && !isSourceElement(node)) {
+            node = node.parent;
+        }
+        result.push(node);
+    }
+
+    function chooseOverlappingBlockLike(span: TextSpan, node: BlockLike, result: Node[]): boolean {
+        const childResult: Node[] = [];
+        const stmts = node.statements.filter(stmt => chooseOverlappingNodes(span, stmt, childResult));
+        if (stmts.length === node.statements.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+    }
+
+    function chooseOverlappingClassLike(span: TextSpan, node: ClassLikeDeclaration, result: Node[]): boolean {
+        const overlaps = (n: Node) => textRangeIntersectsWithTextSpan(n, span);
+        if (
+            node.modifiers?.some(overlaps)
+            || node.name && overlaps(node.name)
+            || node.typeParameters?.some(overlaps)
+            || node.heritageClauses?.some(overlaps)
+        ) {
+            addSourceElement(node, result);
+            return true;
+        }
+        const childResult: Node[] = [];
+        const members = node.members.filter(member => chooseOverlappingNodes(span, member, childResult));
+        if (members.length === node.members.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+    }
+
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();
         return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
@@ -3182,6 +3343,7 @@ export function createLanguageService(
         cleanupSemanticCache,
         getSyntacticDiagnostics,
         getSemanticDiagnostics,
+        getRegionSemanticDiagnostics,
         getSuggestionDiagnostics,
         getCompilerOptionsDiagnostics,
         getSyntacticClassifications,

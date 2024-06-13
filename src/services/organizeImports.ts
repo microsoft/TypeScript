@@ -45,6 +45,7 @@ import {
     LanguageServiceHost,
     length,
     map,
+    moduleExportNameTextEscaped,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -690,7 +691,7 @@ function hasModuleDeclarationMatchingSpecifier(sourceFile: SourceFile, moduleSpe
 function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
     return flatMap(namedImports, namedImport =>
         map(tryGetNamedBindingElements(namedImport), importSpecifier =>
-            importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+            importSpecifier.name && importSpecifier.propertyName && moduleExportNameTextEscaped(importSpecifier.name) === moduleExportNameTextEscaped(importSpecifier.propertyName)
                 ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
                 : importSpecifier));
 }

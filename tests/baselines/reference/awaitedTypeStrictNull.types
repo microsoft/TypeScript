@@ -219,15 +219,15 @@ class Api<D = {}> {
 	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
 	async post<T = D>() { return this.request<T>(); }
 >post : <T = D>() => Promise<T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^
 >this.request<T>() : Promise<T>
 >                  : ^^^^^^^^^^
 >this.request : <D_1>() => Promise<D_1>
->             : ^   ^^^^^^^            
+>             : ^^^^^^^^^^^            
 >this : this
 >     : ^^^^
 >request : <D_1>() => Promise<D_1>
->        : ^   ^^^^^^^            
+>        : ^^^^^^^^^^^            
 
 	async request<D>(): Promise<D> { throw new Error(); }
 >request : <D>() => Promise<D>
@@ -254,7 +254,7 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 	// Should not error.
 	return api.post();
 >api.post() : Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >api.post : <T_1 = {}>() => Promise<T_1>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >api : Api<{}>
