@@ -608,12 +608,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Deferred",
-            "kind": "type",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Error",
             "kind": "var",
             "kindModifiers": "declare",
