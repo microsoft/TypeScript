@@ -298,14 +298,14 @@ lib/lib.d.ts
   Default library for target 'es5'
 src/child/child.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90mHH:MM:SS AM[0m] Skipping build of project '/src/main/tsconfig.json' because its dependency '/src/child' has errors
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/main/tsconfig.json'...
 
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/child/child.js] file written with same contents
@@ -365,3 +365,4 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
   "size": 1011
 }
 
+//// [/src/main/tsconfig.tsbuildinfo] file changed its modified time
