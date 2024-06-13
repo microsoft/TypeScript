@@ -2746,27 +2746,35 @@ export function createStackSet<T>(): StackSet<T> {
     let array: T[] | undefined;
     let set: Set<T> | undefined;
 
+    function has(value: T): boolean {
+        return set?.has(value) ?? contains(array, value);
+    }
+
+    function push(value: T) {
+        array = append(array, value);
+        if (set) {
+            set.add(value);
+        }
+        else if (array!.length > 8) {
+            set = new Set(array);
+        }
+    }
+
+    function pop(): T {
+        if (!array?.length) return Debug.fail();
+        const value = array.pop()!;
+        set?.delete(value);
+        return value;
+    }
+
+    function size(): number {
+        return array?.length ?? 0;
+    }
+
     return {
-        has(value) {
-            return set?.has(value) ?? contains(array, value);
-        },
-        push(value) {
-            array = append(array, value);
-            if (set) {
-                set.add(value);
-            }
-            else if (array!.length > 8) {
-                set = new Set(array);
-            }
-        },
-        pop() {
-            if (!array?.length) return Debug.fail();
-            const value = array.pop()!;
-            set?.delete(value);
-            return value;
-        },
-        size() {
-            return array?.length ?? 0;
-        },
+        has,
+        push,
+        pop,
+        size,
     };
 }
