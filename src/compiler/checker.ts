@@ -126,6 +126,7 @@ import {
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createPropertyNameNodeForIdentifierOrLiteral,
     createScanner,
+    createStackSet,
     createSymbolTable,
     createSyntacticTypeNodeBuilder,
     createTextWriter,
@@ -999,6 +1000,7 @@ import {
     SourceFile,
     SpreadAssignment,
     SpreadElement,
+    StackSet,
     startsWith,
     Statement,
     StringLiteral,
@@ -21648,11 +21650,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ): boolean {
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
-        let maybeKeys: string[];
-        let maybeKeysSet: Set<string>;
+        let maybeKeys: StackSet<string>;
         let sourceStack: Type[];
         let targetStack: Type[];
-        let maybeCount = 0;
         let sourceDepth = 0;
         let targetDepth = 0;
         let expandingFlags = ExpandingFlags.None;
@@ -22598,14 +22598,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return Ternary.False;
             }
             if (!maybeKeys) {
-                maybeKeys = [];
-                maybeKeysSet = new Set();
+                maybeKeys = createStackSet();
                 sourceStack = [];
                 targetStack = [];
             }
             else {
                 // If source and target are already being compared, consider them related with assumptions
-                if (maybeKeysSet.has(id)) {
+                if (maybeKeys.has(id)) {
                     return Ternary.Maybe;
                 }
 
@@ -22613,7 +22612,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                 // were unconstrained.
                 const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
-                if (broadestEquivalentId && maybeKeysSet.has(broadestEquivalentId)) {
+                if (broadestEquivalentId && maybeKeys.has(broadestEquivalentId)) {
                     return Ternary.Maybe;
                 }
 
@@ -22622,10 +22621,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Ternary.False;
                 }
             }
-            const maybeStart = maybeCount;
-            maybeKeys[maybeCount] = id;
-            maybeKeysSet.add(id);
-            maybeCount++;
+            const maybeStart = maybeKeys.size();
+            maybeKeys.push(id);
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
                 sourceStack[sourceDepth] = source;
@@ -22700,14 +22697,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
 
             function resetMaybeStack(markAllAsSucceeded: boolean) {
-                for (let i = maybeStart; i < maybeCount; i++) {
-                    maybeKeysSet.delete(maybeKeys[i]);
+                const toPop = maybeKeys.size() - maybeStart;
+                for (let i = 0; i < toPop; i++) {
+                    const key = maybeKeys.pop();
                     if (markAllAsSucceeded) {
-                        relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                        relation.set(key, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
                         relationCount--;
                     }
                 }
-                maybeCount = maybeStart;
             }
         }
 

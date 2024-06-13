@@ -2732,3 +2732,38 @@ export function isNodeLikeSystem(): boolean {
         && !(process as any).browser
         && typeof require !== "undefined";
 }
+
+/** @internal */
+export interface StackSet<T> {
+    has(value: T): boolean;
+    push(value: T): void;
+    pop(): T;
+    size(): number;
+}
+
+/** @internal */
+export function createStackSet<T>(): StackSet<T> {
+    let array: T[] | undefined;
+    let set: Set<T> | undefined;
+
+    return {
+        has(value) {
+            return set?.has(value) ?? contains(array, value);
+        },
+        push(value) {
+            array = append(array, value);
+            if (!set && array!.length > 8) {
+                set = new Set(array);
+            }
+        },
+        pop() {
+            if (!array?.length) return Debug.fail();
+            const value = array.pop()!;
+            set?.delete(value);
+            return value;
+        },
+        size() {
+            return array?.length ?? 0;
+        },
+    };
+}
