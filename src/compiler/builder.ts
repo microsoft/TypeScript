@@ -983,7 +983,7 @@ function handleDtsMayChangeOfFileAndExportsOfFile(
 function getSemanticDiagnosticsOfFile(
     state: BuilderProgramStateWithDefinedProgram,
     sourceFile: SourceFile,
-    cancellationToken?: CancellationToken,
+    cancellationToken: CancellationToken | undefined,
     semanticDiagnosticsPerFile?: BuilderProgramState["semanticDiagnosticsPerFile"],
 ): readonly Diagnostic[] {
     return concatenate(
