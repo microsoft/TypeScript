@@ -90,7 +90,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /apps/app1/src/package.json 2000 undefined Project: /apps/app1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -179,8 +178,6 @@ watchedFiles::
   {"pollingInterval":500}
 /apps/app1/src/index.ts: *new*
   {"pollingInterval":500}
-/apps/app1/src/package.json: *new*
-  {"pollingInterval":2000}
 /apps/app1/src/utils.ts: *new*
   {"pollingInterval":500}
 /apps/app1/tsconfig.json: *new*
@@ -322,8 +319,6 @@ After Request
 watchedFiles::
 /apps/app1/src/app.ts:
   {"pollingInterval":500}
-/apps/app1/src/package.json:
-  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:
@@ -722,8 +717,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 After Request
 watchedFiles::
-/apps/app1/src/package.json:
-  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:
@@ -1124,8 +1117,6 @@ Info seq  [hh:mm:ss:mss] 	FileName: /shared/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 After Request
 watchedFiles::
-/apps/app1/src/package.json:
-  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:

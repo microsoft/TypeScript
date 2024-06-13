@@ -194,17 +194,17 @@ var C7 = class { constructor(p13: undefined) { } }
 
 declare function fn<T>();
 >fn : <T>() => any
->   : ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^
 
 fn<null>();
 >fn<null>() : any
 >fn : <T>() => any
->   : ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^
 
 fn<undefined>();
 >fn<undefined>() : any
 >fn : <T>() => any
->   : ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^
 
 declare class D<T> {}
 >D : D<T>

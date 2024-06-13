@@ -98,7 +98,7 @@ module Generics {
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
->    : ^^^^^^^^^^^    ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
         var a: A<T>;
 >a : A<T>

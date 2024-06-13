@@ -26,11 +26,11 @@ class Test extends Base {
 >this.check(this) : boolean
 >                 : ^^^^^^^
 >this.check : <TProp extends this>(prop: TProp) => boolean
->           : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
+>           : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
 >this : this
 >     : ^^^^
 >check : <TProp extends this>(prop: TProp) => boolean
->      : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
+>      : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^       
 >this : this
 >     : ^^^^
     }

@@ -49,12 +49,6 @@ var v = 1 /* E2.V */;
 
 
 
-PolledWatches::
-/user/someone/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/someone/projects/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}

@@ -48,12 +48,13 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 TSFILE: /src/dist/hello.json
 TSFILE: /src/dist/src/src/index.js
+TSFILE: /src/dist/tsconfig.tsbuildinfo
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 lib/lib.d.ts
@@ -80,4 +81,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var hello_json_1 = __importDefault(require("../../hello.json"));
 exports.default = hello_json_1.default.hello;
 
+
+//// [/src/dist/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 

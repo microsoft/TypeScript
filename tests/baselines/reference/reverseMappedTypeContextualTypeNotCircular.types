@@ -13,7 +13,7 @@ declare function createStructuredSelector<S, T>(
 
   selectors: {[K in keyof T]: Selector<S, T[K]>},
 >selectors : { [K in keyof T]: Selector<S, T[K]>; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): Selector<S, T>;
 

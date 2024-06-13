@@ -342,10 +342,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
 
     function verify(outFileOptions: ts.CompilerOptions | undefined) {
         function scenarioName(scenario: string) {
-            return `${scenario}${outFileOptions ? "with outFile" : ""}`;
+            return `${outFileOptions ? "outFile" : "multiFile"}/${scenario}`;
         }
         function baselineName(baseline: string) {
-            return `tscWatch/watchApi/${baseline}${outFileOptions ? "-outFile" : ""}.js`;
+            return `tscWatch/watchApi/${outFileOptions ? "outFile" : "multiFile"}/${baseline}.js`;
         }
         it(scenarioName("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files"), () => {
             const { sys, baseline, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
@@ -451,50 +451,50 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
                 Harness.Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
             });
         });
+
+        it(scenarioName("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit"), () => {
+            // Initial
+            const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true, ...outFileOptions ? compilerOptionsToConfigJson(outFileOptions) : undefined } }), "export const x: string = 10;");
+            createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
+
+            // Fix error and emit
+            applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
+
+            const { cb, getPrograms } = commandLineCallbacks(sys);
+            const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
+            const reportWatchStatus = ts.createWatchStatusReporter(sys, /*pretty*/ true);
+            const host = ts.createWatchCompilerHostOfConfigFile({
+                configFileName: config.path,
+                createProgram: ts.createSemanticDiagnosticsBuilderProgram,
+                system: sys,
+                reportDiagnostic,
+                reportWatchStatus,
+            });
+            host.afterProgramCreate = program => {
+                const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
+                diagnostics.forEach(reportDiagnostic);
+                // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
+                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                reportWatchStatus(
+                    ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
+                    sys.newLine,
+                    program.getCompilerOptions(),
+                    diagnostics.length,
+                );
+                cb(program);
+            };
+            ts.createWatchProgram(host);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: ts.emptyArray,
+                sys,
+            });
+            Harness.Baseline.runBaseline(baselineName("semantic-builder-emitOnlyDts"), baseline.join("\r\n"));
+        });
     }
     verify(/*outFileOptions*/ undefined);
     verify({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
-
-    it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
-        // Initial
-        const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
-        createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
-
-        // Fix error and emit
-        applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
-
-        const { cb, getPrograms } = commandLineCallbacks(sys);
-        const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
-        const reportWatchStatus = ts.createWatchStatusReporter(sys, /*pretty*/ true);
-        const host = ts.createWatchCompilerHostOfConfigFile({
-            configFileName: config.path,
-            createProgram: ts.createSemanticDiagnosticsBuilderProgram,
-            system: sys,
-            reportDiagnostic,
-            reportWatchStatus,
-        });
-        host.afterProgramCreate = program => {
-            const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
-            diagnostics.forEach(reportDiagnostic);
-            // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
-            reportWatchStatus(
-                ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
-                sys.newLine,
-                program.getCompilerOptions(),
-                diagnostics.length,
-            );
-            cb(program);
-        };
-        ts.createWatchProgram(host);
-        watchBaseline({
-            baseline,
-            getPrograms,
-            oldPrograms: ts.emptyArray,
-            sys,
-        });
-        Harness.Baseline.runBaseline(`tscWatch/watchApi/semantic-builder-emitOnlyDts.js`, baseline.join("\r\n"));
-    });
 });
 
 describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
@@ -722,8 +722,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
             }
         });
     }
-    verify("when emitting with emitOnlyDtsFiles");
-    verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
+    verify("multiFile/when emitting with emitOnlyDtsFiles");
+    verify("outFile/when emitting with emitOnlyDtsFiles", "outFile.js");
 });
 
 describe("unittests:: tsc-watch:: watchAPI:: when creating program with project references but not config file", () => {

@@ -139,81 +139,79 @@ export {};
 
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../lib/lib.esnext.full.d.ts",
-      "../index.js",
-      "../test/index.js"
-    ],
-    "fileNamesList": [
-      [
-        "../index.js"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../../lib/lib.esnext.full.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../../lib/lib.esnext.full.d.ts",
+    "../index.js",
+    "../test/index.js"
+  ],
+  "fileIdsList": [
+    [
+      "../index.js"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../../lib/lib.esnext.full.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "../index.js": {
-        "original": {
-          "version": "-15642581130-export const a = 'a';",
-          "signature": "-13259723213-export const a: \"a\";\n",
-          "impliedFormat": 99
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "../index.js": {
+      "original": {
         "version": "-15642581130-export const a = 'a';",
         "signature": "-13259723213-export const a: \"a\";\n",
-        "impliedFormat": "esnext"
+        "impliedFormat": 99
       },
-      "../test/index.js": {
-        "original": {
-          "version": "-3920874422-import 'a';",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-15642581130-export const a = 'a';",
+      "signature": "-13259723213-export const a: \"a\";\n",
+      "impliedFormat": "esnext"
+    },
+    "../test/index.js": {
+      "original": {
         "version": "-3920874422-import 'a';",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../index.js"
-      ],
-      [
-        3,
-        "../test/index.js"
-      ]
-    ],
-    "options": {
-      "checkJs": true,
-      "composite": true,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "module": 199,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../test/index.js": [
-        "../index.js"
-      ]
-    },
-    "latestChangedDtsFile": "./test/index.d.ts"
+        "impliedFormat": 99
+      },
+      "version": "-3920874422-import 'a';",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      2,
+      "../index.js"
+    ],
+    [
+      3,
+      "../test/index.js"
+    ]
+  ],
+  "options": {
+    "checkJs": true,
+    "composite": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "module": 199,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../test/index.js": [
+      "../index.js"
+    ]
+  },
+  "latestChangedDtsFile": "./test/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 983
 }
 
 
@@ -230,7 +228,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'packages/a/tsconfig.json' is up to date because newest input 'packages/a/test/index.js' is older than output 'packages/a/types/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output 'packages/b/index.js' is older than input 'packages/b/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output file 'packages/b/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/projects/project/packages/b/tsconfig.json'...
 
@@ -267,4 +265,13 @@ packages/b/index.js
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 exitCode:: ExitStatus.Success
 
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 

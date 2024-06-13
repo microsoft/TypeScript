@@ -8,6 +8,7 @@ import {
     AsExpression,
     BuilderProgram,
     CancellationToken,
+    canEmitTsBuildInfo,
     canHaveDecorators,
     canHaveIllegalDecorators,
     chainDiagnosticMessages,
@@ -195,7 +196,6 @@ import {
     isImportEqualsDeclaration,
     isImportSpecifier,
     isImportTypeNode,
-    isIncrementalCompilation,
     isInJSFile,
     isJSDocImportTag,
     isLiteralImportTypeNode,
@@ -1389,10 +1389,16 @@ export function getImpliedNodeFormatForFileWorker(
     host: ModuleResolutionHost,
     options: CompilerOptions,
 ) {
-    return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
-        fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
-        fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
-        undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
+    switch (getEmitModuleResolutionKind(options)) {
+        case ModuleResolutionKind.Node16:
+        case ModuleResolutionKind.NodeNext:
+            return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
+                fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
+                fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+                undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
+        default:
+            return undefined;
+    }
 
     function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
         const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
@@ -2788,7 +2794,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
-        Debug.assert(!options.outFile);
         tracing?.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
         performance.mark("beforeEmit");
         const emitResult = emitFiles(
@@ -2846,9 +2851,28 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return typeChecker || (typeChecker = createTypeChecker(program));
     }
 
-    function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+    function emit(
+        sourceFile?: SourceFile,
+        writeFileCallback?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnly?: boolean | EmitOnly,
+        transformers?: CustomTransformers,
+        forceDtsEmit?: boolean,
+        skipBuildInfo?: boolean,
+    ): EmitResult {
         tracing?.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
-        const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnly, transformers, forceDtsEmit));
+        const result = runWithCancellationToken(() =>
+            emitWorker(
+                program,
+                sourceFile,
+                writeFileCallback,
+                cancellationToken,
+                emitOnly,
+                transformers,
+                forceDtsEmit,
+                skipBuildInfo,
+            )
+        );
         tracing?.pop();
         return result;
     }
@@ -2857,7 +2881,16 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
     }
 
-    function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+    function emitWorker(
+        program: Program,
+        sourceFile: SourceFile | undefined,
+        writeFileCallback: WriteFileCallback | undefined,
+        cancellationToken: CancellationToken | undefined,
+        emitOnly: boolean | EmitOnly | undefined,
+        customTransformers: CustomTransformers | undefined,
+        forceDtsEmit: boolean | undefined,
+        skipBuildInfo: boolean | undefined,
+    ): EmitResult {
         if (!forceDtsEmit) {
             const result = handleNoEmitOptions(program, sourceFile, writeFileCallback, cancellationToken);
             if (result) return result;
@@ -2891,6 +2924,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     emitOnly,
                     /*onlyBuildInfo*/ false,
                     forceDtsEmit,
+                    skipBuildInfo,
                 ),
         );
 
@@ -3016,22 +3050,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
             const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
             const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
-            const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
             // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
             // - plain JS: .js files with no // ts-check and checkJs: undefined
             // - check JS: .js files with either // ts-check or checkJs: true
             // - external: files that are added by plugins
-            const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-            let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+            let bindDiagnostics = sourceFile.bindDiagnostics;
+            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
             if (isPlainJs) {
                 bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(sourceFile, !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
         });
     }
 
@@ -4299,8 +4330,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const outputFile = options.outFile;
         if (options.tsBuildInfoFile) {
-            if (!isIncrementalCompilation(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
+            if (!canEmitTsBuildInfo(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if_not_running_tsc_b, "tsBuildInfoFile");
             }
         }
         else if (options.incremental && !outputFile && !options.configFilePath) {
@@ -4463,9 +4494,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.noCheck) {
             if (options.noEmit) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noCheck", "noEmit");
-            }
-            if (!options.emitDeclarationOnly) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "noCheck", "emitDeclarationOnly");
             }
         }
 
@@ -5416,7 +5444,7 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
     if (options.noEmit) {
         // Cache the semantic diagnostics
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        return sourceFile || options.outFile ?
+        return sourceFile ?
             emitSkippedWithNoDiagnostics :
             program.emitBuildInfo(writeFile, cancellationToken);
     }
@@ -5438,7 +5466,7 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
 
     if (!diagnostics.length) return undefined;
     let emittedFiles: string[] | undefined;
-    if (!sourceFile && !options.outFile) {
+    if (!sourceFile) {
         const emitResult = program.emitBuildInfo(writeFile, cancellationToken);
         if (emitResult.diagnostics) diagnostics = [...diagnostics, ...emitResult.diagnostics];
         emittedFiles = emitResult.emittedFiles;

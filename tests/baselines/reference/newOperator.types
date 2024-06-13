@@ -163,7 +163,7 @@ new ctorUnion("");
 // Error on union with incompatible constructors
 declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 >ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
->           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^    ^^^^^^^^^^^^^ ^^      ^^^^^    ^
+>           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^    ^^^^^^^^^^ ^^ ^^      ^^^^^    ^
 >a : T
 >  : ^
 >a : string
@@ -173,7 +173,7 @@ new ctorUnion2("");
 >new ctorUnion2("") : any
 >                   : ^^^
 >ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
->           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^    ^^^^^^^^^^^^^ ^^      ^^^^^    ^
+>           : ^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^    ^^^^^^^^^^ ^^ ^^      ^^^^^    ^
 >"" : ""
 >   : ^^
 

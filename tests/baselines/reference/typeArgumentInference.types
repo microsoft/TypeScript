@@ -4,30 +4,30 @@
 // Generic call with no parameters
 function noParams<T>() { }
 >noParams : <T>() => void
->         : ^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^
 
 noParams();
 >noParams() : void
 >           : ^^^^
 >noParams : <T>() => void
->         : ^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^
 
 noParams<string>();
 >noParams<string>() : void
 >                   : ^^^^
 >noParams : <T>() => void
->         : ^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^
 
 noParams<{}>();
 >noParams<{}>() : void
 >               : ^^^^
 >noParams : <T>() => void
->         : ^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^
 
 // Generic call with parameters but none use type parameter type
 function noGenericParams<T>(n: string) { }
 >noGenericParams : <T>(n: string) => void
->                : ^^^^ ^^      ^^^^^^^^^
+>                : ^ ^^ ^^      ^^^^^^^^^
 >n : string
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ noGenericParams('');
 >noGenericParams('') : void
 >                    : ^^^^
 >noGenericParams : <T>(n: string) => void
->                : ^^^^ ^^      ^^^^^^^^^
+>                : ^ ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -43,7 +43,7 @@ noGenericParams<number>('');
 >noGenericParams<number>('') : void
 >                            : ^^^^
 >noGenericParams : <T>(n: string) => void
->                : ^^^^ ^^      ^^^^^^^^^
+>                : ^ ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -51,14 +51,14 @@ noGenericParams<{}>('');
 >noGenericParams<{}>('') : void
 >                        : ^^^^
 >noGenericParams : <T>(n: string) => void
->                : ^^^^ ^^      ^^^^^^^^^
+>                : ^ ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U>(n: T, m: number) { }
 >someGenerics1 : <T, U>(n: T, m: number) => void
->              : ^ ^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >n : T
 >  : ^
 >m : number
@@ -68,7 +68,7 @@ someGenerics1(3, 4);
 >someGenerics1(3, 4) : void
 >                    : ^^^^
 >someGenerics1 : <T, U>(n: T, m: number) => void
->              : ^ ^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -78,7 +78,7 @@ someGenerics1<number, {}>(3, 4);
 >someGenerics1<number, {}>(3, 4) : void
 >                                : ^^^^
 >someGenerics1 : <T, U>(n: T, m: number) => void
->              : ^ ^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4

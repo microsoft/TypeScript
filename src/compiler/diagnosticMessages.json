@@ -1789,13 +1789,21 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
     "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
+    },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -4608,6 +4616,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -8317,5 +8329,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
+        "category": "Error",
+        "code": 18057
     }
 }

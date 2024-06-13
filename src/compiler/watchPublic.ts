@@ -12,7 +12,7 @@ import {
     CompilerHost,
     CompilerOptions,
     ConfigFileDiagnosticsReporter,
-    createBuilderProgramUsingProgramBuildInfo,
+    createBuilderProgramUsingIncrementalBuildInfo,
     createCachedDirectoryStructureHost,
     createCompilerDiagnostic,
     createCompilerHostFromProgramHost,
@@ -51,6 +51,7 @@ import {
     HasInvalidatedResolutions,
     isArray,
     isIgnoredFileFromWildCardWatching,
+    isIncrementalBuildInfo,
     isProgramUptoDate,
     JSDocParsingMode,
     MapLike,
@@ -116,8 +117,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
         if (!content) return undefined;
         buildInfo = getBuildInfo(buildInfoPath, content);
     }
-    if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
-    return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
+    if (!buildInfo || buildInfo.version !== version || !isIncrementalBuildInfo(buildInfo)) return undefined;
+    return createBuilderProgramUsingIncrementalBuildInfo(buildInfo, buildInfoPath, host);
 }
 
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {

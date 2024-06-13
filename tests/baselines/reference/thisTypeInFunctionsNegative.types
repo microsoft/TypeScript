@@ -1273,9 +1273,9 @@ c.explicitProperty = (this, m) => m + this.n;
 
 const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >f2 : <T>(this: { n: number; }, m: number) => any
->   : ^^^^    ^^              ^^ ^^      ^^^^^^^^
+>   : ^ ^^    ^^              ^^ ^^      ^^^^^^^^
 ><T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => any
->                                                : ^^^^    ^^              ^^ ^^      ^^^^^^^^
+>                                                : ^ ^^    ^^              ^^ ^^      ^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -1317,9 +1317,9 @@ const f3 = async (this: {n: number}, m: number) => m + this.n;
 
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >f4 : <T>(this: { n: number; }, m: number) => Promise<any>
->   : ^^^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
+>   : ^ ^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => Promise<any>
->                                                      : ^^^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
+>                                                      : ^ ^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number

@@ -50,13 +50,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 TSFILE: /src/dist/hello.json
 TSFILE: /src/dist/index.js.map
 TSFILE: /src/dist/index.js
+TSFILE: /src/dist/tsconfig.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
 src/src/hello.json
@@ -85,6 +86,15 @@ exports.default = hello_json_1.default.hello;
 
 //// [/src/dist/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
+
+//// [/src/dist/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 

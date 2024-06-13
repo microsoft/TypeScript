@@ -46,7 +46,7 @@ export type HostForComputeHash = Pick<BuilderProgramHost, "createHash" | "storeS
  */
 export interface BuilderProgram {
     /** @internal */
-    getState(): ReusableBuilderProgramState;
+    state: ReusableBuilderProgramState;
     /** @internal */
     saveEmitState(): SavedBuildProgramEmitState;
     /** @internal */
@@ -164,28 +164,115 @@ export interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagno
 /**
  * Create the builder to manage semantic diagnostics and cache them
  */
-export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): SemanticDiagnosticsBuilderProgram;
-export function createSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): SemanticDiagnosticsBuilderProgram;
-export function createSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | readonly string[] | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram, configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]) {
-    return createBuilderProgram(BuilderProgramKind.SemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences));
+export function createSemanticDiagnosticsBuilderProgram(
+    newProgram: Program,
+    host: BuilderProgramHost,
+    oldProgram?: SemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+): SemanticDiagnosticsBuilderProgram;
+export function createSemanticDiagnosticsBuilderProgram(
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: SemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): SemanticDiagnosticsBuilderProgram;
+export function createSemanticDiagnosticsBuilderProgram(
+    newProgramOrRootNames: Program | readonly string[] | undefined,
+    hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,
+    oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | SemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+) {
+    return createBuilderProgram(
+        BuilderProgramKind.SemanticDiagnosticsBuilderProgram,
+        getBuilderCreationParameters(
+            newProgramOrRootNames,
+            hostOrOptions,
+            oldProgramOrHost,
+            configFileParsingDiagnosticsOrOldProgram,
+            configFileParsingDiagnostics,
+            projectReferences,
+        ),
+    );
 }
 
 /**
  * Create the builder that can handle the changes in program and iterate through changed files
  * to emit the those files and manage semantic diagnostics cache as well
  */
-export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): EmitAndSemanticDiagnosticsBuilderProgram;
-export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): EmitAndSemanticDiagnosticsBuilderProgram;
-export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | readonly string[] | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]) {
-    return createBuilderProgram(BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences));
+export function createEmitAndSemanticDiagnosticsBuilderProgram(
+    newProgram: Program,
+    host: BuilderProgramHost,
+    oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+): EmitAndSemanticDiagnosticsBuilderProgram;
+export function createEmitAndSemanticDiagnosticsBuilderProgram(
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): EmitAndSemanticDiagnosticsBuilderProgram;
+export function createEmitAndSemanticDiagnosticsBuilderProgram(
+    newProgramOrRootNames: Program | readonly string[] | undefined,
+    hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,
+    oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | EmitAndSemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+) {
+    return createBuilderProgram(
+        BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram,
+        getBuilderCreationParameters(
+            newProgramOrRootNames,
+            hostOrOptions,
+            oldProgramOrHost,
+            configFileParsingDiagnosticsOrOldProgram,
+            configFileParsingDiagnostics,
+            projectReferences,
+        ),
+    );
 }
 
 /**
  * Creates a builder thats just abstraction over program and can be used with watch
  */
-export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): BuilderProgram;
-export function createAbstractBuilder(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderProgram;
-export function createAbstractBuilder(newProgramOrRootNames: Program | readonly string[] | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | BuilderProgram, configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderProgram {
-    const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
-    return createRedirectedBuilderProgram(() => ({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }), newConfigFileParsingDiagnostics);
+export function createAbstractBuilder(
+    newProgram: Program,
+    host: BuilderProgramHost,
+    oldProgram?: BuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+): BuilderProgram;
+export function createAbstractBuilder(
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: BuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): BuilderProgram;
+export function createAbstractBuilder(
+    newProgramOrRootNames: Program | readonly string[] | undefined,
+    hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,
+    oldProgramOrHost?: CompilerHost | BuilderProgram,
+    configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | BuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): BuilderProgram {
+    const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = getBuilderCreationParameters(
+        newProgramOrRootNames,
+        hostOrOptions,
+        oldProgramOrHost,
+        configFileParsingDiagnosticsOrOldProgram,
+        configFileParsingDiagnostics,
+        projectReferences,
+    );
+    return createRedirectedBuilderProgram(
+        { program: newProgram, compilerOptions: newProgram.getCompilerOptions() },
+        newConfigFileParsingDiagnostics,
+    );
 }

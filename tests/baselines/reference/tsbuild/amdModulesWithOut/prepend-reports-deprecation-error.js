@@ -106,6 +106,52 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
+//// [/src/app/module.tsbuildinfo]
+{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-10505171738-export const z = 30;\nimport { x } from \"file1\";\n","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"changeFileSet":[1,3,4,2],"version":"FakeTSVersion"}
+
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "../lib/module.d.ts",
+    "./file3.ts",
+    "./file4.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../lib/module.d.ts": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+    "./file3.ts": "-10505171738-export const z = 30;\nimport { x } from \"file1\";\n",
+    "./file4.ts": "1463681686-const myVar = 30;"
+  },
+  "root": [
+    [
+      3,
+      "./file3.ts"
+    ],
+    [
+      4,
+      "./file4.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./module.js",
+    "sourceMap": true,
+    "strict": false,
+    "target": 1
+  },
+  "changeFileSet": [
+    "../../lib/lib.d.ts",
+    "./file3.ts",
+    "./file4.ts",
+    "../lib/module.d.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 1021
+}
+
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -374,88 +420,51 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"3587416848-const myGlob = 20;","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729954175-export const y = 20;","impliedFormat":1},{"version":"1028229885-const globalConst = 10;","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-10726455937-export const x = 10;","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
-      },
-      "./file0.ts": {
-        "original": {
-          "version": "3587416848-const myGlob = 20;",
-          "impliedFormat": 1
-        },
-        "version": "3587416848-const myGlob = 20;",
-        "impliedFormat": "commonjs"
-      },
-      "./file1.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
-      },
-      "./file2.ts": {
-        "original": {
-          "version": "-13729954175-export const y = 20;",
-          "impliedFormat": 1
-        },
-        "version": "-13729954175-export const y = 20;",
-        "impliedFormat": "commonjs"
-      },
-      "./global.ts": {
-        "original": {
-          "version": "1028229885-const globalConst = 10;",
-          "impliedFormat": 1
-        },
-        "version": "1028229885-const globalConst = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          5
-        ],
-        [
-          "./file0.ts",
-          "./file1.ts",
-          "./file2.ts",
-          "./global.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "module": 2,
-      "outFile": "./module.js",
-      "sourceMap": true,
-      "strict": false,
-      "target": 1
-    },
-    "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
-    "latestChangedDtsFile": "./module.d.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./file0.ts",
+    "./file1.ts",
+    "./file2.ts",
+    "./global.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./file0.ts": "3587416848-const myGlob = 20;",
+    "./file1.ts": "-10726455937-export const x = 10;",
+    "./file2.ts": "-13729954175-export const y = 20;",
+    "./global.ts": "1028229885-const globalConst = 10;"
   },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./file0.ts",
+        "./file1.ts",
+        "./file2.ts",
+        "./global.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./module.js",
+    "sourceMap": true,
+    "strict": false,
+    "target": 1
+  },
+  "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+  "latestChangedDtsFile": "./module.d.ts",
   "version": "FakeTSVersion",
-  "size": 1261
+  "size": 1099
 }
 
 
@@ -477,7 +486,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/app/tsconfig.json' is out of date because buildinfo file 'src/app/module.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/src/app/tsconfig.json'...
 
@@ -666,87 +675,50 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"3587416848-const myGlob = 20;","impliedFormat":1},{"version":"-4405159098-export const x = 10;console.log(x);","impliedFormat":1},{"version":"-13729954175-export const y = 20;","impliedFormat":1},{"version":"1028229885-const globalConst = 10;","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-4405159098-export const x = 10;console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
-      },
-      "./file0.ts": {
-        "original": {
-          "version": "3587416848-const myGlob = 20;",
-          "impliedFormat": 1
-        },
-        "version": "3587416848-const myGlob = 20;",
-        "impliedFormat": "commonjs"
-      },
-      "./file1.ts": {
-        "original": {
-          "version": "-4405159098-export const x = 10;console.log(x);",
-          "impliedFormat": 1
-        },
-        "version": "-4405159098-export const x = 10;console.log(x);",
-        "impliedFormat": "commonjs"
-      },
-      "./file2.ts": {
-        "original": {
-          "version": "-13729954175-export const y = 20;",
-          "impliedFormat": 1
-        },
-        "version": "-13729954175-export const y = 20;",
-        "impliedFormat": "commonjs"
-      },
-      "./global.ts": {
-        "original": {
-          "version": "1028229885-const globalConst = 10;",
-          "impliedFormat": 1
-        },
-        "version": "1028229885-const globalConst = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          5
-        ],
-        [
-          "./file0.ts",
-          "./file1.ts",
-          "./file2.ts",
-          "./global.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "module": 2,
-      "outFile": "./module.js",
-      "sourceMap": true,
-      "strict": false,
-      "target": 1
-    },
-    "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
-    "latestChangedDtsFile": "./module.d.ts"
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./file0.ts",
+    "./file1.ts",
+    "./file2.ts",
+    "./global.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./file0.ts": "3587416848-const myGlob = 20;",
+    "./file1.ts": "-4405159098-export const x = 10;console.log(x);",
+    "./file2.ts": "-13729954175-export const y = 20;",
+    "./global.ts": "1028229885-const globalConst = 10;"
   },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./file0.ts",
+        "./file1.ts",
+        "./file2.ts",
+        "./global.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./module.js",
+    "sourceMap": true,
+    "strict": false,
+    "target": 1
+  },
+  "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+  "latestChangedDtsFile": "./module.d.ts",
   "version": "FakeTSVersion",
-  "size": 1275
+  "size": 1113
 }
 

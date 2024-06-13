@@ -3,19 +3,19 @@
 === overloadsAndTypeArgumentArityErrors.ts ===
 declare function Callbacks(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
->          : ^^^     ^^^      ^^^    ^^^^^^     ^^^      ^^^    ^^^^^^^^^^^     ^^^      ^^^    ^^^
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
 >      : ^^^^^^
 
 declare function Callbacks<T>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
->          : ^^^     ^^^      ^^^    ^^^^^^     ^^^      ^^^    ^^^^^^^^^^^     ^^^      ^^^    ^^^
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
 >      : ^^^^^^
 
 declare function Callbacks<T1, T2>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
->          : ^^^     ^^^      ^^^    ^^^^^^     ^^^      ^^^    ^^^^^^^^^^^     ^^^      ^^^    ^^^
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
 >      : ^^^^^^
 
@@ -23,7 +23,7 @@ Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 >Callbacks<number, string, boolean>('s') : void
 >                                        : ^^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
->          : ^^^     ^^^      ^^^    ^^^^^^     ^^^      ^^^    ^^^^^^^^^^^     ^^^      ^^^    ^^^
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
 >'s' : "s"
 >    : ^^^
 
@@ -31,13 +31,13 @@ new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 >new Callbacks<number, string, boolean>('s') : any
 >                                            : ^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
->          : ^^^     ^^^      ^^^    ^^^^^^     ^^^      ^^^    ^^^^^^^^^^^     ^^^      ^^^    ^^^
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
 >'s' : "s"
 >    : ^^^
 
 declare function f<A, B = {}>(arg: number): void;
 >f : <A, B = {}>(arg: number) => void
->  : ^^^^^^^^^^^^   ^^      ^^^^^    
+>  : ^ ^^ ^^^^^^^   ^^      ^^^^^    
 >arg : number
 >    : ^^^^^^
 
@@ -45,5 +45,5 @@ f<number>(); // wrong number of arguments (#25683)
 >f<number>() : void
 >            : ^^^^
 >f : <A, B = {}>(arg: number) => void
->  : ^^^^^^^^^^^^   ^^      ^^^^^    
+>  : ^ ^^ ^^^^^^^   ^^      ^^^^^    
 

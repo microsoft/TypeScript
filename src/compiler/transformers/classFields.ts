@@ -1754,7 +1754,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
                 else if (isPrivateIdentifierClassElementDeclaration(member)) {
                     containsInstancePrivateElements = true;
-                    if (resolver.getNodeCheckFlags(member) & NodeCheckFlags.ContainsConstructorReference) {
+                    if (resolver.hasNodeCheckFlag(member, NodeCheckFlags.ContainsConstructorReference)) {
                         facts |= ClassFacts.NeedsClassConstructorReference;
                     }
                 }
@@ -1888,7 +1888,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             getClassLexicalEnvironment().classThis = node.emitNode.classThis;
         }
 
-        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
+        const isClassWithConstructorReference = resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference);
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
         let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1964,8 +1964,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // these statements after the class expression variable statement.
         const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
         const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-        const classCheckFlags = resolver.getNodeCheckFlags(node);
-        const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ContainsConstructorReference;
+        const isClassWithConstructorReference = resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference);
+        const requiresBlockScopedVar = resolver.hasNodeCheckFlag(node, NodeCheckFlags.BlockScopedBindingInLoop);
 
         let temp: Identifier | undefined;
         function createClassTempVar() {
@@ -1982,7 +1982,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
             }
 
-            const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
             const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
             return temp;
@@ -2711,7 +2710,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const alreadyTransformed = !!cacheAssignment || isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
             if (!alreadyTransformed && !inlinable && shouldHoist) {
                 const generatedName = factory.getGeneratedNameForNode(name);
-                if (resolver.getNodeCheckFlags(name) & NodeCheckFlags.BlockScopedBindingInLoop) {
+                if (resolver.hasNodeCheckFlag(name, NodeCheckFlags.BlockScopedBindingInLoop)) {
                     addBlockScopedVariable(generatedName);
                 }
                 else {
@@ -2959,7 +2958,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
             factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
-        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
+        if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.BlockScopedBindingInLoop)) {
             addBlockScopedVariable(identifier);
         }
         else {
@@ -3294,7 +3293,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
+            if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.ConstructorReference)) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.

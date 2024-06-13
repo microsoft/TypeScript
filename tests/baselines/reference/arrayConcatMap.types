@@ -7,7 +7,7 @@ var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]
 >                                                          : ^^^^^
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->                                                : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                                                : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[].concat([{ a: 1 }], [{ a: 2 }]) : any[]
 >                                  : ^^^^^
 >[].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
@@ -35,7 +35,7 @@ var x = [].concat([{ a: 1 }], [{ a: 2 }])
 
           .map(b => b.a);
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >b => b.a : (b: any) => any
 >         : ^ ^^^^^^^^^^^^^
 >b : any

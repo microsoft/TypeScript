@@ -2317,13 +2317,13 @@ function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, sh
 }
 
 /** @internal */
-export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number) {
     if (!contextToken) return undefined;
 
     switch (contextToken.kind) {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike);
+            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike, position);
         default:
             return createTextSpanFromNode(contextToken);
     }
@@ -2335,12 +2335,12 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = node.getEnd();
+        replacementEnd = Math.min(position, node.getEnd());
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
@@ -4024,22 +4024,13 @@ export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
     return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
 }
 
-/** @internal */
-export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
-    if (needsNameFromDeclaration(symbol)) {
-        const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
-        if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
-        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
-        if (fileNameCase === capitalized) return fileNameCase;
-        return [fileNameCase, capitalized];
-    }
-    return symbol.name;
-}
-
-/** @internal */
+/**
+ * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
+ * instead, which searches for names of re-exported defaults/namespaces in target files.
+ * @internal
+ */
 export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
-    if (needsNameFromDeclaration(symbol)) {
+    if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
         // Names for default exports:
         // - export default foo => foo
         // - export { foo as default } => foo
@@ -4050,11 +4041,11 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
     return symbol.name;
 }
 
-function needsNameFromDeclaration(symbol: Symbol) {
-    return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
-}
-
-/** @internal */
+/**
+ * If a type checker and multiple files are available, consider using `forEachNameOfDefaultExport`
+ * instead, which searches for names of re-exported defaults/namespaces in target files.
+ * @internal
+ */
 export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d => {
         // "export default" in this case. See `ExportAssignment`for more details.
