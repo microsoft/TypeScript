@@ -994,6 +994,7 @@ export class Session<TMessage = string> implements EventSender {
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
     // Minimum number of lines for attempting to use region diagnostics for a file.
+    /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
     constructor(opts: SessionOptions) {
