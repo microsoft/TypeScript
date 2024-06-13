@@ -51,108 +51,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
-//// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":false},{"version":"-4885977236-export type t = string;","signature":false}],"root":[2,3],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
-
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../lib/lib.d.ts",
-    "./src/index.ts",
-    "./types/type.ts"
-  ],
-  "fileInfos": {
-    "../lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": false,
-        "affectsGlobalScope": true
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./src/index.ts": {
-      "original": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": false
-      },
-      "version": "-10726455937-export const x = 10;"
-    },
-    "./types/type.ts": {
-      "original": {
-        "version": "-4885977236-export type t = string;",
-        "signature": false
-      },
-      "version": "-4885977236-export type t = string;"
-    }
-  },
-  "root": [
-    [
-      2,
-      "./src/index.ts"
-    ],
-    [
-      3,
-      "./types/type.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./src/index.ts",
-    "./types/type.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 841
-}
-
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b /src/tsconfig.json -v
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
-
-[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
-
-[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
-  The file is in the program because:
-    Matched by default include pattern '**/*'
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-
-
-
-Change:: Normal build without change, that does not block emit on error to show files that get emitted
-Input::
-
-
-Output::
-/lib/tsc -p /src/tsconfig.json
-[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
-  The file is in the program because:
-    Matched by default include pattern '**/*'
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-
 //// [/src/dist/index.d.ts]
 export declare const x = 10;
 
@@ -219,15 +117,15 @@ exports.x = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./src/index.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./types/type.ts",
-      "not cached or not changed"
+      "not cached"
     ]
   ],
   "latestChangedDtsFile": "./types/type.d.ts",
@@ -242,5 +140,48 @@ export type t = string;
 //// [/src/types/type.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/tsconfig.json -v
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
+
+[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Matched by default include pattern '**/*'
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+
+
+Change:: Normal build without change, that does not block emit on error to show files that get emitted
+Input::
+
+
+Output::
+/lib/tsc -p /src/tsconfig.json
+[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Matched by default include pattern '**/*'
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 

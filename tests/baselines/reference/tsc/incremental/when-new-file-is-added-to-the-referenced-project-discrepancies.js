@@ -31,15 +31,15 @@ CleanBuild:
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "../project1/class1.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./class2.ts",
-      "not cached or not changed"
+      "not cached"
     ]
   ],
   "latestChangedDtsFile": "FakeFileName",
@@ -72,6 +72,7 @@ IncrementalBuild:
     "module": 0
   },
   "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }
 3:: Delete output for class3
@@ -107,15 +108,15 @@ CleanBuild:
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "../project1/class1.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./class2.ts",
-      "not cached or not changed"
+      "not cached"
     ]
   ],
   "latestChangedDtsFile": "FakeFileName",
@@ -150,11 +151,11 @@ IncrementalBuild:
   "semanticDiagnosticsPerFile": [
     [
       "../project1/class1.d.ts",
-      "not cached or not changed"
+      "not cached"
     ],
     [
       "./class2.ts",
-      "not cached or not changed"
+      "not cached"
     ]
   ],
   "latestChangedDtsFile": "FakeFileName",

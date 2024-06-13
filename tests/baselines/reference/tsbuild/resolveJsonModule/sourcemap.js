@@ -56,8 +56,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 TSFILE: /src/dist/src/hello.json
-TSFILE: /src/dist/src/index.js.map
 TSFILE: /src/dist/src/index.js
+TSFILE: /src/dist/src/index.js.map
 TSFILE: /src/dist/src/index.d.ts
 TSFILE: /src/dist/tsconfig.tsbuildinfo
 lib/lib.d.ts

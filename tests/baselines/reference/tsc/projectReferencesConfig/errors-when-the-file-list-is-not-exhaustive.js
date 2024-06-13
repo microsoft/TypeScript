@@ -67,7 +67,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/primary/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../b.ts","../a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2704852577-export {}","signature":"-3531856636-export {};\n"},{"version":"-4190788607-import * as b from './b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/primary/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -124,7 +124,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "latestChangedDtsFile": "./a.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 872
+  "size": 886
 }
 

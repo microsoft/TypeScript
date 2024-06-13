@@ -221,12 +221,15 @@ a_1.X;
 
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 49
 }
 
 

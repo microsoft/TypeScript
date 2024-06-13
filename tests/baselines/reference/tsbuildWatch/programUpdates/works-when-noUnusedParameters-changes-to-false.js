@@ -38,13 +38,21 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/index.js]
+var fn = function (a, b) { return b; };
+
+
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 63
 }
 
 
@@ -109,11 +117,18 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/user/username/projects/myproject/index.js]
-var fn = function (a, b) { return b; };
+//// [/user/username/projects/myproject/index.js] file changed its modified time
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"version":"FakeTSVersion"}
 
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 49
+}
 
 
 

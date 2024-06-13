@@ -60,18 +60,24 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
 No shapes updated in the builder::
 
 
 //// [/outFile.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/a.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/a.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 63
 }
 
 
@@ -85,7 +91,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'outFile.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -112,7 +118,9 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
 No shapes updated in the builder::
 
@@ -133,7 +141,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'outFile.tsbuildinfo' is older than input 'src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -159,8 +167,18 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 
-//// [/outFile.tsbuildinfo] file written with same contents
-//// [/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/outFile.tsbuildinfo]
+{"root":["./src/a.ts"],"version":"FakeTSVersion"}
+
+//// [/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 49
+}
+
 
 
 Change:: no-change-run

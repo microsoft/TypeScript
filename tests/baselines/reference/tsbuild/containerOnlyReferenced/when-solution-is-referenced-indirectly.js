@@ -294,12 +294,12 @@ src/project3/src/c.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project4/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
-
 lib/lib.d.ts
   Default library for target 'es5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
+
 exitCode:: ExitStatus.Success
 
 
