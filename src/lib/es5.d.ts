@@ -1655,11 +1655,6 @@ type Uncapitalize<S extends string> = intrinsic;
 type NoInfer<T> = intrinsic;
 
 /**
- * Marker for deferred callbacks
- */
-type Deferred<T extends (...args: any) => any> = intrinsic;
-
-/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> {}

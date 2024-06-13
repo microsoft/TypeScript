@@ -971,6 +971,10 @@
         "category": "Error",
         "code": 1293
     },
+    "'deferred' modifier can only appear on a parameter declaration.": {
+        "category": "Error",
+        "code": 1294
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -3910,6 +3914,10 @@
     "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2868
+    },
+    "A 'deferred' parameter must have a function type.": {
+        "category": "Error",
+        "code": 2869
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

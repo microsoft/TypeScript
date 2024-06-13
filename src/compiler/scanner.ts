@@ -148,6 +148,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     debugger: SyntaxKind.DebuggerKeyword,
     declare: SyntaxKind.DeclareKeyword,
     default: SyntaxKind.DefaultKeyword,
+    deferred: SyntaxKind.DeferredKeyword,
     delete: SyntaxKind.DeleteKeyword,
     do: SyntaxKind.DoKeyword,
     else: SyntaxKind.ElseKeyword,

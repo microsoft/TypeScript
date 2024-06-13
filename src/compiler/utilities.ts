@@ -7159,6 +7159,8 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
             return ModifierFlags.In;
         case SyntaxKind.OutKeyword:
             return ModifierFlags.Out;
+        case SyntaxKind.DeferredKeyword:
+            return ModifierFlags.Deferred;
         case SyntaxKind.Decorator:
             return ModifierFlags.Decorator;
     }

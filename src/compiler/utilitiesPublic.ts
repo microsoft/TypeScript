@@ -1568,6 +1568,7 @@ export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         case SyntaxKind.ConstKeyword:
         case SyntaxKind.DeclareKeyword:
         case SyntaxKind.DefaultKeyword:
+        case SyntaxKind.DeferredKeyword:
         case SyntaxKind.ExportKeyword:
         case SyntaxKind.InKeyword:
         case SyntaxKind.PublicKeyword:

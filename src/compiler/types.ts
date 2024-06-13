@@ -196,6 +196,7 @@ export const enum SyntaxKind {
     BooleanKeyword,
     ConstructorKeyword,
     DeclareKeyword,
+    DeferredKeyword,
     GetKeyword,
     InferKeyword,
     IntrinsicKeyword,
@@ -598,6 +599,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.DebuggerKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
+    | SyntaxKind.DeferredKeyword
     | SyntaxKind.DeleteKeyword
     | SyntaxKind.DoKeyword
     | SyntaxKind.ElseKeyword
@@ -669,6 +671,7 @@ export type ModifierSyntaxKind =
     | SyntaxKind.ConstKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
+    | SyntaxKind.DeferredKeyword
     | SyntaxKind.ExportKeyword
     | SyntaxKind.InKeyword
     | SyntaxKind.PrivateKeyword
@@ -865,10 +868,11 @@ export const enum ModifierFlags {
     Const =              1 << 12, // Const enum
     In =                 1 << 13, // Contravariance modifier
     Out =                1 << 14, // Covariance modifier
-    Decorator =          1 << 15, // Contains a decorator.
+    Deferred =           1 << 15, // Parameter
+    Decorator =          1 << 16, // Contains a decorator.
 
     // JSDoc-only modifiers
-    Deprecated =         1 << 16, // Deprecated tag.
+    Deprecated =         1 << 17, // Deprecated tag.
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
     /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
@@ -878,7 +882,7 @@ export const enum ModifierFlags {
     /** @internal */ JSDocOverride = 1 << 27,
 
     /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
-    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Deferred | Decorator,
     /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
     /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
     /** @internal */ JSDocOnlyModifiers = Deprecated,
@@ -892,9 +896,9 @@ export const enum ModifierFlags {
     ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
     NonPublicAccessibilityModifier = Private | Protected,
 
-    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
+    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out | Deferred,
     ExportDefault = Export | Default,
-    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
+    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Deferred | Decorator,
     Modifier = All & ~Decorator,
 }
 
@@ -1620,6 +1624,7 @@ export type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
 export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
 export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
 export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
+export type DeferredKeyword = ModifierToken<SyntaxKind.DeferredKeyword>;
 export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
 export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
 export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
@@ -1637,6 +1642,7 @@ export type Modifier =
     | ConstKeyword
     | DeclareKeyword
     | DefaultKeyword
+    | DeferredKeyword
     | ExportKeyword
     | InKeyword
     | PrivateKeyword
@@ -6389,7 +6395,6 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
     SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
-    DeferredCallback = 1 << 28,  // Function type with Deferred<T> marker
 
     // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */

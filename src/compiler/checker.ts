@@ -1396,7 +1396,6 @@ const enum IntrinsicTypeKind {
     Capitalize,
     Uncapitalize,
     NoInfer,
-    Deferred,
 }
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
@@ -1405,7 +1404,6 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     Capitalize: IntrinsicTypeKind.Capitalize,
     Uncapitalize: IntrinsicTypeKind.Uncapitalize,
     NoInfer: IntrinsicTypeKind.NoInfer,
-    Deferred: IntrinsicTypeKind.Deferred,
 }));
 
 const SymbolLinks = class implements SymbolLinks {
@@ -16105,9 +16103,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type === intrinsicMarkerType) {
             const typeKind = intrinsicTypeKinds.get(symbol.escapedName as string);
             if (typeKind !== undefined && typeArguments && typeArguments.length === 1) {
-                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) :
-                    typeKind === IntrinsicTypeKind.Deferred ? getDeferredCallbackType(typeArguments[0], aliasSymbol, aliasTypeArguments) :
-                    getStringMappingType(symbol, typeArguments[0]);
+                return typeKind === IntrinsicTypeKind.NoInfer ? getNoInferType(typeArguments[0]) : getStringMappingType(symbol, typeArguments[0]);
             }
         }
         const links = getSymbolLinks(symbol);
@@ -16118,27 +16114,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))), aliasSymbol, aliasTypeArguments));
         }
         return instantiation;
-    }
-
-    function getDeferredCallbackType(type: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
-        if (type.flags & TypeFlags.Object) {
-            const key = `F${getTypeId(type)}${getAliasId(aliasSymbol, aliasTypeArguments)}`;
-            return getCachedType(key) ?? setCachedType(key, createDeferredCallbackType(type as ObjectType, aliasSymbol, aliasTypeArguments));
-        }
-        return type;
-    }
-
-    function createDeferredCallbackType(type: ObjectType, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
-        const resolved = resolveStructuredTypeMembers(type);
-        const result = createObjectType(ObjectFlags.Anonymous | ObjectFlags.DeferredCallback, type.symbol);
-        result.members = resolved.members;
-        result.properties = resolved.properties;
-        result.callSignatures = resolved.callSignatures;
-        result.constructSignatures = resolved.constructSignatures;
-        result.indexInfos = resolved.indexInfos;
-        result.aliasSymbol = aliasSymbol;
-        result.aliasTypeArguments = aliasTypeArguments;
-        return result;
     }
 
     /**
@@ -28190,7 +28165,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // circularities. Instead, we simply check if any signature has a deferred callback marker in the
                         // particular argument position.
                         signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
-                        if (!some(signatures, sig => !!(getObjectFlags(getTypeAtPosition(sig, i)) & ObjectFlags.DeferredCallback))) {
+                        if (!some(signatures, sig => !!(getModifiersAtPosition(sig, i) & ModifierFlags.Deferred))) {
                             const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                             if (lambdaType !== initialType) {
                                 lambdaTypes ??= [initialType];
@@ -37257,6 +37232,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return elementType && isTypeAny(elementType) ? anyType : restType;
     }
 
+    function getModifiersAtPosition(signature: Signature, pos: number) {
+        const index = pos < signature.parameters.length ? pos : signatureHasRestParameter(signature) ? signature.parameters.length - 1 : -1;
+        return index >= 0 ? getDeclarationModifierFlagsFromSymbol(signature.parameters[index]) : ModifierFlags.None;
+    }
+
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
     // parameter. For example, the parameter count of (x: number, y: number, ...z: string[]) is 3 and
     // the parameter count of (x: number, ...args: [number, ...string[], boolean])) is also 3. In the
@@ -40568,6 +40548,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (func.kind === SyntaxKind.Constructor && isIdentifier(node.name) && node.name.escapedText === "constructor") {
                 error(node.name, Diagnostics.constructor_cannot_be_used_as_a_parameter_property_name);
+            }
+        }
+        if (hasSyntacticModifier(node, ModifierFlags.Deferred)) {
+            const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
+            if (!isTypeAssignableTo(getTypeOfSymbol(node.symbol), funcType)) {
+                error(node, Diagnostics.A_deferred_parameter_must_have_a_function_type);
             }
         }
         if (!node.initializer && isOptionalDeclaration(node) && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
@@ -50151,6 +50137,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         flags |= inOutFlag;
                         break;
                     }
+
+                    case SyntaxKind.DeferredKeyword:
+                        if (node.kind !== SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics.deferred_modifier_can_only_appear_on_a_parameter_declaration);
+                        }
+                        if (flags & ModifierFlags.Deferred) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "deferred");
+                        }
+                        flags |= ModifierFlags.Deferred;
+                        break;
                 }
             }
         }
