@@ -3548,6 +3548,7 @@ declare namespace ts {
             private getCompileOnSaveAffectedFileList;
             private emitFile;
             private getSignatureHelpItems;
+            private toPendingErrorCheck;
             private getDiagnostics;
             private change;
             private reload;

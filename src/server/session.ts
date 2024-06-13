@@ -301,8 +301,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
 
 interface PendingErrorCheck {
     fileName: NormalizedPath;
-    ranges?: TextRange[];
-    project?: Project;
+    project: Project;
 }
 
 function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
@@ -1143,7 +1142,7 @@ export class Session<TMessage = string> implements EventSender {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                 this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, mapDefined(openFiles, file => ({ fileName: toNormalizedPath(file) })), 100, /*requireOpen*/ true));
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
             }
 
             // Send project changed event
@@ -1336,7 +1335,7 @@ export class Session<TMessage = string> implements EventSender {
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
     private updateErrorCheck(
         next: NextStep,
-        checkList: PendingErrorCheck[],
+        checkList: PendingErrorCheck[] | (string | protocol.FileRangesRequestArgs)[],
         ms: number,
         requireOpen = true,
     ) {
@@ -1363,8 +1362,7 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             if (this.getPreferences(fileName).disableSuggestions) {
-                goNext();
-                return;
+                return goNext();
             }
             next.immediate("suggestionCheck", () => {
                 this.suggestionCheck(fileName, project);
@@ -1377,10 +1375,22 @@ export class Session<TMessage = string> implements EventSender {
                 return;
             }
 
-            const { fileName, project = this.projectService.tryGetDefaultProjectForFile(fileName), ranges } = checkList[index];
-            if (!project) {
-                return;
+            let ranges: protocol.FileRange[] | undefined;
+            let item: string | protocol.FileRangesRequestArgs | PendingErrorCheck | undefined = checkList[index];
+            if (isString(item)) {
+                item = this.toPendingErrorCheck(item);
             }
+            // eslint-disable-next-line local/no-in-operator
+            else if ("ranges" in item) {
+                ranges = item.ranges;
+                item = this.toPendingErrorCheck(item.file);
+            }
+
+            if (!item) {
+                return goNext();
+            }
+
+            const { fileName, project } = item;
 
             // Ensure the project is up to date before checking if this file is present in the project.
             updateProjectIfDirty(project);
@@ -1395,13 +1405,15 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
-                return;
+                return goNext();
             }
 
             if (ranges) {
                 return next.immediate("regionSemanticCheck", () => {
-                    this.regionSemanticCheck(fileName, project, ranges);
+                    const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+                    if (scriptInfo) {
+                        this.regionSemanticCheck(fileName, project, ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)));
+                    }
                     if (this.changeSeq !== seq) {
                         return;
                     }
@@ -2560,28 +2572,19 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
+    private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
+        const fileName = toNormalizedPath(uncheckedFileName);
+        const project = this.projectService.tryGetDefaultProjectForFile(fileName);
+        return project && { fileName, project };
+    }
+
     private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
         if (fileArgs.length > 0) {
-            const files = mapDefined(fileArgs, fileArg => {
-                if (isString(fileArg)) {
-                    return { fileName: toNormalizedPath(fileArg) };
-                }
-                const fileName = toNormalizedPath(fileArg.file);
-                const scriptInfo = this.projectService.getScriptInfo(fileName);
-                if (!scriptInfo) {
-                    return undefined;
-                }
-                const ranges = fileArg.ranges.map(range => this.getRange({ file: fileArg.file, ...range }, scriptInfo));
-                return {
-                    fileName,
-                    ranges,
-                };
-            });
-            this.updateErrorCheck(next, files, delay);
+            this.updateErrorCheck(next, fileArgs, delay);
         }
     }
 
