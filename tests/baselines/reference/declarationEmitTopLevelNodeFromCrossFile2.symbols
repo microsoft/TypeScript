@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitTopLevelNodeFromCrossFile2.ts] ////
+
+=== a.ts ===
+import { boxedBox } from "./boxedBox";
+>boxedBox : Symbol(boxedBox, Decl(a.ts, 0, 8))
+
+export const _ = boxedBox;
+>_ : Symbol(_, Decl(a.ts, 2, 12))
+>boxedBox : Symbol(boxedBox, Decl(a.ts, 0, 8))
+
+// At index 83
+/**
+ * wat
+ */
+
+=== boxedBox.d.ts ===
+export declare const boxedBox: import("./box").Box<{
+>boxedBox : Symbol(boxedBox, Decl(boxedBox.d.ts, 0, 20))
+>Box : Symbol(Box, Decl(box.d.ts, 0, 0))
+
+    boxed: import("./box").Box<number>;
+>boxed : Symbol(boxed, Decl(boxedBox.d.ts, 0, 52))
+>Box : Symbol(Box, Decl(box.d.ts, 0, 0))
+
+}>;                        // ^This is index 83 in this file
+
+=== box.d.ts ===
+export declare class Box<T> {
+>Box : Symbol(Box, Decl(box.d.ts, 0, 0))
+>T : Symbol(T, Decl(box.d.ts, 0, 25))
+
+    value: T;
+>value : Symbol(Box.value, Decl(box.d.ts, 0, 29))
+>T : Symbol(T, Decl(box.d.ts, 0, 25))
+
+    constructor(value: T);
+>value : Symbol(value, Decl(box.d.ts, 2, 16))
+>T : Symbol(T, Decl(box.d.ts, 0, 25))
+}
+export declare function box<T>(value: T): Box<T>;
+>box : Symbol(box, Decl(box.d.ts, 3, 1))
+>T : Symbol(T, Decl(box.d.ts, 4, 28))
+>value : Symbol(value, Decl(box.d.ts, 4, 31))
+>T : Symbol(T, Decl(box.d.ts, 4, 28))
+>Box : Symbol(Box, Decl(box.d.ts, 0, 0))
+>T : Symbol(T, Decl(box.d.ts, 4, 28))
+
