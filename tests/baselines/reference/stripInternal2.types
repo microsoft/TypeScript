@@ -3,6 +3,7 @@
 === stripInternal2.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
   /**
    * Should be stripped
@@ -10,7 +11,9 @@ export class Foo {
    */
   shouldBeStripped = 1;
 >shouldBeStripped : number
+>                 : ^^^^^^
 >1 : 1
+>  : ^
 
   // TODO: maybe make this @internal?
   /**
@@ -18,5 +21,7 @@ export class Foo {
    */
   shouldNotBeStripped = 2;
 >shouldNotBeStripped : number
+>                    : ^^^^^^
 >2 : 2
+>  : ^
 }
