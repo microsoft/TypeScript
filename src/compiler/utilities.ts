@@ -5,6 +5,7 @@ import {
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
     AmpersandAmpersandEqualsToken,
@@ -40,7 +41,6 @@ import {
     canHaveDecorators,
     canHaveLocals,
     canHaveModifiers,
-    type CanHaveModuleSpecifier,
     CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
@@ -168,7 +168,6 @@ import {
     getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
-    getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -4058,26 +4057,7 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function canHaveModuleSpecifier(node: Node | undefined): node is CanHaveModuleSpecifier {
-    switch (node?.kind) {
-        case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.BindingElement:
-        case SyntaxKind.ImportDeclaration:
-        case SyntaxKind.ExportDeclaration:
-        case SyntaxKind.ImportEqualsDeclaration:
-        case SyntaxKind.ImportClause:
-        case SyntaxKind.NamespaceExport:
-        case SyntaxKind.NamespaceImport:
-        case SyntaxKind.ExportSpecifier:
-        case SyntaxKind.ImportSpecifier:
-        case SyntaxKind.ImportType:
-            return true;
-    }
-    return false;
-}
-
-/** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: CanHaveModuleSpecifier | JSDocImportTag): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode | JSDocImportTag): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
@@ -8748,13 +8728,11 @@ function isFileModuleFromUsingJSXTag(file: SourceFile): Node | undefined {
  * Note that this requires file.impliedNodeFormat be set already; meaning it must be set very early on
  * in SourceFile construction.
  */
-function isFileForcedToBeModuleByFormat(file: SourceFile, options: CompilerOptions): true | undefined {
+function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     // Excludes declaration files - they still require an explicit `export {}` or the like
     // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
     // that aren't esm-mode (meaning not in a `type: module` scope).
-    //
-    // TODO: extension check never considered compilerOptions; should impliedNodeFormat?
-    return (getImpliedNodeFormatForEmitWorker(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }
 
 /** @internal */
@@ -8775,27 +8753,15 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
             // If module is nodenext or node16, all esm format files are modules
             // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
             // otherwise, the presence of import or export statments (or import.meta) implies module-ness
-            const checks: ((file: SourceFile, options: CompilerOptions) => Node | true | undefined)[] = [isFileProbablyExternalModule];
+            const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
             if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
                 checks.push(isFileModuleFromUsingJSXTag);
             }
             checks.push(isFileForcedToBeModuleByFormat);
             const combined = or(...checks);
-            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file, options));
+            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
             return callback;
     }
-}
-
-/**
- * @internal
- * Returns true if an `import` and a `require` of the same module specifier
- * can resolve to a different file.
- */
-export function importSyntaxAffectsModuleResolution(options: CompilerOptions) {
-    const moduleResolution = getEmitModuleResolutionKind(options);
-    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
-        || getResolvePackageJsonExports(options)
-        || getResolvePackageJsonImports(options);
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
