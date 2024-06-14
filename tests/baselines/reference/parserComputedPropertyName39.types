@@ -3,11 +3,15 @@
 === parserComputedPropertyName39.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     [public]() { }
 >[public] : () => void
+>         : ^^^^^^^^^^
 >public : any
+>       : ^^^
 }

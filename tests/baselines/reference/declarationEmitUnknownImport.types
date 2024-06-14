@@ -3,8 +3,11 @@
 === declarationEmitUnknownImport.ts ===
 import Foo = SomeNonExistingName
 >Foo : any
+>    : ^^^
 >SomeNonExistingName : any
+>                    : ^^^
 
 export {Foo}
 >Foo : any
+>    : ^^^
 

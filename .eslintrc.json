@@ -17,9 +17,7 @@
     ],
     "plugins": [
         "@typescript-eslint",
-        "no-null",
-        "eslint-plugin-local",
-        "simple-import-sort"
+        "eslint-plugin-local"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -60,6 +58,18 @@
         "prefer-const": "error",
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
+
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "Literal[raw=null]",
+                "message": "Avoid using null; use undefined instead."
+            },
+            {
+                "selector": "TSNullKeyword",
+                "message": "Avoid using null; use undefined instead."
+            }
+        ],
 
         // Enabled in eslint:recommended, but not applicable here
         "no-extra-boolean-cast": "off",
@@ -110,13 +120,14 @@
             }
         ],
         "@typescript-eslint/no-unused-vars": [
-            "error",
+            "warn",
             {
                 // Ignore: (solely underscores | starting with exactly one underscore)
                 "argsIgnorePattern": "^(_+$|_[^_])",
                 "varsIgnorePattern": "^(_+$|_[^_])"
             }
         ],
+        "@typescript-eslint/no-inferrable-types": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",
@@ -134,13 +145,7 @@
         "local/debug-assert": "error",
         "local/no-keywords": "error",
         "local/jsdoc-format": "error",
-
-        // eslint-plugin-no-null
-        "no-null/no-null": "error",
-
-        // eslint-plugin-simple-import-sort
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "local/js-extensions": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -166,14 +171,6 @@
                     { "name": "module" },
                     { "name": "exports" }
                 ]
-            }
-        },
-        {
-            // These files contain imports in a specific order that are generally unsafe to modify.
-            "files": ["**/_namespaces/**"],
-            "rules": {
-                "simple-import-sort/imports": "off",
-                "simple-import-sort/exports": "off"
             }
         }
     ]

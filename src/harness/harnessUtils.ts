@@ -1,5 +1,5 @@
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 export function encodeString(s: string): string {
     return Buffer.from(s).toString("utf8");
@@ -203,10 +203,6 @@ export function sourceFileToJSON(file: ts.Node): string {
                     if ((n as any).hasExtendedUnicodeEscape) {
                         o.hasExtendedUnicodeEscape = true;
                     }
-                    break;
-
-                case "originalKeywordKind":
-                    o[propertyName] = getKindName((n as any)[propertyName]);
                     break;
 
                 case "flags":

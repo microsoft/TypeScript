@@ -4,6 +4,7 @@
 for (let v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     v;
 >v : any
@@ -11,6 +12,7 @@ for (let v of []) {
 for (let v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     v;
 >v : any

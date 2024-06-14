@@ -1,6 +1,4 @@
-import {
-    existsSync,
-} from "fs";
+import { existsSync } from "fs";
 import {
     dirname,
     join,

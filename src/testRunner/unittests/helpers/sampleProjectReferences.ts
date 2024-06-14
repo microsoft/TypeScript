@@ -1,28 +1,20 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
-} from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
+    getProjectConfigWithNodeNext,
+} from "./contents.js";
+import { loadProjectFromFiles } from "./vfs.js";
 import {
     createServerHost,
     createWatchedSystem,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
-export function getSampleProjectConfigWithNodeNext(withNodeNext: boolean | undefined) {
-    return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
-}
 export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({
         compilerOptions: {
-            ...getSampleProjectConfigWithNodeNext(withNodeNext),
+            ...getProjectConfigWithNodeNext(withNodeNext),
             composite: true,
             declaration: true,
             sourceMap: true,
@@ -39,7 +31,7 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
         [libFile.path]: libFile.content,
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
-                ...getSampleProjectConfigWithNodeNext(withNodeNext),
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 declarationMap: true,
@@ -69,7 +61,7 @@ export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean):
             ],
             files: ["index.ts"],
             compilerOptions: {
-                ...getSampleProjectConfigWithNodeNext(withNodeNext),
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 forceConsistentCasingInFileNames: true,

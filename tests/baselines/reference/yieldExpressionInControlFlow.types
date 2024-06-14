@@ -3,18 +3,25 @@
 === bug25149.js ===
 function* f() {
 >f : () => Generator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var o
 >o : any
+>  : ^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         o = yield o
 >o = yield o : any
+>            : ^^^
 >o : any
+>  : ^^^
 >yield o : any
+>        : ^^^
 >o : any
+>  : ^^^
     }
 }
 
@@ -22,19 +29,27 @@ function* f() {
 // fails in Typescript too
 function* g() {
 >g : () => Generator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var o = []
 >o : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         o = yield* o
 >o = yield* o : any
+>             : ^^^
 >o : any[]
+>  : ^^^^^
 >yield* o : any
+>         : ^^^
 >o : any
+>  : ^^^
     }
 }
 

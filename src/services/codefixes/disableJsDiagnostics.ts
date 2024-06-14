@@ -1,4 +1,11 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createFileTextChanges,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixAction,
     createTextChange,
     createTextSpan,
@@ -13,14 +20,7 @@ import {
     SourceFile,
     textChanges,
     tryAddToSet,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    createFileTextChanges,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "disableJsDiagnostics";
 const fixId = "disableJsDiagnostics";

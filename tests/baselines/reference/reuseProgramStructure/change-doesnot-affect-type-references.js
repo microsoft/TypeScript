@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: c.ts
 
 
@@ -55,7 +55,7 @@ a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: c.ts
 
 

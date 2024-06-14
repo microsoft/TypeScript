@@ -3,8 +3,10 @@
 === parserAccessibilityAfterStatic4.ts ===
 class Outer
 >Outer : Outer
+>      : ^^^^^
 {
 static public: number;
 >public : number
+>       : ^^^^^^
 }
 

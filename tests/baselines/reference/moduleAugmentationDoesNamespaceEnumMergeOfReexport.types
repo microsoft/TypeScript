@@ -6,6 +6,7 @@ export namespace Root {
     export interface Foo {
         x: number;
 >x : number
+>  : ^^^^^^
     }
 }
 === reexport.ts ===
@@ -14,41 +15,60 @@ export * from "./file";
 === augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 declare module "./reexport" {
 >"./reexport" : typeof ns
+>             : ^^^^^^^^^
 
     // Merging an enum into a type-only NS is OK
     export enum Root {
 >Root : Root
+>     : ^^^^
 
         A,
 >A : Root.A
+>  : ^^^^^^
 
         B,
 >B : Root.B
+>  : ^^^^^^
 
         C
 >C : Root.C
+>  : ^^^^^^
     }
 }
 
 declare const f: ns.Root.Foo;
 >f : ns.Root.Foo
+>  : ^^^^^^^^^^^
 >ns : any
+>   : ^^^
 >Root : any
+>     : ^^^
 
 const g: ns.Root = ns.Root.A;
 >g : ns.Root
+>  : ^^^^^^^
 >ns : any
+>   : ^^^
 >ns.Root.A : ns.Root.A
+>          : ^^^^^^^^^
 >ns.Root : typeof ns.Root
+>        : ^^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >Root : typeof ns.Root
+>     : ^^^^^^^^^^^^^^
 >A : ns.Root.A
+>  : ^^^^^^^^^
 
 f.x;
 >f.x : number
+>    : ^^^^^^
 >f : ns.Root.Foo
+>  : ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

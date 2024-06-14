@@ -132,7 +132,7 @@ FsWatches::
 /a/lib/lib.d.ts:
   {"inode":3}
 /user/username/projects/myproject/foo.ts:
-  {"inode":13} *new*
+  {} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":8}
 /user/username/projects/myproject/tsconfig.json:
@@ -148,6 +148,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -239,7 +240,7 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.ts:
-  {"inode":13}
+  {}
 
 Timeout callback:: count: 1
 4: timerToUpdateProgram *new*
@@ -247,6 +248,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program

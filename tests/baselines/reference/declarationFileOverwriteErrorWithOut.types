@@ -3,10 +3,12 @@
 === /out.d.ts ===
 declare class c {
 >c : c
+>  : ^
 }
 
 === /a.ts ===
 class d {
 >d : d
+>  : ^
 }
 

@@ -5,9 +5,13 @@
 
 class C4a extends void {}
 >C4a : C4a
+>    : ^^^
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 class C5a extends null { }
 >C5a : C5a
+>    : ^^^
 

@@ -14,7 +14,6 @@ import {
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
-    perfLogger,
     startTracing,
     stripQuotes,
     sys,
@@ -23,13 +22,13 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 import {
     getLogLevel,
     StartInput,
     StartSessionOptions,
-} from "./common";
+} from "./common.js";
 
 interface LogOptions {
     file?: string;
@@ -213,18 +212,6 @@ export function initializeNodeSystem(): StartInput {
             return this.loggingEnabled() && this.level >= level;
         }
         msg(s: string, type: ts.server.Msg = ts.server.Msg.Err) {
-            switch (type) {
-                case ts.server.Msg.Info:
-                    perfLogger?.logInfoEvent(s);
-                    break;
-                case ts.server.Msg.Perf:
-                    perfLogger?.logPerfEvent(s);
-                    break;
-                default: // Msg.Err
-                    perfLogger?.logErrEvent(s);
-                    break;
-            }
-
             if (!this.canWrite()) return;
 
             s = `[${ts.server.nowString()}] ${s}\n`;
@@ -243,7 +230,7 @@ export function initializeNodeSystem(): StartInput {
         protected write(s: string, _type: ts.server.Msg) {
             if (this.fd >= 0) {
                 const buf = Buffer.from(s);
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {

@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/tslibMultipleMissingHelper.ts] ////
+
+=== /package1/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : () => Promise<void>
+>    : ^^^^^^             
+
+async function bar(): Promise<void> {}
+>bar : () => Promise<void>
+>    : ^^^^^^             
+
+=== /package1/other.ts ===
+export {};
+export async function noop(): Promise<void> {}
+>noop : () => Promise<void>
+>     : ^^^^^^             
+
+export function spread({ a, ...rest }: { a: number, b: number}) {
+>spread : ({ a, ...rest }: { a: number; b: number; }) => { b: number; c: string; }
+>       : ^              ^^                         ^^^^^^^^^^      ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>rest : { b: number; }
+>     : ^^^^^      ^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+    return { c: "c", ...rest };
+>{ c: "c", ...rest } : { b: number; c: string; }
+>                    : ^^^^^      ^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+>"c" : "c"
+>    : ^^^
+>rest : { b: number; }
+>     : ^^^^^      ^^^
+}
+
+=== /package2/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : () => Promise<void>
+>    : ^^^^^^             
+
+=== /package1/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : any
+>           : ^^^
+
+=== /package2/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : any
+>           : ^^^
+
