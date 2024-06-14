@@ -23665,7 +23665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceArity = getTypeReferenceArity(source);
                     const targetArity = getTypeReferenceArity(target);
                     const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
-                    const targetRestFlag = target.target.combinedFlags & ElementFlags.Rest;
+                    const targetHasRestElement = !!(target.target.combinedFlags & ElementFlags.Variable);
                     const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
                     const targetMinLength = target.target.minLength;
                     if (!sourceRestFlag && sourceArity < targetMinLength) {
@@ -23674,13 +23674,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return Ternary.False;
                     }
-                    if (!targetRestFlag && targetArity < sourceMinLength) {
+                    if (!targetHasRestElement && targetArity < sourceMinLength) {
                         if (reportErrors) {
                             reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
                         }
                         return Ternary.False;
                     }
-                    if (!targetRestFlag && (sourceRestFlag || targetArity < sourceArity)) {
+                    if (!targetHasRestElement && (sourceRestFlag || targetArity < sourceArity)) {
                         if (reportErrors) {
                             if (sourceMinLength < targetMinLength) {
                                 reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
@@ -23695,7 +23695,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const targetTypeArguments = getTypeArguments(target);
                     const targetStartCount = getStartElementCount(target.target, ElementFlags.NonRest);
                     const targetEndCount = getEndElementCount(target.target, ElementFlags.NonRest);
-                    const targetHasRestElement = !!(target.target.combinedFlags & ElementFlags.Variable);
                     let canExcludeDiscriminants = !!excludedProperties;
                     for (let sourcePosition = 0; sourcePosition < sourceArity; sourcePosition++) {
                         const sourceFlags = isTupleType(source) ? source.target.elementFlags[sourcePosition] : ElementFlags.Rest;
@@ -25282,27 +25281,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else {
                     for (const t of (type as UnionType).types) {
-                        if (reportWideningErrorsInType(t)) {
-                            errorReported = true;
-                        }
+                        errorReported ||= reportWideningErrorsInType(t);
                     }
                 }
             }
-            if (isArrayOrTupleType(type)) {
+            else if (isArrayOrTupleType(type)) {
                 for (const t of getTypeArguments(type)) {
-                    if (reportWideningErrorsInType(t)) {
-                        errorReported = true;
-                    }
+                    errorReported ||= reportWideningErrorsInType(t);
                 }
             }
-            if (isObjectLiteralType(type)) {
+            else if (isObjectLiteralType(type)) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
                     if (getObjectFlags(t) & ObjectFlags.ContainsWideningType) {
-                        if (!reportWideningErrorsInType(t)) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolToString(p), typeToString(getWidenedType(t)));
+                        errorReported = reportWideningErrorsInType(t);
+                        if (!errorReported) {
+                            // we need to account for property types coming from object literal type normalization in unions
+                            const valueDeclaration = p.declarations?.find(d => d.symbol.valueDeclaration?.parent === type.symbol.valueDeclaration);
+                            if (valueDeclaration) {
+                                error(valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolToString(p), typeToString(getWidenedType(t)));
+                                errorReported = true;
+                            }
                         }
-                        errorReported = true;
                     }
                 }
             }
