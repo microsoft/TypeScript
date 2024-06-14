@@ -80,9 +80,12 @@ File '/package.json' does not exist.
 
 
 //// [/user/username/projects/myproject/dist/index.js]
-import * as me from "@this/package";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+var me = require("@this/package");
 me.thing();
-export function thing() { }
+function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index.d.ts]
@@ -90,7 +93,10 @@ export declare function thing(): void;
 
 
 //// [/user/username/projects/myproject/dist/index2.js]
-export function thing() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index2.d.ts]

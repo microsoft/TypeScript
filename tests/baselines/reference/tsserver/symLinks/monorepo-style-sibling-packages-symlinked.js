@@ -400,7 +400,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -432,7 +433,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2307,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -479,7 +481,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -726,7 +729,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -744,7 +748,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -791,7 +796,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1057,7 +1063,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1089,7 +1096,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2307,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1136,7 +1144,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1384,7 +1393,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1402,7 +1412,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package2/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1449,7 +1460,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

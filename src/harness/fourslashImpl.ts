@@ -1799,13 +1799,44 @@ export class TestState {
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
-    public getSemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
-        const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    public getSemanticDiagnostics(): ts.Diagnostic[] {
+        return this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    }
+
+    public verifySemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
+        const diagnostics = this.getSemanticDiagnostics();
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
     public getSuggestionDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
         this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+    }
+
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expectedDiagnostics: readonly FourSlashInterface.Diagnostic[] | undefined,
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
+        const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
+        if (diagnosticsResult && expectedDiagnostics) {
+            this.testDiagnostics(expectedDiagnostics, diagnosticsResult.diagnostics, "error");
+        }
+        else if (diagnosticsResult !== expectedDiagnostics) {
+            if (expectedDiagnostics) this.raiseError("Expected diagnostics to be defined.");
+            else {assert.deepEqual(
+                    diagnosticsResult!.diagnostics,
+                    expectedDiagnostics,
+                    "Expected diagnostics to be undefined.",
+                );}
+        }
+
+        if (expectedRanges && diagnosticsResult) {
+            const spans = expectedRanges.map(range => ({ start: range.pos, length: range.end - range.pos }));
+            assert.deepEqual(diagnosticsResult.spans, spans);
+        }
+        else if (expectedRanges && !diagnosticsResult) {
+            this.raiseError("Expected spans to be defined.");
+        }
     }
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {

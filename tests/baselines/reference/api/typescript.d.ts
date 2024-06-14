@@ -584,23 +584,7 @@ declare namespace ts {
             }
             export interface ApplyCodeActionCommandResponse extends Response {
             }
-            export interface FileRangeRequestArgs extends FileRequestArgs {
-                /**
-                 * The line number for the request (1-based).
-                 */
-                startLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                startOffset: number;
-                /**
-                 * The line number for the request (1-based).
-                 */
-                endLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                endOffset: number;
+            export interface FileRangeRequestArgs extends FileRequestArgs, FileRange {
             }
             /**
              * Instances of this interface specify errorcodes on a specific location in a sourcefile.
@@ -1866,7 +1850,7 @@ declare namespace ts {
                  * List of file names for which to compute compiler errors.
                  * The files will be checked in list order.
                  */
-                files: string[];
+                files: (string | FileRangesRequestArgs)[];
                 /**
                  * Delay in milliseconds to wait before starting to compute
                  * errors for the files in the file list
@@ -1886,6 +1870,27 @@ declare namespace ts {
             export interface GeterrRequest extends Request {
                 command: CommandTypes.Geterr;
                 arguments: GeterrRequestArgs;
+            }
+            export interface FileRange {
+                /**
+                 * The line number for the request (1-based).
+                 */
+                startLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                startOffset: number;
+                /**
+                 * The line number for the request (1-based).
+                 */
+                endLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                endOffset: number;
+            }
+            export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
+                ranges: FileRange[];
             }
             export type RequestCompletedEventName = "requestCompleted";
             /**
@@ -1969,8 +1974,16 @@ declare namespace ts {
                  * An array of diagnostic information items.
                  */
                 diagnostics: Diagnostic[];
+                /**
+                 * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+                 */
+                spans?: TextSpan[];
+                /**
+                 * Time spent computing the diagnostics, in milliseconds.
+                 */
+                duration?: number;
             }
-            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
              * Event message for DiagnosticEventKind event types.
              * These events provide syntactic and semantic errors for a file.
@@ -3386,10 +3399,6 @@ declare namespace ts {
             resetRequest(requestId: number): void;
         }
         const nullCancellationToken: ServerCancellationToken;
-        interface PendingErrorCheck {
-            fileName: NormalizedPath;
-            project: Project;
-        }
         /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
@@ -3460,6 +3469,7 @@ declare namespace ts {
             private semanticCheck;
             private syntacticCheck;
             private suggestionCheck;
+            private regionSemanticCheck;
             private sendDiagnosticsEvent;
             /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;
@@ -6015,67 +6025,19 @@ declare namespace ts {
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
         /**
-         * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
-         * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
-         * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
-         * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
-         * Some examples:
-         *
-         * ```ts
-         * // tsc foo.mts --module nodenext
-         * import {} from "mod";
-         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
-         *
-         * // tsc foo.cts --module nodenext
-         * import {} from "mod";
-         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
-         *
-         * // tsc foo.ts --module preserve --moduleResolution bundler
-         * import {} from "mod";
-         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
-         * // supports conditional imports/exports
-         *
-         * // tsc foo.ts --module preserve --moduleResolution node10
-         * import {} from "mod";
-         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
-         * // does not support conditional imports/exports
-         *
-         * // tsc foo.ts --module commonjs --moduleResolution node10
-         * import type {} from "mod" with { "resolution-mode": "import" };
-         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
-         * ```
+         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+         * impact on module resolution, emit, or type checking.
          */
         getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
         /**
-         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This function only returns a result
-         * when module resolution settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided
-         * via import attributes, which cause an `import` or `require` condition to be used during resolution regardless of module resolution
-         * settings. In absence of overriding attributes, and in modes that support differing resolution, the result indicates the syntax the
-         * usage would emit to JavaScript. Some examples:
-         *
-         * ```ts
-         * // tsc foo.mts --module nodenext
-         * import {} from "mod";
-         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
-         *
-         * // tsc foo.cts --module nodenext
-         * import {} from "mod";
-         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
-         *
-         * // tsc foo.ts --module preserve --moduleResolution bundler
-         * import {} from "mod";
-         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
-         * // supports conditional imports/exports
-         *
-         * // tsc foo.ts --module preserve --moduleResolution node10
-         * import {} from "mod";
-         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
-         * // does not support conditional imports/exports
-         *
-         * // tsc foo.ts --module commonjs --moduleResolution node10
-         * import type {} from "mod" with { "resolution-mode": "import" };
-         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
-         * ```
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
          */
         getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
@@ -9429,43 +9391,24 @@ declare namespace ts {
     function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
      * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
-     * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
-     * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
-     * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
-     * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
-     * Some examples:
-     *
-     * ```ts
-     * // tsc foo.mts --module nodenext
-     * import {} from "mod";
-     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
-     *
-     * // tsc foo.cts --module nodenext
-     * import {} from "mod";
-     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
-     *
-     * // tsc foo.ts --module preserve --moduleResolution bundler
-     * import {} from "mod";
-     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
-     * // supports conditional imports/exports
-     *
-     * // tsc foo.ts --module preserve --moduleResolution node10
-     * import {} from "mod";
-     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
-     * // does not support conditional imports/exports
-     *
-     * // tsc foo.ts --module commonjs --moduleResolution node10
-     * import type {} from "mod" with { "resolution-mode": "import" };
-     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
-     * ```
-     *
+     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+     * impact on module resolution, emit, or type checking.
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
      * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
      * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions): ResolutionMode;
+    function getModeForUsageLocation(
+        file: {
+            impliedNodeFormat?: ResolutionMode;
+        },
+        usage: StringLiteralLike,
+        compilerOptions: CompilerOptions,
+    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

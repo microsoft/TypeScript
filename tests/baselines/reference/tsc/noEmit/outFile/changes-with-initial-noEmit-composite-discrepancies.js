@@ -34,21 +34,6 @@ CleanBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -83,21 +68,6 @@ IncrementalBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "outSignature": "-1966987419-declare module \"src/class\" {\n    export class classC {\n        prop1: number;\n    }\n}\ndeclare module \"src/indirectClass\" {\n    import { classC } from \"src/class\";\n    export class indirectClass {\n        classC: classC;\n    }\n}\ndeclare module \"src/directUse\" { }\ndeclare module \"src/indirectUse\" { }\ndeclare module \"src/noChangeFile\" {\n    export function writeLog(s: string): void;\n}\ndeclare function someFunc(arguments: boolean, ...rest: any[]): void;\n",
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
