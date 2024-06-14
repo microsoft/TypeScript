@@ -29822,7 +29822,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!getJsxNamespaceContainerForImplicitImport(node)) {
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found : undefined;
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
 

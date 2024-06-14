@@ -3911,6 +3911,10 @@
         "category": "Error",
         "code": 2868
     },
+    "This JSX tag requires '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2869
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
