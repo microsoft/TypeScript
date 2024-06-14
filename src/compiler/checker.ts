@@ -26336,8 +26336,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
                 if (inferredCovariantType || inferredContravariantType) {
                     // If we have both co- and contra-variant inferences, we prefer the co-variant inference if it is not 'never',
-                    // all co-variant inferences are subtypes of it (i.e. it isn't one of a conflicting set of candidates), it is
-                    // a subtype of some contra-variant inference, and no other type parameter is constrained to this type parameter
+                    // all co-variant inferences are assignable to it (i.e. it isn't one of a conflicting set of candidates), it is
+                    // assignable to some contra-variant inference, and no other type parameter is constrained to this type parameter
                     // and has inferences that would conflict. Otherwise, we prefer the contra-variant inference.
                     // Similarly ignore co-variant `any` inference when both are available as almost everything is assignable to it
                     // and it would spoil the overall inference.
