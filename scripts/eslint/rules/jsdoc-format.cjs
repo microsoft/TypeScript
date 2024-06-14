@@ -57,16 +57,9 @@ module.exports = createRule({
 
         /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
-            const line = c.loc.start.line;
             return {
-                start: {
-                    line,
-                    column: c.loc.start.column + indexInComment,
-                },
-                end: {
-                    line,
-                    column: c.loc.start.column + indexInComment + atInternal.length,
-                },
+                start: context.sourceCode.getLocFromIndex(c.range[0] + indexInComment),
+                end: context.sourceCode.getLocFromIndex(c.range[0] + indexInComment + atInternal.length),
             };
         };
 
