@@ -47,7 +47,7 @@
         "@types/minimist": "^1.2.5",
         "@types/mocha": "^10.0.6",
         "@types/ms": "^0.7.34",
-        "@types/node": "latest",
+        "@types/node": "^20.14.1",
         "@types/source-map-support": "^0.5.10",
         "@types/which": "^3.0.3",
         "@typescript-eslint/eslint-plugin": "^7.11.0",

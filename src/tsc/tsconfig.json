@@ -1,9 +1,13 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
+      "module": "CommonJS",
+      "moduleResolution": "node",
+      "types": ["node"]
     },
     "references": [
-        { "path": "../compiler" }
+      { "path": "../compiler" }
     ],
     "include": ["**/*"]
-}
+  }
+  
