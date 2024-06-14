@@ -87,6 +87,7 @@ describe("unittests:: canWatch::", () => {
                                     root,
                                     rootPathCompoments,
                                     ts.returnUndefined,
+                                    preferNonRecursiveWatch,
                                 );
                                 pushRow(baseline, [testPath, result ? result.packageDir ?? result.dir : "", result ? `${!result.nonRecursive}` : "", result?.packageDir ? result.dir : ""], maxLengths);
                             });
@@ -116,6 +117,7 @@ describe("unittests:: canWatch::", () => {
                             root,
                             rootPathCompoments,
                             ts.returnUndefined,
+                            preferNonRecursiveWatch,
                             ts.returnTrue,
                         );
                         pushRow(baseline, [path, result !== undefined ? result : ""], maxLengths);

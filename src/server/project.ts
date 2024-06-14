@@ -499,6 +499,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     protected typeAcquisition: TypeAcquisition | undefined;
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
+    /** @internal*/ preferNonRecursiveWatch: boolean | undefined;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -559,6 +560,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.trace = s => host.trace!(s);
         }
         this.realpath = maybeBind(host, host.realpath);
+        this.preferNonRecursiveWatch = this.projectService.canUseWatchEvents || host.preferNonRecursiveWatch;
 
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(

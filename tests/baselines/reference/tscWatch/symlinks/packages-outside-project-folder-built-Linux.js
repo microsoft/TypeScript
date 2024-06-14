@@ -220,8 +220,8 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/a.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -247,8 +247,8 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
 ======== Module name './c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/c.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
@@ -312,14 +312,6 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {"inode":41}
-/home/src/projects/a: *new*
-  {"inode":16}
-/home/src/projects/a/1: *new*
-  {"inode":17}
-/home/src/projects/a/1/a-impl: *new*
-  {"inode":18}
-/home/src/projects/a/1/a-impl/a: *new*
-  {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
   {"inode":49}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -330,12 +322,6 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json: *new*
   {"inode":24}
-/home/src/projects/a/1/a-impl/a/src: *new*
-  {"inode":20}
-/home/src/projects/a/2: *new*
-  {"inode":27}
-/home/src/projects/a/2/unrelated: *new*
-  {"inode":28}
 /home/src/projects/b/2/b-impl/b/node_modules: *new*
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src: *new*
@@ -344,14 +330,6 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
-/home/src/projects/c: *new*
-  {"inode":4}
-/home/src/projects/c/3: *new*
-  {"inode":5}
-/home/src/projects/c/3/c-impl: *new*
-  {"inode":6}
-/home/src/projects/c/3/c-impl/c: *new*
-  {"inode":7}
 /home/src/projects/c/3/c-impl/c/lib: *new*
   {"inode":42}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
@@ -360,12 +338,6 @@ FsWatches::
   {"inode":46}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/projects/c/3/c-impl/c/src: *new*
-  {"inode":8}
-/home/src/projects/c/4: *new*
-  {"inode":13}
-/home/src/projects/c/4/unrelated: *new*
-  {"inode":14}
 
 Program root files: [
   "/home/src/projects/b/2/b-impl/b/src/index.ts"
@@ -413,31 +385,12 @@ Input::
 export const a = 10;
 
 
-Timeout callback:: count: 1
-1: timerToUpdateChildWatches *new*
+Before running Timeout callback:: count: 0
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-sysLog:: onTimerToUpdateChildWatches:: 1
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/somethingUnrelated.ts 0:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/somethingUnrelated.ts 0:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
+Before running Timeout callback:: count: 0
 
-
-
-Timeout callback:: count: 1
-2: timerToInvalidateFailedLookupResolutions *new*
-
-Before running Timeout callback:: count: 1
-2: timerToInvalidateFailedLookupResolutions
-
-Host is moving to new time
 After running Timeout callback:: count: 0
 
 
@@ -450,31 +403,12 @@ Input::
 export const a = 10;
 
 
-Timeout callback:: count: 1
-3: timerToUpdateChildWatches *new*
+Before running Timeout callback:: count: 0
 
-Before running Timeout callback:: count: 1
-3: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-sysLog:: onTimerToUpdateChildWatches:: 1
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/somethingUnrelated.ts 0:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/somethingUnrelated.ts 0:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
+Before running Timeout callback:: count: 0
 
-
-
-Timeout callback:: count: 1
-4: timerToInvalidateFailedLookupResolutions *new*
-
-Before running Timeout callback:: count: 1
-4: timerToInvalidateFailedLookupResolutions
-
-Host is moving to new time
 After running Timeout callback:: count: 0
 
 
@@ -487,31 +421,12 @@ Input::
 export const a = 10;
 
 
-Timeout callback:: count: 1
-5: timerToUpdateChildWatches *new*
+Before running Timeout callback:: count: 0
 
-Before running Timeout callback:: count: 1
-5: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-sysLog:: onTimerToUpdateChildWatches:: 1
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/anotherFile.ts 0:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/anotherFile.ts 0:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
+Before running Timeout callback:: count: 0
 
-
-
-Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions *new*
-
-Before running Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions
-
-Host is moving to new time
 After running Timeout callback:: count: 0
 
 
@@ -524,31 +439,12 @@ Input::
 export const a = 10;
 
 
-Timeout callback:: count: 1
-7: timerToUpdateChildWatches *new*
+Before running Timeout callback:: count: 0
 
-Before running Timeout callback:: count: 1
-7: timerToUpdateChildWatches
+After running Timeout callback:: count: 0
 
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-sysLog:: onTimerToUpdateChildWatches:: 1
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/anotherFile.ts 0:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/anotherFile.ts 0:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
+Before running Timeout callback:: count: 0
 
-
-
-Timeout callback:: count: 1
-8: timerToInvalidateFailedLookupResolutions *new*
-
-Before running Timeout callback:: count: 1
-8: timerToInvalidateFailedLookupResolutions
-
-Host is moving to new time
 After running Timeout callback:: count: 0
 
 
@@ -575,25 +471,61 @@ FileWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.d.ts 2:: Watc
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.d.ts 2:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
 sysLog:: /home/src/projects/c/3/c-impl/c/lib/c.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.d.ts :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.d.ts :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.js :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.js :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.d.ts 2:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.d.ts 2:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 sysLog:: /home/src/projects/c/3/c-impl/c/lib/index.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.d.ts :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.d.ts :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 sysLog:: /home/src/projects/c/3/c-impl/c/lib:: Changing watcher to MissingFileSystemEntryWatcher
 FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.d.ts 2:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.d.ts 2:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 sysLog:: /home/src/projects/a/1/a-impl/a/lib/a.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.d.ts :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.d.ts :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.js :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/a.js :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts 2:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts 2:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 sysLog:: /home/src/projects/a/1/a-impl/a/lib/index.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 sysLog:: /home/src/projects/a/1/a-impl/a/lib:: Changing watcher to MissingFileSystemEntryWatcher
 
 
@@ -626,24 +558,10 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {"inode":41}
-/home/src/projects/a:
-  {"inode":16}
-/home/src/projects/a/1:
-  {"inode":17}
-/home/src/projects/a/1/a-impl:
-  {"inode":18}
-/home/src/projects/a/1/a-impl/a:
-  {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
-/home/src/projects/a/1/a-impl/a/src:
-  {"inode":20}
-/home/src/projects/a/2:
-  {"inode":27}
-/home/src/projects/a/2/unrelated:
-  {"inode":28}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -652,22 +570,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/projects/c:
-  {"inode":4}
-/home/src/projects/c/3:
-  {"inode":5}
-/home/src/projects/c/3/c-impl:
-  {"inode":6}
-/home/src/projects/c/3/c-impl/c:
-  {"inode":7}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
-/home/src/projects/c/3/c-impl/c/src:
-  {"inode":8}
-/home/src/projects/c/4:
-  {"inode":13}
-/home/src/projects/c/4/unrelated:
-  {"inode":14}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib:
@@ -683,17 +587,15 @@ FsWatches *deleted*::
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
   {"inode":46}
 
-Timeout callback:: count: 3
-22: timerToUpdateProgram *new*
-27: timerToInvalidateFailedLookupResolutions *new*
-28: timerToUpdateChildWatches *new*
+Timeout callback:: count: 2
+13: timerToUpdateProgram *new*
+18: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 3
-22: timerToUpdateProgram
-27: timerToInvalidateFailedLookupResolutions
-28: timerToUpdateChildWatches
+Before running Timeout callback:: count: 2
+13: timerToUpdateProgram
+18: timerToInvalidateFailedLookupResolutions
 
-After running Timeout callback:: count: 1
+After running Timeout callback:: count: 0
 Output::
 Synchronizing program
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
@@ -779,10 +681,10 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
@@ -799,15 +701,6 @@ src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-sysLog:: onTimerToUpdateChildWatches:: 4
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
 //// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 57
@@ -851,13 +744,13 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {"inode":41}
-/home/src/projects/a/1/a-impl/a:
+/home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
-/home/src/projects/a/1/a-impl/a/src:
+/home/src/projects/a/1/a-impl/a/src: *new*
   {"inode":20}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
@@ -871,36 +764,11 @@ FsWatches::
   {"inode":36}
 
 FsWatches *deleted*::
-/home/src/projects/a:
-  {"inode":16}
-/home/src/projects/a/1:
-  {"inode":17}
-/home/src/projects/a/1/a-impl:
-  {"inode":18}
-/home/src/projects/a/2:
-  {"inode":27}
-/home/src/projects/a/2/unrelated:
-  {"inode":28}
-/home/src/projects/c:
-  {"inode":4}
-/home/src/projects/c/3:
-  {"inode":5}
-/home/src/projects/c/3/c-impl:
-  {"inode":6}
-/home/src/projects/c/3/c-impl/c:
-  {"inode":7}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
-/home/src/projects/c/3/c-impl/c/src:
-  {"inode":8}
-/home/src/projects/c/4:
-  {"inode":13}
-/home/src/projects/c/4/unrelated:
-  {"inode":14}
 
-Timeout callback:: count: 1
-27: timerToInvalidateFailedLookupResolutions *deleted*
-30: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 0
+18: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -932,135 +800,18 @@ Change:: After updating childs
 
 Input::
 
-Before running Timeout callback:: count: 1
-30: timerToInvalidateFailedLookupResolutions
+Before running Timeout callback:: count: 0
 
-Host is moving to new time
-After running Timeout callback:: count: 1
-Output::
-Scheduling update
-
-
-
-Timeout callback:: count: 1
-31: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-31: timerToUpdateProgram
-
-Host is moving to new time
 After running Timeout callback:: count: 0
-Output::
-Synchronizing program
-[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
-
-CreatingProgramWith::
-  roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
-  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
-======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typesVersions' field.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.js' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.jsx' does not exist.
-'package.json' does not have a 'main' field.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.js' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.jsx' does not exist.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name 'a' was not resolved. ========
-[96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
-
-[7m1[0m import { a } from 'a';
-[7m [0m [91m                  ~~~[0m
-
-../../../../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
-src/index.ts
-  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
-
-
-
 
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
+Before running Timeout callback:: count: 0
 
-Program root files: [
-  "/home/src/projects/b/2/b-impl/b/src/index.ts"
-]
-Program options: {
-  "outDir": "/home/src/projects/b/2/b-impl/b/lib",
-  "watch": true,
-  "project": "/home/src/projects/b/2/b-impl/b",
-  "extendedDiagnostics": true,
-  "explainFiles": true,
-  "traceResolution": true,
-  "configFilePath": "/home/src/projects/b/2/b-impl/b/tsconfig.json"
-}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/b/2/b-impl/b/src/index.ts
+After running Timeout callback:: count: 0
 
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -1167,10 +918,10 @@ export * from 'c';
 
 
 Timeout callback:: count: 1
-33: timerToUpdateChildWatches *new*
+20: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 1
-33: timerToUpdateChildWatches
+20: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 1
 Output::
@@ -1228,10 +979,10 @@ FsWatches::
   {"inode":36}
 
 Timeout callback:: count: 1
-35: timerToInvalidateFailedLookupResolutions *new*
+22: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-35: timerToInvalidateFailedLookupResolutions
+22: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -1241,10 +992,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-36: timerToUpdateProgram *new*
+23: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-36: timerToUpdateProgram
+23: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1279,8 +1030,8 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
 ======== Module name './a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/a.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1304,8 +1055,8 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
 ======== Module name './c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/c.d.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
@@ -1367,14 +1118,6 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {"inode":41}
-/home/src/projects/a: *new*
-  {"inode":16}
-/home/src/projects/a/1: *new*
-  {"inode":17}
-/home/src/projects/a/1/a-impl: *new*
-  {"inode":18}
-/home/src/projects/a/1/a-impl/a:
-  {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib:
   {"inode":69}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -1385,12 +1128,6 @@ FsWatches::
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
-/home/src/projects/a/1/a-impl/a/src:
-  {"inode":20}
-/home/src/projects/a/2: *new*
-  {"inode":27}
-/home/src/projects/a/2/unrelated: *new*
-  {"inode":28}
 /home/src/projects/b/2/b-impl/b/node_modules:
   {"inode":37}
 /home/src/projects/b/2/b-impl/b/src:
@@ -1399,14 +1136,6 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/projects/c: *new*
-  {"inode":4}
-/home/src/projects/c/3: *new*
-  {"inode":5}
-/home/src/projects/c/3/c-impl: *new*
-  {"inode":6}
-/home/src/projects/c/3/c-impl/c: *new*
-  {"inode":7}
 /home/src/projects/c/3/c-impl/c/lib: *new*
   {"inode":62}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
@@ -1415,14 +1144,12 @@ FsWatches::
   {"inode":66}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/projects/c/3/c-impl/c/src: *new*
-  {"inode":8}
-/home/src/projects/c/4: *new*
-  {"inode":13}
-/home/src/projects/c/4/unrelated: *new*
-  {"inode":14}
 
 FsWatches *deleted*::
+/home/src/projects/a/1/a-impl/a:
+  {"inode":19}
+/home/src/projects/a/1/a-impl/a/src:
+  {"inode":20}
 /home/src/projects/b/2/b-impl/b/node_modules/a:
   {"inode":19}
 

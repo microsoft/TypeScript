@@ -667,6 +667,7 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
         clearTimeout: maybeBind(system, system.clearTimeout) || noop,
+        preferNonRecursiveWatch: system.preferNonRecursiveWatch,
     };
 }
 

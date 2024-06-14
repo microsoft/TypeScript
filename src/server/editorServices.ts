@@ -1074,13 +1074,17 @@ function getHostWatcherMap<T>(): HostWatcherMap<T> {
     return { idToCallbacks: new Map(), pathToId: new Map() };
 }
 
+function getCanUseWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined) {
+    return !!canUseWatchEvents && !!service.eventHandler && !!service.session;
+}
+
 function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined): WatchFactoryHost | undefined {
-    if (!canUseWatchEvents || !service.eventHandler || !service.session) return undefined;
+    if (!getCanUseWatchEvents(service, canUseWatchEvents)) return undefined;
     const watchedFiles = getHostWatcherMap<FileWatcherCallback>();
     const watchedDirectories = getHostWatcherMap<DirectoryWatcherCallback>();
     const watchedDirectoriesRecursive = getHostWatcherMap<DirectoryWatcherCallback>();
     let ids = 1;
-    service.session.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
+    service.session!.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
         onWatchChange((req as protocol.WatchChangeRequest).arguments);
         return { responseRequired: false };
     });
@@ -1321,6 +1325,7 @@ export class ProjectService {
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
+    /** @internal */ canUseWatchEvents: boolean;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -1392,6 +1397,7 @@ export class ProjectService {
                 log,
                 getDetailWatchInfo,
             );
+        this.canUseWatchEvents = getCanUseWatchEvents(this, opts.canUseWatchEvents);
         opts.incrementalVerifier?.(this);
     }
 
