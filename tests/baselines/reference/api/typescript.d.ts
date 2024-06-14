@@ -2523,6 +2523,7 @@ declare namespace ts {
                 private readonly knownCachesSet;
                 private readonly projectWatchers;
                 private safeList;
+                private pendingRunRequests;
                 private installRunCount;
                 private inFlightRequestCount;
                 abstract readonly typesRegistry: Map<string, MapLike<string>>;
@@ -2715,6 +2716,10 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
+            /**
+             * Set to real path if path is different from info.path
+             */
+            private realpath;
             constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
             open(newText: string | undefined): void;
@@ -2802,6 +2807,8 @@ declare namespace ts {
             private externalFiles;
             private missingFilesMap;
             private generatedFilesMap;
+            private hasAddedorRemovedFiles;
+            private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
             readonly trace?: (s: string) => void;
@@ -2821,10 +2828,15 @@ declare namespace ts {
             private lastReportedVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
+            private typingWatchers;
             private readonly cancellationToken;
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            private exportMapCache;
+            private changedFilesForExportMapCache;
+            private moduleSpecifierCache;
+            private symlinks;
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
@@ -2895,6 +2907,8 @@ declare namespace ts {
              * @returns: true if set of files in the project stays the same and false - otherwise.
              */
             updateGraph(): boolean;
+            private closeWatchingTypingLocations;
+            private onTypingInstallerWatchInvoke;
             protected removeExistingTypings(include: string[]): string[];
             private updateGraphWorker;
             private detachScriptInfoFromProject;
@@ -2906,6 +2920,7 @@ declare namespace ts {
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
             getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
             filesToString(writeProjectFileNames: boolean): string;
+            private filesToStringWorker;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
@@ -2914,6 +2929,8 @@ declare namespace ts {
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
+            private isDefaultProjectForOpenFiles;
+            private getCompilerOptionsForNoDtsResolutionProject;
         }
         /**
          * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -2933,6 +2950,7 @@ declare namespace ts {
         }
         class AutoImportProviderProject extends Project {
             private hostProject;
+            private static readonly maxDependencies;
             private rootFileNames;
             updateGraph(): boolean;
             hasRoots(): boolean;
@@ -2949,6 +2967,8 @@ declare namespace ts {
         class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
             private projectReferences;
+            private compilerHost?;
+            private releaseParsedConfig;
             /**
              * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -3236,6 +3256,10 @@ declare namespace ts {
             readonly serverMode: LanguageServiceMode;
             /** Tracks projects that we have already sent telemetry for. */
             private readonly seenProjects;
+            private readonly sharedExtendedConfigFileWatchers;
+            private readonly extendedConfigCache;
+            private packageJsonFilesMap;
+            private incompleteCompletionsCache;
             private performanceEventHandler?;
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
@@ -3273,6 +3297,12 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
+            /**
+             * This is to watch whenever files are added or removed to the wildcard directories
+             */
+            private watchWildcardDirectory;
+            private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
+            private onConfigFileChanged;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
             /**
@@ -3282,6 +3312,7 @@ declare namespace ts {
             private closeOpenFile;
             private deleteScriptInfo;
             private configFileExists;
+            private createConfigFileWatcherForParsedConfig;
             /**
              * This function tries to search for a tsconfig.json for the given file.
              * This is different from the method the compiler uses because
@@ -3302,8 +3333,14 @@ declare namespace ts {
             private getFilenameForExceededTotalSizeLimitForNonTsFiles;
             private createExternalProject;
             private addFilesToNonInferredProject;
+            /**
+             * Read the config file of the project, and update the project root file names.
+             */
+            private loadConfiguredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
+            private reloadFileNamesOfParsedConfig;
+            private clearSemanticCache;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
@@ -3329,6 +3366,7 @@ declare namespace ts {
             private addSourceInfoToSourceMap;
             private addMissingSourceMapFile;
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
+            private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
             /**
              * This function rebuilds the project for every file opened by the client
@@ -3389,9 +3427,15 @@ declare namespace ts {
             private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
+            /**
+             * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+             */
+            private endEnablePlugin;
             private enableRequestedPluginsAsync;
             private enableRequestedPluginsWorker;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
+            private watchPackageJsonFile;
+            private onPackageJsonChange;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
         interface ServerCancellationToken extends HostCancellationToken {
