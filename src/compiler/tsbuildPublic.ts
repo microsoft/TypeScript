@@ -1591,44 +1591,14 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
     // Get timestamps of input files
     for (const inputFile of project.fileNames) {
-        const inputTime = getModifiedTime(state, inputFile);
-        if (inputTime === missingFileModifiedTime) {
-            return {
-                type: UpToDateStatusType.Unbuildable,
-                reason: `${inputFile} does not exist`,
-            };
-        }
-
-        const inputPath = toPath(state, inputFile);
-        // If an buildInfo is older than the newest input, we can stop checking
-        if (buildInfoTime < inputTime) {
-            let version: string | undefined;
-            let currentVersion: string | undefined;
-            if (incrementalBuildInfo) {
-                // Read files and see if they are same, read is anyways cached
-                if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(incrementalBuildInfo, buildInfoPath, host);
-                const resolvedInputPath = buildInfoVersionMap.roots.get(inputPath);
-                version = buildInfoVersionMap.fileInfos.get(resolvedInputPath ?? inputPath);
-                const text = version ? state.readFileWithCache(resolvedInputPath ?? inputFile) : undefined;
-                currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
-                if (version && version === currentVersion) pseudoInputUpToDate = true;
-            }
-
-            if (!version || version !== currentVersion) {
-                return {
-                    type: UpToDateStatusType.OutOfDateWithSelf,
-                    outOfDateOutputFileName: buildInfoPath,
-                    newerInputFileName: inputFile,
-                };
-            }
-        }
-
-        if (inputTime > newestInputFileTime) {
+        const statusOrInputInfo = verifyInputFile(inputFile);
+        if (isUpToDateStatus(statusOrInputInfo)) return statusOrInputInfo;
+        if (statusOrInputInfo.inputTime > newestInputFileTime) {
             newestInputFileName = inputFile;
-            newestInputFileTime = inputTime;
+            newestInputFileTime = statusOrInputInfo.inputTime;
         }
 
-        seenRoots.add(inputPath);
+        seenRoots.add(statusOrInputInfo.inputPath);
     }
 
     let existingRoot;
@@ -1748,6 +1718,18 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     );
     if (dependentPackageFileStatus) return dependentPackageFileStatus;
 
+    // Check if all the additional files in the program are uptodate with buildInfo
+    if (incrementalBuildInfo) {
+        // DO we watch these?
+        buildInfoVersionMap ??= getBuildInfoFileVersionMap(incrementalBuildInfo, buildInfoPath, host);
+        const additionalFilesStatus = forEachEntry(buildInfoVersionMap.fileInfos, (_version, path) => {
+            if (seenRoots.has(path)) return undefined;
+            const statusOrInputInfo = verifyInputFile(path);
+            return isUpToDateStatus(statusOrInputInfo) ? statusOrInputInfo : undefined;
+        });
+        if (additionalFilesStatus) return additionalFilesStatus;
+    }
+
     // Up to date
     return {
         type: pseudoUpToDate ?
@@ -1759,6 +1741,45 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         newestInputFileName,
         oldestOutputFileName,
     };
+
+    function verifyInputFile(inputFile: string): UpToDateStatus | { inputTime: Date; inputPath: Path; } {
+        const inputTime = getModifiedTime(state, inputFile);
+        if (inputTime === missingFileModifiedTime) {
+            return {
+                type: UpToDateStatusType.Unbuildable,
+                reason: `${inputFile} does not exist`,
+            };
+        }
+
+        const inputPath = toPath(state, inputFile);
+        // If an buildInfo is older than the newest input, we can stop checking
+        if (buildInfoTime < inputTime) {
+            let version: string | undefined;
+            let currentVersion: string | undefined;
+            if (incrementalBuildInfo) {
+                // Read files and see if they are same, read is anyways cached
+                buildInfoVersionMap ??= getBuildInfoFileVersionMap(incrementalBuildInfo, buildInfoPath, host);
+                const resolvedInputPath = buildInfoVersionMap.roots.get(inputPath);
+                version = buildInfoVersionMap.fileInfos.get(resolvedInputPath ?? inputPath);
+                const text = version ? state.readFileWithCache(resolvedInputPath ?? inputFile) : undefined;
+                currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
+                if (version && version === currentVersion) pseudoInputUpToDate = true;
+            }
+
+            if (!version || version !== currentVersion) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: buildInfoPath,
+                    newerInputFileName: inputFile,
+                };
+            }
+        }
+        return { inputTime, inputPath };
+    }
+
+    function isUpToDateStatus(statusOrInputInfo: ReturnType<typeof verifyInputFile>): statusOrInputInfo is UpToDateStatus {
+        return !!(statusOrInputInfo as UpToDateStatus).type;
+    }
 }
 
 function hasSameBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildInfoCacheEntry: BuildInfoCacheEntry, resolvedRefPath: ResolvedConfigFilePath) {

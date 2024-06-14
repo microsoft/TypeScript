@@ -4,6 +4,7 @@ import { Symlink } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeOnlyRuns,
+    noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
@@ -196,5 +197,38 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
             edit: ts.noop,
             commandLineArgs: ["-b", "packages/b", "--verbose", "--traceResolution", "--explainFiles"],
         }],
+    });
+});
+
+describe("unittests:: tsbuild:: moduleResolution:: handles additional file update sheetal", () => {
+    [{ incremental: true }, {}].forEach(compilerOptions => {
+        [{}, { outFile: "../outFile.js" }].forEach(outFileOptions => {
+            verifyTsc({
+                scenario: "moduleResolution",
+                subScenario: `${outFileOptions.outFile ? "outFile" : "multiFile"}/handles additional file update${compilerOptions.incremental ? " with incremental" : ""}`,
+                fs: () =>
+                    loadProjectFromFiles({
+                        "/src/projects/a/src/index.ts": "",
+                        "/src/projects/a/tsconfig.json": jsonToReadableText({
+                            compilerOptions: { strict: true, ...compilerOptions, ...outFileOptions },
+                        }),
+                        "/src/projects/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
+                        "/src/projects/node_modules/@types/pg/package.json": jsonToReadableText({
+                            name: "@types/pg",
+                            types: "index.d.ts",
+                        }),
+                    }),
+                commandLineArgs: ["-b", "/src/projects/a", "--verbose", "--traceResolution", "--explainFiles"],
+                edits: [
+                    noChangeRun,
+                    {
+                        caption: "update package",
+                        edit: fs => {
+                            fs.writeFileSync("/src/projects/node_modules/@types/pg/index.d.ts", "export function foo(): void; export function bar(): void;");
+                        },
+                    },
+                ],
+            });
+        });
     });
 });
