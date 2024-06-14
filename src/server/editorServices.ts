@@ -740,7 +740,9 @@ function forEachAncestorProject<T>(
             !project.isInitialLoadPending() &&
             (
                 (searchOnlyPotentialSolution && !project.getCompilerOptions().composite) ||
-                // TODO: Should this flag be shared between trying to load solution for find all references vs trying to find default project
+                // Currently disableSolutionSearching is shared for finding solution/project when
+                // - loading solution for find all references
+                // - trying to find default project
                 project.getCompilerOptions().disableSolutionSearching
             )
         ) return;
