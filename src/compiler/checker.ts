@@ -25281,27 +25281,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else {
                     for (const t of (type as UnionType).types) {
-                        if (reportWideningErrorsInType(t)) {
-                            errorReported = true;
-                        }
+                        errorReported ||= reportWideningErrorsInType(t);
                     }
                 }
             }
-            if (isArrayOrTupleType(type)) {
+            else if (isArrayOrTupleType(type)) {
                 for (const t of getTypeArguments(type)) {
-                    if (reportWideningErrorsInType(t)) {
-                        errorReported = true;
-                    }
+                    errorReported ||= reportWideningErrorsInType(t);
                 }
             }
-            if (isObjectLiteralType(type)) {
+            else if (isObjectLiteralType(type)) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
                     if (getObjectFlags(t) & ObjectFlags.ContainsWideningType) {
-                        if (!reportWideningErrorsInType(t)) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolToString(p), typeToString(getWidenedType(t)));
+                        errorReported = reportWideningErrorsInType(t);
+                        if (!errorReported) {
+                            // we need to account for property types coming from object literal type normalization in unions
+                            const valueDeclaration = p.declarations?.find(d => d.symbol.valueDeclaration?.parent === type.symbol.valueDeclaration);
+                            if (valueDeclaration) {
+                                error(valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, symbolToString(p), typeToString(getWidenedType(t)));
+                                errorReported = true;
+                            }
                         }
-                        errorReported = true;
                     }
                 }
             }
