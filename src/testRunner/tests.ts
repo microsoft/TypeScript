@@ -122,6 +122,7 @@ export * from "./unittests/tsc/incremental.js";
 export * from "./unittests/tsc/libraryResolution.js";
 export * from "./unittests/tsc/listFilesOnly.js";
 export * from "./unittests/tsc/moduleResolution.js";
+export * from "./unittests/tsc/noCheck.js";
 export * from "./unittests/tsc/noEmit.js";
 export * from "./unittests/tsc/noEmitOnError.js";
 export * from "./unittests/tsc/projectReferences.js";
