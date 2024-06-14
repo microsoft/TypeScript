@@ -36605,7 +36605,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // through resolution of the containing function call. By resetting the resolution stack we'll
             // retry the symbol type resolution with the resolvingSignature marker in place to suppress
             // the contextual type circularity.
-            resolutionStart = resolutionTargets.length;
+            // resolutionStart = resolutionTargets.length;
         }
         links.resolvedSignature = resolvingSignature;
         let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
