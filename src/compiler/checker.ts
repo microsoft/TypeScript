@@ -23665,7 +23665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceArity = getTypeReferenceArity(source);
                     const targetArity = getTypeReferenceArity(target);
                     const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
-                    const targetRestFlag = target.target.combinedFlags & ElementFlags.Rest;
+                    const targetHasRestElement = !!(target.target.combinedFlags & ElementFlags.Variable);
                     const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
                     const targetMinLength = target.target.minLength;
                     if (!sourceRestFlag && sourceArity < targetMinLength) {
@@ -23674,13 +23674,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return Ternary.False;
                     }
-                    if (!targetRestFlag && targetArity < sourceMinLength) {
+                    if (!targetHasRestElement && targetArity < sourceMinLength) {
                         if (reportErrors) {
                             reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
                         }
                         return Ternary.False;
                     }
-                    if (!targetRestFlag && (sourceRestFlag || targetArity < sourceArity)) {
+                    if (!targetHasRestElement && (sourceRestFlag || targetArity < sourceArity)) {
                         if (reportErrors) {
                             if (sourceMinLength < targetMinLength) {
                                 reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
@@ -23695,7 +23695,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const targetTypeArguments = getTypeArguments(target);
                     const targetStartCount = getStartElementCount(target.target, ElementFlags.NonRest);
                     const targetEndCount = getEndElementCount(target.target, ElementFlags.NonRest);
-                    const targetHasRestElement = target.target.hasRestElement;
                     let canExcludeDiscriminants = !!excludedProperties;
                     for (let sourcePosition = 0; sourcePosition < sourceArity; sourcePosition++) {
                         const sourceFlags = isTupleType(source) ? source.target.elementFlags[sourcePosition] : ElementFlags.Rest;
