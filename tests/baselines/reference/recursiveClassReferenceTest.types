@@ -34,7 +34,7 @@ declare module Sample.Thing {
   
   		getDomNode(): Element;
 >getDomNode : () => Element
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^       
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
@@ -142,7 +142,7 @@ module Sample.Thing.Widgets {
 >runner(this) : any
 >             : ^^^
 >runner : (widget: Sample.Thing.IWidget) => any
->       : ^      ^^                    ^^^^^^^^
+>       : ^      ^^                    ^^^^^   
 >this : this
 >     : ^^^^
 			

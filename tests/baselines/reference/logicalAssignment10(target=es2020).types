@@ -36,7 +36,7 @@ const oobj = {
 }
 
 obj[incr()] ??= incr();
->obj[incr()] ??= incr() : any
+>obj[incr()] ??= incr() : error
 >obj[incr()] : error
 >obj : {}
 >    : ^^
@@ -50,7 +50,7 @@ obj[incr()] ??= incr();
 >     : ^^^^^^^^^^^^
 
 oobj["obj"][incr()] ??= incr();
->oobj["obj"][incr()] ??= incr() : any
+>oobj["obj"][incr()] ??= incr() : error
 >oobj["obj"][incr()] : error
 >oobj["obj"] : {}
 >            : ^^

@@ -20,7 +20,6 @@ import {
     ClassDeclaration,
     ClassExpression,
     clone,
-    codefix,
     combinePaths,
     CommentKind,
     CommentRange,
@@ -92,12 +91,12 @@ import {
     FunctionLikeDeclaration,
     FutureSourceFile,
     getAssignmentDeclarationKind,
+    getBaseFileName,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
-    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
     getImpliedNodeFormatForFileWorker,
     getIndentString,
@@ -181,6 +180,8 @@ import {
     isGlobalScopeAugmentation,
     isHeritageClause,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isImportCall,
     isImportClause,
     isImportDeclaration,
@@ -240,6 +241,7 @@ import {
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
+    isStringANonContextualKeyword,
     isStringDoubleQuoted,
     isStringLiteral,
     isStringLiteralLike,
@@ -319,6 +321,8 @@ import {
     pseudoBigIntToString,
     QualifiedName,
     RefactorContext,
+    removeFileExtension,
+    removeSuffix,
     Scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
@@ -327,6 +331,7 @@ import {
     SemicolonPreference,
     setConfigFileInOptions,
     setOriginalNode,
+    setParentRecursive,
     setTextRange,
     Signature,
     SignatureDeclaration,
@@ -2311,13 +2316,13 @@ function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, sh
 }
 
 /** @internal */
-export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number) {
     if (!contextToken) return undefined;
 
     switch (contextToken.kind) {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike);
+            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike, position);
         default:
             return createTextSpanFromNode(contextToken);
     }
@@ -2329,12 +2334,12 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = node.getEnd();
+        replacementEnd = Math.min(position, node.getEnd());
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
@@ -2487,8 +2492,6 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
-        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
-        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 
@@ -3167,7 +3170,7 @@ export function getPrecedingNonSpaceCharacterPosition(text: string, position: nu
 export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
     const clone = node && getSynthesizedDeepCloneWorker(node);
     if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-    return clone;
+    return setParentRecursive(clone, /*incremental*/ false);
 }
 
 /** @internal */
@@ -4023,8 +4026,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
-        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
+        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }
@@ -4039,7 +4042,7 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
         // - export { foo as default } => foo
         // - export default 0 => filename converted to camelCase
         return getDefaultLikeExportNameFromDeclaration(symbol)
-            || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
+            || moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
     }
     return symbol.name;
 }
@@ -4048,7 +4051,8 @@ function needsNameFromDeclaration(symbol: Symbol) {
     return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
 }
 
-function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
+/** @internal */
+export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d => {
         // "export default" in this case. See `ExportAssignment`for more details.
         if (isExportAssignment(d)) {
@@ -4063,7 +4067,8 @@ function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undef
     });
 }
 
-function getSymbolParentOrFail(symbol: Symbol) {
+/** @internal */
+export function getSymbolParentOrFail(symbol: Symbol) {
     return Debug.checkDefined(
         symbol.parent,
         `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
@@ -4076,6 +4081,42 @@ function getSymbolParentOrFail(symbol: Symbol) {
                 }).join(", ")
             }.`,
     );
+}
+
+/** @internal */
+export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceCapitalize: boolean): string {
+    return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceCapitalize);
+}
+
+/** @internal */
+export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
+    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
+    let res = "";
+    let lastCharWasValid = true;
+    const firstCharCode = baseName.charCodeAt(0);
+    if (isIdentifierStart(firstCharCode, target)) {
+        res += String.fromCharCode(firstCharCode);
+        if (forceCapitalize) {
+            res = res.toUpperCase();
+        }
+    }
+    else {
+        lastCharWasValid = false;
+    }
+    for (let i = 1; i < baseName.length; i++) {
+        const ch = baseName.charCodeAt(i);
+        const isValid = isIdentifierPart(ch, target);
+        if (isValid) {
+            let char = String.fromCharCode(ch);
+            if (!lastCharWasValid) {
+                char = char.toUpperCase();
+            }
+            res += char;
+        }
+        lastCharWasValid = isValid;
+    }
+    // Need `|| "_"` to ensure result isn't empty.
+    return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
 }
 
 /**
@@ -4260,13 +4301,11 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
+    const compilerOptions = program.getCompilerOptions();
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const sourceFileLike = typeof file === "string" ? {
-        fileName: file,
-        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
-    } : file;
-    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
+    const impliedNodeFormat = typeof file === "string"
+        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        : file.impliedNodeFormat;
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

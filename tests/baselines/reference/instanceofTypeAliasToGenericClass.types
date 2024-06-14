@@ -16,7 +16,7 @@ export type Table = TableClass;
 
 function fn<T extends Table>(o: T) {
 >fn : <T extends Table>(o: T) => boolean
->   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^^^^
 >o : T
 >  : ^
 
@@ -30,8 +30,8 @@ function fn<T extends Table>(o: T) {
 }
 
 function fn2<T extends TableClass>(o: T) {
->fn2 : <T extends TableClass<any>>(o: T) => boolean
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>fn2 : <T extends TableClass>(o: T) => boolean
+>    : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^^^^
 >o : T
 >  : ^
 

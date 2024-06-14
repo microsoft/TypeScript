@@ -24,7 +24,7 @@ declare module "fs" {
 === /index.js ===
 import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
->          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^^^^^
+>          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^    
 >WriteFileOptions : any
 >                 : ^^^
 >WriteFileOptions : any

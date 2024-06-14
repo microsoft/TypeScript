@@ -1,6 +1,7 @@
 import {
     arrayFrom,
     CancellationToken,
+    CompilerOptions,
     computeSignatureWithDiagnostics,
     CustomTransformers,
     Debug,
@@ -110,6 +111,7 @@ export namespace BuilderState {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
         keys(): IterableIterator<Path>;
+        size(): number;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -123,6 +125,7 @@ export namespace BuilderState {
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
                 keys: () => forward.keys(),
+                size: () => forward.size,
 
                 deleteKey: k => {
                     (deleted ||= new Set<Path>()).add(k);
@@ -292,15 +295,19 @@ export namespace BuilderState {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 
+    export function createReferencedMap(options: CompilerOptions) {
+        return options.module !== ModuleKind.None && !options.outFile ?
+            createManyToManyPathMap() :
+            undefined;
+    }
+
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
     export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
-        const isOutFile = options.outFile;
-        const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
-            createManyToManyPathMap() : undefined;
+        const referencedMap = createReferencedMap(options);
         const useOldState = canReuseOldState(referencedMap, oldState);
 
         // Ensure source files have parent pointers set
@@ -323,7 +330,7 @@ export namespace BuilderState {
                 version,
                 signature,
                 // No need to calculate affectsGlobalScope with --out since its not used at all
-                affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
+                affectsGlobalScope: !options.outFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
                 impliedFormat: sourceFile.impliedNodeFormat,
             });
         }

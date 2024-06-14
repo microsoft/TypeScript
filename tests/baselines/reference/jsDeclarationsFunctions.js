@@ -63,13 +63,14 @@ export function j() {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jj = exports.ii = exports.h = exports.g = void 0;
 exports.a = a;
 exports.b = b;
 exports.c = c;
 exports.d = d;
 exports.e = e;
 exports.f = f;
+exports.g = g;
+exports.h = hh;
 exports.i = i;
 exports.ii = i;
 exports.j = j;
@@ -164,7 +165,7 @@ declare class Cls {
 export function g(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 /**
  * @param {{x: string}} a
@@ -173,6 +174,6 @@ export function g(a: {
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 export { hh as h, i as ii, j as jj };

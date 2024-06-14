@@ -15,7 +15,7 @@ module Editor {
 >ListMakeHead<Line>() : List<Line>
 >                     : ^^^^^^^^^^
 >ListMakeHead : <U>() => List<U>
->             : ^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^       
         
         addLine(lineText: string): List<Line> {
 >addLine : (lineText: string) => List<Line>
@@ -37,7 +37,7 @@ module Editor {
 >this.lines.add(line) : List<Line>
 >                     : ^^^^^^^^^^
 >this.lines.add : (data: Line) => List<Line>
->               : ^    ^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^^^^^^^^^^     ^^^^ 
 >this.lines : List<Line>
 >           : ^^^^^^^^^^
 >this : this
@@ -45,7 +45,7 @@ module Editor {
 >lines : List<Line>
 >      : ^^^^^^^^^^
 >add : (data: Line) => List<Line>
->    : ^    ^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^^^^^^^^^^     ^^^^ 
 >line : Line
 >     : ^^^^
 
@@ -108,7 +108,7 @@ module Editor {
 >ListMakeEntry(data) : List<T>
 >                    : ^^^^^^^
 >ListMakeEntry : <U>(data: U) => List<U>
->              : ^ ^^    ^^ ^^^^^^^^^^^^
+>              : ^ ^^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -133,7 +133,7 @@ module Editor {
 >ListRemoveEntry(this.next) : List<T>
 >                           : ^^^^^^^
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->                : ^ ^^     ^^       ^^^^^^^^^^^^
+>                : ^ ^^     ^^       ^^^^^       
 >this.next : List<T>
 >          : ^^^^^^^
 >this : this

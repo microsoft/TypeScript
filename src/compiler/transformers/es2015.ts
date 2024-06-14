@@ -2867,9 +2867,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         //   * Why loop initializer is excluded?
         //     - Since we've introduced a fresh name it already will be undefined.
 
-        const flags = resolver.getNodeCheckFlags(node);
-        const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
-        const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
+        const isCapturedInFunction = resolver.hasNodeCheckFlag(node, NodeCheckFlags.CapturedBlockScopedBinding);
+        const isDeclaredInLoop = resolver.hasNodeCheckFlag(node, NodeCheckFlags.BlockScopedBindingInLoop);
         const emittedAsTopLevel = (hierarchyFacts & HierarchyFacts.TopLevel) !== 0
             || (isCapturedInFunction
                 && isDeclaredInLoop
@@ -3373,7 +3372,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldConvertPartOfIterationStatement(node: Node) {
-        return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0;
+        return resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsCapturedBlockScopeBinding);
     }
 
     function shouldConvertInitializerOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleInitializer {
@@ -3394,7 +3393,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldConvertBodyOfIterationStatement(node: IterationStatement): boolean {
-        return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
+        return resolver.hasNodeCheckFlag(node, NodeCheckFlags.LoopWithCapturedBlockScopedBinding);
     }
 
     /**
@@ -4057,11 +4056,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
         else {
             loopParameters.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
-            const checkFlags = resolver.getNodeCheckFlags(decl);
-            if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
+            const needsOutParam = resolver.hasNodeCheckFlag(decl, NodeCheckFlags.NeedsLoopOutParameter);
+            if (needsOutParam || hasCapturedBindingsInForHead) {
                 const outParamName = factory.createUniqueName("out_" + idText(name));
                 let flags = LoopOutParameterFlags.None;
-                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
+                if (needsOutParam) {
                     flags |= LoopOutParameterFlags.Body;
                 }
                 if (isForStatement(container)) {

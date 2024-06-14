@@ -74,11 +74,11 @@ module M {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 module N {
@@ -102,11 +102,11 @@ module N {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 var aNumber: number = 'this is a string';
@@ -179,11 +179,11 @@ var anOtherObjectLiteral: { id: string } = new C();
 
 var aFunction: typeof F = F2;
 >aFunction : (x: string) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >F : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^       
 
 var anOtherFunction: (x: string) => number = F2;
 >anOtherFunction : (x: string) => number
@@ -191,13 +191,13 @@ var anOtherFunction: (x: string) => number = F2;
 >x : string
 >  : ^^^^^^
 >F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^       
 
 var aLambda: typeof F = (x) => 'a string';
 >aLambda : (x: string) => number
->        : ^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^      
 >F : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >(x) => 'a string' : (x: string) => string
 >                  : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -229,14 +229,14 @@ var aClassInModule: M.A = new N.A();
 
 var aFunctionInModule: typeof M.F2 = F2;
 >aFunctionInModule : (x: number) => string
->                  : ^ ^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^      
 >M.F2 : (x: number) => string
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >M : typeof M
 >  : ^^^^^^^^
 >F2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^       
 
 

@@ -9,9 +9,9 @@ var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find
 >x : T
 >  : ^
 >((x) => { return null; }) : <T>(x: T) => any
->                          : ^^^^ ^^^^^^^^^^^
+>                          : ^ ^^ ^^^^^^^^^^^
 >(x) => { return null; } : <T>(x: T) => any
->                        : ^^^^ ^^^^^^^^^^^
+>                        : ^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 

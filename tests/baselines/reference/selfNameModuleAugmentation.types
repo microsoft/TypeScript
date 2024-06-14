@@ -22,5 +22,5 @@ export {};
 === /index.ts ===
 import { simple } from 'acorn-walk';
 >simple : (node: any, visitors: any, base?: any, state?: any) => any
->       : ^    ^^   ^^        ^^   ^^    ^^^   ^^     ^^^   ^^^^^^^^
+>       : ^    ^^   ^^        ^^   ^^    ^^^   ^^     ^^^   ^^^^^   
 

@@ -602,11 +602,11 @@ if (nameA == nameB) {
 >console.log(skillB) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >skillB : string
 >       : ^^^^^^
 }

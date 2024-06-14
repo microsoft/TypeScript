@@ -6,7 +6,7 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 
-describe("unittests:: tsserver:: libraryResolution", () => {
+describe("unittests:: tsserver:: libraryResolution::", () => {
     it("with config", () => {
         const host = getServerHostForLibResolution();
         const session = new TestSession(host);
@@ -44,6 +44,7 @@ describe("unittests:: tsserver:: libraryResolution", () => {
             }),
         );
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
+        host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" });
         host.runQueuedTimeoutCallbacks();

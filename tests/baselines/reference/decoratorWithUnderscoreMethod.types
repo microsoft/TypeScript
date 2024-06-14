@@ -26,11 +26,11 @@ function dec(): Function {
 >console.log(target[propKey]) : void
 >                             : ^^^^
 >console.log : (arg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(arg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (arg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >target[propKey] : any
 >target : any
 >propKey : string
@@ -49,7 +49,7 @@ class A {
 >dec() : Function
 >      : ^^^^^^^^
 >dec : () => Function
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^^        
 
     private __foo(bar: string): void {
 >__foo : (bar: string) => void

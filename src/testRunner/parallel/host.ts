@@ -25,7 +25,7 @@ import {
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
-export function start() {
+export function start(importTests: () => Promise<unknown>) {
     const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
     const color = Base.color;
@@ -656,5 +656,5 @@ export function start() {
         shimNoopTestInterface(global);
     }
 
-    setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
+    importTests().then(() => startDelayed(perfData, totalCost));
 }

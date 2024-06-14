@@ -77,7 +77,7 @@ bools("true");
 >bools("true") : void
 >              : ^^^^
 >bools : (x: `${boolean}`) => void
->      : ^ ^^            ^^^^^^^^^
+>      : ^ ^^            ^^^^^    
 >"true" : "true"
 >       : ^^^^^^
 
@@ -85,7 +85,7 @@ bools("false");
 >bools("false") : void
 >               : ^^^^
 >bools : (x: `${boolean}`) => void
->      : ^ ^^            ^^^^^^^^^
+>      : ^ ^^            ^^^^^    
 >"false" : "false"
 >        : ^^^^^^^
 
@@ -94,7 +94,7 @@ bools("other");
 >bools("other") : void
 >               : ^^^^
 >bools : (x: `${boolean}`) => void
->      : ^ ^^            ^^^^^^^^^
+>      : ^ ^^            ^^^^^    
 >"other" : "other"
 >        : ^^^^^^^
 
@@ -113,7 +113,7 @@ nullishes("null");
 >nullishes("null") : void
 >                  : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"null" : "null"
 >       : ^^^^^^
 
@@ -121,7 +121,7 @@ nullishes("undefined");
 >nullishes("undefined") : void
 >                       : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"undefined" : "undefined"
 >            : ^^^^^^^^^^^
 
@@ -130,7 +130,7 @@ nullishes("0");
 >nullishes("0") : void
 >               : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"0" : "0"
 >    : ^^^
 
@@ -138,7 +138,7 @@ nullishes("false");
 >nullishes("false") : void
 >                   : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"false" : "false"
 >        : ^^^^^^^
 
@@ -146,7 +146,7 @@ nullishes("NaN");
 >nullishes("NaN") : void
 >                 : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"NaN" : "NaN"
 >      : ^^^^^
 
@@ -154,7 +154,7 @@ nullishes("");
 >nullishes("") : void
 >              : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"" : ""
 >   : ^^
 
@@ -162,7 +162,7 @@ nullishes("other");
 >nullishes("other") : void
 >                   : ^^^^
 >nullishes : (x: Pat<null | undefined>) => void
->          : ^ ^^                     ^^^^^^^^^
+>          : ^ ^^                     ^^^^^    
 >"other" : "other"
 >        : ^^^^^^^
 
@@ -177,7 +177,7 @@ numbers("1");
 >numbers("1") : void
 >             : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1" : "1"
 >    : ^^^
 
@@ -185,7 +185,7 @@ numbers("-1");
 >numbers("-1") : void
 >              : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1" : "-1"
 >     : ^^^^
 
@@ -193,7 +193,7 @@ numbers("0");
 >numbers("0") : void
 >             : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0" : "0"
 >    : ^^^
 
@@ -201,7 +201,7 @@ numbers("0b1");
 >numbers("0b1") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0b1" : "0b1"
 >      : ^^^^^
 
@@ -209,7 +209,7 @@ numbers("0x1");
 >numbers("0x1") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0x1" : "0x1"
 >      : ^^^^^
 
@@ -217,7 +217,7 @@ numbers("0o1");
 >numbers("0o1") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0o1" : "0o1"
 >      : ^^^^^
 
@@ -225,7 +225,7 @@ numbers("1e21");
 >numbers("1e21") : void
 >                : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e21" : "1e21"
 >       : ^^^^^^
 
@@ -233,7 +233,7 @@ numbers("1E21");
 >numbers("1E21") : void
 >                : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E21" : "1E21"
 >       : ^^^^^^
 
@@ -241,7 +241,7 @@ numbers("1e-21");
 >numbers("1e-21") : void
 >                 : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e-21" : "1e-21"
 >        : ^^^^^^^
 
@@ -249,7 +249,7 @@ numbers("1E-21");
 >numbers("1E-21") : void
 >                 : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E-21" : "1E-21"
 >        : ^^^^^^^
 
@@ -257,7 +257,7 @@ numbers("1.1");
 >numbers("1.1") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1" : "1.1"
 >      : ^^^^^
 
@@ -265,7 +265,7 @@ numbers("-1.1");
 >numbers("-1.1") : void
 >                : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1" : "-1.1"
 >       : ^^^^^^
 
@@ -273,7 +273,7 @@ numbers("-1.1e-10");
 >numbers("-1.1e-10") : void
 >                    : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10" : "-1.1e-10"
 >           : ^^^^^^^^^^
 
@@ -281,7 +281,7 @@ numbers("-1.1E-10");
 >numbers("-1.1E-10") : void
 >                    : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10" : "-1.1E-10"
 >           : ^^^^^^^^^^
 
@@ -289,7 +289,7 @@ numbers("1.1e-10");
 >numbers("1.1e-10") : void
 >                   : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1e-10" : "1.1e-10"
 >          : ^^^^^^^^^
 
@@ -298,7 +298,7 @@ numbers("?");
 >numbers("?") : void
 >             : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"?" : "?"
 >    : ^^^
 
@@ -306,7 +306,7 @@ numbers("NaN");
 >numbers("NaN") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"NaN" : "NaN"
 >      : ^^^^^
 
@@ -314,7 +314,7 @@ numbers("Infinity");
 >numbers("Infinity") : void
 >                    : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"Infinity" : "Infinity"
 >           : ^^^^^^^^^^
 
@@ -322,7 +322,7 @@ numbers("+Infinity");
 >numbers("+Infinity") : void
 >                     : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"+Infinity" : "+Infinity"
 >            : ^^^^^^^^^^^
 
@@ -330,7 +330,7 @@ numbers("-Infinity");
 >numbers("-Infinity") : void
 >                     : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-Infinity" : "-Infinity"
 >            : ^^^^^^^^^^^
 
@@ -338,7 +338,7 @@ numbers("1_000");
 >numbers("1_000") : void
 >                 : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1_000" : "1_000"
 >        : ^^^^^^^
 
@@ -347,7 +347,7 @@ numbers("a10");
 >numbers("a10") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"a10" : "a10"
 >      : ^^^^^
 
@@ -355,7 +355,7 @@ numbers("10a");
 >numbers("10a") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"10a" : "10a"
 >      : ^^^^^
 
@@ -364,7 +364,7 @@ numbers("- 1");
 >numbers("- 1") : void
 >               : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"- 1" : "- 1"
 >      : ^^^^^
 
@@ -372,7 +372,7 @@ numbers("-/**/1");
 >numbers("-/**/1") : void
 >                  : ^^^^
 >numbers : (x: `${number}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-/**/1" : "-/**/1"
 >         : ^^^^^^^^
 
@@ -387,7 +387,7 @@ bigints("1");
 >bigints("1") : void
 >             : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1" : "1"
 >    : ^^^
 
@@ -395,7 +395,7 @@ bigints("-1");
 >bigints("-1") : void
 >              : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1" : "-1"
 >     : ^^^^
 
@@ -403,7 +403,7 @@ bigints("0");
 >bigints("0") : void
 >             : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0" : "0"
 >    : ^^^
 
@@ -411,7 +411,7 @@ bigints("0b1");
 >bigints("0b1") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0b1" : "0b1"
 >      : ^^^^^
 
@@ -419,7 +419,7 @@ bigints("0x1");
 >bigints("0x1") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0x1" : "0x1"
 >      : ^^^^^
 
@@ -427,7 +427,7 @@ bigints("0o1");
 >bigints("0o1") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0o1" : "0o1"
 >      : ^^^^^
 
@@ -436,7 +436,7 @@ bigints("1e21");
 >bigints("1e21") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e21" : "1e21"
 >       : ^^^^^^
 
@@ -444,7 +444,7 @@ bigints("1E21");
 >bigints("1E21") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E21" : "1E21"
 >       : ^^^^^^
 
@@ -452,7 +452,7 @@ bigints("1e-21");
 >bigints("1e-21") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e-21" : "1e-21"
 >        : ^^^^^^^
 
@@ -460,7 +460,7 @@ bigints("1E-21");
 >bigints("1E-21") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E-21" : "1E-21"
 >        : ^^^^^^^
 
@@ -469,7 +469,7 @@ bigints("1.0");
 >bigints("1.0") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.0" : "1.0"
 >      : ^^^^^
 
@@ -477,7 +477,7 @@ bigints("1.1");
 >bigints("1.1") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1" : "1.1"
 >      : ^^^^^
 
@@ -485,7 +485,7 @@ bigints("-1.1");
 >bigints("-1.1") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1" : "-1.1"
 >       : ^^^^^^
 
@@ -493,7 +493,7 @@ bigints("-1.1e-10");
 >bigints("-1.1e-10") : void
 >                    : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10" : "-1.1e-10"
 >           : ^^^^^^^^^^
 
@@ -501,7 +501,7 @@ bigints("-1.1E-10");
 >bigints("-1.1E-10") : void
 >                    : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10" : "-1.1E-10"
 >           : ^^^^^^^^^^
 
@@ -509,7 +509,7 @@ bigints("1.1e-10");
 >bigints("1.1e-10") : void
 >                   : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1e-10" : "1.1e-10"
 >          : ^^^^^^^^^
 
@@ -518,7 +518,7 @@ bigints("?");
 >bigints("?") : void
 >             : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"?" : "?"
 >    : ^^^
 
@@ -526,7 +526,7 @@ bigints("NaN");
 >bigints("NaN") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"NaN" : "NaN"
 >      : ^^^^^
 
@@ -534,7 +534,7 @@ bigints("Infinity");
 >bigints("Infinity") : void
 >                    : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"Infinity" : "Infinity"
 >           : ^^^^^^^^^^
 
@@ -542,7 +542,7 @@ bigints("+Infinity");
 >bigints("+Infinity") : void
 >                     : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"+Infinity" : "+Infinity"
 >            : ^^^^^^^^^^^
 
@@ -550,7 +550,7 @@ bigints("-Infinity");
 >bigints("-Infinity") : void
 >                     : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-Infinity" : "-Infinity"
 >            : ^^^^^^^^^^^
 
@@ -558,7 +558,7 @@ bigints("1_000");
 >bigints("1_000") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1_000" : "1_000"
 >        : ^^^^^^^
 
@@ -567,7 +567,7 @@ bigints("- 1");
 >bigints("- 1") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"- 1" : "- 1"
 >      : ^^^^^
 
@@ -575,7 +575,7 @@ bigints("-/**/1");
 >bigints("-/**/1") : void
 >                  : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-/**/1" : "-/**/1"
 >         : ^^^^^^^^
 
@@ -584,7 +584,7 @@ bigints("a10n");
 >bigints("a10n") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"a10n" : "a10n"
 >       : ^^^^^^
 
@@ -592,7 +592,7 @@ bigints("10an");
 >bigints("10an") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"10an" : "10an"
 >       : ^^^^^^
 
@@ -601,7 +601,7 @@ bigints("1n");
 >bigints("1n") : void
 >              : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1n" : "1n"
 >     : ^^^^
 
@@ -609,7 +609,7 @@ bigints("-1n");
 >bigints("-1n") : void
 >               : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1n" : "-1n"
 >      : ^^^^^
 
@@ -617,7 +617,7 @@ bigints("0n");
 >bigints("0n") : void
 >              : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0n" : "0n"
 >     : ^^^^
 
@@ -625,7 +625,7 @@ bigints("0b1n");
 >bigints("0b1n") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0b1n" : "0b1n"
 >       : ^^^^^^
 
@@ -633,7 +633,7 @@ bigints("0x1n");
 >bigints("0x1n") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0x1n" : "0x1n"
 >       : ^^^^^^
 
@@ -641,7 +641,7 @@ bigints("0o1n");
 >bigints("0o1n") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"0o1n" : "0o1n"
 >       : ^^^^^^
 
@@ -649,7 +649,7 @@ bigints("1e21n");
 >bigints("1e21n") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e21n" : "1e21n"
 >        : ^^^^^^^
 
@@ -657,7 +657,7 @@ bigints("1E21n");
 >bigints("1E21n") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E21n" : "1E21n"
 >        : ^^^^^^^
 
@@ -665,7 +665,7 @@ bigints("1e-21n");
 >bigints("1e-21n") : void
 >                  : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1e-21n" : "1e-21n"
 >         : ^^^^^^^^
 
@@ -673,7 +673,7 @@ bigints("1E-21n");
 >bigints("1E-21n") : void
 >                  : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1E-21n" : "1E-21n"
 >         : ^^^^^^^^
 
@@ -681,7 +681,7 @@ bigints("1.1n");
 >bigints("1.1n") : void
 >                : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1n" : "1.1n"
 >       : ^^^^^^
 
@@ -689,7 +689,7 @@ bigints("-1.1n");
 >bigints("-1.1n") : void
 >                 : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1n" : "-1.1n"
 >        : ^^^^^^^
 
@@ -697,7 +697,7 @@ bigints("-1.1e-10n");
 >bigints("-1.1e-10n") : void
 >                     : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10n" : "-1.1e-10n"
 >            : ^^^^^^^^^^^
 
@@ -705,7 +705,7 @@ bigints("-1.1E-10n");
 >bigints("-1.1E-10n") : void
 >                     : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10n" : "-1.1E-10n"
 >            : ^^^^^^^^^^^
 
@@ -713,7 +713,7 @@ bigints("1.1e-10n");
 >bigints("1.1e-10n") : void
 >                    : ^^^^
 >bigints : (x: `${bigint}`) => void
->        : ^ ^^           ^^^^^^^^^
+>        : ^ ^^           ^^^^^    
 >"1.1e-10n" : "1.1e-10n"
 >           : ^^^^^^^^^^
 
@@ -959,11 +959,11 @@ export abstract class BB {
 >this.get(id!) : void
 >              : ^^^^
 >this.get : (id: Id<AA>) => void
->         : ^  ^^      ^^^^^^^^^
+>         : ^  ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >get : (id: Id<AA>) => void
->    : ^  ^^      ^^^^^^^^^
+>    : ^  ^^      ^^^^^    
 >id! : `${string}-${string}`
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >id : `${string}-${string}`

@@ -9,11 +9,11 @@ const x: 0 | 1 = Math.random()? 0: 1;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0 : 0
 >  : ^
 >1 : 1
@@ -29,7 +29,7 @@ assert(x);
 >assert(x) : void
 >          : ^^^^
 >assert : (n: number) => asserts n is 1
->       : ^ ^^      ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^              
 >x : 0 | 1
 >  : ^^^^^
 
@@ -195,7 +195,7 @@ export let o7 = {
 >foo() : 1
 >      : ^
 >foo : () => 1
->    : ^^^^^^^
+>    : ^^^^^^ 
 >1 : 1
 >  : ^
 
