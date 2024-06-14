@@ -2716,9 +2716,6 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
-            /**
-             * Set to real path if path is different from info.path
-             */
             private realpath;
             constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
@@ -2814,17 +2811,8 @@ declare namespace ts {
             readonly trace?: (s: string) => void;
             readonly realpath?: (path: string) => string;
             private builderState;
-            /**
-             * Set of files names that were updated since the last call to getChangesSinceVersion.
-             */
             private updatedFileNames;
-            /**
-             * Set of files that was returned from the last call to getChangesSinceVersion.
-             */
             private lastReportedFileNames;
-            /**
-             * Last version that was reported.
-             */
             private lastReportedVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
@@ -3184,16 +3172,8 @@ declare namespace ts {
         }
         class ProjectService {
             private readonly nodeModulesWatchers;
-            /**
-             * Contains all the deleted script info's version information so that
-             * it does not reset when creating script info again
-             * (and could have potentially collided with version where contents mismatch)
-             */
             private readonly filenameToScriptInfoVersion;
             private readonly allJsFilesForOpenFileTelemetry;
-            /**
-             * maps external project file name to list of config files that were the part of this project
-             */
             private readonly externalProjectToConfiguredProjectMap;
             /**
              * external projects (configuration and list of root files is not controlled by tsserver)
@@ -3211,13 +3191,8 @@ declare namespace ts {
              * Open files: with value being project root path, and key being Path of the file that is open
              */
             readonly openFiles: Map<Path, NormalizedPath | undefined>;
-            /** Config files looked up and cached config files for open script info */
             private readonly configFileForOpenFiles;
-            /** Set of open script infos that are root of inferred project */
             private rootOfInferredProjects;
-            /**
-             * Map of open files that are opened without complete path but have projectRoot as current directory
-             */
             private readonly openFilesWithNonRootedDiskPath;
             private compilerOptionsForInferredProjects;
             private compilerOptionsForInferredProjectsPerProjectRoot;
@@ -3225,18 +3200,11 @@ declare namespace ts {
             private watchOptionsForInferredProjectsPerProjectRoot;
             private typeAcquisitionForInferredProjects;
             private typeAcquisitionForInferredProjectsPerProjectRoot;
-            /**
-             * Project size for configured or external projects
-             */
             private readonly projectToSizeMap;
             private readonly hostConfiguration;
             private safelist;
             private readonly legacySafelist;
             private pendingProjectUpdates;
-            /**
-             * All the open script info that needs recalculation of the default project,
-             * this also caches config file info before config file change was detected to use it in case projects are not updated yet
-             */
             private pendingOpenFileProjectUpdates?;
             readonly currentDirectory: NormalizedPath;
             readonly toCanonicalFileName: (f: string) => string;
@@ -3254,7 +3222,6 @@ declare namespace ts {
             readonly allowLocalPluginLoads: boolean;
             readonly typesMapLocation: string | undefined;
             readonly serverMode: LanguageServiceMode;
-            /** Tracks projects that we have already sent telemetry for. */
             private readonly seenProjects;
             private readonly sharedExtendedConfigFileWatchers;
             private readonly extendedConfigCache;
@@ -3273,20 +3240,9 @@ declare namespace ts {
             setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
-            /**
-             * If there is default project calculation pending for this file,
-             * then it completes that calculation so that correct default project is used for the project
-             */
             private tryGetDefaultProjectForEnsuringConfiguredProjectForFile;
             private doEnsureDefaultProjectForFile;
             getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
-            /**
-             * Ensures the project structures are upto date
-             * This means,
-             * - we go through all the projects and update them if they are dirty
-             * - if updates reflect some change in structure or there was pending request to ensure projects for open files
-             *   ensure that each open script info has project
-             */
             private ensureProjectStructuresUptoDate;
             getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
             getPreferences(file: NormalizedPath): protocol.UserPreferences;
@@ -3297,45 +3253,24 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
-            /**
-             * This is to watch whenever files are added or removed to the wildcard directories
-             */
             private watchWildcardDirectory;
             private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
             private onConfigFileChanged;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
-            /**
-             * Remove this file from the set of open, non-configured files.
-             * @param info The file that has been closed or newly configured
-             */
             private closeOpenFile;
             private deleteScriptInfo;
             private configFileExists;
             private createConfigFileWatcherForParsedConfig;
-            /**
-             * This function tries to search for a tsconfig.json for the given file.
-             * This is different from the method the compiler uses because
-             * the compiler can assume it will always start searching in the
-             * current directory (the directory in which tsc was invoked).
-             * The server must start searching from the directory containing
-             * the newly opened file.
-             */
             private forEachConfigFileLocation;
-            /** Get cached configFileName for scriptInfo or ancestor of open script info */
             private getConfigFileNameForFileFromCache;
-            /** Caches the configFilename for script info or ancestor of open script info */
             private setConfigFileNameForFileInCache;
             private printProjects;
             private getConfiguredProjectByCanonicalConfigFilePath;
             private findExternalProjectByProjectName;
-            /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
             private getFilenameForExceededTotalSizeLimitForNonTsFiles;
             private createExternalProject;
             private addFilesToNonInferredProject;
-            /**
-             * Read the config file of the project, and update the project root file names.
-             */
             private loadConfiguredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
@@ -3373,17 +3308,7 @@ declare namespace ts {
              * This does not reload contents of open files from disk. But we could do that if needed
              */
             reloadProjects(): void;
-            /**
-             * Remove the root of inferred project if script info is part of another project
-             */
             private removeRootOfInferredProjectIfNowPartOfOtherProject;
-            /**
-             * This function is to update the project structure for every inferred project.
-             * It is called on the premise that all the configured projects are
-             * up to date.
-             * This will go through open files and assign them to inferred project if open file is not part of any other project
-             * After that all the inferred project graphs are updated
-             */
             private ensureProjectForOpenFiles;
             /**
              * Open file whose contents is managed by the client
@@ -3394,16 +3319,7 @@ declare namespace ts {
             private findExternalProjectContainingOpenScriptInfo;
             private getOrCreateOpenScriptInfo;
             private assignProjectToOpenedScriptInfo;
-            /**
-             * Finds the default configured project for given info
-             * For any tsconfig found, it looks into that project, if not then all its references,
-             * The search happens for all tsconfigs till projectRootPath
-             */
             private tryFindDefaultConfiguredProjectForOpenScriptInfo;
-            /**
-             * Finds the default configured project, if found, it creates the solution projects (does not load them right away)
-             * with Find: finds the projects even if the project is deferredClosed
-             */
             private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
@@ -3419,7 +3335,6 @@ declare namespace ts {
             private collectChanges;
             closeExternalProject(uncheckedFileName: string): void;
             openExternalProjects(projects: protocol.ExternalProject[]): void;
-            /** Makes a filename safe to insert in a RegExp */
             private static readonly filenameEscapeRegexp;
             private static escapeFilenameForRegex;
             resetSafeList(): void;
@@ -3427,9 +3342,6 @@ declare namespace ts {
             private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
-            /**
-             * Performs the remaining steps of enabling a plugin after its module has been instantiated.
-             */
             private endEnablePlugin;
             private enableRequestedPluginsAsync;
             private enableRequestedPluginsWorker;
@@ -3515,7 +3427,6 @@ declare namespace ts {
             private suggestionCheck;
             private regionSemanticCheck;
             private sendDiagnosticsEvent;
-            /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;
             private cleanProjects;
             private cleanup;
@@ -3562,10 +3473,6 @@ declare namespace ts {
             private toSpanGroups;
             private getReferences;
             private getFileReferences;
-            /**
-             * @param fileName is the name of the file to be opened
-             * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
-             */
             private openClientFile;
             private getPosition;
             private getPositionInFile;
