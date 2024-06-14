@@ -78,7 +78,7 @@ const tmp = <PATH extends PostPath>(
 >post<PATH>(path, { body }) : void
 >                           : ^^^^
 >post : <PATH_1 extends PostPath>(path: PATH_1, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH_1>; }) => void
->     : ^      ^^^^^^^^^        ^^    ^^      ^^                    ^^                                                       ^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^        ^^    ^^      ^^                    ^^                                                       ^^^^^^^^^
 >path : PATH
 >     : ^^^^
 >{ body } : { body: PostBody<PATH>; }

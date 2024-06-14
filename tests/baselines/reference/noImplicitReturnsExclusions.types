@@ -208,7 +208,7 @@ declare class HistoryItem {
 interface Thenable<T> {
   then<TResult>(
 >then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
->     : ^^^       ^^           ^^^                                         ^^          ^^^                                            ^^^                 ^^^         ^^           ^^^                                             ^^          ^^^                     ^^^                   ^^^
+>     : ^^^       ^^           ^^^                                         ^^          ^^^                                            ^^^                 ^^^^^^^^^^^^^^           ^^^                                             ^^          ^^^                     ^^^                   ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
@@ -225,7 +225,7 @@ interface Thenable<T> {
   ): Thenable<TResult>;
   then<TResult>(
 >then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
->     : ^^^         ^^           ^^^                                             ^^          ^^^                                                ^^^                   ^^^       ^^           ^^^                                         ^^          ^^^                     ^^^                 ^^^
+>     : ^^^^^^^^^^^^^^           ^^^                                             ^^          ^^^                                                ^^^                   ^^^       ^^           ^^^                                         ^^          ^^^                     ^^^                 ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined

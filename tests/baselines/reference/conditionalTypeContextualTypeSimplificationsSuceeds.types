@@ -16,7 +16,7 @@ function bad<P extends Props>(
 
     attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) { }
 >attrs : string extends keyof P ? { [K in keyof P]: P[K]; } : { [K_1 in keyof P]: P[K_1]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function good1<P extends Props>(
 >good1 : <P extends Props>(attrs: string extends keyof P ? P : { [K in keyof P]: P[K]; }) => void
@@ -24,7 +24,7 @@ function good1<P extends Props>(
 
     attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) { }
 >attrs : string extends keyof P ? P : { [K in keyof P]: P[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 function good2<P extends Props>(
 >good2 : <P extends Props>(attrs: { [K in keyof P]: P[K]; }) => void
@@ -32,7 +32,7 @@ function good2<P extends Props>(
 
     attrs: { [K in keyof P]: P[K] }) { }
 >attrs : { [K in keyof P]: P[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 bad({ when: value => false });
 >bad({ when: value => false }) : void

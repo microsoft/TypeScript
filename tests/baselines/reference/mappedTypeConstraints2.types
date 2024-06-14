@@ -224,11 +224,11 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >Object.entries(obj) : [string, any][]
 >                    : ^^^^^^^^^^^^^^^
 >Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->               : ^^^   ^^ ^^                                      ^^^               ^^^ ^^  ^^^               ^^^
+>               : ^^^^^^^^ ^^                                      ^^^               ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->        : ^^^   ^^ ^^                                      ^^^               ^^^ ^^  ^^^               ^^^
+>        : ^^^^^^^^ ^^                                      ^^^               ^^^ ^^  ^^^               ^^^
 >obj : T
 >    : ^
 

@@ -163,7 +163,7 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >[1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
 >                                               : ^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[1, 2, 3, 4, 5] : number[]
 >                : ^^^^^^^^
 >1 : 1
@@ -177,7 +177,7 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >5 : 5
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >v => ({ type: 'folder' }) : (v: number) => { type: "folder"; }
 >                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -211,11 +211,11 @@ let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >arr.map(([x, y]) => {    return [x, y];}) : [number, number][]
 >                                          : ^^^^^^^^^^^^^^^^^^
 >arr.map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
->        : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >arr : [number, number][]
 >    : ^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >([x, y]) => {    return [x, y];} : ([x, y]: [number, number]) => [number, number]
 >                                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -300,11 +300,11 @@ function bug(): Diagnostic[] {
 >values.map((value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	}) : { severity: 1; message: string; }[]
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >values.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>           : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >values : any[]
 >       : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >(value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	} : (value: any) => { severity: 1; message: string; }
 >                                                                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
@@ -349,7 +349,7 @@ function objectToMap(obj: any) {
 >Object.keys(obj).map(key => [key, obj[key]]) : [string, any][]
 >                                             : ^^^^^^^^^^^^^^^
 >Object.keys(obj).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->                     : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                     : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >Object.keys(obj) : string[]
 >                 : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
@@ -361,7 +361,7 @@ function objectToMap(obj: any) {
 >obj : any
 >    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >key => [key, obj[key]] : (key: string) => [string, any]
 >                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -407,13 +407,13 @@ function createPerson(): Person {
 >[1].map(() => ({      __typename: 'PhoneNumber'    })) : { __typename: "PhoneNumber"; }[]
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->        : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>        : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >() => ({      __typename: 'PhoneNumber'    }) : () => { __typename: "PhoneNumber"; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({      __typename: 'PhoneNumber'    }) : { __typename: "PhoneNumber"; }
@@ -555,7 +555,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 >['a', 'b'].map(name => {    return {        code: 'mapped',        name,    }}) : { code: "mapped"; name: string; }[]
 >                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['a', 'b'].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->               : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>               : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >['a', 'b'] : string[]
 >           : ^^^^^^^^
 >'a' : "a"
@@ -563,7 +563,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 >'b' : "b"
 >    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >name => {    return {        code: 'mapped',        name,    }} : (name: string) => { code: "mapped"; name: string; }
 >                                                                : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string

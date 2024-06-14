@@ -55,7 +55,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^   ^^    ^^   ^^^^^         
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -63,7 +63,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^   ^^    ^^   ^^^^^         
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
 >     : ^
             
@@ -331,7 +331,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^   ^^    ^^   ^^^^^         
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -339,7 +339,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^   ^^    ^^   ^^^^^         
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
 >     : ^
 
@@ -449,7 +449,7 @@ module Editor {
 >this.listFactory.RemoveEntry(this.next) : List<T>
 >                                        : ^^^^^^^
 >this.listFactory.RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
->                             : ^   ^^     ^^         ^^^^^         
+>                             : ^^^^^^     ^^         ^^^^^         
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -457,7 +457,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
->            : ^   ^^     ^^         ^^^^^         
+>            : ^^^^^^     ^^         ^^^^^         
 >this.next : List<T>
 >          : ^^^^^^^
 >this : this
@@ -558,7 +558,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^   ^^    ^^   ^^^^^         
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -566,7 +566,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^   ^^    ^^   ^^^^^         
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
 >     : ^
 
@@ -710,7 +710,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^   ^^    ^^   ^^^^^         
+>                           : ^^^^^^    ^^   ^^^^^         
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -718,7 +718,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^   ^^    ^^   ^^^^^         
+>          : ^^^^^^    ^^   ^^^^^         
 >data : T
 >     : ^
 

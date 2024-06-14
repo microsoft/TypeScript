@@ -36,7 +36,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/src/main.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
@@ -57,6 +57,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
+
+//// [/src/project/tsconfig.tsbuildinfo]
+{"root":["./src/main.tsx"],"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/main.tsx"
+  ],
+  "version": "FakeTSVersion",
+  "size": 53
+}
 
 
 
@@ -85,5 +97,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/project/tsconfig.tsbuildinfo] unlink
 //// [/src/project/src/main.d.ts] unlink
 //// [/src/project/src/main.js] unlink

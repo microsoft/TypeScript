@@ -78,7 +78,7 @@ export const works2 = fn<MakeItWork>(x => x);
 >fn : <T>(x: T) => import("module").Modifier<T>
 >   : ^ ^^ ^^ ^^^^^       ^^^^^^^^  ^^^^^^^^   
 >x => x : <T>(x: T) => T
->       : ^^^^ ^^^^^^^^^
+>       : ^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >x : T

@@ -45,7 +45,7 @@ type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
 
 function assignmentWithComplexRest<T extends any[]>() {
 >assignmentWithComplexRest : <T extends any[]>() => void
->                          : ^^^^^^^^^^^     ^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void
@@ -74,7 +74,7 @@ function assignmentWithComplexRest<T extends any[]>() {
 
 function assignmentWithComplexRest2<T extends any[]>() {
 >assignmentWithComplexRest2 : <T extends any[]>() => void
->                           : ^^^^^^^^^^^     ^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
 >fn1 : (cb: (x: string, ...rest: T) => void) => void
@@ -103,7 +103,7 @@ function assignmentWithComplexRest2<T extends any[]>() {
 
 function assignmentWithComplexRest3<T extends any[]>() {
 >assignmentWithComplexRest3 : <T extends any[]>() => void
->                           : ^^^^^^^^^^^     ^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^     ^^^^^^^^^^^
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void

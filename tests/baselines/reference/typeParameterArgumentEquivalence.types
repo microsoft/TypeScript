@@ -3,7 +3,7 @@
 === typeParameterArgumentEquivalence.ts ===
 function foo<T>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var x: (item: number) => boolean;
 >x : (item: number) => boolean

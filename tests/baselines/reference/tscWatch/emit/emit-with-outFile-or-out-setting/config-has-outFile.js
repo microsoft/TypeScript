@@ -73,7 +73,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -126,7 +129,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -179,7 +185,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 

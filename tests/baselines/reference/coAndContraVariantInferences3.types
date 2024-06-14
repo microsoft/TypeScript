@@ -33,7 +33,7 @@ type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T
 >OverloadBinder : OverloadBinder<T>
 >               : ^^^^^^^^^^^^^^^^^
 >args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
 >OverloadKeys : OverloadKeys<T>
@@ -246,7 +246,7 @@ declare const updateImportDeclaration: {
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T_1, U_1 extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^   ^^   ^^^^^^^^^   ^^     ^^                          ^^        ^^                                               ^^^                                   ^^^   ^^     ^^                          ^^        ^^                                        ^^^       ^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^^^^^^^^^^^^^^^^^^   ^^     ^^                          ^^        ^^                                               ^^^                                   ^^^^^^^^     ^^                          ^^        ^^                                        ^^^       ^^^
 >array : readonly T[]
 >      : ^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
@@ -258,7 +258,7 @@ declare function every<T, U extends T>(array: readonly T[], callback: (element: 
 
 declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 >every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
->      : ^^^   ^^   ^^^^^^^^^   ^^     ^^              ^^        ^^                                               ^^^                       ^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^   ^^     ^^                          ^^        ^^                                        ^^^       ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^   ^^     ^^              ^^        ^^                                               ^^^                       ^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^^^^^^     ^^                          ^^        ^^                                        ^^^       ^^^
 >array : readonly T[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
@@ -270,7 +270,7 @@ declare function every<T, U extends T>(array: readonly T[] | undefined, callback
 
 declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 >every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_1, U extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^   ^^ ^^^^^^^^^   ^^     ^^              ^^        ^^                                             ^^^                     ^^^   ^^ ^^^^^^^^^   ^^     ^^                          ^^        ^^                                             ^^^                                 ^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
+>      : ^^^^^^^^ ^^^^^^^^^   ^^     ^^              ^^        ^^                                             ^^^                     ^^^^^^^^ ^^^^^^^^^   ^^     ^^                          ^^        ^^                                             ^^^                                 ^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
 >array : readonly T[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (element: T, index: number) => boolean

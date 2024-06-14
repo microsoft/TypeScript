@@ -386,7 +386,7 @@ module GenericSignaturesInvalid {
 
     function foo<T>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
         var b: Base2;
 >b : Base2
@@ -401,11 +401,11 @@ module GenericSignaturesInvalid {
 >b.a = t.a : () => T
 >          : ^^^^^^^
 >b.a : <T_1>() => T_1
->    : ^   ^^^^^^^   
+>    : ^^^^^^^^^^^   
 >b : Base2
 >  : ^^^^^
 >a : <T_1>() => T_1
->  : ^   ^^^^^^^   
+>  : ^^^^^^^^^^^   
 >t.a : () => T
 >    : ^^^^^^^
 >t : Target<T>
@@ -417,11 +417,11 @@ module GenericSignaturesInvalid {
 >b.a = t.a2 : (x?: T) => T
 >           : ^ ^^^^^^^^^^
 >b.a : <T_1>() => T_1
->    : ^   ^^^^^^^   
+>    : ^^^^^^^^^^^   
 >b : Base2
 >  : ^^^^^
 >a : <T_1>() => T_1
->  : ^   ^^^^^^^   
+>  : ^^^^^^^^^^^   
 >t.a2 : (x?: T) => T
 >     : ^ ^^^^^^^^^^
 >t : Target<T>
@@ -433,11 +433,11 @@ module GenericSignaturesInvalid {
 >b.a = t.a3 : (x: T) => T
 >           : ^ ^^^^^^^^^
 >b.a : <T_1>() => T_1
->    : ^   ^^^^^^^   
+>    : ^^^^^^^^^^^   
 >b : Base2
 >  : ^^^^^
 >a : <T_1>() => T_1
->  : ^   ^^^^^^^   
+>  : ^^^^^^^^^^^   
 >t.a3 : (x: T) => T
 >     : ^ ^^^^^^^^^
 >t : Target<T>
@@ -449,11 +449,11 @@ module GenericSignaturesInvalid {
 >b.a = t.a4 : (x: T, y?: T) => T
 >           : ^ ^^^^^ ^^^^^^^^^^
 >b.a : <T_1>() => T_1
->    : ^   ^^^^^^^   
+>    : ^^^^^^^^^^^   
 >b : Base2
 >  : ^^^^^
 >a : <T_1>() => T_1
->  : ^   ^^^^^^^   
+>  : ^^^^^^^^^^^   
 >t.a4 : (x: T, y?: T) => T
 >     : ^ ^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -465,11 +465,11 @@ module GenericSignaturesInvalid {
 >b.a = t.a5 : (x?: T, y?: T) => T
 >           : ^ ^^^^^^ ^^^^^^^^^^
 >b.a : <T_1>() => T_1
->    : ^   ^^^^^^^   
+>    : ^^^^^^^^^^^   
 >b : Base2
 >  : ^^^^^
 >a : <T_1>() => T_1
->  : ^   ^^^^^^^   
+>  : ^^^^^^^^^^^   
 >t.a5 : (x?: T, y?: T) => T
 >     : ^ ^^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -481,11 +481,11 @@ module GenericSignaturesInvalid {
 >b.a2 = t.a : () => T
 >           : ^^^^^^^
 >b.a2 : <T_1>(x?: T_1) => T_1
->     : ^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a2 : <T_1>(x?: T_1) => T_1
->   : ^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^^^^   
 >t.a : () => T
 >    : ^^^^^^^
 >t : Target<T>
@@ -497,11 +497,11 @@ module GenericSignaturesInvalid {
 >b.a2 = t.a2 : (x?: T) => T
 >            : ^ ^^^^^^^^^^
 >b.a2 : <T_1>(x?: T_1) => T_1
->     : ^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a2 : <T_1>(x?: T_1) => T_1
->   : ^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^^^^   
 >t.a2 : (x?: T) => T
 >     : ^ ^^^^^^^^^^
 >t : Target<T>
@@ -513,11 +513,11 @@ module GenericSignaturesInvalid {
 >b.a2 = t.a3 : (x: T) => T
 >            : ^ ^^^^^^^^^
 >b.a2 : <T_1>(x?: T_1) => T_1
->     : ^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a2 : <T_1>(x?: T_1) => T_1
->   : ^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^^^^   
 >t.a3 : (x: T) => T
 >     : ^ ^^^^^^^^^
 >t : Target<T>
@@ -529,11 +529,11 @@ module GenericSignaturesInvalid {
 >b.a2 = t.a4 : (x: T, y?: T) => T
 >            : ^ ^^^^^ ^^^^^^^^^^
 >b.a2 : <T_1>(x?: T_1) => T_1
->     : ^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a2 : <T_1>(x?: T_1) => T_1
->   : ^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^^^^   
 >t.a4 : (x: T, y?: T) => T
 >     : ^ ^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -545,11 +545,11 @@ module GenericSignaturesInvalid {
 >b.a2 = t.a5 : (x?: T, y?: T) => T
 >            : ^ ^^^^^^ ^^^^^^^^^^
 >b.a2 : <T_1>(x?: T_1) => T_1
->     : ^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a2 : <T_1>(x?: T_1) => T_1
->   : ^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^^^^   
 >t.a5 : (x?: T, y?: T) => T
 >     : ^ ^^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -561,11 +561,11 @@ module GenericSignaturesInvalid {
 >b.a3 = t.a : () => T
 >           : ^^^^^^^
 >b.a3 : <T_1>(x: T_1) => T_1
->     : ^   ^^ ^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a3 : <T_1>(x: T_1) => T_1
->   : ^   ^^ ^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^^^^   
 >t.a : () => T
 >    : ^^^^^^^
 >t : Target<T>
@@ -577,11 +577,11 @@ module GenericSignaturesInvalid {
 >b.a3 = t.a2 : (x?: T) => T
 >            : ^ ^^^^^^^^^^
 >b.a3 : <T_1>(x: T_1) => T_1
->     : ^   ^^ ^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a3 : <T_1>(x: T_1) => T_1
->   : ^   ^^ ^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^^^^   
 >t.a2 : (x?: T) => T
 >     : ^ ^^^^^^^^^^
 >t : Target<T>
@@ -593,11 +593,11 @@ module GenericSignaturesInvalid {
 >b.a3 = t.a3 : (x: T) => T
 >            : ^ ^^^^^^^^^
 >b.a3 : <T_1>(x: T_1) => T_1
->     : ^   ^^ ^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a3 : <T_1>(x: T_1) => T_1
->   : ^   ^^ ^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^^^^   
 >t.a3 : (x: T) => T
 >     : ^ ^^^^^^^^^
 >t : Target<T>
@@ -609,11 +609,11 @@ module GenericSignaturesInvalid {
 >b.a3 = t.a4 : (x: T, y?: T) => T
 >            : ^ ^^^^^ ^^^^^^^^^^
 >b.a3 : <T_1>(x: T_1) => T_1
->     : ^   ^^ ^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a3 : <T_1>(x: T_1) => T_1
->   : ^   ^^ ^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^^^^   
 >t.a4 : (x: T, y?: T) => T
 >     : ^ ^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -625,11 +625,11 @@ module GenericSignaturesInvalid {
 >b.a3 = t.a5 : (x?: T, y?: T) => T
 >            : ^ ^^^^^^ ^^^^^^^^^^
 >b.a3 : <T_1>(x: T_1) => T_1
->     : ^   ^^ ^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a3 : <T_1>(x: T_1) => T_1
->   : ^   ^^ ^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^^^^   
 >t.a5 : (x?: T, y?: T) => T
 >     : ^ ^^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -641,11 +641,11 @@ module GenericSignaturesInvalid {
 >b.a4 = t.a : () => T
 >           : ^^^^^^^
 >b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a4 : <T_1>(x: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >t.a : () => T
 >    : ^^^^^^^
 >t : Target<T>
@@ -657,11 +657,11 @@ module GenericSignaturesInvalid {
 >b.a4 = t.a2 : (x?: T) => T
 >            : ^ ^^^^^^^^^^
 >b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a4 : <T_1>(x: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >t.a2 : (x?: T) => T
 >     : ^ ^^^^^^^^^^
 >t : Target<T>
@@ -673,11 +673,11 @@ module GenericSignaturesInvalid {
 >b.a4 = t.a3 : (x: T) => T
 >            : ^ ^^^^^^^^^
 >b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a4 : <T_1>(x: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >t.a3 : (x: T) => T
 >     : ^ ^^^^^^^^^
 >t : Target<T>
@@ -689,11 +689,11 @@ module GenericSignaturesInvalid {
 >b.a4 = t.a4 : (x: T, y?: T) => T
 >            : ^ ^^^^^ ^^^^^^^^^^
 >b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a4 : <T_1>(x: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >t.a4 : (x: T, y?: T) => T
 >     : ^ ^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -705,11 +705,11 @@ module GenericSignaturesInvalid {
 >b.a4 = t.a5 : (x?: T, y?: T) => T
 >            : ^ ^^^^^^ ^^^^^^^^^^
 >b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a4 : <T_1>(x: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^   ^^ ^^^   ^^^^^   
 >t.a5 : (x?: T, y?: T) => T
 >     : ^ ^^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -721,11 +721,11 @@ module GenericSignaturesInvalid {
 >b.a5 = t.a : () => T
 >           : ^^^^^^^
 >b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >t.a : () => T
 >    : ^^^^^^^
 >t : Target<T>
@@ -737,11 +737,11 @@ module GenericSignaturesInvalid {
 >b.a5 = t.a2 : (x?: T) => T
 >            : ^ ^^^^^^^^^^
 >b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >t.a2 : (x?: T) => T
 >     : ^ ^^^^^^^^^^
 >t : Target<T>
@@ -753,11 +753,11 @@ module GenericSignaturesInvalid {
 >b.a5 = t.a3 : (x: T) => T
 >            : ^ ^^^^^^^^^
 >b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >t.a3 : (x: T) => T
 >     : ^ ^^^^^^^^^
 >t : Target<T>
@@ -769,11 +769,11 @@ module GenericSignaturesInvalid {
 >b.a5 = t.a4 : (x: T, y?: T) => T
 >            : ^ ^^^^^ ^^^^^^^^^^
 >b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >t.a4 : (x: T, y?: T) => T
 >     : ^ ^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -785,11 +785,11 @@ module GenericSignaturesInvalid {
 >b.a5 = t.a5 : (x?: T, y?: T) => T
 >            : ^ ^^^^^^ ^^^^^^^^^^
 >b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->     : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>     : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >b : Base2
 >  : ^^^^^
 >a5 : <T_1>(x?: T_1, y?: T_1) => T_1
->   : ^   ^^ ^^^   ^^ ^^^   ^^^^^   
+>   : ^^^^^^ ^^^   ^^ ^^^   ^^^^^   
 >t.a5 : (x?: T, y?: T) => T
 >     : ^ ^^^^^^ ^^^^^^^^^^
 >t : Target<T>
@@ -847,7 +847,7 @@ module GenericSignaturesValid {
 
             this.a = <T>() => null; // ok, same T of required params
 >this.a = <T>() => null : <T>() => any
->                       : ^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^
 >this.a : <T>() => T
 >       : ^ ^^^^^^^ 
 >this : this
@@ -855,7 +855,7 @@ module GenericSignaturesValid {
 >a : <T>() => T
 >  : ^ ^^^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a = <T>(x?: T) => null; // ok, same T of required params
 >this.a = <T>(x?: T) => null : <T>(x?: T) => any
@@ -887,7 +887,7 @@ module GenericSignaturesValid {
 
             this.a2 = <T>() => null; // ok, same T of required params
 >this.a2 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a2 : <T>(x?: T) => T
 >        : ^ ^^ ^^^ ^^^^^ 
 >this : this
@@ -895,7 +895,7 @@ module GenericSignaturesValid {
 >a2 : <T>(x?: T) => T
 >   : ^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a2 = <T>(x?: T) => null; // ok, same T of required params
 >this.a2 = <T>(x?: T) => null : <T>(x?: T) => any
@@ -927,7 +927,7 @@ module GenericSignaturesValid {
 
             this.a3 = <T>() => null; // ok, fewer required params
 >this.a3 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a3 : <T>(x: T) => T
 >        : ^ ^^ ^^ ^^^^^ 
 >this : this
@@ -935,7 +935,7 @@ module GenericSignaturesValid {
 >a3 : <T>(x: T) => T
 >   : ^ ^^ ^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a3 = <T>(x?: T) => null; // ok, fewer required params
 >this.a3 = <T>(x?: T) => null : <T>(x?: T) => any
@@ -983,7 +983,7 @@ module GenericSignaturesValid {
 
             this.a4 = <T>() => null; // ok, fewer required params
 >this.a4 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a4 : <T>(x: T, y?: T) => T
 >        : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 >this : this
@@ -991,7 +991,7 @@ module GenericSignaturesValid {
 >a4 : <T>(x: T, y?: T) => T
 >   : ^ ^^ ^^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
 >this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
@@ -1042,7 +1042,7 @@ module GenericSignaturesValid {
 
             this.a5 = <T>() => null; // ok, fewer required params
 >this.a5 = <T>() => null : <T>() => any
->                        : ^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^
 >this.a5 : <T>(x?: T, y?: T) => T
 >        : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >this : this
@@ -1050,7 +1050,7 @@ module GenericSignaturesValid {
 >a5 : <T>(x?: T, y?: T) => T
 >   : ^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 ><T>() => null : <T>() => any
->              : ^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^
 
             this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
 >this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any

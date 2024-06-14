@@ -7,7 +7,7 @@ export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 >[1, 2, 3, 4].map(n => n * n) : number[]
 >                             : ^^^^^^^^
 >[1, 2, 3, 4].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                 : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                 : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[1, 2, 3, 4] : number[]
 >             : ^^^^^^^^
 >1 : 1
@@ -19,7 +19,7 @@ export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 >4 : 4
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -47,11 +47,11 @@ export let a = numTuple.map(x => x * x);
 >numTuple.map(x => x * x) : number[]
 >                         : ^^^^^^^^
 >numTuple.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->             : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>             : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numTuple : [number]
 >         : ^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x * x : (x: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -101,11 +101,11 @@ export let b = numNum.map(n => n * n);
 >numNum.map(n => n * n) : number[]
 >                       : ^^^^^^^^
 >numNum.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>           : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numNum : [number, number]
 >       : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -123,11 +123,11 @@ export let c = strStr.map(s => s.charCodeAt(0));
 >strStr.map(s => s.charCodeAt(0)) : number[]
 >                                 : ^^^^^^^^
 >strStr.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>           : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >strStr : [string, string]
 >       : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >s => s.charCodeAt(0) : (s: string) => number
 >                     : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -149,11 +149,11 @@ export let d = numStr.map(x => x);
 >numStr.map(x => x) : (string | number)[]
 >                   : ^^^^^^^^^^^^^^^^^^^
 >numStr.map : <U>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => U, thisArg?: any) => U[]
->           : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numStr : [number, string]
 >       : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >x => x : (x: string | number) => string | number
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
@@ -181,11 +181,11 @@ export let e = numNumNum.map(n => n * n);
 >numNumNum.map(n => n * n) : number[]
 >                          : ^^^^^^^^
 >numNumNum.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>              : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numNumNum : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -219,11 +219,11 @@ export let f = numNumNumNum.map(n => n * n);
 >numNumNumNum.map(n => n * n) : number[]
 >                             : ^^^^^^^^
 >numNumNumNum.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                 : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                 : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numNumNumNum : [number, number, number, number]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -259,11 +259,11 @@ export let g = numNumNumNumNum.map(n => n * n);
 >numNumNumNumNum.map(n => n * n) : number[]
 >                                : ^^^^^^^^
 >numNumNumNumNum.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numNumNumNumNum : [number, number, number, number, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -302,11 +302,11 @@ export let h = numNumNumNumNum.map(n => n * n);
 >numNumNumNumNum.map(n => n * n) : number[]
 >                                : ^^^^^^^^
 >numNumNumNumNum.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >numNumNumNumNum : [number, number, number, number, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => n * n : (n: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number

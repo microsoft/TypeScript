@@ -58,7 +58,7 @@ function foo<T, U extends T>(x: T, y: U): V { // error
 
     function bar<V extends T, W extends U>(): X { // error
 >bar : <V extends T, W extends U>() => X
->    : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^ 
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
@@ -93,7 +93,7 @@ function foo2<U extends T, T>(x: T, y: U): W { // error
 
     function bar<V extends T, W extends U>(): Y { // error
 >bar : <V extends T, W extends U>() => Y
->    : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^ 
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
@@ -130,7 +130,7 @@ var f3 = <T, U extends T>(x: T, y: U) => {
 
     function bar<V extends T, W extends U>(r: X, s: Y) { // error
 >bar : <V extends T, W extends U>(r: X, s: Y) => void
->    : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >r : X
 >  : ^
 >s : Y
@@ -163,9 +163,9 @@ var f3 = <T, U extends T>(x: T, y: U) => {
 
 var f4 = <U extends T, T>(x: V, y: X) => { // error
 >f4 : <U extends T, T>(x: V, y: X) => void
->   : ^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><U extends T, T>(x: V, y: X) => { // error    function bar<V extends T, W extends U>() {        var g = <X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        }    }} : <U extends T, T>(x: V, y: X) => void
->                                                                                                                                                                                                             : ^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>                                                                                                                                                                                                             : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : V
 >  : ^
 >y : X
@@ -173,7 +173,7 @@ var f4 = <U extends T, T>(x: V, y: X) => { // error
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->    : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^
 
         var g = <X extends W, Y extends V>(a: X, b: Y): T => {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T

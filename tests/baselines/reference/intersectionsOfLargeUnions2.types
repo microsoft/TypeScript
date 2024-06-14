@@ -123,7 +123,7 @@ export function assertNodeProperty<
 >assertNodeTagName(node, tagName) : boolean
 >                                 : ^^^^^^^
 >assertNodeTagName : <T_1 extends keyof ElementTagNameMap, U extends ElementTagNameMap[T_1]>(node: Node | null, tagName: T_1) => node is U
->                  : ^   ^^^^^^^^^                       ^^ ^^^^^^^^^                      ^^    ^^           ^^       ^^   ^^^^^         
+>                  : ^^^^^^^^^^^^^                       ^^ ^^^^^^^^^                      ^^    ^^           ^^       ^^   ^^^^^         
 >node : Node | null
 >     : ^^^^^^^^^^^
 >tagName : T

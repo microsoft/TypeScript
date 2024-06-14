@@ -282,16 +282,16 @@ const textToToken = new Map(Object.entries({
     "`": SyntaxKind.BacktickToken,
 }));
 
-const charToRegExpFlag = new Map(Object.entries({
-    d: RegularExpressionFlags.HasIndices,
-    g: RegularExpressionFlags.Global,
-    i: RegularExpressionFlags.IgnoreCase,
-    m: RegularExpressionFlags.Multiline,
-    s: RegularExpressionFlags.DotAll,
-    u: RegularExpressionFlags.Unicode,
-    v: RegularExpressionFlags.UnicodeSets,
-    y: RegularExpressionFlags.Sticky,
-}));
+const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
+    [CharacterCodes.d, RegularExpressionFlags.HasIndices],
+    [CharacterCodes.g, RegularExpressionFlags.Global],
+    [CharacterCodes.i, RegularExpressionFlags.IgnoreCase],
+    [CharacterCodes.m, RegularExpressionFlags.Multiline],
+    [CharacterCodes.s, RegularExpressionFlags.DotAll],
+    [CharacterCodes.u, RegularExpressionFlags.Unicode],
+    [CharacterCodes.v, RegularExpressionFlags.UnicodeSets],
+    [CharacterCodes.y, RegularExpressionFlags.Sticky],
+]);
 
 const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
@@ -394,8 +394,8 @@ function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | u
         lookupInUnicodeMap(code, unicodeES5IdentifierPart);
 }
 
-function makeReverseMap(source: Map<string, number>): string[] {
-    const result: string[] = [];
+function makeReverseMap<T>(source: Map<T, number>): T[] {
+    const result: T[] = [];
     source.forEach((value, name) => {
         result[value] = name;
     });
@@ -416,16 +416,16 @@ export function stringToToken(s: string): SyntaxKind | undefined {
     return textToToken.get(s);
 }
 
-const regExpFlagChars = makeReverseMap(charToRegExpFlag);
+const regExpFlagCharCodes = makeReverseMap(charCodeToRegExpFlag);
 
 /** @internal */
-export function regularExpressionFlagToCharacter(f: RegularExpressionFlags): string | undefined {
-    return regExpFlagChars[f];
+export function regularExpressionFlagToCharacterCode(f: RegularExpressionFlags): CharacterCodes | undefined {
+    return regExpFlagCharCodes[f];
 }
 
 /** @internal */
-export function characterToRegularExpressionFlag(c: string): RegularExpressionFlags | undefined {
-    return charToRegExpFlag.get(c);
+export function characterCodeToRegularExpressionFlag(ch: CharacterCodes): RegularExpressionFlags | undefined {
+    return charCodeToRegExpFlag.get(ch);
 }
 
 /** @internal */
@@ -2562,23 +2562,24 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                         break;
                     }
+                    const size = charSize(ch);
                     if (reportErrors) {
-                        const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                        const flag = characterCodeToRegularExpressionFlag(ch);
                         if (flag === undefined) {
-                            error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                            error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                         }
                         else if (regExpFlags & flag) {
-                            error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                            error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
                         }
                         else if (((regExpFlags | flag) & RegularExpressionFlags.AnyUnicodeMode) === RegularExpressionFlags.AnyUnicodeMode) {
-                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, 1);
+                            error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, size);
                         }
                         else {
                             regExpFlags |= flag;
-                            checkRegularExpressionFlagAvailable(flag, pos);
+                            checkRegularExpressionFlagAvailability(flag, size);
                         }
                     }
-                    pos++;
+                    pos += size;
                 }
                 if (reportErrors) {
                     scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
@@ -2843,25 +2844,26 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
             while (true) {
-                const ch = charCodeChecked(pos);
+                const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
-                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                const size = charSize(ch);
+                const flag = characterCodeToRegularExpressionFlag(ch);
                 if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Unknown_regular_expression_flag, pos, size);
                 }
                 else if (currFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                    error(Diagnostics.Duplicate_regular_expression_flag, pos, size);
                 }
                 else if (!(flag & RegularExpressionFlags.Modifiers)) {
-                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
+                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, size);
                 }
                 else {
                     currFlags |= flag;
-                    checkRegularExpressionFlagAvailable(flag, pos);
+                    checkRegularExpressionFlagAvailability(flag, size);
                 }
-                pos++;
+                pos += size;
             }
             return currFlags;
         }
@@ -3566,6 +3568,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         forEach(groupNameReferences, reference => {
             if (!groupSpecifiers?.has(reference.name)) {
                 error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
+                if (groupSpecifiers) {
+                    const suggestion = getSpellingSuggestion(reference.name, groupSpecifiers, identity);
+                    if (suggestion) {
+                        error(Diagnostics.Did_you_mean_0, reference.pos, reference.end - reference.pos, suggestion);
+                    }
+                }
             }
         });
         forEach(decimalEscapes, escape => {
@@ -3583,10 +3591,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         });
     }
 
-    function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+    function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, size: number) {
         const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
         if (availableFrom && languageVersion < availableFrom) {
-            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
         }
     }
 
@@ -4068,6 +4076,9 @@ const binaryUnicodePropertiesOfStrings = new Set(["Basic_Emoji", "Emoji_Keycap_S
 // dprint-ignore
 const valuesOfNonBinaryUnicodeProperties = {
     General_Category: new Set(["C", "Other", "Cc", "Control", "cntrl", "Cf", "Format", "Cn", "Unassigned", "Co", "Private_Use", "Cs", "Surrogate", "L", "Letter", "LC", "Cased_Letter", "Ll", "Lowercase_Letter", "Lm", "Modifier_Letter", "Lo", "Other_Letter", "Lt", "Titlecase_Letter", "Lu", "Uppercase_Letter", "M", "Mark", "Combining_Mark", "Mc", "Spacing_Mark", "Me", "Enclosing_Mark", "Mn", "Nonspacing_Mark", "N", "Number", "Nd", "Decimal_Number", "digit", "Nl", "Letter_Number", "No", "Other_Number", "P", "Punctuation", "punct", "Pc", "Connector_Punctuation", "Pd", "Dash_Punctuation", "Pe", "Close_Punctuation", "Pf", "Final_Punctuation", "Pi", "Initial_Punctuation", "Po", "Other_Punctuation", "Ps", "Open_Punctuation", "S", "Symbol", "Sc", "Currency_Symbol", "Sk", "Modifier_Symbol", "Sm", "Math_Symbol", "So", "Other_Symbol", "Z", "Separator", "Zl", "Line_Separator", "Zp", "Paragraph_Separator", "Zs", "Space_Separator"]),
-    Script: new Set(["Adlm", "Adlam", "Aghb", "Caucasian_Albanian", "Ahom", "Ahom", "Arab", "Arabic", "Armi", "Imperial_Aramaic", "Armn", "Armenian", "Avst", "Avestan", "Bali", "Balinese", "Bamu", "Bamum", "Bass", "Bassa_Vah", "Batk", "Batak", "Beng", "Bengali", "Bhks", "Bhaiksuki", "Bopo", "Bopomofo", "Brah", "Brahmi", "Brai", "Braille", "Bugi", "Buginese", "Buhd", "Buhid", "Cakm", "Chakma", "Cans", "Canadian_Aboriginal", "Cari", "Carian", "Cham", "Cham", "Cher", "Cherokee", "Chrs", "Chorasmian", "Copt", "Coptic", "Qaac", "Cpmn", "Cypro_Minoan", "Cprt", "Cypriot", "Cyrl", "Cyrillic", "Deva", "Devanagari", "Diak", "Dives_Akuru", "Dogr", "Dogra", "Dsrt", "Deseret", "Dupl", "Duployan", "Egyp", "Egyptian_Hieroglyphs", "Elba", "Elbasan", "Elym", "Elymaic", "Ethi", "Ethiopic", "Geor", "Georgian", "Glag", "Glagolitic", "Gong", "Gunjala_Gondi", "Gonm", "Masaram_Gondi", "Goth", "Gothic", "Gran", "Grantha", "Grek", "Greek", "Gujr", "Gujarati", "Guru", "Gurmukhi", "Hang", "Hangul", "Hani", "Han", "Hano", "Hanunoo", "Hatr", "Hatran", "Hebr", "Hebrew", "Hira", "Hiragana", "Hluw", "Anatolian_Hieroglyphs", "Hmng", "Pahawh_Hmong", "Hmnp", "Nyiakeng_Puachue_Hmong", "Hrkt", "Katakana_Or_Hiragana", "Hung", "Old_Hungarian", "Ital", "Old_Italic", "Java", "Javanese", "Kali", "Kayah_Li", "Kana", "Katakana", "Kawi", "Kawi", "Khar", "Kharoshthi", "Khmr", "Khmer", "Khoj", "Khojki", "Kits", "Khitan_Small_Script", "Knda", "Kannada", "Kthi", "Kaithi", "Lana", "Tai_Tham", "Laoo", "Lao", "Latn", "Latin", "Lepc", "Lepcha", "Limb", "Limbu", "Lina", "Linear_A", "Linb", "Linear_B", "Lisu", "Lisu", "Lyci", "Lycian", "Lydi", "Lydian", "Mahj", "Mahajani", "Maka", "Makasar", "Mand", "Mandaic", "Mani", "Manichaean", "Marc", "Marchen", "Medf", "Medefaidrin", "Mend", "Mende_Kikakui", "Merc", "Meroitic_Cursive", "Mero", "Meroitic_Hieroglyphs", "Mlym", "Malayalam", "Modi", "Modi", "Mong", "Mongolian", "Mroo", "Mro", "Mtei", "Meetei_Mayek", "Mult", "Multani", "Mymr", "Myanmar", "Nagm", "Nag_Mundari", "Nand", "Nandinagari", "Narb", "Old_North_Arabian", "Nbat", "Nabataean", "Newa", "Newa", "Nkoo", "Nko", "Nshu", "Nushu", "Ogam", "Ogham", "Olck", "Ol_Chiki", "Orkh", "Old_Turkic", "Orya", "Oriya", "Osge", "Osage", "Osma", "Osmanya", "Ougr", "Old_Uyghur", "Palm", "Palmyrene", "Pauc", "Pau_Cin_Hau", "Perm", "Old_Permic", "Phag", "Phags_Pa", "Phli", "Inscriptional_Pahlavi", "Phlp", "Psalter_Pahlavi", "Phnx", "Phoenician", "Plrd", "Miao", "Prti", "Inscriptional_Parthian", "Rjng", "Rejang", "Rohg", "Hanifi_Rohingya", "Runr", "Runic", "Samr", "Samaritan", "Sarb", "Old_South_Arabian", "Saur", "Saurashtra", "Sgnw", "SignWriting", "Shaw", "Shavian", "Shrd", "Sharada", "Sidd", "Siddham", "Sind", "Khudawadi", "Sinh", "Sinhala", "Sogd", "Sogdian", "Sogo", "Old_Sogdian", "Sora", "Sora_Sompeng", "Soyo", "Soyombo", "Sund", "Sundanese", "Sylo", "Syloti_Nagri", "Syrc", "Syriac", "Tagb", "Tagbanwa", "Takr", "Takri", "Tale", "Tai_Le", "Talu", "New_Tai_Lue", "Taml", "Tamil", "Tang", "Tangut", "Tavt", "Tai_Viet", "Telu", "Telugu", "Tfng", "Tifinagh", "Tglg", "Tagalog", "Thaa", "Thaana", "Thai", "Thai", "Tibt", "Tibetan", "Tirh", "Tirhuta", "Tnsa", "Tangsa", "Toto", "Toto", "Ugar", "Ugaritic", "Vaii", "Vai", "Vith", "Vithkuqi", "Wara", "Warang_Citi", "Wcho", "Wancho", "Xpeo", "Old_Persian", "Xsux", "Cuneiform", "Yezi", "Yezidi", "Yiii", "Yi", "Zanb", "Zanabazar_Square", "Zinh", "Inherited", "Qaai", "Zyyy", "Common", "Zzzz", "Unknown"]),
-    Script_Extensions: new Set<string>(), // Currently empty
+    Script: new Set(["Adlm", "Adlam", "Aghb", "Caucasian_Albanian", "Ahom", "Arab", "Arabic", "Armi", "Imperial_Aramaic", "Armn", "Armenian", "Avst", "Avestan", "Bali", "Balinese", "Bamu", "Bamum", "Bass", "Bassa_Vah", "Batk", "Batak", "Beng", "Bengali", "Bhks", "Bhaiksuki", "Bopo", "Bopomofo", "Brah", "Brahmi", "Brai", "Braille", "Bugi", "Buginese", "Buhd", "Buhid", "Cakm", "Chakma", "Cans", "Canadian_Aboriginal", "Cari", "Carian", "Cham", "Cher", "Cherokee", "Chrs", "Chorasmian", "Copt", "Coptic", "Qaac", "Cpmn", "Cypro_Minoan", "Cprt", "Cypriot", "Cyrl", "Cyrillic", "Deva", "Devanagari", "Diak", "Dives_Akuru", "Dogr", "Dogra", "Dsrt", "Deseret", "Dupl", "Duployan", "Egyp", "Egyptian_Hieroglyphs", "Elba", "Elbasan", "Elym", "Elymaic", "Ethi", "Ethiopic", "Geor", "Georgian", "Glag", "Glagolitic", "Gong", "Gunjala_Gondi", "Gonm", "Masaram_Gondi", "Goth", "Gothic", "Gran", "Grantha", "Grek", "Greek", "Gujr", "Gujarati", "Guru", "Gurmukhi", "Hang", "Hangul", "Hani", "Han", "Hano", "Hanunoo", "Hatr", "Hatran", "Hebr", "Hebrew", "Hira", "Hiragana", "Hluw", "Anatolian_Hieroglyphs", "Hmng", "Pahawh_Hmong", "Hmnp", "Nyiakeng_Puachue_Hmong", "Hrkt", "Katakana_Or_Hiragana", "Hung", "Old_Hungarian", "Ital", "Old_Italic", "Java", "Javanese", "Kali", "Kayah_Li", "Kana", "Katakana", "Kawi", "Khar", "Kharoshthi", "Khmr", "Khmer", "Khoj", "Khojki", "Kits", "Khitan_Small_Script", "Knda", "Kannada", "Kthi", "Kaithi", "Lana", "Tai_Tham", "Laoo", "Lao", "Latn", "Latin", "Lepc", "Lepcha", "Limb", "Limbu", "Lina", "Linear_A", "Linb", "Linear_B", "Lisu", "Lyci", "Lycian", "Lydi", "Lydian", "Mahj", "Mahajani", "Maka", "Makasar", "Mand", "Mandaic", "Mani", "Manichaean", "Marc", "Marchen", "Medf", "Medefaidrin", "Mend", "Mende_Kikakui", "Merc", "Meroitic_Cursive", "Mero", "Meroitic_Hieroglyphs", "Mlym", "Malayalam", "Modi", "Mong", "Mongolian", "Mroo", "Mro", "Mtei", "Meetei_Mayek", "Mult", "Multani", "Mymr", "Myanmar", "Nagm", "Nag_Mundari", "Nand", "Nandinagari", "Narb", "Old_North_Arabian", "Nbat", "Nabataean", "Newa", "Nkoo", "Nko", "Nshu", "Nushu", "Ogam", "Ogham", "Olck", "Ol_Chiki", "Orkh", "Old_Turkic", "Orya", "Oriya", "Osge", "Osage", "Osma", "Osmanya", "Ougr", "Old_Uyghur", "Palm", "Palmyrene", "Pauc", "Pau_Cin_Hau", "Perm", "Old_Permic", "Phag", "Phags_Pa", "Phli", "Inscriptional_Pahlavi", "Phlp", "Psalter_Pahlavi", "Phnx", "Phoenician", "Plrd", "Miao", "Prti", "Inscriptional_Parthian", "Rjng", "Rejang", "Rohg", "Hanifi_Rohingya", "Runr", "Runic", "Samr", "Samaritan", "Sarb", "Old_South_Arabian", "Saur", "Saurashtra", "Sgnw", "SignWriting", "Shaw", "Shavian", "Shrd", "Sharada", "Sidd", "Siddham", "Sind", "Khudawadi", "Sinh", "Sinhala", "Sogd", "Sogdian", "Sogo", "Old_Sogdian", "Sora", "Sora_Sompeng", "Soyo", "Soyombo", "Sund", "Sundanese", "Sylo", "Syloti_Nagri", "Syrc", "Syriac", "Tagb", "Tagbanwa", "Takr", "Takri", "Tale", "Tai_Le", "Talu", "New_Tai_Lue", "Taml", "Tamil", "Tang", "Tangut", "Tavt", "Tai_Viet", "Telu", "Telugu", "Tfng", "Tifinagh", "Tglg", "Tagalog", "Thaa", "Thaana", "Thai", "Tibt", "Tibetan", "Tirh", "Tirhuta", "Tnsa", "Tangsa", "Toto", "Ugar", "Ugaritic", "Vaii", "Vai", "Vith", "Vithkuqi", "Wara", "Warang_Citi", "Wcho", "Wancho", "Xpeo", "Old_Persian", "Xsux", "Cuneiform", "Yezi", "Yezidi", "Yiii", "Yi", "Zanb", "Zanabazar_Square", "Zinh", "Inherited", "Qaai", "Zyyy", "Common", "Zzzz", "Unknown"]),
+    Script_Extensions: undefined! as Set<string>,
 };
+// The Script_Extensions property of a character contains one or more Script values. See https://www.unicode.org/reports/tr24/#Script_Extensions
+// Here since each Unicode property value expression only allows a single value, its values can be considered the same as those of the Script property.
+valuesOfNonBinaryUnicodeProperties.Script_Extensions = valuesOfNonBinaryUnicodeProperties.Script;

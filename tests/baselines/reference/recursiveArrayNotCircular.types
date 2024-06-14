@@ -150,7 +150,7 @@ function reducer(action: ReducerAction): void {
 >action.payload.map(reducer) : void[]
 >                            : ^^^^^^
 >action.payload.map : <U>(callbackfn: (value: ReducerAction, index: number, array: ReducerAction[]) => U, thisArg?: any) => U[]
->                   : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                   : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >action.payload : ReducerAction[]
 >               : ^^^^^^^^^^^^^^^
 >action : { type: ActionType.Batch; payload: ReducerAction[]; }
@@ -158,7 +158,7 @@ function reducer(action: ReducerAction): void {
 >payload : ReducerAction[]
 >        : ^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: ReducerAction, index: number, array: ReducerAction[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >reducer : (action: ReducerAction) => void
 >        : ^      ^^             ^^^^^    
 

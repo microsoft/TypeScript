@@ -7,7 +7,7 @@ Instantiation count: 2,500
 === deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
->   : ^ ^^  ^^^^^^^^^       ^^^^^^^^^^^^^           ^^^^^^^^^^^
+>   : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^           ^^^^^^^^^^^
 
     let v1: Extract<T, string> = 0 as any as T;  // Error
 >v1 : Extract<T, string>
@@ -54,7 +54,7 @@ type Bar<T> = { x: Bar<T[]> };
 
 function f2<U>() {
 >f2 : <U>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
 >x : Foo<U>
@@ -81,7 +81,7 @@ type Foo2<T> = { x: Foo1<T> };
 
 function f3<U>() {
 >f3 : <U>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
 >x : Foo1<U>

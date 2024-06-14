@@ -176,7 +176,7 @@ type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 
 declare const connect: {
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
@@ -354,7 +354,7 @@ const Test1 = connect(
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
+>        : ^        ^^^^^^^              ^^^^^^^         ^^^^^^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   null,
   mapDispatchToProps
