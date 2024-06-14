@@ -967,10 +967,6 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
-        "category": "Error",
-        "code": 1293
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -4365,10 +4361,6 @@
         "category": "Error",
         "code": 5012
     },
-    "Failed to parse file '{0}': {1}.": {
-        "category": "Error",
-        "code": 5014
-    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -4616,6 +4608,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5893,6 +5889,14 @@
     "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
         "category": "Message",
         "code": 6418
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors.": {
+        "category": "Message",
+        "code": 6419
+    },
+    "Project '{0}' is out of date because {1}.": {
+        "category": "Message",
+        "code": 6420
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -8325,5 +8329,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
+        "category": "Error",
+        "code": 18057
     }
 }

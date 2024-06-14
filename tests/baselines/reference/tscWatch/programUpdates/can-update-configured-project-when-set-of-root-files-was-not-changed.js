@@ -138,7 +138,10 @@ Program files::
 /a/b/f1.ts
 /a/b/f2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/f1.ts
+/a/b/f2.ts
 
 No shapes updated in the builder::
 

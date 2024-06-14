@@ -102,7 +102,6 @@ import {
     OutliningSpan,
     PasteEdits,
     Path,
-    perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
     Program,
@@ -299,7 +298,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         : common;
 }
 
-export interface PendingErrorCheck {
+interface PendingErrorCheck {
     fileName: NormalizedPath;
     project: Project;
 }
@@ -993,6 +992,10 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
+    // Minimum number of lines for attempting to use region diagnostics for a file.
+    /** @internal */
+    protected regionDiagLineCountThreshold = 500;
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1206,7 +1209,6 @@ export class Session<TMessage = string> implements EventSender {
 
     protected writeMessage(msg: protocol.Message) {
         const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
-        perfLogger?.logEvent(`Response message size: ${msgText.length}`);
         this.host.write(msgText);
     }
 
@@ -1257,29 +1259,72 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
             : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
-        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
+        const diagnosticsStartTime = this.hrtime();
+        tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
+        let diagnosticsResult;
+        if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
+            tracing?.pop();
+            return;
+        }
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, diagnosticsResult.spans);
+        tracing?.pop();
+        return;
+    }
+
+    // We should only do the region-based semantic check if we think it would be
+    // considerably faster than a whole-file semantic check.
+    /** @internal */
+    protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.textStorage.getLineInfo().getLineCount();
+        return !!(lineCount && lineCount >= this.regionDiagLineCountThreshold);
+    }
+
+    private sendDiagnosticsEvent(
+        file: NormalizedPath,
+        project: Project,
+        diagnostics: readonly Diagnostic[],
+        kind: protocol.DiagnosticEventKind,
+        diagnosticsStartTime: [number, number],
+        spans?: TextSpan[],
+    ): void {
         try {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const duration = hrTimeToMilliseconds(this.hrtime(diagnosticsStartTime));
+
+            const body: protocol.DiagnosticEventBody = {
+                file,
+                diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+                duration,
+            };
+            this.event<protocol.DiagnosticEventBody>(
+                body,
+                kind,
+            );
         }
         catch (err) {
             this.logError(err, kind);
@@ -1287,7 +1332,15 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-    private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
+    private updateErrorCheck(
+        next: NextStep,
+        checkList: PendingErrorCheck[] | (string | protocol.FileRangesRequestArgs)[],
+        ms: number,
+        requireOpen = true,
+    ) {
+        if (checkList.length === 0) {
+            return;
+        }
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
@@ -1297,23 +1350,43 @@ export class Session<TMessage = string> implements EventSender {
         const goNext = () => {
             index++;
             if (checkList.length > index) {
-                next.delay("checkOne", followMs, checkOne);
+                return next.delay("checkOne", followMs, checkOne);
             }
         };
+
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project) => {
+            this.semanticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            if (this.getPreferences(fileName).disableSuggestions) {
+                return goNext();
+            }
+            next.immediate("suggestionCheck", () => {
+                this.suggestionCheck(fileName, project);
+                goNext();
+            });
+        };
+
         const checkOne = () => {
             if (this.changeSeq !== seq) {
                 return;
             }
 
-            let item: string | PendingErrorCheck | undefined = checkList[index];
+            let ranges: protocol.FileRange[] | undefined;
+            let item: string | protocol.FileRangesRequestArgs | PendingErrorCheck | undefined = checkList[index];
             if (isString(item)) {
-                // Find out project for the file name
                 item = this.toPendingErrorCheck(item);
-                if (!item) {
-                    // Ignore file if there is no project for the file
-                    goNext();
-                    return;
-                }
+            }
+            // eslint-disable-next-line local/no-in-operator
+            else if ("ranges" in item) {
+                ranges = item.ranges;
+                item = this.toPendingErrorCheck(item.file);
+            }
+
+            if (!item) {
+                return goNext();
             }
 
             const { fileName, project } = item;
@@ -1331,24 +1404,23 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
-                return;
+                return goNext();
             }
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
 
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNext();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
-                    goNext();
+            if (ranges) {
+                return next.immediate("regionSemanticCheck", () => {
+                    const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+                    if (scriptInfo) {
+                        this.regionSemanticCheck(fileName, project, ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)));
+                    }
+                    if (this.changeSeq !== seq) {
+                        return;
+                    }
+                    next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
                 });
-            });
+            }
+
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
@@ -2505,13 +2577,13 @@ export class Session<TMessage = string> implements EventSender {
         return project && { fileName, project };
     }
 
-    private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
-        if (fileNames.length > 0) {
-            this.updateErrorCheck(next, fileNames, delay);
+        if (fileArgs.length > 0) {
+            this.updateErrorCheck(next, fileArgs, delay);
         }
     }
 
@@ -3698,7 +3770,6 @@ export class Session<TMessage = string> implements EventSender {
             relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-            perfLogger?.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
             tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
             const { response, responseRequired } = this.executeCommand(request);
@@ -3715,7 +3786,6 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             // Note: Log before writing the response, else the editor can complete its activity before the server does
-            perfLogger?.logStopCommand("" + request.command, "Success");
             tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
             if (response) {
                 this.doOutput(response, request.command, request.seq, /*success*/ true);
@@ -3730,14 +3800,12 @@ export class Session<TMessage = string> implements EventSender {
 
             if (err instanceof OperationCanceledException) {
                 // Handle cancellation exceptions
-                perfLogger?.logStopCommand("" + (request && request.command), "Canceled: " + err);
                 tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
                 this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                 return;
             }
 
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
-            perfLogger?.logStopCommand("" + (request && request.command), "Error: " + err);
             tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
 
             this.doOutput(

@@ -46,7 +46,7 @@ export function forEachNoEmitOnErrorScenario<T>(
         for (const declaration of [undefined, true] as const) {
             for (const incremental of [undefined, true] as const) {
                 action(
-                    scenario => `${scenario}${outFile ? " outFile" : ""}${declaration ? " with declaration" : ""}${incremental ? " with incremental" : ""}`,
+                    scenario => `${outFile ? "outFile" : "multiFile"}/${scenario}${declaration ? " with declaration" : ""}${incremental ? " with incremental" : ""}`,
                     () =>
                         loadFs(
                             getFsContentsForNoEmitOnError(outFile, declaration, incremental),
