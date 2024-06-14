@@ -1,13 +1,13 @@
-{
-    "extends": "../tsconfig-base",
-    "compilerOptions": {
-      "module": "CommonJS",
-      "moduleResolution": "node",
-      "types": ["node"]
-    },
-    "references": [
-      { "path": "../compiler" }
-    ],
-    "include": ["**/*"]
-  }
-  
+{ 
+  "$schema": "./tsconfig-schema.json",
+  "extends": "../tsconfig-base",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "references": [
+    { "path": "../compiler" }
+  ],
+  "include": ["**/*"]
+}
