@@ -1144,8 +1144,7 @@ export interface NonIncrementalBuildInfo extends BuildInfo {
     checkPending: true | undefined;
 }
 
-/** @internal */
-export function isNonIncrementalBuildInfo(info: BuildInfo): info is NonIncrementalBuildInfo {
+function isNonIncrementalBuildInfo(info: BuildInfo): info is NonIncrementalBuildInfo {
     return !isIncrementalBuildInfo(info) && !!(info as NonIncrementalBuildInfo).root;
 }
 

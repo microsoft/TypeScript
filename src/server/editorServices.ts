@@ -788,9 +788,8 @@ function forEachAncestorProject<T>(
  * Goes through project's resolved project references and finds, creates or reloads project per kind
  * If project for this resolved reference exists its used immediately otherwise,
  * follows all references in order, deciding if references of the visited project can be loaded or not
- * @internal
  */
-export function forEachResolvedProjectReferenceProject<T>(
+function forEachResolvedProjectReferenceProject<T>(
     project: ConfiguredProject,
     fileName: string | undefined,
     cb: (child: ConfiguredProject, sentConfigFileDiag: boolean) => T | undefined,

@@ -4042,8 +4042,7 @@ export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string 
     });
 }
 
-/** @internal */
-export function getSymbolParentOrFail(symbol: Symbol) {
+function getSymbolParentOrFail(symbol: Symbol) {
     return Debug.checkDefined(
         symbol.parent,
         `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
