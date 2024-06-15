@@ -1,7 +1,5 @@
 import {
-    getBaseFileName,
-    identity,
-    SortedArray,
+    getBaseFileName
 } from "./_namespaces/ts.js";
 import {
     Logger,
