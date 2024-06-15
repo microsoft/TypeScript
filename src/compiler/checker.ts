@@ -19495,7 +19495,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const skippedPrivateMembers = new Set<__String>();
         const indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getUnionIndexInfos([left, right]);
 
-        // propagating flags of the right properties should be preserved if they override the left properties
+        // propagating flags of the right properties should always be preserved
+        // propagating flags of the left properties doesn't always happen since right properties can override them
         let finalObjectFlags = objectFlags & ~ObjectFlags.PropagatingFlags;
         for (const rightProp of getPropertiesOfType(right)) {
             finalObjectFlags |= getObjectFlags(getTypeOfSymbol(rightProp)) & ObjectFlags.PropagatingFlags;
