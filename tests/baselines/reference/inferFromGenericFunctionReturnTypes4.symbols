@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes4.ts] ////
+
+=== inferFromGenericFunctionReturnTypes4.ts ===
+// https://github.com/microsoft/TypeScript/issues/58833
+
+interface Config<T> {
+>Config : Symbol(Config, Decl(inferFromGenericFunctionReturnTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 2, 17))
+
+  context: T;
+>context : Symbol(Config.context, Decl(inferFromGenericFunctionReturnTypes4.ts, 2, 21))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 2, 17))
+
+  invoke: {
+>invoke : Symbol(Config.invoke, Decl(inferFromGenericFunctionReturnTypes4.ts, 3, 13))
+
+    (x: T): void;
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 5, 5))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 2, 17))
+
+    exec: (x: T) => void;
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 5, 17))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 6, 11))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 2, 17))
+
+  };
+}
+
+declare function create<T>(config: Config<T>): void;
+>create : Symbol(create, Decl(inferFromGenericFunctionReturnTypes4.ts, 8, 1))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 10, 24))
+>config : Symbol(config, Decl(inferFromGenericFunctionReturnTypes4.ts, 10, 27))
+>Config : Symbol(Config, Decl(inferFromGenericFunctionReturnTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 10, 24))
+
+declare function myInvoke<T>(i: { exec: (x: T) => void }): {
+>myInvoke : Symbol(myInvoke, Decl(inferFromGenericFunctionReturnTypes4.ts, 10, 52))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 26))
+>i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 29))
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 33))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 41))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 26))
+
+  (x: T): void;
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 13, 3))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 26))
+
+  exec: (x: T) => void;
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 13, 15))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 14, 9))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 12, 26))
+
+};
+
+create({
+>create : Symbol(create, Decl(inferFromGenericFunctionReturnTypes4.ts, 8, 1))
+
+  context: { count: 10 },
+>context : Symbol(context, Decl(inferFromGenericFunctionReturnTypes4.ts, 17, 8))
+>count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 18, 12))
+
+  invoke: myInvoke({
+>invoke : Symbol(invoke, Decl(inferFromGenericFunctionReturnTypes4.ts, 18, 25))
+>myInvoke : Symbol(myInvoke, Decl(inferFromGenericFunctionReturnTypes4.ts, 10, 52))
+
+    exec: (x) => {
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 19, 20))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 20, 11))
+
+      x.count.toFixed(2);
+>x.count.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x.count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 18, 12))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 20, 11))
+>count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 18, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    },
+  }),
+});
+
+declare function myInvoke2<T>(i: { exec: (x: T) => void }): {
+>myInvoke2 : Symbol(myInvoke2, Decl(inferFromGenericFunctionReturnTypes4.ts, 24, 3))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 27))
+>i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 30))
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 34))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 42))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 27))
+
+  (x: T): void;
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 27, 3))
+>T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 27))
+
+} & typeof i;
+>i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes4.ts, 26, 30))
+
+create({
+>create : Symbol(create, Decl(inferFromGenericFunctionReturnTypes4.ts, 8, 1))
+
+  context: { count: 20 },
+>context : Symbol(context, Decl(inferFromGenericFunctionReturnTypes4.ts, 30, 8))
+>count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 31, 12))
+
+  invoke: myInvoke2({
+>invoke : Symbol(invoke, Decl(inferFromGenericFunctionReturnTypes4.ts, 31, 25))
+>myInvoke2 : Symbol(myInvoke2, Decl(inferFromGenericFunctionReturnTypes4.ts, 24, 3))
+
+    exec: (x) => {
+>exec : Symbol(exec, Decl(inferFromGenericFunctionReturnTypes4.ts, 32, 21))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 33, 11))
+
+      x.count.toFixed(2);
+>x.count.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x.count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 31, 12))
+>x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes4.ts, 33, 11))
+>count : Symbol(count, Decl(inferFromGenericFunctionReturnTypes4.ts, 31, 12))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    },
+  }),
+});
+

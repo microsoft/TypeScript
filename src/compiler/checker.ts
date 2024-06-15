@@ -36090,7 +36090,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isGenericFunctionReturningFunction(signature: Signature) {
-        return !!(signature.typeParameters && isFunctionType(getReturnTypeOfSignature(signature)));
+        if (!signature.typeParameters) {
+            return false;
+        }
+        const returnType = getReturnTypeOfSignature(signature);
+        return returnType.flags & TypeFlags.Intersection ? some((returnType as IntersectionType).types, isFunctionType) : isFunctionType(returnType);
     }
 
     /**
