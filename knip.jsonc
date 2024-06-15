@@ -28,7 +28,7 @@
     "ignore": [
         "scripts/failed-tests.d.cts"
     ],
-    "ignoreDependencies": ["c8", "diff", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter"],
+    "ignoreDependencies": ["c8", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter"],
     "ignoreExportsUsedInFile": {
         "enum": true,
         "interface": true,
