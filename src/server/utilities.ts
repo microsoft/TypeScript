@@ -1,6 +1,4 @@
-import {
-    getBaseFileName
-} from "./_namespaces/ts.js";
+import { getBaseFileName } from "./_namespaces/ts.js";
 import {
     Logger,
     LogLevel,
