@@ -33,3 +33,41 @@ const bar = {
 
 };
 
+function doSthWithParams(params: unknown) {
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 14, 2))
+>params : Symbol(params, Decl(noImplicitAnySpreads1.ts, 16, 25))
+
+  return {
+    c: 'foo',
+>c : Symbol(c, Decl(noImplicitAnySpreads1.ts, 17, 10))
+
+    p: 'bar',
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 18, 13))
+
+    s: 'baz',
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 19, 13))
+
+  };
+}
+
+const baz = {
+>baz : Symbol(baz, Decl(noImplicitAnySpreads1.ts, 24, 5))
+
+  p: null,
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 24, 13))
+
+  s: null,
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 25, 10))
+
+  ...doSthWithParams({
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 14, 2))
+
+    p: 'hello',
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 27, 22))
+
+    s: 'world',
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 28, 15))
+
+  }),
+};
+

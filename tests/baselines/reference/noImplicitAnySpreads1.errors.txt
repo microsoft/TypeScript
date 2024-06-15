@@ -20,3 +20,20 @@ noImplicitAnySpreads1.ts(13,3): error TS7018: Object literal's property 'other' 
       ...getMore(),
     };
     
+    function doSthWithParams(params: unknown) {
+      return {
+        c: 'foo',
+        p: 'bar',
+        s: 'baz',
+      };
+    }
+    
+    const baz = {
+      p: null,
+      s: null,
+      ...doSthWithParams({
+        p: 'hello',
+        s: 'world',
+      }),
+    };
+    

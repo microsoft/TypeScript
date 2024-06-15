@@ -54,3 +54,71 @@ const bar = {
 
 };
 
+function doSthWithParams(params: unknown) {
+>doSthWithParams : (params: unknown) => { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>params : unknown
+>       : ^^^^^^^
+
+  return {
+>{    c: 'foo',    p: 'bar',    s: 'baz',  } : { c: string; p: string; s: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    c: 'foo',
+>c : string
+>  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+    p: 'bar',
+>p : string
+>  : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+    s: 'baz',
+>s : string
+>  : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
+
+  };
+}
+
+const baz = {
+>baz : { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  s: null,  ...doSthWithParams({    p: 'hello',    s: 'world',  }),} : { c: string; p: string; s: string; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null,
+>p : null
+>  : ^^^^
+
+  s: null,
+>s : null
+>  : ^^^^
+
+  ...doSthWithParams({
+>doSthWithParams({    p: 'hello',    s: 'world',  }) : { c: string; p: string; s: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams : (params: unknown) => { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    p: 'hello',    s: 'world',  } : { p: string; s: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p: 'hello',
+>p : string
+>  : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+    s: 'world',
+>s : string
+>  : ^^^^^^
+>'world' : "world"
+>        : ^^^^^^^
+
+  }),
+};
+

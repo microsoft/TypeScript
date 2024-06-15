@@ -17,3 +17,20 @@ const bar = {
   other: null, // error, this does not get overriden
   ...getMore(),
 };
+
+function doSthWithParams(params: unknown) {
+  return {
+    c: 'foo',
+    p: 'bar',
+    s: 'baz',
+  };
+}
+
+const baz = {
+  p: null,
+  s: null,
+  ...doSthWithParams({
+    p: 'hello',
+    s: 'world',
+  }),
+};
