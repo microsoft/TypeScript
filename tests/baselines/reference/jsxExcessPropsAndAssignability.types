@@ -34,7 +34,7 @@ const myHoc = <ComposedComponentProps extends any>(
 
     const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
 >WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >React : any
 >      : ^^^
 >null as any : any
@@ -50,7 +50,7 @@ const myHoc = <ComposedComponentProps extends any>(
 ><WrapperComponent {...props} myProp={'1000000'} /> : JSX.Element
 >                                                   : ^^^^^^^^^^^
 >WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >props : ComposedComponentProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 >myProp : "1000000"
@@ -62,7 +62,7 @@ const myHoc = <ComposedComponentProps extends any>(
 ><WrapperComponent {...props} myProp={1000000} /> : JSX.Element
 >                                                 : ^^^^^^^^^^^
 >WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 >props : ComposedComponentProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 >myProp : number

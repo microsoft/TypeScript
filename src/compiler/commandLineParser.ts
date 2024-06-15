@@ -121,7 +121,7 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {
@@ -503,6 +503,25 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: true,
+        defaultValueDescription: false,
+        // Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
+    },
+    {
+        name: "noEmit",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Disable_emitting_files_from_a_compilation,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+    },
+    {
         name: "assumeChangesOnlyAffectDirectDependencies",
         type: "boolean",
         affectsSemanticDiagnostics: true,
@@ -771,29 +790,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Emit,
         defaultValueDescription: false,
         description: Diagnostics.Disable_emitting_comments,
-    },
-    {
-        name: "noCheck",
-        type: "boolean",
-        showInSimplifiedHelpView: false,
-        category: Diagnostics.Compiler_Diagnostics,
-        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-        affectsSemanticDiagnostics: true,
-        affectsBuildInfo: true,
-        extraValidation() {
-            return [Diagnostics.Unknown_compiler_option_0, "noCheck"];
-        },
-    },
-    {
-        name: "noEmit",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_emitting_files_from_a_compilation,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
     },
     {
         name: "importHelpers",
@@ -1638,6 +1634,12 @@ export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] 
 export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
 
 // Build related options
 /** @internal */

@@ -1,10 +1,10 @@
-import * as FourSlash from "./_namespaces/FourSlash";
+import * as FourSlash from "./_namespaces/FourSlash.js";
 import {
     IO,
     RunnerBase,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class FourSlashRunner extends RunnerBase {
     protected basePath: string;

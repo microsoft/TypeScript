@@ -77,7 +77,7 @@ class C1 extends Constructor<I1>() { x: string }
 >Constructor<I1>() : I1
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -87,7 +87,7 @@ class C2 extends Constructor<I2>() { x: string }
 >Constructor<I2>() : I2
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -97,7 +97,7 @@ class C3 extends Constructor<I3>() { x: string }
 >Constructor<I3>() : I3
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -107,7 +107,7 @@ class C4 extends Constructor<I4>() { x: string }
 >Constructor<I4>() : I4
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -117,7 +117,7 @@ class C5 extends Constructor<I5>() { x: string }
 >Constructor<I5>() : I5
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -127,7 +127,7 @@ class C6 extends Constructor<I6>() { x: string }
 >Constructor<I6>() : I6
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -137,7 +137,7 @@ class C7 extends Constructor<I7>() { x: string }
 >Constructor<I7>() : I7
 >                  : ^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -173,9 +173,9 @@ declare namespace NX { export const a = 1 }
 
 type T10 = typeof fx;
 >T10 : (x: string) => string
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >fx : (x: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 type T11 = typeof CX;
 >T11 : typeof CX
@@ -241,7 +241,7 @@ class C20 extends Constructor<Partial<T1>>() { x: string }
 >Constructor<Partial<T1>>() : Partial<T1>
 >                           : ^^^^^^^^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -251,7 +251,7 @@ class C21 extends Constructor<Readonly<T1>>() { x: string }
 >Constructor<Readonly<T1>>() : Readonly<T1>
 >                            : ^^^^^^^^^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -261,7 +261,7 @@ class C22 extends Constructor<Identifiable<T1>>() { x: string }
 >Constructor<Identifiable<T1>>() : Identifiable<T1>
 >                                : ^^^^^^^^^^^^^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >x : string
 >  : ^^^^^^
 
@@ -271,7 +271,7 @@ class C23 extends Constructor<Identifiable<T1 & { b: number}>>() { x: string }
 >Constructor<Identifiable<T1 & { b: number}>>() : Identifiable<T1 & { b: number; }>
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >Constructor : <T>() => Constructor<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^              
 >b : number
 >  : ^^^^^^
 >x : string

@@ -42,7 +42,7 @@ if (objWithValMaybeNull.val !== null)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 
@@ -54,7 +54,7 @@ if (objWithValMaybeNull.val !== null)
 >objWithValMaybeNull.val : number
 >                        : ^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number
 >    : ^^^^^^
 
@@ -64,7 +64,7 @@ if (objWithValMaybeNull.val !== myNull)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 >myNull : null
@@ -78,7 +78,7 @@ if (objWithValMaybeNull.val !== myNull)
 >objWithValMaybeNull.val : number
 >                        : ^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number
 >    : ^^^^^^
 
@@ -88,7 +88,7 @@ if (objWithValMaybeNull.val === null)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 
@@ -100,7 +100,7 @@ if (objWithValMaybeNull.val === null)
 >objWithValMaybeNull.val : null
 >                        : ^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : null
 >    : ^^^^
 
@@ -110,7 +110,7 @@ if (objWithValMaybeNull.val === myNull)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 >myNull : null
@@ -124,7 +124,7 @@ if (objWithValMaybeNull.val === myNull)
 >objWithValMaybeNull.val : null
 >                        : ^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : null
 >    : ^^^^
 

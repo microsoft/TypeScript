@@ -43,7 +43,7 @@ Multimap.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^   ^^ ^^^^^^
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 
@@ -108,7 +108,7 @@ Multimap2.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^   ^^ ^^^^^^
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 
@@ -189,7 +189,7 @@ Ns.Multimap3.prototype.get = function (key) {
 >get : any
 >    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
->                                                 : ^   ^^ ^^^^^^
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 

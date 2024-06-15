@@ -37,10 +37,10 @@ class B extends A<number, string> {
 >value.toExponential() : string
 >                      : ^^^^^^
 >value.toExponential : (fractionDigits?: number) => string
->                    : ^              ^^^      ^^^^^^^^^^^
+>                    : ^              ^^^      ^^^^^      
 >value : number
 >      : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 }
 

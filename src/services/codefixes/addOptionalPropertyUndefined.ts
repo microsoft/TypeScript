@@ -1,4 +1,8 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     emptyArray,
     factory,
@@ -26,11 +30,7 @@ import {
     TextSpan,
     TypeChecker,
     UnionTypeNode,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 

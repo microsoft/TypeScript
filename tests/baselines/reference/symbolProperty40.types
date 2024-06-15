@@ -7,7 +7,7 @@ class C {
 
     [Symbol.iterator](x: string): string;
 >[Symbol.iterator] : { (x: string): string; (x: number): number; }
->                  : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -19,7 +19,7 @@ class C {
 
     [Symbol.iterator](x: number): number;
 >[Symbol.iterator] : { (x: string): string; (x: number): number; }
->                  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -31,7 +31,7 @@ class C {
 
     [Symbol.iterator](x: any) {
 >[Symbol.iterator] : { (x: string): string; (x: number): number; }
->                  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -58,7 +58,7 @@ c[Symbol.iterator]("");
 >c[Symbol.iterator]("") : string
 >                       : ^^^^^^
 >c[Symbol.iterator] : { (x: string): string; (x: number): number; }
->                   : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
 >  : ^
 >Symbol.iterator : unique symbol
@@ -74,7 +74,7 @@ c[Symbol.iterator](0);
 >c[Symbol.iterator](0) : number
 >                      : ^^^^^^
 >c[Symbol.iterator] : { (x: string): string; (x: number): number; }
->                   : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >c : C
 >  : ^
 >Symbol.iterator : unique symbol

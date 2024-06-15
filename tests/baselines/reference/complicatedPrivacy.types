@@ -84,8 +84,8 @@ module m1 {
     }
 
     export function f4(arg1: 
->f4 : (arg1: {}) => void
->   : ^    ^^  ^^^^^^^^^
+>f4 : (arg1: { [number]: C1; }) => void
+>   : ^    ^^                 ^^^^^^^^^
 >arg1 : {}
 >     : ^^
     {

@@ -20,7 +20,7 @@ function bigger(this: {}) {
 >isBig(this) : boolean
 >            : ^^^^^^^
 >isBig : (x: any) => x is { big: true; }
->      : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^^^^                   
 >this : {}
 >     : ^^
 
@@ -28,7 +28,7 @@ function bigger(this: {}) {
 >this.big : true
 >         : ^^^^
 >this : { big: true; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^^^    ^^^
 >big : true
 >    : ^^^^
     }

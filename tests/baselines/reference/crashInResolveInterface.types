@@ -46,23 +46,23 @@ var x = q1.each(x => c.log(x));
 >q1.each(x => c.log(x)) : void
 >                       : ^^^^
 >q1.each : (action: (item: { a: number; }, index: number) => void) => void
->        : ^      ^^^    ^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^
+>        : ^      ^^^    ^^^^^^^      ^^^^^     ^^      ^^^^^    ^^^^^    
 >q1 : Q<{ a: number; }>
->   : ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^^
 >each : (action: (item: { a: number; }, index: number) => void) => void
->     : ^      ^^^    ^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^
+>     : ^      ^^^    ^^^^^^^      ^^^^^     ^^      ^^^^^    ^^^^^    
 >x => c.log(x) : (x: { a: number; }) => void
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^      ^^^^^^^^^^^^
 >x : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >c.log(x) : void
 >         : ^^^^
 >c.log : (message?: any, ...optionalParams: any[]) => void
->      : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>      : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >c : C
 >  : ^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >x : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 

@@ -1,19 +1,19 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { commonFile1 } from "../helpers/tscWatch";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commonFile1 } from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: inferredProjects", () => {
     it("create inferred project", () => {

@@ -17,11 +17,11 @@ function foo<T, U>(arg: { cb: new(t: T) => U }) {
 >new arg.cb(null) : U
 >                 : ^
 >arg.cb : new (t: T) => U
->       : ^^^^^ ^^ ^^^^^^
+>       : ^^^^^ ^^ ^^^^^ 
 >arg : { cb: new (t: T) => U; }
->    : ^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^^^^^^               ^^^
 >cb : new (t: T) => U
->   : ^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^ ^^^^^ 
 }
 
 var arg: { cb: new<T>(x: T) => string };
@@ -40,7 +40,7 @@ var r = foo(arg); // {}
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg : { cb: new <T>(x: T) => string; }
->    : ^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
+>    : ^^^^^^                       ^^^
 
 // more args not allowed
 var arg2: { cb: new <T>(x: T, y: T) => string };
@@ -61,7 +61,7 @@ var r2 = foo(arg2); // error
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
->     : ^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^
+>     : ^^^^^^                             ^^^
 
 var arg3: { cb: new (x: string, y: number) => string };
 >arg3 : { cb: new (x: string, y: number) => string; }
@@ -81,7 +81,7 @@ var r3 = foo(arg3); // error
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg3 : { cb: new (x: string, y: number) => string; }
->     : ^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^
+>     : ^^^^^^                                    ^^^
 
 function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
 >foo2 : <T, U>(arg: { cb: new (t: T, t2: T) => U; }) => U
@@ -99,11 +99,11 @@ function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
 >new arg.cb(null, null) : U
 >                       : ^
 >arg.cb : new (t: T, t2: T) => U
->       : ^^^^^ ^^ ^^  ^^ ^^^^^^
+>       : ^^^^^ ^^ ^^  ^^ ^^^^^ 
 >arg : { cb: new (t: T, t2: T) => U; }
->    : ^^^^^^^^^^^ ^^ ^^  ^^ ^^^^^^^^^
+>    : ^^^^^^                      ^^^
 >cb : new (t: T, t2: T) => U
->   : ^^^^^ ^^ ^^  ^^ ^^^^^^
+>   : ^^^^^ ^^ ^^  ^^ ^^^^^ 
 }
 
 // fewer args ok
@@ -115,7 +115,7 @@ var r4 = foo(arg); // {}
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg : { cb: new <T>(x: T) => string; }
->    : ^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
+>    : ^^^^^^                       ^^^
 
 var arg4: { cb: new (x: string) => string };
 >arg4 : { cb: new (x: string) => string; }
@@ -133,7 +133,7 @@ var r6 = foo(arg4); // string
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg4 : { cb: new (x: string) => string; }
->     : ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
+>     : ^^^^^^                         ^^^
 
 var arg5: { cb: new () => string };
 >arg5 : { cb: new () => string; }
@@ -149,5 +149,5 @@ var r7 = foo(arg5); // string
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >    : ^ ^^ ^^   ^^                        ^^^^^^
 >arg5 : { cb: new () => string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^                ^^^
 

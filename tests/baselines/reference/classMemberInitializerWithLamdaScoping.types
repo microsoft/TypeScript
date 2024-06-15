@@ -40,11 +40,11 @@ class Test {
 >console.log(field) : void
 >                   : ^^^^
 >console.log : (msg?: any) => void
->            : ^   ^^^   ^^^^^^^^^
+>            : ^   ^^^   ^^^^^    
 >console : { log(msg?: any): void; }
->        : ^^^^^^   ^^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^    ^^^
 >log : (msg?: any) => void
->    : ^   ^^^   ^^^^^^^^^
+>    : ^   ^^^   ^^^^^    
 >field : string
 >      : ^^^^^^
 
@@ -73,11 +73,11 @@ class Test {
 >console.log(field) : void
 >                   : ^^^^
 >console.log : (msg?: any) => void
->            : ^   ^^^   ^^^^^^^^^
+>            : ^   ^^^   ^^^^^    
 >console : { log(msg?: any): void; }
->        : ^^^^^^   ^^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^    ^^^
 >log : (msg?: any) => void
->    : ^   ^^^   ^^^^^^^^^
+>    : ^   ^^^   ^^^^^    
 >field : number
 >      : ^^^^^^
 
@@ -106,11 +106,11 @@ class Test1 {
 >console.log(field1) : void
 >                    : ^^^^
 >console.log : (msg?: any) => void
->            : ^   ^^^   ^^^^^^^^^
+>            : ^   ^^^   ^^^^^    
 >console : { log(msg?: any): void; }
->        : ^^^^^^   ^^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^    ^^^
 >log : (msg?: any) => void
->    : ^   ^^^   ^^^^^^^^^
+>    : ^   ^^^   ^^^^^    
 >field1 : any
 >       : ^^^
 
@@ -127,11 +127,11 @@ class Test1 {
 >console.log(field1) : void
 >                    : ^^^^
 >console.log : (msg?: any) => void
->            : ^   ^^^   ^^^^^^^^^
+>            : ^   ^^^   ^^^^^    
 >console : { log(msg?: any): void; }
->        : ^^^^^^   ^^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^    ^^^
 >log : (msg?: any) => void
->    : ^   ^^^   ^^^^^^^^^
+>    : ^   ^^^   ^^^^^    
 >field1 : string
 >       : ^^^^^^
 

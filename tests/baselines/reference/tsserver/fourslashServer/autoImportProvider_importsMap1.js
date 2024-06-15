@@ -136,6 +136,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -352,28 +353,6 @@ Info seq  [hh:mm:ss:mss] response:
       "body": [
         {
           "fixName": "import",
-          "description": "Add import from \"./env/browser.js\"",
-          "changes": [
-            {
-              "fileName": "/src/a.ts",
-              "textChanges": [
-                {
-                  "start": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "newText": "import { isBrowser } from \"./env/browser.js\";\r\n\r\n"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "fixName": "import",
           "description": "Add import from \"#is-browser\"",
           "changes": [
             {
@@ -389,6 +368,28 @@ Info seq  [hh:mm:ss:mss] response:
                     "offset": 1
                   },
                   "newText": "import { isBrowser } from \"#is-browser\";\r\n\r\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "fixName": "import",
+          "description": "Add import from \"./env/browser.js\"",
+          "changes": [
+            {
+              "fileName": "/src/a.ts",
+              "textChanges": [
+                {
+                  "start": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "newText": "import { isBrowser } from \"./env/browser.js\";\r\n\r\n"
                 }
               ]
             }

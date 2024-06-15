@@ -9,7 +9,7 @@ const fs = require("fs");
 >require("fs") : typeof fs
 >              : ^^^^^^^^^
 >require : (moduleName: string) => any
->        : ^          ^^      ^^^^^^^^
+>        : ^          ^^      ^^^^^   
 >"fs" : "fs"
 >     : ^^^^
 
@@ -19,11 +19,11 @@ const text = fs.readFileSync("/a/b/c");
 >fs.readFileSync("/a/b/c") : string
 >                          : ^^^^^^
 >fs.readFileSync : (s: string) => string
->                : ^ ^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^^^^      
 >fs : typeof fs
 >   : ^^^^^^^^^
 >readFileSync : (s: string) => string
->             : ^ ^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^      
 >"/a/b/c" : "/a/b/c"
 >         : ^^^^^^^^
 

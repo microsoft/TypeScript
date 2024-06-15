@@ -1,15 +1,15 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { commandLineCallbacks } from "./baseline";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commandLineCallbacks } from "./baseline.js";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,
-} from "./tsc";
+} from "./tsc.js";
 import {
     changeToHostTrackingWrittenFiles,
     TestServerHost,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function createSolutionBuilderHostForBaseline(
     sys: TscCompileSystem | TestServerHost,

@@ -1,5 +1,5 @@
-import { Baseline } from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import { Baseline } from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 describe("unittests:: canWatch::", () => {
     baselineCanWatch(
         "canWatchDirectoryOrFile",

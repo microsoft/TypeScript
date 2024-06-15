@@ -16,9 +16,9 @@ interface i3 extends i1 { foo: string; };
 interface i4 {
  bar():any;
 >bar : { (): any; (): any; }
->    : ^^^^^^   ^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^^   ^^^
 
  bar():any;
 >bar : { (): any; (): any; }
->    : ^^^^^^^^^^^^^^^   ^^^
+>    : ^^^^^^   ^^^^^^   ^^^
 }

@@ -29,11 +29,11 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"A" : "A"
 >    : ^^^
 
@@ -47,11 +47,11 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"B" : "B"
 >    : ^^^
 
@@ -61,11 +61,11 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"C" : "C"
 >    : ^^^
 
@@ -75,11 +75,11 @@ function test1(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"D" : "D"
 >    : ^^^
 
@@ -119,11 +119,11 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"A" : "A"
 >    : ^^^
 
@@ -133,11 +133,11 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"B" : "B"
 >    : ^^^
 
@@ -147,11 +147,11 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"C" : "C"
 >    : ^^^
 
@@ -165,11 +165,11 @@ function test2(arg: string | undefined) {
 >arg.toUpperCase() : string
 >                  : ^^^^^^
 >arg.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >arg : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"D" : "D"
 >    : ^^^
 
@@ -223,7 +223,7 @@ function test3(
 >!bar : boolean
 >     : ^^^^^^^
 >bar : { type: "b"; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^^^^^^^^
 
     return;
   }
@@ -232,7 +232,7 @@ function test3(
 >foo.kind : "a" | "b" | "c"
 >         : ^^^^^^^^^^^^^^^
 >foo : { kind: "a"; prop: string; } | { kind: "b"; prop: number; } | { kind: "c"; prop: boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^^^^^^       ^^^
 >kind : "a" | "b" | "c"
 >     : ^^^^^^^^^^^^^^^
 
@@ -245,7 +245,7 @@ function test3(
 >bar.type : "b"
 >         : ^^^
 >bar : { type: "b"; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^
 >type : "b"
 >     : ^^^
 
