@@ -68,7 +68,7 @@
         "glob": "^10.4.1",
         "hereby": "^1.8.9",
         "jsonc-parser": "^3.2.1",
-        "knip": "^5.12.3",
+        "knip": "^5.19.0",
         "minimist": "^1.2.8",
         "mocha": "^10.4.0",
         "mocha-fivemat-progress-reporter": "^0.1.0",
