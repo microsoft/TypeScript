@@ -8684,7 +8684,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isJSDocTypeLiteral(node)) {
                     return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
-                        const name = isIdentifier(t.name) ? t.name : t.name.right;
+                        const name = visitNode(isIdentifier(t.name) ? t.name : t.name.right, visitExistingNodeTreeSymbols, isIdentifier)!;
                         const typeViaParent = getTypeOfPropertyOfType(getTypeFromTypeNode(context, node), name.escapedText);
                         const overrideTypeNode = typeViaParent && t.typeExpression && getTypeFromTypeNode(context, t.typeExpression.type) !== typeViaParent ? typeToTypeNodeHelper(typeViaParent, context) : undefined;
 
@@ -8723,7 +8723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
                                     setTextRange(context, factory.createIdentifier(getNameForJSDocFunctionParameter(p, i)), p),
-                                    p.questionToken,
+                                    factory.cloneNode(p.questionToken),
                                     visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined,
                                 )),
@@ -8738,7 +8738,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
                                     setTextRange(context, factory.createIdentifier(getNameForJSDocFunctionParameter(p, i)), p),
-                                    p.questionToken,
+                                    factory.cloneNode(p.questionToken),
                                     visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined,
                                 )),
@@ -8756,7 +8756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isTypeParameterDeclaration(node)) {
                     return factory.updateTypeParameterDeclaration(
                         node,
-                        node.modifiers,
+                        visitNodes(node.modifiers, visitExistingNodeTreeSymbols, isModifier),
                         setTextRange(context, typeParameterToName(getDeclaredTypeOfSymbol(getSymbolOfDeclaration(node)), context), node),
                         visitNode(node.constraint, visitExistingNodeTreeSymbols, isTypeNode),
                         visitNode(node.default, visitExistingNodeTreeSymbols, isTypeNode),
@@ -8797,8 +8797,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.updateImportTypeNode(
                         node,
                         factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
-                        node.attributes,
-                        node.qualifier,
+                        visitNode(node.attributes, visitExistingNodeTreeSymbols, isImportAttributes),
+                        visitNode(node.qualifier, visitExistingNodeTreeSymbols, isEntityName),
                         visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
                         node.isTypeOf,
                     );
@@ -8877,9 +8877,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         parameterName = result;
                     }
                     else {
-                        parameterName = node.parameterName;
+                        parameterName = factory.cloneNode(node.parameterName);
                     }
-                    return factory.updateTypePredicateNode(node, node.assertsModifier, parameterName, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
+                    return factory.updateTypePredicateNode(node, factory.cloneNode(node.assertsModifier), parameterName, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
                 }
 
                 if (isTupleTypeNode(node) || isTypeLiteralNode(node) || isMappedTypeNode(node)) {
