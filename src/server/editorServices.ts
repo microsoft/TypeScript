@@ -76,7 +76,6 @@ import {
     LanguageServiceMode,
     length,
     map,
-    mapDefinedEntries,
     mapDefinedIterator,
     missingFileModifiedTime,
     MultiMap,
@@ -4273,14 +4272,15 @@ export class ProjectService {
 
     /** @internal */
     loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
-        forProjects = forProjects || mapDefinedEntries(
-            this.configuredProjects,
-            (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined,
+        forProjects ??= new Set(
+            mapDefinedIterator(this.configuredProjects.entries(), ([key, project]) => !project.isInitialLoadPending() ? key : undefined),
         );
 
         const seenProjects = new Set<NormalizedPath>();
-        // Work on array copy as we could add more projects as part of callback
-        for (const project of arrayFrom(this.configuredProjects.values())) {
+        // We must copy the current configured projects into a separate array,
+        // as we could end up creating and adding more projects indirectly.
+        const currentConfiguredProjects = arrayFrom(this.configuredProjects.values());
+        for (const project of currentConfiguredProjects) {
             // If this project has potential project reference for any of the project we are loading ancestor tree for
             // load this project first
             if (forEachPotentialProjectReference(project, potentialRefPath => forProjects.has(potentialRefPath))) {

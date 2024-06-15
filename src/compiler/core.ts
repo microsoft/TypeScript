@@ -538,30 +538,6 @@ export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U 
 }
 
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
-/** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
-/** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
-    if (!map) {
-        return undefined;
-    }
-
-    const result = new Map<K2, V2>();
-    map.forEach((value, key) => {
-        const entry = f(key, value);
-        if (entry !== undefined) {
-            const [newKey, newValue] = entry;
-            if (newKey !== undefined && newValue !== undefined) {
-                result.set(newKey, newValue);
-            }
-        }
-    });
-
-    return result;
-}
-
-/** @internal */
 export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V) {
     if (map.has(key)) {
         return map.get(key)!;
