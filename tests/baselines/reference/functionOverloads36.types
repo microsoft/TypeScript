@@ -3,7 +3,7 @@
 === functionOverloads36.ts ===
 function foo(bar:{a:number;}):number;
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->    : ^^^   ^^              ^^^      ^^^   ^^              ^^^^^^^^^^^^
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: number; }
 >    : ^^^^^      ^^^
 >a : number
@@ -11,7 +11,7 @@ function foo(bar:{a:number;}):number;
 
 function foo(bar:{a:string;}):string;
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->    : ^^^   ^^              ^^^^^^^^^^^^   ^^              ^^^      ^^^
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: string; }
 >    : ^^^^^      ^^^
 >a : string
@@ -19,12 +19,12 @@ function foo(bar:{a:string;}):string;
 
 function foo(bar:{a:any;}):any{ return bar }
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->    : ^^^   ^^              ^^^^^^^^^^^^   ^^              ^^^^^^^^^^^^
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >bar : { a: any; }
 >    : ^^^^^   ^^^
 >a : any
 >bar : { a: any; }
->    : ^^^^^^^^^^^
+>    : ^^^^^   ^^^
 
 var x = foo({a:'foo'});
 >x : string
@@ -32,7 +32,7 @@ var x = foo({a:'foo'});
 >foo({a:'foo'}) : string
 >               : ^^^^^^
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->    : ^^^   ^^              ^^^^^^^^^^^^   ^^              ^^^^^^^^^^^^
+>    : ^^^   ^^              ^^^      ^^^   ^^              ^^^      ^^^
 >{a:'foo'} : { a: string; }
 >          : ^^^^^^^^^^^^^^
 >a : string

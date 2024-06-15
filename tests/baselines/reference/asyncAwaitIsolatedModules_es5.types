@@ -23,7 +23,7 @@ async function f1(): Promise<void> { }
 
 async function f3(): MyPromise<void> { }
 >f3 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 
 let f4 = async function() { }
 >f4 : () => Promise<void>
@@ -39,9 +39,9 @@ let f5 = async function(): Promise<void> { }
 
 let f6 = async function(): MyPromise<void> { }
 >f6 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 >async function(): MyPromise<void> { } : () => MyPromise<void>
->                                      : ^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^               
 
 let f7 = async () => { };
 >f7 : () => Promise<void>
@@ -57,9 +57,9 @@ let f8 = async (): Promise<void> => { };
 
 let f9 = async (): MyPromise<void> => { };
 >f9 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 >async (): MyPromise<void> => { } : () => MyPromise<void>
->                                 : ^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^               
 
 let f10 = async () => p;
 >f10 : () => Promise<number>
@@ -87,17 +87,17 @@ let f12 = async (): Promise<number> => mp;
 
 let f13 = async (): MyPromise<number> => p;
 >f13 : () => MyPromise<number>
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                 
 >async (): MyPromise<number> => p : () => MyPromise<number>
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^                 
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 
 let o = {
 >o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^               ^^^
 >{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
->                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^               ^^^
 
 	async m1() { },
 >m1 : () => Promise<void>
@@ -109,7 +109,7 @@ let o = {
 
 	async m3(): MyPromise<void> { }
 >m3 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 
 };
 
@@ -127,7 +127,7 @@ class C {
 
 	async m3(): MyPromise<void> { }
 >m3 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 
 	static async m4() { }
 >m4 : () => Promise<void>
@@ -139,7 +139,7 @@ class C {
 
 	static async m6(): MyPromise<void> { }
 >m6 : () => MyPromise<void>
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^               
 }
 
 module M {

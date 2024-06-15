@@ -28,7 +28,7 @@ class Base { foo() { } }
 
 function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^^^^^^^
+>     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >collection : string
 >           : ^^^^^^
 >callback : (indexInArray: any, valueOfElement: any) => any
@@ -38,7 +38,7 @@ function each(collection: string, callback: (indexInArray: any, valueOfElement: 
 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->     : ^^^          ^^      ^^        ^^                                               ^^^^^^^^^          ^^      ^^        ^^                                                   ^^^   ^^^
+>     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >collection : JQuery
 >           : ^^^^^^
 >callback : (indexInArray: number, valueOfElement: Base) => any
@@ -50,7 +50,7 @@ function each(collection: JQuery, callback: (indexInArray: number, valueOfElemen
 
 function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->     : ^^^          ^^      ^^        ^^                                               ^^^^^^^^^          ^^      ^^        ^^                                                   ^^^^^^^^^
+>     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >collection : any
 >callback : (indexInArray: any, valueOfElement: any) => any
 >         : ^            ^^   ^^              ^^   ^^^^^   
@@ -73,15 +73,15 @@ function _setBarAndText(): void {
     each(x.find(" "), function () {
 >each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->     : ^^^          ^^      ^^        ^^                                               ^^^^^^^^^          ^^      ^^        ^^                                                   ^^^^^^^^^
+>     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >x.find(" ") : JQuery
 >            : ^^^^^^
 >x.find : (selector: string) => JQuery
->       : ^        ^^      ^^^^^^^^^^^
+>       : ^        ^^      ^^^^^      
 >x : JQuery
 >  : ^^^^^^
 >find : (selector: string) => JQuery
->     : ^        ^^      ^^^^^^^^^^^
+>     : ^        ^^      ^^^^^      
 >" " : " "
 >    : ^^^
 >function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } : () => void
@@ -103,11 +103,11 @@ function _setBarAndText(): void {
 >$this.find(".fx-usagebars-calloutbar-this") : JQuery
 >                                            : ^^^^^^
 >$this.find : (selector: string) => JQuery
->           : ^        ^^      ^^^^^^^^^^^
+>           : ^        ^^      ^^^^^      
 >$this : JQuery
 >      : ^^^^^^
 >find : (selector: string) => JQuery
->     : ^        ^^      ^^^^^^^^^^^
+>     : ^        ^^      ^^^^^      
 >".fx-usagebars-calloutbar-this" : ".fx-usagebars-calloutbar-this"
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -111,8 +111,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
+  File is CommonJS module because 'node_modules/@types/yargs/package.json' does not have field "type"
 src/bin.ts
   Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' was not found
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -7,13 +7,13 @@ import React = require('react')
 
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^           ^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >JSX : any
 >    : ^^^
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^           ^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >l : { yy: number; yy1: string; }
 >  : ^^^^^^      ^^^^^^^      ^^^
 >yy : number
@@ -84,7 +84,7 @@ const c1 = <OneThing />
 ><OneThing /> : JSX.Element
 >             : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 
 const c2 = <OneThing {...obj}/>
 >c2 : JSX.Element
@@ -92,7 +92,7 @@ const c2 = <OneThing {...obj}/>
 ><OneThing {...obj}/> : JSX.Element
 >                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj : { yy: number; yy1: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -102,7 +102,7 @@ const c3 = <OneThing {...{}} />
 ><OneThing {...{}} /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >{} : {}
 >   : ^^
 
@@ -112,7 +112,7 @@ const c4 = <OneThing {...obj1} {...obj} />
 ><OneThing {...obj1} {...obj} /> : JSX.Element
 >                                : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
 >     : ^^^^^^^^^^^^^^^^
 >obj : { yy: number; yy1: string; }
@@ -124,7 +124,7 @@ const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
 ><OneThing {...obj1} yy={42} {...{yy1: "hi"}}/> : JSX.Element
 >                                               : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
 >     : ^^^^^^^^^^^^^^^^
 >yy : number
@@ -144,7 +144,7 @@ const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 ><OneThing {...obj1} {...{yy: 10000, yy1: "true"}} /> : JSX.Element
 >                                                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
 >     : ^^^^^^^^^^^^^^^^
 >{yy: 10000, yy1: "true"} : { yy: number; yy1: string; }
@@ -164,7 +164,7 @@ const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick s
 ><OneThing {...defaultObj} yy {...obj} /> : JSX.Element
 >                                         : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >defaultObj : any
 >yy : true
 >   : ^^^^
@@ -177,7 +177,7 @@ const c8 = <OneThing ignore-prop={100} />
 ><OneThing ignore-prop={100} /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >ignore-prop : number
 >            : ^^^^^^
 >100 : 100
@@ -189,7 +189,7 @@ const c9 = <OneThing {...{ "ignore-prop":200 }} />;
 ><OneThing {...{ "ignore-prop":200 }} /> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >{ "ignore-prop":200 } : { "ignore-prop": number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"ignore-prop" : number
@@ -203,7 +203,7 @@ const c10 = <OneThing {...obj2} yy1="boo" />;
 ><OneThing {...obj2} yy1="boo" /> : JSX.Element
 >                                 : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->         : ^^^^^^^^^^^^^^^^^^^^ ^^                            ^^^^^^^^^^^^^^^^^
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj2 : { yy: number; "ignore-prop": string; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yy1 : string

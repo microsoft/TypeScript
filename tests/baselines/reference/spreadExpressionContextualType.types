@@ -16,8 +16,8 @@ interface Apple {
 }
 
 function test<T extends Apple | Orange>(item: T): T {
->test : <T extends Orange | Apple>(item: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>test : <T extends Apple | Orange>(item: T) => T
+>     : ^ ^^^^^^^^^              ^^    ^^ ^^^^^ 
 >item : T
 >     : ^
 
@@ -29,8 +29,8 @@ function test<T extends Apple | Orange>(item: T): T {
 }
 
 function test2<T extends Apple | Orange>(item: T): T {
->test2 : <T extends Orange | Apple>(item: T) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>test2 : <T extends Apple | Orange>(item: T) => T
+>      : ^ ^^^^^^^^^              ^^    ^^ ^^^^^ 
 >item : T
 >     : ^
 

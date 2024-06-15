@@ -31,7 +31,7 @@ if (box.done) {
 >box.value : number
 >          : ^^^^^^
 >box : { done: true; value: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 }

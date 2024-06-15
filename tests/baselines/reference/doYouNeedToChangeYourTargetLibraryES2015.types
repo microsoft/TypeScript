@@ -392,11 +392,11 @@ const testObjectConstructorKeys = Object.keys({});
 >Object.keys({}) : string[]
 >                : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^      ^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^      ^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^        
 >{} : {}
 >   : ^^
 

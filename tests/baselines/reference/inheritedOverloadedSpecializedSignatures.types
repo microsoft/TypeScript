@@ -22,7 +22,7 @@ b('foo').charAt(0);
 >b('foo').charAt(0) : string
 >                   : ^^^^^^
 >b('foo').charAt : (pos: number) => string
->                : ^   ^^      ^^^^^^^^^^^
+>                : ^   ^^      ^^^^^      
 >b('foo') : string
 >         : ^^^^^^
 >b : B
@@ -30,7 +30,7 @@ b('foo').charAt(0);
 >'foo' : "foo"
 >      : ^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 

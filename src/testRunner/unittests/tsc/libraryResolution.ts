@@ -1,8 +1,9 @@
 import {
     getCommandLineArgsForLibResolution,
     getFsForLibResolution,
-} from "../helpers/libraryResolution";
-import { verifyTsc } from "../helpers/tsc";
+    getFsForLibResolutionUnknown,
+} from "../helpers/libraryResolution.js";
+import { verifyTsc } from "../helpers/tsc.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true, withoutConfig?: true) {
@@ -18,4 +19,12 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verify(/*libRedirection*/ true);
     verify(/*libRedirection*/ undefined, /*withoutConfig*/ true);
     verify(/*libRedirection*/ true, /*withoutConfig*/ true);
+
+    verifyTsc({
+        scenario: "libraryResolution",
+        subScenario: "unknown lib",
+        fs: () => getFsForLibResolutionUnknown(),
+        commandLineArgs: getCommandLineArgsForLibResolution(/*withoutConfig*/ undefined),
+        baselinePrograms: true,
+    });
 });

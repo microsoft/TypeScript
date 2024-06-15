@@ -11,5 +11,5 @@ export function Foo(): number;
 
 export function Foo(): any {}
 >Foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

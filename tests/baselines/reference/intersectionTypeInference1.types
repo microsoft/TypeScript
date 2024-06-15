@@ -25,7 +25,7 @@ const parameterFn = (props:{store:string}) => alert(props.store)
 >props.store : string
 >            : ^^^^^^
 >props : { store: string; }
->      : ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^      ^^^
 >store : string
 >      : ^^^^^^
 
@@ -49,11 +49,11 @@ const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void)
 
 export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 >Form3 : { store: string; }
->      : ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^      ^^^
 >brokenFunction(parameterFn)({store: "hello"}) : { store: string; }
->                                              : ^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^^^      ^^^
 >brokenFunction(parameterFn) : (o: { store: string; }) => { store: string; }
->                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^
 >brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
 >               : ^        ^^ ^^                                             ^^^^^^ ^^        ^^^^^^^^^^^^^
 >parameterFn : (props: { store: string; }) => void

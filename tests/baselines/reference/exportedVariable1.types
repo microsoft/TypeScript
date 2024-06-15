@@ -17,7 +17,7 @@ var upper = foo.name.toUpperCase();
 >foo.name.toUpperCase() : string
 >                       : ^^^^^^
 >foo.name.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >foo.name : string
 >         : ^^^^^^
 >foo : { name: string; }
@@ -25,5 +25,5 @@ var upper = foo.name.toUpperCase();
 >name : string
 >     : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

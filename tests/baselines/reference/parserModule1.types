@@ -43,11 +43,11 @@
 >diagnosticWriter.Alert(output) : void
 >                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
->                       : ^      ^^      ^^^^^^^^^
+>                       : ^      ^^      ^^^^^    
 >diagnosticWriter : IDiagnosticWriter
 >                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
->      : ^      ^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^    
 >output : string
 >       : ^^^^^^
             }

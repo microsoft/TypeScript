@@ -16,7 +16,7 @@ function C() {
 >this.e : number
 >       : ^^^^^^
 >this : { e: number; m: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^
 >e : number
 >  : ^^^^^^
 >this.m + 1 : number
@@ -24,7 +24,7 @@ function C() {
 >this.m : number
 >       : ^^^^^^
 >this : { e: number; m: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^^^      ^^^
 >m : number
 >  : ^^^^^^
 >1 : 1

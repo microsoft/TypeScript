@@ -26,7 +26,7 @@ class C {
 >(new C()).p.push("string") : number
 >                           : ^^^^^^
 >(new C()).p.push : (...items: number[]) => number
->                 : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^     ^^^^^^^^^^^^^^^      
 >(new C()).p : number[]
 >            : ^^^^^^^^
 >(new C()) : C
@@ -38,7 +38,7 @@ class C {
 >p : number[]
 >  : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"string" : "string"
 >         : ^^^^^^^^
 

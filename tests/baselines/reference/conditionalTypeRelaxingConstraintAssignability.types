@@ -126,7 +126,7 @@ function g(p1: I, p2: Partial<I>): I {
 >f(p1, p2) : I
 >          : ^
 >f : <T>(t: T, partial: DeepPartial<T>) => T
->  : ^ ^^ ^^ ^^       ^^              ^^^^^^
+>  : ^ ^^ ^^ ^^       ^^              ^^^^^ 
 >p1 : I
 >   : ^
 >p2 : Partial<I>

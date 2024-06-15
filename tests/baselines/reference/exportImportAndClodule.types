@@ -54,7 +54,7 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >new M.D('Hello') : K.L
 >                 : ^^^
 >M.D : typeof K.L
@@ -76,7 +76,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >M : any
 >  : ^^^
 >D : any

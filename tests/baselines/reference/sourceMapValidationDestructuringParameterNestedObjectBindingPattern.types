@@ -70,11 +70,11 @@ function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -100,11 +100,11 @@ function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB 
 >console.log(secondaryB) : void
 >                        : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >secondaryB : string
 >           : ^^^^^^
 }
@@ -112,21 +112,21 @@ function foo3({ skills }: Robot) {
 >foo3 : ({ skills }: Robot) => void
 >     : ^          ^^     ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 
     console.log(skills.primary);
 >console.log(skills.primary) : void
 >                            : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >skills.primary : string
 >               : ^^^^^^
 >skills : { primary: string; secondary: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 >primary : string
 >        : ^^^^^^
 }

@@ -74,11 +74,11 @@ stringFoo2.foo("hm");
 >stringFoo2.foo("hm") : string
 >                     : ^^^^^^
 >stringFoo2.foo : (x: string) => string
->               : ^ ^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^      
 >stringFoo2 : StringFoo2
 >           : ^^^^^^^^^^
 >foo : (x: string) => string
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >"hm" : "hm"
 >     : ^^^^
 

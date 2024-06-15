@@ -39,11 +39,11 @@ ws.has(s);
 >ws.has(s) : boolean
 >          : ^^^^^^^
 >ws.has : (value: symbol) => boolean
->       : ^     ^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^       
 >ws : WeakSet<symbol>
 >   : ^^^^^^^^^^^^^^^
 >has : (value: symbol) => boolean
->    : ^     ^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^       
 >s : symbol
 >  : ^^^^^^
 
@@ -51,11 +51,11 @@ ws.delete(s);
 >ws.delete(s) : boolean
 >             : ^^^^^^^
 >ws.delete : (value: symbol) => boolean
->          : ^     ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^       
 >ws : WeakSet<symbol>
 >   : ^^^^^^^^^^^^^^^
 >delete : (value: symbol) => boolean
->       : ^     ^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^       
 >s : symbol
 >  : ^^^^^^
 
@@ -93,11 +93,11 @@ wm.has(s);
 >wm.has(s) : boolean
 >          : ^^^^^^^
 >wm.has : (key: symbol) => boolean
->       : ^   ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^       
 >wm : WeakMap<symbol, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >has : (key: symbol) => boolean
->    : ^   ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^       
 >s : symbol
 >  : ^^^^^^
 
@@ -105,11 +105,11 @@ wm.get(s);
 >wm.get(s) : boolean | undefined
 >          : ^^^^^^^^^^^^^^^^^^^
 >wm.get : (key: symbol) => boolean | undefined
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^^^^            
 >wm : WeakMap<symbol, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (key: symbol) => boolean | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^^^^^^^^            
 >s : symbol
 >  : ^^^^^^
 
@@ -117,11 +117,11 @@ wm.delete(s);
 >wm.delete(s) : boolean
 >             : ^^^^^^^
 >wm.delete : (key: symbol) => boolean
->          : ^   ^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^^^^^^^^^^^^       
 >wm : WeakMap<symbol, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >delete : (key: symbol) => boolean
->       : ^   ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^       
 >s : symbol
 >  : ^^^^^^
 
@@ -139,11 +139,11 @@ wr.deref();
 >wr.deref() : symbol | undefined
 >           : ^^^^^^^^^^^^^^^^^^
 >wr.deref : () => symbol | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^            
 >wr : WeakRef<symbol>
 >   : ^^^^^^^^^^^^^^^
 >deref : () => symbol | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^            
 
 const f = new FinalizationRegistry(() => {});
 >f : FinalizationRegistry<unknown>
@@ -159,11 +159,11 @@ f.register(s, null);
 >f.register(s, null) : void
 >                    : ^^^^
 >f.register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
->           : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^^^^^
+>           : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^    
 >f : FinalizationRegistry<unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
->         : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^^^^^
+>         : ^      ^^       ^^         ^^^^^^^^^^^               ^^^       ^^^^^    
 >s : symbol
 >  : ^^^^^^
 
@@ -171,11 +171,11 @@ f.unregister(s);
 >f.unregister(s) : boolean
 >                : ^^^^^^^
 >f.unregister : (unregisterToken: WeakKey) => boolean
->             : ^               ^^       ^^^^^^^^^^^^
+>             : ^               ^^       ^^^^^       
 >f : FinalizationRegistry<unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unregister : (unregisterToken: WeakKey) => boolean
->           : ^               ^^       ^^^^^^^^^^^^
+>           : ^               ^^       ^^^^^       
 >s : symbol
 >  : ^^^^^^
 

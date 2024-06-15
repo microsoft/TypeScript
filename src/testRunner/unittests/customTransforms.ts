@@ -1,5 +1,5 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: customTransforms", () => {
     function emitsCorrectly(name: string, sources: { file: string; text: string; }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {

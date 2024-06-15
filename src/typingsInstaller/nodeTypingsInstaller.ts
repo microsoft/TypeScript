@@ -11,8 +11,8 @@ import {
     sys,
     toPath,
     version,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 
 class FileLog implements ts.server.typingsInstaller.Log {
     constructor(private logFile: string | undefined) {

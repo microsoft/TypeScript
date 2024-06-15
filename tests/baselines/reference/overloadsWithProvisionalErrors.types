@@ -25,7 +25,7 @@ func(s => ({})); // Error for no applicable overload (object type is missing a a
 >func(s => ({})) : never
 >                : ^^^^^
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->     : ^^^ ^^      ^^^^^^^^^^^^      ^^                                        ^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^      ^^                                        ^^^      ^^^
 >s => ({}) : (s: string) => {}
 >          : ^ ^^^^^^^^^^^^^^^
 >s : string
@@ -39,7 +39,7 @@ func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outsi
 >func(s => ({ a: blah, b: 3 })) : string
 >                               : ^^^^^^
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->     : ^^^ ^^      ^^^^^^^^^^^^      ^^                                        ^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^      ^^                                        ^^^      ^^^
 >s => ({ a: blah, b: 3 }) : (s: string) => { a: any; b: number; }
 >                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -61,7 +61,7 @@ func(s => ({ a: blah })); // Two errors here, one for blah not being defined, an
 >func(s => ({ a: blah })) : never
 >                         : ^^^^^
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->     : ^^^ ^^      ^^^^^^^^^^^^      ^^                                        ^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^      ^^                                        ^^^      ^^^
 >s => ({ a: blah }) : (s: string) => { a: any; }
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string

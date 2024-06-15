@@ -31,7 +31,7 @@ function g1(headerNames: any) {
 >[{cells: headerNames }].concat(t) : { cells: any; }[]
 >                                  : ^^^^^^^^^^^^^^^^^
 >[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->                               : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >[{cells: headerNames }] : { cells: any; }[]
 >                        : ^^^^^^^^^^^^^^^^^
 >{cells: headerNames } : { cells: any; }
@@ -41,7 +41,7 @@ function g1(headerNames: any) {
 >headerNames : any
 >            : ^^^
 >concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >t : { hasLineBreak: boolean; cells: never[]; }[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -74,7 +74,7 @@ function g2(headerNames: any) {
 >[{cells: headerNames }]["concat"](t) : { cells: any; }[]
 >                                     : ^^^^^^^^^^^^^^^^^
 >[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->                                  : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >[{cells: headerNames }] : { cells: any; }[]
 >                        : ^^^^^^^^^^^^^^^^^
 >{cells: headerNames } : { cells: any; }
@@ -107,11 +107,11 @@ function foo(options?: { a: string, b: number }) {
 >(options || {}).a : string | undefined
 >                  : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { a: string; b: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^^^      ^^^^^^^^
 >options || {} : { a: string; b: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^^^      ^^^^^^^^
 >options : { a: string; b: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >a : string | undefined
@@ -123,11 +123,11 @@ function foo(options?: { a: string, b: number }) {
 >(options || {})["a"] : string | undefined
 >                     : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { a: string; b: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^^^      ^^^^^^^^
 >options || {} : { a: string; b: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^^^      ^^^^^^^^
 >options : { a: string; b: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >"a" : "a"
@@ -139,11 +139,11 @@ function foo(options?: { a: string, b: number }) {
 >(options || {}).a : any
 >                  : ^^^
 >(options || {}) : { a: string; b: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^^^      ^^^^^^^^
 >options || {} : { a: string; b: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^^^      ^^^^^^^^
 >options : { a: string; b: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >a : any
@@ -157,11 +157,11 @@ function foo(options?: { a: string, b: number }) {
 >(options || {})["a"] : any
 >                     : ^^^
 >(options || {}) : { a: string; b: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^^^      ^^^^^^^^
 >options || {} : { a: string; b: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^      ^^^^^      ^^^^^^^^
 >options : { a: string; b: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >"a" : "a"

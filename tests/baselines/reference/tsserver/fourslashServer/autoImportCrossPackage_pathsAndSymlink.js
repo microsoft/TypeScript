@@ -199,8 +199,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/app/
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/common/lib/index.tsx 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/common/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/common/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -263,11 +261,8 @@ watchedFiles::
   {"pollingInterval":2000}
 /project/packages/common/lib/index.tsx: *new*
   {"pollingInterval":500}
-/project/packages/common/lib/package.json: *new*
-  {"pollingInterval":2000}
 /project/packages/common/package.json:
   {"pollingInterval":250}
-  {"pollingInterval":2000} *new*
 
 watchedDirectoriesRecursive::
 /project/packages/app: *new*
@@ -501,11 +496,8 @@ watchedFiles::
   {"pollingInterval":2000}
 /project/packages/common/lib/index.tsx:
   {"pollingInterval":500}
-/project/packages/common/lib/package.json:
-  {"pollingInterval":2000}
 /project/packages/common/package.json:
   {"pollingInterval":250}
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /project/node_modules: *new*

@@ -21,7 +21,7 @@ import {
     Statement,
     SyntaxKind,
     ThisExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Creates a class `static {}` block used to assign the static `this` to a `_classThis` (or similar) variable.

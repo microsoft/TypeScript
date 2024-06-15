@@ -48,7 +48,7 @@ import {
     TransformationContext,
     VariableDeclaration,
     WrappedExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Gets a string literal to use as the assigned name of an anonymous class or function declaration.
