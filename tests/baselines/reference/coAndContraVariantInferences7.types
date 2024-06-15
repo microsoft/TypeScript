@@ -21,7 +21,7 @@ type Schema = { query?: unknown; body?: unknown };
 
 declare function route<TSchema extends Schema>(obj: {
 >route : <TSchema extends Schema>(obj: { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }) => void
->      : ^       ^^^^^^^^^^^^^^^^^   ^^                                                                                        ^^^^^    
+>      : ^       ^^^^^^^^^      ^^   ^^                                                                                        ^^^^^    
 >obj : { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }
 >    : ^^^^^^^                    ^^^^^^^^^^       ^^^^^^^^^^                               ^^^
 
@@ -59,7 +59,7 @@ route({
 >route({  pre: validate,  schema: {    query: "",  },  handle: (req) => {    const test: string = req.query;  },}) : void
 >                                                                                                                  : ^^^^
 >route : <TSchema extends Schema>(obj: { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }) => void
->      : ^       ^^^^^^^^^^^^^^^^^   ^^                                                                                        ^^^^^^^^^
+>      : ^       ^^^^^^^^^      ^^   ^^                                                                                        ^^^^^    
 >{  pre: validate,  schema: {    query: "",  },  handle: (req) => {    const test: string = req.query;  },} : { pre: (_: { query?: unknown; body?: unknown; }) => void; schema: { query: string; }; handle: (req: Request<{ query: string; }>) => void; }
 >                                                                                                           : ^^^^^^^^ ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
