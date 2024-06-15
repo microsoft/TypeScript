@@ -2150,6 +2150,14 @@ export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<Te
 }
 
 /** @internal */
+export function maxBy<T>(arr: readonly T[], init: number, mapper: (x: T) => number): number {
+    for (let i = 0; i < arr.length; i++) {
+        init = Math.max(init, mapper(arr[i]));
+    }
+    return init;
+}
+
+/** @internal */
 export function min<T>(items: readonly [T, ...T[]], compare: Comparer<T>): T;
 /** @internal */
 export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined;

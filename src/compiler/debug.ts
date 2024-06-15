@@ -1126,7 +1126,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         function renderGraph() {
             const columnCount = columnWidths.length;
-            const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
+            const laneCount = ts.maxBy(nodes, 0, n => n.lane) + 1;
             const lanes: string[] = fill(Array(laneCount), "");
             const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
             const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));
