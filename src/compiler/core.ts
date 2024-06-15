@@ -2044,7 +2044,13 @@ export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
 /** @internal */
 export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
     if (!!e) {
-        return t => e(d(c(b(a(t)))));
+        const args: ((t: T) => T)[] = [];
+        for (let i = 0; i < arguments.length; i++) {
+            // eslint-disable-next-line prefer-rest-params
+            args[i] = arguments[i];
+        }
+
+        return t => reduceLeft(args, (u, f) => f(u), t);
     }
     else if (d) {
         return t => d(c(b(a(t))));
