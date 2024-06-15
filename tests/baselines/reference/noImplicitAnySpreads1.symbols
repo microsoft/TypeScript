@@ -19,14 +19,25 @@ function getMore() {
   };
 }
 
-const bar = {
->bar : Symbol(bar, Decl(noImplicitAnySpreads1.ts, 10, 5))
+const foo = {
+>foo : Symbol(foo, Decl(noImplicitAnySpreads1.ts, 10, 5))
 
-  p: null, // no error, this gets overriden
+  p: null,
 >p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 10, 13))
 
+  ...getMore(),
+>getMore : Symbol(getMore, Decl(noImplicitAnySpreads1.ts, 0, 0))
+
+};
+
+const bar = {
+>bar : Symbol(bar, Decl(noImplicitAnySpreads1.ts, 15, 5))
+
+  p: null, // no error, this gets overriden
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 15, 13))
+
   other: null, // error, this does not get overriden
->other : Symbol(other, Decl(noImplicitAnySpreads1.ts, 11, 10))
+>other : Symbol(other, Decl(noImplicitAnySpreads1.ts, 16, 10))
 
   ...getMore(),
 >getMore : Symbol(getMore, Decl(noImplicitAnySpreads1.ts, 0, 0))
@@ -34,39 +45,39 @@ const bar = {
 };
 
 function doSthWithParams(params: unknown) {
->doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 14, 2))
->params : Symbol(params, Decl(noImplicitAnySpreads1.ts, 16, 25))
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 19, 2))
+>params : Symbol(params, Decl(noImplicitAnySpreads1.ts, 21, 25))
 
   return {
     c: 'foo',
->c : Symbol(c, Decl(noImplicitAnySpreads1.ts, 17, 10))
+>c : Symbol(c, Decl(noImplicitAnySpreads1.ts, 22, 10))
 
     p: 'bar',
->p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 18, 13))
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 23, 13))
 
     s: 'baz',
->s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 19, 13))
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 24, 13))
 
   };
 }
 
 const baz = {
->baz : Symbol(baz, Decl(noImplicitAnySpreads1.ts, 24, 5))
+>baz : Symbol(baz, Decl(noImplicitAnySpreads1.ts, 29, 5))
 
   p: null,
->p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 24, 13))
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 29, 13))
 
   s: null,
->s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 25, 10))
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 30, 10))
 
   ...doSthWithParams({
->doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 14, 2))
+>doSthWithParams : Symbol(doSthWithParams, Decl(noImplicitAnySpreads1.ts, 19, 2))
 
     p: 'hello',
->p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 27, 22))
+>p : Symbol(p, Decl(noImplicitAnySpreads1.ts, 32, 22))
 
     s: 'world',
->s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 28, 15))
+>s : Symbol(s, Decl(noImplicitAnySpreads1.ts, 33, 15))
 
   }),
 };

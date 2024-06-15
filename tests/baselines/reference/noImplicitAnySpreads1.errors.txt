@@ -1,4 +1,4 @@
-noImplicitAnySpreads1.ts(13,3): error TS7018: Object literal's property 'other' implicitly has an 'any' type.
+noImplicitAnySpreads1.ts(18,3): error TS7018: Object literal's property 'other' implicitly has an 'any' type.
 
 
 ==== noImplicitAnySpreads1.ts (1 errors) ====
@@ -11,6 +11,11 @@ noImplicitAnySpreads1.ts(13,3): error TS7018: Object literal's property 'other' 
         s: "baz",
       };
     }
+    
+    const foo = {
+      p: null,
+      ...getMore(),
+    };
     
     const bar = {
       p: null, // no error, this gets overriden

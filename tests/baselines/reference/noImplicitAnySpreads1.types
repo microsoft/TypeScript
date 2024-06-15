@@ -32,6 +32,24 @@ function getMore() {
   };
 }
 
+const foo = {
+>foo : { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  ...getMore(),} : { c: string; p: string; s: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null,
+>p : null
+>  : ^^^^
+
+  ...getMore(),
+>getMore() : { c: string; p: string; s: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getMore : () => { c: string; p: string; s: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
 const bar = {
 >bar : { c: string; p: string; s: string; other: any; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

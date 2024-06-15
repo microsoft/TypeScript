@@ -12,6 +12,11 @@ function getMore() {
   };
 }
 
+const foo = {
+  p: null,
+  ...getMore(),
+};
+
 const bar = {
   p: null, // no error, this gets overriden
   other: null, // error, this does not get overriden
