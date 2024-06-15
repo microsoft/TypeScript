@@ -2640,13 +2640,14 @@ export class TestState {
 
     private printMembersOrCompletions(info: ts.CompletionInfo | undefined) {
         if (info === undefined) return "No completion info.";
-        const { entries } = info
+        const { entries } = info;
 
         const longestNameLength = ts.maxBy(entries, 0, m => m.name.length);
         const longestKindLength = ts.maxBy(entries, 0, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
-        Harness.IO.log(membersString);
+
+        const formattedEntries = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source ?? ""}`);
+        Harness.IO.log(formattedEntries.join("\n"));
     }
 
     public printContext() {
