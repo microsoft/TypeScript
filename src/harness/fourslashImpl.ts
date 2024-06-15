@@ -2640,18 +2640,12 @@ export class TestState {
 
     private printMembersOrCompletions(info: ts.CompletionInfo | undefined) {
         if (info === undefined) return "No completion info.";
-        const { entries } = info;
+        const { entries } = info
 
-        function pad(s: string, length: number) {
-            return s + new Array(length - s.length + 1).join(" ");
-        }
-        function max<T>(arr: T[], selector: (x: T) => number): number {
-            return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
-        }
-        const longestNameLength = max(entries, m => m.name.length);
-        const longestKindLength = max(entries, m => m.kind.length);
+        const longestNameLength = ts.maxBy(entries, 0, m => m.name.length);
+        const longestKindLength = ts.maxBy(entries, 0, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
+        const membersString = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
         Harness.IO.log(membersString);
     }
 
