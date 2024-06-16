@@ -4842,6 +4842,7 @@ namespace Parser {
             // Skip modifiers
             parseModifiers(/*allowDecorators*/ false);
         }
+        parseOptional(SyntaxKind.DotDotDotToken);
         if (isIdentifier() || token() === SyntaxKind.ThisKeyword) {
             nextToken();
             return true;

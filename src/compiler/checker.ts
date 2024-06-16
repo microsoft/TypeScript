@@ -40550,12 +40550,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node.name, Diagnostics.constructor_cannot_be_used_as_a_parameter_property_name);
             }
         }
-        if (hasSyntacticModifier(node, ModifierFlags.Deferred)) {
-            const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
-            if (!isTypeAssignableTo(getTypeOfSymbol(node.symbol), funcType)) {
-                error(node, Diagnostics.A_deferred_parameter_must_have_a_function_type);
-            }
-        }
         if (!node.initializer && isOptionalDeclaration(node) && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
             error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
         }
@@ -40578,6 +40572,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
         if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
             error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+        }
+        if (hasSyntacticModifier(node, ModifierFlags.Deferred)) {
+            const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
+            if (!areTypesComparable(getTypeOfSymbol(node.symbol), funcType)) {
+                error(node, Diagnostics.A_deferred_parameter_must_have_a_type_that_permits_functions);
+            }
         }
     }
 

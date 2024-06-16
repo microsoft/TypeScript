@@ -3915,7 +3915,7 @@
         "category": "Error",
         "code": 2868
     },
-    "A 'deferred' parameter must have a function type.": {
+    "A 'deferred' parameter must have a type that permits functions.": {
         "category": "Error",
         "code": 2869
     },
