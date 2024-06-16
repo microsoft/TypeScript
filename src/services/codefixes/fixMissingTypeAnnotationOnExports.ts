@@ -892,7 +892,8 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         const flags = (
@@ -901,7 +902,7 @@ function withContext<T>(
             ) && type.flags & TypeFlags.UniqueESSymbol ?
             NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, flags),
             mutatedTarget: false,
         };
     }

@@ -178,7 +178,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             return typeFromAccessor(parent, context);
         }
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        const addUndefined = resolver.requiresAddingImplicitUndefined(node);
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node, context.enclosingDeclaration);
         let resultType;
         if (declaredType) {
             resultType = serializeExistingTypeAnnotation(declaredType, addUndefined);
