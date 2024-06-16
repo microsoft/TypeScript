@@ -119,11 +119,11 @@ for (let {name: nameA } = robot, i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -155,11 +155,11 @@ for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -199,11 +199,11 @@ for (let {name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; 
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -239,11 +239,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = multiRobot, 
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -281,11 +281,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobo
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -343,11 +343,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } =
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -382,11 +382,11 @@ for (let {name: nameA, skill: skillA } = robot, i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -422,11 +422,11 @@ for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -470,11 +470,11 @@ for (let {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimm
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -514,11 +514,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -560,11 +560,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }
@@ -626,11 +626,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >primaryA : string
 >         : ^^^^^^
 }

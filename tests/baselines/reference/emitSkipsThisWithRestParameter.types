@@ -22,21 +22,21 @@ function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any
         return fn.apply(this, [ this ].concat(args));
 >fn.apply(this, [ this ].concat(args)) : any
 >fn.apply : (this: Function, thisArg: any, argArray?: any) => any
->         : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>         : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >fn : (base: any, ...args: any[]) => any
->   : ^    ^^   ^^^^^    ^^     ^^^^^^^^
+>   : ^    ^^   ^^^^^    ^^     ^^^^^   
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >this : any
 >[ this ].concat(args) : any[]
 >                      : ^^^^^
 >[ this ].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->                : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >[ this ] : any[]
 >         : ^^^^^
 >this : any
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
 >args : any[]
 >     : ^^^^^
 

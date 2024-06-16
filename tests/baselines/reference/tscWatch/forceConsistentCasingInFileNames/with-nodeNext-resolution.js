@@ -101,15 +101,20 @@ Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/inde
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
+  File is CommonJS module because 'node_modules/@types/yargs/package.json' does not have field "type"
 src/bin.ts
   Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' was not found
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 

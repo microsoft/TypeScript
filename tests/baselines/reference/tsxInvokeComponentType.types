@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,700 / 7,700 (nearest 100)
-Instantiation count: 90,000 / 90,000 (nearest 500)
-Symbol count: 66,000 / 66,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === tsxInvokeComponentType.tsx ===
 /// <reference path="react16.d.ts" />
@@ -26,7 +26,7 @@ const bad = <Elem />;
 ><Elem /> : JSX.Element
 >         : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 
 const good = <Elem someKey="ok" />;
 >good : JSX.Element
@@ -34,7 +34,7 @@ const good = <Elem someKey="ok" />;
 ><Elem someKey="ok" /> : JSX.Element
 >                      : ^^^^^^^^^^^
 >Elem : React.ComponentType<{ someKey: string; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >someKey : string
 >        : ^^^^^^
 
@@ -49,8 +49,8 @@ const alsoOk = <Elem2>text</Elem2>;
 >       : ^^^^^^^^^^^
 ><Elem2>text</Elem2> : JSX.Element
 >                    : ^^^^^^^^^^^
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 

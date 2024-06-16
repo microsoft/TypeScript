@@ -70,16 +70,22 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/myproject/dist/index.js]
-import * as me from "@this/package";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+var me = require("@this/package");
 me.thing();
-export function thing() { }
+function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index.d.ts]
@@ -87,7 +93,10 @@ export declare function thing(): void;
 
 
 //// [/user/username/projects/myproject/dist/index2.js]
-export function thing() { }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+function thing() { }
 
 
 //// [/user/username/projects/myproject/types/index2.d.ts]
@@ -159,6 +168,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -184,7 +194,10 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 

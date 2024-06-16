@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/config
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/config/file.ts :: Config file name: /a/b/projects/config/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/config/file.ts ProjectRootPath: undefined:: Result: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/tsconfig.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -63,9 +62,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/projects/config/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/config/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
@@ -163,14 +159,8 @@ After request
 PolledWatches::
 /a/b/projects/config/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/config/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/tsconfig.json: *new*
@@ -215,8 +205,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/files
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/files/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/files/file1.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/config/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -235,14 +224,8 @@ After request
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/tsconfig.json:
@@ -301,14 +284,8 @@ After request
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/b/projects/config/file.ts: *new*
@@ -354,13 +331,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/files
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/files/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/files/file2.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -397,9 +371,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config 1 undefined Config: /a/b/projects/config/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config 1 undefined Config: /a/b/projects/config/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/config/tsconfig.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/config/package.json 2000 undefined Project: /a/b/projects/config/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/config/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/config/tsconfig.json WatchType: Type roots
@@ -425,20 +396,14 @@ PolledWatches::
   {"pollingInterval":2000}
 /a/b/projects/files/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/files/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/files/tsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/b/projects/config/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/config/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -510,8 +475,6 @@ Info seq  [hh:mm:ss:mss] 		Projects:
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/files/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/files/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots

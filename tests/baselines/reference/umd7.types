@@ -8,7 +8,7 @@ let y: number = Foo();
 >Foo() : number
 >      : ^^^^^^
 >Foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 === foo.d.ts ===
 declare function Thing(): number;
@@ -17,9 +17,9 @@ declare function Thing(): number;
 
 export = Thing;
 >Thing : () => number
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 
 export as namespace Foo;
 >Foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

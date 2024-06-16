@@ -49,7 +49,7 @@ class A {
 >fn : () => number
 >   : ^^^^^^^^^^^^
 >() => this.a : () => number
->             :             
+>             : ^^^^^^^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
@@ -74,7 +74,7 @@ class A {
 >fn : () => number
 >   : ^^^^^^^^^^^^
 >() => this.a : () => number
->             :             
+>             : ^^^^^^^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : A
@@ -124,7 +124,7 @@ var f2 = function f2(this: A): number {
 >f2 : (this: A) => number
 >   : ^    ^^ ^^^^^      
 >function f2(this: A): number {    return this.a;} : (this: A) => number
->                                                  :                    
+>                                                  : ^    ^^ ^^^^^      
 >f2 : (this: A) => number
 >   : ^    ^^ ^^^^^      
 >this : A

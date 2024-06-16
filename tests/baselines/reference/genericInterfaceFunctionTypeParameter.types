@@ -16,7 +16,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 >foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
 >    : ^ ^^  ^^                       ^^^^^^^^^
 >fn : (ifoo: IFoo<A>) => void
->   : ^    ^^       ^^^^^^^^^
+>   : ^    ^^       ^^^^^    
 }
 
 

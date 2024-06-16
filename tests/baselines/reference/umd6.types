@@ -8,11 +8,11 @@ let y: number = Foo.fn();
 >Foo.fn() : number
 >         : ^^^^^^
 >Foo.fn : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >fn : () => number
->   : ^^^^^^^^^^^^
+>   : ^^^^^^      
 
 === foo.d.ts ===
 declare namespace Thing {

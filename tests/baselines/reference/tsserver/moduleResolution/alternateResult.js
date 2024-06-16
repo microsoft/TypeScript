@@ -161,8 +161,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/index.mts :: Config file name: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/index.mts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -395,8 +394,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -467,9 +468,18 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
             "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
             "code": 5110,
-            "category": "error"
+            "category": "error",
+            "fileName": "/home/src/projects/project/tsconfig.json"
           }
         ]
       }
@@ -573,7 +583,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -618,7 +629,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -693,7 +705,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -910,7 +923,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -961,7 +975,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1036,7 +1051,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1233,7 +1249,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1284,7 +1301,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1359,7 +1377,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1566,7 +1585,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1617,7 +1637,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1692,7 +1713,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1878,7 +1900,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1929,7 +1952,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -2004,7 +2028,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -2149,10 +2174,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2193,7 +2221,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -2253,7 +2282,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -2328,7 +2358,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -2470,12 +2501,16 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2516,7 +2551,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -2596,7 +2632,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -2671,7 +2708,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -2861,10 +2899,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2905,7 +2946,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -2999,7 +3041,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -3074,7 +3117,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -3238,8 +3282,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -3280,7 +3326,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -3356,7 +3403,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -3431,7 +3479,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -3674,7 +3723,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -3725,7 +3775,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -3800,7 +3851,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -4025,7 +4077,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -4076,7 +4129,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -4151,7 +4205,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -4386,7 +4441,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -4437,7 +4493,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -4512,7 +4569,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -4725,7 +4783,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/index.mts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -4776,7 +4835,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 7016,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -4851,7 +4911,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

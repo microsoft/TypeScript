@@ -195,7 +195,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >obj1.x : string | number
 >       : ^^^^^^^^^^^^^^^
 >obj1 : { x: string | number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^               ^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >"string" : "string"
@@ -203,7 +203,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >obj1.x : string
 >       : ^^^^^^
 >obj1 : { x: string | number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^               ^^^
 >x : string
 >  : ^^^^^^
 

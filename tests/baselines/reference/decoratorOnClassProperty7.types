@@ -17,7 +17,7 @@ class C {
 
     @dec prop;
 >dec : (target: Function, propertyKey: string | symbol, paramIndex: number) => void
->    : ^      ^^        ^^           ^^               ^^          ^^      ^^^^^^^^^
+>    : ^      ^^        ^^           ^^               ^^          ^^      ^^^^^    
 >prop : any
 >     : ^^^
 }

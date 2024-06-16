@@ -14,5 +14,5 @@ declare let x: {foo: undefined} & {new(...args: any[]): any};
 new x();
 >new x() : any
 >x : { foo: undefined; } & (new (...args: any[]) => any)
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^
+>  : ^^^^^^^         ^^^^^^^^^^^^^^^    ^^     ^^^^^   ^
 

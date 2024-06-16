@@ -28,8 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server
-Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/referencesForGlobals_1.ts :: Config file name: /tests/cases/fourslash/server/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/referencesForGlobals_1.ts ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tests/cases/fourslash/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

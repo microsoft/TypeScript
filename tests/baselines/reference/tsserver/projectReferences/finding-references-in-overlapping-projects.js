@@ -130,8 +130,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/b/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/tsconfig.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -177,10 +176,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/a 1 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/a 1 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/package.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/package.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/package.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/node_modules/@types 1 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/node_modules/@types 1 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Type roots
@@ -267,12 +262,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/tsconfig.json :: Config file name: /user/username/projects/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/b/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -293,18 +286,10 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/solution/a/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/solution/b/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/b/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -332,7 +317,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -362,8 +346,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -376,9 +359,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/package.json 2000 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/package.json 2000 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/node_modules/@types 1 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/node_modules/@types 1 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/a/tsconfig.json WatchType: Type roots
@@ -451,10 +431,19 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/solution/a/tsconfig.json",
+        "configFile": "/user/username/projects/solution/a/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -611,11 +600,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/a 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/package.json 2000 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/package.json 2000 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/package.json 2000 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/c/package.json 2000 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/c/node_modules/@types 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/c/node_modules/@types 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/c/tsconfig.json WatchType: Type roots
@@ -694,6 +678,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/solution/c/tsconfig.json",
+        "configFile": "/user/username/projects/solution/c/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -715,12 +710,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/c 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/b 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/a/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/c/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/d/package.json 2000 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/d/node_modules/@types 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/d/node_modules/@types 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/d/tsconfig.json WatchType: Type roots
@@ -803,22 +792,26 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/solution/d/tsconfig.json",
+        "configFile": "/user/username/projects/solution/d/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -958,28 +951,16 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/solution/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/a/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/solution/b/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/b/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/solution/c/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/c/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/solution/d/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/solution/d/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/solution/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1015,7 +996,6 @@ Projects::
 /user/username/projects/solution/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1025,7 +1005,6 @@ Projects::
 /user/username/projects/solution/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 4
         /user/username/projects/solution/a/tsconfig.json
         /user/username/projects/solution/b/tsconfig.json
@@ -1034,7 +1013,6 @@ Projects::
 /user/username/projects/solution/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 4
         /user/username/projects/solution/a/tsconfig.json
         /user/username/projects/solution/b/tsconfig.json
@@ -1044,7 +1022,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -1091,26 +1068,17 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1252,7 +1220,6 @@ Projects::
 /user/username/projects/solution/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1264,7 +1231,6 @@ Projects::
 /user/username/projects/solution/c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 4
         /user/username/projects/solution/a/tsconfig.json
         /user/username/projects/solution/b/tsconfig.json
@@ -1273,7 +1239,6 @@ Projects::
 /user/username/projects/solution/d/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 4
         /user/username/projects/solution/a/tsconfig.json
         /user/username/projects/solution/b/tsconfig.json
@@ -1282,4 +1247,3 @@ Projects::
 /user/username/projects/solution/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true

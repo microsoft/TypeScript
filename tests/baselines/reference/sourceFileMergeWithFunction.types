@@ -14,7 +14,7 @@ declare function foo(props: any): any;
 
 export default foo;
 >foo : (props: any) => any
->    : ^     ^^   ^^^^^^^^
+>    : ^     ^^   ^^^^^   
 
 export as namespace foo;
 >foo : typeof import("types")

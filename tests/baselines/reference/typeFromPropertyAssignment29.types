@@ -11,11 +11,11 @@ function ExpandoDecl(n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoDecl.prop = 2
 >ExpandoDecl.prop = 2 : 2
@@ -39,7 +39,7 @@ ExpandoDecl.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -89,7 +89,7 @@ const ExpandoExpr = function (n: number) {
 >ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->                                                :                                            ^                               ^                                       
+>                                                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -97,11 +97,11 @@ const ExpandoExpr = function (n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoExpr.prop = { x: 2 }
 >ExpandoExpr.prop = { x: 2 } : { x: number; }
@@ -145,7 +145,7 @@ ExpandoExpr.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -205,17 +205,17 @@ const ExpandoArrow = (n: number) => n.toString();
 >ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
 >             : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >(n: number) => n.toString() : { (n: number): string; prop: number; m(n: number): number; }
->                            :                                                             
+>                            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 ExpandoArrow.prop = 2
 >ExpandoArrow.prop = 2 : 2
@@ -239,7 +239,7 @@ ExpandoArrow.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -263,7 +263,7 @@ function ExpandoNested(n: number) {
 >nested : { (m: number): number; total: number; }
 >       : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (m: number) {        return n + m;    } : { (m: number): number; total: number; }
->                                                 :                                        
+>                                                 : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -404,7 +404,7 @@ namespace Ns {
 >ExpandoNamespace.p6 : number
 >                    : ^^^^^^
 >ExpandoNamespace : { (): void; p6: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^    ^^^^^^^^^^^^^^^
 >p6 : number
 >   : ^^^^^^
 >42 : 42
@@ -412,11 +412,11 @@ namespace Ns {
 
     export function foo() {
 >foo : () => { (): void; p6: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 
         return ExpandoNamespace;
 >ExpandoNamespace : { (): void; p6: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^    ^^^^^^^^^^^^^^^
     }
 }
 
@@ -425,7 +425,7 @@ var ExpandoExpr2 = function (n: number) {
 >ExpandoExpr2 : (n: number) => string
 >             : ^ ^^      ^^^^^^^^^^^
 >function (n: number) {    return n.toString();} : (n: number) => string
->                                                :                      
+>                                                : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -433,11 +433,11 @@ var ExpandoExpr2 = function (n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoExpr2.prop = 2
 >ExpandoExpr2.prop = 2 : 2

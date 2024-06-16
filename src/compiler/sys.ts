@@ -35,7 +35,6 @@ import {
     normalizeSlashes,
     orderedRemoveItem,
     Path,
-    perfLogger,
     PollingWatchKind,
     resolveJSModule,
     some,
@@ -46,7 +45,7 @@ import {
     WatchFileKind,
     WatchOptions,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -889,7 +888,7 @@ function createDirectoryWatcherSupportingRecursive({
 }
 
 /** @internal */
-export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void;
+export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void; // eslint-disable-line no-restricted-syntax
 /** @internal */
 export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
 /** @internal */
@@ -1284,7 +1283,7 @@ export function createSystemWatchFunctions({
             }
         }
 
-        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) {
+        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) { // eslint-disable-line no-restricted-syntax
             // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
             // To ensure we see the file going missing and coming back up (file delete and then recreated)
             // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
@@ -1786,7 +1785,7 @@ export let sys: System = (() => {
             );
         }
 
-        function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+        function readFile(fileName: string, _encoding?: string): string | undefined {
             let buffer: Buffer;
             try {
                 buffer = _fs.readFileSync(fileName);
@@ -1818,15 +1817,7 @@ export let sys: System = (() => {
             return buffer.toString("utf8");
         }
 
-        function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger?.logStartReadFile(fileName);
-            const file = readFileWorker(fileName, _encoding);
-            perfLogger?.logStopReadFile();
-            return file;
-        }
-
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1846,7 +1837,6 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];

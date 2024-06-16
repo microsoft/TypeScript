@@ -226,7 +226,6 @@ ScriptInfos::
     containingProjects: 0 *changed*
         /a/b/proj1 *deleted*
 
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -369,7 +368,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -884,7 +882,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0
 
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -985,7 +982,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

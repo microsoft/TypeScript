@@ -1,4 +1,3 @@
-import * as compiler from "./_namespaces/compiler";
 import {
     Baseline,
     Compiler,
@@ -10,11 +9,11 @@ import {
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export const enum CompilerTestType {
     Conformance,
@@ -171,7 +170,7 @@ class CompilerTest {
     private configuredName: string;
     private harnessSettings: TestCaseParser.CompilerSettings;
     private hasNonDtsFiles: boolean;
-    private result: compiler.CompilationResult;
+    private result: Compiler.CompileFilesResult;
     private options: ts.CompilerOptions;
     private tsConfigFiles: Compiler.TestFile[];
     // equivalent to the files that will be passed on the command line
@@ -300,7 +299,7 @@ class CompilerTest {
             const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
             const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                ? null // eslint-disable-line no-null/no-null
+                ? null // eslint-disable-line no-restricted-syntax
                 : record;
             Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }

@@ -20,8 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 TestServerCancellationToken:: Cancellation Request id:: 1
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/app.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -344,7 +343,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -407,7 +407,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -427,7 +428,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -447,7 +449,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -498,7 +501,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
