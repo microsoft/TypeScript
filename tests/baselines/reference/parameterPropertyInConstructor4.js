@@ -23,6 +23,6 @@ exports.C = C;
 
 //// [parameterPropertyInConstructor4.d.ts]
 export declare class C {
-    a: number[] | undefined;
+    a: number[];
     constructor(a: number[] | undefined, b: number);
 }
