@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/unusedTypeDeclarations.ts] ////
+
+=== unusedTypeDeclarations.ts ===
+type T1 = number;  // error
+>T1 : number
+>   : ^^^^^^
+
+type _T2 = number; // ok
+>_T2 : number
+>    : ^^^^^^
+
+export {};
+
