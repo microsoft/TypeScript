@@ -126,7 +126,7 @@ export function intersperse<T>(input: T[], element: T): T[] {
     }
     const result: T[] = [];
     for (let i = 0, n = input.length; i < n; i++) {
-        if (i) result.push(element);
+        if (i !== 0) result.push(element);
         result.push(input[i]);
     }
     return result;
@@ -634,7 +634,7 @@ export function some<T>(array: readonly T[] | undefined, predicate: (value: T) =
 /** @internal */
 export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
     if (array !== undefined) {
-        if (predicate) {
+        if (predicate !== undefined) {
             for (let i = 0; i < array.length; i++) {
                 if (predicate(array[i])) {
                     return true;
@@ -1507,7 +1507,7 @@ export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySel
 export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; }; // eslint-disable-line no-restricted-syntax
 export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } { // eslint-disable-line no-restricted-syntax
     const result: Record<string, T[]> = {};
-    if (values) {
+    if (values !== undefined) {
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             const key = `${keySelector(value)}`;
