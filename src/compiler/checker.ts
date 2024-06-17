@@ -20562,9 +20562,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Note that this check ignores type parameters and only considers the
     // inheritance hierarchy.
     function isTypeDerivedFrom(source: Type, target: Type): boolean {
-        return source.flags & TypeFlags.Union ? every((source as UnionType).types, t => isTypeDerivedFrom(t, target)) :
-            target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
-            source.flags & TypeFlags.Intersection ? some((source as IntersectionType).types, t => isTypeDerivedFrom(t, target)) :
+        return source.flags & TypeFlags.Union ? everyContainedType(source, t => isTypeDerivedFrom(t, target)) :
+            target.flags & TypeFlags.Union ? someContainedType(target, t => isTypeDerivedFrom(source, t)) :
+            source.flags & TypeFlags.Intersection ? someContainedType(source, t => isTypeDerivedFrom(t, target)) :
             source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || unknownType, target) :
             isEmptyAnonymousObjectType(target) ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
             target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) && !isEmptyAnonymousObjectType(source) :
@@ -21376,8 +21376,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isEmptyObjectType(type: Type): boolean {
         return type.flags & TypeFlags.Object ? !isGenericMappedType(type) && isEmptyResolvedType(resolveStructuredTypeMembers(type as ObjectType)) :
             type.flags & TypeFlags.NonPrimitive ? true :
-            type.flags & TypeFlags.Union ? some((type as UnionType).types, isEmptyObjectType) :
-            type.flags & TypeFlags.Intersection ? every((type as UnionType).types, isEmptyObjectType) :
+            type.flags & TypeFlags.Union ? someContainedType(type, isEmptyObjectType) :
+            type.flags & TypeFlags.Intersection ? everyContainedType(type, isEmptyObjectType) :
             false;
     }
 
@@ -24828,7 +24828,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Intersections that reduce to 'never' (e.g. 'T & null' where 'T extends {}') are not unit types.
         const t = getBaseConstraintOrType(type);
         // Scan intersections such that tagged literal types are considered unit types.
-        return t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, isUnitType) : isUnitType(t);
+        return t.flags & TypeFlags.Intersection ? someContainedType(t, isUnitType) : isUnitType(t);
     }
 
     function extractUnitType(type: Type) {
@@ -27682,6 +27682,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.flags & TypeFlags.Union ? every((type as UnionType).types, f) : f(type);
     }
 
+    function someContainedType(type: Type, f: (t: Type) => boolean): boolean {
+        return type.flags & TypeFlags.UnionOrIntersection ? some((type as UnionOrIntersectionType).types, f) : f(type);
+    }
+
     function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
         return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
     }
@@ -29601,13 +29605,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isGenericTypeWithUnionConstraint(type: Type): boolean {
         return type.flags & TypeFlags.Intersection ?
-            some((type as IntersectionType).types, isGenericTypeWithUnionConstraint) :
+            someContainedType(type, isGenericTypeWithUnionConstraint) :
             !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
     }
 
     function isGenericTypeWithoutNullableConstraint(type: Type): boolean {
         return type.flags & TypeFlags.Intersection ?
-            some((type as IntersectionType).types, isGenericTypeWithoutNullableConstraint) :
+            someContainedType(type, isGenericTypeWithoutNullableConstraint) :
             !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
     }
 
@@ -36094,7 +36098,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
         const returnType = getReturnTypeOfSignature(signature);
-        return returnType.flags & TypeFlags.Intersection ? some((returnType as IntersectionType).types, isFunctionType) : isFunctionType(returnType);
+        return returnType.flags & TypeFlags.Intersection ? someContainedType(returnType, isFunctionType) : isFunctionType(returnType);
     }
 
     /**
