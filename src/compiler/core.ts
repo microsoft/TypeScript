@@ -421,7 +421,7 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
  */
 export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
     let result: U[] | undefined;
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const v = mapfn(array[i], i);
             if (v) {
@@ -440,7 +440,7 @@ export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: 
 /** @internal */
 export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): U[] {
     const result: U[] = [];
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const v = mapfn(array[i], i);
             if (v) {
@@ -480,7 +480,7 @@ export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => 
 /** @internal */
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
     let result: T[] | undefined;
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const item = array[i];
             const mapped = mapfn(item, i);
@@ -516,7 +516,7 @@ export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number)
 /** @internal */
 export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
     const result: U[] = [];
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const mapped = mapFn(array[i], i);
             if (mapped !== undefined) {
@@ -576,7 +576,7 @@ export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, 
 /** @internal */
 export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined {
     let result: U[] | undefined;
-    if (array) {
+    if (array !== undefined) {
         result = [];
         const len = array.length;
         let previousKey: K | undefined;
@@ -620,7 +620,7 @@ export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1
 export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
 /** @internal */
 export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
-    if (!map) {
+    if (map === undefined) {
         return undefined;
     }
 
@@ -692,8 +692,8 @@ export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined)
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
 /** @internal */
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
-    if (!some(array2)) return array1;
-    if (!some(array1)) return array2;
+    if (array2 === undefined || array2.length === 0) return array1;
+    if (array1 === undefined || array1.length === 0) return array2;
     return [...array1, ...array2];
 }
 
