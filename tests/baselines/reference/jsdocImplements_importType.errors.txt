@@ -1,0 +1,16 @@
+/a.js(1,18): error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+
+
+==== /a.js (1 errors) ====
+    /** @implements {import('./b').B} */
+                     ~~~~~~~~~~~~~~~
+!!! error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+    class A {
+        /** @return {number} */
+        method() { throw new Error(); }
+    }
+==== /b.ts (0 errors) ====
+    export interface B  {
+        method(): number
+    }
+    
