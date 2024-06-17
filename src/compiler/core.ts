@@ -33,7 +33,7 @@ export function length(array: readonly any[] | undefined): number {
  * @internal
  */
 export function forEach<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result) {
@@ -145,7 +145,7 @@ export function every<T, U extends T>(array: readonly T[] | undefined, callback:
 /** @internal */
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             if (!callback(array[i], i)) {
                 return false;
@@ -873,13 +873,13 @@ export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable
 /** @internal */
 export function compact<T>(array: readonly T[]): readonly T[] {
     let result: T[] | undefined;
-    if (array) {
+    if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
             const v = array[i];
+            // Either the result has been initialized (and is looking to collect truthy values separately),
+            // or we've hit our first falsy value and need to copy over the current stretch of truthy values.
             if (result ?? !v) {
-                if (!result) {
-                    result = array.slice(0, i);
-                }
+                result ??= array.slice(0, i);
                 if (v) {
                     result.push(v);
                 }
@@ -1049,7 +1049,7 @@ export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: Equalit
  * @internal
  */
 export function appendIfUnique<T>(array: T[] | undefined, toAdd: T, equalityComparer?: EqualityComparer<T>): T[] {
-    if (array) {
+    if (array !== undefined) {
         pushIfUnique(array, toAdd, equalityComparer);
         return array;
     }
