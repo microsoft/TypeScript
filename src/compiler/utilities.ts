@@ -632,6 +632,15 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
     return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
+/**
+ * True if the symbol is for an external module, as opposed to a namespace.
+ *
+ * @internal
+ */
+export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
+    return !!(moduleSymbol.flags & SymbolFlags.Module) && (moduleSymbol.escapedName as string).charCodeAt(0) === CharacterCodes.doubleQuote;
+}
+
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
