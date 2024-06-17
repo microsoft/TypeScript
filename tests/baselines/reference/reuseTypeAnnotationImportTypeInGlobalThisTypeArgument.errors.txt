@@ -1,0 +1,37 @@
+/types.js(3,21): error TS2304: Cannot find name 'Keyword'.
+/types.js(3,30): error TS2304: Cannot find name 'ParamValueTyped'.
+
+
+==== /contractHelper.d.ts (0 errors) ====
+    export function handleParamGovernance(zcf: any): {
+      publicMixin: {
+        getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
+      };
+    };
+    
+==== /exported.d.ts (0 errors) ====
+    type _ERef<T> = T | Promise<T>;
+    import { ParamStateRecord as _ParamStateRecord } from './types.js';
+    declare global {
+      // @ts-ignore TS2666
+      export {
+        _ERef as ERef,
+        _ParamStateRecord as ParamStateRecord,
+      };
+    }
+    
+==== /types.js (2 errors) ====
+    export {};
+    /**
+     * @typedef {Record<Keyword, ParamValueTyped>} ParamStateRecord a Record containing
+                        ~~~~~~~
+!!! error TS2304: Cannot find name 'Keyword'.
+                                 ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ParamValueTyped'.
+     *   keyword pairs with descriptions of parameters under governance.
+     */
+    
+==== /index.js (0 errors) ====
+    import { handleParamGovernance } from './contractHelper.js';
+    export const blah = handleParamGovernance({});
+    

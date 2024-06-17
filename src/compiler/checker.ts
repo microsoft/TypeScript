@@ -541,6 +541,7 @@ import {
     isExternalModuleIndicator,
     isExternalModuleNameRelative,
     isExternalModuleReference,
+    isExternalModuleSymbol,
     isExternalOrCommonJsModule,
     isForInOrOfStatement,
     isForInStatement,
@@ -9002,7 +9003,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const parentSymbol = nodeSymbol
                             && isSymbolAccessible(nodeSymbol, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible
                             && lookupSymbolChain(nodeSymbol, context, meaning, /*yieldModuleSymbol*/ true)[0];
-                        if (parentSymbol && parentSymbol.flags & SymbolFlags.Module) {
+                        if (parentSymbol && isExternalModuleSymbol(parentSymbol)) {
                             name = getSpecifierForModuleSymbol(parentSymbol, context);
                         }
                         else {
