@@ -6,8 +6,7 @@
 //// }
 
 // @Filename: /src/vs/parts.ts
-//// import { Event } from '../event/event';
-//// 
+//// import { Event } from '../thing';
 //// export interface Parts {
 //// 	readonly options: Event;
 //// }
@@ -18,7 +17,7 @@
 //// }
 
 // @Filename: /src/thing.ts
-//// import { Event } from './event/event';
+//// import { Event } from '../event/event';
 //// export { Event };
 
 // @Filename: /src/a.ts
@@ -29,12 +28,11 @@
 //// 	}
 //// }
 
-
+// In this test, `Event` is incorrectly imported in `thing.ts`
 verify.codeFix({
     description: "Implement interface 'Parts'",
     newFileContent: 
-`import { Event } from '../event/event';
-import { Parts } from './parts';
+`import { Parts } from './parts';
 export class Extended implements Parts {
     options: Event;
 }`,

@@ -18,7 +18,7 @@
 //// }
 
 // @Filename: /src/thing.ts
-//// import { Event } from './event/event';
+//// import { Event } from '../event/event';
 //// export { Event };
 
 // @Filename: /src/a.ts
@@ -29,7 +29,7 @@
 //// 	}
 //// }
 
-
+// In this test, `Event` is incorrectly imported in `thing.ts`
 verify.codeFix({
     description: "Implement interface 'Parts'",
     newFileContent: 
