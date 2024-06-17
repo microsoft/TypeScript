@@ -9508,15 +9508,14 @@ namespace Parser {
             function parseExpressionWithTypeArgumentsForJSDoc(): ExpressionWithTypeArguments {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
-                // const expression = parsePropertyAccessEntityNameExpression();
-        const saveParsingContext = parsingContext;
-        parsingContext |= 1 << ParsingContext.HeritageClauseElement;
-        const expression = parseLeftHandSideExpressionOrHigher();
-        parsingContext = saveParsingContext;
-        if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
-            parseExpected(SyntaxKind.CloseBraceToken);
-            return expression as ExpressionWithTypeArguments;
-        }
+                const saveParsingContext = parsingContext;
+                parsingContext |= 1 << ParsingContext.HeritageClauseElement;
+                const expression = parseLeftHandSideExpressionOrHigher();
+                parsingContext = saveParsingContext;
+                if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                    parseExpected(SyntaxKind.CloseBraceToken);
+                    return expression as ExpressionWithTypeArguments;
+                }
                 scanner.setSkipJsDocLeadingAsterisks(true);
                 const typeArguments = tryParseTypeArguments();
                 scanner.setSkipJsDocLeadingAsterisks(false);
@@ -9527,16 +9526,6 @@ namespace Parser {
                 }
                 return res;
             }
-
-            // function parsePropertyAccessEntityNameExpression() {
-            //     const pos = getNodePos();
-            //     let node: Identifier | PropertyAccessEntityNameExpression = parseJSDocIdentifierName();
-            //     while (parseOptional(SyntaxKind.DotToken)) {
-            //         const name = parseJSDocIdentifierName();
-            //         node = finishNode(factoryCreatePropertyAccessExpression(node, name), pos) as PropertyAccessEntityNameExpression;
-            //     }
-            //     return node;
-            // }
 
             function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
                 return finishNode(createTag(tagName, parseTrailingTagComments(start, getNodePos(), margin, indentText)), start);
