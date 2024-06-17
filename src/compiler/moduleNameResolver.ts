@@ -1,7 +1,7 @@
 import {
     append,
     appendIfUnique,
-    arrayIsEqualTo,
+    arraysEqual,
     changeAnyExtension,
     changeFullExtension,
     CharacterCodes,
@@ -2245,7 +2245,7 @@ export function getEntrypointsFromPackageJsonInfo(
     if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
         const conditionSets = deduplicate(
             [getConditions(options, ModuleKind.ESNext), getConditions(options, ModuleKind.CommonJS)],
-            arrayIsEqualTo,
+            arraysEqual,
         );
         for (const conditions of conditionSets) {
             const loadPackageJsonExportsState = { ...loadPackageJsonMainState, failedLookupLocations: [], conditions, host };

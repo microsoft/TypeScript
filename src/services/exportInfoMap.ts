@@ -2,7 +2,7 @@ import {
     __String,
     addToSeen,
     append,
-    arrayIsEqualTo,
+    arraysEqual,
     CancellationToken,
     consumesNodeCoreModules,
     createMultiMap,
@@ -260,7 +260,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
                 // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
                 // but type info is gathered in getCompletionEntryDetails, which doesn't use the cache.
-                !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
+                !arraysEqual(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
                 !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
             ) {
                 cache.clear();
@@ -336,7 +336,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
     }
 
     function ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
-        if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
+        if (!arraysEqual(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
             return false;
         }
         let oldFileStatementIndex = -1;

@@ -1,6 +1,6 @@
 import {
     ApplyCodeActionCommandResult,
-    arrayIsEqualTo,
+    arraysEqual,
     CompilerOptions,
     getAllowJSCompilerOption,
     InstallPackageOptions,
@@ -97,7 +97,7 @@ function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefi
     if (imports1 === imports2) {
         return false;
     }
-    return !arrayIsEqualTo(imports1, imports2);
+    return !arraysEqual(imports1, imports2);
 }
 
 /** @internal */

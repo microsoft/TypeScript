@@ -839,7 +839,7 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
 }
 
 /** @internal */
-export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
+export function arraysEqual<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
     if (array1 === undefined || array2 === undefined) {
         return array1 === array2;
     }
