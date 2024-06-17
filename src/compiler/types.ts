@@ -5132,7 +5132,7 @@ export interface TypeChecker {
     getNumberType(): Type;
     getNumberLiteralType(value: number): NumberLiteralType;
     getBigIntType(): Type;
-    getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType
+    getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
     getBooleanType(): Type;
     /* eslint-disable @typescript-eslint/unified-signatures */
     /** @internal */
