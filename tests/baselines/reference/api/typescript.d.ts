@@ -6196,6 +6196,7 @@ declare namespace ts {
         getNumberType(): Type;
         getNumberLiteralType(value: number): NumberLiteralType;
         getBigIntType(): Type;
+        getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
         getBooleanType(): Type;
         getFalseType(): Type;
         getTrueType(): Type;
