@@ -6666,7 +6666,11 @@ declare namespace ts {
         minLength: number;
         /** Number of initial required or optional elements */
         fixedLength: number;
-        /** True if tuple has any rest or variadic elements */
+        /**
+         * True if tuple has any rest or variadic elements
+         *
+         * @deprecated Use `.combinedFlags & ElementFlags.Variable` instead
+         */
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;

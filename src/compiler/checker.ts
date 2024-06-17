@@ -18567,7 +18567,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (everyType(objectType, isTupleType) && isNumericLiteralName(propName)) {
                 const index = +propName;
-                if (accessNode && everyType(objectType, t => !(t as TupleTypeReference).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
+                if (accessNode && everyType(objectType, t => !((t as TupleTypeReference).target.combinedFlags & ElementFlags.Variable)) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
                     const indexNode = getIndexNodeForAccessExpression(accessNode);
                     if (isTupleType(objectType)) {
                         if (index < 0) {
@@ -25755,7 +25755,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
         return !(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
-            !target.target.hasRestElement && (source.target.hasRestElement || target.target.fixedLength < source.target.fixedLength);
+            !(target.target.combinedFlags & ElementFlags.Variable) && (!!(source.target.combinedFlags & ElementFlags.Variable) || target.target.fixedLength < source.target.fixedLength);
     }
 
     function typesDefinitelyUnrelated(source: Type, target: Type) {
@@ -26586,7 +26586,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return;
                         }
                         const startLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
-                        const endLength = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.Fixed) : 0, target.target.hasRestElement ? getEndElementCount(target.target, ElementFlags.Fixed) : 0);
+                        const endLength = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.Fixed) : 0, target.target.combinedFlags & ElementFlags.Variable ? getEndElementCount(target.target, ElementFlags.Fixed) : 0);
                         // Infer between starting fixed elements.
                         for (let i = 0; i < startLength; i++) {
                             inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
@@ -26615,7 +26615,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
                                     const param = getInferenceInfoForType(elementTypes[startLength])?.typeParameter;
                                     const constraint = param && getBaseConstraintOfType(param);
-                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                    if (constraint && isTupleType(constraint) && !(constraint.target.combinedFlags & ElementFlags.Variable)) {
                                         const impliedArity = constraint.target.fixedLength;
                                         inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
                                         inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
@@ -26626,7 +26626,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
                                     const param = getInferenceInfoForType(elementTypes[startLength + 1])?.typeParameter;
                                     const constraint = param && getBaseConstraintOfType(param);
-                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                    if (constraint && isTupleType(constraint) && !(constraint.target.combinedFlags & ElementFlags.Variable)) {
                                         const impliedArity = constraint.target.fixedLength;
                                         const endIndex = sourceArity - getEndElementCount(target.target, ElementFlags.Fixed);
                                         const startIndex = endIndex - impliedArity;
@@ -31583,7 +31583,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // When the length is known and the index is after all spread elements we compute the offset from the element
                 // to the end and the number of ending fixed elements in the contextual tuple type.
                 const offset = length !== undefined && (lastSpreadIndex === undefined || index > lastSpreadIndex) ? length - index : 0;
-                const fixedEndLength = offset > 0 && t.target.hasRestElement ? getEndElementCount(t.target, ElementFlags.Fixed) : 0;
+                const fixedEndLength = offset > 0 && (t.target.combinedFlags & ElementFlags.Variable) ? getEndElementCount(t.target, ElementFlags.Fixed) : 0;
                 // If the offset is within the ending fixed part of the contextual tuple type, return the type of the contextual
                 // tuple element.
                 if (offset > 0 && offset <= fixedEndLength) {
@@ -37367,7 +37367,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // otherwise would return the type 'undefined').
             const restType = getTypeOfSymbol(signature.parameters[paramCount]);
             const index = pos - paramCount;
-            if (!isTupleType(restType) || restType.target.hasRestElement || index < restType.target.fixedLength) {
+            if (!isTupleType(restType) || restType.target.combinedFlags & ElementFlags.Variable || index < restType.target.fixedLength) {
                 return getIndexedAccessType(restType, getNumberLiteralType(index));
             }
         }
@@ -37416,7 +37416,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (signatureHasRestParameter(signature)) {
             const restType = getTypeOfSymbol(signature.parameters[length - 1]);
             if (isTupleType(restType)) {
-                return length + restType.target.fixedLength - (restType.target.hasRestElement ? 0 : 1);
+                return length + restType.target.fixedLength - (restType.target.combinedFlags & ElementFlags.Variable ? 0 : 1);
             }
         }
         return length;
@@ -37461,7 +37461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasEffectiveRestParameter(signature: Signature) {
         if (signatureHasRestParameter(signature)) {
             const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-            return !isTupleType(restType) || restType.target.hasRestElement;
+            return !isTupleType(restType) || !!(restType.target.combinedFlags & ElementFlags.Variable);
         }
         return false;
     }
@@ -37472,7 +37472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isTupleType(restType)) {
                 return isTypeAny(restType) ? anyArrayType : restType;
             }
-            if (restType.target.hasRestElement) {
+            if (restType.target.combinedFlags & ElementFlags.Variable) {
                 return sliceTupleType(restType, restType.target.fixedLength);
             }
         }
@@ -40147,7 +40147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal)
                 : checkExpressionCached(initializer, checkMode));
         return isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
-                isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
+                isTupleType(type) && !(type.target.combinedFlags & ElementFlags.Variable) && getTypeReferenceArity(type) < declaration.name.elements.length ?
             padTupleType(type, declaration.name) : type;
     }
 
