@@ -289,7 +289,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         if (!exportInfo) {
             // If no exportInfo is found, this means export could not be resolved when we have filtered for autoImportFileExcludePatterns,
             //     so we should not generate an import.
-            Debug.assert(preferences.autoImportFileExcludePatterns !== undefined);
+            Debug.assert(preferences.autoImportFileExcludePatterns!.length > 0);
             return;
         }
         const useRequire = shouldUseRequire(sourceFile, program);
