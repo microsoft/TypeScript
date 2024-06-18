@@ -1718,6 +1718,8 @@ export function transformDeclarations(context: TransformationContext) {
                 ));
             }
         }
+        // Anything left unhandled is an error, so this should be unreachable
+        return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
 
         function cleanup<T extends Node>(node: T | undefined): T | undefined {
             if (isEnclosingDeclaration(input)) {
