@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion1.ts] ////
+
+=== inferenceContextualReturnTypeUnion1.ts ===
+// https://github.com/microsoft/TypeScript/issues/50719
+
+declare function useCallback1<T extends Function>(fn: T): T;
+>useCallback1 : <T extends Function>(fn: T) => T
+>             : ^ ^^^^^^^^^        ^^  ^^ ^^^^^ 
+>fn : T
+>   : ^
+
+declare function ex2(callback?: (x: number) => void): void;
+>ex2 : (callback?: (x: number) => void) => void
+>    : ^        ^^^                   ^^^^^    
+>callback : ((x: number) => void) | undefined
+>         : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+ex2(useCallback1((x) => {}));
+>ex2(useCallback1((x) => {})) : void
+>                             : ^^^^
+>ex2 : (callback?: (x: number) => void) => void
+>    : ^        ^^^                   ^^^^^    
+>useCallback1((x) => {}) : (x: number) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^
+>useCallback1 : <T extends Function>(fn: T) => T
+>             : ^ ^^^^^^^^^        ^^  ^^ ^^^^^ 
+>(x) => {} : (x: number) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+declare function ex3(callback: ((x: number) => void) | 5): void;
+>ex3 : (callback: ((x: number) => void) | 5) => void
+>    : ^        ^^                         ^^^^^    
+>callback : ((x: number) => void) | 5
+>         : ^^ ^^      ^^^^^    ^^^^^
+>x : number
+>  : ^^^^^^
+
+ex3(useCallback1((x) => {}));
+>ex3(useCallback1((x) => {})) : void
+>                             : ^^^^
+>ex3 : (callback: ((x: number) => void) | 5) => void
+>    : ^        ^^                         ^^^^^    
+>useCallback1((x) => {}) : (x: number) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^
+>useCallback1 : <T extends Function>(fn: T) => T
+>             : ^ ^^^^^^^^^        ^^  ^^ ^^^^^ 
+>(x) => {} : (x: number) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/41461
+
+declare function useCallback2<T extends (...args: any[]) => any>(
+>useCallback2 : <T extends (...args: any[]) => any>(callback: T) => T
+>             : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^ 
+>args : any[]
+>     : ^^^^^
+
+  callback: T,
+>callback : T
+>         : ^
+
+): T;
+const test: ((x: string) => void) | undefined = useCallback2((x) => {});
+>test : ((x: string) => void) | undefined
+>     : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>useCallback2((x) => {}) : (x: string) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^
+>useCallback2 : <T extends (...args: any[]) => any>(callback: T) => T
+>             : ^ ^^^^^^^^^                       ^^        ^^ ^^^^^ 
+>(x) => {} : (x: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+
