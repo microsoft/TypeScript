@@ -131,7 +131,6 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -420,6 +419,7 @@ import {
     WithStatement,
     writeCommentRange,
     writeFile,
+    WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -829,7 +829,6 @@ export function emitFiles(
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
-            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -905,7 +904,6 @@ export function emitFiles(
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
-                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
                 sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -923,7 +921,7 @@ export function emitFiles(
                 isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
-            printSourceFileOrBundle(
+            const dtsWritten = printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
                 declarationTransform,
@@ -937,7 +935,7 @@ export function emitFiles(
                 },
             );
             if (emittedFilesList) {
-                emittedFilesList.push(declarationFilePath);
+                if (dtsWritten) emittedFilesList.push(declarationFilePath);
                 if (declarationMapPath) {
                     emittedFilesList.push(declarationMapPath);
                 }
@@ -1027,10 +1025,12 @@ export function emitFiles(
 
         // Write the output file
         const text = writer.getText();
-        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
+        const data: WriteFileCallbackData = { sourceMapUrlPos, diagnostics: transform.diagnostics };
+        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, data);
 
         // Reset state
         writer.clear();
+        return !data.skippedDtsWrite;
     }
 
     interface SourceMapOptions {

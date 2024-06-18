@@ -293,7 +293,6 @@ import {
     ParenthesizedExpression,
     ParenthesizedTypeNode,
     PartiallyEmittedExpression,
-    perfLogger,
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
@@ -1343,7 +1342,6 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
     performance.mark("beforeParse");
     let result: SourceFile;
 
-    perfLogger?.logStartParseSourceFile(fileName);
     const {
         languageVersion,
         setExternalModuleIndicator: overrideSetExternalModuleIndicator,
@@ -1360,7 +1358,6 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
         };
         result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator, jsDocParsingMode);
     }
-    perfLogger?.logStopParseSourceFile();
 
     performance.mark("afterParse");
     performance.measure("Parse", "beforeParse", "afterParse");

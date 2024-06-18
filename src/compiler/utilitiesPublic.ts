@@ -348,13 +348,23 @@ export function textSpanContainsPosition(span: TextSpan, position: number) {
 }
 
 /** @internal */
-export function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean {
-    return position >= span.pos && position <= span.end;
+export function textRangeContainsPositionInclusive(range: TextRange, position: number): boolean {
+    return position >= range.pos && position <= range.end;
 }
 
 // Returns true if 'span' contains 'other'.
 export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
     return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+}
+
+/** @internal */
+export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
+    return range.pos >= span.start && range.end <= textSpanEnd(span);
+}
+
+/** @internal */
+export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
+    return span.start >= range.pos && textSpanEnd(span) <= range.end;
 }
 
 export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
@@ -366,28 +376,61 @@ export function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | un
     return overlap && overlap.length === 0 ? undefined : overlap;
 }
 
-export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
+export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean {
     return decodedTextSpanIntersectsWith(span.start, span.length, other.start, other.length);
 }
 
-export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+export function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean {
     return decodedTextSpanIntersectsWith(span.start, span.length, start, length);
 }
 
-export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
+export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean {
     const end1 = start1 + length1;
     const end2 = start2 + length2;
     return start2 <= end1 && end2 >= start1;
 }
 
-export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
+export function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean {
     return position <= textSpanEnd(span) && position >= span.start;
+}
+
+/** @internal */
+export function textRangeIntersectsWithTextSpan(range: TextRange, span: TextSpan): boolean {
+    return textSpanIntersectsWith(span, range.pos, range.end - range.pos);
 }
 
 export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined {
     const start = Math.max(span1.start, span2.start);
     const end = Math.min(textSpanEnd(span1), textSpanEnd(span2));
     return start <= end ? createTextSpanFromBounds(start, end) : undefined;
+}
+
+/**
+ * Given an array of text spans, returns an equivalent sorted array of text spans
+ * where no span overlaps or is adjacent to another span in the array.
+ * @internal
+ */
+export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
+    spans = spans.filter(span => span.length > 0).sort((a, b) => {
+        return a.start !== b.start ? a.start - b.start : a.length - b.length;
+    });
+
+    const result: TextSpan[] = [];
+    let i = 0;
+    while (i < spans.length) {
+        let span = spans[i];
+        let j = i + 1;
+        while (j < spans.length && textSpanIntersectsWithTextSpan(span, spans[j])) {
+            const start = Math.min(span.start, spans[j].start);
+            const end = Math.max(textSpanEnd(span), textSpanEnd(spans[j]));
+            span = createTextSpanFromBounds(start, end);
+            j++;
+        }
+        i = j;
+        result.push(span);
+    }
+
+    return result;
 }
 
 export function createTextSpan(start: number, length: number): TextSpan {

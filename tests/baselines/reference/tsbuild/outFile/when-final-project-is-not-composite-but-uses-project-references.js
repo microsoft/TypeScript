@@ -1036,12 +1036,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../../third_part1.ts"],"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../../third_part1.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 59
 }
 
 

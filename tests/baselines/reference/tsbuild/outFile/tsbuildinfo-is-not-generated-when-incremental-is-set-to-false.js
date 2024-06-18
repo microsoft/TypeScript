@@ -316,11 +316,14 @@ c.doSomething();
 {"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../../third_part1.ts"],"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../../third_part1.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 59
 }
 

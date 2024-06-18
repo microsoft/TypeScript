@@ -967,10 +967,6 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
-        "category": "Error",
-        "code": 1293
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -4365,10 +4361,6 @@
         "category": "Error",
         "code": 5012
     },
-    "Failed to parse file '{0}': {1}.": {
-        "category": "Error",
-        "code": 5014
-    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -5696,14 +5688,6 @@
         "category": "Message",
         "code": 6361
     },
-    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6362
-    },
-    "Project '{0}' can't be built because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6363
-    },
     "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6364
@@ -5747,14 +5731,6 @@
     "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
         "category": "Message",
         "code": 6381
-    },
-    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6382
-    },
-    "Project '{0}' can't be built because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6383
     },
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
@@ -5897,6 +5873,14 @@
     "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
         "category": "Message",
         "code": 6418
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors.": {
+        "category": "Message",
+        "code": 6419
+    },
+    "Project '{0}' is out of date because {1}.": {
+        "category": "Message",
+        "code": 6420
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

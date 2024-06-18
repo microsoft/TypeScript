@@ -82,10 +82,34 @@ Output::
 [7m6[0m     }
 [7m [0m [91m~~~~~[0m
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/src/main/tsconfig.json'...
+
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/src/dist/a.d.ts]
+export {};
+
+
+//// [/src/dist/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var a = b_1.b;
+
+
+//// [/src/dist/b.d.ts]
+export declare const b = 0;
+
+
+//// [/src/dist/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = void 0;
+exports.b = 0;
 
 
 //// [/src/dist/other.d.ts]

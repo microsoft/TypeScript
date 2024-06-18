@@ -353,7 +353,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     describe("downstream-blocked compilations", () => {
         verifyTsc({
             scenario: "sample1",
-            subScenario: "does not build downstream projects if upstream projects have errors",
+            subScenario: "builds downstream projects even if upstream projects have errors",
             fs: () => projFs,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifyFs: fs => replaceText(fs, "logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),

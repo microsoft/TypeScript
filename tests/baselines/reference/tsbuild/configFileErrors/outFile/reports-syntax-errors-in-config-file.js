@@ -50,8 +50,32 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
+
+
+//// [/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = foo;
+    function foo() { }
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.bar = bar;
+    function bar() { }
+});
+
+
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -80,13 +104,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
-  ],
+  "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 719
+  "size": 901
 }
 
 
@@ -145,8 +167,35 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+    export function fooBar(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
+
+
+//// [/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = foo;
+    exports.fooBar = fooBar;
+    function foo() { }
+    function fooBar() { }
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.bar = bar;
+    function bar() { }
+});
+
+
 //// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -176,13 +225,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
-  ],
+  "outSignature": "-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 766
+  "size": 986
 }
 
 
@@ -227,33 +274,6 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json
 exitCode:: ExitStatus.Success
-
-
-//// [/outFile.d.ts]
-declare module "a" {
-    export function foo(): void;
-    export function fooBar(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
-
-
-//// [/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = foo;
-    exports.fooBar = fooBar;
-    function foo() { }
-    function fooBar() { }
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.bar = bar;
-    function bar() { }
-});
 
 
 //// [/outFile.tsbuildinfo]
