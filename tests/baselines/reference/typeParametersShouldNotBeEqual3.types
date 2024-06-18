@@ -3,7 +3,7 @@
 === typeParametersShouldNotBeEqual3.ts ===
 function ff<T extends Object, U extends Object>(x: T, y: U) {
 >ff : <T extends Object, U extends Object>(x: T, y: U) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

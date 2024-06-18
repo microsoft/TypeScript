@@ -40,5 +40,5 @@ if(null === isVoid()) { }
 >isVoid() : void
 >         : ^^^^
 >isVoid : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 

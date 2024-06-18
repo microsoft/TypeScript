@@ -9,19 +9,19 @@ class A {
 
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
 }
 
@@ -31,19 +31,19 @@ class B {
 
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : any
 }
 
@@ -53,38 +53,38 @@ class C<T> {
 
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^ ^^ ^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : string
 >  : ^^^^^^
 
     foo(x: T): T;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^ ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : T
 >  : ^
 
     foo(x: any): any { return null; }
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : any
 }
 
 interface I {
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;    
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 }
@@ -92,19 +92,19 @@ interface I {
 interface I2<T> {
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^ ^^ ^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : string
 >  : ^^^^^^
 
     foo(x: T): T;
 >foo : { (x: number): number; (x: string): string; (x: T): T; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^ ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
 >x : T
 >  : ^
 }
@@ -115,13 +115,13 @@ var a: {
 
     foo(x: number): number
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
     foo(x: string): string
 >foo : { (x: number): number; (x: string): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
 }
@@ -214,17 +214,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 >a : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 >a : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -313,9 +313,9 @@ function foo7(x: typeof a); // BUG 831930
 >foo7 : { (x: A): any; (x: typeof a): any; }
 >     : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 >a : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 
 function foo7(x: any) { }
 >foo7 : { (x: A): any; (x: typeof a): any; }
@@ -366,9 +366,9 @@ function foo10(x: typeof a); // BUG 831930
 >foo10 : { (x: B): any; (x: typeof a): any; }
 >      : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 >a : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 
 function foo10(x: any) { }
 >foo10 : { (x: B): any; (x: typeof a): any; }
@@ -438,9 +438,9 @@ function foo13(x: typeof a);  // error
 >foo13 : { (x: I): any; (x: typeof a): any; }
 >      : ^^^ ^^ ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 >a : { foo(x: number): number; foo(x: string): string; }
->  : ^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^ ^^      ^^^      ^^^^^^ ^^      ^^^      ^^^
 
 function foo13(x: any) { }
 >foo13 : { (x: I): any; (x: typeof a): any; }

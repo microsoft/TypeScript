@@ -139,11 +139,11 @@ module TypeScript {
 >this.scopeGetter() : SymbolScope
 >                   : ^^^^^^^^^^^
 >this.scopeGetter : () => SymbolScope
->                 : ^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^           
 >this : this
 >     : ^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
         }
 
         public getObjectLiteralScope(): SymbolScope {
@@ -154,11 +154,11 @@ module TypeScript {
 >this.objectLiteralScopeGetter() : SymbolScope
 >                                : ^^^^^^^^^^^
 >this.objectLiteralScopeGetter : () => SymbolScope
->                              : ^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^           
 >this : this
 >     : ^^^^
 >objectLiteralScopeGetter : () => SymbolScope
->                         : ^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^           
         }
 
         public getScopeAST() {
@@ -214,11 +214,11 @@ module TypeScript {
 >this.getScriptFragmentStartAST() : AST
 >                                 : ^^^
 >this.getScriptFragmentStartAST : () => AST
->                               : ^^^^^^^^^
+>                               : ^^^^^^   
 >this : this
 >     : ^^^^
 >getScriptFragmentStartAST : () => AST
->                          : ^^^^^^^^^
+>                          : ^^^^^^   
 >minChar : any
 >        : ^^^
         }
@@ -243,11 +243,11 @@ module TypeScript {
 >this.getScriptFragmentStartAST() : AST
 >                                 : ^^^
 >this.getScriptFragmentStartAST : () => AST
->                               : ^^^^^^^^^
+>                               : ^^^^^^   
 >this : this
 >     : ^^^^
 >getScriptFragmentStartAST : () => AST
->                          : ^^^^^^^^^
+>                          : ^^^^^^   
 
                 var minChar = ast.minChar;
 >minChar : any
@@ -796,11 +796,11 @@ module TypeScript {
 >context.scopeGetter = function () {                        return script.bod === null ? null : script.bod.enclosingScope;                    } : () => any
 >                                                                                                                                               : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                        return script.bod === null ? null : script.bod.enclosingScope;                    } : () => any
 >                                                                                                                         : ^^^^^^^^^
 
@@ -853,11 +853,11 @@ module TypeScript {
 >context.scopeGetter = function () {                        return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;                    } : () => any
 >                                                                                                                                                                                                           : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                        return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;                    } : () => any
 >                                                                                                                                                                                     : ^^^^^^^^^
 
@@ -965,11 +965,11 @@ module TypeScript {
 >context.scopeGetter = function () {                            return objectLit.targetType.containedScope;                        } : () => any
 >                                                                                                                                    : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                            return objectLit.targetType.containedScope;                        } : () => any
 >                                                                                                              : ^^^^^^^^^
 
@@ -990,11 +990,11 @@ module TypeScript {
 >context.objectLiteralScopeGetter = function () {                            return objectLit.targetType.memberScope;                        } : () => any
 >                                                                                                                                              : ^^^^^^^^^
 >context.objectLiteralScopeGetter : () => SymbolScope
->                                 : ^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >objectLiteralScopeGetter : () => SymbolScope
->                         : ^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^           
 >function () {                            return objectLit.targetType.memberScope;                        } : () => any
 >                                                                                                           : ^^^^^^^^^
 
@@ -1050,11 +1050,11 @@ module TypeScript {
 >context.scopeGetter = function () {                        return ast.type === null ? null : ast.type.containedScope;                    } : () => any
 >                                                                                                                                           : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                        return ast.type === null ? null : ast.type.containedScope;                    } : () => any
 >                                                                                                                     : ^^^^^^^^^
 
@@ -1107,11 +1107,11 @@ module TypeScript {
 >context.scopeGetter = function () {                        return (ast.type === null) ? null : ast.type.containedScope;                    } : () => any
 >                                                                                                                                             : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                        return (ast.type === null) ? null : ast.type.containedScope;                    } : () => any
 >                                                                                                                       : ^^^^^^^^^
 
@@ -1195,11 +1195,11 @@ module TypeScript {
 >context.scopeGetter = function () {                            // The scope of a class constructor is hidden somewhere we don't expect :-S                            if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {                                if (ast.type && ast.type.enclosingType) {                                    return ast.type.enclosingType.constructorScope;                                }                            }                            if (funcDecl.scopeType) {                                return funcDecl.scopeType.containedScope;                            }                            if (funcDecl.type) {                                return funcDecl.type.containedScope;                            }                            return null;                        } : () => any
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^^^
 >context.scopeGetter : () => SymbolScope
->                    : ^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^           
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeGetter : () => SymbolScope
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 >function () {                            // The scope of a class constructor is hidden somewhere we don't expect :-S                            if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {                                if (ast.type && ast.type.enclosingType) {                                    return ast.type.enclosingType.constructorScope;                                }                            }                            if (funcDecl.scopeType) {                                return funcDecl.scopeType.containedScope;                            }                            if (funcDecl.type) {                                return funcDecl.type.containedScope;                            }                            return null;                        } : () => any
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^
 

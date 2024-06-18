@@ -151,7 +151,7 @@ function gg1(x: {}) {
 >isObject1(x) : boolean
 >             : ^^^^^^^
 >isObject1 : (value: unknown) => value is Record<string, unknown>
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^                                
 >x : {}
 >  : ^^
 
@@ -185,7 +185,7 @@ function gg2(x: Record<string, unknown>) {
 >isObject2(x) : boolean
 >             : ^^^^^^^
 >isObject2 : (value: unknown) => value is {}
->          : ^     ^^       ^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^           
 >x : Record<string, unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -221,7 +221,7 @@ function gg3(x: {}) {
 >isObject3(x) : boolean
 >             : ^^^^^^^
 >isObject3 : (value: unknown) => value is Record<string, any>
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^                            
 >x : {}
 >  : ^^
 
@@ -255,7 +255,7 @@ function gg4(x: Record<string, any>) {
 >isObject4(x) : boolean
 >             : ^^^^^^^
 >isObject4 : (value: unknown) => value is {}
->          : ^     ^^       ^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^           
 >x : Record<string, any>
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -314,7 +314,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -322,7 +322,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -330,7 +330,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -338,7 +338,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -346,7 +346,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -354,7 +354,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -362,7 +362,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -370,7 +370,7 @@ function example(x: Union) {
 >is(x) : boolean
 >      : ^^^^^^^
 >is : <T>(value: T) => value is Self<T>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^                
 >x : Union
 >  : ^^^^^
 
@@ -392,11 +392,11 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj.length : number
@@ -428,11 +428,11 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >console.log(obj[key]) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj[key] : any
 >         : ^^^
 >obj : any[] | Record<string, any>[]
@@ -466,11 +466,11 @@ function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) 
 >console.log(obj[key]) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj[key] : any
 >         : ^^^
 >obj : any[] | Record<string, any>
@@ -492,11 +492,11 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : Record<string, any> | Record<string, any>[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -523,11 +523,11 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >console.log(obj[key]) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj[key] : any
 >         : ^^^
 >obj : any[] | Record<string, any>[]
@@ -561,11 +561,11 @@ function checksArrayOrObject2(obj: Record<string, any> | Record<string, any>[]) 
 >console.log(obj[key]) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >obj[key] : any
 >         : ^^^
 >obj : Record<string, any>

@@ -7,7 +7,7 @@ var nake;
 
 function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
 >doCompile : <P0, P1, P2>(fileset: P0, moduleType: P1) => any
->          : ^  ^^  ^^^^^^       ^^  ^^          ^^  ^^^^^^^^
+>          : ^  ^^  ^^  ^^       ^^  ^^          ^^  ^^^^^^^^
 >fileset : P0
 >        : ^^
 >moduleType : P1
@@ -25,7 +25,7 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 >task : any
 >     : ^^^
 ><P0, P1, P2>() => {    var folder = path.join(),        fileset = nake.fileSetSync<number, number, any>(folder)  return doCompile<number, number, any>(fileset, moduleType);} : <P0, P1, P2>() => any
->                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                              : ^  ^^  ^^  ^^^^^^^^^^
 
     var folder = path.join(),
 >folder : any
@@ -57,7 +57,7 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 >doCompile<number, number, any>(fileset, moduleType) : any
 >                                                    : ^^^
 >doCompile : <P0_1, P1_1, P2_1>(fileset: P0_1, moduleType: P1_1) => any
->          : ^    ^^    ^^^^^^^^       ^^    ^^          ^^    ^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^       ^^    ^^          ^^    ^^^^^^^^
 >fileset : any
 >        : ^^^
 >moduleType : any

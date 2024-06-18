@@ -165,11 +165,11 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
         matchResult = execResult;
 >matchResult = execResult : RegExpExecArray

@@ -25,7 +25,7 @@ var b1G = makeArray(1, ""); // any, no error
 >makeArray(1, "") : unknown[]
 >                 : ^^^^^^^^^
 >makeArray : <T>(items: T[]) => T[]
->          : ^ ^^     ^^   ^^^^^^^^
+>          : ^ ^^     ^^   ^^^^^   
 >1 : 1
 >  : ^
 >"" : ""
@@ -37,7 +37,7 @@ var b2G = makeArray(b); // any[]
 >makeArray(b) : (string | number)[]
 >             : ^^^^^^^^^^^^^^^^^^^
 >makeArray : <T>(items: T[]) => T[]
->          : ^ ^^     ^^   ^^^^^^^^
+>          : ^ ^^     ^^   ^^^^^   
 >b : (string | number)[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ var b3G = makeArray2(1, ""); // error
 >makeArray2(1, "") : any[]
 >                  : ^^^^^
 >makeArray2 : (items: any[]) => any[]
->           : ^     ^^     ^^^^^^^^^^
+>           : ^     ^^     ^^^^^     
 >1 : 1
 >  : ^
 >"" : ""

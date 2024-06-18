@@ -3,7 +3,6 @@ import {
     Comparer,
     getBaseFileName,
     identity,
-    perfLogger,
     SortedArray,
 } from "./_namespaces/ts.js";
 import {
@@ -48,13 +47,11 @@ export class ThrottledOperations {
     }
 
     private static run(operationId: string, self: ThrottledOperations, cb: () => void) {
-        perfLogger?.logStartScheduledOperation(operationId);
         self.pendingTimeouts.delete(operationId);
         if (self.logger) {
             self.logger.info(`Running: ${operationId}`);
         }
         cb();
-        perfLogger?.logStopScheduledOperation();
     }
 }
 
@@ -75,7 +72,6 @@ export class GcTimer {
     private static run(self: GcTimer) {
         self.timerId = undefined;
 
-        perfLogger?.logStartScheduledOperation("GC collect");
         const log = self.logger.hasLevel(LogLevel.requestTime);
         const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
@@ -84,7 +80,6 @@ export class GcTimer {
             const after = self.host.getMemoryUsage!(); // TODO: GH#18217
             self.logger.perftrc(`GC::before ${before}, after ${after}`);
         }
-        perfLogger?.logStopScheduledOperation();
     }
 }
 

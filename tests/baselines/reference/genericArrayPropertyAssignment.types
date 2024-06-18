@@ -15,7 +15,7 @@ return list.length ===0;
 >list.length : number
 >            : ^^^^^^
 >list : { length: number; }
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^      ^^^
 >length : number
 >       : ^^^^^^
 >0 : 0

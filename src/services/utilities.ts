@@ -97,7 +97,6 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
-    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
     getImpliedNodeFormatForFileWorker,
     getIndentString,
@@ -2317,13 +2316,13 @@ function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, sh
 }
 
 /** @internal */
-export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number) {
     if (!contextToken) return undefined;
 
     switch (contextToken.kind) {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
-            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike);
+            return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike, position);
         default:
             return createTextSpanFromNode(contextToken);
     }
@@ -2335,12 +2334,12 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
         if (node.getStart() === replacementEnd) return undefined;
-        replacementEnd = node.getEnd();
+        replacementEnd = Math.min(position, node.getEnd());
     }
     return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
@@ -2407,15 +2406,6 @@ export function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKey
 /** @internal */
 export function isTypeKeywordTokenOrIdentifier(node: Node) {
     return isTypeKeywordToken(node) || isIdentifier(node) && node.text === "type";
-}
-
-/**
- * True if the symbol is for an external module, as opposed to a namespace.
- *
- * @internal
- */
-export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
-    return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
 }
 
 /**
@@ -2493,8 +2483,6 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
-        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
-        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 
@@ -4304,13 +4292,11 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
+    const compilerOptions = program.getCompilerOptions();
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const sourceFileLike = typeof file === "string" ? {
-        fileName: file,
-        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
-    } : file;
-    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
+    const impliedNodeFormat = typeof file === "string"
+        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        : file.impliedNodeFormat;
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

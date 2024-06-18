@@ -1,122 +1,68 @@
-import * as vfs from "../../_namespaces/vfs.js";
-import { getFsForNoEmitOnError } from "../helpers/noEmitOnError.js";
+import { forEachNoEmitOnErrorScenario } from "../helpers/noEmitOnError.js";
 import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
-describe("unittests:: tsbuild - with noEmitOnError", () => {
-    let projFs: vfs.FileSystem;
-    before(() => {
-        projFs = getFsForNoEmitOnError();
-    });
-    after(() => {
-        projFs = undefined!;
-    });
-
-    verifyTsc({
-        scenario: "noEmitOnError",
-        subScenario: "syntax errors",
-        fs: () => projFs,
-        commandLineArgs: ["--b"],
-        edits: [
-            noChangeRun,
-            {
-                caption: "Fix error",
-                edit: fs =>
-                    fs.writeFileSync(
-                        "src/main.ts",
-                        `import { A } from "../shared/types/db";
+describe("unittests:: tsbuild - with noEmitOnError::", () => {
+    forEachNoEmitOnErrorScenario(
+        (fsContents, cwd, executingFilePath) => loadProjectFromFiles(fsContents, { cwd, executingFilePath }),
+        (scenarioName, fs) => {
+            describe(scenarioName("verify noEmitOnError"), () => {
+                verifyTsc({
+                    scenario: "noEmitOnError",
+                    subScenario: scenarioName("syntax errors"),
+                    fs,
+                    commandLineArgs: ["--b", "--verbose"],
+                    edits: [
+                        noChangeRun,
+                        {
+                            caption: "Fix error",
+                            edit: fs =>
+                                fs.writeFileSync(
+                                    "src/main.ts",
+                                    `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`,
-                        "utf-8",
-                    ),
-            },
-            noChangeRun,
-        ],
-        baselinePrograms: true,
-    });
+                                    "utf-8",
+                                ),
+                        },
+                        noChangeRun,
+                    ],
+                    baselinePrograms: true,
+                });
 
-    verifyTsc({
-        scenario: "noEmitOnError",
-        subScenario: "syntax errors with incremental",
-        fs: () => projFs,
-        commandLineArgs: ["--b", "--incremental"],
-        edits: [
-            noChangeRun,
-            {
-                caption: "Fix error",
-                edit: fs =>
-                    fs.writeFileSync(
-                        "src/main.ts",
-                        `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                        "utf-8",
-                    ),
-            },
-            noChangeRun,
-        ],
-        baselinePrograms: true,
-    });
-
-    verifyTsc({
-        scenario: "noEmitOnError",
-        subScenario: "semantic errors",
-        fs: () => projFs,
-        modifyFs: fs =>
-            fs.writeFileSync(
-                "src/main.ts",
-                `import { A } from "../shared/types/db";
+                verifyTsc({
+                    scenario: "noEmitOnError",
+                    subScenario: scenarioName("semantic errors"),
+                    fs,
+                    modifyFs: fs =>
+                        fs.writeFileSync(
+                            "src/main.ts",
+                            `import { A } from "../shared/types/db";
 const a: string = 10;`,
-                "utf-8",
-            ),
-        commandLineArgs: ["--b"],
-        edits: [
-            noChangeRun,
-            {
-                caption: "Fix error",
-                edit: fs =>
-                    fs.writeFileSync(
-                        "src/main.ts",
-                        `import { A } from "../shared/types/db";
+                            "utf-8",
+                        ),
+                    commandLineArgs: ["--b", "--verbose"],
+                    edits: [
+                        noChangeRun,
+                        {
+                            caption: "Fix error",
+                            edit: fs =>
+                                fs.writeFileSync(
+                                    "src/main.ts",
+                                    `import { A } from "../shared/types/db";
 const a: string = "hello";`,
-                        "utf-8",
-                    ),
-            },
-            noChangeRun,
-        ],
-        baselinePrograms: true,
-    });
-
-    verifyTsc({
-        scenario: "noEmitOnError",
-        subScenario: "semantic errors with incremental",
-        fs: () => projFs,
-        modifyFs: fs =>
-            fs.writeFileSync(
-                "src/main.ts",
-                `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                "utf-8",
-            ),
-        commandLineArgs: ["--b", "--incremental"],
-        edits: [
-            noChangeRun,
-            {
-                caption: "Fix error",
-                edit: fs =>
-                    fs.writeFileSync(
-                        "src/main.ts",
-                        `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                        "utf-8",
-                    ),
-            },
-            noChangeRun,
-        ],
-        baselinePrograms: true,
-    });
+                                    "utf-8",
+                                ),
+                        },
+                        noChangeRun,
+                    ],
+                    baselinePrograms: true,
+                });
+            });
+        },
+    );
 });

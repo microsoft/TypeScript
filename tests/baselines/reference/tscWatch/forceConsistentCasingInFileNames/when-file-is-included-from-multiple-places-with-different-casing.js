@@ -322,20 +322,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/node_modules/fp-ts/lib/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules/fp-ts/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -410,6 +398,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -725,6 +714,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

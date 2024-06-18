@@ -39,7 +39,7 @@ class Foo {
 >this.#p1(v) : void
 >            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
->         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^                   
 >this : this
 >     : ^^^^
 >v : unknown
@@ -86,7 +86,7 @@ class Foo2 {
 >this.#p1(v) : void
 >            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
->         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^                   
 >this : this
 >     : ^^^^
 >v : unknown

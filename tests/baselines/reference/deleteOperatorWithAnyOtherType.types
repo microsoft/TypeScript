@@ -127,7 +127,7 @@ var ResultIsBoolean5 = delete obj;
 >delete obj : boolean
 >           : ^^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsBoolean6 = delete obj1;
 >ResultIsBoolean6 : boolean
@@ -221,7 +221,7 @@ var ResultIsBoolean14 = delete foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsBoolean15 = delete A.foo();
 >ResultIsBoolean15 : boolean

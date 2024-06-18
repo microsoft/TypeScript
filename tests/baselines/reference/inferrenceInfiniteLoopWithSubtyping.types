@@ -42,7 +42,7 @@ export class ObjectTypeComposer<TSource, TContext> {
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 >addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
->            : ^^^^^^^^^^^^^^^^^^    ^^                                              ^^^^^    
+>            : ^               ^^    ^^                                              ^^^^^    
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >     : ^^^^^^^^^                                  ^^^
 >type : Thunk<ComposeOutputTypeDefinition>
@@ -55,7 +55,7 @@ export class Resolver {
 
   public wrapArgs<NewContext>(
 >wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
->         : ^^^^^^^^^^^^^  ^^                                                               ^^^^^    
+>         : ^          ^^  ^^                                                               ^^^^^    
 
     cb: () => {
 >cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
@@ -88,11 +88,11 @@ User.addResolver({
 >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
->                 : ^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^^^^^^  ^^^^^        ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^               ^^    ^^                ^^^^^^^^^^^^^^^^^  ^^^^^        ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >User : ObjectTypeComposer<any, any>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
->            : ^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^^^^^^  ^^^^^        ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^               ^^    ^^                ^^^^^^^^^^^^^^^^^  ^^^^^        ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

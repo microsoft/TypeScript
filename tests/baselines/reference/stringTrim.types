@@ -13,11 +13,11 @@ trimmed = "abcde".trimEnd();
 >"abcde".trimEnd() : string
 >                  : ^^^^^^
 >"abcde".trimEnd : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >trimEnd : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 
 trimmed = "abcde".trimStart();
 >trimmed = "abcde".trimStart() : string
@@ -27,11 +27,11 @@ trimmed = "abcde".trimStart();
 >"abcde".trimStart() : string
 >                    : ^^^^^^
 >"abcde".trimStart : () => string
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >trimStart : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 
 trimmed = "abcde".trimLeft();
 >trimmed = "abcde".trimLeft() : string
@@ -41,11 +41,11 @@ trimmed = "abcde".trimLeft();
 >"abcde".trimLeft() : string
 >                   : ^^^^^^
 >"abcde".trimLeft : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >trimLeft : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 trimmed = "abcde".trimRight();
 >trimmed = "abcde".trimRight() : string
@@ -55,9 +55,9 @@ trimmed = "abcde".trimRight();
 >"abcde".trimRight() : string
 >                    : ^^^^^^
 >"abcde".trimRight : () => string
->                  : ^^^^^^^^^^^^
+>                  : ^^^^^^      
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >trimRight : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 

@@ -4,6 +4,7 @@ import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger.js";
+import { FileRangesRequestArgs } from "../../../server/protocol.js";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
 import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
@@ -20,7 +21,6 @@ import {
     FileOrFolderOrSymLink,
     libFile,
     SerializeOutputOrder,
-    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch.js";
@@ -56,20 +56,10 @@ export function patchHostTimeouts(
         return host;
     }
 
-    const originalSetTime = host.setTime;
-
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
-    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.setTime = setTime;
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
-
-    function setTime(time: number) {
-        logger.log(`Host is moving to new time`);
-        return originalSetTime.call(host, time);
-    }
 
     function baselineHost(title: string) {
         logger.log(title);
@@ -82,6 +72,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
+    regionDiagLineCountThreshold?: number;
 }
 export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
@@ -131,6 +122,9 @@ export class TestSession extends ts.server.Session {
             this,
             this.logger,
         );
+        if (opts.regionDiagLineCountThreshold !== undefined) {
+            this.regionDiagLineCountThreshold = opts.regionDiagLineCountThreshold;
+        }
     }
 
     getProjectService() {
@@ -229,6 +223,15 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return ts.createTextSpan(start, substring.length);
+}
+
+export function protocolTextSpanToFileRange(span: ts.server.protocol.TextSpan): ts.server.protocol.FileRange {
+    return {
+        startLine: span.start.line,
+        startOffset: span.start.offset,
+        endLine: span.end.line,
+        endOffset: span.end.offset,
+    };
 }
 
 export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
@@ -366,14 +369,22 @@ export interface VerifyGetErrRequestBase {
     existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
-    files: readonly (string | File)[];
+    files: readonly (string | File | FileRangesRequestArgs)[];
     skip?: CheckAllErrors["skip"];
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) },
+        arguments: {
+            delay: 0,
+            files: files.map(file => {
+                if (typeof file !== "string" && !(file as FileRangesRequestArgs).ranges) {
+                    return filePath(file as File);
+                }
+                return file as string | FileRangesRequestArgs;
+            }),
+        },
     });
     checkAllErrors(request);
 }
@@ -381,6 +392,8 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
 interface SkipErrors {
     semantic?: true;
     suggestion?: true;
+    /** Region semantic checking will only happen if this is */
+    regionSemantic?: false;
 }
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
@@ -389,6 +402,7 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     for (let i = 0; i < files.length; i++) {
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
+        if (skip?.[i]?.regionSemantic === false) session.host.runQueuedImmediateCallbacks();
         if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
         if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }

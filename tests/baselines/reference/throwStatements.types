@@ -64,11 +64,11 @@ module M {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 var aNumber = 9.9;
@@ -182,19 +182,19 @@ throw anObjectLiteral;
 
 var aFunction = F;
 >aFunction : (x: string) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >F : (x: string) => number
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 
 throw aFunction;
 >aFunction : (x: string) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 
 throw aFunction('');
 >aFunction('') : number
 >              : ^^^^^^
 >aFunction : (x: string) => number
->          : ^ ^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^      
 >'' : ""
 >   : ^^
 
@@ -253,17 +253,17 @@ throw aClassInModule;
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : (x: number) => string
->                  : ^ ^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^      
 >M.F2 : (x: number) => string
->     : ^ ^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^      
 >M : typeof M
 >  : ^^^^^^^^
 >F2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 throw aFunctionInModule;
 >aFunctionInModule : (x: number) => string
->                  : ^ ^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^      
 
 // no initializer or annotation, so this is an 'any'
 var x;

@@ -49,12 +49,10 @@ import {
     getBaseFileName,
     getDefaultLikeExportInfo,
     getDirectoryPath,
-    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExportInfoMap,
-    getImpliedNodeFormatForEmitWorker,
     getMeaningFromLocation,
     getNameForExportedSymbol,
     getOutputExtension,
@@ -329,7 +327,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 compilerOptions,
                 createModuleSpecifierResolutionHost(program, host),
             );
-            const importKind = getImportKind(futureExportingSourceFile, exportKind, program);
+            const importKind = getImportKind(futureExportingSourceFile, exportKind, compilerOptions);
             const addAsTypeOnly = getAddAsTypeOnly(
                 isImportUsageValidAsTypeOnly,
                 /*isForNewImportDeclaration*/ true,
@@ -340,6 +338,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             );
             const fix: FixAddNewImport = {
                 kind: ImportFixKind.AddNew,
+                moduleSpecifierKind: "relative",
                 moduleSpecifier,
                 importKind,
                 addAsTypeOnly,
@@ -692,7 +691,7 @@ export interface ImportSpecifierResolver {
 /** @internal */
 export function createImportSpecifierResolver(importingFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): ImportSpecifierResolver {
     const packageJsonImportFilter = createPackageJsonImportFilter(importingFile, preferences, host);
-    const importMap = createExistingImportMap(importingFile, program);
+    const importMap = createExistingImportMap(program.getTypeChecker(), importingFile, program.getCompilerOptions());
     return { getModuleSpecifierForBestExportInfo };
 
     function getModuleSpecifierForBestExportInfo(
@@ -713,7 +712,7 @@ export function createImportSpecifierResolver(importingFile: SourceFile, program
             importMap,
             fromCacheOnly,
         );
-        const result = getBestFix(fixes, importingFile, program, packageJsonImportFilter, host);
+        const result = getBestFix(fixes, importingFile, program, packageJsonImportFilter, host, preferences);
         return result && { ...result, computedWithoutCacheCount };
     }
 }
@@ -742,6 +741,7 @@ type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImpor
 interface ImportFixBase {
     readonly isReExport?: boolean;
     readonly exportInfo?: SymbolExportInfo | FutureSymbolExportInfo;
+    readonly moduleSpecifierKind: moduleSpecifiers.ModuleSpecifierResult["kind"];
     readonly moduleSpecifier: string;
 }
 interface Qualification {
@@ -850,7 +850,7 @@ export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbo
 
 function getImportFixForSymbol(sourceFile: SourceFile | FutureSourceFile, exportInfos: readonly SymbolExportInfo[], program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
     const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
-    return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
+    return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host, preferences);
 }
 
 function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -896,7 +896,7 @@ function getImportFixes(
     sourceFile: SourceFile | FutureSourceFile,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-    importMap = isFullSourceFile(sourceFile) ? createExistingImportMap(sourceFile, program) : undefined,
+    importMap = isFullSourceFile(sourceFile) ? createExistingImportMap(program.getTypeChecker(), sourceFile, program.getCompilerOptions()) : undefined,
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
     const checker = program.getTypeChecker();
@@ -947,7 +947,7 @@ function tryUseExistingNamespaceImport(existingImports: readonly FixAddToExistin
         const namespacePrefix = getNamespaceLikeImportText(declaration);
         const moduleSpecifier = namespacePrefix && tryGetModuleSpecifierFromDeclaration(declaration)?.text;
         if (moduleSpecifier) {
-            return { kind: ImportFixKind.UseNamespace, namespacePrefix, usagePosition: position, moduleSpecifier };
+            return { kind: ImportFixKind.UseNamespace, namespacePrefix, usagePosition: position, moduleSpecifierKind: undefined, moduleSpecifier };
         }
     });
 }
@@ -1017,7 +1017,7 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
 
         if (declaration.kind === SyntaxKind.VariableDeclaration) {
             return (importKind === ImportKind.Named || importKind === ImportKind.Default) && declaration.name.kind === SyntaxKind.ObjectBindingPattern
-                ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: declaration.name, importKind, moduleSpecifier: declaration.initializer.arguments[0].text, addAsTypeOnly: AddAsTypeOnly.NotAllowed }
+                ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: declaration.name, importKind, moduleSpecifierKind: undefined, moduleSpecifier: declaration.initializer.arguments[0].text, addAsTypeOnly: AddAsTypeOnly.NotAllowed }
                 : undefined;
         }
 
@@ -1056,14 +1056,14 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
             kind: ImportFixKind.AddToExisting,
             importClauseOrBindingPattern: importClause,
             importKind,
+            moduleSpecifierKind: undefined,
             moduleSpecifier: declaration.moduleSpecifier.text,
             addAsTypeOnly,
         };
     }
 }
 
-function createExistingImportMap(importingFile: SourceFile, program: Program) {
-    const checker = program.getTypeChecker();
+function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions) {
     let importMap: MultiMap<SymbolId, AnyImportOrRequire> | undefined;
     for (const moduleSpecifier of importingFile.imports) {
         const i = importFromModuleSpecifier(moduleSpecifier);
@@ -1093,7 +1093,7 @@ function createExistingImportMap(importingFile: SourceFile, program: Program) {
                 && !every(matchingDeclarations, isJSDocImportTag)
             ) return emptyArray;
 
-            const importKind = getImportKind(importingFile, exportKind, program);
+            const importKind = getImportKind(importingFile, exportKind, compilerOptions);
             return matchingDeclarations.map(declaration => ({ declaration, importKind, symbol, targetFlags }));
         },
     };
@@ -1117,9 +1117,8 @@ function shouldUseRequire(sourceFile: SourceFile | FutureSourceFile, program: Pr
 
     // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
     //    whatever syntax Node expects based on the detected module kind
-    //    TODO: consider removing `impliedNodeFormatForEmit`
-    if (getImpliedNodeFormatForEmit(sourceFile, program) === ModuleKind.CommonJS) return true;
-    if (getImpliedNodeFormatForEmit(sourceFile, program) === ModuleKind.ESNext) return false;
+    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
+    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
 
     // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
@@ -1154,13 +1153,13 @@ function getNewImportFixes(
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
-        ? (exportInfo: SymbolExportInfo | FutureSymbolExportInfo) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(exportInfo.moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
+        ? (exportInfo: SymbolExportInfo | FutureSymbolExportInfo) => moduleSpecifiers.tryGetModuleSpecifiersFromCache(exportInfo.moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences)
         : (exportInfo: SymbolExportInfo | FutureSymbolExportInfo, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(exportInfo.moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
 
     let computedWithoutCacheCount = 0;
     const fixes = flatMap(exportInfo, (exportInfo, i) => {
         const checker = getChecker(exportInfo.isFromPackageJson);
-        const { computedWithoutCache, moduleSpecifiers } = getModuleSpecifiers(exportInfo, checker);
+        const { computedWithoutCache, moduleSpecifiers, kind: moduleSpecifierKind } = getModuleSpecifiers(exportInfo, checker) ?? {};
         const importedSymbolHasValueMeaning = !!(exportInfo.targetFlags & SymbolFlags.Value);
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ true, exportInfo.symbol, exportInfo.targetFlags, checker, compilerOptions);
         computedWithoutCacheCount += computedWithoutCache ? 1 : 0;
@@ -1170,9 +1169,9 @@ function getNewImportFixes(
             }
             if (!importedSymbolHasValueMeaning && isJs && usagePosition !== undefined) {
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                return { kind: ImportFixKind.JsdocTypeImport, moduleSpecifier, usagePosition, exportInfo, isReExport: i > 0 };
+                return { kind: ImportFixKind.JsdocTypeImport, moduleSpecifierKind, moduleSpecifier, usagePosition, exportInfo, isReExport: i > 0 };
             }
-            const importKind = getImportKind(sourceFile, exportInfo.exportKind, program);
+            const importKind = getImportKind(sourceFile, exportInfo.exportKind, compilerOptions);
             let qualification: Qualification | undefined;
             if (usagePosition !== undefined && importKind === ImportKind.CommonJS && exportInfo.exportKind === ExportKind.Named) {
                 // Compiler options are restricting our import options to a require, but we need to access
@@ -1195,6 +1194,7 @@ function getNewImportFixes(
             }
             return {
                 kind: ImportFixKind.AddNew,
+                moduleSpecifierKind,
                 moduleSpecifier,
                 importKind,
                 useRequire,
@@ -1237,7 +1237,7 @@ function newImportInfoFromExistingSpecifier(
         const addAsTypeOnly = useRequire
             ? AddAsTypeOnly.NotAllowed
             : getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ true, symbol, targetFlags, checker, compilerOptions);
-        return { kind: ImportFixKind.AddNew, moduleSpecifier, importKind, addAsTypeOnly, useRequire };
+        return { kind: ImportFixKind.AddNew, moduleSpecifierKind: undefined, moduleSpecifier, importKind, addAsTypeOnly, useRequire };
     }
 }
 
@@ -1266,24 +1266,24 @@ function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number
     }
 
     const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
-    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
+    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host, context.preferences);
 }
 
-function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
+function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost, preferences: UserPreferences): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
     const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
     return sort(fixes, (a, b) =>
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
         compareValues(a.fix.kind, b.fix.kind) ||
-        compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
+        compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, preferences, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
 }
 
 function getFixInfosWithoutDiagnostic(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly FixInfo[] | undefined {
     const info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
     const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
-    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
+    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host, context.preferences);
 }
 
-function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile | FutureSourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): ImportFixWithModuleSpecifier | undefined {
+function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile | FutureSourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost, preferences: UserPreferences): ImportFixWithModuleSpecifier | undefined {
     if (!some(fixes)) return;
     // These will always be placed first if available, and are better than other kinds
     if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {
@@ -1297,6 +1297,7 @@ function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: 
                 best,
                 sourceFile,
                 program,
+                preferences,
                 packageJsonImportFilter.allowsImportingSpecifier,
                 fileName => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host)),
             ) === Comparison.LessThan ? fix : best
@@ -1309,17 +1310,29 @@ function compareModuleSpecifiers(
     b: ImportFixWithModuleSpecifier,
     importingFile: SourceFile | FutureSourceFile,
     program: Program,
+    preferences: UserPreferences,
     allowsImportingSpecifier: (specifier: string) => boolean,
     toPath: (fileName: string) => Path,
 ): Comparison {
     if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
-        return compareBooleans(allowsImportingSpecifier(b.moduleSpecifier), allowsImportingSpecifier(a.moduleSpecifier))
+        return compareBooleans(
+            b.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(b.moduleSpecifier),
+            a.moduleSpecifierKind !== "node_modules" || allowsImportingSpecifier(a.moduleSpecifier),
+        )
+            || compareModuleSpecifierRelativity(a, b, preferences)
             || compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, program)
             || compareBooleans(
                 isFixPossiblyReExportingImportingFile(a, importingFile.path, toPath),
                 isFixPossiblyReExportingImportingFile(b, importingFile.path, toPath),
             )
             || compareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier);
+    }
+    return Comparison.EqualTo;
+}
+
+function compareModuleSpecifierRelativity(a: ImportFixWithModuleSpecifier, b: ImportFixWithModuleSpecifier, preferences: UserPreferences): Comparison {
+    if (preferences.importModuleSpecifierPreference === "non-relative" || preferences.importModuleSpecifierPreference === "project-relative") {
+        return compareBooleans(a.moduleSpecifierKind === "relative", b.moduleSpecifierKind === "relative");
     }
     return Comparison.EqualTo;
 }
@@ -1389,8 +1402,8 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
  *
  * @internal
  */
-export function getImportKind(importingFile: SourceFile | FutureSourceFile, exportKind: ExportKind, program: Program, forceImportKeyword?: boolean): ImportKind {
-    if (program.getCompilerOptions().verbatimModuleSyntax && getEmitModuleFormatOfFile(importingFile, program) === ModuleKind.CommonJS) {
+export function getImportKind(importingFile: SourceFile | FutureSourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
+    if (compilerOptions.verbatimModuleSyntax && (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS || importingFile.impliedNodeFormat === ModuleKind.CommonJS)) {
         // TODO: if the exporting file is ESM under nodenext, or `forceImport` is given in a JS file, this is impossible
         return ImportKind.CommonJS;
     }
@@ -1400,22 +1413,22 @@ export function getImportKind(importingFile: SourceFile | FutureSourceFile, expo
         case ExportKind.Default:
             return ImportKind.Default;
         case ExportKind.ExportEquals:
-            return getExportEqualsImportKind(importingFile, program.getCompilerOptions(), !!forceImportKeyword);
+            return getExportEqualsImportKind(importingFile, compilerOptions, !!forceImportKeyword);
         case ExportKind.UMD:
-            return getUmdImportKind(importingFile, program, !!forceImportKeyword);
+            return getUmdImportKind(importingFile, compilerOptions, !!forceImportKeyword);
         default:
             return Debug.assertNever(exportKind);
     }
 }
 
-function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program: Program, forceImportKeyword: boolean): ImportKind {
+function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
     // Import a synthetic `default` if enabled.
-    if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
+    if (getAllowSyntheticDefaultImports(compilerOptions)) {
         return ImportKind.Default;
     }
 
     // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
-    const moduleKind = getEmitModuleKind(program.getCompilerOptions());
+    const moduleKind = getEmitModuleKind(compilerOptions);
     switch (moduleKind) {
         case ModuleKind.AMD:
         case ModuleKind.CommonJS:
@@ -1435,7 +1448,7 @@ function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program:
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return getImpliedNodeFormatForEmit(importingFile, program) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
+            return importingFile.impliedNodeFormat === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
             return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
     }
@@ -2009,12 +2022,4 @@ function symbolFlagsHaveMeaning(flags: SymbolFlags, meaning: SemanticMeaning): b
         meaning & SemanticMeaning.Type ? !!(flags & SymbolFlags.Type) :
         meaning & SemanticMeaning.Namespace ? !!(flags & SymbolFlags.Namespace) :
         false;
-}
-
-function getImpliedNodeFormatForEmit(file: SourceFile | FutureSourceFile, program: Program) {
-    return isFullSourceFile(file) ? program.getImpliedNodeFormatForEmit(file) : getImpliedNodeFormatForEmitWorker(file, program.getCompilerOptions());
-}
-
-function getEmitModuleFormatOfFile(file: SourceFile | FutureSourceFile, program: Program) {
-    return isFullSourceFile(file) ? program.getEmitModuleFormatOfFile(file) : getEmitModuleFormatOfFileWorker(file, program.getCompilerOptions());
 }

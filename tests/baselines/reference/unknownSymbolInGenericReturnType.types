@@ -7,7 +7,7 @@ class Linq {
 
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
 >select : <T, S>(values: T[], func: (v: T) => A) => any[]
->       : ^ ^^^^^      ^^   ^^    ^^           ^^^^^     
+>       : ^ ^^ ^^      ^^   ^^    ^^           ^^^^^     
 >values : T[]
 >       : ^^^
 >func : (v: T) => A
@@ -61,7 +61,7 @@ class Linq {
 >func(values[i]) : A
 >                : ^
 >func : (v: T) => A
->     : ^ ^^ ^^^^^^
+>     : ^ ^^ ^^^^^ 
 >values[i] : T
 >          : ^
 >values : T[]

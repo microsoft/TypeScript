@@ -53,7 +53,7 @@ var f: {
 
 var f2: {
 >f2 : { new <T>(x: string): C; new <T>(x: number): C; }
->   : ^^^^^^^^^^ ^^      ^^^ ^^^^^^^^^^ ^^      ^^^ ^^^
+>   : ^^^^^^^ ^^ ^^      ^^^ ^^^^^^^ ^^ ^^      ^^^ ^^^
 
     new<T>(x: string): C;
 >x : string

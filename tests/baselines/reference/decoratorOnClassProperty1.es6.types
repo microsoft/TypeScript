@@ -11,6 +11,6 @@ declare function dec(target: any, propertyKey: string): void;
 export default class {
     @dec prop;
 >dec : (target: any, propertyKey: string) => void
->    : ^      ^^   ^^           ^^      ^^^^^^^^^
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >prop : any
 }

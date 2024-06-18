@@ -33,16 +33,16 @@ if (typeof (otherValue(), value).inner === 'number') {
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(otherValue(), value).inner : string | number
 >                            : ^^^^^^^^^^^^^^^
->(otherValue(), value) : { inner: string | number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->otherValue(), value : { inner: string | number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(otherValue(), value) : { inner: number | string; }
+>                      : ^^^^^^^^^               ^^^
+>otherValue(), value : { inner: number | string; }
+>                    : ^^^^^^^^^               ^^^
 >otherValue() : boolean
 >             : ^^^^^^^
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : string | number
 >      : ^^^^^^^^^^^^^^^
 >'number' : "number"
@@ -53,8 +53,8 @@ if (typeof (otherValue(), value).inner === 'number') {
 >  : ^^^^^^
 >value.inner : number
 >            : ^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : number
 >      : ^^^^^^
 
@@ -63,16 +63,16 @@ if (typeof (otherValue(), value).inner === 'number') {
 >  : ^^^^^^
 >(otherValue(), value).inner : number
 >                            : ^^^^^^
->(otherValue(), value) : { inner: string | number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->otherValue(), value : { inner: string | number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(otherValue(), value) : { inner: number | string; }
+>                      : ^^^^^^^^^               ^^^
+>otherValue(), value : { inner: number | string; }
+>                    : ^^^^^^^^^               ^^^
 >otherValue() : boolean
 >             : ^^^^^^^
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : number
 >      : ^^^^^^
 }
@@ -81,19 +81,19 @@ if (isNumber((otherValue(), value).inner)) {
 >isNumber((otherValue(), value).inner) : boolean
 >                                      : ^^^^^^^
 >isNumber : (obj: any) => obj is number
->         : ^   ^^   ^^^^^^^^^^^^^^^^^^
+>         : ^   ^^   ^^^^^             
 >(otherValue(), value).inner : string | number
 >                            : ^^^^^^^^^^^^^^^
->(otherValue(), value) : { inner: string | number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->otherValue(), value : { inner: string | number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(otherValue(), value) : { inner: number | string; }
+>                      : ^^^^^^^^^               ^^^
+>otherValue(), value : { inner: number | string; }
+>                    : ^^^^^^^^^               ^^^
 >otherValue() : boolean
 >             : ^^^^^^^
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : string | number
 >      : ^^^^^^^^^^^^^^^
 
@@ -102,8 +102,8 @@ if (isNumber((otherValue(), value).inner)) {
 >  : ^^^^^^
 >value.inner : number
 >            : ^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : number
 >      : ^^^^^^
 
@@ -112,16 +112,16 @@ if (isNumber((otherValue(), value).inner)) {
 >  : ^^^^^^
 >(otherValue(), value).inner : number
 >                            : ^^^^^^
->(otherValue(), value) : { inner: string | number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->otherValue(), value : { inner: string | number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(otherValue(), value) : { inner: number | string; }
+>                      : ^^^^^^^^^               ^^^
+>otherValue(), value : { inner: number | string; }
+>                    : ^^^^^^^^^               ^^^
 >otherValue() : boolean
 >             : ^^^^^^^
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
->value : { inner: string | number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : { inner: number | string; }
+>      : ^^^^^^^^^               ^^^
 >inner : number
 >      : ^^^^^^
 }

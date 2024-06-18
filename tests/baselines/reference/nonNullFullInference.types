@@ -90,11 +90,11 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
 >arr.push(n) : number
 >            : ^^^^^^
 >arr.push : (...items: any[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^      
 >arr : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >n : number
 >  : ^^^^^^
 

@@ -20,7 +20,7 @@ verify.codeFix({
     description: "Implement interface 'Foo'",
     newRangeContent:
 `export class C implements Foo {
-    request(): { nested1?: { field?: string; }; test2?: { field?: string; }; } {
+    request(): DeepPartial<{ nested1: Nested; test2: Nested; }> {
         throw new Error("Method not implemented.");
     }
 }`,

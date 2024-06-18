@@ -28,7 +28,7 @@ function Greet(x: {name: string}) {
 >div : any
 >    : ^^^
 >x : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >div : any
 >    : ^^^
 }

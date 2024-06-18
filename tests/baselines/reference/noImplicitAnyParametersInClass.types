@@ -65,7 +65,7 @@ class C {
     // Implicit-'any' errors for x1, y2, x3, and y3.
     public pub_f8(x1, y1: number): any;
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -73,7 +73,7 @@ class C {
 
     public pub_f8(x2: string, y2): any;
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -81,7 +81,7 @@ class C {
 
     public pub_f8(x3, y3): any { }
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any
@@ -223,7 +223,7 @@ class C {
     // Implicit-'any' errors for x1, y2, x3, and y3.
     private priv_f8(x1, y1: number): any;
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -231,7 +231,7 @@ class C {
 
     private priv_f8(x2: string, y2): any;
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -239,7 +239,7 @@ class C {
 
     private priv_f8(x3, y3): any { }
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any

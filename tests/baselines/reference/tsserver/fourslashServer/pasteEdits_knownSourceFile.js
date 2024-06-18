@@ -271,6 +271,22 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
+            "fileName": "/file2.ts",
+            "textChanges": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "newText": "export "
+              }
+            ]
+          },
+          {
             "fileName": "/target.ts",
             "textChanges": [
               {
@@ -294,22 +310,6 @@ Info seq  [hh:mm:ss:mss] response:
                   "offset": 14
                 },
                 "newText": "const c = a + b;\nconst t = 9;"
-              }
-            ]
-          },
-          {
-            "fileName": "/file2.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 2,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 2,
-                  "offset": 1
-                },
-                "newText": "export "
               }
             ]
           }
