@@ -138,7 +138,6 @@ export interface publicInterfaceImplementingPrivateInterface extends privateInte
 }
 export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
 }
-export {};
 //// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.d.ts]
 declare namespace publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {

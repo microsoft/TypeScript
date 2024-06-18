@@ -25,4 +25,3 @@ type AX = {
     readonly A: unique symbol;
 };
 export declare const A: AX;
-export {};

@@ -42,4 +42,3 @@ export declare class ExportedClass1 {
 export declare class ExportedClass2 {
     protected constructor(data: PrivateInterface);
 }
-export {};

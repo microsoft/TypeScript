@@ -801,7 +801,6 @@ declare namespace privateModule {
     export var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
     export {};
 }
-export {};
 //// [privacyVarDeclFile_GlobalFile.d.ts]
 declare class publicClassInGlobal {
 }

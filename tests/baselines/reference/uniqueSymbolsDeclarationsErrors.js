@@ -150,4 +150,3 @@ export declare class ClassWithPrivateNamedAccessors {
     static get [s](): any;
     static set [s](v: any);
 }
-export {};

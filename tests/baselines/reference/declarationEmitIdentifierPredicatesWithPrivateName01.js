@@ -23,4 +23,3 @@ interface I {
     a: number;
 }
 export declare function f(x: any): x is I;
-export {};

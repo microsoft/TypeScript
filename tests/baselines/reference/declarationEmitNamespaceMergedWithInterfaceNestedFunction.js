@@ -37,4 +37,3 @@ interface Bar {
 declare namespace Bar {
     function biz(): number;
 }
-export {};

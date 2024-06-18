@@ -968,4 +968,3 @@ declare namespace privateModule {
     export function publicFunctionWithPublicTypeParametersWithoutExtends<T>(): void;
     export {};
 }
-export {};

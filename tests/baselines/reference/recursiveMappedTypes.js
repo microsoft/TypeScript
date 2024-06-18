@@ -128,4 +128,3 @@ export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> = Theme
 export type Foo<T> = T extends {
     [P in infer E]: any;
 } ? E : never;
-export {};

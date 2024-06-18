@@ -38,4 +38,3 @@ export declare const fail2: import("module").Modifier<(<T>(x: T) => T)>;
 export declare const works1: import("module").Modifier<(x: number) => number>;
 type MakeItWork = <T>(x: T) => T;
 export declare const works2: import("module").Modifier<MakeItWork>;
-export {};

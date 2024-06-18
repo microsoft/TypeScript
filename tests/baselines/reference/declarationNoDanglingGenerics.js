@@ -131,4 +131,3 @@ declare const CKind_base: {
 };
 export declare class CKind extends CKind_base {
 }
-export {};

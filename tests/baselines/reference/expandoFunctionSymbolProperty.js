@@ -34,4 +34,3 @@ interface TestSymb {
     readonly [symb]: boolean;
 }
 export declare function test(): TestSymb;
-export {};

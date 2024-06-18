@@ -411,7 +411,6 @@ export declare class publicClassExtendingPrivateClass extends privateClass {
 }
 export declare class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
 }
-export {};
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
 declare namespace publicModuleInGlobal {
     export class publicClassInPublicModule {

@@ -60,4 +60,3 @@ import * as A from "./a";
 declare const Foo: typeof A.Foo;
 export default class extends Foo {
 }
-export {};

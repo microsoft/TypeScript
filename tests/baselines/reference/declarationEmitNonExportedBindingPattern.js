@@ -47,4 +47,3 @@ declare const renamed: {
 export type AliasType2 = typeof renamed;
 declare const c: string;
 export type AliasType3 = typeof c;
-export {};

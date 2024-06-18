@@ -1438,7 +1438,6 @@ declare namespace privateModule {
     export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
     export {};
 }
-export {};
 //// [privacyFunctionParameterDeclFile_GlobalFile.d.ts]
 declare class publicClassInGlobal {
 }

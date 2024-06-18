@@ -99,6 +99,5 @@ declare module "./f1" {
         baz(): C;
     }
 }
-export {};
 //// [f4.d.ts]
 import "./f3";

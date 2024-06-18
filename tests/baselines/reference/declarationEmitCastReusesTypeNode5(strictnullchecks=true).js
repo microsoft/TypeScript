@@ -47,4 +47,3 @@ export declare class C {
     reuseType8?: `${string}-ok` | `${string}-ok`;
     reuseType9?: this | this;
 }
-export {};

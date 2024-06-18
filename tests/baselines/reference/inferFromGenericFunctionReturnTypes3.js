@@ -333,4 +333,3 @@ interface OK<T> {
     value: T;
 }
 export declare function ok<T>(value: T): OK<T>;
-export {};

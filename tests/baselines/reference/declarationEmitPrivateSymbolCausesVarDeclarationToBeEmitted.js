@@ -27,4 +27,3 @@ declare const _data: unique symbol;
 export declare class User {
     private [_data];
 }
-export {};

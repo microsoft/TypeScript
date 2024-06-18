@@ -67,4 +67,3 @@ export declare class Bar {
     readonly r = 1;
     f: number;
 }
-export {};

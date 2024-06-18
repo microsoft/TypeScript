@@ -35,4 +35,3 @@ interface Foo {
 export declare const obj: {
     m(): this is Foo;
 };
-export {};

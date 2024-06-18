@@ -43,4 +43,3 @@ export type Bar = Omit<Foo, "c">;
 export type Baz = Omit<Foo, "b" | "c">;
 export declare function getBarC(bar: Bar): any;
 export declare function getBazB(baz: Baz): any;
-export {};

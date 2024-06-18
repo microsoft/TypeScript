@@ -53,4 +53,3 @@ export declare class C {
 }
 declare class D extends C {
 }
-export {};

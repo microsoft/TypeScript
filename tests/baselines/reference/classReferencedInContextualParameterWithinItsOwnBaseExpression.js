@@ -65,4 +65,3 @@ declare const A_base: Class<OutputFrom<{
 }>>;
 export declare class A extends A_base {
 }
-export {};

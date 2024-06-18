@@ -54,4 +54,3 @@ export declare namespace Y {
 }
 export declare class Y {
 }
-export {};

@@ -365,4 +365,3 @@ declare namespace privateModule {
     }
     export {};
 }
-export {};

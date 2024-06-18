@@ -270,4 +270,3 @@ interface IEntry {
     Category: string;
 }
 export declare const useEntries: () => import("@tanstack/vue-query").UseQueryReturnType<IEntry[], Error>;
-export {};

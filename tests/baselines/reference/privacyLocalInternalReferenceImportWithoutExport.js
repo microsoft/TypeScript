@@ -369,4 +369,3 @@ export declare namespace import_public {
     var publicUse_im_private_mi_public: im_private_mi_public.c;
     var publicUse_im_private_mu_public: im_private_mu_public.i;
 }
-export {};

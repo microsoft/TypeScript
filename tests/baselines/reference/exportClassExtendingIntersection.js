@@ -130,6 +130,5 @@ declare const MyExtendedClass_base: typeof MyBaseClass & import("./BaseClass").C
 export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }
-export {};
 //// [Main.d.ts]
 export {};

@@ -280,7 +280,6 @@ export declare class publicClassImplementingPrivateInterface implements privateI
 }
 export declare class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
 }
-export {};
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.d.ts]
 declare namespace publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {

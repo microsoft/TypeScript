@@ -34,4 +34,3 @@ declare global {
 //// [c.d.ts]
 type Foo = teams.calling.Foo;
 export declare const bar: (p?: Foo) => void;
-export {};

@@ -69,7 +69,6 @@ type OmitUnveiled<T, K extends string | number | symbol> = {
 };
 export declare function test1<T, K extends string>(obj: T, k: K): OmitReal<T, K>;
 export declare function test2<T, K extends string>(obj: T, k: K): OmitUnveiled<T, K>;
-export {};
 //// [index.d.ts]
 export declare function wrappedTest1<T, K extends string>(obj: T, k: K): Exclude<keyof T, K> extends infer T_1 extends keyof T ? { [P in T_1]: T[P]; } : never;
 export declare function wrappedTest2<T, K extends string>(obj: T, k: K): { [P in Exclude<keyof T, K>]: T[P]; };

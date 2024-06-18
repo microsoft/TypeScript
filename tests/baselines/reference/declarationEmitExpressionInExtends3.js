@@ -140,4 +140,3 @@ export declare class MyClass3 extends MyClass3_base<LocalInterface> {
 declare const MyClass4_base: typeof ExportedClass;
 export declare class MyClass4 extends MyClass4_base<ExportedInterface> {
 }
-export {};

@@ -87,4 +87,3 @@ declare const XmlElement2_base: {
 };
 export declare class XmlElement2 extends XmlElement2_base {
 }
-export {};

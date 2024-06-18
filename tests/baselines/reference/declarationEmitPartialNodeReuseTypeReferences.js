@@ -38,7 +38,6 @@ export declare const o: (p1: SpecialString, p2: PrivateSpecialString, p3: N.Spec
     bar: PrivateSpecialString;
     baz: N.SpecialString;
 };
-export {};
 //// [b.d.ts]
 import * as a from "./a";
 export declare const g: (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => {

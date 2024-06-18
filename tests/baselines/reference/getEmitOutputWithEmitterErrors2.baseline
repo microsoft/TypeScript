@@ -23,5 +23,4 @@ declare class C {
 export declare namespace M {
     var foo: C;
 }
-export {};
 

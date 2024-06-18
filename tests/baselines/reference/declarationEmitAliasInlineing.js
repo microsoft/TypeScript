@@ -61,7 +61,6 @@ type I = {
     prop: string;
 };
 export declare const fn: (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void;
-export {};
 //// [aExp.d.ts]
 export type O = {
     prop: string;

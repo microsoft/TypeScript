@@ -87,4 +87,3 @@ export declare const t9: number;
 export declare const t10: number;
 export declare const t11: number;
 export declare const t12: number;
-export {};

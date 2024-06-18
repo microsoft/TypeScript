@@ -189,7 +189,6 @@ declare const Sub_base: import("./utils/type-helpers").MyReturnType;
 export declare class Sub extends Sub_base {
     id: string;
 }
-export {};
 
 
 

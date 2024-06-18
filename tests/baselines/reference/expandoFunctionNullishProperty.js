@@ -72,4 +72,3 @@ interface TestUndefined {
     readonly prop: undefined;
 }
 export declare function testUndefined(): TestUndefined;
-export {};

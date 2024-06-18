@@ -64,4 +64,3 @@ export declare class MyObservable<T> {
     subscribe(next: (val: T) => void): void;
     [observable](): this;
 }
-export {};

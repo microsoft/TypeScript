@@ -113,4 +113,3 @@ declare const FilteredThing_base: (abstract new (...args: any[]) => {
 export declare class FilteredThing extends FilteredThing_base {
     match(path: string): boolean;
 }
-export {};

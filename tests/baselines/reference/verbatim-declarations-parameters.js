@@ -65,4 +65,3 @@ export declare class Foo {
     constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map | undefined);
 }
 export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number): void;
-export {};

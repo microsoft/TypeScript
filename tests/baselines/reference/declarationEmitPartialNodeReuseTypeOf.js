@@ -39,7 +39,6 @@ export declare const o: (p1: typeof nImported, p2: typeof nNotImported, p3: type
     bar: typeof nPrivate;
     baz: typeof nNotImported;
 };
-export {};
 //// [b.d.ts]
 import { nImported } from "./a";
 export declare const g: (p1: typeof nImported, p2: typeof import("./a").nNotImported, p3: "private") => {

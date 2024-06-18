@@ -67,4 +67,3 @@ export declare const mixin: (Base: Constructor) => {
         get(domNode: DOMNode): void;
     };
 };
-export {};

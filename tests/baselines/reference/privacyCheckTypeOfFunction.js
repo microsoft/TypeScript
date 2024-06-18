@@ -20,4 +20,3 @@ exports.b = foo;
 declare function foo(): void;
 export declare var x: typeof foo;
 export declare var b: typeof foo;
-export {};

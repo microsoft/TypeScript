@@ -28,4 +28,3 @@ q.val = (0, a_1.f)();
 interface I {
 }
 export declare function f(): I;
-export {};

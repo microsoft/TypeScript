@@ -23,4 +23,3 @@ export type Type = {
         [Foo.sym]: 0;
     };
 };
-export {};

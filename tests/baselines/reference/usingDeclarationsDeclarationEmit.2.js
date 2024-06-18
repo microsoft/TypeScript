@@ -23,4 +23,3 @@ declare const r2: {
     [Symbol.asyncDispose](): Promise<void>;
 };
 export type R2 = typeof r2;
-export {};

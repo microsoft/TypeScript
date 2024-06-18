@@ -3702,7 +3702,6 @@ declare namespace privateModule {
     }
     export {};
 }
-export {};
 //// [privacyAccessorDeclFile_GlobalFile.d.ts]
 declare class publicClassInGlobal {
 }

@@ -18,4 +18,3 @@ type T = {
 export interface I {
     f: T;
 }
-export {};
