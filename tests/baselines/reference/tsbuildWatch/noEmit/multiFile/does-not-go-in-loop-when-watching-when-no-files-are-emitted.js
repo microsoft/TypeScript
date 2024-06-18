@@ -47,30 +47,18 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./a.js","./b.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./a.js",
+    "./b.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 54
 }
 
-
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/a.js: *new*

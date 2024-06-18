@@ -85,13 +85,17 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
 
 No shapes updated in the builder::
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"changeFileSet":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
@@ -102,38 +106,10 @@ No shapes updated in the builder::
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/shared/types/db.ts": {
-      "original": {
-        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/src/main.ts": {
-      "original": {
-        "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-        "impliedFormat": 1
-      },
-      "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/src/other.ts": {
-      "original": {
-        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": 1
-      },
-      "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-      "impliedFormat": "commonjs"
-    }
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
   },
   "root": [
     [
@@ -154,14 +130,13 @@ No shapes updated in the builder::
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
-  "changeFileSet": [
-    "../../../a/lib/lib.d.ts",
-    "./noemitonerror/shared/types/db.ts",
-    "./noemitonerror/src/main.ts",
-    "./noemitonerror/src/other.ts"
+  "pendingEmit": [
+    "Js | Dts",
+    false
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 1074
+  "size": 962
 }
 
 
@@ -175,7 +150,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -209,7 +184,7 @@ Program files::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -231,7 +206,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -298,7 +273,7 @@ define("src/other", ["require", "exports"], function (require, exports) {
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
@@ -309,38 +284,10 @@ define("src/other", ["require", "exports"], function (require, exports) {
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": {
-      "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": 1
-      },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/shared/types/db.ts": {
-      "original": {
-        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": 1
-      },
-      "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/src/main.ts": {
-      "original": {
-        "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-        "impliedFormat": 1
-      },
-      "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-      "impliedFormat": "commonjs"
-    },
-    "./noemitonerror/src/other.ts": {
-      "original": {
-        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": 1
-      },
-      "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-      "impliedFormat": "commonjs"
-    }
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
   },
   "root": [
     [
@@ -362,7 +309,7 @@ define("src/other", ["require", "exports"], function (require, exports) {
     "outFile": "./dev-build.js"
   },
   "version": "FakeTSVersion",
-  "size": 1047
+  "size": 927
 }
 
 

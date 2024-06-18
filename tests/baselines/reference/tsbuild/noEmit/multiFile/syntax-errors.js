@@ -58,18 +58,26 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (used version)
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 59
 }
 
 
@@ -83,7 +91,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -109,9 +117,13 @@ Program files::
 /lib/lib.d.ts
 /src/a.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/a.ts (used version)
 
 
 //// [/src/tsconfig.tsbuildinfo] file written with same contents
@@ -130,7 +142,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/tsconfig.tsbuildinfo' is older than input 'src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -157,8 +169,18 @@ Shape signatures in builder refreshed for::
 /src/a.ts (used version)
 
 
-//// [/src/tsconfig.tsbuildinfo] file written with same contents
-//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 45
+}
+
 
 
 Change:: no-change-run

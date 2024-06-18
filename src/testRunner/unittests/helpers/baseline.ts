@@ -136,7 +136,7 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
 }
 
 export type ReadableIncrementalBuildInfoDiagnosticOfFile = [file: string, diagnostics: readonly ts.ReusableDiagnostic[]];
-export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
+export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableIncrementalBuildInfoEmitDiagnostic = ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
@@ -161,14 +161,12 @@ export type ReadableIncrementalBuildInfoBase =
         | "resolvedRoot"
         | "semanticDiagnosticsPerFile"
         | "emitDiagnosticsPerFile"
-        | "changeFileSet"
     >
     & {
         root: readonly ReadableIncrementalBuildInfoRoot[];
         resolvedRoot: readonly ReadableIncrementalBuildInfoResolvedRoot[] | undefined;
         semanticDiagnosticsPerFile: readonly ReadableIncrementalBuildInfoDiagnostic[] | undefined;
         emitDiagnosticsPerFile: readonly ReadableIncrementalBuildInfoEmitDiagnostic[] | undefined;
-        changeFileSet: readonly string[] | undefined;
     }
     & ReadableBuildInfo;
 export type ReadableIncrementalMultiFileEmitBuildInfo =
@@ -182,7 +180,6 @@ export type ReadableIncrementalMultiFileEmitBuildInfo =
         | "semanticDiagnosticsPerFile"
         | "emitDiagnosticsPerFile"
         | "affectedFilesPendingEmit"
-        | "changeFileSet"
         | "emitSignatures"
     >
     & ReadableIncrementalBuildInfoBase
@@ -202,7 +199,6 @@ export type ReadableIncrementalBundleEmitBuildInfo =
         | "resolvedRoot"
         | "semanticDiagnosticsPerFile"
         | "emitDiagnosticsPerFile"
-        | "changeFileSet"
         | "pendingEmit"
     >
     & ReadableIncrementalBuildInfoBase
@@ -251,7 +247,6 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
             resolvedRoot: buildInfo.resolvedRoot?.map(toReadableIncrementalBuildInfoResolvedRoot),
             semanticDiagnosticsPerFile: toReadableIncrementalBuildInfoDiagnostic(buildInfo.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toReadableIncrementalBuildInfoEmitDiagnostic(buildInfo.emitDiagnosticsPerFile),
-            changeFileSet: buildInfo.changeFileSet?.map(toFileName),
             pendingEmit: pendingEmit === undefined ?
                 undefined :
                 [
@@ -277,7 +272,6 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
             semanticDiagnosticsPerFile: toReadableIncrementalBuildInfoDiagnostic(buildInfo.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toReadableIncrementalBuildInfoEmitDiagnostic(buildInfo.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.affectedFilesPendingEmit?.map(value => toReadableIncrementalBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
-            changeFileSet: buildInfo.changeFileSet?.map(toFileName),
             emitSignatures: buildInfo.emitSignatures?.map(s =>
                 ts.isNumber(s) ?
                     toFileName(s) :
@@ -370,7 +364,7 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
     ): readonly ReadableIncrementalBuildInfoDiagnostic[] | undefined {
         return diagnostics?.map(d =>
             ts.isNumber(d) ?
-                [toFileName(d), "not cached or not changed"] :
+                [toFileName(d), "not cached"] :
                 [toFileName(d[0]), d[1]]
         );
     }

@@ -77,7 +77,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"7198220534-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface ReadonlyArray<T> { readonly length: number }","affectsGlobalScope":true,"impliedFormat":1},{"version":"42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)","affectsGlobalScope":true,"impliedFormat":1}],"root":[2],"options":{"jsx":2,"module":99,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"code":2769,"category":1,"messageText":{"messageText":"No overload matches this call.","category":1,"code":2769,"next":[{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided."},{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided."}]},"relatedInformation":[]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"7198220534-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface ReadonlyArray<T> { readonly length: number }","affectsGlobalScope":true},{"version":"42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)","affectsGlobalScope":true}],"root":[2],"options":{"jsx":2,"module":99,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"code":2769,"category":1,"messageText":{"messageText":"No overload matches this call.","category":1,"code":2769,"next":[{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided."},{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'number | undefined', but multiple children were provided."}]},"relatedInformation":[]}]]],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -89,24 +89,20 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     "../../lib/lib.d.ts": {
       "original": {
         "version": "7198220534-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface ReadonlyArray<T> { readonly length: number }",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "7198220534-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface ReadonlyArray<T> { readonly length: number }",
       "signature": "7198220534-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface ReadonlyArray<T> { readonly length: number }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./index.tsx": {
       "original": {
         "version": "42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)",
       "signature": "42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -166,7 +162,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1980
+  "size": 1944
 }
 
 

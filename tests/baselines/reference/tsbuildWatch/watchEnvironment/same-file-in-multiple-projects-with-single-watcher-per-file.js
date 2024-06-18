@@ -133,12 +133,16 @@ exports.pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg1/index.js]
@@ -149,12 +153,16 @@ exports.pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg2/index.js]
@@ -165,12 +173,16 @@ exports.pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg3/index.js]
@@ -181,40 +193,18 @@ exports.pkg3 = 3;
 
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
-
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg0/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg1/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg2/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg3/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/typings/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/pkg0/index.ts: *new*
@@ -547,34 +537,6 @@ Output::
 
 
 
-PolledWatches::
-/a/lib/package.json:
-  {"pollingInterval":2000}
-/a/package.json:
-  {"pollingInterval":2000}
-/package.json:
-  {"pollingInterval":2000}
-/user/package.json:
-  {"pollingInterval":2000}
-/user/username/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg0/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg1/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg2/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/typings/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/myproject/pkg3/package.json:
-  {"pollingInterval":2000}
-
 FsWatches::
 /user/username/projects/myproject/pkg0/index.ts:
   {}
@@ -775,30 +737,6 @@ Output::
 
 
 
-
-PolledWatches *deleted*::
-/a/lib/package.json:
-  {"pollingInterval":2000}
-/a/package.json:
-  {"pollingInterval":2000}
-/package.json:
-  {"pollingInterval":2000}
-/user/package.json:
-  {"pollingInterval":2000}
-/user/username/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg0/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg1/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/pkg2/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/typings/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:

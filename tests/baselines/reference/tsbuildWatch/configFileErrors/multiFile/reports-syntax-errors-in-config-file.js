@@ -45,8 +45,30 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
+function foo() { }
+
+
+//// [/user/username/projects/myproject/a.d.ts]
+export declare function foo(): void;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = bar;
+function bar() { }
+
+
+//// [/user/username/projects/myproject/b.d.ts]
+export declare function bar(): void;
+
+
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"4646078106-export function foo() { }","signature":false,"impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":false,"impliedFormat":1}],"root":[2,3],"options":{"composite":true},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"root":[2,3],"options":{"composite":true},"latestChangedDtsFile":"./b.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -59,31 +81,27 @@ Output::
     "../../../../a/lib/lib.d.ts": {
       "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": false,
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
     },
     "./a.ts": {
       "original": {
         "version": "4646078106-export function foo() { }",
-        "signature": false,
-        "impliedFormat": 1
+        "signature": "-5677608893-export declare function foo(): void;\n"
       },
       "version": "4646078106-export function foo() { }",
-      "impliedFormat": "commonjs"
+      "signature": "-5677608893-export declare function foo(): void;\n"
     },
     "./b.ts": {
       "original": {
         "version": "1045484683-export function bar() { }",
-        "signature": false,
-        "impliedFormat": 1
+        "signature": "-2904461644-export declare function bar(): void;\n"
       },
       "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
+      "signature": "-2904461644-export declare function bar(): void;\n"
     }
   },
   "root": [
@@ -99,31 +117,12 @@ Output::
   "options": {
     "composite": true
   },
-  "changeFileSet": [
-    "../../../../a/lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "./b.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 777
+  "size": 823
 }
 
-
-PolledWatches::
-/a/lib/package.json: *new*
-  {"pollingInterval":2000}
-/a/package.json: *new*
-  {"pollingInterval":2000}
-/package.json: *new*
-  {"pollingInterval":2000}
-/user/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/a.ts: *new*
@@ -149,9 +148,15 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
 
@@ -211,7 +216,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -245,8 +250,19 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.fooBar = fooBar;
+function fooBar() { }
+
+
+//// [/user/username/projects/myproject/a.d.ts]
+export declare function fooBar(): void;
+
+
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true,"impliedFormat":1},{"version":"-3260843409-export function fooBar() { }","signature":false,"impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":false,"impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"root":[2,3],"options":{"composite":true,"declaration":true},"latestChangedDtsFile":"./a.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -259,31 +275,27 @@ Output::
     "../../../../a/lib/lib.d.ts": {
       "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": false,
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
     },
     "./a.ts": {
       "original": {
         "version": "-3260843409-export function fooBar() { }",
-        "signature": false,
-        "impliedFormat": 1
+        "signature": "-6611919720-export declare function fooBar(): void;\n"
       },
       "version": "-3260843409-export function fooBar() { }",
-      "impliedFormat": "commonjs"
+      "signature": "-6611919720-export declare function fooBar(): void;\n"
     },
     "./b.ts": {
       "original": {
         "version": "1045484683-export function bar() { }",
-        "signature": false,
-        "impliedFormat": 1
+        "signature": "-2904461644-export declare function bar(): void;\n"
       },
       "version": "1045484683-export function bar() { }",
-      "impliedFormat": "commonjs"
+      "signature": "-2904461644-export declare function bar(): void;\n"
     }
   },
   "root": [
@@ -300,13 +312,10 @@ Output::
     "composite": true,
     "declaration": true
   },
-  "changeFileSet": [
-    "../../../../a/lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "./a.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 800
+  "size": 849
 }
 
 
@@ -328,9 +337,11 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -379,7 +390,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -418,7 +429,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n","impliedFormat":1},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"declaration":true},"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"root":[2,3],"options":{"composite":true,"declaration":true},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -431,33 +442,27 @@ Output::
     "../../../../a/lib/lib.d.ts": {
       "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "affectsGlobalScope": true
       },
       "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
       "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
       "original": {
         "version": "-3260843409-export function fooBar() { }",
-        "signature": "-6611919720-export declare function fooBar(): void;\n",
-        "impliedFormat": 1
+        "signature": "-6611919720-export declare function fooBar(): void;\n"
       },
       "version": "-3260843409-export function fooBar() { }",
-      "signature": "-6611919720-export declare function fooBar(): void;\n",
-      "impliedFormat": "commonjs"
+      "signature": "-6611919720-export declare function fooBar(): void;\n"
     },
     "./b.ts": {
       "original": {
         "version": "1045484683-export function bar() { }",
-        "signature": "-2904461644-export declare function bar(): void;\n",
-        "impliedFormat": 1
+        "signature": "-2904461644-export declare function bar(): void;\n"
       },
       "version": "1045484683-export function bar() { }",
-      "signature": "-2904461644-export declare function bar(): void;\n",
-      "impliedFormat": "commonjs"
+      "signature": "-2904461644-export declare function bar(): void;\n"
     }
   },
   "root": [
@@ -474,32 +479,10 @@ Output::
     "composite": true,
     "declaration": true
   },
-  "latestChangedDtsFile": "./b.d.ts",
+  "latestChangedDtsFile": "./a.d.ts",
   "version": "FakeTSVersion",
-  "size": 889
+  "size": 835
 }
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooBar = fooBar;
-function fooBar() { }
-
-
-//// [/user/username/projects/myproject/a.d.ts]
-export declare function fooBar(): void;
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-function bar() { }
-
-
-//// [/user/username/projects/myproject/b.d.ts]
-export declare function bar(): void;
-
 
 
 
@@ -521,13 +504,7 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (computed .d.ts)
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined

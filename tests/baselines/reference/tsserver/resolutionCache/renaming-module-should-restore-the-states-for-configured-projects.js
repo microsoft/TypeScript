@@ -46,8 +46,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
@@ -192,12 +190,8 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects/project/moduleFile.ts: *new*
@@ -340,14 +334,10 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects/project: *new*
@@ -526,12 +516,8 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/moduleFile:

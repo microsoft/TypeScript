@@ -7,33 +7,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -66,21 +59,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -96,33 +74,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -155,21 +126,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -182,33 +138,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -241,21 +190,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -271,33 +205,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -330,21 +257,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -357,33 +269,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -416,65 +321,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -490,33 +336,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -549,65 +388,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     [
       "./src/class.ts",
@@ -634,33 +414,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -693,21 +466,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -723,33 +481,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -782,21 +533,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -809,33 +545,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -868,21 +597,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -898,33 +612,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -957,21 +664,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -984,33 +676,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1043,65 +728,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -1117,33 +743,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1176,65 +795,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -1247,33 +807,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1306,65 +859,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -1380,33 +874,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "1786859709-export class classC {\n    prop1 = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1439,65 +926,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/directuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/indirectuse.ts",
-      [
-        {
-          "start": 76,
-          "length": 4,
-          "code": 2551,
-          "category": 1,
-          "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
-          "relatedInformation": [
-            {
-              "file": "./src/class.ts",
-              "start": 26,
-              "length": 5,
-              "messageText": "'prop1' is declared here.",
-              "category": 3,
-              "code": 2728
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -1510,33 +938,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1569,21 +990,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -1599,33 +1005,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1658,21 +1057,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     [
       "./src/class.ts",
@@ -1699,33 +1083,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1758,21 +1135,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -1788,33 +1150,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1847,21 +1202,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
@@ -1874,33 +1214,26 @@ CleanBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -1933,21 +1266,6 @@ CleanBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "emitSignatures": [
     "./src/class.ts",
     "./src/indirectclass.ts",
@@ -1963,33 +1281,26 @@ IncrementalBuild:
   "fileInfos": {
     "../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./src/class.ts": {
-      "version": "545032748-export class classC {\n    prop = 1;\n}",
-      "impliedFormat": "commonjs"
+      "version": "545032748-export class classC {\n    prop = 1;\n}"
     },
     "./src/indirectclass.ts": {
-      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
-      "impliedFormat": "commonjs"
+      "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}"
     },
     "./src/directuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/indirectuse.ts": {
-      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
-      "impliedFormat": "commonjs"
+      "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;"
     },
     "./src/nochangefile.ts": {
-      "version": "6714567633-export function writeLog(s: string) {\n}",
-      "impliedFormat": "commonjs"
+      "version": "6714567633-export function writeLog(s: string) {\n}"
     },
     "./src/nochangefilewithemitspecificerror.ts": {
       "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     }
   },
   "root": [
@@ -2022,21 +1333,6 @@ IncrementalBuild:
       "./src/indirectclass.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./src/nochangefilewithemitspecificerror.ts",
-      [
-        {
-          "start": 18,
-          "length": 18,
-          "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
-          "category": 1,
-          "code": 2396,
-          "skippedOn": "noEmit"
-        }
-      ]
-    ]
-  ],
   "latestChangedDtsFile": "FakeFileName",
   "version": "FakeTSVersion"
 }
