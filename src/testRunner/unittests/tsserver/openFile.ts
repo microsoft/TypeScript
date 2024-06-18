@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -8,12 +8,12 @@ import {
     TestSession,
     toExternalFile,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {

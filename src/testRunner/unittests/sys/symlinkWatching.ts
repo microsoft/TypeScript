@@ -1,17 +1,17 @@
 import * as fs from "fs";
 
-import { IO } from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { IO } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
     Deferred,
-} from "../../_namespaces/Utils";
+} from "../../_namespaces/Utils.js";
 import {
     createWatchedSystem,
     FileOrFolderOrSymLinkMap,
     osFlavorToString,
     TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: sys:: symlinkWatching::", () => {
     function delayedOp(op: () => void, delay: number) {
         ts.sys.setTimeout!(op, delay);

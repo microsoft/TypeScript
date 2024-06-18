@@ -40,9 +40,9 @@ MyComponent.defaultProps = {
 
 const MyComponent2 = () => null;
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >() => null : { (): any; defaultProps: MyComponentProps; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
 /**
  * @type {MyComponentProps}
@@ -73,7 +73,7 @@ const check = MyComponent2;
 >check : StatelessComponent<MyComponentProps>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
 /**
  * 
@@ -83,7 +83,7 @@ function expectLiteral(p) {}
 >expectLiteral : (p: { props: MyComponentProps; }) => void
 >              : ^ ^^                            ^^^^^^^^^
 >p : { props: MyComponentProps; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^                ^^^
 
 function foo() {
 >foo : typeof foo

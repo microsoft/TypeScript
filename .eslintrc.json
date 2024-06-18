@@ -144,7 +144,8 @@
         "local/no-in-operator": "error",
         "local/debug-assert": "error",
         "local/no-keywords": "error",
-        "local/jsdoc-format": "error"
+        "local/jsdoc-format": "error",
+        "local/js-extensions": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at

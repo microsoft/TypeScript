@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes8.ts] ////
+
+=== templateLiteralTypes8.ts ===
+const enum E {
+>E : E
+>  : ^
+
+  a = "a",
+>a : E.a
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+
+  b = "b",
+>b : E.b
+>  : ^^^
+>"b" : "b"
+>    : ^^^
+}
+
+type Stringify<T extends string> = `${T}`;
+>Stringify : `${T}`
+>          : ^^^^^^
+
+let z1: `${E}` = "a";
+>z1 : "a" | "b"
+>   : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+let z2: Stringify<E> = "a";
+>z2 : "a" | "b"
+>   : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+

@@ -62,3 +62,19 @@ var C3 = /** @class */ (function (_super) {
     }
     return C3;
 }(SomeUndefinedFunction));
+
+
+//// [declarationEmitExpressionInExtends4.d.ts]
+declare function getSomething(): {
+    new (): {};
+};
+declare const C_base: {
+    new (): {};
+};
+declare class C extends C_base<number, string> {
+}
+declare const C2_base: any;
+declare class C2 extends C2_base<number, string> {
+}
+declare class C3 extends SomeUndefinedFunction {
+}

@@ -72,7 +72,7 @@ const myStoreConnect: Connect = function(
 >myStoreConnect : Connect
 >               : ^^^^^^^
 >function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : <TStateProps, TOwnProps>(mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
->                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                   : ^           ^^         ^^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     mapStateToProps?: any,
 >mapStateToProps : any

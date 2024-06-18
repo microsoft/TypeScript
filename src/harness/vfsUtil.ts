@@ -1,8 +1,8 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -788,8 +788,8 @@ export class FileSystem {
     }
 
     private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
-        while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
-        while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
+        changedNode = walkSameNodes(changedNode);
+        baseNode = walkSameNodes(baseNode);
 
         // no difference if the nodes are the same reference
         if (changedNode === baseNode) return false;
@@ -827,6 +827,15 @@ export class FileSystem {
 
         container[basename] = new File(changedBuffer.data, { encoding: changedBuffer.encoding });
         return true;
+
+        function walkSameNodes(node: FileInode) {
+            while (
+                !node.buffer &&
+                node.shadowRoot &&
+                (!options.includeChangedFileWithSameContent || node.mtimeMs === node.shadowRoot.mtimeMs)
+            ) node = node.shadowRoot;
+            return node;
+        }
     }
 
     private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {

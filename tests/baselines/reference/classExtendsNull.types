@@ -16,11 +16,11 @@ class C extends null {
 >Object.create(null) : any
 >                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->              : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->       : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
     }
 }
 
@@ -33,10 +33,10 @@ class D extends null {
 >Object.create(null) : any
 >                    : ^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->              : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
->       : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
     }
 }

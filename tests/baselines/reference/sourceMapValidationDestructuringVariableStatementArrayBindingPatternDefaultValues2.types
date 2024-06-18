@@ -145,11 +145,11 @@ if (nameMB == nameMA) {
 >console.log(skillA[0] + skillA[1]) : void
 >                                   : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >skillA[0] + skillA[1] : string
 >                      : ^^^^^^
 >skillA[0] : string

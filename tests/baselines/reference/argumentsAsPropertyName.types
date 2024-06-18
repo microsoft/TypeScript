@@ -64,7 +64,7 @@ function myFunction(myType: MyType) {
 >[1, 2, 3].forEach(function(j) { use(x); }) : void
 >                                           : ^^^^
 >[1, 2, 3].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -74,7 +74,7 @@ function myFunction(myType: MyType) {
 >3 : 3
 >  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function(j) { use(x); } : (j: number) => void
 >                        : ^ ^^^^^^^^^^^^^^^^^
 >j : number

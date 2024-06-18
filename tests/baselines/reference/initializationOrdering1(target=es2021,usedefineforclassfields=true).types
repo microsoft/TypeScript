@@ -27,11 +27,11 @@ export class Broken {
 >console.log(this.bug) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >this.bug : boolean
 >         : ^^^^^^^
 >this : this
@@ -45,7 +45,7 @@ export class Broken {
 >this.facade.create() : boolean
 >                     : ^^^^^^^
 >this.facade.create : () => boolean
->                   : ^^^^^^^^^^^^^
+>                   : ^^^^^^       
 >this.facade : Helper
 >            : ^^^^^^
 >this : this
@@ -53,7 +53,7 @@ export class Broken {
 >facade : Helper
 >       : ^^^^^^
 >create : () => boolean
->       : ^^^^^^^^^^^^^
+>       : ^^^^^^       
 
 }
 

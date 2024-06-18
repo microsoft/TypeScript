@@ -33,7 +33,7 @@ fooVar();
 >fooVar() : void
 >         : ^^^^
 >fooVar : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
 /**class comment*/
 class c {
@@ -102,21 +102,21 @@ class c {
     /** overload signature1*/
     public foo1(a: number): string;
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     /** Overload signature 2*/
     public foo1(b: string): string;
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >b : string
 >  : ^^^^^^
 
     /** overload implementation signature*/
     public foo1(aOrb) {
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >aOrb : any
 
         return aOrb.toString();

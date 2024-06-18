@@ -56,7 +56,6 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitScriptTarget,
-    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
     getNameOfScriptTarget,
     getNewLineCharacter,
@@ -106,7 +105,7 @@ import {
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
@@ -329,12 +328,11 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
 }
 
 /** @internal */
-export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
-    return !!(program as BuilderProgram).getState;
+export function isBuilderProgram<T extends BuilderProgram>(program: Program | BuilderProgram): program is T {
+    return !!(program as T).state;
 }
 
-/** @internal */
-export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
+function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
     const options = program.getCompilerOptions();
     if (options.explainFiles) {
         explainFiles(isBuilderProgram(program) ? program.getProgram() : program, write);
@@ -353,14 +351,13 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 
 /** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
-    options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
 ): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
@@ -379,7 +376,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
+        switch (file.impliedNodeFormat) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
@@ -598,14 +595,13 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     const emitResult = isListFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
         : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
-    const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
-    addRange(allDiagnostics, emitDiagnostics);
+    addRange(allDiagnostics, emitResult.diagnostics);
 
     const diagnostics = sortAndDeduplicateDiagnostics(allDiagnostics);
     diagnostics.forEach(reportDiagnostic);
     if (write) {
         const currentDir = program.getCurrentDirectory();
-        forEach(emittedFiles, file => {
+        forEach(emitResult.emittedFiles, file => {
             const filepath = getNormalizedAbsolutePath(file, currentDir);
             write(`TSFILE: ${filepath}`);
         });

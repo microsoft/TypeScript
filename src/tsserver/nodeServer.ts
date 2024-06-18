@@ -14,7 +14,6 @@ import {
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
-    perfLogger,
     startTracing,
     stripQuotes,
     sys,
@@ -23,13 +22,13 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 import {
     getLogLevel,
     StartInput,
     StartSessionOptions,
-} from "./common";
+} from "./common.js";
 
 interface LogOptions {
     file?: string;
@@ -213,18 +212,6 @@ export function initializeNodeSystem(): StartInput {
             return this.loggingEnabled() && this.level >= level;
         }
         msg(s: string, type: ts.server.Msg = ts.server.Msg.Err) {
-            switch (type) {
-                case ts.server.Msg.Info:
-                    perfLogger?.logInfoEvent(s);
-                    break;
-                case ts.server.Msg.Perf:
-                    perfLogger?.logPerfEvent(s);
-                    break;
-                default: // Msg.Err
-                    perfLogger?.logErrEvent(s);
-                    break;
-            }
-
             if (!this.canWrite()) return;
 
             s = `[${ts.server.nowString()}] ${s}\n`;

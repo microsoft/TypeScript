@@ -24,7 +24,7 @@ function fn(value: Promise<number>): any {
 >dec(await value) : any
 >                 : ^^^
 >dec : (a: any) => any
->    : ^ ^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^   
 >await value : number
 >            : ^^^^^^
 >value : Promise<number>

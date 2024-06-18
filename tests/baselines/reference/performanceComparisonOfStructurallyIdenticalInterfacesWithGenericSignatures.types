@@ -30,47 +30,47 @@ export interface InterfaceA<T> {
 
     await<R extends ThenArg<T>>(): InterfaceA<R>;
 >await : <R extends ThenArg<T>>() => InterfaceA<R>
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>      : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitLatest<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitLatest : <R extends ThenArg<T>>() => InterfaceA<R>
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>            : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered : <R extends ThenArg<T>>() => InterfaceA<R>
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>             : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered2<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered2 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered3<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered3 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered4<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered4 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered5<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered5 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered6<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered6 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered7<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered7 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered8<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered8 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered9<R extends ThenArg<T>>(): InterfaceA<R>;
 >awaitOrdered9 : <R extends ThenArg<T>>() => InterfaceA<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 }
 
 export interface InterfaceB<T> extends InterfaceA<T> {
@@ -84,47 +84,47 @@ export interface InterfaceB<T> extends InterfaceA<T> {
 
     await<R extends ThenArg<T>>(): InterfaceB<R>;
 >await : <R extends ThenArg<T>>() => InterfaceB<R>
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>      : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitLatest<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitLatest : <R extends ThenArg<T>>() => InterfaceB<R>
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>            : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered : <R extends ThenArg<T>>() => InterfaceB<R>
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>             : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered2<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered2 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered3<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered3 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered4<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered4 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered5<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered5 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered6<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered6 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered7<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered7 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered8<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered8 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 
     awaitOrdered9<R extends ThenArg<T>>(): InterfaceB<R>;
 >awaitOrdered9 : <R extends ThenArg<T>>() => InterfaceB<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^             
+>              : ^ ^^^^^^^^^          ^^^^^^^             
 }
 
 export class A<T> implements InterfaceB<T> {
@@ -163,7 +163,7 @@ export class A<T> implements InterfaceB<T> {
 
     public await<R extends ThenArg<T>>(): B<R> {
 >await : <R extends ThenArg<T>>() => B<R>
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -173,7 +173,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered : <R extends ThenArg<T>>() => B<R>
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>             : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -183,7 +183,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered2<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered2 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -193,7 +193,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered3<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered3 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -203,7 +203,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered4<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered4 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -213,7 +213,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered5<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered5 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -223,7 +223,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered6<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered6 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -233,7 +233,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered7<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered7 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -243,7 +243,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered8<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered8 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -253,7 +253,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitOrdered9<R extends ThenArg<T>>(): B<R> {
 >awaitOrdered9 : <R extends ThenArg<T>>() => B<R>
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>              : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any
@@ -263,7 +263,7 @@ export class A<T> implements InterfaceB<T> {
 
     public awaitLatest<R extends ThenArg<T>>(): B<R> {
 >awaitLatest : <R extends ThenArg<T>>() => B<R>
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>            : ^ ^^^^^^^^^          ^^^^^^^    
 
         return undefined as any;
 >undefined as any : any

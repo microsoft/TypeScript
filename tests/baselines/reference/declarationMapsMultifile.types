@@ -21,7 +21,7 @@ export class Foo {
 >x.a : number
 >    : ^^^^^^
 >x : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
     }

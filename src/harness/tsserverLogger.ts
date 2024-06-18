@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import { Compiler } from "./harnessIO";
+import * as ts from "./_namespaces/ts.js";
+import { Compiler } from "./harnessIO.js";
 
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
@@ -127,6 +127,7 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
+    s = s.replace(/"duration":\s*\d+(?:.\d+)?/g, `"duration": *`);
     s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
     s = sanitizeHarnessLSException(s);
     return s;

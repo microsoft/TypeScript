@@ -7,11 +7,11 @@ var arr = [].splice(0,3,4,5);
 >[].splice(0,3,4,5) : any[]
 >                   : ^^^^^
 >[].splice : { (start: number, deleteCount?: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
->          : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^
+>          : ^^^     ^^      ^^           ^^^      ^^^^^^  ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^  ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >splice : { (start: number, deleteCount?: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
->       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^  ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^  ^^^
 >0 : 0
 >  : ^
 >3 : 3

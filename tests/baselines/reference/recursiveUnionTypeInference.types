@@ -17,7 +17,7 @@ function bar<T>(x: Foo<T> | string): T {
 >bar(x) : T
 >       : ^
 >bar : <T>(x: Foo<T> | string) => T
->    : ^ ^^ ^^               ^^^^^^
+>    : ^ ^^ ^^               ^^^^^ 
 >x : string | Foo<T>
 >  : ^^^^^^^^^^^^^^^
 }

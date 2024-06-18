@@ -110,11 +110,11 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value : string
 >      : ^^^^^^
 
@@ -204,11 +204,11 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value : string
 >      : ^^^^^^
 >error : true
@@ -318,11 +318,11 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value : string
 >      : ^^^^^^
 

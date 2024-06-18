@@ -5,8 +5,9 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
+import * as dprintFormatter from "@dprint/formatter";
+import * as dprintTypeScript from "@dprint/typescript";
 import assert, { fail } from "assert";
-import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";
 import path from "path";
@@ -475,23 +476,23 @@ if (publicContents.includes("@internal")) {
     console.error("Output includes untrimmed @internal nodes!");
 }
 
-const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.js");
+const buffer = fs.readFileSync(dprintTypeScript.getPath());
+const formatter = dprintFormatter.createFromBuffer(buffer);
+formatter.setConfig({
+    indentWidth: 4,
+    lineWidth: 1000,
+    newLineKind: "auto",
+    useTabs: false,
+}, {
+    quoteStyle: "preferDouble",
+});
 
 /**
  * @param {string} contents
  * @returns {string}
  */
 function dprint(contents) {
-    const result = cp.execFileSync(
-        process.execPath,
-        [dprintPath, "fmt", "--stdin", "ts"],
-        {
-            stdio: ["pipe", "pipe", "inherit"],
-            encoding: "utf-8",
-            input: contents,
-            maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
-        },
-    );
+    const result = formatter.formatText("dummy.d.ts", contents);
     return result.replace(/\r\n/g, "\n");
 }
 

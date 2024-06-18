@@ -79,11 +79,11 @@ if (u === 5) {
 >u.toString(10) : string
 >               : ^^^^^^
 >u.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >u : 5
 >  : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >10 : 10
 >   : ^^
 }
@@ -343,7 +343,7 @@ if (u === anObjectLiteral) {
 >u : unknown
 >  : ^^^^^^^
 >anObjectLiteral : { x: number; }
->                : ^^^^^^^^^^^^^^
+>                : ^^^^^      ^^^
 
     let uObjectLiteral: object = u;
 >uObjectLiteral : object
@@ -358,7 +358,7 @@ if (u === aUnion) {
 >u : unknown
 >  : ^^^^^^^
 >aUnion : { x: number; } | { y: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^^^^^^^      ^^^
 
     type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
 >unionDoesNotNarrow : true
@@ -373,7 +373,7 @@ if (u === anIntersection) {
 >u : unknown
 >  : ^^^^^^^
 >anIntersection : { x: number; } & { y: string; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^^^^^^^      ^^^
 
     type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
 >intersectionDoesNotNarrow : true
@@ -388,7 +388,7 @@ if (u === aFunction) {
 >u : unknown
 >  : ^^^^^^^
 >aFunction : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 
     let uFunction: object = u;
 >uFunction : object
@@ -814,7 +814,7 @@ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
             break;
         case y:
 >y : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
             const obj1: object = x;
 >obj1 : object
@@ -825,7 +825,7 @@ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
             break;
         case z:
 >z : { prop: number; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 
             const obj2: object = x;
 >obj2 : object

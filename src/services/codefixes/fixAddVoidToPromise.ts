@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixAllContext,
     Diagnostics,
     factory,
@@ -24,12 +29,7 @@ import {
     textChanges,
     TextSpan,
     TypeFlags,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "addVoidToPromise";
 const fixId = "addVoidToPromise";

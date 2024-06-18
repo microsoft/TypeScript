@@ -46,7 +46,7 @@ import {
     SyntaxList,
     textSpanIntersectsWithPosition,
     textSpansEqual,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {

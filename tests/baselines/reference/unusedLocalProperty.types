@@ -31,11 +31,11 @@ class Animal {
 >console.log(species) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >species : string
 >        : ^^^^^^
     }
