@@ -11,8 +11,6 @@ import {
     TextSpan,
 } from "./_namespaces/ts.js";
 
-/* eslint-disable @typescript-eslint/prefer-for-of */
-
 /** @internal */
 export const emptyArray: never[] = [] as never[];
 /** @internal */
@@ -34,7 +32,7 @@ export function length(array: readonly any[] | undefined): number {
  */
 export function forEach<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const result = callback(array[i], i);
             if (result) {
                 return result;
@@ -71,7 +69,7 @@ export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (e
         return undefined;
     }
 
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         const result = callback(array[i], i);
         if (result !== undefined) {
             return result;
@@ -108,7 +106,7 @@ export function reduceLeftIterator<T, U>(iterator: Iterable<T> | undefined, f: (
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
     const result: V[] = [];
     Debug.assertEqual(arrayA.length, arrayB.length);
-    for (let i = 0; i < arrayA.length; i++) {
+    for (let i = 0, n = arrayA.length; i < n; i++) {
         result.push(callback(arrayA[i], arrayB[i], i));
     }
     return result;
@@ -146,7 +144,7 @@ export function every<T, U extends T>(array: readonly T[] | undefined, callback:
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             if (!callback(array[i], i)) {
                 return false;
             }
@@ -237,7 +235,7 @@ export function findMap<T, U>(array: readonly T[], callback: (element: T, index:
 /** @internal */
 export function contains<T>(array: readonly T[] | undefined, value: T, equalityComparer: EqualityComparer<T> = equateValues): boolean {
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             if (equalityComparer(array[i], value)) {
                 return true;
             }
@@ -260,7 +258,7 @@ export function indexOfAnyCharCode(text: string, charCodes: readonly number[], s
 export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T, i: number) => boolean): number {
     let count = 0;
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const v = array[i];
             if (predicate(v, i)) {
                 count++;
@@ -316,7 +314,7 @@ export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean)
 /** @internal */
 export function filterMutate<T>(array: T[], f: (x: T, i: number, array: T[]) => boolean): void {
     let outIndex = 0;
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         if (f(array[i], i, array)) {
             array[outIndex] = array[i];
             outIndex++;
@@ -339,7 +337,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
     let result: U[] | undefined;
     if (array !== undefined) {
         result = [];
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             result.push(f(array[i], i));
         }
     }
@@ -367,7 +365,7 @@ export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: 
 /** @internal */
 export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined {
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const item = array[i];
             const mapped = f(item, i);
             if (item as unknown !== mapped) {
@@ -392,7 +390,7 @@ export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: 
  */
 export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined)[]): T[] {
     const result = [];
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         const v = array[i];
         if (v) {
             if (isArray(v)) {
@@ -417,7 +415,7 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
 export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
     let result: U[] | undefined;
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const v = mapfn(array[i], i);
             if (v) {
                 if (isArray(v)) {
@@ -436,7 +434,7 @@ export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: 
 export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): U[] {
     const result: U[] = [];
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const v = mapfn(array[i], i);
             if (v) {
                 if (isArray(v)) {
@@ -476,7 +474,7 @@ export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => 
 export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => T | readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const item = array[i];
             const mapped = mapfn(item, i);
             if (result || item !== mapped || isArray(mapped)) {
@@ -498,7 +496,7 @@ export function sameFlatMap<T>(array: readonly T[], mapfn: (x: T, i: number) => 
 /** @internal */
 export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
     const result: U[] = [];
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         const mapped = mapFn(array[i], i);
         if (mapped === undefined) {
             return undefined;
@@ -512,7 +510,7 @@ export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number)
 export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
     const result: U[] = [];
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const mapped = mapFn(array[i], i);
             if (mapped !== undefined) {
                 result.push(mapped);
@@ -635,7 +633,7 @@ export function some<T>(array: readonly T[] | undefined, predicate: (value: T) =
 export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
     if (array !== undefined) {
         if (predicate !== undefined) {
-            for (let i = 0; i < array.length; i++) {
+            for (let i = 0, n = array.length; i < n; i++) {
                 if (predicate(array[i])) {
                     return true;
                 }
@@ -655,7 +653,7 @@ export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) 
  */
 export function getRangesWhere<T>(arr: readonly T[], pred: (t: T) => boolean, cb: (start: number, afterEnd: number) => void): void {
     let start: number | undefined;
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0, n = arr.length; i < n; i++) {
         if (pred(arr[i])) {
             start = start === undefined ? i : start;
         }
@@ -725,7 +723,7 @@ function deduplicateRelational<T>(array: readonly T[], equalityComparer: Equalit
 
 function deduplicateEquality<T>(array: readonly T[], equalityComparer: EqualityComparer<T>) {
     const result: T[] = [];
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         pushIfUnique(result, array[i], equalityComparer);
     }
     return result;
@@ -844,11 +842,12 @@ export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: read
         return array1 === array2;
     }
 
-    if (array1.length !== array2.length) {
+    const firstLength = array1.length;
+    if (firstLength !== array2.length) {
         return false;
     }
 
-    for (let i = 0; i < array1.length; i++) {
+    for (let i = 0; i < firstLength; i++) {
         if (!equalityComparer(array1[i], array2[i], i)) {
             return false;
         }
@@ -874,7 +873,7 @@ export function compact<T>(array: readonly T[]): readonly T[]; // eslint-disable
 export function compact<T>(array: readonly T[]): readonly T[] {
     let result: T[] | undefined;
     if (array !== undefined) {
-        for (let i = 0; i < array.length; i++) {
+        for (let i = 0, n = array.length; i < n; i++) {
             const v = array[i];
             // Either the result has been initialized (and is looking to collect truthy values separately),
             // or we've hit our first falsy value and need to copy over the current stretch of truthy values.
@@ -1452,7 +1451,7 @@ export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => str
 /** @internal */
 export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
     const result = new Map<K, V1 | V2>();
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         const value = array[i];
         const key = makeKey(value);
         if (key !== undefined) result.set(key, makeValue(value));
@@ -1467,7 +1466,7 @@ export function arrayToNumericMap<T, U>(array: readonly T[], makeKey: (value: T)
 /** @internal */
 export function arrayToNumericMap<T, U>(array: readonly T[], makeKey: (value: T) => number, makeValue: (value: T) => T | U = identity): (T | U)[] {
     const result: (T | U)[] = [];
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         const value = array[i];
         result[makeKey(value)] = makeValue(value);
     }
@@ -1481,7 +1480,7 @@ export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: 
 /** @internal */
 export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => V | U = identity): MultiMap<K, V | U> {
     const result = createMultiMap<K, V | U>();
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0, n = values.length; i < n; i++) {
         const value = values[i];
         result.add(makeKey(value), makeValue(value));
     }
@@ -1508,7 +1507,7 @@ export function groupBy<T, K extends string | number | boolean | null | undefine
 export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } { // eslint-disable-line no-restricted-syntax
     const result: Record<string, T[]> = {};
     if (values !== undefined) {
-        for (let i = 0; i < values.length; i++) {
+        for (let i = 0, n = values.length; i < n; i++) {
             const value = values[i];
             const key = `${keySelector(value)}`;
             const array = result[key] ??= [];
@@ -1717,7 +1716,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
             if (!multiMap.has(hash)) return false;
             const candidates = multiMap.get(hash)!;
             if (isArray(candidates)) {
-                for (let i = 0; i < candidates.length; i++) {
+                for (let i = 0, n = candidates.length; i < n; i++) {
                     if (equals(candidates[i], element)) {
                         if (candidates.length === 1) {
                             multiMap.delete(hash);
@@ -2122,7 +2121,7 @@ export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<Te
 
 /** @internal */
 export function maxBy<T>(arr: readonly T[], init: number, mapper: (x: T) => number): number {
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0, n = arr.length; i < n; i++) {
         init = Math.max(init, mapper(arr[i]));
     }
     return init;
@@ -2318,8 +2317,8 @@ export function getSpellingSuggestion<T>(name: string, candidates: Iterable<T>, 
 }
 
 function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
-    let previous = new Array(s2.length + 1);
-    let current = new Array(s2.length + 1);
+    let previous = new Array<number>(s2.length + 1);
+    let current = new Array<number>(s2.length + 1);
     /** Represents any value > max. We don't care about the particular value. */
     const big = max + 0.01;
 
@@ -2445,7 +2444,7 @@ export function removeMinAndVersionNumbers(fileName: string) {
  * @internal
  */
 export function orderedRemoveItem<T>(array: T[], item: T): boolean {
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         if (array[i] === item) {
             orderedRemoveItemAt(array, i);
             return true;
@@ -2485,7 +2484,7 @@ export function unorderedRemoveItem<T>(array: T[], item: T) {
 
 /** Remove the *first* element satisfying `predicate`. */
 function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean) {
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0, n = array.length; i < n; i++) {
         if (predicate(array[i])) {
             unorderedRemoveItemAt(array, i);
             return true;
@@ -2537,7 +2536,7 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
     // use length of prefix as betterness criteria
     let longestMatchPrefixLength = -1;
 
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0, n = values.length; i < n; i++) {
         const v = values[i];
         const pattern = getPattern(v);
         if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
