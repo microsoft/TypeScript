@@ -1,0 +1,248 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesNestedGenericCall1.ts] ////
+
+=== intraExpressionInferencesNestedGenericCall1.ts ===
+interface FastifyTypeProvider {
+  readonly input: unknown;
+>input : unknown
+>      : ^^^^^^^
+
+  readonly output: unknown;
+>output : unknown
+>       : ^^^^^^^
+}
+
+export interface FastifyTypeProviderDefault extends FastifyTypeProvider {}
+
+type CallTypeProvider<F extends FastifyTypeProvider, I> = (F & {
+>CallTypeProvider : CallTypeProvider<F, I>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+  input: I;
+>input : I
+>      : ^
+
+})["output"];
+type UndefinedToUnknown<T> = [T] extends [undefined] ? unknown : T;
+>UndefinedToUnknown : UndefinedToUnknown<T>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+
+interface RouteGenericInterface {
+  Querystring?: unknown;
+>Querystring : unknown
+>            : ^^^^^^^
+}
+
+interface FastifySchema {
+  querystring?: unknown;
+>querystring : unknown
+>            : ^^^^^^^
+
+  headers?: unknown;
+>headers : unknown
+>        : ^^^^^^^
+}
+
+interface FastifyRequestType<Querystring = unknown> {
+  query: Querystring;
+>query : Querystring
+>      : ^^^^^^^^^^^
+}
+
+type ResolveRequestQuerystring<
+>ResolveRequestQuerystring : ResolveRequestQuerystring<TypeProvider, SchemaCompiler>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TypeProvider extends FastifyTypeProvider,
+  SchemaCompiler extends FastifySchema,
+> = UndefinedToUnknown<
+  CallTypeProvider<TypeProvider, SchemaCompiler["querystring"]>
+>;
+
+interface ResolveFastifyRequestType<
+  TypeProvider extends FastifyTypeProvider,
+  SchemaCompiler extends FastifySchema,
+> {
+  query: ResolveRequestQuerystring<TypeProvider, SchemaCompiler>;
+>query : UndefinedToUnknown<CallTypeProvider<TypeProvider, SchemaCompiler["querystring"]>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface FastifyRequest<
+  RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
+  SchemaCompiler extends FastifySchema = FastifySchema,
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
+  RequestType extends FastifyRequestType = ResolveFastifyRequestType<
+    TypeProvider,
+    SchemaCompiler
+  >,
+> {
+  query: RequestType["query"];
+>query : RequestType["query"]
+>      : ^^^^^^^^^^^^^^^^^^^^
+}
+
+interface RouteOptions<
+  RouteGeneric extends RouteGenericInterface,
+  SchemaCompiler extends FastifySchema,
+  TypeProvider extends FastifyTypeProvider,
+> {
+  schema?: SchemaCompiler;
+>schema : SchemaCompiler | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onRequest?: (
+>onRequest : ((request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>) => void) | undefined
+>          : ^^       ^^                                                          ^^^^^    ^^^^^^^^^^^^^
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider, ResolveFastifyRequestType<TypeProvider, SchemaCompiler>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) => void;
+  method: "GET" | "POST";
+>method : "GET" | "POST"
+>       : ^^^^^^^^^^^^^^
+
+  url: string;
+>url : string
+>    : ^^^^^^
+
+  handler: (
+>handler : (request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>) => void
+>        : ^       ^^                                                          ^^^^^    
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider, ResolveFastifyRequestType<TypeProvider, SchemaCompiler>>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) => void;
+}
+
+interface FastifyInstance<TypeProvider extends FastifyTypeProvider> {
+  route<
+>route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>) => void
+>      : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^                                                        ^^^^^    
+
+    RouteGeneric extends RouteGenericInterface,
+    SchemaCompiler extends FastifySchema,
+  >(
+    opts: RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>,
+>opts : RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ): void;
+}
+
+type Type<Output> = {
+>Type : Type<Output>
+>     : ^^^^^^^^^^^^
+
+  _output: Output;
+>_output : Output
+>        : ^^^^^^
+
+};
+
+declare function string(): Type<string>;
+>string : () => Type<string>
+>       : ^^^^^^            
+
+interface ZodTypeProvider extends FastifyTypeProvider {
+  output: this["input"] extends { _output: unknown }
+>output : this["input"] extends { _output: unknown; } ? this["input"]["_output"] : never
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_output : unknown
+>        : ^^^^^^^
+
+    ? this["input"]["_output"]
+    : never;
+}
+
+const verifyAuth =
+>verifyAuth : <T extends FastifyRequest>() => (req: T) => void
+>           : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+
+  <T extends FastifyRequest>() =>
+><T extends FastifyRequest>() =>  (req: T) => {} : <T extends FastifyRequest>() => (req: T) => void
+>                                                : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+
+  (req: T) => {};
+>(req: T) => {} : (req: T) => void
+>               : ^   ^^ ^^^^^^^^^
+>req : T
+>    : ^
+
+declare const server: FastifyInstance<ZodTypeProvider>;
+>server : FastifyInstance<ZodTypeProvider>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+server.route({
+>server.route({  url: "/config",  method: "GET",  schema: {    querystring: string(),  },  onRequest: verifyAuth(),  handler: async (req) => {    const query: string = req.query;  },}) : void
+>                                                                                                                                                                                        : ^^^^
+>server.route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, ZodTypeProvider>) => void
+>             : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>server : FastifyInstance<ZodTypeProvider>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>route : <RouteGeneric extends RouteGenericInterface, SchemaCompiler extends FastifySchema>(opts: RouteOptions<RouteGeneric, SchemaCompiler, ZodTypeProvider>) => void
+>      : ^            ^^^^^^^^^                     ^^              ^^^^^^^^^             ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>{  url: "/config",  method: "GET",  schema: {    querystring: string(),  },  onRequest: verifyAuth(),  handler: async (req) => {    const query: string = req.query;  },} : { url: string; method: "GET"; schema: { querystring: Type<string>; }; onRequest: (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void; handler: (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  url: "/config",
+>url : string
+>    : ^^^^^^
+>"/config" : "/config"
+>          : ^^^^^^^^^
+
+  method: "GET",
+>method : "GET"
+>       : ^^^^^
+>"GET" : "GET"
+>      : ^^^^^
+
+  schema: {
+>schema : { querystring: Type<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    querystring: string(),  } : { querystring: Type<string>; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    querystring: string(),
+>querystring : Type<string>
+>            : ^^^^^^^^^^^^
+>string() : Type<string>
+>         : ^^^^^^^^^^^^
+>string : () => Type<string>
+>       : ^^^^^^            
+
+  },
+  onRequest: verifyAuth(),
+>onRequest : (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void
+>          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>verifyAuth() : (req: FastifyRequest<RouteGenericInterface, FastifySchema, FastifyTypeProviderDefault, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema>>) => void
+>             : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>verifyAuth : <T extends FastifyRequest>() => (req: T) => void
+>           : ^ ^^^^^^^^^              ^^^^^^^^   ^^ ^^^^^^^^^
+
+  handler: async (req) => {
+>handler : (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async (req) => {    const query: string = req.query;  } : (req: FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>) => Promise<void>
+>                                                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const query: string = req.query;
+>query : string
+>      : ^^^^^^
+>req.query : string
+>          : ^^^^^^
+>req : FastifyRequest<RouteGenericInterface, { querystring: Type<string>; }, ZodTypeProvider, ResolveFastifyRequestType<ZodTypeProvider, { querystring: Type<string>; }>>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>query : string
+>      : ^^^^^^
+
+  },
+});
+
+export {};
+

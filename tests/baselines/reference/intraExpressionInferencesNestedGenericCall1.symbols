@@ -1,0 +1,294 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesNestedGenericCall1.ts] ////
+
+=== intraExpressionInferencesNestedGenericCall1.ts ===
+interface FastifyTypeProvider {
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+  readonly input: unknown;
+>input : Symbol(FastifyTypeProvider.input, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 31))
+
+  readonly output: unknown;
+>output : Symbol(FastifyTypeProvider.output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 1, 26))
+}
+
+export interface FastifyTypeProviderDefault extends FastifyTypeProvider {}
+>FastifyTypeProviderDefault : Symbol(FastifyTypeProviderDefault, Decl(intraExpressionInferencesNestedGenericCall1.ts, 3, 1))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+type CallTypeProvider<F extends FastifyTypeProvider, I> = (F & {
+>CallTypeProvider : Symbol(CallTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 5, 74))
+>F : Symbol(F, Decl(intraExpressionInferencesNestedGenericCall1.ts, 7, 22))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+>I : Symbol(I, Decl(intraExpressionInferencesNestedGenericCall1.ts, 7, 52))
+>F : Symbol(F, Decl(intraExpressionInferencesNestedGenericCall1.ts, 7, 22))
+
+  input: I;
+>input : Symbol(input, Decl(intraExpressionInferencesNestedGenericCall1.ts, 7, 64))
+>I : Symbol(I, Decl(intraExpressionInferencesNestedGenericCall1.ts, 7, 52))
+
+})["output"];
+type UndefinedToUnknown<T> = [T] extends [undefined] ? unknown : T;
+>UndefinedToUnknown : Symbol(UndefinedToUnknown, Decl(intraExpressionInferencesNestedGenericCall1.ts, 9, 13))
+>T : Symbol(T, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 24))
+>T : Symbol(T, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 24))
+>T : Symbol(T, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 24))
+
+interface RouteGenericInterface {
+>RouteGenericInterface : Symbol(RouteGenericInterface, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 67))
+
+  Querystring?: unknown;
+>Querystring : Symbol(RouteGenericInterface.Querystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 12, 33))
+}
+
+interface FastifySchema {
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+  querystring?: unknown;
+>querystring : Symbol(FastifySchema.querystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 16, 25))
+
+  headers?: unknown;
+>headers : Symbol(FastifySchema.headers, Decl(intraExpressionInferencesNestedGenericCall1.ts, 17, 24))
+}
+
+interface FastifyRequestType<Querystring = unknown> {
+>FastifyRequestType : Symbol(FastifyRequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 19, 1))
+>Querystring : Symbol(Querystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 21, 29))
+
+  query: Querystring;
+>query : Symbol(FastifyRequestType.query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 21, 53))
+>Querystring : Symbol(Querystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 21, 29))
+}
+
+type ResolveRequestQuerystring<
+>ResolveRequestQuerystring : Symbol(ResolveRequestQuerystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 23, 1))
+
+  TypeProvider extends FastifyTypeProvider,
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 25, 31))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+  SchemaCompiler extends FastifySchema,
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 26, 43))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+> = UndefinedToUnknown<
+>UndefinedToUnknown : Symbol(UndefinedToUnknown, Decl(intraExpressionInferencesNestedGenericCall1.ts, 9, 13))
+
+  CallTypeProvider<TypeProvider, SchemaCompiler["querystring"]>
+>CallTypeProvider : Symbol(CallTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 5, 74))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 25, 31))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 26, 43))
+
+>;
+
+interface ResolveFastifyRequestType<
+>ResolveFastifyRequestType : Symbol(ResolveFastifyRequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 30, 2))
+
+  TypeProvider extends FastifyTypeProvider,
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 32, 36))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+  SchemaCompiler extends FastifySchema,
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 33, 43))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+> {
+  query: ResolveRequestQuerystring<TypeProvider, SchemaCompiler>;
+>query : Symbol(ResolveFastifyRequestType.query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 35, 3))
+>ResolveRequestQuerystring : Symbol(ResolveRequestQuerystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 23, 1))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 32, 36))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 33, 43))
+}
+
+interface FastifyRequest<
+>FastifyRequest : Symbol(FastifyRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 37, 1))
+
+  RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 39, 25))
+>RouteGenericInterface : Symbol(RouteGenericInterface, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 67))
+>RouteGenericInterface : Symbol(RouteGenericInterface, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 67))
+
+  SchemaCompiler extends FastifySchema = FastifySchema,
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 40, 69))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+  TypeProvider extends FastifyTypeProvider = FastifyTypeProviderDefault,
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 41, 55))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+>FastifyTypeProviderDefault : Symbol(FastifyTypeProviderDefault, Decl(intraExpressionInferencesNestedGenericCall1.ts, 3, 1))
+
+  RequestType extends FastifyRequestType = ResolveFastifyRequestType<
+>RequestType : Symbol(RequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 42, 72))
+>FastifyRequestType : Symbol(FastifyRequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 19, 1))
+>ResolveFastifyRequestType : Symbol(ResolveFastifyRequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 30, 2))
+
+    TypeProvider,
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 41, 55))
+
+    SchemaCompiler
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 40, 69))
+
+  >,
+> {
+  query: RequestType["query"];
+>query : Symbol(FastifyRequest.query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 47, 3))
+>RequestType : Symbol(RequestType, Decl(intraExpressionInferencesNestedGenericCall1.ts, 42, 72))
+}
+
+interface RouteOptions<
+>RouteOptions : Symbol(RouteOptions, Decl(intraExpressionInferencesNestedGenericCall1.ts, 49, 1))
+
+  RouteGeneric extends RouteGenericInterface,
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 51, 23))
+>RouteGenericInterface : Symbol(RouteGenericInterface, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 67))
+
+  SchemaCompiler extends FastifySchema,
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 52, 45))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+  TypeProvider extends FastifyTypeProvider,
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 53, 39))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+> {
+  schema?: SchemaCompiler;
+>schema : Symbol(RouteOptions.schema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 55, 3))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 52, 45))
+
+  onRequest?: (
+>onRequest : Symbol(RouteOptions.onRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 56, 26))
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : Symbol(request, Decl(intraExpressionInferencesNestedGenericCall1.ts, 57, 15))
+>FastifyRequest : Symbol(FastifyRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 37, 1))
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 51, 23))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 52, 45))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 53, 39))
+
+  ) => void;
+  method: "GET" | "POST";
+>method : Symbol(RouteOptions.method, Decl(intraExpressionInferencesNestedGenericCall1.ts, 59, 12))
+
+  url: string;
+>url : Symbol(RouteOptions.url, Decl(intraExpressionInferencesNestedGenericCall1.ts, 60, 25))
+
+  handler: (
+>handler : Symbol(RouteOptions.handler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 61, 14))
+
+    request: FastifyRequest<RouteGeneric, SchemaCompiler, TypeProvider>,
+>request : Symbol(request, Decl(intraExpressionInferencesNestedGenericCall1.ts, 62, 12))
+>FastifyRequest : Symbol(FastifyRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 37, 1))
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 51, 23))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 52, 45))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 53, 39))
+
+  ) => void;
+}
+
+interface FastifyInstance<TypeProvider extends FastifyTypeProvider> {
+>FastifyInstance : Symbol(FastifyInstance, Decl(intraExpressionInferencesNestedGenericCall1.ts, 65, 1))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 67, 26))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+  route<
+>route : Symbol(FastifyInstance.route, Decl(intraExpressionInferencesNestedGenericCall1.ts, 67, 69))
+
+    RouteGeneric extends RouteGenericInterface,
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 68, 8))
+>RouteGenericInterface : Symbol(RouteGenericInterface, Decl(intraExpressionInferencesNestedGenericCall1.ts, 10, 67))
+
+    SchemaCompiler extends FastifySchema,
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 69, 47))
+>FastifySchema : Symbol(FastifySchema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 14, 1))
+
+  >(
+    opts: RouteOptions<RouteGeneric, SchemaCompiler, TypeProvider>,
+>opts : Symbol(opts, Decl(intraExpressionInferencesNestedGenericCall1.ts, 71, 4))
+>RouteOptions : Symbol(RouteOptions, Decl(intraExpressionInferencesNestedGenericCall1.ts, 49, 1))
+>RouteGeneric : Symbol(RouteGeneric, Decl(intraExpressionInferencesNestedGenericCall1.ts, 68, 8))
+>SchemaCompiler : Symbol(SchemaCompiler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 69, 47))
+>TypeProvider : Symbol(TypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 67, 26))
+
+  ): void;
+}
+
+type Type<Output> = {
+>Type : Symbol(Type, Decl(intraExpressionInferencesNestedGenericCall1.ts, 74, 1))
+>Output : Symbol(Output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 76, 10))
+
+  _output: Output;
+>_output : Symbol(_output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 76, 21))
+>Output : Symbol(Output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 76, 10))
+
+};
+
+declare function string(): Type<string>;
+>string : Symbol(string, Decl(intraExpressionInferencesNestedGenericCall1.ts, 78, 2))
+>Type : Symbol(Type, Decl(intraExpressionInferencesNestedGenericCall1.ts, 74, 1))
+
+interface ZodTypeProvider extends FastifyTypeProvider {
+>ZodTypeProvider : Symbol(ZodTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 80, 40))
+>FastifyTypeProvider : Symbol(FastifyTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 0, 0))
+
+  output: this["input"] extends { _output: unknown }
+>output : Symbol(ZodTypeProvider.output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 82, 55))
+>_output : Symbol(_output, Decl(intraExpressionInferencesNestedGenericCall1.ts, 83, 33))
+
+    ? this["input"]["_output"]
+    : never;
+}
+
+const verifyAuth =
+>verifyAuth : Symbol(verifyAuth, Decl(intraExpressionInferencesNestedGenericCall1.ts, 88, 5))
+
+  <T extends FastifyRequest>() =>
+>T : Symbol(T, Decl(intraExpressionInferencesNestedGenericCall1.ts, 89, 3))
+>FastifyRequest : Symbol(FastifyRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 37, 1))
+
+  (req: T) => {};
+>req : Symbol(req, Decl(intraExpressionInferencesNestedGenericCall1.ts, 90, 3))
+>T : Symbol(T, Decl(intraExpressionInferencesNestedGenericCall1.ts, 89, 3))
+
+declare const server: FastifyInstance<ZodTypeProvider>;
+>server : Symbol(server, Decl(intraExpressionInferencesNestedGenericCall1.ts, 92, 13))
+>FastifyInstance : Symbol(FastifyInstance, Decl(intraExpressionInferencesNestedGenericCall1.ts, 65, 1))
+>ZodTypeProvider : Symbol(ZodTypeProvider, Decl(intraExpressionInferencesNestedGenericCall1.ts, 80, 40))
+
+server.route({
+>server.route : Symbol(FastifyInstance.route, Decl(intraExpressionInferencesNestedGenericCall1.ts, 67, 69))
+>server : Symbol(server, Decl(intraExpressionInferencesNestedGenericCall1.ts, 92, 13))
+>route : Symbol(FastifyInstance.route, Decl(intraExpressionInferencesNestedGenericCall1.ts, 67, 69))
+
+  url: "/config",
+>url : Symbol(url, Decl(intraExpressionInferencesNestedGenericCall1.ts, 94, 14))
+
+  method: "GET",
+>method : Symbol(method, Decl(intraExpressionInferencesNestedGenericCall1.ts, 95, 17))
+
+  schema: {
+>schema : Symbol(schema, Decl(intraExpressionInferencesNestedGenericCall1.ts, 96, 16))
+
+    querystring: string(),
+>querystring : Symbol(querystring, Decl(intraExpressionInferencesNestedGenericCall1.ts, 97, 11))
+>string : Symbol(string, Decl(intraExpressionInferencesNestedGenericCall1.ts, 78, 2))
+
+  },
+  onRequest: verifyAuth(),
+>onRequest : Symbol(onRequest, Decl(intraExpressionInferencesNestedGenericCall1.ts, 99, 4))
+>verifyAuth : Symbol(verifyAuth, Decl(intraExpressionInferencesNestedGenericCall1.ts, 88, 5))
+
+  handler: async (req) => {
+>handler : Symbol(handler, Decl(intraExpressionInferencesNestedGenericCall1.ts, 100, 26))
+>req : Symbol(req, Decl(intraExpressionInferencesNestedGenericCall1.ts, 101, 18))
+
+    const query: string = req.query;
+>query : Symbol(query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 102, 9))
+>req.query : Symbol(FastifyRequest.query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 47, 3))
+>req : Symbol(req, Decl(intraExpressionInferencesNestedGenericCall1.ts, 101, 18))
+>query : Symbol(FastifyRequest.query, Decl(intraExpressionInferencesNestedGenericCall1.ts, 47, 3))
+
+  },
+});
+
+export {};
+
