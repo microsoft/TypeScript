@@ -4,7 +4,7 @@ import {
     addRange,
     addRelatedInfo,
     append,
-    arraysEqual,
+    arrayIsEqualTo,
     AsExpression,
     BuilderProgram,
     CancellationToken,
@@ -1289,12 +1289,12 @@ export function isProgramUptoDate(
     if (!program || hasChangedAutomaticTypeDirectiveNames?.()) return false;
 
     // If root file names don't match
-    if (!arraysEqual(program.getRootFileNames(), rootFileNames)) return false;
+    if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) return false;
 
     let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
     // If project references don't match
-    if (!arraysEqual(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) return false;
+    if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) return false;
 
     // If any file is not up-to-date, then the whole program is not up-to-date
     if (program.getSourceFiles().some(sourceFileNotUptoDate)) return false;
@@ -1345,7 +1345,7 @@ export function isProgramUptoDate(
             if (oldResolvedRef.commandLine.options.configFile !== newParsedCommandLine.options.configFile) return false;
 
             // check file names
-            if (!arraysEqual(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
+            if (!arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
 
             // Add to seen before checking the referenced paths of this config file
             (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
@@ -2469,7 +2469,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     // Resolved project reference has gone missing or changed
                     return !newResolvedRef ||
                         newResolvedRef.sourceFile !== oldResolvedRef.sourceFile ||
-                        !arraysEqual(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
+                        !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
                 }
                 else {
                     // A previously-unresolved reference may be resolved now
@@ -2479,7 +2479,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             (oldProjectReferences, parent) => {
                 // If array of references is changed, we cant resue old program
                 const newReferences = parent ? getResolvedProjectReferenceByPath(parent.sourceFile.path)!.commandLine.projectReferences : projectReferences;
-                return !arraysEqual(oldProjectReferences, newReferences, projectReferenceIsEqualTo);
+                return !arrayIsEqualTo(oldProjectReferences, newReferences, projectReferenceIsEqualTo);
             },
         );
     }
@@ -2498,7 +2498,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // there is an old program, check if we can reuse its structure
         const oldRootNames = oldProgram.getRootFileNames();
-        if (!arraysEqual(oldRootNames, rootNames)) {
+        if (!arrayIsEqualTo(oldRootNames, rootNames)) {
             return StructureIsReused.Not;
         }
 
@@ -2588,7 +2588,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     structureIsReused = StructureIsReused.SafeModules;
                 }
                 // The `newSourceFile` object was created for the new program.
-                else if (!arraysEqual(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
+                else if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
                     // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
                     structureIsReused = StructureIsReused.SafeModules;
                 }
@@ -2598,18 +2598,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     structureIsReused = StructureIsReused.SafeModules;
                 }
                 // check tripleslash references
-                else if (!arraysEqual(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
+                else if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                     // tripleslash references has changed
                     structureIsReused = StructureIsReused.SafeModules;
                 }
                 else {
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
-                    if (!arraysEqual(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
-                    else if (!arraysEqual(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                    else if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
                         // moduleAugmentations has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -2617,7 +2617,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         // dynamicImport has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
-                    else if (!arraysEqual(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
+                    else if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'types' references has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -2693,7 +2693,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
         else {
             automaticTypeDirectiveNames = getAutomaticTypeDirectiveNames(options, host);
-            if (!arraysEqual(oldProgram.getAutomaticTypeDirectiveNames(), automaticTypeDirectiveNames)) return StructureIsReused.SafeModules;
+            if (!arrayIsEqualTo(oldProgram.getAutomaticTypeDirectiveNames(), automaticTypeDirectiveNames)) return StructureIsReused.SafeModules;
         }
         missingFileNames = oldProgram.getMissingFilePaths();
 

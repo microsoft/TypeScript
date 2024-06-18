@@ -6,8 +6,8 @@ import {
     addSyntheticLeadingComment,
     AllAccessorDeclarations,
     append,
+    arrayIsEqualTo,
     ArrayLiteralExpression,
-    arraysEqual,
     ArrowFunction,
     AssignmentExpression,
     BinaryExpression,
@@ -2620,7 +2620,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
 
         statements.unshift(...prologue);
-        if (isBlock(body) && arraysEqual(statements, body.statements)) {
+        if (isBlock(body) && arrayIsEqualTo(statements, body.statements)) {
             // no changes were made, preserve the tree
             return body;
         }
