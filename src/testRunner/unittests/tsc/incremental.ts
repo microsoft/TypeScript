@@ -676,4 +676,30 @@ console.log(a);`,
         verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ true);
         verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ true);
     });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "when noLib toggles",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/a.d.ts": `declare const a = "hello";`,
+                "/src/b.ts": `const b = 10;`,
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                        incremental: true,
+                        lib: ["es6"],
+                    },
+                }),
+                "/lib/lib.es2015.d.ts": libContent,
+            }),
+        commandLineArgs: ["-p", "/src/tsconfig.json"],
+        edits: [
+            {
+                ...noChangeRun,
+                commandLineArgs: ["-p", "/src/tsconfig.json", "--noLib"],
+            },
+        ],
+        baselinePrograms: true,
+    });
 });
