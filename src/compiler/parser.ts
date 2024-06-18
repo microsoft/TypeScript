@@ -306,7 +306,6 @@ import {
     PrefixUnaryOperator,
     PrimaryExpression,
     PrivateIdentifier,
-    PropertyAccessEntityNameExpression,
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
