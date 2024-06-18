@@ -121,7 +121,6 @@ export declare class InClassMethodOk2 {
 export declare class InClassMethodBad {
     o(array: T | undefined, rParam: string): void;
 }
-export {};
 
 
 //// [Diagnostics reported]

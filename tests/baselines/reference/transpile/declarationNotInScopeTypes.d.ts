@@ -18,7 +18,6 @@ declare const x = "";
 export declare function one(): typeof x;
 export declare function two(): "";
 export declare function three(): string;
-export {};
 
 
 //// [Diagnostics reported]

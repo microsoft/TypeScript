@@ -19,7 +19,6 @@ export declare const o: (p1: typeof nImported, p2: typeof nNotImported, p3: type
     bar: typeof nPrivate;
     baz: typeof nNotImported;
 };
-export {};
 //// [b.d.ts] ////
 export declare const g: any;
 

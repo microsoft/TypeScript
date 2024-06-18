@@ -507,7 +507,7 @@ export function transformDeclarations(context: TransformationContext) {
         else {
             const statements = visitNodes(node.statements, visitDeclarationStatements, isStatement);
             combinedStatements = setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
-            if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
+            if (isExternalModule(node) && !resultHasExternalModuleIndicator) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
@@ -1529,8 +1529,6 @@ export function transformDeclarations(context: TransformationContext) {
                 needsDeclare = false;
                 const inner = input.body;
                 if (inner && inner.kind === SyntaxKind.ModuleBlock) {
-                    const oldNeedsScopeFix = needsScopeFixMarker;
-                    const oldHasScopeFix = resultHasScopeMarker;
                     resultHasScopeMarker = false;
                     needsScopeFixMarker = false;
                     const statements = visitNodes(inner.statements, visitDeclarationStatements, isStatement);
@@ -1552,8 +1550,6 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                     const body = factory.updateModuleBlock(inner, lateStatements);
                     needsDeclare = previousNeedsDeclare;
-                    needsScopeFixMarker = oldNeedsScopeFix;
-                    resultHasScopeMarker = oldHasScopeFix;
                     const mods = ensureModifiers(input);
 
                     return cleanup(updateModuleDeclarationAndKeyword(
@@ -1722,8 +1718,6 @@ export function transformDeclarations(context: TransformationContext) {
                 ));
             }
         }
-        // Anything left unhandled is an error, so this should be unreachable
-        return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
 
         function cleanup<T extends Node>(node: T | undefined): T | undefined {
             if (isEnclosingDeclaration(input)) {

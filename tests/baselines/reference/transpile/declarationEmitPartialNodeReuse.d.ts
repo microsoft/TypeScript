@@ -23,7 +23,6 @@ export declare const o: (p1: SpecialString, p2: PrivateSpecialString, p3: N.Spec
     bar: PrivateSpecialString;
     baz: N.SpecialString;
 };
-export {};
 //// [b.d.ts] ////
 export declare const g: any;
 

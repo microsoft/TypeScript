@@ -99,7 +99,6 @@ export declare const D: {
     1: number;
     "2": number;
 };
-export {};
 
 
 //// [Diagnostics reported]
