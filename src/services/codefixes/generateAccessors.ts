@@ -55,7 +55,7 @@ import {
     textChanges,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;

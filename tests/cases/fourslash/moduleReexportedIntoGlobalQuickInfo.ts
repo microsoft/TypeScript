@@ -12,5 +12,4 @@
 // @Filename: /index.ts
 ////let v = new /*1*/THREE.Vector3();
 
-verify.quickInfoAt("1", `module THREE
-var THREE: typeof import("/node_modules/@types/three/index")`);
+verify.quickInfoAt("1", `const THREE: typeof import("/node_modules/@types/three/index")`);

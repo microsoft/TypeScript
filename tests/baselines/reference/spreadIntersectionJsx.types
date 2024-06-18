@@ -6,18 +6,23 @@ const React: any = null;
 
 class A { a; }
 >A : A
+>  : ^
 >a : any
 
 class C { c; }
 >C : C
+>  : ^
 >c : any
 
 let intersected: A & C;
 >intersected : A & C
+>            : ^^^^^
 
 let element = <div { ...intersected } />;
 >element : error
 ><div { ...intersected } /> : error
 >div : any
+>    : ^^^
 >intersected : A & C
+>            : ^^^^^
 

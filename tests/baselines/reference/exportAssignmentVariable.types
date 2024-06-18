@@ -3,16 +3,22 @@
 === exportAssignmentVariable_B.ts ===
 import y = require("./exportAssignmentVariable_A");
 >y : number
+>  : ^^^^^^
 
 var n: number = y;
 >n : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 === exportAssignmentVariable_A.ts ===
 var x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 export = x;
 >x : number
+>  : ^^^^^^
 

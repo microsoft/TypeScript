@@ -10,8 +10,10 @@ interface JQuery {
 /// <reference types="jquery" preserve="true" />
 namespace Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     export var x: JQuery;
 >x : JQuery
+>  : ^^^^^^
 }
 

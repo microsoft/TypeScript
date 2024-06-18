@@ -16,8 +16,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /a.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -108,13 +107,13 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "name": "Move to a new file",
-          "description": "Move to a new file",
+          "name": "Move to file",
+          "description": "Move to file",
           "actions": [
             {
-              "name": "Move to a new file",
-              "description": "Move to a new file",
-              "kind": "refactor.move.newFile",
+              "name": "Move to file",
+              "description": "Move to file",
+              "kind": "refactor.move.file",
               "range": {
                 "start": {
                   "line": 1,
@@ -129,13 +128,13 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to file",
-          "description": "Move to file",
+          "name": "Move to a new file",
+          "description": "Move to a new file",
           "actions": [
             {
-              "name": "Move to file",
-              "description": "Move to file",
-              "kind": "refactor.move.file",
+              "name": "Move to a new file",
+              "description": "Move to a new file",
+              "kind": "refactor.move.newFile",
               "range": {
                 "start": {
                   "line": 1,

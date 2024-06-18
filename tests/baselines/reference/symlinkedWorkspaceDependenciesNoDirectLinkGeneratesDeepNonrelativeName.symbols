@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/symlinkedWorkspaceDependenciesNoDirectLinkGeneratesDeepNonrelativeName.ts] ////
+
+=== workspace/packageA/foo.d.ts ===
+export declare class Foo {
+>Foo : Symbol(Foo, Decl(foo.d.ts, 0, 0))
+
+    private f: any;
+>f : Symbol(Foo.f, Decl(foo.d.ts, 0, 26))
+}
+=== workspace/packageA/index.d.ts ===
+import { Foo } from "./foo.js";
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+export function create(): Foo;
+>create : Symbol(create, Decl(index.d.ts, 0, 31))
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 8))
+
+=== workspace/packageB/index.d.ts ===
+import { create } from "package-a";
+>create : Symbol(create, Decl(index.d.ts, 0, 8))
+
+export declare function invoke(): ReturnType<typeof create>;
+>invoke : Symbol(invoke, Decl(index.d.ts, 0, 35))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>create : Symbol(create, Decl(index.d.ts, 0, 8))
+
+=== workspace/packageC/index.ts ===
+import * as pkg from "package-b";
+>pkg : Symbol(pkg, Decl(index.ts, 0, 6))
+
+export const a = pkg.invoke();
+>a : Symbol(a, Decl(index.ts, 2, 12))
+>pkg.invoke : Symbol(pkg.invoke, Decl(index.d.ts, 0, 35))
+>pkg : Symbol(pkg, Decl(index.ts, 0, 6))
+>invoke : Symbol(pkg.invoke, Decl(index.d.ts, 0, 35))
+

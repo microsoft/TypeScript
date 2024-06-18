@@ -20,10 +20,18 @@ declare namespace ts {
             export import ClassificationType = ts.ClassificationType;
             export import CompletionsTriggerCharacter = ts.CompletionsTriggerCharacter;
             export import CompletionTriggerKind = ts.CompletionTriggerKind;
+            export import InlayHintKind = ts.InlayHintKind;
             export import OrganizeImportsMode = ts.OrganizeImportsMode;
+            export import RefactorActionInfo = ts.RefactorActionInfo;
             export import RefactorTriggerReason = ts.RefactorTriggerReason;
             export import RenameInfoFailure = ts.RenameInfoFailure;
             export import SemicolonPreference = ts.SemicolonPreference;
+            export import SignatureHelpCharacterTypedReason = ts.SignatureHelpCharacterTypedReason;
+            export import SignatureHelpInvokedReason = ts.SignatureHelpInvokedReason;
+            export import SignatureHelpParameter = ts.SignatureHelpParameter;
+            export import SignatureHelpRetriggerCharacter = ts.SignatureHelpRetriggerCharacter;
+            export import SignatureHelpRetriggeredReason = ts.SignatureHelpRetriggeredReason;
+            export import SignatureHelpTriggerCharacter = ts.SignatureHelpTriggerCharacter;
             export import SignatureHelpTriggerReason = ts.SignatureHelpTriggerReason;
             export import SymbolDisplayPart = ts.SymbolDisplayPart;
             export import UserPreferences = ts.UserPreferences;
@@ -99,6 +107,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -112,6 +121,7 @@ declare namespace ts {
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
+                MapCode = "mapCode",
             }
             /**
              * A TypeScript Server message
@@ -469,6 +479,33 @@ declare namespace ts {
                     files: string[];
                 };
             }
+            /**
+             * Request refactorings at a given position post pasting text from some other location.
+             */
+            export interface GetPasteEditsRequest extends Request {
+                command: CommandTypes.GetPasteEdits;
+                arguments: GetPasteEditsRequestArgs;
+            }
+            export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+                /** The text that gets pasted in a file.  */
+                pastedText: string[];
+                /** Locations of where the `pastedText` gets added in a file. If the length of the `pastedText` and `pastedLocations` are not the same,
+                 *  then the `pastedText` is combined into one and added at all the `pastedLocations`.
+                 */
+                pasteLocations: TextSpan[];
+                /** The source location of each `pastedText`. If present, the length of `spans` must be equal to the length of `pastedText`. */
+                copiedFrom?: {
+                    file: string;
+                    spans: TextSpan[];
+                };
+            }
+            export interface GetPasteEditsResponse extends Response {
+                body: PasteEditsAction;
+            }
+            export interface PasteEditsAction {
+                edits: FileCodeEdits[];
+                fixId?: {};
+            }
             export interface GetEditsForRefactorRequest extends Request {
                 command: CommandTypes.GetEditsForRefactor;
                 arguments: GetEditsForRefactorRequestArgs;
@@ -547,23 +584,7 @@ declare namespace ts {
             }
             export interface ApplyCodeActionCommandResponse extends Response {
             }
-            export interface FileRangeRequestArgs extends FileRequestArgs {
-                /**
-                 * The line number for the request (1-based).
-                 */
-                startLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                startOffset: number;
-                /**
-                 * The line number for the request (1-based).
-                 */
-                endLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                endOffset: number;
+            export interface FileRangeRequestArgs extends FileRequestArgs, FileRange {
             }
             /**
              * Instances of this interface specify errorcodes on a specific location in a sourcefile.
@@ -1342,12 +1363,13 @@ declare namespace ts {
             }
             export interface WatchChangeRequest extends Request {
                 command: CommandTypes.WatchChange;
-                arguments: WatchChangeRequestArgs;
+                arguments: WatchChangeRequestArgs | readonly WatchChangeRequestArgs[];
             }
             export interface WatchChangeRequestArgs {
                 id: number;
-                path: string;
-                eventType: "create" | "delete" | "update";
+                created?: string[];
+                deleted?: string[];
+                updated?: string[];
             }
             /**
              * Request to obtain the list of files that should be regenerated if target file is recompiled.
@@ -1732,6 +1754,33 @@ declare namespace ts {
             export interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
             }
+            export interface MapCodeRequestArgs extends FileRequestArgs {
+                /**
+                 * The files and changes to try and apply/map.
+                 */
+                mapping: MapCodeRequestDocumentMapping;
+            }
+            export interface MapCodeRequestDocumentMapping {
+                /**
+                 * The specific code to map/insert/replace in the file.
+                 */
+                contents: string[];
+                /**
+                 * Areas of "focus" to inform the code mapper with. For example, cursor
+                 * location, current selection, viewport, etc. Nested arrays denote
+                 * priority: toplevel arrays are more important than inner arrays, and
+                 * inner array priorities are based on items within that array. Items
+                 * earlier in the arrays have higher priority.
+                 */
+                focusLocations?: TextSpan[][];
+            }
+            export interface MapCodeRequest extends FileRequest {
+                command: CommandTypes.MapCode;
+                arguments: MapCodeRequestArgs;
+            }
+            export interface MapCodeResponse extends Response {
+                body: readonly FileCodeEdits[];
+            }
             /**
              * Synchronous request for semantic diagnostics of one file.
              */
@@ -1801,7 +1850,7 @@ declare namespace ts {
                  * List of file names for which to compute compiler errors.
                  * The files will be checked in list order.
                  */
-                files: string[];
+                files: (string | FileRangesRequestArgs)[];
                 /**
                  * Delay in milliseconds to wait before starting to compute
                  * errors for the files in the file list
@@ -1821,6 +1870,27 @@ declare namespace ts {
             export interface GeterrRequest extends Request {
                 command: CommandTypes.Geterr;
                 arguments: GeterrRequestArgs;
+            }
+            export interface FileRange {
+                /**
+                 * The line number for the request (1-based).
+                 */
+                startLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                startOffset: number;
+                /**
+                 * The line number for the request (1-based).
+                 */
+                endLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                endOffset: number;
+            }
+            export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
+                ranges: FileRange[];
             }
             export type RequestCompletedEventName = "requestCompleted";
             /**
@@ -1904,8 +1974,16 @@ declare namespace ts {
                  * An array of diagnostic information items.
                  */
                 diagnostics: Diagnostic[];
+                /**
+                 * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+                 */
+                spans?: TextSpan[];
+                /**
+                 * Time spent computing the diagnostics, in milliseconds.
+                 */
+                duration?: number;
             }
-            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
              * Event message for DiagnosticEventKind event types.
              * These events provide syntactic and semantic errors for a file.
@@ -2032,6 +2110,7 @@ declare namespace ts {
                 readonly id: number;
                 readonly path: string;
                 readonly recursive: boolean;
+                readonly ignoreUpdate?: boolean;
             }
             export type CloseFileWatcherEventName = "closeFileWatcher";
             export interface CloseFileWatcherEvent extends Event {
@@ -2414,6 +2493,7 @@ declare namespace ts {
                 ES2020 = "es2020",
                 ES2021 = "es2021",
                 ES2022 = "es2022",
+                ES2023 = "es2023",
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
@@ -2717,7 +2797,6 @@ declare namespace ts {
             private compilerOptions;
             compileOnSaveEnabled: boolean;
             protected watchOptions: WatchOptions | undefined;
-            private rootFiles;
             private rootFilesMap;
             private program;
             private externalFiles;
@@ -2798,7 +2877,7 @@ declare namespace ts {
             private detachScriptInfoIfNotRoot;
             isClosed(): boolean;
             hasRoots(): boolean;
-            getRootFiles(): ts.server.NormalizedPath[];
+            getRootFiles(): NormalizedPath[];
             getRootScriptInfos(): ts.server.ScriptInfo[];
             getScriptInfos(): ScriptInfo[];
             getExcludedFiles(): readonly NormalizedPath[];
@@ -2811,7 +2890,6 @@ declare namespace ts {
             addMissingFileRoot(fileName: NormalizedPath): void;
             removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
             registerFileUpdate(fileName: string): void;
-            markAsDirty(): void;
             /**
              * Updates set of files that contribute to this project
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -2856,10 +2934,8 @@ declare namespace ts {
         class AutoImportProviderProject extends Project {
             private hostProject;
             private rootFileNames;
-            isOrphan(): boolean;
             updateGraph(): boolean;
             hasRoots(): boolean;
-            markAsDirty(): void;
             getScriptFileNames(): string[];
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
@@ -2872,8 +2948,6 @@ declare namespace ts {
          */
         class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
-            /** Ref count to the project when opened from external project */
-            private externalProjectRefCount;
             private projectReferences;
             /**
              * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -3116,7 +3190,11 @@ declare namespace ts {
             /**
              * Open files: with value being project root path, and key being Path of the file that is open
              */
-            readonly openFiles: Map<string, NormalizedPath | undefined>;
+            readonly openFiles: Map<Path, NormalizedPath | undefined>;
+            /** Config files looked up and cached config files for open script info */
+            private readonly configFileForOpenFiles;
+            /** Set of open script infos that are root of inferred project */
+            private rootOfInferredProjects;
             /**
              * Map of open files that are opened without complete path but have projectRoot as current directory
              */
@@ -3135,6 +3213,11 @@ declare namespace ts {
             private safelist;
             private readonly legacySafelist;
             private pendingProjectUpdates;
+            /**
+             * All the open script info that needs recalculation of the default project,
+             * this also caches config file info before config file change was detected to use it in case projects are not updated yet
+             */
+            private pendingOpenFileProjectUpdates?;
             readonly currentDirectory: NormalizedPath;
             readonly toCanonicalFileName: (f: string) => string;
             readonly host: ServerHost;
@@ -3166,6 +3249,11 @@ declare namespace ts {
             setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
+            /**
+             * If there is default project calculation pending for this file,
+             * then it completes that calculation so that correct default project is used for the project
+             */
+            private tryGetDefaultProjectForEnsuringConfiguredProjectForFile;
             private doEnsureDefaultProjectForFile;
             getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
             /**
@@ -3195,14 +3283,6 @@ declare namespace ts {
             private deleteScriptInfo;
             private configFileExists;
             /**
-             * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
-             */
-            private configFileExistenceImpactsRootOfInferredProject;
-            /**
-             * This is called on file close, so that we stop watching the config file for this script info
-             */
-            private stopWatchingConfigFilesForClosedScriptInfo;
-            /**
              * This function tries to search for a tsconfig.json for the given file.
              * This is different from the method the compiler uses because
              * the compiler can assume it will always start searching in the
@@ -3211,17 +3291,10 @@ declare namespace ts {
              * the newly opened file.
              */
             private forEachConfigFileLocation;
-            /**
-             * This function tries to search for a tsconfig.json for the given file.
-             * This is different from the method the compiler uses because
-             * the compiler can assume it will always start searching in the
-             * current directory (the directory in which tsc was invoked).
-             * The server must start searching from the directory containing
-             * the newly opened file.
-             * If script info is passed in, it is asserted to be open script info
-             * otherwise just file name
-             */
-            private getConfigFileNameForFile;
+            /** Get cached configFileName for scriptInfo or ancestor of open script info */
+            private getConfigFileNameForFileFromCache;
+            /** Caches the configFilename for script info or ancestor of open script info */
+            private setConfigFileNameForFileInCache;
             private printProjects;
             private getConfiguredProjectByCanonicalConfigFilePath;
             private findExternalProjectByProjectName;
@@ -3231,7 +3304,6 @@ declare namespace ts {
             private addFilesToNonInferredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
-            private sendConfigFileDiagEvent;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
@@ -3245,7 +3317,6 @@ declare namespace ts {
             private refreshScriptInfosInDirectory;
             private stopWatchingScriptInfo;
             private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
-            private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
             getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
                 fileExists(path: string): boolean;
             }): ScriptInfo | undefined;
@@ -3264,14 +3335,6 @@ declare namespace ts {
              * This does not reload contents of open files from disk. But we could do that if needed
              */
             reloadProjects(): void;
-            /**
-             * This function goes through all the openFiles and tries to file the config file for them.
-             * If the config file is found and it refers to existing project, it reloads it either immediately
-             * or schedules it for reload depending on delayReload option
-             * If there is no existing project it just opens the configured project for the config file
-             * reloadForInfo provides a way to filter out files to reload configured project for
-             */
-            private reloadConfiguredProjectForFiles;
             /**
              * Remove the root of inferred project if script info is part of another project
              */
@@ -3293,11 +3356,21 @@ declare namespace ts {
             private findExternalProjectContainingOpenScriptInfo;
             private getOrCreateOpenScriptInfo;
             private assignProjectToOpenedScriptInfo;
-            private createAncestorProjects;
+            /**
+             * Finds the default configured project for given info
+             * For any tsconfig found, it looks into that project, if not then all its references,
+             * The search happens for all tsconfigs till projectRootPath
+             */
+            private tryFindDefaultConfiguredProjectForOpenScriptInfo;
+            /**
+             * Finds the default configured project, if found, it creates the solution projects (does not load them right away)
+             * with Find: finds the projects even if the project is deferredClosed
+             */
+            private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
             private ensureProjectChildren;
-            private cleanupAfterOpeningFile;
+            private cleanupConfiguredProjects;
+            private cleanupProjectsAndScriptInfos;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
-            private removeOrphanConfiguredProjects;
             private removeOrphanScriptInfos;
             private telemetryOnOpenFile;
             /**
@@ -3306,7 +3379,6 @@ declare namespace ts {
              */
             closeClientFile(uncheckedFileName: string): void;
             private collectChanges;
-            private closeConfiguredProjectReferencedFromExternalProject;
             closeExternalProject(uncheckedFileName: string): void;
             openExternalProjects(projects: protocol.ExternalProject[]): void;
             /** Makes a filename safe to insert in a RegExp */
@@ -3319,7 +3391,6 @@ declare namespace ts {
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;
             private enableRequestedPluginsWorker;
-            private enableRequestedPluginsForProjectAsync;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
@@ -3328,10 +3399,6 @@ declare namespace ts {
             resetRequest(requestId: number): void;
         }
         const nullCancellationToken: ServerCancellationToken;
-        interface PendingErrorCheck {
-            fileName: NormalizedPath;
-            project: Project;
-        }
         /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
@@ -3402,6 +3469,7 @@ declare namespace ts {
             private semanticCheck;
             private syntacticCheck;
             private suggestionCheck;
+            private regionSemanticCheck;
             private sendDiagnosticsEvent;
             /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;
@@ -3438,6 +3506,7 @@ declare namespace ts {
             private getLinkedEditingRange;
             private getDocumentHighlights;
             private provideInlayHints;
+            private mapCode;
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
@@ -3497,6 +3566,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -3505,6 +3575,7 @@ declare namespace ts {
             private getStartAndEndPosition;
             private mapCodeAction;
             private mapCodeFixAction;
+            private mapPasteEditsAction;
             private mapTextChangesToCodeEdits;
             private mapTextChangeToCodeEdit;
             private convertTextChangeToCodeEdit;
@@ -3555,7 +3626,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.5";
+    const versionMajorMinor = "5.6";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -3940,12 +4011,13 @@ declare namespace ts {
         JSDocPropertyTag = 348,
         JSDocThrowsTag = 349,
         JSDocSatisfiesTag = 350,
-        SyntaxList = 351,
-        NotEmittedStatement = 352,
-        PartiallyEmittedExpression = 353,
-        CommaListExpression = 354,
-        SyntheticReferenceExpression = 355,
-        Count = 356,
+        JSDocImportTag = 351,
+        SyntaxList = 352,
+        NotEmittedStatement = 353,
+        PartiallyEmittedExpression = 354,
+        CommaListExpression = 355,
+        SyntheticReferenceExpression = 356,
+        Count = 357,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -3974,9 +4046,9 @@ declare namespace ts {
         LastStatement = 259,
         FirstNode = 166,
         FirstJSDocNode = 309,
-        LastJSDocNode = 350,
+        LastJSDocNode = 351,
         FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 350,
+        LastJSDocTagNode = 351,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -4131,7 +4203,7 @@ declare namespace ts {
     type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
     type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
-    type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
+    type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
     enum NodeFlags {
         None = 0,
         Let = 1,
@@ -4212,7 +4284,7 @@ declare namespace ts {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): Node[];
+        getChildren(sourceFile?: SourceFile): readonly Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
@@ -4374,12 +4446,6 @@ declare namespace ts {
     }
     interface Identifier {
         readonly text: string;
-    }
-    interface Identifier {
-        /** @deprecated Use `idKeyword(identifier)` instead. */
-        readonly originalKeywordKind?: SyntaxKind;
-        /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
-        readonly isInJSDocNamespace?: boolean;
     }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
@@ -5426,7 +5492,7 @@ declare namespace ts {
     type NamedExportBindings = NamespaceExport | NamedExports;
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
-        readonly parent: ImportDeclaration;
+        readonly parent: ImportDeclaration | JSDocImportTag;
         readonly isTypeOnly: boolean;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
@@ -5461,7 +5527,7 @@ declare namespace ts {
     interface NamespaceExport extends NamedDeclaration {
         readonly kind: SyntaxKind.NamespaceExport;
         readonly parent: ExportDeclaration;
-        readonly name: Identifier;
+        readonly name: ModuleExportName;
     }
     interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.NamespaceExportDeclaration;
@@ -5493,7 +5559,7 @@ declare namespace ts {
     interface ImportSpecifier extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportSpecifier;
         readonly parent: NamedImports;
-        readonly propertyName?: Identifier;
+        readonly propertyName?: ModuleExportName;
         readonly name: Identifier;
         readonly isTypeOnly: boolean;
     }
@@ -5501,9 +5567,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.ExportSpecifier;
         readonly parent: NamedExports;
         readonly isTypeOnly: boolean;
-        readonly propertyName?: Identifier;
-        readonly name: Identifier;
+        readonly propertyName?: ModuleExportName;
+        readonly name: ModuleExportName;
     }
+    type ModuleExportName = Identifier | StringLiteral;
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
     type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
     type TypeOnlyImportDeclaration =
@@ -5783,60 +5850,12 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    enum FlowFlags {
-        Unreachable = 1,
-        Start = 2,
-        BranchLabel = 4,
-        LoopLabel = 8,
-        Assignment = 16,
-        TrueCondition = 32,
-        FalseCondition = 64,
-        SwitchClause = 128,
-        ArrayMutation = 256,
-        Call = 512,
-        ReduceLabel = 1024,
-        Referenced = 2048,
-        Shared = 4096,
-        Label = 12,
-        Condition = 96,
-    }
-    type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
-    interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;
-    }
-    interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
-    }
-    interface FlowLabel extends FlowNodeBase {
-        antecedents: FlowNode[] | undefined;
-    }
-    interface FlowAssignment extends FlowNodeBase {
-        node: Expression | VariableDeclaration | BindingElement;
-        antecedent: FlowNode;
-    }
-    interface FlowCall extends FlowNodeBase {
-        node: CallExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowCondition extends FlowNodeBase {
-        node: Expression;
-        antecedent: FlowNode;
-    }
-    interface FlowSwitchClause extends FlowNodeBase {
-        switchStatement: SwitchStatement;
-        clauseStart: number;
-        clauseEnd: number;
-        antecedent: FlowNode;
-    }
-    interface FlowArrayMutation extends FlowNodeBase {
-        node: CallExpression | BinaryExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowReduceLabel extends FlowNodeBase {
-        target: FlowLabel;
-        antecedents: FlowNode[];
-        antecedent: FlowNode;
+    interface JSDocImportTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocImportTag;
+        readonly parent: JSDoc;
+        readonly importClause?: ImportClause;
+        readonly moduleSpecifier: Expression;
+        readonly attributes?: ImportAttributes;
     }
     type FlowType = Type | IncompleteType;
     interface IncompleteType {
@@ -6177,6 +6196,7 @@ declare namespace ts {
         getNumberType(): Type;
         getNumberLiteralType(value: number): NumberLiteralType;
         getBigIntType(): Type;
+        getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
         getBooleanType(): Type;
         getFalseType(): Type;
         getTrueType(): Type;
@@ -6590,6 +6610,7 @@ declare namespace ts {
         ContainsSpread = 2097152,
         ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
+        SingleSignatureType = 134217728,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
@@ -6645,7 +6666,11 @@ declare namespace ts {
         minLength: number;
         /** Number of initial required or optional elements */
         fixedLength: number;
-        /** True if tuple has any rest or variadic elements */
+        /**
+         * True if tuple has any rest or variadic elements
+         *
+         * @deprecated Use `.combinedFlags & ElementFlags.Variable` instead
+         */
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
@@ -6905,6 +6930,7 @@ declare namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
+        isolatedDeclarations?: boolean;
         jsx?: JsxEmit;
         /** @deprecated */
         keyofStringsOnly?: boolean;
@@ -7064,6 +7090,7 @@ declare namespace ts {
         ES2020 = 7,
         ES2021 = 8,
         ES2022 = 9,
+        ES2023 = 10,
         ESNext = 99,
         JSON = 100,
         Latest = 99,
@@ -7602,20 +7629,20 @@ declare namespace ts {
         updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
-        createNamespaceExport(name: Identifier): NamespaceExport;
-        updateNamespaceExport(node: NamespaceExport, name: Identifier): NamespaceExport;
+        createNamespaceExport(name: ModuleExportName): NamespaceExport;
+        updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport;
         createNamedImports(elements: readonly ImportSpecifier[]): NamedImports;
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
-        createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
+        createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
+        updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier;
         createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
         updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
         createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, attributes?: ImportAttributes): ExportDeclaration;
         updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, attributes: ImportAttributes | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
-        createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
-        updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ExportSpecifier;
+        createExportSpecifier(isTypeOnly: boolean, propertyName: string | ModuleExportName | undefined, name: string | ModuleExportName): ExportSpecifier;
+        updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier;
         createExternalModuleReference(expression: Expression): ExternalModuleReference;
         updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
         createJSDocAllType(): JSDocAllType;
@@ -7696,6 +7723,8 @@ declare namespace ts {
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+        createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+        updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -8027,7 +8056,6 @@ declare namespace ts {
     }
     interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
-        _children: Node[];
     }
     enum ListFormat {
         None = 0,
@@ -8932,6 +8960,7 @@ declare namespace ts {
     function isExportDeclaration(node: Node): node is ExportDeclaration;
     function isNamedExports(node: Node): node is NamedExports;
     function isExportSpecifier(node: Node): node is ExportSpecifier;
+    function isModuleExportName(node: Node): node is ModuleExportName;
     function isMissingDeclaration(node: Node): node is MissingDeclaration;
     function isNotEmittedStatement(node: Node): node is NotEmittedStatement;
     function isExternalModuleReference(node: Node): node is ExternalModuleReference;
@@ -8998,6 +9027,7 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isJSDocImportTag(node: Node): node is JSDocImportTag;
     function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
     function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
     function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;
@@ -9435,6 +9465,7 @@ declare namespace ts {
     interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
+        diagnostics: readonly Diagnostic[];
     }
     interface OutputFile {
         name: string;
@@ -10081,6 +10112,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10097,6 +10129,20 @@ declare namespace ts {
         All = "All",
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
+    }
+    interface PasteEdits {
+        edits: readonly FileTextChanges[];
+        fixId?: {};
+    }
+    interface PasteEditsArgs {
+        targetFile: string;
+        pastedText: string[];
+        pasteLocations: TextRange[];
+        copiedFrom: {
+            file: string;
+            range: TextRange[];
+        } | undefined;
+        preferences: UserPreferences;
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */
@@ -11169,6 +11215,7 @@ declare namespace ts {
     };
     function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
     function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput;
+    function transpileDeclaration(input: string, transpileOptions: TranspileOptions): TranspileOutput;
     function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
     interface TranspileOptions {
         compilerOptions?: CompilerOptions;

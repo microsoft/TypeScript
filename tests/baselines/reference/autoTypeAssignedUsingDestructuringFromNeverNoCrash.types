@@ -5,23 +5,32 @@
 
 declare const b: null;
 >b : null
+>  : ^^^^
 
 let file;
 >file : any
+>     : ^^^
 
 if (b === null) {
 >b === null : boolean
+>           : ^^^^^^^
 >b : null
+>  : ^^^^
 
   // empty
 } else {
   [file] = b;
 >[file] = b : never
+>           : ^^^^^
 >[file] : [any]
+>       : ^^^^^
 >file : any
+>     : ^^^
 >b : never
+>  : ^^^^^
 }
 
 file; // request flow type here
 >file : any
+>     : ^^^
 

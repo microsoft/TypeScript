@@ -175,7 +175,7 @@ interface ScriptHostInterface { }
 
 /home/src/lib/tsc.js -w project1/core.d.ts project1/utils.d.ts project1/file.ts project1/index.ts project1/file2.ts --lib es5,dom --traceResolution --explainFiles --extendedDiagnostics
 Output::
-[[90m12:01:33 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/src/projects CaseSensitiveFileNames: false
 Synchronizing program
@@ -266,7 +266,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -394,10 +394,11 @@ Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
 2: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -456,7 +457,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -571,10 +572,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -602,7 +604,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -670,10 +672,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -705,7 +708,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:02 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -796,6 +799,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -808,10 +812,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -855,7 +860,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:16 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -959,10 +964,11 @@ Before running Timeout callback:: count: 2
 7: timerToUpdateProgram
 8: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:18 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -1023,7 +1029,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:28 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1127,6 +1133,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1139,10 +1146,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:02:32 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
@@ -1186,7 +1194,7 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90m12:02:42 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

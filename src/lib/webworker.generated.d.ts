@@ -532,6 +532,17 @@ interface ReadableStreamGetReaderOptions {
     mode?: ReadableStreamReaderMode;
 }
 
+interface ReadableStreamIteratorOptions {
+    /**
+     * Asynchronously iterates over the chunks in the stream's internal queue.
+     *
+     * Asynchronously iterating over the stream will lock it, preventing any other consumer from acquiring a reader. The lock will be released if the async iterator's return() method is called, e.g. by breaking out of the loop.
+     *
+     * By default, calling the async iterator's return() method will also cancel the stream. To prevent this, use the stream's values() method, passing true for the preventCancel option.
+     */
+    preventCancel?: boolean;
+}
+
 interface ReadableStreamReadDoneResult<T> {
     done: true;
     value?: T;
@@ -629,16 +640,16 @@ interface RsaPssParams extends Algorithm {
 interface SecurityPolicyViolationEventInit extends EventInit {
     blockedURI?: string;
     columnNumber?: number;
-    disposition: SecurityPolicyViolationEventDisposition;
-    documentURI: string;
-    effectiveDirective: string;
+    disposition?: SecurityPolicyViolationEventDisposition;
+    documentURI?: string;
+    effectiveDirective?: string;
     lineNumber?: number;
-    originalPolicy: string;
+    originalPolicy?: string;
     referrer?: string;
     sample?: string;
     sourceFile?: string;
-    statusCode: number;
-    violatedDirective: string;
+    statusCode?: number;
+    violatedDirective?: string;
 }
 
 interface StorageEstimate {
@@ -953,6 +964,8 @@ declare var AbortSignal: {
     new(): AbortSignal;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_static) */
     abort(reason?: any): AbortSignal;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static) */
+    any(signals: AbortSignal[]): AbortSignal;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/timeout_static) */
     timeout(milliseconds: number): AbortSignal;
 };
@@ -5203,6 +5216,7 @@ interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
 
 /**
  * This ServiceWorker API interface represents the global execution context of a service worker.
+ * Available only in secure contexts.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope)
  */

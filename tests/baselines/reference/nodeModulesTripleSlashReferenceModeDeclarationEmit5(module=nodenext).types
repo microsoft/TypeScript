@@ -9,6 +9,7 @@ export interface LocalInterface extends ImportInterface, RequireInterface {}
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface ImportInterface {}
 }
@@ -16,6 +17,7 @@ declare global {
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface RequireInterface {}
 }

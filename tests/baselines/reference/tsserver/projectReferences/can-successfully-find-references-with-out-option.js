@@ -112,35 +112,33 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../lib/index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
-    },
-    "root": [
-      [
-        2,
-        "../../lib/index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outFile": "./lib.js"
-    },
-    "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-    "latestChangedDtsFile": "./lib.d.ts"
+  "fileNames": [
+    "../../../../../../a/lib/lib.d.ts",
+    "../../lib/index.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
   },
+  "root": [
+    [
+      2,
+      "../../lib/index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outFile": "./lib.js"
+  },
+  "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+  "latestChangedDtsFile": "./lib.d.ts",
   "version": "FakeTSVersion",
-  "size": 765
+  "size": 753
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -152,6 +150,18 @@ var container;
     container.getMyConst = getMyConst;
 })(container || (container = {}));
 
+
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo]
+{"root":["../../exec/index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../../exec/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 58
+}
 
 //// [/user/username/projects/container/built/local/compositeExec.js]
 var container;
@@ -173,37 +183,35 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../a/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../a/lib/lib.d.ts",
-      "./lib.d.ts",
-      "../../compositeexec/index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-      "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
-    },
-    "root": [
-      [
-        3,
-        "../../compositeexec/index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outFile": "./compositeExec.js"
-    },
-    "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
-    "latestChangedDtsFile": "./compositeExec.d.ts"
+  "fileNames": [
+    "../../../../../../a/lib/lib.d.ts",
+    "./lib.d.ts",
+    "../../compositeexec/index.ts"
+  ],
+  "fileInfos": {
+    "../../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+    "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
   },
+  "root": [
+    [
+      3,
+      "../../compositeexec/index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outFile": "./compositeExec.js"
+  },
+  "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
+  "latestChangedDtsFile": "./compositeExec.d.ts",
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 915
 }
 
 
@@ -216,8 +224,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/compositeExec
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -349,12 +356,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/compositeExec
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/compositeExec/tsconfig.json :: Config file name: /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/compositeExec/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/container/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -400,7 +405,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -429,8 +433,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/lib
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -516,7 +519,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
+        "configFile": "/user/username/projects/container/lib/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -717,8 +730,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/lib
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/exec/tsconfig.json",
+        "configFile": "/user/username/projects/container/exec/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -837,7 +860,6 @@ Projects::
 /user/username/projects/container/exec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 3
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/compositeexec/tsconfig.json
@@ -845,12 +867,10 @@ Projects::
 /user/username/projects/container/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/container/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

@@ -7,25 +7,33 @@ export * from "./nested";
 === nested/base.ts ===
 import { B } from "./shared";
 >B : typeof B
+>  : ^^^^^^^^
 
 export function f() {
 >f : () => B
+>  : ^^^^^^^
 
     return new B();
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 }
 
 === nested/derived.ts ===
 import { f } from "./base";
 >f : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export function g() {
 >g : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return f();
 >f() : import("index").B
+>    : ^^^^^^^^^^^^^^^^^
 >f : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 === nested/index.ts ===
@@ -38,4 +46,5 @@ export * from "./shared";
 === nested/shared.ts ===
 export class B {}
 >B : B
+>  : ^
 

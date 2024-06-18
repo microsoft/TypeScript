@@ -1,14 +1,10 @@
 import {
     verifyProgramStructure,
     verifyResolutionCache,
-} from "../../../harness/incrementalUtils";
-import {
-    patchHostForBuildInfoReadWrite,
-} from "../../_namespaces/fakes";
-import {
-    Baseline,
-} from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+} from "../../../harness/incrementalUtils.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import { Baseline } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselinePrograms,
     CommandLineCallbacks,
@@ -16,7 +12,7 @@ import {
     CommandLineProgram,
     generateSourceMapBaselineFiles,
     tscBaselineName,
-} from "./baseline";
+} from "./baseline.js";
 import {
     changeToHostTrackingWrittenFiles,
     File,
@@ -24,7 +20,7 @@ import {
     StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -45,7 +41,6 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
         watchOrSolution: WatchOrSolution<T>,
     ) => void;
     // TODO:: sheetal: Needing these fields are technically issues that need to be fixed later
-    symlinksNotReflected?: readonly string[];
     skipStructureCheck?: true;
 }
 export interface TscWatchCheckOptions {
@@ -109,8 +104,7 @@ function changeToTestServerHostWithTimeoutLogging(host: TestServerHostTrackingWr
         log: s => baseline.push(s),
         logs: baseline,
     };
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.BeforeDiff);
     return host;
 }
 
@@ -220,7 +214,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     });
 
     if (edits) {
-        for (const { caption, edit, timeouts, symlinksNotReflected, skipStructureCheck } of edits) {
+        for (const { caption, edit, timeouts, skipStructureCheck } of edits) {
             applyEdit(sys, baseline, edit, caption);
             timeouts(sys, programs, watchOrSolution);
             programs = watchBaseline({
@@ -233,7 +227,6 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 caption,
                 resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.() : undefined,
                 useSourceOfProjectReferenceRedirect,
-                symlinksNotReflected,
             });
         }
     }
@@ -254,7 +247,6 @@ export interface WatchBaseline extends BaselineBase, TscWatchCheckOptions {
     caption?: string;
     resolutionCache?: ts.ResolutionCache;
     useSourceOfProjectReferenceRedirect?: () => boolean;
-    symlinksNotReflected?: readonly string[];
 }
 export function watchBaseline({
     baseline,
@@ -266,7 +258,6 @@ export function watchBaseline({
     caption,
     resolutionCache,
     useSourceOfProjectReferenceRedirect,
-    symlinksNotReflected,
 }: WatchBaseline) {
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
     const programs = getPrograms();
@@ -279,7 +270,13 @@ export function watchBaseline({
     // Verify program structure and resolution cache when incremental edit with tsc --watch (without build mode)
     if (resolutionCache && programs.length) {
         ts.Debug.assert(programs.length === 1);
-        verifyProgramStructureAndResolutionCache(caption!, sys, programs[0][0], resolutionCache, useSourceOfProjectReferenceRedirect, symlinksNotReflected);
+        verifyProgramStructureAndResolutionCache(
+            caption!,
+            sys,
+            programs[0][0],
+            resolutionCache,
+            useSourceOfProjectReferenceRedirect,
+        );
     }
     return programs;
 }
@@ -289,23 +286,12 @@ function verifyProgramStructureAndResolutionCache(
     program: ts.Program,
     resolutionCache: ts.ResolutionCache,
     useSourceOfProjectReferenceRedirect?: () => boolean,
-    symlinksNotReflected?: readonly string[],
 ) {
     const options = program.getCompilerOptions();
     const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
     compilerHost.trace = ts.noop;
     compilerHost.writeFile = ts.notImplemented;
     compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
-    const readFile = compilerHost.readFile;
-    compilerHost.readFile = fileName => {
-        const text = readFile.call(compilerHost, fileName);
-        if (!ts.contains(symlinksNotReflected, fileName)) return text;
-        // Handle symlinks that dont reflect the watch change
-        ts.Debug.assert(sys.toPath(sys.realpath(fileName)) !== sys.toPath(fileName));
-        const file = program.getSourceFile(fileName)!;
-        ts.Debug.assert(file.text !== text);
-        return file.text;
-    };
     verifyProgramStructure(
         ts.createProgram({
             rootNames: program.getRootFileNames(),

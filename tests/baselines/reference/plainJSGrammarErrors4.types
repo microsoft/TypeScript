@@ -3,20 +3,27 @@
 === plainJSGrammarErrors4.js ===
 class A {
 >A : A
+>  : ^
 
     #a;
 >#a : any
+>   : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.#a; // ok
 >this.#a : any
+>        : ^^^
 >this : this
+>     : ^^^^
 
         this.#b; // error
 >this.#b : any
+>        : ^^^
 >this : this
+>     : ^^^^
     }
 }
 

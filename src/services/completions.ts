@@ -1,3 +1,4 @@
+import { StringCompletions } from "./_namespaces/ts.Completions.js";
 import {
     __String,
     addToSeen,
@@ -73,6 +74,7 @@ import {
     forEach,
     formatting,
     FunctionLikeDeclaration,
+    FutureSymbolExportInfo,
     getAllSuperTypeNodes,
     getAncestor,
     getCombinedLocalAndExportSymbolFlags,
@@ -168,6 +170,8 @@ import {
     isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isIdentifierText,
     isImportableFile,
     isImportAttributes,
@@ -188,6 +192,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocImplementsTag,
+    isJSDocImportTag,
     isJSDocParameterTag,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -255,6 +260,7 @@ import {
     isVariableDeclaration,
     isVariableLike,
     JsDoc,
+    JSDocImportTag,
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocReturnTag,
@@ -293,6 +299,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -386,10 +393,7 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-} from "./_namespaces/ts";
-import {
-    StringCompletions,
-} from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 // Exported only for tests
 /** @internal */
@@ -609,7 +613,7 @@ interface ModuleSpecifierResolutionContext {
 }
 
 type ModuleSpecifierResolutionResult = "skipped" | "failed" | {
-    exportInfo?: SymbolExportInfo;
+    exportInfo?: SymbolExportInfo | FutureSymbolExportInfo;
     moduleSpecifier: string;
 };
 
@@ -1337,7 +1341,7 @@ function completionInfoFromData(
                 !uniqueNames.has(keywordEntry.name)
             ) {
                 uniqueNames.add(keywordEntry.name);
-                insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+                insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
             }
         }
     }
@@ -1345,14 +1349,14 @@ function completionInfoFromData(
     for (const keywordEntry of getContextualKeywords(contextToken, position)) {
         if (!uniqueNames.has(keywordEntry.name)) {
             uniqueNames.add(keywordEntry.name);
-            insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+            insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
         }
     }
 
     for (const literal of literals) {
         const literalEntry = createCompletionEntryForLiteral(sourceFile, preferences, literal);
         uniqueNames.add(literalEntry.name);
-        insertSorted(entries, literalEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, literalEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     if (!isChecked) {
@@ -1657,7 +1661,7 @@ function createCompletionEntry(
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let filterText: string | undefined;
-    let replacementSpan = getReplacementSpanForContextToken(replacementToken);
+    let replacementSpan = getReplacementSpanForContextToken(replacementToken, position);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
     let source = getSourceFromOrigin(origin);
@@ -1832,10 +1836,19 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = JSON.stringify(name);
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -1866,6 +1879,29 @@ function createCompletionEntry(
         data,
         ...includeSymbol ? { symbol } : undefined,
     };
+}
+
+function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number | undefined;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
+        ch = text.codePointAt(i);
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -2623,7 +2659,7 @@ export function getCompletionEntriesFromSymbols(
         /** True for locals; false for globals, module exports from other files, `this.` completions. */
         const shouldShadowLaterSymbols = (!origin || originIsTypeOnlyAlias(origin)) && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
         uniques.set(name, shouldShadowLaterSymbols);
-        insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, entry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
@@ -2704,7 +2740,8 @@ export function getCompletionEntriesFromSymbols(
     }
 
     function symbolAppearsToBeTypeOnly(symbol: Symbol): boolean {
-        return !(symbol.flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(symbol.flags & SymbolFlags.Type));
+        const flags = getCombinedLocalAndExportSymbolFlags(skipAlias(symbol, typeChecker));
+        return !(flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(flags & SymbolFlags.Type));
     }
 }
 
@@ -3158,8 +3195,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
         default:
             const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile, checker);
             return argInfo ?
-                // At `,`, treat this as the next argument after the comma.
-                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
+                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex) :
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                 // completion at `x ===/**/` should be for the right side
                 checker.getTypeAtLocation(parent.left) :
@@ -3202,6 +3238,7 @@ function getCompletionData(
     log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
     let insideJsDocTagTypeExpression = false;
+    let insideJsDocImportTag = false;
     let isInSnippetScope = false;
     if (insideComment) {
         if (hasDocComment(sourceFile, position)) {
@@ -3242,25 +3279,30 @@ function getCompletionData(
             if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                 return { kind: CompletionDataKind.JsDocTagName };
             }
-            const typeExpression = tryGetTypeExpressionFromTag(tag);
-            if (typeExpression) {
-                currentToken = getTokenAtPosition(sourceFile, position);
-                if (
-                    !currentToken ||
-                    (!isDeclarationName(currentToken) &&
-                        (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                            (currentToken.parent as JSDocPropertyTag).name !== currentToken))
-                ) {
-                    // Use as type location if inside tag's type expression
-                    insideJsDocTagTypeExpression = isCurrentlyEditingNode(typeExpression);
-                }
+            if (isJSDocImportTag(tag)) {
+                insideJsDocImportTag = true;
             }
-            if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
-                return { kind: CompletionDataKind.JsDocParameterName, tag };
+            else {
+                const typeExpression = tryGetTypeExpressionFromTag(tag);
+                if (typeExpression) {
+                    currentToken = getTokenAtPosition(sourceFile, position);
+                    if (
+                        !currentToken ||
+                        (!isDeclarationName(currentToken) &&
+                            (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
+                                (currentToken.parent as JSDocPropertyTag).name !== currentToken))
+                    ) {
+                        // Use as type location if inside tag's type expression
+                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(typeExpression);
+                    }
+                }
+                if (!insideJsDocTagTypeExpression && isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
+                    return { kind: CompletionDataKind.JsDocParameterName, tag };
+                }
             }
         }
 
-        if (!insideJsDocTagTypeExpression) {
+        if (!insideJsDocTagTypeExpression && !insideJsDocImportTag) {
             // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal
             // comment or the plain text part of a jsDoc comment, so no completion should be available
             log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
@@ -3271,7 +3313,7 @@ function getCompletionData(
     start = timestamp();
     // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
     // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
-    const isJsOnlyLocation = !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile);
+    const isJsOnlyLocation = !insideJsDocTagTypeExpression && !insideJsDocImportTag && isSourceFileJS(sourceFile);
     const tokens = getRelevantTokens(position, sourceFile);
     const previousToken = tokens.previousToken!;
     let contextToken = tokens.contextToken!;
@@ -3935,7 +3977,9 @@ function getCompletionData(
         // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
         if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
         // If some file is using ES6 modules, assume that it's OK to add more.
-        return programContainsModules(program);
+        return program.getSymlinkCache?.().hasAnySymlinks() ||
+            !!program.getCompilerOptions().paths ||
+            programContainsModules(program);
     }
 
     function isSnippetScope(scopeNode: Node): boolean {
@@ -3952,6 +3996,7 @@ function getCompletionData(
 
     function isTypeOnlyCompletion(): boolean {
         return insideJsDocTagTypeExpression
+            || insideJsDocImportTag
             || !!importStatementCompletion && isTypeOnlyImportOrExportDeclaration(location.parent)
             || !isContextTokenValueLocation(contextToken) &&
                 (isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker)
@@ -4072,20 +4117,20 @@ function getCompletionData(
                         // it should be identical regardless of which one is used. During the subsequent
                         // `CompletionEntryDetails` request, we'll get all the ExportInfos again and pick
                         // the best one based on the module specifier it produces.
-                        let exportInfo = info[0], moduleSpecifier;
+                        let exportInfo: SymbolExportInfo | FutureSymbolExportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
                             ({ exportInfo = info[0], moduleSpecifier } = result);
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
-                        const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
+                        const symbol = isDefaultExport && getLocalSymbolForExportDefault(Debug.checkDefined(exportInfo.symbol)) || Debug.checkDefined(exportInfo.symbol);
 
                         pushAutoImportSymbol(symbol, {
                             kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                             moduleSpecifier,
                             symbolName,
                             exportMapKey,
-                            exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
+                            exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : Debug.checkDefined(exportInfo.symbol).name,
                             fileName: exportInfo.moduleFileName,
                             isDefaultExport,
                             moduleSymbol: exportInfo.moduleSymbol,
@@ -4481,7 +4526,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -5234,6 +5279,10 @@ function getCompletionEntryDisplayNameForSymbol(
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
     }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
+    }
     switch (kind) {
         case CompletionKind.MemberLike:
             return originIsComputedPropertyName(origin) ? { name: origin.symbolName, needsConvertPropertyAccess: false } : undefined;
@@ -5742,9 +5791,9 @@ function getImportStatementCompletionInfo(contextToken: Node, sourceFile: Source
     }
 }
 
-function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
+function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | JSDocImportTag | Token<SyntaxKind.ImportKeyword> | undefined) {
     if (!node) return undefined;
-    const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) ?? node;
+    const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration, isJSDocImportTag)) ?? node;
     const sourceFile = top.getSourceFile();
     if (rangeIsOnSingleLine(top, sourceFile)) {
         return createTextSpanFromNode(top, sourceFile);
@@ -5753,7 +5802,7 @@ function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclara
     Debug.assert(top.kind !== SyntaxKind.ImportKeyword && top.kind !== SyntaxKind.ImportSpecifier);
     // Guess which point in the import might actually be a later statement parsed as part of the import
     // during parser recovery - either in the middle of named imports, or the module specifier.
-    const potentialSplitPoint = top.kind === SyntaxKind.ImportDeclaration
+    const potentialSplitPoint = top.kind === SyntaxKind.ImportDeclaration || top.kind === SyntaxKind.JSDocImportTag
         ? getPotentiallyInvalidImportSpecifier(top.importClause?.namedBindings) ?? top.moduleSpecifier
         : top.moduleReference;
     const withoutModuleSpecifier: TextRange = {

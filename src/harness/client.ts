@@ -35,7 +35,6 @@ import {
     identity,
     ImplementationLocation,
     InlayHint,
-    InlayHintKind,
     InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
@@ -49,6 +48,8 @@ import {
     notImplemented,
     OrganizeImportsArgs,
     OutliningSpan,
+    PasteEdits,
+    PasteEditsArgs,
     PatternMatchKind,
     Program,
     QuickInfo,
@@ -56,6 +57,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     RenameInfo,
     RenameInfoFailure,
     RenameInfoSuccess,
@@ -74,10 +76,8 @@ import {
     TodoComment,
     TodoCommentDescriptor,
     UserPreferences,
-} from "./_namespaces/ts";
-import {
-    protocol,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
@@ -502,6 +502,9 @@ export class SessionClient implements LanguageService {
     getSuggestionDiagnostics(file: string): DiagnosticWithLocation[] {
         return this.getDiagnostics(file, protocol.CommandTypes.SuggestionDiagnosticsSync);
     }
+    getRegionSemanticDiagnostics(_file: string, _ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        throw new Error("Method not implemented.");
+    }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
         const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
@@ -777,7 +780,7 @@ export class SessionClient implements LanguageService {
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                kind: item.kind as InlayHintKind,
+                kind: item.kind,
                 displayParts: displayParts?.map(({ text, span }) => ({
                     text,
                     span: span && {
@@ -789,6 +792,8 @@ export class SessionClient implements LanguageService {
             });
         });
     }
+
+    mapCode = notImplemented;
 
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
@@ -1007,6 +1012,26 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    getPasteEdits(
+        { targetFile, pastedText, pasteLocations, copiedFrom }: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        this.setFormattingOptions(formatOptions);
+        const args: protocol.GetPasteEditsRequestArgs = {
+            file: targetFile,
+            pastedText,
+            pasteLocations: pasteLocations.map(range => ({ start: this.positionToOneBasedLineOffset(targetFile, range.pos), end: this.positionToOneBasedLineOffset(targetFile, range.end) })),
+            copiedFrom: copiedFrom ? { file: copiedFrom.file, spans: copiedFrom.range.map(range => ({ start: this.positionToOneBasedLineOffset(copiedFrom.file, range.pos), end: this.positionToOneBasedLineOffset(copiedFrom.file, range.end) })) } : undefined,
+        };
+        const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
+        const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
+        if (!response.body) {
+            return { edits: [] };
+        }
+        const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
+        return { edits, fixId: response.body.fixId };
     }
 
     getProgram(): Program {

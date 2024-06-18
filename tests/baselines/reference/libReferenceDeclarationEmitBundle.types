@@ -4,10 +4,12 @@
 /// <reference lib="dom" preserve="true" />
 export declare const elem: HTMLElement;
 >elem : HTMLElement
+>     : ^^^^^^^^^^^
 
 === file2.ts ===
 /// <reference lib="dom" preserve="true" />
 export {}
 declare const elem: HTMLElement;
 >elem : HTMLElement
+>     : ^^^^^^^^^^^
 

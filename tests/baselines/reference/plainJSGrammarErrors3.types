@@ -5,11 +5,16 @@
 === /a.js ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     await new Promise(undefined);
 >await new Promise(undefined) : any
+>                             : ^^^
 >new Promise(undefined) : Promise<any>
+>                       : ^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
