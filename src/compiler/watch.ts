@@ -73,6 +73,7 @@ import {
     isReferenceFileLocation,
     isString,
     last,
+    maxBy,
     maybeBind,
     memoize,
     ModuleKind,
@@ -303,7 +304,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
 
     const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
     const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
-    const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
+    const maxErrors = maxBy(fileToErrorCount, 0, value => value[1]);
 
     const headerRow = Diagnostics.Errors_Files.message;
     const leftColumnHeadingLength = headerRow.split(" ")[0].length;

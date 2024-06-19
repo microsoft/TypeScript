@@ -12,6 +12,7 @@ module.exports = createRule({
             multipleJSDocError: `Declaration has multiple JSDoc comments.`,
             internalCommentOnParameterProperty: `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
             internalCommentOnUnexported: `@internal should not appear on an unexported declaration.`,
+            internalCommentOnPrivate: `@internal should not appear on a private declaration.`,
         },
         schema: [],
         type: "problem",
@@ -56,16 +57,9 @@ module.exports = createRule({
 
         /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
-            const line = c.loc.start.line;
             return {
-                start: {
-                    line,
-                    column: c.loc.start.column + indexInComment,
-                },
-                end: {
-                    line,
-                    column: c.loc.start.column + indexInComment + atInternal.length,
-                },
+                start: context.sourceCode.getLocFromIndex(c.range[0] + indexInComment),
+                end: context.sourceCode.getLocFromIndex(c.range[0] + indexInComment + atInternal.length),
             };
         };
 
@@ -112,6 +106,10 @@ module.exports = createRule({
                 }
                 else if (!isExported(node)) {
                     context.report({ messageId: "internalCommentOnUnexported", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                }
+                // eslint-disable-next-line local/no-in-operator
+                else if ("accessibility" in node && node.accessibility === "private") {
+                    context.report({ messageId: "internalCommentOnPrivate", node: c, loc: getAtInternalLoc(c, indexInComment) });
                 }
                 else if (i !== last) {
                     context.report({ messageId: "internalCommentNotLastError", node: c, loc: getAtInternalLoc(c, indexInComment) });

@@ -2573,9 +2573,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
-    return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-    };
+    return Object.fromEntries(optionMap);
 }
 
 function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
