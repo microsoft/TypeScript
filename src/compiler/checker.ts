@@ -1416,9 +1416,10 @@ const SymbolLinks = class implements SymbolLinks {
     declare _symbolLinksBrand: any;
 };
 
-function NodeLinks(this: NodeLinks) {
-    this.flags = NodeCheckFlags.None;
-}
+const NodeLinks = class {
+    flags = NodeCheckFlags.None;
+    calculatedFlags = NodeCheckFlags.None;
+};
 
 /** @internal */
 export function getNodeId(node: Node): number {

@@ -15,7 +15,6 @@ import {
     canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
-    CheckJsDirective,
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
@@ -61,17 +60,14 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
-    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
     EndOfFileToken,
-    EntityName,
     equateValues,
     ExportDeclaration,
     Extension,
     extensionFromPath,
-    FileReference,
     FileTextChanges,
     filter,
     find,
@@ -197,7 +193,6 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JSDoc,
     JsDoc,
     JSDocContainer,
     JSDocParsingMode,
@@ -211,7 +206,6 @@ import {
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
-    LanguageVariant,
     lastOrUndefined,
     length,
     LineAndCharacter,
@@ -233,6 +227,7 @@ import {
     Node,
     NodeArray,
     NodeFlags,
+    NodeImpl,
     noop,
     normalizePath,
     normalizeSpans,
@@ -257,8 +252,6 @@ import {
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
-    PragmaMap,
-    PrivateIdentifier,
     Program,
     PropertyName,
     PropertySignature,
@@ -291,6 +284,7 @@ import {
     SignatureHelp,
     SignatureHelpItems,
     SignatureHelpItemsOptions,
+    SignatureImpl,
     SignatureKind,
     singleElementArray,
     skipTypeChecking,
@@ -301,8 +295,6 @@ import {
     SourceFileLike,
     SourceMapSource,
     startsWith,
-    Statement,
-    StringLiteral,
     StringLiteralLike,
     StringLiteralType,
     Symbol,
@@ -328,16 +320,13 @@ import {
     timestamp,
     TodoComment,
     TodoCommentDescriptor,
-    Token,
     toPath,
     tracing,
-    TransformFlags,
     Type,
     TypeChecker,
     TypeFlags,
-    TypeNode,
+    TypeImpl,
     TypeParameter,
-    TypePredicate,
     TypeReference,
     typeToDisplayParts,
     UnionOrIntersectionType,
@@ -359,44 +348,40 @@ import * as classifier2020 from "./classifier2020.js";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject<TKind> | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
-    const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
-        kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-        kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-        new TokenObject(kind, pos, end);
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): Node {
+    const node = new NodeObject<TKind>(kind, pos, end);
     node.parent = parent;
     node.flags = parent.flags & NodeFlags.ContextFlags;
     return node;
 }
 
-class NodeObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
-    public jsDoc?: JSDoc[];
-    public original?: Node;
-    public id?: number;
-    public emitNode?: EmitNode;
+class NodeObject<TKind extends SyntaxKind> extends NodeImpl implements Node {
+    override kind!: TKind;
+
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
 
     constructor(kind: TKind, pos: number, end: number) {
-        // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
+        super(kind, pos, end);
     }
 
+    override get text(): string {
+        if (this.kind === SyntaxKind.Identifier || this.kind === SyntaxKind.PrivateIdentifier) {
+            return idText(this as any as Identifier);
+        }
+        return super.text;
+    }
+    override set text(value) {
+        super.text = value;
+    }
     private assertHasRealPosition(message?: string) {
         // eslint-disable-next-line local/debug-assert
         Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
@@ -458,670 +443,102 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     }
 
     public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
-        this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+            return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        }
+        else {
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        }
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
-        if (!children.length) {
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
+            if (!children.length) {
+                return undefined;
+            }
+
+            const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
+            return child.kind < SyntaxKind.FirstNode ?
+                child :
+                child.getFirstToken(sourceFile);
+        }
+        else {
             return undefined;
         }
-
-        const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
-        return child.kind < SyntaxKind.FirstNode ?
-            child :
-            child.getFirstToken(sourceFile);
     }
 
     public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
 
-        const child = lastOrUndefined(children);
-        if (!child) {
+            const child = lastOrUndefined(children);
+            if (!child) {
+                return undefined;
+            }
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+        }
+        else {
             return undefined;
         }
-
-        return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
     }
 
     public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
-    }
-}
-
-function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
-    const children: Node[] = [];
-
-    if (isJSDocCommentContainingNode(node)) {
-        /** Don't add trivia for "tokens" since this is in a comment. */
-        node.forEachChild(child => {
-            children.push(child);
-        });
-        return children;
-    }
-
-    scanner.setText((sourceFile || node.getSourceFile()).text);
-    let pos = node.pos;
-    const processNode = (child: Node) => {
-        addSyntheticNodes(children, pos, child.pos, node);
-        children.push(child);
-        pos = child.end;
-    };
-    const processNodes = (nodes: NodeArray<Node>) => {
-        addSyntheticNodes(children, pos, nodes.pos, node);
-        children.push(createSyntaxList(nodes, node));
-        pos = nodes.end;
-    };
-    // jsDocComments need to be the first children
-    forEach((node as JSDocContainer).jsDoc, processNode);
-    // For syntactic classifications, all trivia are classified together, including jsdoc comments.
-    // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-    // Restoring the scanner position ensures that.
-    pos = node.pos;
-    node.forEachChild(processNode, processNodes);
-    addSyntheticNodes(children, pos, node.end, node);
-    scanner.setText(undefined);
-    return children;
-}
-
-function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
-    scanner.resetTokenState(pos);
-    while (pos < end) {
-        const token = scanner.scan();
-        const textPos = scanner.getTokenEnd();
-        if (textPos <= end) {
-            if (token === SyntaxKind.Identifier) {
-                if (hasTabstop(parent)) {
-                    continue;
-                }
-                Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
-            }
-            nodes.push(createNode(token, pos, textPos, parent));
+        if (isNodeKind(this.kind)) {
+            return forEachChild(this, cbNode, cbNodeArray);
         }
-        pos = textPos;
-        if (token === SyntaxKind.EndOfFileToken) {
-            break;
+        else {
+            return undefined;
         }
     }
-}
 
-function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
-    const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
-    const children: Node[] = [];
-    let pos = nodes.pos;
-    for (const node of nodes) {
-        addSyntheticNodes(children, pos, node.pos, parent);
-        children.push(node);
-        pos = node.end;
+    private get namedDeclarations(): Map<string, Declaration[]> | undefined {
+        return this.data.namedDeclarations;
     }
-    addSyntheticNodes(children, pos, nodes.end, parent);
-    setNodeChildren(list, children);
-    return list;
-}
-
-class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache!: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol;
-    public jsDocComments?: JSDoc[];
-    public id?: number;
-    public emitNode?: EmitNode | undefined;
-
-    constructor(kind: TKind, pos: number, end: number) {
-        // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.emitNode = undefined;
+    private set namedDeclarations(value: Map<string, Declaration[]> | undefined) {
+        this.data.namedDeclarations = value;
     }
 
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
+    public get scriptSnapshot(): IScriptSnapshot {
+        return this.data.scriptSnapshot;
+    }
+    public set scriptSnapshot(value: IScriptSnapshot) {
+        this.data.scriptSnapshot = value;
     }
 
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(): number {
-        return this.getChildren().length;
-    }
-
-    public getChildAt(index: number): Node {
-        return this.getChildren()[index];
-    }
-
-    public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
-    }
-
-    public getFirstToken(): Node | undefined {
-        return undefined;
-    }
-
-    public getLastToken(): Node | undefined {
-        return undefined;
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
-}
-
-class SymbolObject implements Symbol {
-    flags: SymbolFlags;
-    escapedName: __String;
-    declarations?: Declaration[];
-    valueDeclaration?: Declaration;
-    members?: SymbolTable;
-    exports?: SymbolTable;
-    id: number;
-    mergeId: number;
-    parent?: Symbol;
-    exportSymbol?: Symbol;
-    constEnumOnlyModule: boolean | undefined;
-    isReferenced?: SymbolFlags;
-    lastAssignmentPos?: number;
-    links?: SymbolLinks;
-
-    // Undefined is used to indicate the value has not been computed. If, after computing, the
-    // symbol has no doc comment, then the empty array will be returned.
-    documentationComment?: SymbolDisplayPart[];
-    tags?: JSDocTagInfo[]; // same
-
-    contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
-    contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
-
-    contextualGetAccessorTags?: JSDocTagInfo[];
-    contextualSetAccessorTags?: JSDocTagInfo[];
-
-    constructor(flags: SymbolFlags, name: __String) {
-        // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
-        this.flags = flags;
-        this.escapedName = name;
-        this.declarations = undefined;
-        this.valueDeclaration = undefined;
-        this.id = 0;
-        this.mergeId = 0;
-        this.parent = undefined;
-        this.members = undefined;
-        this.exports = undefined;
-        this.exportSymbol = undefined;
-        this.constEnumOnlyModule = undefined;
-        this.isReferenced = undefined;
-        this.lastAssignmentPos = undefined;
-        this.links = undefined; // used by TransientSymbol
-    }
-
-    getFlags(): SymbolFlags {
-        return this.flags;
-    }
-
-    get name(): string {
-        return symbolName(this);
-    }
-
-    getEscapedName(): __String {
-        return this.escapedName;
-    }
-
-    getName(): string {
-        return this.name;
-    }
-
-    getDeclarations(): Declaration[] | undefined {
-        return this.declarations;
-    }
-
-    getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (!this.documentationComment) {
-            this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
-
-            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
-                const labelDecl = this.links.target.links.tupleLabelDeclaration;
-                this.documentationComment = getDocumentationComment([labelDecl], checker);
-            }
-            else {
-                this.documentationComment = getDocumentationComment(this.declarations, checker);
-            }
-        }
-        return this.documentationComment;
-    }
-
-    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (context) {
-            if (isGetAccessor(context)) {
-                if (!this.contextualGetAccessorDocumentationComment) {
-                    this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
-                }
-                if (length(this.contextualGetAccessorDocumentationComment)) {
-                    return this.contextualGetAccessorDocumentationComment;
-                }
-            }
-            if (isSetAccessor(context)) {
-                if (!this.contextualSetAccessorDocumentationComment) {
-                    this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
-                }
-                if (length(this.contextualSetAccessorDocumentationComment)) {
-                    return this.contextualSetAccessorDocumentationComment;
-                }
-            }
-        }
-        return this.getDocumentationComment(checker);
-    }
-
-    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
-        if (this.tags === undefined) {
-            this.tags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
-            this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
-        }
-
-        return this.tags;
-    }
-
-    getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-        if (context) {
-            if (isGetAccessor(context)) {
-                if (!this.contextualGetAccessorTags) {
-                    this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
-                }
-                if (length(this.contextualGetAccessorTags)) {
-                    return this.contextualGetAccessorTags;
-                }
-            }
-            if (isSetAccessor(context)) {
-                if (!this.contextualSetAccessorTags) {
-                    this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
-                }
-                if (length(this.contextualSetAccessorTags)) {
-                    return this.contextualSetAccessorTags;
-                }
-            }
-        }
-        return this.getJsDocTags(checker);
-    }
-}
-
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKind> implements Token<TKind> {
-    constructor(kind: TKind, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-}
-
-class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
-    public escapedText!: __String;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare _declarationBrand: any;
-    declare _jsdocContainerBrand: any;
-    declare _flowContainerBrand: any;
-    typeArguments!: NodeArray<TypeNode>;
-    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
-
-class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.PrivateIdentifier> implements PrivateIdentifier {
-    public escapedText!: __String;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
-
-class TypeObject implements Type {
-    checker: TypeChecker;
-    flags: TypeFlags;
-    objectFlags?: ObjectFlags;
-    id!: number;
-    symbol!: Symbol;
-    constructor(checker: TypeChecker, flags: TypeFlags) {
-        // Note: if modifying this, be sure to update Type in src/compiler/types.ts
-        this.flags = flags;
-        this.checker = checker;
-    }
-    getFlags(): TypeFlags {
-        return this.flags;
-    }
-    getSymbol(): Symbol | undefined {
-        return this.symbol;
-    }
-    getProperties(): Symbol[] {
-        return this.checker.getPropertiesOfType(this);
-    }
-    getProperty(propertyName: string): Symbol | undefined {
-        return this.checker.getPropertyOfType(this, propertyName);
-    }
-    getApparentProperties(): Symbol[] {
-        return this.checker.getAugmentedPropertiesOfType(this);
-    }
-    getCallSignatures(): readonly Signature[] {
-        return this.checker.getSignaturesOfType(this, SignatureKind.Call);
-    }
-    getConstructSignatures(): readonly Signature[] {
-        return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
-    }
-    getStringIndexType(): Type | undefined {
-        return this.checker.getIndexTypeOfType(this, IndexKind.String);
-    }
-    getNumberIndexType(): Type | undefined {
-        return this.checker.getIndexTypeOfType(this, IndexKind.Number);
-    }
-    getBaseTypes(): BaseType[] | undefined {
-        return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
-    }
-    isNullableType(): boolean {
-        return this.checker.isNullableType(this);
-    }
-    getNonNullableType(): Type {
-        return this.checker.getNonNullableType(this);
-    }
-    getNonOptionalType(): Type {
-        return this.checker.getNonOptionalType(this);
-    }
-    getConstraint(): Type | undefined {
-        return this.checker.getBaseConstraintOfType(this);
-    }
-    getDefault(): Type | undefined {
-        return this.checker.getDefaultFromTypeParameter(this);
-    }
-
-    isUnion(): this is UnionType {
-        return !!(this.flags & TypeFlags.Union);
-    }
-    isIntersection(): this is IntersectionType {
-        return !!(this.flags & TypeFlags.Intersection);
-    }
-    isUnionOrIntersection(): this is UnionOrIntersectionType {
-        return !!(this.flags & TypeFlags.UnionOrIntersection);
-    }
-    isLiteral(): this is LiteralType {
-        return !!(this.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral));
-    }
-    isStringLiteral(): this is StringLiteralType {
-        return !!(this.flags & TypeFlags.StringLiteral);
-    }
-    isNumberLiteral(): this is NumberLiteralType {
-        return !!(this.flags & TypeFlags.NumberLiteral);
-    }
-    isTypeParameter(): this is TypeParameter {
-        return !!(this.flags & TypeFlags.TypeParameter);
-    }
-    isClassOrInterface(): this is InterfaceType {
-        return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
-    }
-    isClass(): this is InterfaceType {
-        return !!(getObjectFlags(this) & ObjectFlags.Class);
-    }
-    isIndexType(): this is IndexType {
-        return !!(this.flags & TypeFlags.Index);
-    }
-    /**
-     * This polyfills `referenceType.typeArguments` for API consumers
-     */
-    get typeArguments() {
-        if (getObjectFlags(this) & ObjectFlags.Reference) {
-            return this.checker.getTypeArguments(this as Type as TypeReference);
-        }
-        return undefined;
-    }
-}
-
-class SignatureObject implements Signature {
-    flags: SignatureFlags;
-    checker: TypeChecker;
-    declaration!: SignatureDeclaration;
-    typeParameters?: TypeParameter[];
-    parameters!: Symbol[];
-    thisParameter!: Symbol;
-    resolvedReturnType!: Type;
-    resolvedTypePredicate: TypePredicate | undefined;
-    minTypeArgumentCount!: number;
-    minArgumentCount!: number;
-
-    // Undefined is used to indicate the value has not been computed. If, after computing, the
-    // symbol has no doc comment, then the empty array will be returned.
-    documentationComment?: SymbolDisplayPart[];
-    jsDocTags?: JSDocTagInfo[]; // same
-
-    constructor(checker: TypeChecker, flags: SignatureFlags) {
-        // Note: if modifying this, be sure to update Signature in src/compiler/types.ts
-        this.flags = flags;
-        this.checker = checker;
-    }
-
-    getDeclaration(): SignatureDeclaration {
-        return this.declaration;
-    }
-    getTypeParameters(): TypeParameter[] | undefined {
-        return this.typeParameters;
-    }
-    getParameters(): Symbol[] {
-        return this.parameters;
-    }
-    getReturnType(): Type {
-        return this.checker.getReturnTypeOfSignature(this);
-    }
-    getTypeParameterAtPosition(pos: number): Type {
-        const type = this.checker.getParameterType(this, pos);
-        if (type.isIndexType() && isThisTypeParameter(type.type)) {
-            const constraint = type.type.getConstraint();
-            if (constraint) {
-                return this.checker.getIndexType(constraint);
-            }
-        }
-        return type;
-    }
-
-    getDocumentationComment(): SymbolDisplayPart[] {
-        return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
-    }
-
-    getJsDocTags(): JSDocTagInfo[] {
-        return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
-    }
-}
-
-/**
- * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.
- * @param node the Node in question.
- * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
- */
-function hasJSDocInheritDocTag(node: Node) {
-    return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
-}
-
-function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-    if (!declarations) return emptyArray;
-
-    let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
-    if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-        const seenSymbols = new Set<Symbol>();
-        for (const declaration of declarations) {
-            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => {
-                if (!seenSymbols.has(symbol)) {
-                    seenSymbols.add(symbol);
-                    if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
-                        return symbol.getContextualJsDocTags(declaration, checker);
-                    }
-                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags(checker) : undefined;
-                }
-            });
-            if (inheritedTags) {
-                tags = [...inheritedTags, ...tags];
-            }
-        }
-    }
-    return tags;
-}
-
-function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-    if (!declarations) return emptyArray;
-
-    let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
-    if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-        const seenSymbols = new Set<Symbol>();
-        for (const declaration of declarations) {
-            const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
-                if (!seenSymbols.has(symbol)) {
-                    seenSymbols.add(symbol);
-                    if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
-                        return symbol.getContextualDocumentationComment(declaration, checker);
-                    }
-                    return symbol.getDocumentationComment(checker);
-                }
-            });
-            // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
-            if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-        }
-    }
-    return doc;
-}
-
-function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-    if (!classOrInterfaceDeclaration) return;
-
-    const isStaticMember = hasStaticModifier(declaration);
-    return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-        const baseType = checker.getTypeAtLocation(superTypeNode);
-        const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
-        const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
-        return symbol ? cb(symbol) : undefined;
-    });
-}
-
-class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
-    declare _declarationBrand: any;
-    declare _localsContainerBrand: any;
-    public fileName!: string;
-    public path!: Path;
-    public resolvedPath!: Path;
-    public originalFileName!: string;
-    public text!: string;
-    public scriptSnapshot!: IScriptSnapshot;
-    public lineMap!: readonly number[];
-
-    public statements!: NodeArray<Statement>;
-    public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
-
-    public amdDependencies!: { name: string; path: string; }[];
-    public moduleName!: string;
-    public referencedFiles!: FileReference[];
-    public typeReferenceDirectives!: FileReference[];
-    public libReferenceDirectives!: FileReference[];
-
-    public syntacticDiagnostics!: DiagnosticWithLocation[];
-    public parseDiagnostics!: DiagnosticWithLocation[];
-    public bindDiagnostics!: DiagnosticWithLocation[];
-    public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
-
-    public isDeclarationFile!: boolean;
-    public isDefaultLib!: boolean;
-    public hasNoDefaultLib!: boolean;
-    public externalModuleIndicator!: Node; // The first node that causes this file to be an external module
-    public commonJsModuleIndicator!: Node; // The first node that causes this file to be a CommonJS module
-    public nodeCount!: number;
-    public identifierCount!: number;
-    public symbolCount!: number;
-    public version!: string;
-    public scriptKind!: ScriptKind;
-    public languageVersion!: ScriptTarget;
-    public languageVariant!: LanguageVariant;
-    public identifiers!: Map<string, string>;
-    public nameTable: Map<__String, number> | undefined;
-    public imports!: readonly StringLiteralLike[];
-    public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: Map<string, Declaration[]> | undefined;
-    public ambientModuleNames!: string[];
-    public checkJsDirective: CheckJsDirective | undefined;
-    public errorExpectations: TextRange[] | undefined;
-    public possiblyContainDynamicImport?: boolean;
-    public pragmas!: PragmaMap;
-    public localJsxFactory: EntityName | undefined;
-    public localJsxNamespace: __String | undefined;
-
-    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
-        super(kind, pos, end);
+    public get nameTable(): Map<__String, number> | undefined {
+        return this.data.nameTable;
+    }
+    public set nameTable(value: Map<__String, number> | undefined) {
+        this.data.nameTable = value;
     }
 
     public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
-        return updateSourceFile(this, newText, textChangeRange);
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        return updateSourceFile(this as SourceFile, newText, textChangeRange);
     }
 
     public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
         return getLineAndCharacterOfPosition(this, position);
     }
 
     public getLineStarts(): readonly number[] {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
         return getLineStarts(this);
     }
 
     public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
         return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
     }
 
     public getLineEndOfPosition(pos: number): number {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
         const { line } = this.getLineAndCharacterOfPosition(pos);
         const lineStarts = this.getLineStarts();
 
@@ -1139,6 +556,7 @@ class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements Sour
     }
 
     public getNamedDeclarations(): Map<string, Declaration[]> {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
         if (!this.namedDeclarations) {
             this.namedDeclarations = this.computeNamedDeclarations();
         }
@@ -1295,6 +713,404 @@ class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements Sour
     }
 }
 
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
+    const children: Node[] = [];
+
+    if (isJSDocCommentContainingNode(node)) {
+        /** Don't add trivia for "tokens" since this is in a comment. */
+        node.forEachChild(child => {
+            children.push(child);
+        });
+        return children;
+    }
+
+    scanner.setText((sourceFile || node.getSourceFile()).text);
+    let pos = node.pos;
+    const processNode = (child: Node) => {
+        addSyntheticNodes(children, pos, child.pos, node);
+        children.push(child);
+        pos = child.end;
+    };
+    const processNodes = (nodes: NodeArray<Node>) => {
+        addSyntheticNodes(children, pos, nodes.pos, node);
+        children.push(createSyntaxList(nodes, node));
+        pos = nodes.end;
+    };
+    // jsDocComments need to be the first children
+    forEach((node as JSDocContainer).jsDoc, processNode);
+    // For syntactic classifications, all trivia are classified together, including jsdoc comments.
+    // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+    // Restoring the scanner position ensures that.
+    pos = node.pos;
+    node.forEachChild(processNode, processNodes);
+    addSyntheticNodes(children, pos, node.end, node);
+    scanner.setText(undefined);
+    return children;
+}
+
+function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
+    scanner.resetTokenState(pos);
+    while (pos < end) {
+        const token = scanner.scan();
+        const textPos = scanner.getTokenEnd();
+        if (textPos <= end) {
+            if (token === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
+                Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
+            }
+            nodes.push(createNode(token, pos, textPos, parent));
+        }
+        pos = textPos;
+        if (token === SyntaxKind.EndOfFileToken) {
+            break;
+        }
+    }
+}
+
+function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+    const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
+    const children: Node[] = [];
+    let pos = nodes.pos;
+    for (const node of nodes) {
+        addSyntheticNodes(children, pos, node.pos, parent);
+        children.push(node);
+        pos = node.end;
+    }
+    addSyntheticNodes(children, pos, nodes.end, parent);
+    setNodeChildren(list, children);
+    return list;
+}
+
+class SymbolObject implements Symbol {
+    flags: SymbolFlags;
+    escapedName: __String;
+    declarations?: Declaration[];
+    valueDeclaration?: Declaration;
+    members?: SymbolTable;
+    exports?: SymbolTable;
+    id: number;
+    mergeId: number;
+    parent?: Symbol;
+    exportSymbol?: Symbol;
+    constEnumOnlyModule: boolean | undefined;
+    isReferenced?: SymbolFlags;
+    lastAssignmentPos?: number;
+    links?: SymbolLinks;
+
+    // Undefined is used to indicate the value has not been computed. If, after computing, the
+    // symbol has no doc comment, then the empty array will be returned.
+    documentationComment?: SymbolDisplayPart[];
+    tags?: JSDocTagInfo[]; // same
+
+    contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
+    contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
+
+    contextualGetAccessorTags?: JSDocTagInfo[];
+    contextualSetAccessorTags?: JSDocTagInfo[];
+
+    constructor(flags: SymbolFlags, name: __String) {
+        // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
+        this.flags = flags;
+        this.escapedName = name;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = 0;
+        this.mergeId = 0;
+        this.parent = undefined;
+        this.members = undefined;
+        this.exports = undefined;
+        this.exportSymbol = undefined;
+        this.constEnumOnlyModule = undefined;
+        this.isReferenced = undefined;
+        this.lastAssignmentPos = undefined;
+        this.links = undefined; // used by TransientSymbol
+    }
+
+    getFlags(): SymbolFlags {
+        return this.flags;
+    }
+
+    get name(): string {
+        return symbolName(this);
+    }
+
+    getEscapedName(): __String {
+        return this.escapedName;
+    }
+
+    getName(): string {
+        return this.name;
+    }
+
+    getDeclarations(): Declaration[] | undefined {
+        return this.declarations;
+    }
+
+    getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (!this.documentationComment) {
+            this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+
+            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = this.links.target.links.tupleLabelDeclaration;
+                this.documentationComment = getDocumentationComment([labelDecl], checker);
+            }
+            else {
+                this.documentationComment = getDocumentationComment(this.declarations, checker);
+            }
+        }
+        return this.documentationComment;
+    }
+
+    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (context) {
+            if (isGetAccessor(context)) {
+                if (!this.contextualGetAccessorDocumentationComment) {
+                    this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
+                }
+                if (length(this.contextualGetAccessorDocumentationComment)) {
+                    return this.contextualGetAccessorDocumentationComment;
+                }
+            }
+            if (isSetAccessor(context)) {
+                if (!this.contextualSetAccessorDocumentationComment) {
+                    this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
+                }
+                if (length(this.contextualSetAccessorDocumentationComment)) {
+                    return this.contextualSetAccessorDocumentationComment;
+                }
+            }
+        }
+        return this.getDocumentationComment(checker);
+    }
+
+    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
+        if (this.tags === undefined) {
+            this.tags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+            this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
+        }
+
+        return this.tags;
+    }
+
+    getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        if (context) {
+            if (isGetAccessor(context)) {
+                if (!this.contextualGetAccessorTags) {
+                    this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
+                }
+                if (length(this.contextualGetAccessorTags)) {
+                    return this.contextualGetAccessorTags;
+                }
+            }
+            if (isSetAccessor(context)) {
+                if (!this.contextualSetAccessorTags) {
+                    this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
+                }
+                if (length(this.contextualSetAccessorTags)) {
+                    return this.contextualSetAccessorTags;
+                }
+            }
+        }
+        return this.getJsDocTags(checker);
+    }
+}
+
+class TypeObject extends TypeImpl implements Type {
+    getFlags(): TypeFlags {
+        return this.flags;
+    }
+    getSymbol(): Symbol | undefined {
+        return this.symbol;
+    }
+    getProperties(): Symbol[] {
+        return this.checker.getPropertiesOfType(this);
+    }
+    getProperty(propertyName: string): Symbol | undefined {
+        return this.checker.getPropertyOfType(this, propertyName);
+    }
+    getApparentProperties(): Symbol[] {
+        return this.checker.getAugmentedPropertiesOfType(this);
+    }
+    getCallSignatures(): readonly Signature[] {
+        return this.checker.getSignaturesOfType(this, SignatureKind.Call);
+    }
+    getConstructSignatures(): readonly Signature[] {
+        return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
+    }
+    getStringIndexType(): Type | undefined {
+        return this.checker.getIndexTypeOfType(this, IndexKind.String);
+    }
+    getNumberIndexType(): Type | undefined {
+        return this.checker.getIndexTypeOfType(this, IndexKind.Number);
+    }
+    getBaseTypes(): BaseType[] | undefined {
+        return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
+    }
+    isNullableType(): boolean {
+        return this.checker.isNullableType(this);
+    }
+    getNonNullableType(): Type {
+        return this.checker.getNonNullableType(this);
+    }
+    getNonOptionalType(): Type {
+        return this.checker.getNonOptionalType(this);
+    }
+    getConstraint(): Type | undefined {
+        return this.checker.getBaseConstraintOfType(this);
+    }
+    getDefault(): Type | undefined {
+        return this.checker.getDefaultFromTypeParameter(this);
+    }
+
+    isUnion(): this is UnionType {
+        return !!(this.flags & TypeFlags.Union);
+    }
+    isIntersection(): this is IntersectionType {
+        return !!(this.flags & TypeFlags.Intersection);
+    }
+    isUnionOrIntersection(): this is UnionOrIntersectionType {
+        return !!(this.flags & TypeFlags.UnionOrIntersection);
+    }
+    isLiteral(): this is LiteralType {
+        return !!(this.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral));
+    }
+    isStringLiteral(): this is StringLiteralType {
+        return !!(this.flags & TypeFlags.StringLiteral);
+    }
+    isNumberLiteral(): this is NumberLiteralType {
+        return !!(this.flags & TypeFlags.NumberLiteral);
+    }
+    isTypeParameter(): this is TypeParameter {
+        return !!(this.flags & TypeFlags.TypeParameter);
+    }
+    isClassOrInterface(): this is InterfaceType {
+        return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
+    }
+    isClass(): this is InterfaceType {
+        return !!(getObjectFlags(this) & ObjectFlags.Class);
+    }
+    isIndexType(): this is IndexType {
+        return !!(this.flags & TypeFlags.Index);
+    }
+    /**
+     * This polyfills `referenceType.typeArguments` for API consumers
+     */
+    get typeArguments() {
+        if (getObjectFlags(this) & ObjectFlags.Reference) {
+            return this.checker.getTypeArguments(this as Type as TypeReference);
+        }
+        return undefined;
+    }
+}
+
+class SignatureObject extends SignatureImpl implements Signature {
+    constructor(checker: TypeChecker, flags: SignatureFlags) {
+        super(checker, flags);
+        this.checker = checker;
+    }
+    getDeclaration(): SignatureDeclaration {
+        return this.declaration as SignatureDeclaration;
+    }
+    getTypeParameters(): TypeParameter[] | undefined {
+        return this.typeParameters as TypeParameter[];
+    }
+    getParameters(): Symbol[] {
+        return this.parameters as Symbol[];
+    }
+    getReturnType(): Type {
+        return this.checker.getReturnTypeOfSignature(this);
+    }
+    getTypeParameterAtPosition(pos: number): Type {
+        const type = this.checker.getParameterType(this, pos);
+        if (type.isIndexType() && isThisTypeParameter(type.type)) {
+            const constraint = type.type.getConstraint();
+            if (constraint) {
+                return this.checker.getIndexType(constraint);
+            }
+        }
+        return type;
+    }
+
+    getDocumentationComment(): SymbolDisplayPart[] {
+        return this.data.documentationComment || (this.data.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+    }
+
+    getJsDocTags(): JSDocTagInfo[] {
+        return this.data.jsDocTags || (this.data.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
+    }
+}
+
+/**
+ * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.
+ * @param node the Node in question.
+ * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
+ */
+function hasJSDocInheritDocTag(node: Node) {
+    return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
+}
+
+function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+    if (!declarations) return emptyArray;
+
+    let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
+    if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+        const seenSymbols = new Set<Symbol>();
+        for (const declaration of declarations) {
+            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => {
+                if (!seenSymbols.has(symbol)) {
+                    seenSymbols.add(symbol);
+                    if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                        return symbol.getContextualJsDocTags(declaration, checker);
+                    }
+                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags(checker) : undefined;
+                }
+            });
+            if (inheritedTags) {
+                tags = [...inheritedTags, ...tags];
+            }
+        }
+    }
+    return tags;
+}
+
+function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    if (!declarations) return emptyArray;
+
+    let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
+    if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+        const seenSymbols = new Set<Symbol>();
+        for (const declaration of declarations) {
+            const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                if (!seenSymbols.has(symbol)) {
+                    seenSymbols.add(symbol);
+                    if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                        return symbol.getContextualDocumentationComment(declaration, checker);
+                    }
+                    return symbol.getDocumentationComment(checker);
+                }
+            });
+            // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
+            if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
+        }
+    }
+    return doc;
+}
+
+function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
+    if (!classOrInterfaceDeclaration) return;
+
+    const isStaticMember = hasStaticModifier(declaration);
+    return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
+        const baseType = checker.getTypeAtLocation(superTypeNode);
+        const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
+        const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
+        return symbol ? cb(symbol) : undefined;
+    });
+}
+
 class SourceMapSourceObject implements SourceMapSource {
     fileName: string;
     text: string;
@@ -1316,11 +1132,11 @@ class SourceMapSourceObject implements SourceMapSource {
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
         getNodeConstructor: () => NodeObject,
-        getTokenConstructor: () => TokenObject,
+        getTokenConstructor: () => NodeObject,
 
-        getIdentifierConstructor: () => IdentifierObject,
-        getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
-        getSourceFileConstructor: () => SourceFileObject,
+        getIdentifierConstructor: () => NodeObject,
+        getPrivateIdentifierConstructor: () => NodeObject,
+        getSourceFileConstructor: () => NodeObject,
         getSymbolConstructor: () => SymbolObject,
         getTypeConstructor: () => TypeObject,
         getSignatureConstructor: () => SignatureObject,

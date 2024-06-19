@@ -327,6 +327,7 @@ import {
     NodeArray,
     NodeFactory,
     NodeFlags,
+    NodeImpl,
     nodeIsSynthesized,
     NonNullChain,
     NonNullExpression,
@@ -6077,8 +6078,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function createRedirectedSourceFile(redirectInfo: RedirectInfo) {
-        const node: SourceFile = Object.create(redirectInfo.redirectTarget);
-        Object.defineProperties(node, {
+        const nodeData: any = Object.create((redirectInfo.redirectTarget as any as NodeImpl).data);
+        Object.defineProperties(nodeData, {
             id: {
                 get(this: SourceFile) {
                     return this.redirectInfo!.redirectTarget.id;
@@ -6095,9 +6096,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                     this.redirectInfo!.redirectTarget.symbol = value;
                 },
             },
+            redirectInfo: {
+                value: redirectInfo,
+            },
         });
-        node.redirectInfo = redirectInfo;
-        return node;
+        const sourceFile = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile);
+        (sourceFile as NodeImpl).data = nodeData;
+        return sourceFile as SourceFile;
     }
 
     function cloneRedirectedSourceFile(source: SourceFile) {
@@ -6118,7 +6123,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
-        copyBaseNodeProperties(source, node);
         const sourceData = (source as any).data ?? source;
         const nodeData = (node as any).data ?? node;
         for (const p in sourceData) {
@@ -6126,10 +6130,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 continue;
             }
             if (p === "emitNode") {
-                nodeData.emitNode = undefined;
+                node.emitNode = undefined;
                 continue;
             }
-            nodeData[p] = sourceData[p];
+            (node as any)[p] = sourceData[p];
         }
         return node;
     }
@@ -6379,27 +6383,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         (clone as Mutable<T>).flags |= node.flags & ~NodeFlags.Synthesized;
         (clone as Mutable<T>).transformFlags = node.transformFlags;
         setOriginal(clone, node);
-        copyBaseNodeProperties(node, clone);
         const nodeData = (node as any).data ?? node;
         const cloneData = (clone as any).data ?? clone;
         for (const key in nodeData) {
             if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
                 continue;
             }
-            cloneData[key] = nodeData[key];
+            (clone as any)[key] = nodeData[key];
         }
         return clone;
-    }
-    function copyBaseNodeProperties(node: Node, clone: Mutable<Node>) {
-        clone.pos = node.pos;
-        clone.end = node.end;
-        clone.kind = node.kind;
-        clone.id = node.id;
-        clone.modifierFlagsCache = node.modifierFlagsCache;
-        clone.transformFlags = node.transformFlags;
-        clone.parent = node.parent;
-        clone.original = node.original;
-        clone.emitNode = node.emitNode;
     }
     // compound nodes
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): ImmediatelyInvokedFunctionExpression;

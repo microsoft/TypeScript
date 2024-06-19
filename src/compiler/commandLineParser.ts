@@ -97,6 +97,7 @@ import {
     ParsedCommandLine,
     parseJsonText,
     Path,
+    PluginImport,
     PollingWatchKind,
     PrefixUnaryExpression,
     ProjectReference,

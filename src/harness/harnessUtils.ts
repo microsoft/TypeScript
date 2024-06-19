@@ -177,13 +177,43 @@ export function sourceFileToJSON(file: ts.Node): string {
         return ts.Debug.formatNodeFlags(f);
     }
 
+    function addSerializableFlags(o: any, n: ts.Node) {
+        // Clear the flags that are produced by aggregating child values. That is ephemeral
+        // data we don't care about in the dump. We only care what the parser set directly
+        // on the AST.
+        let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+        if (ts.isIdentifier(n)) {
+            if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
+                o.hasExtendedUnicodeEscape = true;
+                flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;
+            }
+        }
+        if (flags) {
+            o.flags = getNodeFlagName(flags);
+        }
+    }
     function serializeNode(n: ts.Node): any {
         const o: any = { kind: getKindName(n.kind) };
         if (ts.containsParseError(n)) {
             o.containsParseError = true;
         }
+        let nodeData;
+        if (n instanceof ts.NodeImpl) {
+            nodeData = (n as any as ts.NodeImpl).data;
+            o.pos = n.pos;
+            o.end = n.end;
+            addSerializableFlags(o, n);
+            if (ts.isNodeKind(n.kind) || ts.isLiteralKind(n.kind)) {
+                o.modifierFlagsCache = n.modifierFlagsCache;
+            }
+            o.transformFlags = n.transformFlags;
+        }
+        else {
+            nodeData = n;
+        }
+        if (!nodeData) return o;
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
+        for (const propertyName of Object.getOwnPropertyNames(nodeData) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -198,26 +228,12 @@ export function sourceFileToJSON(file: ts.Node): string {
                 case "emitNode":
                     // Blocklist of items we never put in the baseline file.
                     break;
-
-                case "hasExtendedUnicodeEscape":
-                    if ((n as any).hasExtendedUnicodeEscape) {
-                        o.hasExtendedUnicodeEscape = true;
-                    }
-                    break;
-
                 case "flags":
-                    // Clear the flags that are produced by aggregating child values. That is ephemeral
-                    // data we don't care about in the dump. We only care what the parser set directly
-                    // on the AST.
-                    let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
-                    if (ts.isIdentifier(n)) {
-                        if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
-                            o.hasExtendedUnicodeEscape = true;
-                            flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;
-                        }
-                    }
-                    if (flags) {
-                        o[propertyName] = getNodeFlagName(flags);
+                    addSerializableFlags(o, nodeData);
+                    break;
+                case "hasExtendedUnicodeEscape":
+                    if (nodeData.hasExtendedUnicodeEscape) {
+                        o.hasExtendedUnicodeEscape = true;
                     }
                     break;
 
@@ -239,7 +255,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 default:
-                    o[propertyName] = (n as any)[propertyName];
+                    o[propertyName] = nodeData[propertyName];
             }
         }
 
@@ -319,8 +335,8 @@ function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.N
 }
 
 function findChildName(parent: any, child: any) {
-    for (const name in parent) {
-        if (ts.hasProperty(parent, name) && parent[name] === child) {
+    for (const name in parent.data) {
+        if (ts.hasProperty(parent.data, name) && parent[name] === child) {
             return name;
         }
     }
