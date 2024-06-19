@@ -70,7 +70,10 @@ jobs:
           git diff --staged --exit-code
 
   coverage:
-    runs-on: ubuntu-latest
+    runs-on:
+      - "self-hosted"
+      - "1ES.Pool=TypeScript-1ES-GitHub-Large"
+      - "1ES.ImageOverride=ubuntu-22.04"
 
     permissions:
       id-token: write
@@ -86,6 +89,12 @@ jobs:
 
       - name: Run tests with coverage
         run: npm test -- --no-lint --coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: coverage
+          path: coverage
 
       # TODO(jakebailey): discuss, enable
       # - uses: codecov/codecov-action@v4
