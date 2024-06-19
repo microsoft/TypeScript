@@ -8,13 +8,13 @@ import { libContent } from "./helpers/contents.js";
 import { loadProjectFromFiles } from "./helpers/vfs.js";
 
 describe("unittests:: Public APIs", () => {
-    function verifyApi(fileName: string) {
-        const builtFile = `built/local/${fileName}`;
-        const api = `api/${fileName}`;
+    function verifyApi(input: string, baseline: string) {
+        const builtFile = `built/local/${input}`;
+        const api = `api/${baseline}`;
         let fileContent: string;
         before(() => {
             fileContent = Harness.IO.readFile(builtFile)!;
-            if (!fileContent) throw new Error(`File ${fileName} was not present in built/local`);
+            if (!fileContent) throw new Error(`File ${input} was not present in built/local`);
             fileContent = fileContent.replace(/\r\n/g, "\n");
         });
 
@@ -24,11 +24,11 @@ describe("unittests:: Public APIs", () => {
     }
 
     describe("for the language service and compiler", () => {
-        verifyApi("typescript.d.ts");
+        verifyApi("typescript.baseline.d.ts", "typescript.d.ts");
     });
 
     describe("for the language server", () => {
-        verifyApi("tsserverlibrary.d.ts");
+        verifyApi("tsserverlibrary.d.ts", "tsserverlibrary.d.ts");
     });
 });
 

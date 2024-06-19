@@ -2513,34 +2513,12 @@ declare namespace ts {
             }
             abstract class TypingsInstaller {
                 protected readonly installTypingHost: InstallTypingHost;
-                private readonly globalCachePath;
-                private readonly safeListPath;
-                private readonly typesMapLocation;
-                private readonly throttleLimit;
                 protected readonly log: Log;
-                private readonly packageNameToTypingLocation;
-                private readonly missingTypingsSet;
-                private readonly knownCachesSet;
-                private readonly projectWatchers;
-                private safeList;
-                private pendingRunRequests;
-                private installRunCount;
-                private inFlightRequestCount;
                 abstract readonly typesRegistry: Map<string, MapLike<string>>;
                 constructor(installTypingHost: InstallTypingHost, globalCachePath: string, safeListPath: Path, typesMapLocation: Path, throttleLimit: number, log?: Log);
                 closeProject(req: CloseProject): void;
-                private closeWatchers;
                 install(req: DiscoverTypings): void;
-                private initializeSafeList;
-                private processCacheLocation;
-                private filterTypings;
                 protected ensurePackageDirectoryExists(directory: string): void;
-                private installTypings;
-                private ensureDirectoryExists;
-                private watchFiles;
-                private createSetTypings;
-                private installTypingsAsync;
-                private executeWithThrottling;
                 protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
                 protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
                 protected readonly latestDistTag = "latest";
@@ -2705,7 +2683,6 @@ declare namespace ts {
         }
         function isDynamicFileName(fileName: NormalizedPath): boolean;
         class ScriptInfo {
-            private readonly host;
             readonly fileName: NormalizedPath;
             readonly scriptKind: ScriptKind;
             readonly hasMixedContent: boolean;
@@ -2714,15 +2691,11 @@ declare namespace ts {
              * All projects that include this file
              */
             readonly containingProjects: Project[];
-            private formatSettings;
-            private preferences;
-            private realpath;
             constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
             open(newText: string | undefined): void;
             close(fileExists?: boolean): void;
             getSnapshot(): IScriptSnapshot;
-            private ensureRealPath;
             getFormatCodeSettings(): FormatCodeSettings | undefined;
             getPreferences(): protocol.UserPreferences | undefined;
             attachToProject(project: Project): boolean;
@@ -2795,47 +2768,26 @@ declare namespace ts {
         abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
             readonly projectKind: ProjectKind;
             readonly projectService: ProjectService;
-            private documentRegistry;
-            private compilerOptions;
             compileOnSaveEnabled: boolean;
             protected watchOptions: WatchOptions | undefined;
-            private rootFilesMap;
-            private program;
-            private externalFiles;
-            private missingFilesMap;
-            private generatedFilesMap;
-            private hasAddedorRemovedFiles;
-            private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
             readonly trace?: (s: string) => void;
             readonly realpath?: (path: string) => string;
-            private builderState;
-            private updatedFileNames;
-            private lastReportedFileNames;
-            private lastReportedVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
-            private typingWatchers;
-            private readonly cancellationToken;
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
-            private exportMapCache;
-            private changedFilesForExportMapCache;
-            private moduleSpecifierCache;
-            private symlinks;
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-            private get typingsCache();
             getCompilationSettings(): ts.CompilerOptions;
             getCompilerOptions(): ts.CompilerOptions;
             getNewLine(): string;
             getProjectVersion(): string;
             getProjectReferences(): readonly ProjectReference[] | undefined;
             getScriptFileNames(): string[];
-            private getOrCreateScriptInfoAndAttachToProject;
             getScriptKind(fileName: string): ts.ScriptKind;
             getScriptVersion(filename: string): string;
             getScriptSnapshot(filename: string): IScriptSnapshot | undefined;
@@ -2851,7 +2803,6 @@ declare namespace ts {
             getDirectories(path: string): string[];
             log(s: string): void;
             error(s: string): void;
-            private setInternalCompilerOptionsForEmittingJsFiles;
             /**
              * Get the errors that dont have any file name associated
              */
@@ -2874,7 +2825,6 @@ declare namespace ts {
             getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string>;
             getSourceFile(path: Path): ts.SourceFile | undefined;
             close(): void;
-            private detachScriptInfoIfNotRoot;
             isClosed(): boolean;
             hasRoots(): boolean;
             getRootFiles(): NormalizedPath[];
@@ -2895,20 +2845,10 @@ declare namespace ts {
              * @returns: true if set of files in the project stays the same and false - otherwise.
              */
             updateGraph(): boolean;
-            private closeWatchingTypingLocations;
-            private onTypingInstallerWatchInvoke;
             protected removeExistingTypings(include: string[]): string[];
-            private updateGraphWorker;
-            private detachScriptInfoFromProject;
-            private addMissingFileWatcher;
-            private isWatchedMissingFile;
-            private createGeneratedFileWatcher;
-            private isValidGeneratedFileWatcher;
-            private clearGeneratedFileWatch;
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
             getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
             filesToString(writeProjectFileNames: boolean): string;
-            private filesToStringWorker;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
@@ -2917,15 +2857,12 @@ declare namespace ts {
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
-            private isDefaultProjectForOpenFiles;
-            private getCompilerOptionsForNoDtsResolutionProject;
         }
         /**
          * If a file is opened and no tsconfig (or jsconfig) is found,
          * the file and its imports/references are put into an InferredProject.
          */
         class InferredProject extends Project {
-            private _isJsInferredProject;
             toggleJsInferredProject(isJsInferredProject: boolean): void;
             setCompilerOptions(options?: CompilerOptions): void;
             /** this is canonical project root path */
@@ -2937,9 +2874,6 @@ declare namespace ts {
             getTypeAcquisition(): TypeAcquisition;
         }
         class AutoImportProviderProject extends Project {
-            private hostProject;
-            private static readonly maxDependencies;
-            private rootFileNames;
             updateGraph(): boolean;
             hasRoots(): boolean;
             getScriptFileNames(): string[];
@@ -2954,9 +2888,6 @@ declare namespace ts {
          */
         class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
-            private projectReferences;
-            private compilerHost?;
-            private releaseParsedConfig;
             /**
              * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -3171,10 +3102,6 @@ declare namespace ts {
             errors: Diagnostic[] | undefined;
         }
         class ProjectService {
-            private readonly nodeModulesWatchers;
-            private readonly filenameToScriptInfoVersion;
-            private readonly allJsFilesForOpenFileTelemetry;
-            private readonly externalProjectToConfiguredProjectMap;
             /**
              * external projects (configuration and list of root files is not controlled by tsserver)
              */
@@ -3191,21 +3118,6 @@ declare namespace ts {
              * Open files: with value being project root path, and key being Path of the file that is open
              */
             readonly openFiles: Map<Path, NormalizedPath | undefined>;
-            private readonly configFileForOpenFiles;
-            private rootOfInferredProjects;
-            private readonly openFilesWithNonRootedDiskPath;
-            private compilerOptionsForInferredProjects;
-            private compilerOptionsForInferredProjectsPerProjectRoot;
-            private watchOptionsForInferredProjects;
-            private watchOptionsForInferredProjectsPerProjectRoot;
-            private typeAcquisitionForInferredProjects;
-            private typeAcquisitionForInferredProjectsPerProjectRoot;
-            private readonly projectToSizeMap;
-            private readonly hostConfiguration;
-            private safelist;
-            private readonly legacySafelist;
-            private pendingProjectUpdates;
-            private pendingOpenFileProjectUpdates?;
             readonly currentDirectory: NormalizedPath;
             readonly toCanonicalFileName: (f: string) => string;
             readonly host: ServerHost;
@@ -3214,140 +3126,59 @@ declare namespace ts {
             readonly useSingleInferredProject: boolean;
             readonly useInferredProjectPerProjectRoot: boolean;
             readonly typingsInstaller: ITypingsInstaller;
-            private readonly globalCacheLocationDirectoryPath;
             readonly throttleWaitMilliseconds?: number;
-            private readonly suppressDiagnosticEvents?;
             readonly globalPlugins: readonly string[];
             readonly pluginProbeLocations: readonly string[];
             readonly allowLocalPluginLoads: boolean;
             readonly typesMapLocation: string | undefined;
             readonly serverMode: LanguageServiceMode;
-            private readonly seenProjects;
-            private readonly sharedExtendedConfigFileWatchers;
-            private readonly extendedConfigCache;
-            private packageJsonFilesMap;
-            private incompleteCompletionsCache;
-            private performanceEventHandler?;
-            private pendingPluginEnablements?;
-            private currentPluginEnablementPromise?;
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             constructor(opts: ProjectServiceOptions);
             toPath(fileName: string): Path;
-            private loadTypesMap;
             updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
-            private delayUpdateProjectGraph;
-            private delayUpdateProjectGraphs;
             setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
-            private tryGetDefaultProjectForEnsuringConfiguredProjectForFile;
-            private doEnsureDefaultProjectForFile;
             getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
-            private ensureProjectStructuresUptoDate;
             getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
             getPreferences(file: NormalizedPath): protocol.UserPreferences;
             getHostFormatCodeOptions(): FormatCodeSettings;
             getHostPreferences(): protocol.UserPreferences;
-            private onSourceFileChanged;
-            private handleSourceMapProjects;
-            private delayUpdateSourceInfoProjects;
-            private delayUpdateProjectsOfScriptInfoPath;
-            private handleDeletedFile;
-            private watchWildcardDirectory;
-            private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
-            private onConfigFileChanged;
-            private removeProject;
-            private assignOrphanScriptInfosToInferredProject;
-            private closeOpenFile;
-            private deleteScriptInfo;
-            private configFileExists;
-            private createConfigFileWatcherForParsedConfig;
-            private forEachConfigFileLocation;
-            private getConfigFileNameForFileFromCache;
-            private setConfigFileNameForFileInCache;
-            private printProjects;
-            private getConfiguredProjectByCanonicalConfigFilePath;
-            private findExternalProjectByProjectName;
-            private getFilenameForExceededTotalSizeLimitForNonTsFiles;
-            private createExternalProject;
-            private addFilesToNonInferredProject;
-            private loadConfiguredProject;
-            private updateNonInferredProjectFiles;
-            private updateRootAndOptionsOfNonInferredProject;
-            private reloadFileNamesOfParsedConfig;
-            private clearSemanticCache;
-            private getOrCreateInferredProjectForProjectRootPathIfEnabled;
-            private getOrCreateSingleInferredProjectIfEnabled;
-            private getOrCreateSingleInferredWithoutProjectRoot;
-            private createInferredProject;
             getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
-            private watchClosedScriptInfo;
-            private createNodeModulesWatcher;
-            private watchClosedScriptInfoInNodeModules;
-            private getModifiedTime;
-            private refreshScriptInfo;
-            private refreshScriptInfosInDirectory;
-            private stopWatchingScriptInfo;
-            private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
             getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
                 fileExists(path: string): boolean;
             }): ScriptInfo | undefined;
-            private getOrCreateScriptInfoWorker;
             /**
              * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
              */
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
             getScriptInfoForPath(fileName: Path): ScriptInfo | undefined;
-            private addSourceInfoToSourceMap;
-            private addMissingSourceMapFile;
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
-            private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
             /**
              * This function rebuilds the project for every file opened by the client
              * This does not reload contents of open files from disk. But we could do that if needed
              */
             reloadProjects(): void;
-            private removeRootOfInferredProjectIfNowPartOfOtherProject;
-            private ensureProjectForOpenFiles;
             /**
              * Open file whose contents is managed by the client
              * @param filename is absolute pathname
              * @param fileContent is a known version of the file content that is more up to date than the one on disk
              */
             openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
-            private findExternalProjectContainingOpenScriptInfo;
-            private getOrCreateOpenScriptInfo;
-            private assignProjectToOpenedScriptInfo;
-            private tryFindDefaultConfiguredProjectForOpenScriptInfo;
-            private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
-            private ensureProjectChildren;
-            private cleanupConfiguredProjects;
-            private cleanupProjectsAndScriptInfos;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
-            private removeOrphanScriptInfos;
-            private telemetryOnOpenFile;
             /**
              * Close file whose contents is managed by the client
              * @param filename is absolute pathname
              */
             closeClientFile(uncheckedFileName: string): void;
-            private collectChanges;
             closeExternalProject(uncheckedFileName: string): void;
             openExternalProjects(projects: protocol.ExternalProject[]): void;
-            private static readonly filenameEscapeRegexp;
-            private static escapeFilenameForRegex;
             resetSafeList(): void;
             applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
-            private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
-            private endEnablePlugin;
-            private enableRequestedPluginsAsync;
-            private enableRequestedPluginsWorker;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
-            private watchPackageJsonFile;
-            private onPackageJsonChange;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
         interface ServerCancellationToken extends HostCancellationToken {
@@ -3395,174 +3226,25 @@ declare namespace ts {
             typesMapLocation?: string;
         }
         class Session<TMessage = string> implements EventSender {
-            private readonly gcTimer;
             protected projectService: ProjectService;
-            private changeSeq;
-            private performanceData;
-            private currentRequestId;
-            private errorCheck;
             protected host: ServerHost;
-            private readonly cancellationToken;
             protected readonly typingsInstaller: ITypingsInstaller;
             protected byteLength: (buf: string, encoding?: BufferEncoding) => number;
-            private hrtime;
             protected logger: Logger;
             protected canUseEvents: boolean;
-            private suppressDiagnosticEvents?;
-            private eventHandler;
-            private readonly noGetErrOnBackgroundUpdate?;
             constructor(opts: SessionOptions);
-            private sendRequestCompletedEvent;
-            private addPerformanceData;
-            private performanceEventHandler;
-            private defaultEventHandler;
-            private projectsUpdatedInBackgroundEvent;
             logError(err: Error, cmd: string): void;
-            private logErrorWorker;
             send(msg: protocol.Message): void;
             protected writeMessage(msg: protocol.Message): void;
             event<T extends object>(body: T, eventName: string): void;
-            private semanticCheck;
-            private syntacticCheck;
-            private suggestionCheck;
-            private regionSemanticCheck;
-            private sendDiagnosticsEvent;
-            private updateErrorCheck;
-            private cleanProjects;
-            private cleanup;
-            private getEncodedSyntacticClassifications;
-            private getEncodedSemanticClassifications;
-            private getProject;
-            private getConfigFileAndProject;
-            private getConfigFileDiagnostics;
-            private convertToDiagnosticsWithLinePositionFromDiagnosticFile;
-            private getCompilerOptionsDiagnostics;
-            private convertToDiagnosticsWithLinePosition;
-            private getDiagnosticsWorker;
-            private getDefinition;
-            private mapDefinitionInfoLocations;
-            private getDefinitionAndBoundSpan;
-            private findSourceDefinition;
-            private getEmitOutput;
-            private mapJSDocTagInfo;
-            private mapDisplayParts;
-            private mapSignatureHelpItems;
-            private mapDefinitionInfo;
-            private static mapToOriginalLocation;
-            private toFileSpan;
-            private toFileSpanWithContext;
-            private getTypeDefinition;
-            private mapImplementationLocations;
-            private getImplementation;
-            private getSyntacticDiagnosticsSync;
-            private getSemanticDiagnosticsSync;
-            private getSuggestionDiagnosticsSync;
-            private getJsxClosingTag;
-            private getLinkedEditingRange;
-            private getDocumentHighlights;
-            private provideInlayHints;
-            private mapCode;
-            private setCompilerOptionsForInferredProjects;
-            private getProjectInfo;
-            private getProjectInfoWorker;
-            private getRenameInfo;
-            private getProjects;
-            private getDefaultProject;
-            private getRenameLocations;
-            private mapRenameInfo;
-            private toSpanGroups;
-            private getReferences;
-            private getFileReferences;
-            private openClientFile;
-            private getPosition;
-            private getPositionInFile;
-            private getFileAndProject;
-            private getFileAndLanguageServiceForSyntacticOperation;
-            private getFileAndProjectWorker;
-            private getOutliningSpans;
-            private getTodoComments;
-            private getDocCommentTemplate;
-            private getSpanOfEnclosingComment;
-            private getIndentation;
-            private getBreakpointStatement;
-            private getNameOrDottedNameSpan;
-            private isValidBraceCompletion;
-            private getQuickInfoWorker;
-            private getFormattingEditsForRange;
-            private getFormattingEditsForRangeFull;
-            private getFormattingEditsForDocumentFull;
-            private getFormattingEditsAfterKeystrokeFull;
-            private getFormattingEditsAfterKeystroke;
-            private getCompletions;
-            private getCompletionEntryDetails;
-            private getCompileOnSaveAffectedFileList;
-            private emitFile;
-            private getSignatureHelpItems;
-            private toPendingErrorCheck;
-            private getDiagnostics;
-            private change;
-            private reload;
-            private saveToTmp;
-            private closeClientFile;
-            private mapLocationNavigationBarItems;
-            private getNavigationBarItems;
-            private toLocationNavigationTree;
-            private getNavigationTree;
-            private getNavigateToItems;
-            private getFullNavigateToItems;
-            private getSupportedCodeFixes;
-            private isLocation;
-            private extractPositionOrRange;
-            private getRange;
-            private getApplicableRefactors;
-            private getEditsForRefactor;
-            private getMoveToRefactoringFileSuggestions;
-            private getPasteEdits;
-            private organizeImports;
-            private getEditsForFileRename;
-            private getCodeFixes;
-            private getCombinedCodeFix;
-            private applyCodeActionCommand;
-            private getStartAndEndPosition;
-            private mapCodeAction;
-            private mapCodeFixAction;
-            private mapPasteEditsAction;
-            private mapTextChangesToCodeEdits;
-            private mapTextChangeToCodeEdit;
-            private convertTextChangeToCodeEdit;
-            private getBraceMatching;
-            private getDiagnosticsForProject;
-            private configurePlugin;
-            private getSmartSelectionRange;
-            private toggleLineComment;
-            private toggleMultilineComment;
-            private commentSelection;
-            private uncommentSelection;
-            private mapSelectionRange;
-            private getScriptInfoFromProjectService;
-            private toProtocolCallHierarchyItem;
-            private toProtocolCallHierarchyIncomingCall;
-            private toProtocolCallHierarchyOutgoingCall;
-            private prepareCallHierarchy;
-            private provideCallHierarchyIncomingCalls;
-            private provideCallHierarchyOutgoingCalls;
             getCanonicalFileName(fileName: string): string;
             exit(): void;
-            private notRequired;
-            private requiredResponse;
-            private handlers;
             addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse): void;
-            private setCurrentRequest;
-            private resetCurrentRequest;
             executeWithRequestId<T>(requestId: number, f: () => T): T;
             executeCommand(request: protocol.Request): HandlerResponse;
             onMessage(message: TMessage): void;
             protected parseMessage(message: TMessage): protocol.Request;
             protected toStringMessage(message: TMessage): string;
-            private getFormatOptions;
-            private getPreferences;
-            private getHostFormatOptions;
-            private getHostPreferences;
         }
         interface HandlerResponse {
             response?: {};

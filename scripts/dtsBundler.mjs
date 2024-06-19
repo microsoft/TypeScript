@@ -32,9 +32,10 @@ assert(typeof entrypoint === "string" && entrypoint);
 assert(typeof output === "string" && output);
 assert(output.endsWith(dotDts));
 
+const publicBaselineOutput = output.substring(0, output.length - dotDts.length) + ".baseline" + dotDts;
 const internalOutput = output.substring(0, output.length - dotDts.length) + ".internal" + dotDts;
 
-console.log(`Bundling ${entrypoint} to ${output} and ${internalOutput}`);
+console.log(`Bundling ${entrypoint} to ${output}, ${publicBaselineOutput}, and ${internalOutput}`);
 
 const newLineKind = ts.NewLineKind.LineFeed;
 const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
@@ -131,6 +132,7 @@ const WriteTarget = {
     Public: 1 << 0,
     Internal: 1 << 1,
     Both: (1 << 0) | (1 << 1),
+    PublicBaseline: 1 << 2,
 };
 
 /**
@@ -512,5 +514,7 @@ function dprint(contents) {
     return result.replace(/\r\n/g, "\n");
 }
 
-fs.writeFileSync(output, dprint(publicContents));
+const formattedPublicContents = dprint(publicContents);
+fs.writeFileSync(output, formattedPublicContents);
+fs.writeFileSync(publicBaselineOutput, formattedPublicContents.replace(/^\s+private .*\n/gm, ""));
 fs.writeFileSync(internalOutput, dprint(internalContents));
