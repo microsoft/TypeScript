@@ -42,14 +42,10 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -107,10 +103,6 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/node_modules:
@@ -138,6 +130,7 @@ Before running Timeout callback:: count: 2
 14: timerToUpdateProgram
 16: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -152,10 +145,6 @@ Output::
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:

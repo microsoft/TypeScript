@@ -138,9 +138,9 @@ import { Power } from "./input";
 
 export const power = <Num extends number, PowerOf extends number>(
 >power : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
->      : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^   ^^   ^^       ^^       ^^^^^                   
+>      : ^   ^^^^^^^^^      ^^       ^^^^^^^^^      ^^   ^^   ^^       ^^       ^^^^^                   
 ><Num extends number, PowerOf extends number>(    num: Num,    powerOf: PowerOf): Power<Num, PowerOf> => (num ** powerOf) as never : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
->                                                                                                                                  : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^   ^^   ^^       ^^       ^^^^^                   
+>                                                                                                                                  : ^   ^^^^^^^^^      ^^       ^^^^^^^^^      ^^   ^^   ^^       ^^       ^^^^^                   
 
     num: Num,
 >num : Num

@@ -151,13 +151,13 @@ export let obj: MyType;
 
 export const photo: typeof obj.photo = {
 >photo : { id: number; } & { url: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >obj.photo : { id: number; } & { url: string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >obj : MyType
 >    : ^^^^^^
 >photo : { id: number; } & { url: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^      ^^^^^^^^^^^^^      ^^^
 >{    id: 1,    url: '',    xyz: 1 // Great! This causes an error!} : { id: number; url: string; xyz: number; }
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

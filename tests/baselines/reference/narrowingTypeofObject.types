@@ -17,7 +17,7 @@ function test(x: number & { _foo: string }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number & { _foo: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^      ^^^
 >'object' : "object"
 >         : ^^^^^^^^
 
@@ -41,12 +41,12 @@ function f1(x: F & { foo: number }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : F & { foo: number; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^
 >"object" : "object"
 >         : ^^^^^^^^
 
         x;
 >x : F & { foo: number; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^
     }
 }

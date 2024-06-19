@@ -152,6 +152,7 @@ export default tseslint.config(
                     varsIgnorePattern: "^(_+$|_[^_])",
                 },
             ],
+            "@typescript-eslint/no-inferrable-types": "off",
 
             // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
             "@typescript-eslint/prefer-optional-chain": "off",
@@ -169,6 +170,7 @@ export default tseslint.config(
             "local/debug-assert": "error",
             "local/no-keywords": "error",
             "local/jsdoc-format": "error",
+            "local/js-extensions": "error",
         },
     },
     {

@@ -8,9 +8,9 @@ let a: number;
 
 o ?? (a = 1);
 >o ?? (a = 1) : { x: number; } | 1
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^^^^^      ^^^^^^^
 >o : { x: number; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >(a = 1) : 1
 >        : ^
 >a = 1 : 1
@@ -24,11 +24,11 @@ a.toString();
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 // assignment flow
 declare const o: { x: number } | undefined;
@@ -45,19 +45,19 @@ let x: { x: number } | boolean;
 
 if (x = o ?? true) {
 >x = o ?? true : true | { x: number; }
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^      ^^^
 >x : boolean | { x: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^      ^^^
 >o ?? true : true | { x: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^      ^^^
 >o : { x: number; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
     x;
 >x : true | { x: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^
 }
 
 

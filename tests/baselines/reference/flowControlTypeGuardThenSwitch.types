@@ -67,7 +67,7 @@ if (isBoth(foo)) {
 >isBoth(foo) : boolean
 >            : ^^^^^^^
 >isBoth : (x: Base) => x is Both
->       : ^ ^^    ^^^^^^^^^^^^^^
+>       : ^ ^^    ^^^^^         
 >foo : Base
 >    : ^^^^
 

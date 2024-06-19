@@ -110,7 +110,7 @@ var ResultIsString6 = typeof foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsString7 = typeof A.foo();
 >ResultIsString7 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -156,7 +156,7 @@ typeof foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 typeof true, false;
 >typeof true, false : false
@@ -215,7 +215,7 @@ r: typeof foo;
 >typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var y = { a: true, b: false};
 >y : { a: boolean; b: boolean; }

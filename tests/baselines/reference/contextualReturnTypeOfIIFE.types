@@ -31,13 +31,13 @@ const test2: Promise<[one: number, two: string]> = new Promise(
 
     (resolve) => resolve([1, 'two']),
 >(resolve) => resolve([1, 'two']) : (resolve: (value: [one: number, two: string] | PromiseLike<[one: number, two: string]>) => void) => void
->                                 : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >resolve : (value: [one: number, two: string] | PromiseLike<[one: number, two: string]>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >resolve([1, 'two']) : void
 >                    : ^^^^
 >resolve : (value: [one: number, two: string] | PromiseLike<[one: number, two: string]>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >[1, 'two'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
 >1 : 1

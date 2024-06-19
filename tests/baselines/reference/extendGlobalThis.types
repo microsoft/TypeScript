@@ -35,15 +35,15 @@ console.log(globalThis.test.split("-"));
 >console.log(globalThis.test.split("-")) : void
 >                                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >globalThis.test.split("-") : string[]
 >                           : ^^^^^^^^
 >globalThis.test.split : (separator: string | RegExp, limit?: number) => string[]
->                      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>                      : ^         ^^               ^^     ^^^      ^^^^^        
 >globalThis.test : string
 >                : ^^^^^^
 >globalThis : typeof globalThis
@@ -51,7 +51,7 @@ console.log(globalThis.test.split("-"));
 >test : string
 >     : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^        
 >"-" : "-"
 >    : ^^^
 

@@ -35,7 +35,7 @@ function f1(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
     }
@@ -69,7 +69,7 @@ function f2(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
     }
@@ -103,7 +103,7 @@ function f3(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
     }
@@ -139,7 +139,7 @@ function f4(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
     }
@@ -192,7 +192,7 @@ function f5(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
     }
@@ -233,7 +233,7 @@ function f6(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
         }
@@ -252,7 +252,7 @@ function f6(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : object | null
 >  : ^^^^^^^^^^^^^
     }

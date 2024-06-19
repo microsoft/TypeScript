@@ -3,25 +3,25 @@
 === declFileTypeAnnotationStringLiteral.ts ===
 function foo(a: "hello"): number;
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->    : ^^^ ^^       ^^^      ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^       ^^^      ^^^ ^^      ^^^      ^^^ ^^      ^^^               ^^^
 >a : "hello"
 >  : ^^^^^^^
 
 function foo(a: "name"): string;
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->    : ^^^ ^^       ^^^^^^^^^^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^       ^^^      ^^^ ^^      ^^^      ^^^ ^^      ^^^               ^^^
 >a : "name"
 >  : ^^^^^^
 
 function foo(a: string): string | number;
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->    : ^^^ ^^       ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^               ^^^
+>    : ^^^ ^^       ^^^      ^^^ ^^      ^^^      ^^^ ^^      ^^^               ^^^
 >a : string
 >  : ^^^^^^
 
 function foo(a: string): string | number {
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->    : ^^^ ^^       ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^       ^^^      ^^^ ^^      ^^^      ^^^ ^^      ^^^               ^^^
 >a : string
 >  : ^^^^^^
 

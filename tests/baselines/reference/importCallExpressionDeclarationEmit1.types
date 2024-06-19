@@ -23,7 +23,7 @@ import(getSpecifier());
 >getSpecifier() : string
 >               : ^^^^^^
 >getSpecifier : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 var p0 = import(`${directory}\\${moduleFile}`);
 >p0 : Promise<any>
@@ -45,7 +45,7 @@ var p1 = import(getSpecifier());
 >getSpecifier() : string
 >               : ^^^^^^
 >getSpecifier : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >p2 : Promise<any>
@@ -59,7 +59,7 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >getSpecifier() : string
 >               : ^^^^^^
 >getSpecifier : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >"defaulPath" : "defaulPath"
 >             : ^^^^^^^^^^^^
 

@@ -83,7 +83,6 @@ import {
     pathIsRelative,
     Pattern,
     patternText,
-    perfLogger,
     readJson,
     removeExtension,
     removeFileExtension,
@@ -108,7 +107,7 @@ import {
     version,
     versionMajorMinor,
     VersionRange,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void {
@@ -342,12 +341,14 @@ export interface PackageJsonPathFields {
     imports?: object;
     exports?: object;
     name?: string;
+    dependencies?: MapLike<string>;
+    peerDependencies?: MapLike<string>;
+    optionalDependencies?: MapLike<string>;
 }
 
 interface PackageJson extends PackageJsonPathFields {
     name?: string;
     version?: string;
-    peerDependencies?: MapLike<string>;
 }
 
 function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
@@ -1429,7 +1430,6 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             }
         }
 
-        perfLogger?.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
         switch (moduleResolution) {
             case ModuleResolutionKind.Node16:
                 result = node16ModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
@@ -1449,8 +1449,6 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
         }
-        if (result && result.resolvedModule) perfLogger?.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
-        perfLogger?.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
         if (cache && !cache.isReadonly) {
             cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);

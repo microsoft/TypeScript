@@ -1,10 +1,10 @@
 import {
     getConfigDirExtendsSys,
     getSymlinkedExtendsSys,
-} from "../helpers/extends";
-import { verifyTsc } from "../helpers/tsc";
-import { verifyTscWatch } from "../helpers/tscWatch";
-import { loadProjectFromFiles } from "../helpers/vfs";
+} from "../helpers/extends.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: extends::", () => {
     verifyTscWatch({

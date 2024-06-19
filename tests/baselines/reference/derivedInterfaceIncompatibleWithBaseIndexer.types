@@ -61,7 +61,7 @@ interface Derived5 extends Base {
 interface Derived5 extends Base {
     '1': { x: number } // error
 >'1' : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 }

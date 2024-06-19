@@ -20,17 +20,17 @@ var a: { (x: number): void };
 
 t = a;
 >t = a : (x: number) => void
->      : ^ ^^      ^^^^^^^^^
+>      : ^ ^^      ^^^^^    
 >t : T
 >  : ^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 
 a = t;
 >a = t : T
 >      : ^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >t : T
 >  : ^
 
@@ -59,27 +59,27 @@ t = s;
 
 t = a2;
 >t = a2 : (x: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >t : T
 >  : ^
 >a2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 a = s;
 >a = s : S
 >      : ^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >s : S
 >  : ^
 
 a = a2;
 >a = a2 : (x: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >a2 : (x: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
 t = <T>(x: T) => 1;
 >t = <T>(x: T) => 1 : <T>(x: T) => number
@@ -119,7 +119,7 @@ a = <T>(x: T) => 1;
 >a = <T>(x: T) => 1 : <T>(x: T) => number
 >                   : ^ ^^ ^^ ^^^^^^^^^^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 ><T>(x: T) => 1 : <T>(x: T) => number
 >               : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
@@ -131,7 +131,7 @@ a = () => 1;
 >a = () => 1 : () => number
 >            : ^^^^^^^^^^^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -141,7 +141,7 @@ a = function (x: number) { return ''; }
 >a = function (x: number) { return ''; } : (x: number) => string
 >                                        : ^ ^^      ^^^^^^^^^^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >function (x: number) { return ''; } : (x: number) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -175,11 +175,11 @@ t = s2;
 
 t = a3;
 >t = a3 : (x: string) => void
->       : ^ ^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^    
 >t : T
 >  : ^
 >a3 : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 t = (x: string) => 1;
 >t = (x: string) => 1 : (x: string) => number
@@ -209,23 +209,23 @@ a = s2;
 >a = s2 : S2
 >       : ^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >s2 : S2
 >   : ^^
 
 a = a3;
 >a = a3 : (x: string) => void
->       : ^ ^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^    
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >a3 : (x: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 
 a = (x: string) => 1;
 >a = (x: string) => 1 : (x: string) => number
 >                     : ^ ^^      ^^^^^^^^^^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >(x: string) => 1 : (x: string) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : string
@@ -237,7 +237,7 @@ a = function (x: string) { return ''; }
 >a = function (x: string) { return ''; } : (x: string) => string
 >                                        : ^ ^^      ^^^^^^^^^^^
 >a : (x: number) => void
->  : ^ ^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^    
 >function (x: string) { return ''; } : (x: string) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >x : string

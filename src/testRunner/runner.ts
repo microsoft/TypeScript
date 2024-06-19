@@ -1,4 +1,4 @@
-import * as FourSlash from "./_namespaces/FourSlash";
+import * as FourSlash from "./_namespaces/FourSlash.js";
 import {
     CompilerBaselineRunner,
     CompilerTestType,
@@ -11,10 +11,11 @@ import {
     setShardId,
     setShards,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as project from "./_namespaces/project";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+    TranspileRunner,
+} from "./_namespaces/Harness.js";
+import * as project from "./_namespaces/project.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /* eslint-disable prefer-const */
 export let runners: RunnerBase[] = [];
@@ -66,6 +67,8 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
+        case "transpile":
+            return new TranspileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -190,6 +193,9 @@ function handleTestConfig() {
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
+                    case "transpile":
+                        runners.push(new TranspileRunner());
+                        break;
                 }
             }
         }
@@ -206,6 +212,9 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+
+        // transpile
+        runners.push(new TranspileRunner());
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
@@ -240,6 +249,10 @@ function beginTests() {
     }
 }
 
+function importTests() {
+    return import("./tests.js");
+}
+
 export let isWorker: boolean;
 function startTestEnvironment() {
     // For debugging convenience.
@@ -247,20 +260,13 @@ function startTestEnvironment() {
 
     isWorker = handleTestConfig();
     if (isWorker) {
-        return Parallel.Worker.start();
+        return Parallel.Worker.start(importTests);
     }
     else if (taskConfigsFolder && workerCount && workerCount > 1) {
-        return Parallel.Host.start();
+        return Parallel.Host.start(importTests);
     }
     beginTests();
+    importTests();
 }
 
 startTestEnvironment();
-
-// This brings in all of the unittests.
-
-// If running as emitted CJS, we want to start the tests here after startTestEnvironment.
-// If running bundled, we will do this in Harness.ts.
-if (__filename.endsWith("runner.js")) {
-    require("./tests");
-}

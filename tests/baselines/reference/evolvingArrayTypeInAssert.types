@@ -21,11 +21,11 @@ function yadda() {
 >out.push(100) : number
 >              : ^^^^^^
 >out.push : (...items: any[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^      
 >out : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 
@@ -33,7 +33,7 @@ function yadda() {
 >unsafeCast<any>(out) : void
 >                     : ^^^^
 >unsafeCast : <T>(_value: unknown) => asserts _value is T
->           : ^^^^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^       ^^^^^                   
 >out : number[]
 >    : ^^^^^^^^
 

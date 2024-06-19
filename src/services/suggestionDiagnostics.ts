@@ -57,7 +57,7 @@ import {
     SyntaxKind,
     TypeChecker,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 
@@ -66,7 +66,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: DiagnosticWithLocation[] = [];
     const checker = program.getTypeChecker();
-    const isCommonJSFile = program.getImpliedNodeFormatForEmit(sourceFile) === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
+    const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
     if (
         !isCommonJSFile &&
@@ -87,7 +87,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             const importNode = importFromModuleSpecifier(moduleSpecifier);
             const name = importNameForConvertToDefaultImport(importNode);
             if (!name) continue;
-            const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
+            const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
