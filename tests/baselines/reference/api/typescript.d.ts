@@ -3626,9 +3626,6 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    namespace codefix {
-        function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]): void;
-    }
     const versionMajorMinor = "5.6";
     /** The version of the TypeScript compiler release */
     const version: string;
