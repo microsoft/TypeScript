@@ -71,9 +71,9 @@ jobs:
 
   coverage:
     runs-on:
-      - "self-hosted"
-      - "1ES.Pool=TypeScript-1ES-GitHub-Large"
-      - "1ES.ImageOverride=ubuntu-22.04"
+      - 'self-hosted'
+      - '1ES.Pool=TypeScript-1ES-GitHub-Large'
+      - '1ES.ImageOverride=ubuntu-22.04'
 
     permissions:
       id-token: write
