@@ -188,14 +188,6 @@ export default tseslint.config(
         },
     },
     {
-        // These files contain imports in a specific order that are generally unsafe to modify.
-        files: ["**/_namespaces/**"],
-        rules: {
-            "simple-import-sort/imports": "off",
-            "simple-import-sort/exports": "off",
-        },
-    },
-    {
         files: ["src/**"],
         languageOptions: {
             parserOptions: {
