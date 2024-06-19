@@ -77,7 +77,6 @@ import {
     LanguageServiceMode,
     length,
     map,
-    mapDefinedEntries,
     mapDefinedIterator,
     missingFileModifiedTime,
     MultiMap,
@@ -1303,16 +1302,12 @@ export class ProjectService {
     /** @internal */
     readonly watchFactory: WatchFactory<WatchType, Project | NormalizedPath>;
 
-    /** @internal */
     private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
-    /** @internal */
     private readonly extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
 
     /** @internal */
     readonly packageJsonCache: PackageJsonCache;
-    /** @internal */
     private packageJsonFilesMap: Map<Path, PackageJsonWatcher> | undefined;
-    /** @internal */
     private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
     /** @internal */
     readonly session: Session<unknown> | undefined;
@@ -1842,8 +1837,6 @@ export class ProjectService {
 
     /**
      * This is to watch whenever files are added or removed to the wildcard directories
-     *
-     * @internal
      */
     private watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
         let watcher: FileWatcher | undefined = this.watchFactory.watchDirectory(
@@ -1942,7 +1935,6 @@ export class ProjectService {
         return result;
     }
 
-    /** @internal */
     private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         if (!configFileExistenceInfo?.config) return false;
@@ -1979,7 +1971,6 @@ export class ProjectService {
         return scheduledAnyProjectUpdate;
     }
 
-    /** @internal */
     private onConfigFileChanged(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, eventKind: FileWatcherEventKind) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
         const project = this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
@@ -2281,7 +2272,6 @@ export class ProjectService {
         return exists;
     }
 
-    /** @internal */
     private createConfigFileWatcherForParsedConfig(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProject: ConfiguredProject) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
         // When watching config file for parsed config, remove the noopFileWatcher that can be created for open files impacted by config file and watch for real
@@ -2746,8 +2736,6 @@ export class ProjectService {
 
     /**
      * Read the config file of the project, and update the project root file names.
-     *
-     * @internal
      */
     private loadConfiguredProject(project: ConfiguredProject, reason: string) {
         tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
@@ -3032,7 +3020,6 @@ export class ProjectService {
         return project.updateGraph();
     }
 
-    /** @internal */
     private reloadFileNamesOfParsedConfig(configFileName: NormalizedPath, config: ParsedConfig) {
         if (config.updateLevel === undefined) return config.parsedCommandLine!.fileNames;
         Debug.assert(config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate);
@@ -3086,7 +3073,6 @@ export class ProjectService {
         updateWithTriggerFile(project, project.triggerFileForConfigFileDiag ?? project.getConfigFilePath(), /*isReload*/ true);
     }
 
-    /** @internal */
     private clearSemanticCache(project: Project) {
         project.originalConfiguredProjects = undefined;
         project.resolutionCache.clear();
@@ -3801,7 +3787,6 @@ export class ProjectService {
         return this.getWatchOptionsFromProjectWatchOptions(project.getWatchOptions(), project.getCurrentDirectory());
     }
 
-    /** @internal */
     private getWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined, basePath: string) {
         const hostWatchOptions = !this.hostConfiguration.beforeSubstitution ? this.hostConfiguration.watchOptions :
             handleWatchOptionsConfigDirTemplateSubstitution(
@@ -4347,14 +4332,15 @@ export class ProjectService {
 
     /** @internal */
     loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
-        forProjects = forProjects || mapDefinedEntries(
-            this.configuredProjects,
-            (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined,
+        forProjects ??= new Set(
+            mapDefinedIterator(this.configuredProjects.entries(), ([key, project]) => !project.isInitialLoadPending() ? key : undefined),
         );
 
         const seenProjects = new Set<NormalizedPath>();
-        // Work on array copy as we could add more projects as part of callback
-        for (const project of arrayFrom(this.configuredProjects.values())) {
+        // We must copy the current configured projects into a separate array,
+        // as we could end up creating and adding more projects indirectly.
+        const currentConfiguredProjects = arrayFrom(this.configuredProjects.values());
+        for (const project of currentConfiguredProjects) {
             // If this project has potential project reference for any of the project we are loading ancestor tree for
             // load this project first
             if (forEachPotentialProjectReference(project, potentialRefPath => forProjects.has(potentialRefPath))) {
@@ -5007,7 +4993,6 @@ export class ProjectService {
 
     /**
      * Performs the remaining steps of enabling a plugin after its module has been instantiated.
-     * @internal
      */
     private endEnablePlugin(project: Project, { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
         if (resolvedModule) {
@@ -5162,7 +5147,6 @@ export class ProjectService {
         });
     }
 
-    /** @internal */
     private watchPackageJsonFile(file: string, path: Path, project: Project | WildcardWatcher) {
         Debug.assert(project !== undefined);
         let result = (this.packageJsonFilesMap ??= new Map()).get(path);
@@ -5204,7 +5188,6 @@ export class ProjectService {
         (project.packageJsonWatches ??= new Set()).add(result);
     }
 
-    /** @internal */
     private onPackageJsonChange(result: PackageJsonWatcher) {
         result.projects.forEach(project => (project as Project).onPackageJsonChange?.());
     }
