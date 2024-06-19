@@ -2788,7 +2788,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return equalityComparer(file.fileName, getDefaultLibraryFileName());
         }
         else {
-            return some(options.lib, libFileName => equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!.actual));
+            return some(options.lib, libFileName => resolvedLibReferences!.has(libFileName) && equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!.actual));
         }
     }
 
