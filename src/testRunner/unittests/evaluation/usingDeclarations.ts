@@ -1849,9 +1849,11 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             0,
             1,
             2,
-            4, // This really should be 2, but our transpile introduces an extra `await` by necessity to observe the
-               // result of DisposeResources. The process of adopting the result of DisposeResource ends up taking two
-               // turns of the microtask queue.
+
+            // This really should be 2, but our transpile introduces an extra `await` by necessity to observe the
+            // result of __disposeResources. The process of adopting the result ends up taking two turns of the
+            // microtask queue.
+            4,
         ]);
     });
 });
