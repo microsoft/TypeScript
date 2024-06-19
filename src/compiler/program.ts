@@ -2777,7 +2777,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return true;
         }
 
-        if (options.noLib) {
+        if (!options.noLib) {
             return false;
         }
 
