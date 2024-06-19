@@ -1,13 +1,14 @@
 import * as performance from "../../compiler/performance.js";
 
 const name = "mark";
-describe("count", () => {
+describe("clear measures", () => {
   before(() => {
     performance.mark(name);
   });
 
   it("count should be 0", () => {
-    expect(performance.getCount(name)).to.equal(0);
+    performance.clearMeasures(name);
+    expect(performance.getDuration(name)).to.equal(0);
   });
 
   after(() => {
