@@ -28,10 +28,10 @@ declare const p: Promise<number>;
 p.finally();
 >p.finally() : Promise<number>
 >            : ^^^^^^^^^^^^^^^
->p.finally : (onfinally?: () => void) => Promise<number>
->          : ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
+>p.finally : (deferred onfinally?: () => void) => Promise<number>
+>          : ^        ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
->finally : (onfinally?: () => void) => Promise<number>
->        : ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
+>finally : (deferred onfinally?: () => void) => Promise<number>
+>        : ^        ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
 
