@@ -155,6 +155,7 @@ import {
     isConstTypeReference,
     IScriptSnapshot,
     isDeclarationName,
+    isElementAccessExpression,
     isGetAccessor,
     isIdentifier,
     isImportMeta,
@@ -345,7 +346,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    isElementAccessExpression,
 } from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
