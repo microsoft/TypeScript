@@ -24166,7 +24166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             findMostOverlappyType(source, target);
     }
 
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
+    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String | number])[], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
         const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
         for (const [getDiscriminatingType, propertyName] of discriminators) {
@@ -24176,7 +24176,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let matched = false;
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
-                    const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
+                    const targetType = typeof propertyName === "number"
+                        ? getContextualTypeForElementExpression(types[i], propertyName)
+                        : getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
                     if (targetType && related(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
@@ -31740,6 +31742,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function discriminateContextualTypeByElements(node: ArrayLiteralExpression, contextualType: UnionType) {
+        const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
+        const cached = getCachedType(key);
+        if (cached) return cached;
+
+        // Create a discriminator for each element in the list
+        const discriminators = map(
+            node.elements,
+            (e, ndx) => [() => getContextFreeTypeOfExpression(e), ndx] as const,
+        );
+        const discriminatedType = discriminateTypeByDiscriminableItems(
+            contextualType,
+            discriminators,
+            isTypeAssignableTo,
+        );
+
+        return setCachedType(key, discriminatedType);
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -31757,9 +31778,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
                 /*noReductions*/ true,
             );
-            return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
-                apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
-                apparentType;
+            const isUnion = apparentType.flags & TypeFlags.Union;
+            if (isUnion && isObjectLiteralExpression(node)) {
+                return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+            }
+            else if (isUnion && isJsxAttributes(node)) {
+                return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+            }
+            else if (contextFlags && contextFlags & ContextFlags.Completions && isUnion && isArrayLiteralExpression(node)) {
+                return discriminateContextualTypeByElements(node, instantiatedType as UnionType);
+            }
+            else {
+                return apparentType;
+            }
         }
     }
 
