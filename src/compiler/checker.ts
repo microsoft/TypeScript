@@ -5283,10 +5283,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exports = getExportsOfSymbol(container);
         const quick = exports.get(symbol.escapedName);
         if (quick && getSymbolIfSameReference(quick, symbol)) {
+            if (!quick.parent) {
+                const clone = cloneSymbol(quick);
+                clone.parent = container;
+                return clone;
+            }
             return quick;
         }
         return forEachEntry(exports, exported => {
             if (getSymbolIfSameReference(exported, symbol)) {
+                if (!exported.parent) {
+                    const clone = cloneSymbol(exported);
+                    clone.parent = container;
+                    return clone;
+                }
                 return exported;
             }
         });
