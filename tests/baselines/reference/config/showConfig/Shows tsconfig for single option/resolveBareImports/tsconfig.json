@@ -1,0 +1,5 @@
+{
+    "compilerOptions": {
+        "resolveBareImports": true
+    }
+}

@@ -7349,6 +7349,7 @@ export interface CompilerOptions {
     target?: ScriptTarget;
     traceResolution?: boolean;
     useUnknownInCatchVariables?: boolean;
+    resolveBareImports?: boolean;
     resolveJsonModule?: boolean;
     types?: string[];
     /** Paths used to compute primary types search locations */

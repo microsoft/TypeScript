@@ -150,6 +150,7 @@ class CompilerTest {
         "noUncheckedIndexedAccess",
         "preserveConstEnums",
         "removeComments",
+        "resolveBareImports",
         "resolveJsonModule",
         "resolvePackageJsonExports",
         "resolvePackageJsonImports",

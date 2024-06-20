@@ -6384,6 +6384,10 @@
         "category": "Message",
         "code": 6805
     },
+    "Resolve bare imports.": {
+        "category": "Message",
+        "code": 6806
+    },
 
     "one of:": {
         "category": "Message",

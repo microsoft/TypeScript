@@ -1192,6 +1192,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
     },
+    {
+        name: "resolveBareImports",
+        type: "boolean",
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Resolve_bare_imports,
+        defaultValueDescription: false,
+    },
 
     // Source Maps
     {
