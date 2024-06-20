@@ -10,10 +10,7 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import {
-    appendText,
-    loadProjectFromFiles,
-} from "../helpers/vfs.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true, withoutConfig?: true) {
