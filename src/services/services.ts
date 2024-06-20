@@ -2273,10 +2273,10 @@ export function createLanguageService(
         const nodeForQuickInfo = getNodeForQuickInfo(node);
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-            const nodeForType = shouldGetType(sourceFile, nodeForQuickInfo, position)
-            const type = nodeForType === true 
-              ? typeChecker.getTypeAtLocation(nodeForQuickInfo)
-              : nodeForType === false ? undefined : typeChecker.getTypeAtLocation(nodeForType);
+            const nodeForType = shouldGetType(sourceFile, nodeForQuickInfo, position);
+            const type = nodeForType === true
+                ? typeChecker.getTypeAtLocation(nodeForQuickInfo)
+                : nodeForType === false ? undefined : typeChecker.getTypeAtLocation(nodeForType);
             return type && {
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
