@@ -2497,6 +2497,11 @@ export interface RequestCompletedEvent extends Event {
 
 export interface RequestCompletedEventBody {
     request_seq: number;
+    performanceData?: RequestCompletedPerformanceData;
+}
+
+export interface RequestCompletedPerformanceData {
+    diagnosticsDuration?: FileDiagnosticPerformanceData[];
 }
 
 /**
@@ -2587,11 +2592,6 @@ export interface DiagnosticEventBody {
      * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
      */
     spans?: TextSpan[];
-
-    /**
-     * Time spent computing the diagnostics, in milliseconds.
-     */
-    duration?: number;
 }
 
 export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
@@ -2603,6 +2603,18 @@ export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDia
 export interface DiagnosticEvent extends Event {
     body?: DiagnosticEventBody;
     event: DiagnosticEventKind;
+}
+
+/**
+ * Time spent computing each kind of diagnostics, in milliseconds.
+ */
+export type DiagnosticPerformanceData = { [Kind in DiagnosticEventKind]?: number; };
+
+export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+    /**
+     * The file for which the performance data is reported.
+     */
+    file: string;
 }
 
 export interface ConfigFileDiagnosticEventBody {

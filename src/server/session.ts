@@ -996,6 +996,9 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
+    /** @internal */
+    private requestPerformanceData: Map<number, Map<NormalizedPath, protocol.DiagnosticPerformanceData>> = new Map();
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1068,6 +1071,12 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private sendRequestCompletedEvent(requestId: number): void {
+        if (this.requestPerformanceData.has(requestId)) {
+            const diagnosticsDuration = arrayFrom(this.requestPerformanceData.get(requestId)!.entries()).map(([file, data]) => ({ file, ...data }));
+            this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData: { diagnosticsDuration } }, "requestCompleted");
+            this.requestPerformanceData.delete(requestId);
+            return;
+        }
         this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
     }
 
@@ -1142,7 +1151,7 @@ export class Session<TMessage = string> implements EventSender {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                 this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, undefined, /*requireOpen*/ true));
             }
 
             // Send project changed event
@@ -1258,31 +1267,31 @@ export class Session<TMessage = string> implements EventSender {
         this.send(res);
     }
 
-    private semanticCheck(file: NormalizedPath, project: Project) {
+    private semanticCheck(file: NormalizedPath, project: Project, requestId: number | undefined) {
         const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
             : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
-        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime);
+        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime, requestId);
         tracing?.pop();
     }
 
-    private syntacticCheck(file: NormalizedPath, project: Project) {
+    private syntacticCheck(file: NormalizedPath, project: Project, requestId: number | undefined) {
         const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime, requestId);
         tracing?.pop();
     }
 
-    private suggestionCheck(file: NormalizedPath, project: Project) {
+    private suggestionCheck(file: NormalizedPath, project: Project, requestId: number | undefined) {
         const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime, requestId);
         tracing?.pop();
     }
 
-    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[], requestId: number | undefined): void {
         const diagnosticsStartTime = this.hrtime();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         let diagnosticsResult;
@@ -1290,7 +1299,7 @@ export class Session<TMessage = string> implements EventSender {
             tracing?.pop();
             return;
         }
-        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, diagnosticsResult.spans);
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, requestId, diagnosticsResult.spans);
         tracing?.pop();
         return;
     }
@@ -1309,6 +1318,7 @@ export class Session<TMessage = string> implements EventSender {
         diagnostics: readonly Diagnostic[],
         kind: protocol.DiagnosticEventKind,
         diagnosticsStartTime: [number, number],
+        requestId: number | undefined,
         spans?: TextSpan[],
     ): void {
         try {
@@ -1319,16 +1329,32 @@ export class Session<TMessage = string> implements EventSender {
                 file,
                 diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
                 spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
-                duration,
             };
             this.event<protocol.DiagnosticEventBody>(
                 body,
                 kind,
             );
+            if (requestId) this.addDiagnosticsPerformanceData(file, kind, duration, requestId);
         }
         catch (err) {
             this.logError(err, kind);
         }
+    }
+
+    /** @internal */
+    private addDiagnosticsPerformanceData(
+        file: NormalizedPath,
+        kind: protocol.DiagnosticEventKind,
+        duration: number,
+        requestId: number,
+    ): void {
+        if (!this.requestPerformanceData.has(requestId)) {
+            this.requestPerformanceData.set(requestId, new Map());
+        }
+        const requestData = this.requestPerformanceData.get(requestId)!;
+        const fileData = requestData.get(file) || {};
+        fileData[kind] = duration;
+        requestData.set(file, fileData);
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
@@ -1336,6 +1362,7 @@ export class Session<TMessage = string> implements EventSender {
         next: NextStep,
         checkList: PendingErrorCheck[] | (string | protocol.FileRangesRequestArgs)[],
         ms: number,
+        requestId: number | undefined,
         requireOpen = true,
     ) {
         if (checkList.length === 0) {
@@ -1355,7 +1382,7 @@ export class Session<TMessage = string> implements EventSender {
         };
 
         const doSemanticCheck = (fileName: NormalizedPath, project: Project) => {
-            this.semanticCheck(fileName, project);
+            this.semanticCheck(fileName, project, requestId);
             if (this.changeSeq !== seq) {
                 return;
             }
@@ -1364,7 +1391,7 @@ export class Session<TMessage = string> implements EventSender {
                 return goNext();
             }
             next.immediate("suggestionCheck", () => {
-                this.suggestionCheck(fileName, project);
+                this.suggestionCheck(fileName, project, requestId);
                 goNext();
             });
         };
@@ -1397,7 +1424,7 @@ export class Session<TMessage = string> implements EventSender {
                 return;
             }
 
-            this.syntacticCheck(fileName, project);
+            this.syntacticCheck(fileName, project, requestId);
             if (this.changeSeq !== seq) {
                 return;
             }
@@ -1411,7 +1438,12 @@ export class Session<TMessage = string> implements EventSender {
                 return next.immediate("regionSemanticCheck", () => {
                     const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
                     if (scriptInfo) {
-                        this.regionSemanticCheck(fileName, project, ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)));
+                        this.regionSemanticCheck(
+                            fileName,
+                            project,
+                            ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)),
+                            requestId,
+                        );
                     }
                     if (this.changeSeq !== seq) {
                         return;
@@ -2577,13 +2609,13 @@ export class Session<TMessage = string> implements EventSender {
         return project && { fileName, project };
     }
 
-    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
+    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[], requestId: number): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
         if (fileArgs.length > 0) {
-            this.updateErrorCheck(next, fileArgs, delay);
+            this.updateErrorCheck(next, fileArgs, delay, requestId);
         }
     }
 
@@ -3082,7 +3114,7 @@ export class Session<TMessage = string> implements EventSender {
             : spans;
     }
 
-    private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
+    private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string, requestId: number): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
@@ -3129,7 +3161,7 @@ export class Session<TMessage = string> implements EventSender {
         const checkList = sortedFiles.map(fileName => ({ fileName, project }));
         // Project level error analysis runs on background files too, therefore
         // doesn't require the file to be opened
-        this.updateErrorCheck(next, checkList, delay, /*requireOpen*/ false);
+        this.updateErrorCheck(next, checkList, delay, requestId, /*requireOpen*/ false);
     }
 
     private configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
@@ -3533,11 +3565,11 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(this.getSuggestionDiagnosticsSync(request.arguments));
         },
         [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
-            this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
+            this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files, this.currentRequestId));
             return this.notRequired();
         },
         [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
-            this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
+            this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file, this.currentRequestId));
             return this.notRequired();
         },
         [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
