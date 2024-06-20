@@ -689,9 +689,9 @@ export function concatenate<T>(array1: readonly T[] | undefined, array2: readonl
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
     if (array2 === undefined || array2.length === 0) return array1;
     if (array1 === undefined || array1.length === 0) return array2;
-    const result: T[] = [];
-    for (let i = 0; i < array1.length; i++) result.push(array1[i]);
-    for (let i = 0; i < array2.length; i++) result.push(array2[i]);
+    let result: T[] | undefined;
+    for (let i = 0; i < array1.length; i++) result = append(result, array1[i]);
+    for (let i = 0; i < array2.length; i++) result = append(result, array2[i]);
     return result;
 }
 
