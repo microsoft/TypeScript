@@ -6384,7 +6384,7 @@
         "category": "Message",
         "code": 6805
     },
-    "Resolve bare imports.": {
+    "Resolve side effect imports.": {
         "category": "Message",
         "code": 6806
     },

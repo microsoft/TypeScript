@@ -1,8 +1,0 @@
-//// [tests/cases/compiler/resolveBareImports.ts] ////
-
-=== resolveBareImports.ts ===
-
-import "does-not-exist";
-import "./does-not-exist-either";
-import "./does-not-exist-either.js";
-
