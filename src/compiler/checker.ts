@@ -47127,7 +47127,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            else if (resolveBareImports && !importClause) {
+            else if (resolveBareImports !== false && !importClause) { // TODO(jakebailey): revert after testing impact
                 void resolveExternalModuleName(node, node.moduleSpecifier);
             }
         }
