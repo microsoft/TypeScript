@@ -722,7 +722,7 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 
 function f30<T, K extends keyof T>() {
 >f30 : <T, K extends keyof T>() => void
->    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
@@ -733,7 +733,7 @@ function f30<T, K extends keyof T>() {
 
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
->    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]

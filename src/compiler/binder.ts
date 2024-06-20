@@ -252,6 +252,7 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    moduleExportNameIsDefault,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -269,7 +270,6 @@ import {
     ParenthesizedExpression,
     Pattern,
     PatternAmbientModule,
-    perfLogger,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
@@ -435,6 +435,9 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
 
 function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
     const name = specifier.propertyName || specifier.name;
+    if (name.kind !== SyntaxKind.Identifier) {
+        return ModuleInstanceState.Instantiated; // Skip for invalid syntax like this: export { "x" }
+    }
     let p: Node | undefined = specifier.parent;
     while (p) {
         if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
@@ -511,9 +514,7 @@ const binder = /* @__PURE__ */ createBinder();
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.mark("beforeBind");
-    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }
@@ -763,7 +764,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
         Debug.assert(isComputedName || !hasDynamicName(node));
 
-        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
+        const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && moduleExportNameIsDefault(node.name);
 
         // The exported symbol for an export default function/class node is always named "default"
         const name = isComputedName ? InternalSymbolName.Computed

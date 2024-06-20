@@ -58,7 +58,7 @@ const res3 = fn3()(() => res3);
 >fn3()(() => res3) : (a: unknown) => void
 >                  : ^ ^^^^^^^^^^^^^^    
 >fn3() : <T2>(cb: (arg: T2) => any) => (a: unknown) => void
->      : ^^^^^  ^^^   ^^^^^^^^^   ^^^^^    ^^^^^^^         
+>      : ^  ^^  ^^^   ^^^^^^^^^   ^^^^^    ^^^^^^^         
 >fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
 >    : ^ ^^^^^^^                                            
 >() => res3 : () => (a: unknown) => void

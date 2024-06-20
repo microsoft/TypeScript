@@ -56,7 +56,7 @@ module Generics {
    
     function foo<T extends Derived>() {
 >foo : <T extends Derived>() => void
->    : ^^^^^^^^^^^       ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^^^^^^^^^^
 
         var a: A<T>;
 >a : A<T>

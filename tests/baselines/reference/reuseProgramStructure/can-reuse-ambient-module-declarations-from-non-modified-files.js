@@ -38,9 +38,6 @@ File: /a/b/node.d.ts
 
 declare module 'fs' {}
 
-File '/a/b/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/a/b/fs.ts' does not exist.
@@ -69,10 +66,6 @@ File '/a/fs.jsx' does not exist.
 File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
-File '/a/b/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File 'package.json' does not exist.
 
 MissingPaths:: [
   "lib.d.ts"
@@ -121,12 +114,6 @@ File: /a/b/node.d.ts
 
 declare module 'fs' {}
 
-File '/a/b/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/a/b/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified.
 
 MissingPaths:: [
@@ -176,12 +163,6 @@ File: /a/b/node.d.ts
 
 declare var process: any
 
-File '/a/b/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/a/b/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/a/b/fs.ts' does not exist.

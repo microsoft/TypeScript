@@ -699,7 +699,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValue<T>(value) : void
 >                     : ^^^^
 >printValue : <T_1>(t: T_1) => void
->           : ^   ^^ ^^   ^^^^^    
+>           : ^^^^^^ ^^   ^^^^^    
 >value : T
 >      : ^
     }
@@ -708,7 +708,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValueList<T>(value) : void
 >                         : ^^^^
 >printValueList : <T_1>(t: Array<T_1>) => void
->               : ^   ^^ ^^          ^^^^^    
+>               : ^^^^^^ ^^          ^^^^^    
 >value : T[]
 >      : ^^^
     }
@@ -1416,7 +1416,7 @@ const f60: Func = (kind, payload) => {
 >f60 : Func
 >    : ^^^^
 >(kind, payload) => {    if (kind === "a") {        payload.toFixed();  // error    }    if (kind === "b") {        payload.toUpperCase();  // error    }} : <T extends ["a", number] | ["b", string]>(kind: T[0], payload: T[1]) => void
->                                                                                                                                                          : ^^^^^^^^^^^                             ^^    ^^^^^^^^       ^^^^^^^^^^^^^^^
+>                                                                                                                                                          : ^ ^^^^^^^^^                             ^^    ^^^^^^^^       ^^^^^^^^^^^^^^^
 >kind : T[0]
 >     : ^^^^
 >payload : T[1]

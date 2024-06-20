@@ -14,7 +14,7 @@ class C {
 
     @dec() prop;
 >dec() : <T>(target: any, propertyKey: string) => void
->      : ^^^^      ^^   ^^           ^^      ^^^^^    
+>      : ^ ^^      ^^   ^^           ^^      ^^^^^    
 >dec : () => <T>(target: any, propertyKey: string) => void
 >    : ^^^^^^                                             
 >prop : any

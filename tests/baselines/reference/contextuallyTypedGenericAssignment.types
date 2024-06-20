@@ -23,7 +23,7 @@ foo((t, u: number) => t.a)
 >foo : <A extends any[]>(arg: <T extends { a: number; }>(t: T, ...rest: A) => number) => void
 >    : ^ ^^^^^^^^^     ^^   ^^                                                      ^^^^^^^^^
 >(t, u: number) => t.a : <T extends { a: number; }>(t: T, u: number) => number
->                      : ^^^^^^^^^^^              ^^ ^^^^^ ^^      ^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^              ^^ ^^^^^ ^^      ^^^^^^^^^^^
 >t : T
 >  : ^
 >u : number

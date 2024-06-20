@@ -11,7 +11,7 @@ declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_
 >foo_ : <T extends XNumber_>(props: { [K in keyof T & keyof XNumber_]: T[K]; }) => T
 >     : ^ ^^^^^^^^^        ^^     ^^                                          ^^^^^ 
 >props : { [K in keyof T & "x"]: T[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 foo_({x: 1, y: 'foo'});
 >foo_({x: 1, y: 'foo'}) : { x: 1; }
@@ -33,15 +33,15 @@ foo_({x: 1, y: 'foo'});
 
 const checkType_ = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
 >checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const checked_ = checkType_<{x: number, y: string}>()({
 >checked_ : { x: number; y: "y"; }
@@ -49,9 +49,9 @@ const checked_ = checkType_<{x: number, y: string}>()({
 >checkType_<{x: number, y: string}>()({  x: 1 as number,  y: "y",  z: "z",}) : { x: number; y: "y"; }
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^
 >checkType_<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
->                                     : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string

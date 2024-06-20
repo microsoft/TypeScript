@@ -23,7 +23,7 @@ declare function combineLatest(): void;
 
 function fn<T>() {
 >fn : <T>() => void
->   : ^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^
 
     var values: ISubject<any>[] = [];
 >values : ISubject<any>[]

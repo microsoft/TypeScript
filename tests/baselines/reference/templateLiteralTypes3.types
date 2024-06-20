@@ -931,7 +931,7 @@ type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
 
 function a<T extends {id: string}>() {
 >a : <T extends { id: string; }>() => void
->  : ^^^^^^^^^^^               ^^^^^^^^^^^
+>  : ^ ^^^^^^^^^               ^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 

@@ -73,8 +73,6 @@ a_2.b;
 PolledWatches::
 c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/project/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 c:/a/lib/lib.d.ts: *new*

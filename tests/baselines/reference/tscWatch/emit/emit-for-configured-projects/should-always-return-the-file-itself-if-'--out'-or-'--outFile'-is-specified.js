@@ -138,7 +138,13 @@ Program files::
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
 
 No shapes updated in the builder::
 
@@ -241,7 +247,13 @@ Program files::
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
 
 No shapes updated in the builder::
 

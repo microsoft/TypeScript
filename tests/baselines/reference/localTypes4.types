@@ -43,7 +43,7 @@ function f3() {
     // Type parameters and top-level local types are in same declaration space
     function f<T>() {
 >f : <T>() => any
->  : ^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^
 
         interface T { }
         return undefined;

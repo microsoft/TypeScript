@@ -301,17 +301,17 @@ async function copyExtensions(
 >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, Metadata]>[]
 >                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map : <U>(callbackfn: (value: ILocalExtension, index: number, array: ILocalExtension[]) => U, thisArg?: any) => U[]
->                                                                         : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                                                                         : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >fromExtensions        .filter((e) => !e.isApplicationScoped) : ILocalExtension[]
 >                                                             : ^^^^^^^^^^^^^^^^^
 >fromExtensions        .filter : { <S extends ILocalExtension>(predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => value is S, thisArg?: any): S[]; (predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => unknown, thisArg?: any): ILocalExtension[]; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^  ^^^
+>                              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^  ^^^
 >fromExtensions : ILocalExtension[]
 >               : ^^^^^^^^^^^^^^^^^
 
         .filter((e) => !e.isApplicationScoped)
 >filter : { <S extends ILocalExtension>(predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => value is S, thisArg?: any): S[]; (predicate: (value: ILocalExtension, index: number, array: ILocalExtension[]) => unknown, thisArg?: any): ILocalExtension[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^  ^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^  ^^^
 >(e) => !e.isApplicationScoped : (e: ILocalExtension) => boolean
 >                              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : ILocalExtension
@@ -327,7 +327,7 @@ async function copyExtensions(
 
         .map(async (e) => [e, await scanMetadata(e)])
 >map : <U>(callbackfn: (value: ILocalExtension, index: number, array: ILocalExtension[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >async (e) => [e, await scanMetadata(e)] : (e: ILocalExtension) => Promise<[ILocalExtension, Metadata]>
 >                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : ILocalExtension

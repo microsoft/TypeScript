@@ -5,7 +5,7 @@ function f<A extends string>(p0: { [key in A]: {} | undefined }, p1: A) {
 >f : <A extends string>(p0: { [key in A]: {} | undefined; }, p1: A) => void
 >  : ^ ^^^^^^^^^      ^^  ^^                               ^^  ^^ ^^^^^^^^^
 >p0 : { [key in A]: {} | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >p1 : A
 >   : ^
 
@@ -17,7 +17,7 @@ function f<A extends string>(p0: { [key in A]: {} | undefined }, p1: A) {
 >p0[p1] : {} | undefined
 >       : ^^^^^^^^^^^^^^
 >p0 : { [key in A]: {} | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >p1 : A
 >   : ^
 }

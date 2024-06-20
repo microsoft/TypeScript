@@ -87,7 +87,7 @@ export class BuildResult<A, B, C>{
 >forEach : any
 >        : ^^^
 ><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A_1, B_1 extends A_1, C_1>(each: FileWithErrors<A_1, B_1, C_1>) => void
->                                                                                         : ^   ^^   ^^^^^^^^^   ^^   ^^    ^^                             ^^^^^^^^^
+>                                                                                         : ^^^^^^^^^^^^^^^^^^   ^^^^^^^    ^^                             ^^^^^^^^^
 >each : FileWithErrors<A, B, C>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 

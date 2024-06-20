@@ -129,7 +129,7 @@ function f4<T extends keyof Named>(x: T) {
 
 function f10<T>() {
 >f10 : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     type K = keyof T;
 >K : keyof T
@@ -137,49 +137,49 @@ function f10<T>() {
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [Q in keyof T]: T[Q] };
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [R in K]: T[R] };
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f11<T>() {
 >f11 : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { readonly [P in keyof T]: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { readonly [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f12<T>() {
 >f12 : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     var x: { [P in keyof T]: T[P][] };  // Error
 >x : { [P in keyof T]: T[P]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Check that inferences to mapped types are secondary
@@ -585,11 +585,11 @@ c.setState({ a: "test", b: 43 });
 >c.setState({ a: "test", b: 43 }) : void
 >                                 : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "test", b: 43 } : { a: string; b: number; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -605,11 +605,11 @@ c.setState({ a: "hi" });
 >c.setState({ a: "hi" }) : void
 >                        : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "hi" } : { a: string; }
 >            : ^^^^^^^^^^^^^^
 >a : string
@@ -621,11 +621,11 @@ c.setState({ b: undefined });
 >c.setState({ b: undefined }) : void
 >                             : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: undefined } : { b: undefined; }
 >                 : ^^^^^^^^^^^^^^^^^
 >b : undefined
@@ -637,11 +637,11 @@ c.setState({ });
 >c.setState({ }) : void
 >                : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ } : {}
 >    : ^^
 
@@ -649,11 +649,11 @@ c.setState(foo);
 >c.setState(foo) : void
 >                : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Foo
 >    : ^^^
 
@@ -661,11 +661,11 @@ c.setState({ a: undefined });  // Error
 >c.setState({ a: undefined }) : void
 >                             : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: undefined } : { a: undefined; }
 >                 : ^^^^^^^^^^^^^^^^^
 >a : undefined
@@ -677,11 +677,11 @@ c.setState({ c: true });  // Error
 >c.setState({ c: true }) : void
 >                        : ^^^^
 >c.setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >c : C<Foo>
 >  : ^^^^^^
 >setState : <K extends keyof Foo>(props: Pick<Foo, K>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true } : { c: boolean; }
 >            : ^^^^^^^^^^^^^^^
 >c : boolean
@@ -735,11 +735,11 @@ type Foo2<T, F extends keyof T> = {
 
     pf: {[P in F]?: T[P]},
 >pf : { [P in F]?: T[P] | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     pt: {[P in T]?: T[P]}, // note: should be in keyof T
 >pt : { [P in T]?: T[P] | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 type O = {x: number, y: boolean};

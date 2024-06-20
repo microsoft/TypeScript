@@ -312,7 +312,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 >foo(x) : T
 >       : ^
 >foo : <T_1 extends Function>(x: T_1) => T_1
->    : ^   ^^^^^^^^^        ^^ ^^   ^^^^^   
+>    : ^^^^^^^^^^^^^        ^^ ^^   ^^^^^   
 >x : T
 >  : ^
 
@@ -320,7 +320,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 >foo(y) : U
 >       : ^
 >foo : <T_1 extends Function>(x: T_1) => T_1
->    : ^   ^^^^^^^^^        ^^ ^^   ^^^^^   
+>    : ^^^^^^^^^^^^^        ^^ ^^   ^^^^^   
 >y : U
 >  : ^
 }
