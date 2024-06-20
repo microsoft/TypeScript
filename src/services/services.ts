@@ -345,6 +345,7 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
+    isElementAccessExpression,
 } from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
@@ -2272,7 +2273,10 @@ export function createLanguageService(
         const nodeForQuickInfo = getNodeForQuickInfo(node);
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-            const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
+            const nodeForType = shouldGetType(sourceFile, nodeForQuickInfo, position)
+            const type = nodeForType === true 
+              ? typeChecker.getTypeAtLocation(nodeForQuickInfo)
+              : nodeForType === false ? undefined : typeChecker.getTypeAtLocation(nodeForType);
             return type && {
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
@@ -2327,7 +2331,7 @@ export function createLanguageService(
         return node;
     }
 
-    function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
+    function shouldGetType(sourceFile: SourceFile, node: Node, position: number): Node | boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
                 if (
@@ -2350,6 +2354,12 @@ export function createLanguageService(
                 return true;
             case SyntaxKind.MetaProperty:
                 return isImportMeta(node);
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.NumericLiteral:
+                // ({} as Record<string, number>)["a"]
+                const parent = node.parent;
+                return isElementAccessExpression(parent) && parent.argumentExpression === node ? parent : false;
             default:
                 return false;
         }
