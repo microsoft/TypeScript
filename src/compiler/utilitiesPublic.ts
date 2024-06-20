@@ -137,6 +137,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocClassTag,
+    isJSDocDeferredTag,
     isJSDocDeprecatedTag,
     isJSDocEnumTag,
     isJSDocFunctionType,
@@ -183,6 +184,7 @@ import {
     JSDocClassTag,
     JSDocComment,
     JSDocContainer,
+    JSDocDeferredTag,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocImplementsTag,
@@ -1121,6 +1123,16 @@ export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefine
 /** @internal */
 export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined {
     return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
+}
+
+/** Gets the JSDoc deferred tag for the node if present */
+export function getJSDocDeferredTag(node: Node): JSDocDeferredTag | undefined {
+    return getFirstJSDocTag(node, isJSDocDeferredTag);
+}
+
+/** @internal */
+export function getJSDocDeferredTagNoCache(node: Node): JSDocDeferredTag | undefined {
+    return getFirstJSDocTag(node, isJSDocDeferredTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc enum tag for the node if present */

@@ -170,6 +170,7 @@ import {
     getDirectoryPath,
     getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
+    getJSDocDeferredTagNoCache,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
     getJSDocOverrideTagNoCache,
@@ -7062,15 +7063,18 @@ export function getSyntacticModifierFlags(node: Node): ModifierFlags {
 
 function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = ModifierFlags.None;
-    if (!!node.parent && !isParameter(node)) {
+    if (node.parent) {
         if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
+            if (!isParameter(node)) {
+                if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+                if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+                if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+                if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
+            }
+            if (getJSDocDeferredTagNoCache(node)) flags |= ModifierFlags.JSDocDeferred;
         }
-        if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+        if (!isParameter(node) && getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
@@ -7082,7 +7086,7 @@ function selectSyntacticModifierFlags(flags: ModifierFlags) {
 
 function selectEffectiveModifierFlags(flags: ModifierFlags) {
     return (flags & ModifierFlags.NonCacheOnlyModifiers) |
-        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 22); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
 }
 
 function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {

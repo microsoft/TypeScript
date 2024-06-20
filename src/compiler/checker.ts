@@ -7540,7 +7540,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const parameterType = getTypeOfSymbol(parameterSymbol);
             const parameterTypeNode = serializeTypeForDeclaration(context, parameterDeclaration, parameterType, parameterSymbol);
 
-            const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
+            const modifiers = parameterDeclaration && canHaveModifiers(parameterDeclaration) && (!(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags || hasSyntacticModifier(parameterDeclaration, ModifierFlags.Deferred)) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
             const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
             const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
             const name = parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration, context);
@@ -50144,6 +50144,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         if (flags & ModifierFlags.Deferred) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "deferred");
+                        }
+                        if (flags & ModifierFlags.Public) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "public");
+                        }
+                        if (flags & ModifierFlags.Protected) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "protected");
+                        }
+                        if (flags & ModifierFlags.Private) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "private");
+                        }
+                        if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "readonly");
                         }
                         flags |= ModifierFlags.Deferred;
                         break;

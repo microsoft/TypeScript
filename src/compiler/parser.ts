@@ -9057,6 +9057,9 @@ namespace Parser {
                         hasDeprecatedTag = true;
                         tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
                         break;
+                    case "deferred":
+                        tag = parseSimpleTag(start, factory.createJSDocDeferredTag, tagName, margin, indentText);
+                        break;
                     case "this":
                         tag = parseThisTag(start, tagName, margin, indentText);
                         break;
