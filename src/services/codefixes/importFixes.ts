@@ -272,26 +272,45 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
-        const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
-        const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-        const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         const useRequire = shouldUseRequire(sourceFile, program);
-        let fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
-        if (fix) {
-            const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
-            if (
-                referenceImport
-                && isTypeOnlyImportDeclaration(referenceImport)
-                && (fix.kind === ImportFixKind.AddNew || fix.kind === ImportFixKind.AddToExisting)
-                && fix.addAsTypeOnly === AddAsTypeOnly.Allowed
-            ) {
-                // Copy the type-only status from the reference import
-                fix = { ...fix, addAsTypeOnly: AddAsTypeOnly.Required };
+        if (referenceImport && isNamespaceImport(referenceImport) && exportedSymbol.valueDeclaration) {
+            const namespacePrefix = getNamespaceLikeImportText(referenceImport.parent.parent);
+            const moduleSpecifier = moduleSpecifiers.getLocalModuleSpecifierBetweenFileNames(
+                sourceFile,
+                exportedSymbol.valueDeclaration.getSourceFile().fileName,
+                compilerOptions,
+                createModuleSpecifierResolutionHost(program, host),
+            );
+            if (namespacePrefix) {
+                const info: FixInfo = { 
+                    fix: { kind: ImportFixKind.AddNew, importKind: ImportKind.Namespace, addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.NotAllowed, useRequire, moduleSpecifierKind: undefined, moduleSpecifier },
+                    symbolName: namespacePrefix,
+                    errorIdentifierText: undefined 
+                };
+                addImport(info);
             }
-            addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
         }
+        else {
+            const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
+            const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+            const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
+            const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
+            let fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
+            if (fix) {
+                const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
+                if (
+                    referenceImport
+                    && isTypeOnlyImportDeclaration(referenceImport)
+                    && (fix.kind === ImportFixKind.AddNew || fix.kind === ImportFixKind.AddToExisting)
+                    && fix.addAsTypeOnly === AddAsTypeOnly.Allowed
+                ) {
+                    // Copy the type-only status from the reference import
+                    fix = { ...fix, addAsTypeOnly: AddAsTypeOnly.Required };
+                }
+                addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
+            }
+         }
     }
 
     function addImportForNonExistentExport(exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) {

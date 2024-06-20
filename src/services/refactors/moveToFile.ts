@@ -1127,12 +1127,20 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
         const declaration = importFromModuleSpecifier(moduleSpecifier);
         if (
             isImportDeclaration(declaration) && declaration.importClause &&
-            declaration.importClause.namedBindings && isNamedImports(declaration.importClause.namedBindings)
+            declaration.importClause.namedBindings
         ) {
-            for (const e of declaration.importClause.namedBindings.elements) {
-                const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
+            if (isNamespaceImport(declaration.importClause.namedBindings)) {
+                const symbol = checker.getSymbolAtLocation(declaration.importClause.namedBindings.name);
                 if (symbol) {
-                    existingLocals.add(skipAlias(symbol, checker));
+                    existingLocals.add(symbol);
+                }
+            }
+            else if(isNamedImports(declaration.importClause.namedBindings)) {
+                for (const e of declaration.importClause.namedBindings.elements) {
+                    const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
+                    if (symbol) {
+                        existingLocals.add(skipAlias(symbol, checker));
+                    }
                 }
             }
         }
