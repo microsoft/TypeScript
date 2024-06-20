@@ -996,8 +996,7 @@ export class Session<TMessage = string> implements EventSender {
     /** @internal */
     protected regionDiagLineCountThreshold = 500;
 
-    /** @internal */
-    private requestPerformanceData: Map<number, Map<NormalizedPath, protocol.DiagnosticPerformanceData>> = new Map();
+    private requestPerformanceData = new Map<number, Map<NormalizedPath, protocol.DiagnosticPerformanceData>>();
 
     constructor(opts: SessionOptions) {
         this.host = opts.host;
@@ -1072,7 +1071,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private sendRequestCompletedEvent(requestId: number): void {
         if (this.requestPerformanceData.has(requestId)) {
-            const diagnosticsDuration = arrayFrom(this.requestPerformanceData.get(requestId)!.entries()).map(([file, data]) => ({ file, ...data }));
+            const diagnosticsDuration = arrayFrom(this.requestPerformanceData.get(requestId)!.entries(), ([file, data]) => ({ ...data, file }));
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData: { diagnosticsDuration } }, "requestCompleted");
             this.requestPerformanceData.delete(requestId);
             return;
@@ -1151,7 +1150,7 @@ export class Session<TMessage = string> implements EventSender {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                 this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, undefined, /*requireOpen*/ true));
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requestId*/ undefined, /*requireOpen*/ true));
             }
 
             // Send project changed event
@@ -1334,14 +1333,13 @@ export class Session<TMessage = string> implements EventSender {
                 body,
                 kind,
             );
-            if (requestId) this.addDiagnosticsPerformanceData(file, kind, duration, requestId);
+            if (requestId !== undefined) this.addDiagnosticsPerformanceData(file, kind, duration, requestId);
         }
         catch (err) {
             this.logError(err, kind);
         }
     }
 
-    /** @internal */
     private addDiagnosticsPerformanceData(
         file: NormalizedPath,
         kind: protocol.DiagnosticEventKind,
@@ -1352,7 +1350,7 @@ export class Session<TMessage = string> implements EventSender {
             this.requestPerformanceData.set(requestId, new Map());
         }
         const requestData = this.requestPerformanceData.get(requestId)!;
-        const fileData = requestData.get(file) || {};
+        const fileData = requestData.get(file) ?? {};
         fileData[kind] = duration;
         requestData.set(file, fileData);
     }
@@ -1441,7 +1439,7 @@ export class Session<TMessage = string> implements EventSender {
                         this.regionSemanticCheck(
                             fileName,
                             project,
-                            ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)),
+                            ranges.map(range => this.getRange({ ...range, file: fileName }, scriptInfo)),
                             requestId,
                         );
                     }
