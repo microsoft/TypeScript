@@ -124,21 +124,23 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
             returnType = typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
         }
     }
-    const signature = typeChecker.getSignatureFromDeclaration(declaration);
-    if (signature) {
-        const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
-        if (typePredicate && typePredicate.type) {
-            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                factory.createToken(SyntaxKind.AssertsKeyword) :
-                undefined;
-            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-                factory.createThisTypeNode();
-            const typeNode = typeChecker.typeToTypeNode(typePredicate.type, declaration, NodeBuilderFlags.NoTruncation);
-            return { declaration, returnTypeNode: factory.createTypePredicateNode(assertsModifier, parameterName, typeNode) };
-        }
-        else {
-            returnType = typeChecker.getReturnTypeOfSignature(signature);
+    else {
+        const signature = typeChecker.getSignatureFromDeclaration(declaration);
+        if (signature) {
+            const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+            if (typePredicate && typePredicate.type) {
+                const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                    factory.createToken(SyntaxKind.AssertsKeyword) :
+                    undefined;
+                const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                    setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                    factory.createThisTypeNode();
+                const typeNode = typeChecker.typeToTypeNode(typePredicate.type, declaration, NodeBuilderFlags.NoTruncation);
+                return { declaration, returnTypeNode: factory.createTypePredicateNode(assertsModifier, parameterName, typeNode) };
+            }
+            else {
+                returnType = typeChecker.getReturnTypeOfSignature(signature);
+            }
         }
     }
 
