@@ -687,12 +687,10 @@ export function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined)
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
 /** @internal */
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
+    // This is a comment
     if (array2 === undefined || array2.length === 0) return array1;
     if (array1 === undefined || array1.length === 0) return array2;
-    let result: T[] | undefined;
-    for (let i = 0; i < array1.length; i++) result = append(result, array1[i]);
-    for (let i = 0; i < array2.length; i++) result = append(result, array2[i]);
-    return result;
+    return [...array1, ...array2];
 }
 
 function selectIndex(_: unknown, i: number) {
