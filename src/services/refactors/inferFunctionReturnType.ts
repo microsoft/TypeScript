@@ -124,7 +124,7 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
             returnType = typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
         }
     }
-    else {
+    if (!returnType) {
         const signature = typeChecker.getSignatureFromDeclaration(declaration);
         if (signature) {
             const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
