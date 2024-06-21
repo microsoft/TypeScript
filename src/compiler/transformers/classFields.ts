@@ -464,8 +464,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         switch (node.kind) {
-            case SyntaxKind.AccessorKeyword:
-                return Debug.fail("Use `modifierVisitor` instead.");
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
             case SyntaxKind.ClassExpression:
