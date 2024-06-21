@@ -2,6 +2,7 @@ import {
     ApplicableRefactorInfo,
     ArrowFunction,
     Diagnostics,
+    EmitFlags,
     emptyArray,
     factory,
     findAncestor,
@@ -20,12 +21,13 @@ import {
     NodeBuilderFlags,
     RefactorContext,
     RefactorEditInfo,
+    setEmitFlags,
     SourceFile,
     SyntaxKind,
     textChanges,
     Type,
-    TypeChecker,
     TypeNode,
+    TypePredicateKind,
 } from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
@@ -113,7 +115,33 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
     }
 
     const typeChecker = context.program.getTypeChecker();
-    const returnType = tryGetReturnType(typeChecker, declaration);
+
+    let returnType: Type | undefined;
+
+    if (typeChecker.isImplementationOfOverload(declaration)) {
+        const signatures = typeChecker.getTypeAtLocation(declaration).getCallSignatures();
+        if (signatures.length > 1) {
+            returnType = typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
+        }
+    }
+    const signature = typeChecker.getSignatureFromDeclaration(declaration);
+    if (signature) {
+        const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+        if (typePredicate && typePredicate.type) {
+            const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                factory.createToken(SyntaxKind.AssertsKeyword) :
+                undefined;
+            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+                setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
+                factory.createThisTypeNode();
+            const typeNode = typeChecker.typeToTypeNode(typePredicate.type, declaration, NodeBuilderFlags.NoTruncation);
+            return { declaration, returnTypeNode: factory.createTypePredicateNode(assertsModifier, parameterName, typeNode) };
+        }
+        else {
+            returnType = typeChecker.getReturnTypeOfSignature(signature);
+        }
+    }
+
     if (!returnType) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
     }
@@ -133,18 +161,5 @@ function isConvertibleDeclaration(node: Node): node is ConvertibleDeclaration {
             return true;
         default:
             return false;
-    }
-}
-
-function tryGetReturnType(typeChecker: TypeChecker, node: ConvertibleDeclaration): Type | undefined {
-    if (typeChecker.isImplementationOfOverload(node)) {
-        const signatures = typeChecker.getTypeAtLocation(node).getCallSignatures();
-        if (signatures.length > 1) {
-            return typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
-        }
-    }
-    const signature = typeChecker.getSignatureFromDeclaration(node);
-    if (signature) {
-        return typeChecker.getReturnTypeOfSignature(signature);
     }
 }
