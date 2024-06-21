@@ -861,8 +861,7 @@ function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile,
     const getChecker = createGetChecker(program, host);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
-            const checker = getChecker(info[0].isFromPackageJson);
-            if (skipAlias(checker.getMergedSymbol(info[0].symbol), checker) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)) { // first bit here fails now, cause 
+            if (skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)) {
                 return info;
             }
         });

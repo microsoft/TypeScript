@@ -2626,7 +2626,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Note: if target is transient, then it is mutable, and mergeSymbol with both mutate and return it.
      * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
      */
-    function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
+    function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false, isExports = false): Symbol {
+        const originalTarget = target;
         if (
             !(target.flags & getExcludedSymbolFlags(source.flags)) ||
             (source.flags | target.flags) & SymbolFlags.Assignment
@@ -2646,6 +2647,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (source.flags | resolvedTarget.flags) & SymbolFlags.Assignment
                 ) {
                     target = cloneSymbol(resolvedTarget);
+                    if (isExports) {
+                        target.parent ??= originalTarget.parent;
+                    }
                 }
                 else {
                     reportMergeSymbolError(target, source);
@@ -2668,7 +2672,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (source.exports) {
                 if (!target.exports) target.exports = createSymbolTable();
-                mergeSymbolTable(target.exports, source.exports, unidirectional);
+                mergeSymbolTable(target.exports, source.exports, unidirectional, /*isExports*/ true);
             }
             if (!unidirectional) {
                 recordMergedSymbol(target, source);
@@ -2757,10 +2761,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return combined;
     }
 
-    function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false) {
+    function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false, isExports = false) {
         source.forEach((sourceSymbol, id) => {
             const targetSymbol = target.get(id);
-            target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : getMergedSymbol(sourceSymbol));
+            target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional, isExports) : getMergedSymbol(sourceSymbol));
         });
     }
 
@@ -5283,20 +5287,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const exports = getExportsOfSymbol(container);
         const quick = exports.get(symbol.escapedName);
         if (quick && getSymbolIfSameReference(quick, symbol)) {
-            if (!quick.parent) {
-                const clone = cloneSymbol(quick);
-                clone.parent = container;
-                return clone;
-            }
             return quick;
         }
         return forEachEntry(exports, exported => {
             if (getSymbolIfSameReference(exported, symbol)) {
-                if (!exported.parent) {
-                    const clone = cloneSymbol(exported);
-                    clone.parent = container;
-                    return clone;
-                }
                 return exported;
             }
         });
