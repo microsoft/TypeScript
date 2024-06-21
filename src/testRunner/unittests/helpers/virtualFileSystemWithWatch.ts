@@ -4,6 +4,10 @@ import {
     WatchUtils,
 } from "../../../harness/watchUtils.js";
 import {
+    CreateDirectoryWatcherEventBody,
+    CreateFileWatcherEventBody,
+} from "../../../server/protocol.js";
+import {
     append,
     arrayFrom,
     clear,
@@ -276,11 +280,13 @@ type TimeOutCallback = (...args: any[]) => void;
 export interface TestFileWatcher {
     cb: FileWatcherCallback;
     pollingInterval: PollingInterval;
+    event?: CreateFileWatcherEventBody;
 }
 
 export interface TestFsWatcher {
     cb: FsWatchCallback;
     inode: number | undefined;
+    event?: CreateDirectoryWatcherEventBody;
 }
 
 export interface WatchInvokeOptions {
