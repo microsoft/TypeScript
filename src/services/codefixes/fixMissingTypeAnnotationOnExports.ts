@@ -874,7 +874,7 @@ function withContext<T>(
             return relativeType(node);
         }
 
-        let type: Type | undefined
+        let type: Type | undefined;
 
         if (isValueSignatureDeclaration(node)) {
             const signature = typeChecker.getSignatureFromDeclaration(node);
@@ -891,7 +891,8 @@ function withContext<T>(
                 }
                 type = typeChecker.getReturnTypeOfSignature(signature);
             }
-        } else {
+        }
+        else {
             type = typeChecker.getTypeAtLocation(node);
         }
 
