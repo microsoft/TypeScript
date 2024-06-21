@@ -329,12 +329,15 @@ export namespace Debug {
             );
         }
     }
+    export const branch_coverage = new Map<string, boolean>();
 
     export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }>;
     export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }> | undefined;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+        branch_coverage.set('assertOptionalToken_0', true);
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
+            branch_coverage.set('assertOptionalToken_1', true);
             assert(
                 kind === undefined || node === undefined || node.kind === kind,
                 message || "Unexpected node.",
@@ -346,7 +349,9 @@ export namespace Debug {
 
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+        branch_coverage.set('assertMissingNode_0', true);
         if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
+            branch_coverage.set('assertMissingNode_1', true);
             assert(
                 node === undefined,
                 message || "Unexpected node.",
