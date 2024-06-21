@@ -940,7 +940,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7
+        "request_seq": 7,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
