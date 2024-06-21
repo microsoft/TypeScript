@@ -14,7 +14,6 @@ import {
     Debug,
     Declaration,
     Diagnostics,
-    EmitFlags,
     emptyArray,
     EntityName,
     Expression,
@@ -85,7 +84,6 @@ import {
     sameMap,
     ScriptTarget,
     SetAccessorDeclaration,
-    setEmitFlags,
     setTextRange,
     Signature,
     SignatureDeclaration,
@@ -108,7 +106,6 @@ import {
     TypeNode,
     TypeParameterDeclaration,
     TypePredicate,
-    TypePredicateKind,
     unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
@@ -608,14 +605,16 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 
 /** @internal */
 export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-        factory.createToken(SyntaxKind.AssertsKeyword) :
-        undefined;
-    const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
-        setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
-        factory.createThisTypeNode();
-    const typeNode = typePredicate.type && typeToAutoImportableTypeNode(checker, importAdder, typePredicate.type, contextNode, scriptTarget, flags, tracker);
-    return factory.createTypePredicateNode(assertsModifier, parameterName, typeNode);
+    let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, tracker);
+    if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
+        if (importableReference) {
+            importSymbols(importAdder, importableReference.symbols);
+            typePredicateNode = factory.updateTypePredicateNode(typePredicateNode, typePredicateNode.assertsModifier, typePredicateNode.parameterName, importableReference.typeNode);
+        }
+    }
+    // Ensure nodes are fresh so they can have different positions when going through formatting.
+    return getSynthesizedDeepClone(typePredicateNode);
 }
 
 function typeContainsTypeParameter(type: Type) {
