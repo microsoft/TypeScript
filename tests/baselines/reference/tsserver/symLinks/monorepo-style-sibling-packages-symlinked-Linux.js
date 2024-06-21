@@ -312,7 +312,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -382,10 +389,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -493,10 +496,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 2
       }
     }
 After running Immedidate callback:: count: 0
@@ -755,10 +755,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -851,10 +847,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 3
       }
     }
 After running Immedidate callback:: count: 0
@@ -1269,10 +1262,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -1379,10 +1368,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 4
       }
     }
 After running Immedidate callback:: count: 0
@@ -1695,10 +1681,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -1791,10 +1773,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 5
       }
     }
 After running Immedidate callback:: count: 0
