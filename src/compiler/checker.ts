@@ -24177,7 +24177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
                     const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
-                    if (targetType && related(getDiscriminatingType(), targetType)) {
+                    if (targetType && someType(getDiscriminatingType(), t => !!related(t, targetType))) {
                         matched = true;
                     }
                     else {
