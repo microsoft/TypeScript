@@ -24166,7 +24166,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             findMostOverlappyType(source, target);
     }
 
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
+    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[]) {
         const types = target.types;
         const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
         for (const [getDiscriminatingType, propertyName] of discriminators) {
@@ -24177,7 +24177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
                     const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
-                    if (targetType && related(getDiscriminatingType(), targetType)) {
+                    if (targetType && !isIntersectionEmpty(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
                     else {
@@ -31702,7 +31702,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         s => [() => undefinedType, s.escapedName] as const,
                     ),
                 ),
-                isTypeAssignableTo,
             ),
         );
     }
@@ -31735,7 +31734,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         s => [() => undefinedType, s.escapedName] as const,
                     ),
                 ),
-                isTypeAssignableTo,
             ),
         );
     }
@@ -52014,7 +52012,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sourceProperties) {
                 const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                 if (sourcePropertiesFiltered) {
-                    const discriminated = discriminateTypeByDiscriminableItems(target as UnionType, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
+                    const discriminated = discriminateTypeByDiscriminableItems(target as UnionType, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])));
                     if (discriminated !== target) {
                         return discriminated;
                     }
