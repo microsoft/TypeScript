@@ -234,7 +234,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
@@ -301,7 +304,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 3 is as expected
@@ -343,7 +349,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -364,7 +371,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -406,7 +416,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -426,7 +437,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -446,7 +458,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -455,7 +468,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -497,7 +513,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
@@ -527,7 +544,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7
+        "request_seq": 7,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 8 is as expected

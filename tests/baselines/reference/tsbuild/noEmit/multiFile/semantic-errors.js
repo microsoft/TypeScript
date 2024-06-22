@@ -32,7 +32,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -50,6 +50,7 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -65,6 +66,19 @@ Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
 /src/a.ts (used version)
 
+
+//// [/src/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 59
+}
 
 
 
@@ -77,7 +91,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -95,6 +109,7 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -111,6 +126,8 @@ Shape signatures in builder refreshed for::
 /src/a.ts (used version)
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
@@ -125,7 +142,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/a.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -135,6 +152,7 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -150,6 +168,18 @@ Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
 /src/a.ts (used version)
 
+
+//// [/src/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 45
+}
 
 
 
@@ -172,6 +202,7 @@ Program root files: [
 ]
 Program options: {
   "noEmit": true,
+  "tscBuild": true,
   "configFilePath": "/src/tsconfig.json"
 }
 Program structureReused: Not
@@ -188,3 +219,5 @@ Shape signatures in builder refreshed for::
 /src/a.ts (used version)
 
 
+//// [/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

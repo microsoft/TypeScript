@@ -7,24 +7,19 @@ CleanBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
-      "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;"
     },
     "./b.ts": {
-      "version": "-6189287562-export const b = 10;const bLocal = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-6189287562-export const b = 10;const bLocal = 10;"
     },
     "./c.ts": {
-      "version": "3248317647-import { a } from \"./a\";export const c = a;",
-      "impliedFormat": "commonjs"
+      "version": "3248317647-import { a } from \"./a\";export const c = a;"
     },
     "./d.ts": {
-      "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-      "impliedFormat": "commonjs"
+      "version": "-19615769517-import { b } from \"./b\";export const d = b;"
     }
   },
   "root": [
@@ -60,24 +55,19 @@ IncrementalBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./a.ts": {
-      "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-6435489413-export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;"
     },
     "./b.ts": {
-      "version": "-6189287562-export const b = 10;const bLocal = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-6189287562-export const b = 10;const bLocal = 10;"
     },
     "./c.ts": {
-      "version": "3248317647-import { a } from \"./a\";export const c = a;",
-      "impliedFormat": "commonjs"
+      "version": "3248317647-import { a } from \"./a\";export const c = a;"
     },
     "./d.ts": {
-      "version": "-19615769517-import { b } from \"./b\";export const d = b;",
-      "impliedFormat": "commonjs"
+      "version": "-19615769517-import { b } from \"./b\";export const d = b;"
     }
   },
   "root": [
@@ -113,28 +103,22 @@ CleanBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./e.ts": {
-      "version": "-13789510868-export const e = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-13789510868-export const e = 10;"
     },
     "../../project1/src/a.d.ts": {
-      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
     },
     "./f.ts": {
-      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-      "impliedFormat": "commonjs"
+      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
     },
     "../../project1/src/b.d.ts": {
-      "version": "-3829150557-export declare const b = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-3829150557-export declare const b = 10;\n"
     },
     "./g.ts": {
-      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-      "impliedFormat": "commonjs"
+      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
     }
   },
   "root": [
@@ -163,14 +147,6 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -178,28 +154,22 @@ IncrementalBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./e.ts": {
-      "version": "-13789510868-export const e = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-13789510868-export const e = 10;"
     },
     "../../project1/src/a.d.ts": {
-      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
     },
     "./f.ts": {
-      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-      "impliedFormat": "commonjs"
+      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
     },
     "../../project1/src/b.d.ts": {
-      "version": "-3829150557-export declare const b = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-3829150557-export declare const b = 10;\n"
     },
     "./g.ts": {
-      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-      "impliedFormat": "commonjs"
+      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
     }
   },
   "root": [
@@ -227,14 +197,6 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 6:: local change
@@ -246,28 +208,22 @@ CleanBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./e.ts": {
-      "version": "-13789510868-export const e = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-13789510868-export const e = 10;"
     },
     "../../project1/src/a.d.ts": {
-      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
     },
     "./f.ts": {
-      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-      "impliedFormat": "commonjs"
+      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
     },
     "../../project1/src/b.d.ts": {
-      "version": "-3829150557-export declare const b = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-3829150557-export declare const b = 10;\n"
     },
     "./g.ts": {
-      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-      "impliedFormat": "commonjs"
+      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
     }
   },
   "root": [
@@ -296,14 +252,6 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -311,28 +259,22 @@ IncrementalBuild:
   "fileInfos": {
     "../../../lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
+      "affectsGlobalScope": true
     },
     "./e.ts": {
-      "version": "-13789510868-export const e = 10;",
-      "impliedFormat": "commonjs"
+      "version": "-13789510868-export const e = 10;"
     },
     "../../project1/src/a.d.ts": {
-      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-1973399231-export declare const a = 10;\nexport declare const aaa = 10;\n"
     },
     "./f.ts": {
-      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
-      "impliedFormat": "commonjs"
+      "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
     },
     "../../project1/src/b.d.ts": {
-      "version": "-3829150557-export declare const b = 10;\n",
-      "impliedFormat": "commonjs"
+      "version": "-3829150557-export declare const b = 10;\n"
     },
     "./g.ts": {
-      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
-      "impliedFormat": "commonjs"
+      "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
     }
   },
   "root": [
@@ -360,13 +302,5 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "changeFileSet": [
-    "../../../lib/lib.d.ts",
-    "../../project1/src/a.d.ts",
-    "../../project1/src/b.d.ts",
-    "./e.ts",
-    "./f.ts",
-    "./g.ts"
-  ],
   "version": "FakeTSVersion"
 }

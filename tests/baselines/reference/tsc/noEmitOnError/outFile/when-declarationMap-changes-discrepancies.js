@@ -5,18 +5,9 @@ TsBuild info text without affectedFilesPendingEmit:: /src/outfile.tsbuildinfo.re
 CleanBuild:
 {
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./project/a.ts": {
-      "version": "5515933561-const x: 20 = 10;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/b.ts": {
-      "version": "2026006654-const y = 10;",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "5515933561-const x: 20 = 10;",
+    "./project/b.ts": "2026006654-const y = 10;"
   },
   "root": [
     [
@@ -35,37 +26,14 @@ CleanBuild:
     "noEmitOnError": true,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/a.ts",
-      [
-        {
-          "start": 6,
-          "length": 1,
-          "code": 2322,
-          "category": 1,
-          "messageText": "Type '10' is not assignable to type '20'."
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
 {
   "fileInfos": {
-    "../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "impliedFormat": "commonjs"
-    },
-    "./project/a.ts": {
-      "version": "5515933561-const x: 20 = 10;",
-      "impliedFormat": "commonjs"
-    },
-    "./project/b.ts": {
-      "version": "2026006654-const y = 10;",
-      "impliedFormat": "commonjs"
-    }
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "5515933561-const x: 20 = 10;",
+    "./project/b.ts": "2026006654-const y = 10;"
   },
   "root": [
     [
@@ -84,20 +52,6 @@ IncrementalBuild:
     "noEmitOnError": true,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/a.ts",
-      [
-        {
-          "start": 6,
-          "length": 1,
-          "code": 2322,
-          "category": 1,
-          "messageText": "Type '10' is not assignable to type '20'."
-        }
-      ]
-    ]
-  ],
   "outSignature": [
     "-2781996726-declare const x = 10;\ndeclare const y = 10;\n"
   ],

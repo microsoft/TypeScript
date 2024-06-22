@@ -62,18 +62,8 @@ Output::
 PolledWatches::
 /user/username/projects/noEmitOnError/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/noEmitOnError/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/shared/types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/noEmitOnError/src/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
