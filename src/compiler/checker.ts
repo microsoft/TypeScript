@@ -22250,7 +22250,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let reducedTarget = target;
             let checkTypes: Type[] | undefined;
             if (target.flags & TypeFlags.Union) {
-                reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
+                reducedTarget = findMatchingDiscriminantType(source, target as UnionType) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
                 checkTypes = reducedTarget.flags & TypeFlags.Union ? (reducedTarget as UnionType).types : [reducedTarget];
             }
             for (const prop of getPropertiesOfType(source)) {
@@ -22432,7 +22432,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (reportErrors) {
                 // Elaborate only if we can find a best matching type in the target union
-                const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
+                const bestMatchingType = getBestMatchingType(source, target);
                 if (bestMatchingType) {
                     isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
                 }
@@ -24158,8 +24158,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getPropertiesOfType(type).filter(targetProp => containsMissingType(getTypeOfSymbol(targetProp)));
     }
 
-    function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
-        return findMatchingDiscriminantType(source, target, isRelatedTo) ||
+    function getBestMatchingType(source: Type, target: UnionOrIntersectionType) {
+        return findMatchingDiscriminantType(source, target) ||
             findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
             findBestTypeForObjectLiteral(source, target) ||
             findBestTypeForInvokable(source, target) ||
@@ -52002,7 +52002,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
-    function findMatchingDiscriminantType(source: Type, target: Type, isRelatedTo: (source: Type, target: Type) => Ternary) {
+    function findMatchingDiscriminantType(source: Type, target: Type) {
         if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
             const match = getMatchingUnionConstituentForType(target as UnionType, source);
             if (match) {
