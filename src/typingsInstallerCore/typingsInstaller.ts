@@ -113,7 +113,6 @@ export abstract class TypingsInstaller {
     private readonly knownCachesSet = new Set<string>();
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
-    /** @internal */
     private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;

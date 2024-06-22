@@ -40,6 +40,13 @@ const newLineKind = ts.NewLineKind.LineFeed;
 const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
 
 /**
+ * @param {ts.Node} node
+ */
+function removeAllComments(node) {
+    /** @type {any} */ (ts).removeAllComments(node);
+}
+
+/**
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
  */
@@ -421,6 +428,15 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
                     // No @internal comments in the public API.
                     if (ts.isInternalDeclaration(node)) {
                         return undefined;
+                    }
+                    // TODO: remove after https://github.com/microsoft/TypeScript/pull/58187 is released
+                    if (ts.canHaveModifiers(node)) {
+                        for (const modifier of ts.getModifiers(node) ?? []) {
+                            if (modifier.kind === ts.SyntaxKind.PrivateKeyword) {
+                                removeAllComments(node);
+                                break;
+                            }
+                        }
                     }
                     return node;
                 }, /*context*/ undefined);
