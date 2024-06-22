@@ -24177,7 +24177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (let i = 0; i < types.length; i++) {
                 if (include[i]) {
                     const targetType = getTypeOfPropertyOrIndexSignatureOfType(types[i], propertyName);
-                    if (targetType && !isIntersectionEmpty(getDiscriminatingType(), targetType)) {
+                    if (targetType && isMatchingDiscriminantType(getDiscriminatingType(), targetType)) {
                         matched = true;
                     }
                     else {
@@ -24194,6 +24194,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i]), UnionReduction.None) : target;
         return filtered.flags & TypeFlags.Never ? target : filtered;
+    }
+
+    function isMatchingDiscriminantType(source: Type, target: Type) {
+        return !strictNullChecks && !!(source.flags & TypeFlags.Nullable) || !isIntersectionEmpty(source, target);
     }
 
     /**
