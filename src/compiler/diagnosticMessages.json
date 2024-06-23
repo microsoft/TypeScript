@@ -1801,6 +1801,10 @@
         "category": "Error",
         "code": 1537
     },
+    "Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1538
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
