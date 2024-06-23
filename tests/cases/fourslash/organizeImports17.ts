@@ -5,8 +5,7 @@
 
 verify.organizeImports(
 `import { case, Insensitively, sorted } from "aardvark";
-import { Both } from "module-specifiers-unsorted";
-`,
+import { Both } from "module-specifiers-unsorted";`,
     ts.OrganizeImportsMode.SortAndCombine,
     {
         organizeImportsIgnoreCase: "auto",

@@ -9,5 +9,5 @@
 verify.organizeImports(
 `declare export default class A {}
 declare export * from "foo";
-declare export { a, b };
-`);
+declare export { a, b };`
+);
