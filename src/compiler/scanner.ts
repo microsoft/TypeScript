@@ -1640,7 +1640,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     const nextStart = pos;
                     let nextPos = pos + 2;
                     for (; nextPos < nextStart + 6; nextPos++) {
-                        if (!isHexDigit(charCodeUnchecked(pos))) {
+                        if (!isHexDigit(charCodeUnchecked(nextPos))) {
                             // leave the error to the next call
                             return escapedValueString;
                         }
@@ -3549,7 +3549,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanSourceCharacter(): string {
-            const size = anyUnicodeMode ? charSize(charCodeChecked(pos)) : 1;
+            const size = anyUnicodeMode ? charSize(codePointChecked(pos)) : 1;
             pos += size;
             return size > 0 ? text.substring(pos - size, pos) : "";
         }
