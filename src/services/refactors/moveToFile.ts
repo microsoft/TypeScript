@@ -1135,7 +1135,7 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
                     existingLocals.add(skipAlias(symbol, checker));
                 }
             }
-            else if(isNamedImports(declaration.importClause.namedBindings)) {
+            else if (isNamedImports(declaration.importClause.namedBindings)) {
                 for (const e of declaration.importClause.namedBindings.elements) {
                     const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                     if (symbol) {

@@ -283,10 +283,10 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 createModuleSpecifierResolutionHost(program, host),
             );
             if (namespacePrefix) {
-                const info: FixInfo = { 
+                const info: FixInfo = {
                     fix: { kind: ImportFixKind.AddNew, importKind: ImportKind.Namespace, addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.NotAllowed, useRequire, moduleSpecifierKind: undefined, moduleSpecifier },
                     symbolName: namespacePrefix,
-                    errorIdentifierText: undefined 
+                    errorIdentifierText: undefined,
                 };
                 addImport(info);
             }
@@ -310,7 +310,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 }
                 addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
             }
-         }
+        }
     }
 
     function addImportForNonExistentExport(exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) {
