@@ -2,11 +2,11 @@
 // @target: esnext
 // @resolveJsonModule: true
 // @noEmit: true
-// @moduleDetection: force
 // @noTypesAndSymbols: true
 
 // @Filename: data.json
 {}
 
 // @Filename: main.ts
-const data = await import("./data.json", { with: { type: "json" } });
+import data1 from "./data.json" with { type: "json" };
+const data2 = await import("./data.json", { with: { type: "json" } });
