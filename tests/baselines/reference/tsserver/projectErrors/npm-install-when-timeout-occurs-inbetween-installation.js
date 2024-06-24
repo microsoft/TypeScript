@@ -285,7 +285,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -520,7 +523,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -669,7 +675,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4
+        "request_seq": 4,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -780,7 +789,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -1053,7 +1065,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
