@@ -2508,7 +2508,7 @@ export function createLanguageService(
         synchronizeHostData();
         Debug.assert(args.type === "file");
         const sourceFile = getValidSourceFile(args.fileName);
-        if (containsParseError(sourceFile)) return [];
+        if (containsParseError(sourceFile)) return emptyArray;
 
         const formatContext = formatting.getFormatContext(formatOptions, host);
         const mode = args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : OrganizeImportsMode.All);
