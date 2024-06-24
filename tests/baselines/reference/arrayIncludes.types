@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/arrayIncludes.ts] ////
+
+=== arrayIncludes.ts ===
+const array1 = ['foo', 'bar'] as const;
+>array1 : readonly ["foo", "bar"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>['foo', 'bar'] as const : readonly ["foo", "bar"]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>['foo', 'bar'] : readonly ["foo", "bar"]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+const value1: string = 'baz';
+>value1 : string
+>       : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
+
+if (array1.includes(value1)) {
+>array1.includes(value1) : boolean
+>                        : ^^^^^^^
+>array1.includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>                : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array1 : readonly ["foo", "bar"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>         : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value1 : string
+>       : ^^^^^^
+
+    value1.length;
+>value1.length : number
+>              : ^^^^^^
+>value1 : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+}
+
+const value2 = 'baz';
+>value2 : "baz"
+>       : ^^^^^
+>'baz' : "baz"
+>      : ^^^^^
+
+if (array1.includes(value2)) {
+>array1.includes(value2) : boolean
+>                        : ^^^^^^^
+>array1.includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>                : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array1 : readonly ["foo", "bar"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>         : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value2 : "baz"
+>       : ^^^^^
+
+    value2.length;
+>value2.length : any
+>              : ^^^
+>value2 : never
+>       : ^^^^^
+>length : any
+>       : ^^^
+}
+
+const value3 = 'bar';
+>value3 : "bar"
+>       : ^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+if (array1.includes(value3)) {
+>array1.includes(value3) : boolean
+>                        : ^^^^^^^
+>array1.includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>                : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array1 : readonly ["foo", "bar"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>         : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value3 : "bar"
+>       : ^^^^^
+
+    value3.length;
+>value3.length : number
+>              : ^^^^^^
+>value3 : "bar"
+>       : ^^^^^
+>length : number
+>       : ^^^^^^
+}
+
+const value4 = 'baz';
+>value4 : "baz"
+>       : ^^^^^
+>'baz' : "baz"
+>      : ^^^^^
+
+const result0 = array1.includes(value4);
+>result0 : boolean
+>        : ^^^^^^^
+>array1.includes(value4) : boolean
+>                        : ^^^^^^^
+>array1.includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>                : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array1 : readonly ["foo", "bar"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>includes : <U>(searchElement: U, fromIndex?: number) => searchElement is ("foo" extends infer T ? T extends "foo" ? T extends U ? U & ("foo" | "bar") : never : never : never) | ("bar" extends infer T_1 ? T_1 extends "bar" ? T_1 extends U ? U & ("foo" | "bar") : never : never : never)
+>         : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value4 : "baz"
+>       : ^^^^^
+
+if (result0) {
+>result0 : boolean
+>        : ^^^^^^^
+
+    value4.length;
+>value4.length : any
+>              : ^^^
+>value4 : never
+>       : ^^^^^
+>length : any
+>       : ^^^
+}
+

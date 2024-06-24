@@ -649,12 +649,12 @@ export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>):
 >                  : ^^^^^^^
 >ids.includes(id) : boolean
 >                 : ^^^^^^^
->ids.includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
->             : ^             ^^^^^^^^^^^         ^^^      ^^^^^       
+>ids.includes : <U>(searchElement: U, fromIndex?: number) => searchElement is IdOf<E> extends infer T ? T extends IdOf<E> ? T extends U ? IdOf<E> : never : never : never
+>             : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ids : IdOf<E>[]
 >    : ^^^^^^^^^
->includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
->         : ^             ^^^^^^^^^^^         ^^^      ^^^^^       
+>includes : <U>(searchElement: U, fromIndex?: number) => searchElement is IdOf<E> extends infer T ? T extends IdOf<E> ? T extends U ? IdOf<E> : never : never : never
+>         : ^ ^^             ^^^^^         ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>
 >   : ^^^^^^^
 

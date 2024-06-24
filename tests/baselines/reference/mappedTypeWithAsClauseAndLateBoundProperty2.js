@@ -65,7 +65,7 @@ export declare const thing: {
     entries: () => IterableIterator<[number, number]>;
     keys: () => IterableIterator<number>;
     values: () => IterableIterator<number>;
-    includes: (searchElement: number, fromIndex?: number) => boolean;
+    includes: <U>(searchElement: U, fromIndex?: number) => searchElement is number extends infer T ? T extends number ? T extends U ? U & number : never : never : never;
     flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | ReadonlyArray<U>, thisArg?: This) => U[];
     flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
     [Symbol.iterator]: () => IterableIterator<number>;
@@ -174,7 +174,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(27,118): error TS2526: A 'this'
         entries: () => IterableIterator<[number, number]>;
         keys: () => IterableIterator<number>;
         values: () => IterableIterator<number>;
-        includes: (searchElement: number, fromIndex?: number) => boolean;
+        includes: <U>(searchElement: U, fromIndex?: number) => searchElement is number extends infer T ? T extends number ? T extends U ? U & number : never : never : never;
         flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | ReadonlyArray<U>, thisArg?: This) => U[];
         flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
         [Symbol.iterator]: () => IterableIterator<number>;

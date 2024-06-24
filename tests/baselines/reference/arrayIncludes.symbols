@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/arrayIncludes.ts] ////
+
+=== arrayIncludes.ts ===
+const array1 = ['foo', 'bar'] as const;
+>array1 : Symbol(array1, Decl(arrayIncludes.ts, 0, 5))
+>const : Symbol(const)
+
+const value1: string = 'baz';
+>value1 : Symbol(value1, Decl(arrayIncludes.ts, 2, 5))
+
+if (array1.includes(value1)) {
+>array1.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>array1 : Symbol(array1, Decl(arrayIncludes.ts, 0, 5))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>value1 : Symbol(value1, Decl(arrayIncludes.ts, 2, 5))
+
+    value1.length;
+>value1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value1 : Symbol(value1, Decl(arrayIncludes.ts, 2, 5))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+const value2 = 'baz';
+>value2 : Symbol(value2, Decl(arrayIncludes.ts, 7, 5))
+
+if (array1.includes(value2)) {
+>array1.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>array1 : Symbol(array1, Decl(arrayIncludes.ts, 0, 5))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>value2 : Symbol(value2, Decl(arrayIncludes.ts, 7, 5))
+
+    value2.length;
+>value2 : Symbol(value2, Decl(arrayIncludes.ts, 7, 5))
+}
+
+const value3 = 'bar';
+>value3 : Symbol(value3, Decl(arrayIncludes.ts, 12, 5))
+
+if (array1.includes(value3)) {
+>array1.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>array1 : Symbol(array1, Decl(arrayIncludes.ts, 0, 5))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>value3 : Symbol(value3, Decl(arrayIncludes.ts, 12, 5))
+
+    value3.length;
+>value3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>value3 : Symbol(value3, Decl(arrayIncludes.ts, 12, 5))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+const value4 = 'baz';
+>value4 : Symbol(value4, Decl(arrayIncludes.ts, 17, 5))
+
+const result0 = array1.includes(value4);
+>result0 : Symbol(result0, Decl(arrayIncludes.ts, 18, 5))
+>array1.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>array1 : Symbol(array1, Decl(arrayIncludes.ts, 0, 5))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>value4 : Symbol(value4, Decl(arrayIncludes.ts, 17, 5))
+
+if (result0) {
+>result0 : Symbol(result0, Decl(arrayIncludes.ts, 18, 5))
+
+    value4.length;
+>value4 : Symbol(value4, Decl(arrayIncludes.ts, 17, 5))
+}
+
