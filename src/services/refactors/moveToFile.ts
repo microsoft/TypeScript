@@ -891,7 +891,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations) {
+            if (!symbol.declarations || isGlobalType(checker, symbol)) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
@@ -950,6 +950,10 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             ? jsxNamespaceSymbol
             : undefined;
     }
+}
+
+function isGlobalType(checker: TypeChecker, symbol: Symbol) {
+    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {

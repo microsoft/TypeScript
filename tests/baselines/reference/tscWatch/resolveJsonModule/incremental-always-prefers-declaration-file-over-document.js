@@ -52,7 +52,7 @@ var x = data_json_1.default;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -60,6 +60,11 @@ var x = data_json_1.default;
     "../../a/lib/lib.d.ts",
     "./data.d.json.ts",
     "./main.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./data.d.json.ts"
+    ]
   ],
   "fileInfos": {
     "../../a/lib/lib.d.ts": {
@@ -90,6 +95,11 @@ var x = data_json_1.default;
       "./main.ts"
     ]
   ],
+  "referencedMap": {
+    "./main.ts": [
+      "./data.d.json.ts"
+    ]
+  },
   "semanticDiagnosticsPerFile": [
     [
       "./main.ts",
@@ -105,7 +115,7 @@ var x = data_json_1.default;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 864
+  "size": 908
 }
 
 

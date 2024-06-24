@@ -902,7 +902,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
 }
 
 function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
-    if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
+    if (isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent) || isJSDocImportTag(usage.parent)) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
             const override = getResolutionModeOverride(usage.parent.attributes);
@@ -2777,7 +2777,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return true;
         }
 
-        if (!options.noLib) {
+        if (options.noLib) {
             return false;
         }
 
@@ -2788,7 +2788,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return equalityComparer(file.fileName, getDefaultLibraryFileName());
         }
         else {
-            return some(options.lib, libFileName => equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!.actual));
+            return some(options.lib, libFileName => {
+                // We might not have resolved lib if one of the root file included contained no-default-lib = true
+                const resolvedLib = resolvedLibReferences!.get(libFileName);
+                return !!resolvedLib && equalityComparer(file.fileName, resolvedLib.actual);
+            });
         }
     }
 
