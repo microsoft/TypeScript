@@ -11,7 +11,6 @@ var f1 = () => {
 >this.age = 10 : 10
 >              : ^^
 >this.age : any
->         : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >age : any
@@ -33,7 +32,6 @@ var f2 = (x: string) => {
 >this.name = x : string
 >              : ^^^^^^
 >this.name : any
->          : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >name : any
@@ -60,7 +58,6 @@ foo(() => {
 >this.age = 100 : 100
 >               : ^^^
 >this.age : any
->         : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >age : any
