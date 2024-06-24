@@ -56,6 +56,7 @@ import {
     containsObjectRestOrSpread,
     ContinueStatement,
     createBaseNodeFactory,
+    createEmptyObjectArray,
     createNodeConverters,
     createParenthesizerRules,
     createScanner,
@@ -1173,10 +1174,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
-        if (elements === undefined || elements === emptyArray) {
-            elements = [];
-        }
-        else if (isNodeArray(elements)) {
+        let pos = -1;
+        let end = -1;
+        let transformFlags;
+        if (elements !== undefined && isNodeArray(elements)) {
             if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
                 // Ensure the transform flags have been aggregated for this NodeArray
                 if (elements.transformFlags === undefined) {
@@ -1189,25 +1190,27 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
             // array with the same elements, text range, and transform flags but with the updated
             // value for `hasTrailingComma`
-            const array = elements.slice() as MutableNodeArray<T>;
-            array.pos = elements.pos;
-            array.end = elements.end;
-            array.hasTrailingComma = hasTrailingComma;
-            array.transformFlags = elements.transformFlags;
-            Debug.attachNodeArrayDebugInfo(array);
-            return array;
+            pos = elements.pos;
+            end = elements.end;
+            transformFlags = elements.transformFlags;
+            elements = elements.slice();
+        } 
+        else if (elements === undefined || elements === emptyArray || elements.length === 0) {
+            // Ensure we have an object array
+            elements = createEmptyObjectArray();
         }
 
-        // Since the element list of a node array is typically created by starting with an empty array and
-        // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
-        // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
-        const length = elements.length;
-        const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
-        array.pos = -1;
-        array.end = -1;
+        const array = elements as MutableNodeArray<T>;
+        array.pos = pos;
+        array.end = end;
         array.hasTrailingComma = !!hasTrailingComma;
-        array.transformFlags = TransformFlags.None;
-        aggregateChildrenFlags(array);
+        if(transformFlags === undefined) {
+            array.transformFlags = TransformFlags.None;
+            aggregateChildrenFlags(array);
+        }
+        else {
+            array.transformFlags = transformFlags;
+        }
         Debug.attachNodeArrayDebugInfo(array);
         return array;
     }
@@ -6533,16 +6536,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (isPrivateIdentifier(node)) {
             return clonePrivateIdentifier(node) as T & PrivateIdentifier;
         }
-
-        const kind = node.kind;
-        const isSimpleToken = !isNodeKind(kind)
-            && kind !== SyntaxKind.SuperKeyword && kind !== SyntaxKind.ThisKeyword
-            && kind !== SyntaxKind.TemplateLiteralTypeSpan
-            && !isLiteralKind(kind);
-
-        const clone = isSimpleToken ?
-            baseFactory.createBaseTokenNode(kind) as T :
-            baseFactory.createBaseNode(kind) as T;
+        const clone = baseFactory.createBaseNode(node.kind);
 
         (clone as unknown as NodeData<T>).flags |= node.flags & ~NodeFlags.Synthesized;
         (clone as unknown as NodeData<T>).transformFlags = node.transformFlags;
@@ -6550,7 +6544,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = (node as any).data ?? node;
         const cloneData = (clone as any).data ?? clone;
         for (const key in nodeData) {
-            if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
+            if (hasProperty(cloneData, key) || hasProperty(clone, key) || !hasProperty(nodeData, key)) {
                 continue;
             }
             (clone as any)[key] = nodeData[key];
