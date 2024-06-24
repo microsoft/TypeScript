@@ -4,7 +4,7 @@ interface Array<T> {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): searchElement is T;
+    includes<U>(searchElement: U, fromIndex?: number): searchElement is T extends U ? T : never;
 }
 
 interface ReadonlyArray<T> {
@@ -13,7 +13,7 @@ interface ReadonlyArray<T> {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): searchElement is T;
+    includes<U>(searchElement: U, fromIndex?: number): searchElement is T extends U ? T : never;
 }
 
 interface Int8Array {
