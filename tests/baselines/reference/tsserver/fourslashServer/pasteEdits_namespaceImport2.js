@@ -5,11 +5,11 @@ const abc = 10;
 const def = 20;
 export interface testInterface {
     abc: number;
-    def: number;s
+    def: number;
 }
 
 //// [/b.ts]
-import * as test from "./a";
+import type * as test from "./a";
 
 function foo(abc: test.testInterface, def: test.testInterface) {
    console.log(abc);
@@ -18,6 +18,12 @@ function foo(abc: test.testInterface, def: test.testInterface) {
 
 
 //// [/folder/c.ts]
+import type * as test from "../a";
+
+function foo(abc: test.abc, def: test.def) {
+console.log(abc);
+}
+
 
 
 //// [/lib.d.ts]
@@ -77,9 +83,9 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/folder/c.ts SVC-1-0 ""
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;s\n}"
-	/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/folder/c.ts SVC-1-0 "import type * as test from \"../a\";\n\nfunction foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\n}\n\n"
+	/b.ts Text-1 "import type * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
 	lib.d.ts
@@ -88,11 +94,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators' from file 'lib.d.ts'
 	lib.decorators.legacy.d.ts
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
-	folder/c.ts
-	  Part of 'files' list in tsconfig.json
 	a.ts
+	  Imported via "../a" from file 'folder/c.ts'
 	  Part of 'files' list in tsconfig.json
 	  Imported via "./a" from file 'b.ts'
+	folder/c.ts
+	  Part of 'files' list in tsconfig.json
 	b.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -223,11 +230,11 @@ Info seq  [hh:mm:ss:mss] request:
         "pasteLocations": [
           {
             "start": {
-              "line": 1,
+              "line": 6,
               "offset": 1
             },
             "end": {
-              "line": 1,
+              "line": 6,
               "offset": 1
             }
           }
@@ -257,9 +264,9 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;s\n}"
-	/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/folder/c.ts SVC-1-1 "import type * as test from \"../a\";\n\nfunction foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\n}\nfunction foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}\n"
+	/b.ts Text-1 "import type * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
@@ -279,22 +286,11 @@ Info seq  [hh:mm:ss:mss] response:
             "textChanges": [
               {
                 "start": {
-                  "line": 1,
+                  "line": 6,
                   "offset": 1
                 },
                 "end": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "newText": "import * as test from \"../a\";\n\n"
-              },
-              {
-                "start": {
-                  "line": 1,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 1,
+                  "line": 6,
                   "offset": 1
                 },
                 "newText": "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"

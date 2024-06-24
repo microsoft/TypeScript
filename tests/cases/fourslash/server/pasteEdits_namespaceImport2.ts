@@ -50,7 +50,8 @@ console.log(abc);
 function foo(abc: test.abc, def: test.def) {
 console.log(abc);
 console.log(def);
-}`
+}
+`
     }
 });
 
