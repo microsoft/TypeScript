@@ -5,7 +5,7 @@ const abc = 10;
 const def = 20;
 export interface testInterface {
     abc: number;
-    def: number;s
+    def: number;
 }
 
 //// [/b.ts]
@@ -78,7 +78,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/folder/c.ts SVC-1-0 ""
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;s\n}"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
 	/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
@@ -258,7 +258,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;s\n}"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
 	/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------

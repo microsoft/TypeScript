@@ -9,7 +9,7 @@
 //// const def = 20;
 //// export interface testInterface {
 ////     abc: number;
-////     def: number;s
+////     def: number;
 //// }
 
 // @Filename: /b.ts
