@@ -178,6 +178,7 @@ import {
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isLabeledStatement,
+    isLiteralKind,
     isLocalName,
     isLogicalOrCoalescingAssignmentOperator,
     isMemberName,
@@ -1280,7 +1281,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral {
-        const node = createBaseToken<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral);
+        const node = createBaseNode<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral);
         node.data.text = text;
         return node;
     }
@@ -1464,6 +1465,28 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
         Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
         Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
+
+        if (token === SyntaxKind.EndOfFileToken) {
+            const node = createBaseNode<EndOfFileToken>(token);
+            node.data.jsDoc = undefined;
+            return node;
+        }
+        if (token === SyntaxKind.ThisKeyword) {
+            const node = createBaseNode<ThisExpression>(token);
+            // 'this' indicates a lexical 'this'
+            node.transformFlags = TransformFlags.ContainsLexicalThis;
+            (node as NodeData<Token<SyntaxKind.ThisKeyword>> as NodeData<ThisExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
+            return node;
+        }
+
+        if (token === SyntaxKind.SuperKeyword) {
+            const node = createBaseNode<SuperExpression>(token);
+
+            node.transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+            (node as NodeData<Token<SyntaxKind.SuperKeyword>> as NodeData<SuperExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
+            return node;
+        }
+
         const node = createBaseToken<Token<TKind>>(token);
         let transformFlags = TransformFlags.None;
         switch (token) {
@@ -1500,20 +1523,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                 transformFlags = TransformFlags.ContainsTypeScript;
                 break;
-            case SyntaxKind.SuperKeyword:
-                transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
-                (node as NodeData<Token<SyntaxKind.SuperKeyword>> as NodeData<SuperExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
-                break;
             case SyntaxKind.StaticKeyword:
                 transformFlags = TransformFlags.ContainsES2015;
                 break;
             case SyntaxKind.AccessorKeyword:
                 transformFlags = TransformFlags.ContainsClassFields;
-                break;
-            case SyntaxKind.ThisKeyword:
-                // 'this' indicates a lexical 'this'
-                transformFlags = TransformFlags.ContainsLexicalThis;
-                (node as NodeData<Token<SyntaxKind.ThisKeyword>> as NodeData<ThisExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
                 break;
         }
         if (transformFlags) {
@@ -3605,7 +3619,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //       the underlying nodes they create. To avoid polymorphism due to two different node shapes, these
     //       functions are intentionally duplicated.
     function createTemplateLiteralLikeToken(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
-        const node = createBaseToken<TemplateLiteralLikeNode>(kind);
+        const node = createBaseNode<TemplateLiteralLikeNode>(kind);
         const nodeData = node.data;
         nodeData.text = text;
         nodeData.rawText = rawText;
@@ -6520,8 +6534,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             return clonePrivateIdentifier(node) as T & PrivateIdentifier;
         }
 
-        const clone = !isNodeKind(node.kind) ? baseFactory.createBaseTokenNode(node.kind) as T :
-            baseFactory.createBaseNode(node.kind) as T;
+        const kind = node.kind;
+        const isSimpleToken = !isNodeKind(kind)
+            && kind !== SyntaxKind.SuperKeyword && kind !== SyntaxKind.ThisKeyword
+            && kind !== SyntaxKind.TemplateLiteralTypeSpan
+            && !isLiteralKind(kind);
+
+        const clone = isSimpleToken ?
+            baseFactory.createBaseTokenNode(kind) as T :
+            baseFactory.createBaseNode(kind) as T;
 
         (clone as unknown as NodeData<T>).flags |= node.flags & ~NodeFlags.Synthesized;
         (clone as unknown as NodeData<T>).transformFlags = node.transformFlags;

@@ -8282,7 +8282,7 @@ export class TypeImpl {
     checker: TypeChecker;
     flags: TypeFlags;
     symbol: Symbol;
-    data: any;
+    _data: any = undefined;
     id: number;
     objectFlags: number;
     constructor(checker: TypeChecker, flags: TypeFlags) {
@@ -8291,735 +8291,737 @@ export class TypeImpl {
         this.flags = flags;
         this.symbol = undefined!;
         this.objectFlags = 0;
-        this.data = new TypeDataImpl();
+    }
+    get data() {
+        return this._data ??= new TypeDataImpl();
     }
 
     get pattern() {
-        return this.data.pattern;
+        return this._data?.pattern;
     }
     set pattern(value: any) {
         this.data.pattern = value;
     }
 
     get aliasSymbol() {
-        return this.data.aliasSymbol;
+        return this._data?.aliasSymbol;
     }
     set aliasSymbol(value: any) {
         this.data.aliasSymbol = value;
     }
 
     get aliasTypeArguments() {
-        return this.data.aliasTypeArguments;
+        return this._data?.aliasTypeArguments;
     }
     set aliasTypeArguments(value: any) {
         this.data.aliasTypeArguments = value;
     }
 
     get permissiveInstantiation() {
-        return this.data.permissiveInstantiation;
+        return this._data?.permissiveInstantiation;
     }
     set permissiveInstantiation(value: any) {
         this.data.permissiveInstantiation = value;
     }
 
     get restrictiveInstantiation() {
-        return this.data.restrictiveInstantiation;
+        return this._data?.restrictiveInstantiation;
     }
     set restrictiveInstantiation(value: any) {
         this.data.restrictiveInstantiation = value;
     }
 
     get immediateBaseConstraint() {
-        return this.data.immediateBaseConstraint;
+        return this._data?.immediateBaseConstraint;
     }
     set immediateBaseConstraint(value: any) {
         this.data.immediateBaseConstraint = value;
     }
 
     get widened() {
-        return this.data.widened;
+        return this._data?.widened;
     }
     set widened(value: any) {
         this.data.widened = value;
     }
 
     get intrinsicName() {
-        return this.data.intrinsicName;
+        return this._data?.intrinsicName;
     }
     set intrinsicName(value: any) {
         this.data.intrinsicName = value;
     }
 
     get debugIntrinsicName() {
-        return this.data.debugIntrinsicName;
+        return this._data?.debugIntrinsicName;
     }
     set debugIntrinsicName(value: any) {
         this.data.debugIntrinsicName = value;
     }
 
-    // get objectFlags() { return this.data.objectFlags; }
+    // get objectFlags() { return this._data?.objectFlags; }
     // set objectFlags(value: any) { this.data.objectFlags = value }
 
     get freshType() {
-        return this.data.freshType;
+        return this._data?.freshType;
     }
     set freshType(value: any) {
         this.data.freshType = value;
     }
 
     get regularType() {
-        return this.data.regularType;
+        return this._data?.regularType;
     }
     set regularType(value: any) {
         this.data.regularType = value;
     }
 
     get value() {
-        return this.data.value;
+        return this._data?.value;
     }
     set value(value: any) {
         this.data.value = value;
     }
 
     get escapedName() {
-        return this.data.escapedName;
+        return this._data?.escapedName;
     }
     set escapedName(value: any) {
         this.data.escapedName = value;
     }
 
     get members() {
-        return this.data.members;
+        return this._data?.members;
     }
     set members(value: any) {
         this.data.members = value;
     }
 
     get properties() {
-        return this.data.properties;
+        return this._data?.properties;
     }
     set properties(value: any) {
         this.data.properties = value;
     }
 
     get callSignatures() {
-        return this.data.callSignatures;
+        return this._data?.callSignatures;
     }
     set callSignatures(value: any) {
         this.data.callSignatures = value;
     }
 
     get constructSignatures() {
-        return this.data.constructSignatures;
+        return this._data?.constructSignatures;
     }
     set constructSignatures(value: any) {
         this.data.constructSignatures = value;
     }
 
     get indexInfos() {
-        return this.data.indexInfos;
+        return this._data?.indexInfos;
     }
     set indexInfos(value: any) {
         this.data.indexInfos = value;
     }
 
     get objectTypeWithoutAbstractConstructSignatures() {
-        return this.data.objectTypeWithoutAbstractConstructSignatures;
+        return this._data?.objectTypeWithoutAbstractConstructSignatures;
     }
     set objectTypeWithoutAbstractConstructSignatures(value: any) {
         this.data.objectTypeWithoutAbstractConstructSignatures = value;
     }
 
     get typeParameters() {
-        return this.data.typeParameters;
+        return this._data?.typeParameters;
     }
     set typeParameters(value: any) {
         this.data.typeParameters = value;
     }
 
     get outerTypeParameters() {
-        return this.data.outerTypeParameters;
+        return this._data?.outerTypeParameters;
     }
     set outerTypeParameters(value: any) {
         this.data.outerTypeParameters = value;
     }
 
     get localTypeParameters() {
-        return this.data.localTypeParameters;
+        return this._data?.localTypeParameters;
     }
     set localTypeParameters(value: any) {
         this.data.localTypeParameters = value;
     }
 
     get thisType() {
-        return this.data.thisType;
+        return this._data?.thisType;
     }
     set thisType(value: any) {
         this.data.thisType = value;
     }
 
     get resolvedBaseConstructorType() {
-        return this.data.resolvedBaseConstructorType;
+        return this._data?.resolvedBaseConstructorType;
     }
     set resolvedBaseConstructorType(value: any) {
         this.data.resolvedBaseConstructorType = value;
     }
 
     get resolvedBaseTypes() {
-        return this.data.resolvedBaseTypes;
+        return this._data?.resolvedBaseTypes;
     }
     set resolvedBaseTypes(value: any) {
         this.data.resolvedBaseTypes = value;
     }
 
     get baseTypesResolved() {
-        return this.data.baseTypesResolved;
+        return this._data?.baseTypesResolved;
     }
     set baseTypesResolved(value: any) {
         this.data.baseTypesResolved = value;
     }
 
     get declaredProperties() {
-        return this.data.declaredProperties;
+        return this._data?.declaredProperties;
     }
     set declaredProperties(value: any) {
         this.data.declaredProperties = value;
     }
 
     get declaredCallSignatures() {
-        return this.data.declaredCallSignatures;
+        return this._data?.declaredCallSignatures;
     }
     set declaredCallSignatures(value: any) {
         this.data.declaredCallSignatures = value;
     }
 
     get declaredConstructSignatures() {
-        return this.data.declaredConstructSignatures;
+        return this._data?.declaredConstructSignatures;
     }
     set declaredConstructSignatures(value: any) {
         this.data.declaredConstructSignatures = value;
     }
 
     get declaredIndexInfos() {
-        return this.data.declaredIndexInfos;
+        return this._data?.declaredIndexInfos;
     }
     set declaredIndexInfos(value: any) {
         this.data.declaredIndexInfos = value;
     }
 
     get instantiations() {
-        return this.data.instantiations;
+        return this._data?.instantiations;
     }
     set instantiations(value: any) {
         this.data.instantiations = value;
     }
 
     get variances() {
-        return this.data.variances;
+        return this._data?.variances;
     }
     set variances(value: any) {
         this.data.variances = value;
     }
 
     get target() {
-        return this.data.target;
+        return this._data?.target;
     }
     set target(value: any) {
         this.data.target = value;
     }
 
     get node() {
-        return this.data.node;
+        return this._data?.node;
     }
     set node(value: any) {
         this.data.node = value;
     }
 
     get mapper() {
-        return this.data.mapper;
+        return this._data?.mapper;
     }
     set mapper(value: any) {
         this.data.mapper = value;
     }
 
     get resolvedTypeArguments() {
-        return this.data.resolvedTypeArguments;
+        return this._data?.resolvedTypeArguments;
     }
     set resolvedTypeArguments(value: any) {
         this.data.resolvedTypeArguments = value;
     }
 
     get literalType() {
-        return this.data.literalType;
+        return this._data?.literalType;
     }
     set literalType(value: any) {
         this.data.literalType = value;
     }
 
     get cachedEquivalentBaseType() {
-        return this.data.cachedEquivalentBaseType;
+        return this._data?.cachedEquivalentBaseType;
     }
     set cachedEquivalentBaseType(value: any) {
         this.data.cachedEquivalentBaseType = value;
     }
 
     get elementFlags() {
-        return this.data.elementFlags;
+        return this._data?.elementFlags;
     }
     set elementFlags(value: any) {
         this.data.elementFlags = value;
     }
 
     get minLength() {
-        return this.data.minLength;
+        return this._data?.minLength;
     }
     set minLength(value: any) {
         this.data.minLength = value;
     }
 
     get fixedLength() {
-        return this.data.fixedLength;
+        return this._data?.fixedLength;
     }
     set fixedLength(value: any) {
         this.data.fixedLength = value;
     }
 
     get hasRestElement() {
-        return this.data.hasRestElement;
+        return this._data?.hasRestElement;
     }
     set hasRestElement(value: any) {
         this.data.hasRestElement = value;
     }
 
     get combinedFlags() {
-        return this.data.combinedFlags;
+        return this._data?.combinedFlags;
     }
     set combinedFlags(value: any) {
         this.data.combinedFlags = value;
     }
 
     get readonly() {
-        return this.data.readonly;
+        return this._data?.readonly;
     }
     set readonly(value: any) {
         this.data.readonly = value;
     }
 
     get labeledElementDeclarations() {
-        return this.data.labeledElementDeclarations;
+        return this._data?.labeledElementDeclarations;
     }
     set labeledElementDeclarations(value: any) {
         this.data.labeledElementDeclarations = value;
     }
 
     get declaration() {
-        return this.data.declaration;
+        return this._data?.declaration;
     }
     set declaration(value: any) {
         this.data.declaration = value;
     }
 
     get typeParameter() {
-        return this.data.typeParameter;
+        return this._data?.typeParameter;
     }
     set typeParameter(value: any) {
         this.data.typeParameter = value;
     }
 
     get constraintType() {
-        return this.data.constraintType;
+        return this._data?.constraintType;
     }
     set constraintType(value: any) {
         this.data.constraintType = value;
     }
 
     get nameType() {
-        return this.data.nameType;
+        return this._data?.nameType;
     }
     set nameType(value: any) {
         this.data.nameType = value;
     }
 
     get templateType() {
-        return this.data.templateType;
+        return this._data?.templateType;
     }
     set templateType(value: any) {
         this.data.templateType = value;
     }
 
     get modifiersType() {
-        return this.data.modifiersType;
+        return this._data?.modifiersType;
     }
     set modifiersType(value: any) {
         this.data.modifiersType = value;
     }
 
     get resolvedApparentType() {
-        return this.data.resolvedApparentType;
+        return this._data?.resolvedApparentType;
     }
     set resolvedApparentType(value: any) {
         this.data.resolvedApparentType = value;
     }
 
     get containsError() {
-        return this.data.containsError;
+        return this._data?.containsError;
     }
     set containsError(value: any) {
         this.data.containsError = value;
     }
 
     get elementType() {
-        return this.data.elementType;
+        return this._data?.elementType;
     }
     set elementType(value: any) {
         this.data.elementType = value;
     }
 
     get finalArrayType() {
-        return this.data.finalArrayType;
+        return this._data?.finalArrayType;
     }
     set finalArrayType(value: any) {
         this.data.finalArrayType = value;
     }
 
     get source() {
-        return this.data.source;
+        return this._data?.source;
     }
     set source(value: any) {
         this.data.source = value;
     }
 
     get mappedType() {
-        return this.data.mappedType;
+        return this._data?.mappedType;
     }
     set mappedType(value: any) {
         this.data.mappedType = value;
     }
 
     get types() {
-        return this.data.types;
+        return this._data?.types;
     }
     set types(value: any) {
         this.data.types = value;
     }
 
     get propertyCache() {
-        return this.data.propertyCache;
+        return this._data?.propertyCache;
     }
     set propertyCache(value: any) {
         this.data.propertyCache = value;
     }
 
     get propertyCacheWithoutObjectFunctionPropertyAugment() {
-        return this.data.propertyCacheWithoutObjectFunctionPropertyAugment;
+        return this._data?.propertyCacheWithoutObjectFunctionPropertyAugment;
     }
     set propertyCacheWithoutObjectFunctionPropertyAugment(value: any) {
         this.data.propertyCacheWithoutObjectFunctionPropertyAugment = value;
     }
 
     get resolvedProperties() {
-        return this.data.resolvedProperties;
+        return this._data?.resolvedProperties;
     }
     set resolvedProperties(value: any) {
         this.data.resolvedProperties = value;
     }
 
     get resolvedIndexType() {
-        return this.data.resolvedIndexType;
+        return this._data?.resolvedIndexType;
     }
     set resolvedIndexType(value: any) {
         this.data.resolvedIndexType = value;
     }
 
     get resolvedStringIndexType() {
-        return this.data.resolvedStringIndexType;
+        return this._data?.resolvedStringIndexType;
     }
     set resolvedStringIndexType(value: any) {
         this.data.resolvedStringIndexType = value;
     }
 
     get resolvedBaseConstraint() {
-        return this.data.resolvedBaseConstraint;
+        return this._data?.resolvedBaseConstraint;
     }
     set resolvedBaseConstraint(value: any) {
         this.data.resolvedBaseConstraint = value;
     }
 
     get iterationTypesOfGeneratorReturnType() {
-        return this.data.iterationTypesOfGeneratorReturnType;
+        return this._data?.iterationTypesOfGeneratorReturnType;
     }
     set iterationTypesOfGeneratorReturnType(value: any) {
         this.data.iterationTypesOfGeneratorReturnType = value;
     }
 
     get iterationTypesOfAsyncGeneratorReturnType() {
-        return this.data.iterationTypesOfAsyncGeneratorReturnType;
+        return this._data?.iterationTypesOfAsyncGeneratorReturnType;
     }
     set iterationTypesOfAsyncGeneratorReturnType(value: any) {
         this.data.iterationTypesOfAsyncGeneratorReturnType = value;
     }
 
     get iterationTypesOfIterable() {
-        return this.data.iterationTypesOfIterable;
+        return this._data?.iterationTypesOfIterable;
     }
     set iterationTypesOfIterable(value: any) {
         this.data.iterationTypesOfIterable = value;
     }
 
     get iterationTypesOfIterator() {
-        return this.data.iterationTypesOfIterator;
+        return this._data?.iterationTypesOfIterator;
     }
     set iterationTypesOfIterator(value: any) {
         this.data.iterationTypesOfIterator = value;
     }
 
     get iterationTypesOfAsyncIterable() {
-        return this.data.iterationTypesOfAsyncIterable;
+        return this._data?.iterationTypesOfAsyncIterable;
     }
     set iterationTypesOfAsyncIterable(value: any) {
         this.data.iterationTypesOfAsyncIterable = value;
     }
 
     get iterationTypesOfAsyncIterator() {
-        return this.data.iterationTypesOfAsyncIterator;
+        return this._data?.iterationTypesOfAsyncIterator;
     }
     set iterationTypesOfAsyncIterator(value: any) {
         this.data.iterationTypesOfAsyncIterator = value;
     }
 
     get iterationTypesOfIteratorResult() {
-        return this.data.iterationTypesOfIteratorResult;
+        return this._data?.iterationTypesOfIteratorResult;
     }
     set iterationTypesOfIteratorResult(value: any) {
         this.data.iterationTypesOfIteratorResult = value;
     }
 
     get resolvedReducedType() {
-        return this.data.resolvedReducedType;
+        return this._data?.resolvedReducedType;
     }
     set resolvedReducedType(value: any) {
         this.data.resolvedReducedType = value;
     }
 
     get origin() {
-        return this.data.origin;
+        return this._data?.origin;
     }
     set origin(value: any) {
         this.data.origin = value;
     }
 
     get keyPropertyName() {
-        return this.data.keyPropertyName;
+        return this._data?.keyPropertyName;
     }
     set keyPropertyName(value: any) {
         this.data.keyPropertyName = value;
     }
 
     get constituentMap() {
-        return this.data.constituentMap;
+        return this._data?.constituentMap;
     }
     set constituentMap(value: any) {
         this.data.constituentMap = value;
     }
 
     get arrayFallbackSignatures() {
-        return this.data.arrayFallbackSignatures;
+        return this._data?.arrayFallbackSignatures;
     }
     set arrayFallbackSignatures(value: any) {
         this.data.arrayFallbackSignatures = value;
     }
 
     get promiseTypeOfPromiseConstructor() {
-        return this.data.promiseTypeOfPromiseConstructor;
+        return this._data?.promiseTypeOfPromiseConstructor;
     }
     set promiseTypeOfPromiseConstructor(value: any) {
         this.data.promiseTypeOfPromiseConstructor = value;
     }
 
     get promisedTypeOfPromise() {
-        return this.data.promisedTypeOfPromise;
+        return this._data?.promisedTypeOfPromise;
     }
     set promisedTypeOfPromise(value: any) {
         this.data.promisedTypeOfPromise = value;
     }
 
     get awaitedTypeOfType() {
-        return this.data.awaitedTypeOfType;
+        return this._data?.awaitedTypeOfType;
     }
     set awaitedTypeOfType(value: any) {
         this.data.awaitedTypeOfType = value;
     }
 
     get uniqueLiteralFilledInstantiation() {
-        return this.data.uniqueLiteralFilledInstantiation;
+        return this._data?.uniqueLiteralFilledInstantiation;
     }
     set uniqueLiteralFilledInstantiation(value: any) {
         this.data.uniqueLiteralFilledInstantiation = value;
     }
 
     get syntheticType() {
-        return this.data.syntheticType;
+        return this._data?.syntheticType;
     }
     set syntheticType(value: any) {
         this.data.syntheticType = value;
     }
 
     get defaultOnlyType() {
-        return this.data.defaultOnlyType;
+        return this._data?.defaultOnlyType;
     }
     set defaultOnlyType(value: any) {
         this.data.defaultOnlyType = value;
     }
 
     get constraint() {
-        return this.data.constraint;
+        return this._data?.constraint;
     }
     set constraint(value: any) {
         this.data.constraint = value;
     }
 
     get default() {
-        return this.data.default;
+        return this._data?.default;
     }
     set default(value: any) {
         this.data.default = value;
     }
 
     get isThisType() {
-        return this.data.isThisType;
+        return this._data?.isThisType;
     }
     set isThisType(value: any) {
         this.data.isThisType = value;
     }
 
     get resolvedDefaultType() {
-        return this.data.resolvedDefaultType;
+        return this._data?.resolvedDefaultType;
     }
     set resolvedDefaultType(value: any) {
         this.data.resolvedDefaultType = value;
     }
 
     get objectType() {
-        return this.data.objectType;
+        return this._data?.objectType;
     }
     set objectType(value: any) {
         this.data.objectType = value;
     }
 
     get indexType() {
-        return this.data.indexType;
+        return this._data?.indexType;
     }
     set indexType(value: any) {
         this.data.indexType = value;
     }
 
     get accessFlags() {
-        return this.data.accessFlags;
+        return this._data?.accessFlags;
     }
     set accessFlags(value: any) {
         this.data.accessFlags = value;
     }
 
     get simplifiedForReading() {
-        return this.data.simplifiedForReading;
+        return this._data?.simplifiedForReading;
     }
     set simplifiedForReading(value: any) {
         this.data.simplifiedForReading = value;
     }
 
     get simplifiedForWriting() {
-        return this.data.simplifiedForWriting;
+        return this._data?.simplifiedForWriting;
     }
     set simplifiedForWriting(value: any) {
         this.data.simplifiedForWriting = value;
     }
 
     get type() {
-        return this.data.type;
+        return this._data?.type;
     }
     set type(value: any) {
         this.data.type = value;
     }
 
     get indexFlags() {
-        return this.data.indexFlags;
+        return this._data?.indexFlags;
     }
     set indexFlags(value: any) {
         this.data.indexFlags = value;
     }
 
     get root() {
-        return this.data.root;
+        return this._data?.root;
     }
     set root(value: any) {
         this.data.root = value;
     }
 
     get checkType() {
-        return this.data.checkType;
+        return this._data?.checkType;
     }
     set checkType(value: any) {
         this.data.checkType = value;
     }
 
     get extendsType() {
-        return this.data.extendsType;
+        return this._data?.extendsType;
     }
     set extendsType(value: any) {
         this.data.extendsType = value;
     }
 
     get resolvedTrueType() {
-        return this.data.resolvedTrueType;
+        return this._data?.resolvedTrueType;
     }
     set resolvedTrueType(value: any) {
         this.data.resolvedTrueType = value;
     }
 
     get resolvedFalseType() {
-        return this.data.resolvedFalseType;
+        return this._data?.resolvedFalseType;
     }
     set resolvedFalseType(value: any) {
         this.data.resolvedFalseType = value;
     }
 
     get resolvedInferredTrueType() {
-        return this.data.resolvedInferredTrueType;
+        return this._data?.resolvedInferredTrueType;
     }
     set resolvedInferredTrueType(value: any) {
         this.data.resolvedInferredTrueType = value;
     }
 
     get resolvedDefaultConstraint() {
-        return this.data.resolvedDefaultConstraint;
+        return this._data?.resolvedDefaultConstraint;
     }
     set resolvedDefaultConstraint(value: any) {
         this.data.resolvedDefaultConstraint = value;
     }
 
     get resolvedConstraintOfDistributive() {
-        return this.data.resolvedConstraintOfDistributive;
+        return this._data?.resolvedConstraintOfDistributive;
     }
     set resolvedConstraintOfDistributive(value: any) {
         this.data.resolvedConstraintOfDistributive = value;
     }
 
     get combinedMapper() {
-        return this.data.combinedMapper;
+        return this._data?.combinedMapper;
     }
     set combinedMapper(value: any) {
         this.data.combinedMapper = value;
     }
 
     get texts() {
-        return this.data.texts;
+        return this._data?.texts;
     }
     set texts(value: any) {
         this.data.texts = value;
     }
 
     get baseType() {
-        return this.data.baseType;
+        return this._data?.baseType;
     }
     set baseType(value: any) {
         this.data.baseType = value;
@@ -9070,56 +9072,63 @@ export class SignatureImpl {
         this.compositeSignatures = undefined;
         this.compositeKind = undefined;
     }
-
     _data: any = undefined;
     get data() {
         return this._data ??= new SignatureDataImpl();
     }
     get erasedSignatureCache() {
-        return this.data.erasedSignatureCache;
+        return this._data?.erasedSignatureCache;
     }
     set erasedSignatureCache(value: any) {
         this.data.erasedSignatureCache = value;
     }
     get canonicalSignatureCache() {
-        return this.data.canonicalSignatureCache;
+        return this._data?.canonicalSignatureCache;
     }
     set canonicalSignatureCache(value: any) {
         this.data.canonicalSignatureCache = value;
     }
     get baseSignatureCache() {
-        return this.data.baseSignatureCache;
+        return this._data?.baseSignatureCache;
     }
     set baseSignatureCache(value: any) {
         this.data.baseSignatureCache = value;
     }
     get optionalCallSignatureCache() {
-        return this.data.optionalCallSignatureCache;
+        return this._data?.optionalCallSignatureCache;
     }
     set optionalCallSignatureCache(value: any) {
         this.data.optionalCallSignatureCache = value;
     }
     get isolatedSignatureType() {
-        return this.data.isolatedSignatureType;
+        return this._data?.isolatedSignatureType;
     }
     set isolatedSignatureType(value: any) {
         this.data.isolatedSignatureType = value;
     }
     get instantiations() {
-        return this.data.instantiations;
+        return this._data?.instantiations;
     }
     set instantiations(value: any) {
         this.data.instantiations = value;
     }
     get implementationSignatureCache() {
-        return this.data.implementationSignatureCache;
+        return this._data?.implementationSignatureCache;
     }
     set implementationSignatureCache(value: any) {
         this.data.implementationSignatureCache = value;
     }
 }
+
+// export const NodeDataImplInstantiations: Partial<Record<SyntaxKind, number>> = {}
 class NodeDataImpl {
+    // constructor(kind: SyntaxKind) {
+    //     NodeDataImplInstantiations[kind] = (NodeDataImplInstantiations[kind] ?? 0) + 1;
+    // }
+    // original = undefined;
+    // modifierFlagsCache = ModifierFlags.None
 }
+// export const NodeImplInstantiations: Partial<Record<SyntaxKind, number>> = {}
 /** @internal */
 export class NodeImpl {
     pos; // Node, Token, Identifier
@@ -9129,1301 +9138,1321 @@ export class NodeImpl {
     flags = NodeFlags.None; // Node, Token, Identifier
     transformFlags = TransformFlags.None; // Node, Token, Identifier
     parent: Node = undefined!; // Node, Token, Identifier
-    original = undefined; // Node, Identifier
     emitNode = undefined; // Node, Token, Identifier
+    original = undefined;
     modifierFlagsCache = ModifierFlags.None;
     constructor(kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
-        this.data = new NodeDataImpl();
+        // NodeImplInstantiations[kind] = (NodeImplInstantiations[kind] ?? 0) + 1;
     }
+    get data() {
+        return this._data ??= new NodeDataImpl();
+    }
+    set data(value: any) {
+        this._data = value;
+    }
+    _data: any = undefined;
+    // get original(): Node {
+    //     return this._data?.original
+    // }
 
-    data: any;
+    // set original(value: Node) {
+    //     this.data.original = value;
+    // }
+
+    // get modifierFlagsCache(): ModifierFlags {
+    //     return this._data?.modifierFlagsCache;
+    // }
+
+    // set modifierFlagsCache(value: ModifierFlags) {
+    //     this.data.modifierFlagsCache = value;
+    // }
 
     get sourceText() {
-        return this.data.sourceText;
+        return this._data?.sourceText;
     }
     set sourceText(value: any) {
         this.data.sourceText = value;
     }
 
     get jsDoc() {
-        return this.data.jsDoc;
+        return this._data?.jsDoc;
     }
     set jsDoc(value: any) {
         this.data.jsDoc = value;
     }
 
     get escapedText() {
-        return this.data.escapedText;
+        return this._data?.escapedText;
     }
     set escapedText(value: any) {
         this.data.escapedText = value;
     }
 
     get symbol() {
-        return this.data.symbol;
+        return this._data?.symbol;
     }
     set symbol(value: any) {
         this.data.symbol = value;
     }
 
     get localSymbol() {
-        return this.data.localSymbol;
+        return this._data?.localSymbol;
     }
     set localSymbol(value: any) {
         this.data.localSymbol = value;
     }
 
     get flowNode() {
-        return this.data.flowNode;
+        return this._data?.flowNode;
     }
     set flowNode(value: any) {
         this.data.flowNode = value;
     }
 
     get resolvedSymbol() {
-        return this.data.resolvedSymbol;
+        return this._data?.resolvedSymbol;
     }
     set resolvedSymbol(value: any) {
         this.data.resolvedSymbol = value;
     }
 
     get modifiers() {
-        return this.data.modifiers;
+        return this._data?.modifiers;
     }
     set modifiers(value: any) {
         this.data.modifiers = value;
     }
 
     get name() {
-        return this.data.name;
+        return this._data?.name;
     }
     set name(value: any) {
         this.data.name = value;
     }
 
     get constraint() {
-        return this.data.constraint;
+        return this._data?.constraint;
     }
     set constraint(value: any) {
         this.data.constraint = value;
     }
 
     get default() {
-        return this.data.default;
+        return this._data?.default;
     }
     set default(value: any) {
         this.data.default = value;
     }
 
     get expression() {
-        return this.data.expression;
+        return this._data?.expression;
     }
     set expression(value: any) {
         this.data.expression = value;
     }
 
     get typeParameters() {
-        return this.data.typeParameters;
+        return this._data?.typeParameters;
     }
     set typeParameters(value: any) {
         this.data.typeParameters = value;
     }
 
     get parameters() {
-        return this.data.parameters;
+        return this._data?.parameters;
     }
     set parameters(value: any) {
         this.data.parameters = value;
     }
 
     get type() {
-        return this.data.type;
+        return this._data?.type;
     }
     set type(value: any) {
         this.data.type = value;
     }
 
     get typeArguments() {
-        return this.data.typeArguments;
+        return this._data?.typeArguments;
     }
     set typeArguments(value: any) {
         this.data.typeArguments = value;
     }
 
     get questionToken() {
-        return this.data.questionToken;
+        return this._data?.questionToken;
     }
     set questionToken(value: any) {
         this.data.questionToken = value;
     }
 
     get locals() {
-        return this.data.locals;
+        return this._data?.locals;
     }
     set locals(value: any) {
         this.data.locals = value;
     }
 
     get nextContainer() {
-        return this.data.nextContainer;
+        return this._data?.nextContainer;
     }
     set nextContainer(value: any) {
         this.data.nextContainer = value;
     }
 
     get asteriskToken() {
-        return this.data.asteriskToken;
+        return this._data?.asteriskToken;
     }
     set asteriskToken(value: any) {
         this.data.asteriskToken = value;
     }
 
     get exclamationToken() {
-        return this.data.exclamationToken;
+        return this._data?.exclamationToken;
     }
     set exclamationToken(value: any) {
         this.data.exclamationToken = value;
     }
 
     get body() {
-        return this.data.body;
+        return this._data?.body;
     }
     set body(value: any) {
         this.data.body = value;
     }
 
     get endFlowNode() {
-        return this.data.endFlowNode;
+        return this._data?.endFlowNode;
     }
     set endFlowNode(value: any) {
         this.data.endFlowNode = value;
     }
 
     get returnFlowNode() {
-        return this.data.returnFlowNode;
+        return this._data?.returnFlowNode;
     }
     set returnFlowNode(value: any) {
         this.data.returnFlowNode = value;
     }
 
     get equalsGreaterThanToken() {
-        return this.data.equalsGreaterThanToken;
+        return this._data?.equalsGreaterThanToken;
     }
     set equalsGreaterThanToken(value: any) {
         this.data.equalsGreaterThanToken = value;
     }
 
     get initializer() {
-        return this.data.initializer;
+        return this._data?.initializer;
     }
     set initializer(value: any) {
         this.data.initializer = value;
     }
 
     get dotDotDotToken() {
-        return this.data.dotDotDotToken;
+        return this._data?.dotDotDotToken;
     }
     set dotDotDotToken(value: any) {
         this.data.dotDotDotToken = value;
     }
 
     get equalsToken() {
-        return this.data.equalsToken;
+        return this._data?.equalsToken;
     }
     set equalsToken(value: any) {
         this.data.equalsToken = value;
     }
 
     get objectAssignmentInitializer() {
-        return this.data.objectAssignmentInitializer;
+        return this._data?.objectAssignmentInitializer;
     }
     set objectAssignmentInitializer(value: any) {
         this.data.objectAssignmentInitializer = value;
     }
 
     get left() {
-        return this.data.left;
+        return this._data?.left;
     }
     set left(value: any) {
         this.data.left = value;
     }
 
     get operatorToken() {
-        return this.data.operatorToken;
+        return this._data?.operatorToken;
     }
     set operatorToken(value: any) {
         this.data.operatorToken = value;
     }
 
     get right() {
-        return this.data.right;
+        return this._data?.right;
     }
     set right(value: any) {
         this.data.right = value;
     }
 
     get multiLine() {
-        return this.data.multiLine;
+        return this._data?.multiLine;
     }
     set multiLine(value: any) {
         this.data.multiLine = value;
     }
 
     get properties() {
-        return this.data.properties;
+        return this._data?.properties;
     }
     set properties(value: any) {
         this.data.properties = value;
     }
 
     get questionDotToken() {
-        return this.data.questionDotToken;
+        return this._data?.questionDotToken;
     }
     set questionDotToken(value: any) {
         this.data.questionDotToken = value;
     }
 
     get argumentExpression() {
-        return this.data.argumentExpression;
+        return this._data?.argumentExpression;
     }
     set argumentExpression(value: any) {
         this.data.argumentExpression = value;
     }
 
     get heritageClauses() {
-        return this.data.heritageClauses;
+        return this._data?.heritageClauses;
     }
     set heritageClauses(value: any) {
         this.data.heritageClauses = value;
     }
 
     get members() {
-        return this.data.members;
+        return this._data?.members;
     }
     set members(value: any) {
         this.data.members = value;
     }
 
     get isTypeOnly() {
-        return this.data.isTypeOnly;
+        return this._data?.isTypeOnly;
     }
     set isTypeOnly(value: any) {
         this.data.isTypeOnly = value;
     }
 
     get moduleReference() {
-        return this.data.moduleReference;
+        return this._data?.moduleReference;
     }
     set moduleReference(value: any) {
         this.data.moduleReference = value;
     }
 
     get exportClause() {
-        return this.data.exportClause;
+        return this._data?.exportClause;
     }
     set exportClause(value: any) {
         this.data.exportClause = value;
     }
 
     get moduleSpecifier() {
-        return this.data.moduleSpecifier;
+        return this._data?.moduleSpecifier;
     }
     set moduleSpecifier(value: any) {
         this.data.moduleSpecifier = value;
     }
 
     get assertClause() {
-        return this.data.assertClause;
+        return this._data?.assertClause;
     }
     set assertClause(value: any) {
         this.data.assertClause = value;
     }
 
     get attributes() {
-        return this.data.attributes;
+        return this._data?.attributes;
     }
     set attributes(value: any) {
         this.data.attributes = value;
     }
 
     get isExportEquals() {
-        return this.data.isExportEquals;
+        return this._data?.isExportEquals;
     }
     set isExportEquals(value: any) {
         this.data.isExportEquals = value;
     }
 
     get statements() {
-        return this.data.statements;
+        return this._data?.statements;
     }
     set statements(value: any) {
         this.data.statements = value;
     }
 
     get declarationList() {
-        return this.data.declarationList;
+        return this._data?.declarationList;
     }
     set declarationList(value: any) {
         this.data.declarationList = value;
     }
 
     get thenStatement() {
-        return this.data.thenStatement;
+        return this._data?.thenStatement;
     }
     set thenStatement(value: any) {
         this.data.thenStatement = value;
     }
 
     get elseStatement() {
-        return this.data.elseStatement;
+        return this._data?.elseStatement;
     }
     set elseStatement(value: any) {
         this.data.elseStatement = value;
     }
 
     get statement() {
-        return this.data.statement;
+        return this._data?.statement;
     }
     set statement(value: any) {
         this.data.statement = value;
     }
 
     get condition() {
-        return this.data.condition;
+        return this._data?.condition;
     }
     set condition(value: any) {
         this.data.condition = value;
     }
 
     get incrementor() {
-        return this.data.incrementor;
+        return this._data?.incrementor;
     }
     set incrementor(value: any) {
         this.data.incrementor = value;
     }
 
     get awaitModifier() {
-        return this.data.awaitModifier;
+        return this._data?.awaitModifier;
     }
     set awaitModifier(value: any) {
         this.data.awaitModifier = value;
     }
 
     get label() {
-        return this.data.label;
+        return this._data?.label;
     }
     set label(value: any) {
         this.data.label = value;
     }
 
     get caseBlock() {
-        return this.data.caseBlock;
+        return this._data?.caseBlock;
     }
     set caseBlock(value: any) {
         this.data.caseBlock = value;
     }
 
     get possiblyExhaustive() {
-        return this.data.possiblyExhaustive;
+        return this._data?.possiblyExhaustive;
     }
     set possiblyExhaustive(value: any) {
         this.data.possiblyExhaustive = value;
     }
 
     get tryBlock() {
-        return this.data.tryBlock;
+        return this._data?.tryBlock;
     }
     set tryBlock(value: any) {
         this.data.tryBlock = value;
     }
 
     get catchClause() {
-        return this.data.catchClause;
+        return this._data?.catchClause;
     }
     set catchClause(value: any) {
         this.data.catchClause = value;
     }
 
     get finallyBlock() {
-        return this.data.finallyBlock;
+        return this._data?.finallyBlock;
     }
     set finallyBlock(value: any) {
         this.data.finallyBlock = value;
     }
 
     get importClause() {
-        return this.data.importClause;
+        return this._data?.importClause;
     }
     set importClause(value: any) {
         this.data.importClause = value;
     }
 
     get fallthroughFlowNode() {
-        return this.data.fallthroughFlowNode;
+        return this._data?.fallthroughFlowNode;
     }
     set fallthroughFlowNode(value: any) {
         this.data.fallthroughFlowNode = value;
     }
 
     get propertyName() {
-        return this.data.propertyName;
+        return this._data?.propertyName;
     }
     set propertyName(value: any) {
         this.data.propertyName = value;
     }
 
     get checkType() {
-        return this.data.checkType;
+        return this._data?.checkType;
     }
     set checkType(value: any) {
         this.data.checkType = value;
     }
 
     get extendsType() {
-        return this.data.extendsType;
+        return this._data?.extendsType;
     }
     set extendsType(value: any) {
         this.data.extendsType = value;
     }
 
     get trueType() {
-        return this.data.trueType;
+        return this._data?.trueType;
     }
     set trueType(value: any) {
         this.data.trueType = value;
     }
 
     get falseType() {
-        return this.data.falseType;
+        return this._data?.falseType;
     }
     set falseType(value: any) {
         this.data.falseType = value;
     }
 
     get readonlyToken() {
-        return this.data.readonlyToken;
+        return this._data?.readonlyToken;
     }
     set readonlyToken(value: any) {
         this.data.readonlyToken = value;
     }
 
     get typeParameter() {
-        return this.data.typeParameter;
+        return this._data?.typeParameter;
     }
     set typeParameter(value: any) {
         this.data.typeParameter = value;
     }
 
     get nameType() {
-        return this.data.nameType;
+        return this._data?.nameType;
     }
     set nameType(value: any) {
         this.data.nameType = value;
     }
 
     get clauses() {
-        return this.data.clauses;
+        return this._data?.clauses;
     }
     set clauses(value: any) {
         this.data.clauses = value;
     }
 
     get variableDeclaration() {
-        return this.data.variableDeclaration;
+        return this._data?.variableDeclaration;
     }
     set variableDeclaration(value: any) {
         this.data.variableDeclaration = value;
     }
 
     get block() {
-        return this.data.block;
+        return this._data?.block;
     }
     set block(value: any) {
         this.data.block = value;
     }
 
     get typeExpression() {
-        return this.data.typeExpression;
+        return this._data?.typeExpression;
     }
     set typeExpression(value: any) {
         this.data.typeExpression = value;
     }
 
     get tagName() {
-        return this.data.tagName;
+        return this._data?.tagName;
     }
     set tagName(value: any) {
         this.data.tagName = value;
     }
 
     get comment() {
-        return this.data.comment;
+        return this._data?.comment;
     }
     set comment(value: any) {
         this.data.comment = value;
     }
 
     get fullName() {
-        return this.data.fullName;
+        return this._data?.fullName;
     }
     set fullName(value: any) {
         this.data.fullName = value;
     }
 
     get endOfFileToken() {
-        return this.data.endOfFileToken;
+        return this._data?.endOfFileToken;
     }
     set endOfFileToken(value: any) {
         this.data.endOfFileToken = value;
     }
 
     get fileName() {
-        return this.data.fileName;
+        return this._data?.fileName;
     }
     set fileName(value: any) {
         this.data.fileName = value;
     }
 
     get path() {
-        return this.data.path;
+        return this._data?.path;
     }
     set path(value: any) {
         this.data.path = value;
     }
 
     get text() {
-        return this.data.text;
+        return this._data?.text;
     }
     set text(value: any) {
         this.data.text = value;
     }
 
     get resolvedPath() {
-        return this.data.resolvedPath;
+        return this._data?.resolvedPath;
     }
     set resolvedPath(value: any) {
         this.data.resolvedPath = value;
     }
 
     get originalFileName() {
-        return this.data.originalFileName;
+        return this._data?.originalFileName;
     }
     set originalFileName(value: any) {
         this.data.originalFileName = value;
     }
 
     get redirectInfo() {
-        return this.data.redirectInfo;
+        return this._data?.redirectInfo;
     }
     set redirectInfo(value: any) {
         this.data.redirectInfo = value;
     }
 
     get amdDependencies() {
-        return this.data.amdDependencies;
+        return this._data?.amdDependencies;
     }
     set amdDependencies(value: any) {
         this.data.amdDependencies = value;
     }
 
     get moduleName() {
-        return this.data.moduleName;
+        return this._data?.moduleName;
     }
     set moduleName(value: any) {
         this.data.moduleName = value;
     }
 
     get referencedFiles() {
-        return this.data.referencedFiles;
+        return this._data?.referencedFiles;
     }
     set referencedFiles(value: any) {
         this.data.referencedFiles = value;
     }
 
     get typeReferenceDirectives() {
-        return this.data.typeReferenceDirectives;
+        return this._data?.typeReferenceDirectives;
     }
     set typeReferenceDirectives(value: any) {
         this.data.typeReferenceDirectives = value;
     }
 
     get libReferenceDirectives() {
-        return this.data.libReferenceDirectives;
+        return this._data?.libReferenceDirectives;
     }
     set libReferenceDirectives(value: any) {
         this.data.libReferenceDirectives = value;
     }
 
     get languageVariant() {
-        return this.data.languageVariant;
+        return this._data?.languageVariant;
     }
     set languageVariant(value: any) {
         this.data.languageVariant = value;
     }
 
     get isDeclarationFile() {
-        return this.data.isDeclarationFile;
+        return this._data?.isDeclarationFile;
     }
     set isDeclarationFile(value: any) {
         this.data.isDeclarationFile = value;
     }
 
     get renamedDependencies() {
-        return this.data.renamedDependencies;
+        return this._data?.renamedDependencies;
     }
     set renamedDependencies(value: any) {
         this.data.renamedDependencies = value;
     }
 
     get hasNoDefaultLib() {
-        return this.data.hasNoDefaultLib;
+        return this._data?.hasNoDefaultLib;
     }
     set hasNoDefaultLib(value: any) {
         this.data.hasNoDefaultLib = value;
     }
 
     get languageVersion() {
-        return this.data.languageVersion;
+        return this._data?.languageVersion;
     }
     set languageVersion(value: any) {
         this.data.languageVersion = value;
     }
 
     get impliedNodeFormat() {
-        return this.data.impliedNodeFormat;
+        return this._data?.impliedNodeFormat;
     }
     set impliedNodeFormat(value: any) {
         this.data.impliedNodeFormat = value;
     }
 
     get packageJsonLocations() {
-        return this.data.packageJsonLocations;
+        return this._data?.packageJsonLocations;
     }
     set packageJsonLocations(value: any) {
         this.data.packageJsonLocations = value;
     }
 
     get packageJsonScope() {
-        return this.data.packageJsonScope;
+        return this._data?.packageJsonScope;
     }
     set packageJsonScope(value: any) {
         this.data.packageJsonScope = value;
     }
 
     get scriptKind() {
-        return this.data.scriptKind;
+        return this._data?.scriptKind;
     }
     set scriptKind(value: any) {
         this.data.scriptKind = value;
     }
 
     get externalModuleIndicator() {
-        return this.data.externalModuleIndicator;
+        return this._data?.externalModuleIndicator;
     }
     set externalModuleIndicator(value: any) {
         this.data.externalModuleIndicator = value;
     }
 
     get setExternalModuleIndicator() {
-        return this.data.setExternalModuleIndicator;
+        return this._data?.setExternalModuleIndicator;
     }
     set setExternalModuleIndicator(value: any) {
         this.data.setExternalModuleIndicator = value;
     }
 
     get commonJsModuleIndicator() {
-        return this.data.commonJsModuleIndicator;
+        return this._data?.commonJsModuleIndicator;
     }
     set commonJsModuleIndicator(value: any) {
         this.data.commonJsModuleIndicator = value;
     }
 
     get jsGlobalAugmentations() {
-        return this.data.jsGlobalAugmentations;
+        return this._data?.jsGlobalAugmentations;
     }
     set jsGlobalAugmentations(value: any) {
         this.data.jsGlobalAugmentations = value;
     }
 
     get identifiers() {
-        return this.data.identifiers;
+        return this._data?.identifiers;
     }
     set identifiers(value: any) {
         this.data.identifiers = value;
     }
 
     get nodeCount() {
-        return this.data.nodeCount;
+        return this._data?.nodeCount;
     }
     set nodeCount(value: any) {
         this.data.nodeCount = value;
     }
 
     get identifierCount() {
-        return this.data.identifierCount;
+        return this._data?.identifierCount;
     }
     set identifierCount(value: any) {
         this.data.identifierCount = value;
     }
 
     get symbolCount() {
-        return this.data.symbolCount;
+        return this._data?.symbolCount;
     }
     set symbolCount(value: any) {
         this.data.symbolCount = value;
     }
 
     get parseDiagnostics() {
-        return this.data.parseDiagnostics;
+        return this._data?.parseDiagnostics;
     }
     set parseDiagnostics(value: any) {
         this.data.parseDiagnostics = value;
     }
 
     get bindDiagnostics() {
-        return this.data.bindDiagnostics;
+        return this._data?.bindDiagnostics;
     }
     set bindDiagnostics(value: any) {
         this.data.bindDiagnostics = value;
     }
 
     get bindSuggestionDiagnostics() {
-        return this.data.bindSuggestionDiagnostics;
+        return this._data?.bindSuggestionDiagnostics;
     }
     set bindSuggestionDiagnostics(value: any) {
         this.data.bindSuggestionDiagnostics = value;
     }
 
     get jsDocDiagnostics() {
-        return this.data.jsDocDiagnostics;
+        return this._data?.jsDocDiagnostics;
     }
     set jsDocDiagnostics(value: any) {
         this.data.jsDocDiagnostics = value;
     }
 
     get additionalSyntacticDiagnostics() {
-        return this.data.additionalSyntacticDiagnostics;
+        return this._data?.additionalSyntacticDiagnostics;
     }
     set additionalSyntacticDiagnostics(value: any) {
         this.data.additionalSyntacticDiagnostics = value;
     }
 
     get lineMap() {
-        return this.data.lineMap;
+        return this._data?.lineMap;
     }
     set lineMap(value: any) {
         this.data.lineMap = value;
     }
 
     get classifiableNames() {
-        return this.data.classifiableNames;
+        return this._data?.classifiableNames;
     }
     set classifiableNames(value: any) {
         this.data.classifiableNames = value;
     }
 
     get commentDirectives() {
-        return this.data.commentDirectives;
+        return this._data?.commentDirectives;
     }
     set commentDirectives(value: any) {
         this.data.commentDirectives = value;
     }
 
     get imports() {
-        return this.data.imports;
+        return this._data?.imports;
     }
     set imports(value: any) {
         this.data.imports = value;
     }
 
     get moduleAugmentations() {
-        return this.data.moduleAugmentations;
+        return this._data?.moduleAugmentations;
     }
     set moduleAugmentations(value: any) {
         this.data.moduleAugmentations = value;
     }
 
     get patternAmbientModules() {
-        return this.data.patternAmbientModules;
+        return this._data?.patternAmbientModules;
     }
     set patternAmbientModules(value: any) {
         this.data.patternAmbientModules = value;
     }
 
     get ambientModuleNames() {
-        return this.data.ambientModuleNames;
+        return this._data?.ambientModuleNames;
     }
     set ambientModuleNames(value: any) {
         this.data.ambientModuleNames = value;
     }
 
     get checkJsDirective() {
-        return this.data.checkJsDirective;
+        return this._data?.checkJsDirective;
     }
     set checkJsDirective(value: any) {
         this.data.checkJsDirective = value;
     }
 
     get version() {
-        return this.data.version;
+        return this._data?.version;
     }
     set version(value: any) {
         this.data.version = value;
     }
 
     get pragmas() {
-        return this.data.pragmas;
+        return this._data?.pragmas;
     }
     set pragmas(value: any) {
         this.data.pragmas = value;
     }
 
     get localJsxNamespace() {
-        return this.data.localJsxNamespace;
+        return this._data?.localJsxNamespace;
     }
     set localJsxNamespace(value: any) {
         this.data.localJsxNamespace = value;
     }
 
     get localJsxFragmentNamespace() {
-        return this.data.localJsxFragmentNamespace;
+        return this._data?.localJsxFragmentNamespace;
     }
     set localJsxFragmentNamespace(value: any) {
         this.data.localJsxFragmentNamespace = value;
     }
 
     get localJsxFactory() {
-        return this.data.localJsxFactory;
+        return this._data?.localJsxFactory;
     }
     set localJsxFactory(value: any) {
         this.data.localJsxFactory = value;
     }
 
     get localJsxFragmentFactory() {
-        return this.data.localJsxFragmentFactory;
+        return this._data?.localJsxFragmentFactory;
     }
     set localJsxFragmentFactory(value: any) {
         this.data.localJsxFragmentFactory = value;
     }
 
     get jsDocParsingMode() {
-        return this.data.jsDocParsingMode;
+        return this._data?.jsDocParsingMode;
     }
     set jsDocParsingMode(value: any) {
         this.data.jsDocParsingMode = value;
     }
 
     get extendedSourceFiles() {
-        return this.data.extendedSourceFiles;
+        return this._data?.extendedSourceFiles;
     }
     set extendedSourceFiles(value: any) {
         this.data.extendedSourceFiles = value;
     }
 
     get configFileSpecs() {
-        return this.data.configFileSpecs;
+        return this._data?.configFileSpecs;
     }
     set configFileSpecs(value: any) {
         this.data.configFileSpecs = value;
     }
 
     get keywordToken() {
-        return this.data.keywordToken;
+        return this._data?.keywordToken;
     }
     set keywordToken(value: any) {
         this.data.keywordToken = value;
     }
 
     get namedBindings() {
-        return this.data.namedBindings;
+        return this._data?.namedBindings;
     }
     set namedBindings(value: any) {
         this.data.namedBindings = value;
     }
 
     get textSourceNode() {
-        return this.data.textSourceNode;
+        return this._data?.textSourceNode;
     }
     set textSourceNode(value: any) {
         this.data.textSourceNode = value;
     }
 
     get singleQuote() {
-        return this.data.singleQuote;
+        return this._data?.singleQuote;
     }
     set singleQuote(value: any) {
         this.data.singleQuote = value;
     }
 
     get isUnterminated() {
-        return this.data.isUnterminated;
+        return this._data?.isUnterminated;
     }
     set isUnterminated(value: any) {
         this.data.isUnterminated = value;
     }
 
     get hasExtendedUnicodeEscape() {
-        return this.data.hasExtendedUnicodeEscape;
+        return this._data?.hasExtendedUnicodeEscape;
     }
     set hasExtendedUnicodeEscape(value: any) {
         this.data.hasExtendedUnicodeEscape = value;
     }
 
     get templateFlags() {
-        return this.data.templateFlags;
+        return this._data?.templateFlags;
     }
     set templateFlags(value: any) {
         this.data.templateFlags = value;
     }
 
     get rawText() {
-        return this.data.rawText;
+        return this._data?.rawText;
     }
     set rawText(value: any) {
         this.data.rawText = value;
     }
 
     get numericLiteralFlags() {
-        return this.data.numericLiteralFlags;
+        return this._data?.numericLiteralFlags;
     }
     set numericLiteralFlags(value: any) {
         this.data.numericLiteralFlags = value;
     }
 
     get arguments() {
-        return this.data.arguments;
+        return this._data?.arguments;
     }
     set arguments(value: any) {
         this.data.arguments = value;
     }
 
     get isNameFirst() {
-        return this.data.isNameFirst;
+        return this._data?.isNameFirst;
     }
     set isNameFirst(value: any) {
         this.data.isNameFirst = value;
     }
 
     get isBracketed() {
-        return this.data.isBracketed;
+        return this._data?.isBracketed;
     }
     set isBracketed(value: any) {
         this.data.isBracketed = value;
     }
 
     get jsDocPropertyTags() {
-        return this.data.jsDocPropertyTags;
+        return this._data?.jsDocPropertyTags;
     }
     set jsDocPropertyTags(value: any) {
         this.data.jsDocPropertyTags = value;
     }
 
     get isArrayType() {
-        return this.data.isArrayType;
+        return this._data?.isArrayType;
     }
     set isArrayType(value: any) {
         this.data.isArrayType = value;
     }
 
     get declarations() {
-        return this.data.declarations;
+        return this._data?.declarations;
     }
     set declarations(value: any) {
         this.data.declarations = value;
     }
 
     get elements() {
-        return this.data.elements;
+        return this._data?.elements;
     }
     set elements(value: any) {
         this.data.elements = value;
     }
 
     get isTypeOf() {
-        return this.data.isTypeOf;
+        return this._data?.isTypeOf;
     }
     set isTypeOf(value: any) {
         this.data.isTypeOf = value;
     }
 
     get argument() {
-        return this.data.argument;
+        return this._data?.argument;
     }
     set argument(value: any) {
         this.data.argument = value;
     }
 
     get assertions() {
-        return this.data.assertions;
+        return this._data?.assertions;
     }
     set assertions(value: any) {
         this.data.assertions = value;
     }
 
     get qualifier() {
-        return this.data.qualifier;
+        return this._data?.qualifier;
     }
     set qualifier(value: any) {
         this.data.qualifier = value;
     }
 
     get typeName() {
-        return this.data.typeName;
+        return this._data?.typeName;
     }
     set typeName(value: any) {
         this.data.typeName = value;
     }
 
     get exprName() {
-        return this.data.exprName;
+        return this._data?.exprName;
     }
     set exprName(value: any) {
         this.data.exprName = value;
     }
 
     get assertsModifier() {
-        return this.data.assertsModifier;
+        return this._data?.assertsModifier;
     }
     set assertsModifier(value: any) {
         this.data.assertsModifier = value;
     }
 
     get parameterName() {
-        return this.data.parameterName;
+        return this._data?.parameterName;
     }
     set parameterName(value: any) {
         this.data.parameterName = value;
     }
 
     get elementType() {
-        return this.data.elementType;
+        return this._data?.elementType;
     }
     set elementType(value: any) {
         this.data.elementType = value;
     }
 
     get types() {
-        return this.data.types;
+        return this._data?.types;
     }
     set types(value: any) {
         this.data.types = value;
     }
 
     get operator() {
-        return this.data.operator;
+        return this._data?.operator;
     }
     set operator(value: any) {
         this.data.operator = value;
     }
 
     get objectType() {
-        return this.data.objectType;
+        return this._data?.objectType;
     }
     set objectType(value: any) {
         this.data.objectType = value;
     }
 
     get indexType() {
-        return this.data.indexType;
+        return this._data?.indexType;
     }
     set indexType(value: any) {
         this.data.indexType = value;
     }
 
     get literal() {
-        return this.data.literal;
+        return this._data?.literal;
     }
     set literal(value: any) {
         this.data.literal = value;
     }
 
     get head() {
-        return this.data.head;
+        return this._data?.head;
     }
     set head(value: any) {
         this.data.head = value;
     }
 
     get templateSpans() {
-        return this.data.templateSpans;
+        return this._data?.templateSpans;
     }
     set templateSpans(value: any) {
         this.data.templateSpans = value;
     }
 
     get postfix() {
-        return this.data.postfix;
+        return this._data?.postfix;
     }
     set postfix(value: any) {
         this.data.postfix = value;
     }
 
     get operand() {
-        return this.data.operand;
+        return this._data?.operand;
     }
     set operand(value: any) {
         this.data.operand = value;
     }
 
     get openingElement() {
-        return this.data.openingElement;
+        return this._data?.openingElement;
     }
     set openingElement(value: any) {
         this.data.openingElement = value;
     }
 
     get children() {
-        return this.data.children;
+        return this._data?.children;
     }
     set children(value: any) {
         this.data.children = value;
     }
 
     get closingElement() {
-        return this.data.closingElement;
+        return this._data?.closingElement;
     }
     set closingElement(value: any) {
         this.data.closingElement = value;
     }
 
     get openingFragment() {
-        return this.data.openingFragment;
+        return this._data?.openingFragment;
     }
     set openingFragment(value: any) {
         this.data.openingFragment = value;
     }
 
     get closingFragment() {
-        return this.data.closingFragment;
+        return this._data?.closingFragment;
     }
     set closingFragment(value: any) {
         this.data.closingFragment = value;
     }
 
     get tag() {
-        return this.data.tag;
+        return this._data?.tag;
     }
     set tag(value: any) {
         this.data.tag = value;
     }
 
     get template() {
-        return this.data.template;
+        return this._data?.template;
     }
     set template(value: any) {
         this.data.template = value;
     }
 
     get thisArg() {
-        return this.data.thisArg;
+        return this._data?.thisArg;
     }
     set thisArg(value: any) {
         this.data.thisArg = value;
     }
 
     get isSpread() {
-        return this.data.isSpread;
+        return this._data?.isSpread;
     }
     set isSpread(value: any) {
         this.data.isSpread = value;
     }
 
     get tupleNameSource() {
-        return this.data.tupleNameSource;
+        return this._data?.tupleNameSource;
     }
     set tupleNameSource(value: any) {
         this.data.tupleNameSource = value;
     }
 
     get whenTrue() {
-        return this.data.whenTrue;
+        return this._data?.whenTrue;
     }
     set whenTrue(value: any) {
         this.data.whenTrue = value;
     }
 
     get colonToken() {
-        return this.data.colonToken;
+        return this._data?.colonToken;
     }
     set colonToken(value: any) {
         this.data.colonToken = value;
     }
 
     get whenFalse() {
-        return this.data.whenFalse;
+        return this._data?.whenFalse;
     }
     set whenFalse(value: any) {
         this.data.whenFalse = value;
     }
 
     get containsOnlyTriviaWhiteSpaces() {
-        return this.data.containsOnlyTriviaWhiteSpaces;
+        return this._data?.containsOnlyTriviaWhiteSpaces;
     }
     set containsOnlyTriviaWhiteSpaces(value: any) {
         this.data.containsOnlyTriviaWhiteSpaces = value;
     }
 
     get namespace() {
-        return this.data.namespace;
+        return this._data?.namespace;
     }
     set namespace(value: any) {
         this.data.namespace = value;
     }
 
     get token() {
-        return this.data.token;
+        return this._data?.token;
     }
     set token(value: any) {
         this.data.token = value;
     }
 
     get value() {
-        return this.data.value;
+        return this._data?.value;
     }
     set value(value: any) {
         this.data.value = value;
     }
 
     get tags() {
-        return this.data.tags;
+        return this._data?.tags;
     }
     set tags(value: any) {
         this.data.tags = value;
     }
 
     get class() {
-        return this.data.class;
+        return this._data?.class;
     }
     set class(value: any) {
         this.data.class = value;
     }
 
     get sourceFiles() {
-        return this.data.sourceFiles;
+        return this._data?.sourceFiles;
     }
     set sourceFiles(value: any) {
         this.data.sourceFiles = value;
     }
 
     get syntheticFileReferences() {
-        return this.data.syntheticFileReferences;
+        return this._data?.syntheticFileReferences;
     }
     set syntheticFileReferences(value: any) {
         this.data.syntheticFileReferences = value;
     }
 
     get syntheticTypeReferences() {
-        return this.data.syntheticTypeReferences;
+        return this._data?.syntheticTypeReferences;
     }
     set syntheticTypeReferences(value: any) {
         this.data.syntheticTypeReferences = value;
     }
 
     get syntheticLibReferences() {
-        return this.data.syntheticLibReferences;
+        return this._data?.syntheticLibReferences;
     }
     set syntheticLibReferences(value: any) {
         this.data.syntheticLibReferences = value;
@@ -10442,31 +10471,51 @@ export class NodeImpl {
 //     this.original = undefined;
 //     this.emitNode = undefined;
 // }
+class TokenImpl {
+    pos; // Node, Token, Identifier
+    end; // Node, Token, Identifier
+    kind; // Node, Token, Identifier
+    id = 0; // Node, Token, Identifier
+    flags = NodeFlags.None; // Node, Token, Identifier
+    transformFlags = TransformFlags.None; // Node, Token, Identifier
+    parent: Node = undefined!; // Node, Token, Identifier
+    emitNode = undefined; // Node, Token, Identifier
 
-// function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-//     // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-//     this.pos = pos;
-//     this.end = end;
-//     this.kind = kind;
-//     this.id = 0;
-//     this.flags = NodeFlags.None;
-//     this.transformFlags = TransformFlags.None;
-//     this.parent = undefined!;
-//     this.emitNode = undefined;
-// }
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+    }
+    get data() {
+        return this;
+    }
+}
 
-// function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-//     // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-//     this.pos = pos;
-//     this.end = end;
-//     this.kind = kind;
-//     this.id = 0;
-//     this.flags = NodeFlags.None;
-//     this.transformFlags = TransformFlags.None;
-//     this.parent = undefined!;
-//     this.original = undefined;
-//     this.emitNode = undefined;
-// }
+class IdentifierImpl {
+    pos; // Node, Token, Identifier
+    end; // Node, Token, Identifier
+    kind; // Node, Token, Identifier
+    id = 0; // Node, Token, Identifier
+    flags = NodeFlags.None; // Node, Token, Identifier
+    transformFlags = TransformFlags.None; // Node, Token, Identifier
+    parent: Node = undefined!; // Node, Token, Identifier
+    original: Node = undefined!; // Node, Token, Identifier
+    emitNode = undefined; // Node, Token, Identifier
+    escapedText = undefined;
+    jsDoc = undefined; // initialized by parser (JsDocContainer)
+    flowNode = undefined; // initialized by binder (FlowContainer)
+    symbol = undefined!; // initialized by checker
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+    }
+    get data() {
+        return this;
+    }
+}
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     // Note: if modifying this, be sure to update SourceMapSourceObject in src/services/services.ts
@@ -10478,9 +10527,9 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
     getNodeConstructor: () => NodeImpl as any,
-    getTokenConstructor: () => NodeImpl as any,
-    getIdentifierConstructor: () => NodeImpl as any,
-    getPrivateIdentifierConstructor: () => NodeImpl as any,
+    getTokenConstructor: () => TokenImpl as any,
+    getIdentifierConstructor: () => IdentifierImpl as any,
+    getPrivateIdentifierConstructor: () => IdentifierImpl as any,
     getSourceFileConstructor: () => NodeImpl as any,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => TypeImpl as any,
