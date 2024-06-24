@@ -43948,6 +43948,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
             const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+
+            switch (condExpr.kind) {
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    error(location, Diagnostics.Truthiness_test_of_this_kind_of_expression_appears_unintentional);
+                    return;
+            }
+
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
