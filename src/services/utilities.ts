@@ -2410,15 +2410,6 @@ export function isTypeKeywordTokenOrIdentifier(node: Node) {
 }
 
 /**
- * True if the symbol is for an external module, as opposed to a namespace.
- *
- * @internal
- */
-export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
-    return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
-}
-
-/**
  * Returns `true` the first time it encounters a node and `false` afterwards.
  *
  * @internal

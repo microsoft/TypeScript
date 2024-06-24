@@ -2832,7 +2832,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return true;
         }
 
-        if (!options.noLib) {
+        if (options.noLib) {
             return false;
         }
 
@@ -2843,7 +2843,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return equalityComparer(file.fileName, getDefaultLibraryFileName());
         }
         else {
-            return some(options.lib, libFileName => equalityComparer(file.fileName, resolvedLibReferences!.get(libFileName)!.actual));
+            return some(options.lib, libFileName => {
+                // We might not have resolved lib if one of the root file included contained no-default-lib = true
+                const resolvedLib = resolvedLibReferences!.get(libFileName);
+                return !!resolvedLib && equalityComparer(file.fileName, resolvedLib.actual);
+            });
         }
     }
 

@@ -201,7 +201,6 @@ import {
     isVoidExpression,
     isWriteAccess,
     JSDocPropertyLikeTag,
-    JSDocTag,
     length,
     map,
     mapDefined,
@@ -242,7 +241,6 @@ import {
     skipAlias,
     some,
     SourceFile,
-    Statement,
     StringLiteral,
     StringLiteralLike,
     stripQuotes,
@@ -377,7 +375,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 const declOrStatement = findAncestor(validImport, node =>
                     isDeclaration(node) ||
                     isStatement(node) ||
-                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
+                    isJSDocTag(node))!;
                 return isDeclaration(declOrStatement) ?
                     getContextNode(declOrStatement) :
                     declOrStatement;

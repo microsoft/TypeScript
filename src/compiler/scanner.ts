@@ -1,6 +1,6 @@
 import {
     append,
-    arraysEqual,
+    arrayIsEqualTo,
     binarySearch,
     CharacterCodes,
     CommentDirective,
@@ -475,7 +475,7 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
             line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
         }
         else {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arrayIsEqualTo(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
         }
     }
 
