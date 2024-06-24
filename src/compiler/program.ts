@@ -902,7 +902,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
 }
 
 function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
-    if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
+    if (isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent) || isJSDocImportTag(usage.parent)) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
             const override = getResolutionModeOverride(usage.parent.attributes);
