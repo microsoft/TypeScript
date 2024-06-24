@@ -4617,7 +4617,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
-                    const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
+                    const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l));
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
                     // normal mode restrictions
                     if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !hasResolutionModeOverride(overrideHost)) {
@@ -13412,7 +13412,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links[resolutionKind] = resolved || emptySymbols;
         }
 
-        return links[resolutionKind]!;
+        return links[resolutionKind];
     }
 
     /**
@@ -18827,7 +18827,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSimplifiedIndexedAccessType(type: IndexedAccessType, writing: boolean): Type {
         const cache = writing ? "simplifiedForWriting" : "simplifiedForReading";
         if (type[cache]) {
-            return type[cache] === circularConstraintType ? type : type[cache]!;
+            return type[cache] === circularConstraintType ? type : type[cache];
         }
         type[cache] = circularConstraintType;
         // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
