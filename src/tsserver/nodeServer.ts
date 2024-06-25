@@ -182,7 +182,7 @@ export function initializeNodeSystem(): StartInput {
             if (this.fd >= 0) {
                 const buf = Buffer.from(s);
                 // eslint-disable-next-line no-restricted-syntax
-                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null); // TODO: GH#18217
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
             }
             if (this.traceToConsole) {
                 console.warn(s);
