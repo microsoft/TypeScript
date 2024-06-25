@@ -773,7 +773,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * double-binding semantics for the class name.
      */
     function getClassAliasIfNeeded(node: ClassDeclaration) {
-        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference) {
+        if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference)) {
             enableSubstitutionForClassAliases();
             const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
             classAliases[getOriginalNodeId(node)] = classAlias;
@@ -822,7 +822,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (classAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
+            if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.ConstructorReference)) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.

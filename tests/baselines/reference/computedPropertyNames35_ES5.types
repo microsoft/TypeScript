@@ -3,7 +3,7 @@
 === computedPropertyNames35_ES5.ts ===
 function foo<T>() { return '' }
 >foo : <T>() => string
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -18,5 +18,5 @@ interface I<T> {
 >foo<T>() : string
 >         : ^^^^^^
 >foo : <T>() => string
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 }

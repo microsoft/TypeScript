@@ -205,7 +205,7 @@ function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 >foo2(x) : (x: string) => string
 >        : ^ ^^      ^^^^^      
 >foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
->     : ^   ^^^^^^^^^                     ^^ ^^   ^^^^^   
+>     : ^^^^^^^^^^^^^                     ^^ ^^   ^^^^^   
 >x : T
 >  : ^
 
@@ -213,7 +213,7 @@ function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 >foo2(y) : (x: string) => string
 >        : ^ ^^      ^^^^^      
 >foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
->     : ^   ^^^^^^^^^                     ^^ ^^   ^^^^^   
+>     : ^^^^^^^^^^^^^                     ^^ ^^   ^^^^^   
 >y : U
 >  : ^
 }

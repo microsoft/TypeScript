@@ -247,9 +247,11 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
     const neededNamedImports = new Set<ImportSpecifier>();
 
     for (const element of toConvert.elements) {
-        const propertyName = (element.propertyName || element.name).text;
+        const propertyName = element.propertyName || element.name;
         FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-            const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
+            const access = propertyName.kind === SyntaxKind.StringLiteral
+                ? factory.createElementAccessExpression(factory.createIdentifier(namespaceImportName), factory.cloneNode(propertyName))
+                : factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), factory.cloneNode(propertyName));
             if (isShorthandPropertyAssignment(id.parent)) {
                 changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
             }
@@ -271,7 +273,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
     );
 
     if (neededNamedImports.size && isImportDeclaration(importDecl)) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.cloneNode(element.propertyName), factory.cloneNode(element.name)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, createImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }
 }

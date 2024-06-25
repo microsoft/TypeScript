@@ -42,7 +42,7 @@ module NonGenericParameter {
 >foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 >     : ^  ^^        ^^^^^^^^ ^^       ^^^       ^^^ ^^      ^^^      ^^^
 ><T, U>(x: T) => { var r: U; return r } : <T, U>(x: T) => U
->                                       : ^ ^^^^^ ^^ ^^^^^^
+>                                       : ^ ^^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >r : U

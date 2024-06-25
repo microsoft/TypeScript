@@ -78,11 +78,11 @@ class ListWrapper2 {
 >ListWrapper2.clone(dit, array) : T[]
 >                               : ^^^
 >ListWrapper2.clone : <T_1>(dit: typeof ListWrapper2, array: T_1[]) => T_1[]
->                   : ^   ^^   ^^                   ^^     ^^     ^^^^^     
+>                   : ^^^^^^   ^^                   ^^     ^^     ^^^^^     
 >ListWrapper2 : typeof ListWrapper2
 >             : ^^^^^^^^^^^^^^^^^^^
 >clone : <T_1>(dit: typeof ListWrapper2, array: T_1[]) => T_1[]
->      : ^   ^^   ^^                   ^^     ^^     ^^^^^     
+>      : ^^^^^^   ^^                   ^^     ^^     ^^^^^     
 >dit : typeof ListWrapper2
 >    : ^^^^^^^^^^^^^^^^^^^
 >array : T[]
@@ -435,11 +435,11 @@ class ListWrapper {
 >ListWrapper.clone(dit, array) : T[]
 >                              : ^^^
 >ListWrapper.clone : <T_1>(dit: typeof ListWrapper, array: T_1[]) => T_1[]
->                  : ^   ^^   ^^                  ^^     ^^     ^^^^^     
+>                  : ^^^^^^   ^^                  ^^     ^^     ^^^^^     
 >ListWrapper : typeof ListWrapper
 >            : ^^^^^^^^^^^^^^^^^^
 >clone : <T_1>(dit: typeof ListWrapper, array: T_1[]) => T_1[]
->      : ^   ^^   ^^                  ^^     ^^     ^^^^^     
+>      : ^^^^^^   ^^                  ^^     ^^     ^^^^^     
 >dit : typeof ListWrapper
 >    : ^^^^^^^^^^^^^^^^^^
 >array : T[]
@@ -453,11 +453,11 @@ class ListWrapper {
 >scanner.scanRange(3, 5, () => {  }) : void
 >                                    : ^^^^
 >scanner.scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
->                  : ^   ^^     ^^      ^^      ^^      ^^        ^^         ^^^^^   
+>                  : ^^^^^^     ^^      ^^      ^^      ^^        ^^         ^^^^^   
 >scanner : Scanner
 >        : ^^^^^^^
 >scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
->          : ^   ^^     ^^      ^^      ^^      ^^        ^^         ^^^^^   
+>          : ^^^^^^     ^^      ^^      ^^      ^^        ^^         ^^^^^   
 >3 : 3
 >  : ^
 >5 : 5
@@ -471,11 +471,11 @@ class ListWrapper {
 >tessst.funkyFor(array, t => t.toString()) : string
 >                                          : ^^^^^^
 >tessst.funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
->                : ^   ^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
+>                : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >tessst : typeof tessst
 >       : ^^^^^^^^^^^^^
 >funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
->         : ^   ^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
+>         : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >array : T[]
 >      : ^^^
 >t => t.toString() : (t: T) => string
@@ -952,7 +952,7 @@ class ListWrapper {
 >isPresent(compareFn) : boolean
 >                     : ^^^^^^^
 >isPresent : <T_1>(compareFn?: (a: T_1, b: T_1) => number) => boolean
->          : ^   ^^         ^^^                          ^^^^^       
+>          : ^^^^^^         ^^^                          ^^^^^       
 >compareFn : (a: T, b: T) => number
 >          : ^ ^^ ^^ ^^ ^^^^^      
 

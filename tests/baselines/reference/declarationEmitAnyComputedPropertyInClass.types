@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitAnyComputedPropertyInClass.ts] ////
+
+=== ambient.d.ts ===
+declare module "abcdefgh";
+>"abcdefgh" : any
+
+=== main.ts ===
+import Test from "abcdefgh";
+>Test : any
+>     : ^^^
+
+export class C {
+>C : C
+>  : ^
+
+    [Test.someKey]() {};
+>[Test.someKey] : () => void
+>               : ^^^^^^^^^^
+>Test.someKey : any
+>Test : any
+>     : ^^^
+>someKey : any
+>        : ^^^
+}
+

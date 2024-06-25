@@ -228,7 +228,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/client
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -288,12 +295,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/server/utilities.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/server/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/backend/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -430,7 +431,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/test/backe
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -443,29 +451,19 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/src/client/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/client/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/server/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/test/backend/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/test/backend/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/test/backend/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/test/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/test/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/test/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -473,8 +471,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -526,10 +522,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -545,7 +537,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/test/backend/index.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -563,7 +556,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/test/backend/index.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -581,7 +575,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/test/backend/index.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 0
@@ -599,7 +594,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -617,7 +613,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -635,7 +632,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -674,7 +672,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/client
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -687,30 +689,18 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/src/client/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/client/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/server/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/test/backend/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/test/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/test/backend/jsconfig.json:
@@ -778,12 +768,6 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/server/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test/backend/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/test/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -896,10 +880,6 @@ TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discove
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/server/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1027,7 +1007,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/server
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1040,20 +1027,14 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/myproject/src/client/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/client/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/myproject/src/server/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/src/server/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/myproject/src/server/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/src/tsconfig.json:
@@ -1062,22 +1043,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/server/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/test/backend/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/test/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -1136,10 +1101,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -1155,7 +1116,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/server/utilities.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1173,7 +1135,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/server/utilities.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1191,7 +1154,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/server/utilities.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 0
@@ -1209,7 +1173,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1227,7 +1192,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1245,7 +1211,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/client/app.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

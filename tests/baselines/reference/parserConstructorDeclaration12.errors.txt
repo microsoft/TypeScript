@@ -27,56 +27,56 @@ parserConstructorDeclaration12.ts(9,16): error TS1092: Type parameters cannot ap
 ==== parserConstructorDeclaration12.ts (24 errors) ====
     class C {
       constructor<>() { }
-      ~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                  ~~
 !!! error TS1098: Type parameter list cannot be empty.
                   
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor<> () { }
-      ~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                  ~~
 !!! error TS1098: Type parameter list cannot be empty.
                   
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor <>() { }
-      ~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                   ~~
 !!! error TS1098: Type parameter list cannot be empty.
                    
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor <> () { }
-      ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                   ~~
 !!! error TS1098: Type parameter list cannot be empty.
                    
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor< >() { }
-      ~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                  ~~~
 !!! error TS1098: Type parameter list cannot be empty.
                   
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor< > () { }
-      ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                  ~~~
 !!! error TS1098: Type parameter list cannot be empty.
                   
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor < >() { }
-      ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                   ~~~
 !!! error TS1098: Type parameter list cannot be empty.
                    
 !!! error TS1092: Type parameters cannot appear on a constructor declaration.
       constructor < > () { }
-      ~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
                   ~~~
 !!! error TS1098: Type parameter list cannot be empty.

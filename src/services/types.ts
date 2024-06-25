@@ -445,6 +445,12 @@ export const enum SemanticClassificationFormat {
     TwentyTwenty = "2020",
 }
 
+/** @internal */
+export interface RegionDiagnosticsResult {
+    diagnostics: Diagnostic[];
+    spans: TextSpan[];
+}
+
 //
 // Public services of a language service instance associated
 // with a language service host instance
@@ -488,6 +494,12 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+    /**
+     * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
+     * @internal
+     */
+    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to

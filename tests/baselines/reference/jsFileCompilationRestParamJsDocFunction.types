@@ -13,7 +13,7 @@
  */
 function apply(func, thisArg, ...args) {
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
->      : ^    ^^^^^^^^^^^^       ^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>      : ^    ^^^^^^^^^^^^       ^^   ^^^^^    ^^     ^^^^^   
 >func : Function
 >     : ^^^^^^^^
 >thisArg : any
@@ -127,5 +127,5 @@ function apply(func, thisArg, ...args) {
 
 export default apply;
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
->      : ^    ^^^^^^^^^^^^       ^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>      : ^    ^^^^^^^^^^^^       ^^   ^^^^^    ^^     ^^^^^   
 

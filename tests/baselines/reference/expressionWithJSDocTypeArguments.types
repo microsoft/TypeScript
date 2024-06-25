@@ -53,25 +53,25 @@ const ComeOnFoo = foo<?string?>;
 
 type TWhatFoo = typeof foo<?>;
 >TWhatFoo : typeof foo<unknown>
->         :            ^^^^^^^ 
+>         :                    
 >foo : <T>(x: T) => T
 >    : ^ ^^ ^^ ^^^^^ 
 
 type THuhFoo = typeof foo<string?>;
 >THuhFoo : typeof foo<string | null>
->        :                  ^^^^^^^ 
+>        :                     ^^^^ 
 >foo : <T>(x: T) => T
 >    : ^ ^^ ^^ ^^^^^ 
 
 type TNopeFoo = typeof foo<?string>;
 >TNopeFoo : typeof foo<string | null>
->         :                  ^^^^^^^ 
+>         :                     ^^^^ 
 >foo : <T>(x: T) => T
 >    : ^ ^^ ^^ ^^^^^ 
 
 type TComeOnFoo = typeof foo<?string?>;
 >TComeOnFoo : typeof foo<(string | null) | null>
->           :            ^      ^^^^^^^^^^^^^^^ 
+>           :            ^         ^^^^^   ^^^^ 
 >foo : <T>(x: T) => T
 >    : ^ ^^ ^^ ^^^^^ 
 
@@ -109,25 +109,25 @@ const ComeOnBar = Bar<?string?>;
 
 type TWhatBar = typeof Bar<?>;
 >TWhatBar : typeof Bar<unknown>
->         :            ^^^^^^^ 
+>         :                    
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type THuhBar = typeof Bar<string?>;
 >THuhBar : typeof Bar<string | null>
->        :                  ^^^^^^^ 
+>        :                     ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type TNopeBar = typeof Bar<?string>;
 >TNopeBar : typeof Bar<string | null>
->         :                  ^^^^^^^ 
+>         :                     ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 type TComeOnBar = typeof Bar<?string?>;
 >TComeOnBar : typeof Bar<(string | null) | null>
->           :            ^      ^^^^^^^^^^^^^^^ 
+>           :            ^         ^^^^^   ^^^^ 
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

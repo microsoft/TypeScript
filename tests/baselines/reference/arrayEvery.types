@@ -29,11 +29,11 @@ if (foo.every(isString)) {
 >foo.every(isString) : boolean
 >                    : ^^^^^^^
 >foo.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >foo : (string | number)[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >isString : (x: unknown) => x is string
 >         : ^ ^^       ^^^^^           
 

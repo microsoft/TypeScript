@@ -3,7 +3,7 @@
 === genericFunctionSpecializations1.ts ===
 function foo3<T>(test: string); // error
 >foo3 : <T>(test: string) => any
->     : ^^^^    ^^      ^^^^^^^^
+>     : ^ ^^    ^^      ^^^^^^^^
 >test : string
 >     : ^^^^^^
 
@@ -15,7 +15,7 @@ function foo3<T>(test: T) { }
 
 function foo4<T>(test: string); // valid
 >foo4 : <T>(test: string) => any
->     : ^^^^    ^^      ^^^^^^^^
+>     : ^ ^^    ^^      ^^^^^^^^
 >test : string
 >     : ^^^^^^
 

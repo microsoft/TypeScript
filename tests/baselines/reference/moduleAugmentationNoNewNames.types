@@ -94,11 +94,11 @@ let y = x.map(x => x + 1);
 >x.map(x => x + 1) : Observable<number>
 >                  : ^^^^^^^^^^^^^^^^^^
 >x.map : <U>(proj: (e: number) => U) => Observable<U>
->      : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
+>      : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
 >x : Observable<number>
 >  : ^^^^^^^^^^^^^^^^^^
 >map : <U>(proj: (e: number) => U) => Observable<U>
->    : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
+>    : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^           ^ 
 >x => x + 1 : (x: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number

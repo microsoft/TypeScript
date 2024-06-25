@@ -99,6 +99,11 @@ Create source map files for emitted JavaScript files.
 type: boolean
 default: false
 
+--noEmit
+Disable emitting files from a compilation.
+type: boolean
+default: false
+
 --target, -t
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
 one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, esnext
@@ -137,11 +142,6 @@ Specify an output folder for all emitted files.
 
 --removeComments
 Disable emitting comments.
-type: boolean
-default: false
-
---noEmit
-Disable emitting files from a compilation.
 type: boolean
 default: false
 

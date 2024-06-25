@@ -97,7 +97,7 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 >filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>; }
 >       : ^^^ ^^ ^^^^^^^^^ ^^          ^^                ^^^                                          ^^^ ^^         ^^            ^^^                                                       ^^^ ^^         ^^            ^^^                                          ^^^
 >exists((n) => n > 0) : <E>(ma: Either<E, number>) => boolean
->                     : ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^       
+>                     : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^       
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean
 >       : ^ ^^         ^^            ^^^^^                                
 >(n) => n > 0 : (n: number) => boolean

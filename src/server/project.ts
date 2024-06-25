@@ -93,7 +93,6 @@ import {
     ParsedCommandLine,
     parsePackageName,
     Path,
-    perfLogger,
     PerformanceEvent,
     PluginImport,
     PollingInterval,
@@ -328,9 +327,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
-    /** @internal */
     private hasAddedorRemovedFiles = false;
-    /** @internal */
     private hasAddedOrRemovedSymlinks = false;
 
     /** @internal */
@@ -391,7 +388,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     typingFiles: SortedReadonlyArray<string> = emptyArray;
 
-    /** @internal */
     private typingWatchers: TypingWatchers | undefined;
 
     /** @internal */
@@ -493,13 +489,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     public readonly getCanonicalFileName: GetCanonicalFileName;
 
-    /** @internal */
     private exportMapCache: ExportInfoMap | undefined;
-    /** @internal */
     private changedFilesForExportMapCache: Set<Path> | undefined;
-    /** @internal */
     private moduleSpecifierCache = createModuleSpecifierCache(this);
-    /** @internal */
     private symlinks: SymlinkCache | undefined;
     /** @internal */
     autoImportProviderHost: AutoImportProviderProject | false | undefined;
@@ -1360,7 +1352,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1405,7 +1396,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
@@ -1421,13 +1411,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    /** @internal */
     private closeWatchingTypingLocations() {
         if (this.typingWatchers) clearMap(this.typingWatchers, closeFileWatcher);
         this.typingWatchers = undefined;
     }
 
-    /** @internal */
     private onTypingInstallerWatchInvoke() {
         this.typingWatchers!.isInvoked = true;
         this.projectService.updateTypingsForProject({ projectName: this.getProjectName(), kind: ActionInvalidate });
@@ -1831,7 +1819,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
     }
 
-    /** @internal */
     private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
@@ -2206,7 +2193,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    /** @internal */
     private isDefaultProjectForOpenFiles(): boolean {
         return !!forEachEntry(
             this.projectService.openFiles,
@@ -2245,11 +2231,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
         this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
-        cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
-        this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+        try {
+            cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
+        }
+        finally {
+            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+        }
     }
 
-    /** @internal */
     private getCompilerOptionsForNoDtsResolutionProject() {
         return {
             ...this.getCompilerOptions(),
@@ -2442,7 +2431,6 @@ export class AuxiliaryProject extends Project {
 }
 
 export class AutoImportProviderProject extends Project {
-    /** @internal */
     private static readonly maxDependencies = 10;
 
     /** @internal */
@@ -2780,7 +2768,6 @@ export class ConfiguredProject extends Project {
     /** @internal */
     sendLoadingProjectFinish = false;
 
-    /** @internal */
     private compilerHost?: CompilerHost;
 
     /** @internal */
@@ -2844,7 +2831,6 @@ export class ConfiguredProject extends Project {
         this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
     }
 
-    /** @internal */
     private releaseParsedConfig(canonicalConfigFilePath: NormalizedPath) {
         this.projectService.stopWatchingWildCards(canonicalConfigFilePath, this);
         this.projectService.releaseParsedConfig(canonicalConfigFilePath, this);

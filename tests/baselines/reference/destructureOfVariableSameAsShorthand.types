@@ -10,7 +10,7 @@ interface AxiosResponse<T = never> {
 
 declare function get<T = never, R = AxiosResponse<T>>(): Promise<R>;
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 
 async function main() {
 >main : () => Promise<void>
@@ -21,13 +21,13 @@ async function main() {
 >get().then((response) => {        // body is never        const body = response.data;    }) : Promise<void>
 >                                                                                            : ^^^^^^^^^^^^^
 >get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >get() : Promise<AxiosResponse<never>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 >then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >(response) => {        // body is never        const body = response.data;    } : (response: AxiosResponse<never>) => void
 >                                                                                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >response : AxiosResponse<never>
@@ -49,13 +49,13 @@ async function main() {
 >get().then(({ data }) => {        // data is never    }) : Promise<void>
 >                                                         : ^^^^^^^^^^^^^
 >get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >get() : Promise<AxiosResponse<never>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 >then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^ ^^          ^^^^      ^^   ^^^^^^^^^^^^^               ^^^^^^^^ ^^^^^        ^^^^^^^^   ^^^^^^^^ 
 >({ data }) => {        // data is never    } : ({ data }: AxiosResponse<never>) => void
 >                                             : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : never
@@ -71,7 +71,7 @@ async function main() {
 >get() : Promise<AxiosResponse<never>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 
     // body is never
     const body = response.data;
@@ -93,7 +93,7 @@ async function main() {
 >get<never>() : Promise<AxiosResponse<never>>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 
     // The following did not work as expected.
     // shouldBeNever should be never, but was any
@@ -107,5 +107,5 @@ async function main() {
 >get() : Promise<AxiosResponse<never>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <T = never, R = AxiosResponse<T>>() => Promise<R>
->    : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          
 }

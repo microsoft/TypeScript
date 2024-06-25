@@ -3,31 +3,29 @@
 // export * from "./three-core";
 // <|export as namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}THREE|];|>
 
-// === /typings/global.d.ts ===
-// <|import * as _THREE from '[|three|]';|>
-// declare global {
-//     <|const [|{| isWriteAccess: true |}THREE|]: typeof _THREE;|>
-// }
-
-// === /src/index.ts ===
-// export const a = {};
-// let v = new [|THREE|].Vector2();
-
   // === Definitions ===
   // === /node_modules/@types/three/index.d.ts ===
-  // [|export * from "./three-core";
-  // export as namespace /*FIND ALL REFS*/THREE;|]
+  // export * from "./three-core";
+  // <|export as namespace /*FIND ALL REFS*/[|THREE|];|>
 
   // === Details ===
   [
    {
     "containerKind": "",
     "containerName": "",
-    "kind": "var",
-    "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
+    "kind": "alias",
+    "name": "export namespace THREE",
     "displayParts": [
      {
-      "text": "module",
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
       "kind": "keyword"
      },
      {
@@ -36,55 +34,7 @@
      },
      {
       "text": "THREE",
-      "kind": "localName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "var",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "THREE",
-      "kind": "localName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "typeof",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "import",
-      "kind": "keyword"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\"/node_modules/@types/three/index\"",
-      "kind": "stringLiteral"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
+      "kind": "aliasName"
      }
     ]
    }
@@ -93,19 +43,11 @@
 
 
 // === findAllReferences ===
-// === /node_modules/@types/three/index.d.ts ===
-// export * from "./three-core";
-// <|export as namespace [|{| isWriteAccess: true |}THREE|];|>
-
 // === /typings/global.d.ts ===
 // <|import * as _THREE from '/*FIND ALL REFS*/[|three|]';|>
 // declare global {
-//     <|const [|{| isWriteAccess: true |}THREE|]: typeof _THREE;|>
+//     const THREE: typeof _THREE;
 // }
-
-// === /src/index.ts ===
-// export const a = {};
-// let v = new [|THREE|].Vector2();
 
   // === Definitions ===
   // === /node_modules/@types/three/index.d.ts ===
@@ -117,8 +59,8 @@
    {
     "containerKind": "",
     "containerName": "",
-    "kind": "var",
-    "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
+    "kind": "module",
+    "name": "module \"/node_modules/@types/three/index\"",
     "displayParts": [
      {
       "text": "module",
@@ -129,56 +71,8 @@
       "kind": "space"
      },
      {
-      "text": "THREE",
-      "kind": "localName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "var",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "THREE",
-      "kind": "localName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "typeof",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "import",
-      "kind": "keyword"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
       "text": "\"/node_modules/@types/three/index\"",
       "kind": "stringLiteral"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
      }
     ]
    }
@@ -187,12 +81,8 @@
 
 
 // === findAllReferences ===
-// === /node_modules/@types/three/index.d.ts ===
-// export * from "./three-core";
-// <|export as namespace [|{| isWriteAccess: true |}THREE|];|>
-
 // === /typings/global.d.ts ===
-// <|import * as _THREE from '[|three|]';|>
+// import * as _THREE from 'three';
 // declare global {
 //     <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}THREE|]: typeof _THREE;|>
 // }
@@ -202,36 +92,22 @@
 // let v = new [|THREE|].Vector2();
 
   // === Definitions ===
-  // === /node_modules/@types/three/index.d.ts ===
-  // [|export * from "./three-core";
-  // export as namespace THREE;|]
+  // === /typings/global.d.ts ===
+  // import * as _THREE from 'three';
+  // declare global {
+  //     <|const /*FIND ALL REFS*/[|THREE|]: typeof _THREE;|>
+  // }
 
   // === Details ===
   [
    {
     "containerKind": "",
     "containerName": "",
-    "kind": "var",
-    "name": "module THREE\nvar THREE: typeof import(\"/node_modules/@types/three/index\")",
+    "kind": "const",
+    "name": "const THREE: typeof _THREE",
     "displayParts": [
      {
-      "text": "module",
-      "kind": "keyword"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "THREE",
-      "kind": "localName"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "var",
+      "text": "const",
       "kind": "keyword"
      },
      {
@@ -259,20 +135,72 @@
       "kind": "space"
      },
      {
-      "text": "import",
+      "text": "_THREE",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /typings/global.d.ts ===
+// import * as _THREE from 'three';
+// declare global {
+//     <|const [|{| isWriteAccess: true |}THREE|]: typeof _THREE;|>
+// }
+
+// === /src/index.ts ===
+// export const a = {};
+// let v = new /*FIND ALL REFS*/[|THREE|].Vector2();
+
+  // === Definitions ===
+  // === /typings/global.d.ts ===
+  // import * as _THREE from 'three';
+  // declare global {
+  //     <|const [|THREE|]: typeof _THREE;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const THREE: typeof _THREE",
+    "displayParts": [
+     {
+      "text": "const",
       "kind": "keyword"
      },
      {
-      "text": "(",
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "THREE",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
       "kind": "punctuation"
      },
      {
-      "text": "\"/node_modules/@types/three/index\"",
-      "kind": "stringLiteral"
+      "text": " ",
+      "kind": "space"
      },
      {
-      "text": ")",
-      "kind": "punctuation"
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "_THREE",
+      "kind": "aliasName"
      }
     ]
    }
