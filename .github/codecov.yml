@@ -1,6 +1,7 @@
 comment: false
 
 coverage:
+  precision: 5
   status:
     patch:
       default:
