@@ -14,10 +14,10 @@ declare const set: Set<number>;
 >    : ^^^^^^^^^^^
 
 const i0 = array[Symbol.iterator]();
->i0 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->array[Symbol.iterator]() : IterableIterator<number, void>
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i0 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array[Symbol.iterator]() : IterableIterator<number, undefined>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array[Symbol.iterator] : () => IterableIterator<number, BuiltinIteratorReturn>
 >                       : ^^^^^^                 ^^^^^^                        
 >array : number[]
@@ -30,10 +30,10 @@ const i0 = array[Symbol.iterator]();
 >         : ^^^^^^^^^^^^^
 
 const i1 = array.values();
->i1 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->array.values() : IterableIterator<number, void>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i1 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array.values() : IterableIterator<number, undefined>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array.values : () => IterableIterator<number, BuiltinIteratorReturn>
 >             : ^^^^^^                 ^^^^^^                        
 >array : number[]
@@ -42,10 +42,10 @@ const i1 = array.values();
 >       : ^^^^^^                 ^^^^^^                        
 
 const i2 = array.keys();
->i2 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->array.keys() : IterableIterator<number, void>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i2 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array.keys() : IterableIterator<number, undefined>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array.keys : () => IterableIterator<number, BuiltinIteratorReturn>
 >           : ^^^^^^                                               
 >array : number[]
@@ -54,10 +54,10 @@ const i2 = array.keys();
 >     : ^^^^^^                                               
 
 const i3 = array.entries();
->i3 : IterableIterator<[number, number], void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->array.entries() : IterableIterator<[number, number], void>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i3 : IterableIterator<[number, number], undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>array.entries() : IterableIterator<[number, number], undefined>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >array.entries : () => IterableIterator<[number, number], BuiltinIteratorReturn>
 >              : ^^^^^^                          ^^^^^^                         
 >array : number[]
@@ -72,10 +72,10 @@ for (const x of array);
 >      : ^^^^^^^^
 
 const i4 = map[Symbol.iterator]();
->i4 : IterableIterator<[string, number], void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map[Symbol.iterator]() : IterableIterator<[string, number], void>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i4 : IterableIterator<[string, number], undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map[Symbol.iterator]() : IterableIterator<[string, number], undefined>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map[Symbol.iterator] : () => IterableIterator<[string, number], BuiltinIteratorReturn>
 >                     : ^^^^^^                  ^^^^^^  ^^^^^^                         
 >map : Map<string, number>
@@ -88,10 +88,10 @@ const i4 = map[Symbol.iterator]();
 >         : ^^^^^^^^^^^^^
 
 const i5 = map.values();
->i5 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.values() : IterableIterator<number, void>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i5 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.values() : IterableIterator<number, undefined>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values : () => IterableIterator<number, BuiltinIteratorReturn>
 >           : ^^^^^^                 ^^^^^^                        
 >map : Map<string, number>
@@ -100,10 +100,10 @@ const i5 = map.values();
 >       : ^^^^^^                 ^^^^^^                        
 
 const i6 = map.keys();
->i6 : IterableIterator<string, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.keys() : IterableIterator<string, void>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i6 : IterableIterator<string, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.keys() : IterableIterator<string, undefined>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.keys : () => IterableIterator<string, BuiltinIteratorReturn>
 >         : ^^^^^^                 ^^^^^^                        
 >map : Map<string, number>
@@ -112,10 +112,10 @@ const i6 = map.keys();
 >     : ^^^^^^                 ^^^^^^                        
 
 const i7 = map.entries();
->i7 : IterableIterator<[string, number], void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.entries() : IterableIterator<[string, number], void>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i7 : IterableIterator<[string, number], undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.entries() : IterableIterator<[string, number], undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.entries : () => IterableIterator<[string, number], BuiltinIteratorReturn>
 >            : ^^^^^^                  ^^^^^^  ^^^^^^                         
 >map : Map<string, number>
@@ -130,10 +130,10 @@ for (const x of map);
 >    : ^^^^^^^^^^^^^^^^^^^
 
 const i8 = set[Symbol.iterator]();
->i8 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set[Symbol.iterator]() : IterableIterator<number, void>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i8 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set[Symbol.iterator]() : IterableIterator<number, undefined>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set[Symbol.iterator] : () => IterableIterator<number, BuiltinIteratorReturn>
 >                     : ^^^^^^                 ^^^^^^                        
 >set : Set<number>
@@ -146,10 +146,10 @@ const i8 = set[Symbol.iterator]();
 >         : ^^^^^^^^^^^^^
 
 const i9 = set.values();
->i9 : IterableIterator<number, void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set.values() : IterableIterator<number, void>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i9 : IterableIterator<number, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.values() : IterableIterator<number, undefined>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.values : () => IterableIterator<number, BuiltinIteratorReturn>
 >           : ^^^^^^                 ^^^^^^                        
 >set : Set<number>
@@ -158,10 +158,10 @@ const i9 = set.values();
 >       : ^^^^^^                 ^^^^^^                        
 
 const i10 = set.keys();
->i10 : IterableIterator<number, void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set.keys() : IterableIterator<number, void>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i10 : IterableIterator<number, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.keys() : IterableIterator<number, undefined>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.keys : () => IterableIterator<number, BuiltinIteratorReturn>
 >         : ^^^^^^                 ^^^^^^                        
 >set : Set<number>
@@ -170,10 +170,10 @@ const i10 = set.keys();
 >     : ^^^^^^                 ^^^^^^                        
 
 const i11 = set.entries();
->i11 : IterableIterator<[number, number], void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set.entries() : IterableIterator<[number, number], void>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i11 : IterableIterator<[number, number], undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.entries() : IterableIterator<[number, number], undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.entries : () => IterableIterator<[number, number], BuiltinIteratorReturn>
 >            : ^^^^^^                  ^^^^^^  ^^^^^^                         
 >set : Set<number>

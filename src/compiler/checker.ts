@@ -13000,7 +13000,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.instantiations.set(getTypeListId(typeParameters), type);
                 }
                 if (type === intrinsicMarkerType && symbol.escapedName === "BuiltinIteratorReturn") {
-                    type = strictBuiltinIteratorReturn ? voidType : anyType;
+                    type = strictBuiltinIteratorReturn ? undefinedType : anyType;
                 }
             }
             else {
