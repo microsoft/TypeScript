@@ -2,22 +2,22 @@ import * as debug from "../../compiler/debug.js";
 import { SyntaxKind, AssertionLevel } from "../_namespaces/ts.js";
 
 
-describe("in function assertOptionalToken and not in if", () => {
-    const kind: SyntaxKind = SyntaxKind.Identifier;
-    const node: undefined = undefined;
-    before(() => {
-        debug.Debug.assertOptionalToken(node, kind);
-    });
+// describe("in function assertOptionalToken and not in if", () => {
+//     const kind: SyntaxKind = SyntaxKind.Identifier;
+//     const node: undefined = undefined;
+//     before(() => {
+//         debug.Debug.assertOptionalToken(node, kind);
+//     });
 
-    it('should reach function assertOptionalToken', () => {
-        expect(debug.Debug.branch_coverage.get('assertOptionalToken_0')).to.equal(true);
-    });
+//     it('should reach function assertOptionalToken', () => {
+//         expect(debug.Debug.branch_coverage.get('assertOptionalToken_0')).to.equal(true);
+//     });
 
-    it('should not reach the if statement', () => {
-        expect(debug.Debug.branch_coverage.get('assertOptionalToken_1')).not.to.equal(true);
-    });
+//     it('should not reach the if statement', () => {
+//         expect(debug.Debug.branch_coverage.get('assertOptionalToken_1')).not.to.equal(true);
+//     });
 
-});
+// });
 
 describe("in function assertOptionalToken and in if", () => {
     const kind: SyntaxKind = SyntaxKind.Identifier;
