@@ -4662,7 +4662,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
 
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
     // for test failures.
-    sourceMapSupport?.install({
+    sourceMapSupport.install({
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
@@ -4688,7 +4688,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         throw err;
     }
     finally {
-        sourceMapSupport?.resetRetrieveHandlers();
+        sourceMapSupport.resetRetrieveHandlers();
     }
 }
 
