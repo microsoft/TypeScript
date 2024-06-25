@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/unconstrainedTypeComparisons.ts] ////
+
+=== unconstrainedTypeComparisons.ts ===
+export function g<T>(a: T, b: T): boolean {
+>g : <T>(a: T, b: T) => boolean
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+  return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+}

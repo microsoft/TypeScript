@@ -27329,7 +27329,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeFactsWorker(type: Type, callerOnlyNeeds: TypeFacts): TypeFacts {
         if (type.flags & (TypeFlags.Intersection | TypeFlags.Instantiable)) {
-            type = getBaseConstraintOfType(type) || unknownType;
+            const constraintType = getBaseConstraintOfType(type) || unknownType;
+            if (type.flags & TypeFlags.Instantiable && constraintType === unknownType) return callerOnlyNeeds;
+
+            type = constraintType
         }
         const flags = type.flags;
         if (flags & (TypeFlags.String | TypeFlags.StringMapping)) {

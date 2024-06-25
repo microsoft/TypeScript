@@ -1,0 +1,12 @@
+unconstrainedTypeComparisons.ts(2,10): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparisons.ts(2,14): error TS18049: 'b' is possibly 'null' or 'undefined'.
+
+
+==== unconstrainedTypeComparisons.ts (2 errors) ====
+    export function g<T>(a: T, b: T): boolean {
+      return a > b;
+             ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                 ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }

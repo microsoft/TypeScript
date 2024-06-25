@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/unconstrainedTypeComparisons.ts] ////
+
+=== unconstrainedTypeComparisons.ts ===
+export function g<T>(a: T, b: T): boolean {
+>g : Symbol(g, Decl(unconstrainedTypeComparisons.ts, 0, 0))
+>T : Symbol(T, Decl(unconstrainedTypeComparisons.ts, 0, 18))
+>a : Symbol(a, Decl(unconstrainedTypeComparisons.ts, 0, 21))
+>T : Symbol(T, Decl(unconstrainedTypeComparisons.ts, 0, 18))
+>b : Symbol(b, Decl(unconstrainedTypeComparisons.ts, 0, 26))
+>T : Symbol(T, Decl(unconstrainedTypeComparisons.ts, 0, 18))
+
+  return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparisons.ts, 0, 21))
+>b : Symbol(b, Decl(unconstrainedTypeComparisons.ts, 0, 26))
+}
