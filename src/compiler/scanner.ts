@@ -112,6 +112,8 @@ export interface Scanner {
     resetTokenState(pos: number): void;
     /** @internal */
     setSkipJsDocLeadingAsterisks(skip: boolean): void;
+    /** @internal */
+    hasLeadingAsterisks(): boolean;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
     // was in immediately prior to invoking the callback.  The result of invoking the callback
     // is returned from this function.
@@ -1042,6 +1044,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     var commentDirectives: CommentDirective[] | undefined;
     var skipJsDocLeadingAsterisks = 0;
+    var asteriskSeen = false;
 
     var scriptKind = ScriptKind.Unknown;
     var jsDocParsingMode = JSDocParsingMode.ParseAll;
@@ -1096,6 +1099,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         resetTokenState,
         setTextPos: resetTokenState,
         setSkipJsDocLeadingAsterisks,
+        hasLeadingAsterisks,
         tryScan,
         lookAhead,
         scanRange,
@@ -1877,7 +1881,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scan(): SyntaxKind {
         fullStartPos = pos;
         tokenFlags = TokenFlags.None;
-        let asteriskSeen = false;
+        asteriskSeen = false;
         while (true) {
             tokenStart = pos;
             if (pos >= end) {
@@ -4011,6 +4015,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     function setSkipJsDocLeadingAsterisks(skip: boolean) {
         skipJsDocLeadingAsterisks += skip ? 1 : -1;
+    }
+
+    function hasLeadingAsterisks() {
+        return asteriskSeen;
     }
 }
 
