@@ -138,9 +138,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
         }
 
-        await exec(process.execPath, args, { token: options.token });
-        if (coverage) {
-            await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report", "--experimental-monocart"], { token: options.token });
+        try {
+            await exec(process.execPath, args, { token: options.token });
+        }
+        finally {
+            // Calculate coverage even if tests failed.
+            if (coverage) {
+                await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report", "--experimental-monocart"], { token: options.token });
+            }
         }
     }
     catch (e) {
