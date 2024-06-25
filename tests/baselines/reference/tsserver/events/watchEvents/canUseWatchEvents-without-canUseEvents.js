@@ -97,7 +97,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -297,14 +304,7 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "unknown",
       "request_seq": 2,
       "success": false,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      },
       "message": "Unrecognized JSON command: watchChange"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -448,14 +448,7 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "unknown",
       "request_seq": 3,
       "success": false,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      },
       "message": "Unrecognized JSON command: watchChange"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -487,7 +480,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/b.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -565,7 +562,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 5,
+      "success": true
     }
 After request
 
@@ -756,14 +757,7 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "unknown",
       "request_seq": 6,
       "success": false,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      },
       "message": "Unrecognized JSON command: watchChange"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1191,14 +1185,7 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "unknown",
       "request_seq": 7,
       "success": false,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      },
       "message": "Unrecognized JSON command: watchChange"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1236,14 +1223,7 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "unknown",
       "request_seq": 8,
       "success": false,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      },
       "message": "Unrecognized JSON command: watchChange"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 

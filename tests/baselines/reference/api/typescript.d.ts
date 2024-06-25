@@ -1902,6 +1902,7 @@ declare namespace ts {
             }
             export interface RequestCompletedEventBody {
                 request_seq: number;
+                performanceData?: PerformanceData;
             }
             /**
              * Item of diagnostic information found in a DiagnosticEvent message.
