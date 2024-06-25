@@ -1,0 +1,9 @@
+contextuallyTypingOrOperator2.ts(1,39): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== contextuallyTypingOrOperator2.ts (1 errors) ====
+    var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
+                                          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    
+    var v2 = (s: string) => s.length || function (s) { s.aaa };

@@ -8,6 +8,7 @@ class Base { private p; }
 >Base : Base
 >     : ^^^^
 >p : any
+>  : ^^^
 
 class Derived1 extends Base { private m; }
 >Derived1 : Derived1
@@ -15,6 +16,7 @@ class Derived1 extends Base { private m; }
 >Base : Base
 >     : ^^^^
 >m : any
+>  : ^^^
 
 class Derived2 extends Base { private n; }
 >Derived2 : Derived2
@@ -22,6 +24,7 @@ class Derived2 extends Base { private n; }
 >Base : Base
 >     : ^^^^
 >n : any
+>  : ^^^
 
 interface Genric<T> { func(n: T[]); }
 >func : (n: T[]) => any

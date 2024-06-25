@@ -1,0 +1,7 @@
+templateStringInConditional.ts(1,9): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== templateStringInConditional.ts (1 errors) ====
+    var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional

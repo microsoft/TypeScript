@@ -1,0 +1,33 @@
+initializersWidened.ts(20,10): error TS2869: Truthiness test of this kind of expression appears unintentional
+initializersWidened.ts(24,10): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== initializersWidened.ts (2 errors) ====
+    // these are widened to any at the point of assignment
+    
+    var x1 = null;
+    var y1 = undefined;
+    var z1 = void 0;
+    
+    // these are not widened
+    
+    var x2: null;
+    var y2: undefined;
+    
+    var x3: null = null;
+    var y3: undefined = undefined;
+    var z3: undefined = void 0;
+    
+    // widen only when all constituents of union are widening
+    
+    var x4 = null || null;
+    var y4 = undefined || undefined;
+    var z4 = void 0 || void 0;
+             ~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    
+    var x5 = null || x2;
+    var y5 = undefined || y2;
+    var z5 = void 0 || y2;
+             ~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional

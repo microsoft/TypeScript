@@ -1,0 +1,35 @@
+prefixUnaryOperatorsOnExportedVariables.ts(19,5): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== prefixUnaryOperatorsOnExportedVariables.ts (1 errors) ====
+    export var x = false;
+    export var y = 1;
+    if (!x) {
+        
+    }
+    
+    if (+x) {
+        
+    }
+    
+    if (-x) {
+        
+    }
+    
+    if (~x) {
+        
+    }
+    
+    if (void x) {
+        ~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+        
+    }
+    
+    if (typeof x) {
+        
+    }
+    
+    if (++y) {
+        
+    }

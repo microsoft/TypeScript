@@ -1,0 +1,28 @@
+returns.js(20,12): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== returns.js (1 errors) ====
+    // @ts-check
+    /**
+     * @returns {string} This comment is not currently exposed
+     */
+    function f() {
+        return "hello";
+    }
+    
+    /**
+     * @returns {string=} This comment is not currently exposed
+     */
+    function f1() {
+        return "hello world";
+    }
+    
+    /**
+     * @returns {string|number} This comment is not currently exposed
+     */
+    function f2() {
+        return 5 || "hello";
+               ~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    }
+    

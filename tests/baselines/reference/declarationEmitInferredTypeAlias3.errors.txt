@@ -1,0 +1,15 @@
+1.ts(1,9): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== 0.ts (0 errors) ====
+    {
+        type Data = string | boolean;
+        let obj: Data = true;
+    }
+    export { }
+    
+==== 1.ts (1 errors) ====
+    var x = "hi" || 5;
+            ~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    export default x;

@@ -1,0 +1,18 @@
+declFileTypeAnnotationParenType.ts(8,30): error TS2869: Truthiness test of this kind of expression appears unintentional
+declFileTypeAnnotationParenType.ts(9,10): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== declFileTypeAnnotationParenType.ts (2 errors) ====
+    class c {
+        private p: string;
+    }
+    
+    var x: (() => c)[] = [() => new c()];
+    var y = [() => new c()];
+    
+    var k: (() => c) | string = (() => new c()) || "";
+                                 ~~~~~~~~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    var l = (() => new c()) || "";
+             ~~~~~~~~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional

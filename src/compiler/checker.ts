@@ -43949,18 +43949,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
             const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
 
-            switch (condExpr.kind) {
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                    error(location, Diagnostics.Truthiness_test_of_this_kind_of_expression_appears_unintentional);
-                    return;
-            }
-
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
@@ -44090,9 +44078,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTruthinessOfType(type: Type, node: Node) {
+        node = skipParentheses(node);
         if (type.flags & TypeFlags.Void) {
             error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
         }
+
+        switch (node.kind) {
+            case SyntaxKind.NumericLiteral:
+                // Allow e.g. while(0) or while(1)
+                if ((node as NumericLiteral).text === "0" || (node as NumericLiteral).text === "1") break;
+            // falls through
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.BigIntLiteral:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.VoidExpression:
+                error(node, Diagnostics.Truthiness_test_of_this_kind_of_expression_appears_unintentional);
+        }
+
         return type;
     }
 

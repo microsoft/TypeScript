@@ -1,10 +1,13 @@
 contextuallyTypeLogicalAnd03.ts(4,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
+contextuallyTypeLogicalAnd03.ts(4,6): error TS2869: Truthiness test of this kind of expression appears unintentional
 
 
-==== contextuallyTypeLogicalAnd03.ts (1 errors) ====
+==== contextuallyTypeLogicalAnd03.ts (2 errors) ====
     let x: (a: string) => string;
     let y = true;
     
     x = (a => a) && (b => b);
          ~
 !!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+         ~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional

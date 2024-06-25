@@ -1,0 +1,15 @@
+nestedIfStatement.ts(3,12): error TS2869: Truthiness test of this kind of expression appears unintentional
+nestedIfStatement.ts(4,12): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== nestedIfStatement.ts (2 errors) ====
+    if (0) {
+    } else if (1) {
+    } else if (2) {
+               ~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    } else if (3) {
+               ~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    } else {
+    }

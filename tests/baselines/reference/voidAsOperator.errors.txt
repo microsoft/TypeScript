@@ -1,0 +1,15 @@
+voidAsOperator.ts(1,6): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== voidAsOperator.ts (1 errors) ====
+    if (!void 0 !== true) {
+         ~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+     
+    }
+    
+    //CHECK#2
+    if (!null !== true) {
+     
+    }
+    

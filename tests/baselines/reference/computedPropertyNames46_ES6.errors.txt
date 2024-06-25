@@ -1,0 +1,9 @@
+computedPropertyNames46_ES6.ts(2,6): error TS2869: Truthiness test of this kind of expression appears unintentional
+
+
+==== computedPropertyNames46_ES6.ts (1 errors) ====
+    var o = {
+        ["" || 0]: 0
+         ~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
+    };

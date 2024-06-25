@@ -1,7 +1,10 @@
 parserRegularExpression3.ts(1,1): error TS2304: Cannot find name 'Foo'.
+parserRegularExpression3.ts(1,6): error TS2869: Truthiness test of this kind of expression appears unintentional
 
 
-==== parserRegularExpression3.ts (1 errors) ====
+==== parserRegularExpression3.ts (2 errors) ====
     Foo(!/(\\?|&)adurl=/);
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
+         ~~~~~~~~~~~~~~~
+!!! error TS2869: Truthiness test of this kind of expression appears unintentional
