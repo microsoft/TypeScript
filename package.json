@@ -13,11 +13,11 @@
         "javascript"
     ],
     "bugs": {
-        "url": "https://github.com/Microsoft/TypeScript/issues"
+        "url": "https://github.com/microsoft/TypeScript/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Microsoft/TypeScript.git"
+        "url": "https://github.com/microsoft/TypeScript.git"
     },
     "main": "./lib/typescript.js",
     "typings": "./lib/typescript.d.ts",
