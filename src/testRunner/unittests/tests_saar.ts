@@ -1,5 +1,5 @@
 import * as debug from "../../compiler/debug.js";
-import { Node, SyntaxKind, Debug, AssertionLevel } from "../_namespaces/ts.js";
+import { SyntaxKind, AssertionLevel } from "../_namespaces/ts.js";
 
 
 describe("in function assertOptionalToken and not in if", () => {
