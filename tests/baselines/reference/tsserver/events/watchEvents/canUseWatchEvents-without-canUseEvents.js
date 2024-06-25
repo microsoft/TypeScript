@@ -157,7 +157,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Add file: /user/username/projects/myproject/c.ts
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/c.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -282,12 +281,37 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts created
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 2,
+      "success": false,
+      "message": "Unrecognized JSON command: watchChange"
+    }
+After request
+
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
-Change File: /user/username/projects/myproject/b.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -401,8 +425,33 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject/b.ts /user/username/projects/myproject/b.ts updated
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/b.ts updated
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 3,
+      "success": false,
+      "message": "Unrecognized JSON command: watchChange"
+    }
+After request
+
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
@@ -415,7 +464,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
@@ -434,7 +483,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 2,
+      "request_seq": 4,
       "success": true
     }
 After request
@@ -500,7 +549,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
@@ -516,7 +565,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "close",
-      "request_seq": 3,
+      "request_seq": 5,
       "success": true
     }
 After request
@@ -572,44 +621,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "watchChange",
-      "arguments": {
-        "id": 1,
-        "updated": [
-          "/user/username/projects/myproject/b.ts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
-    {
-      "command": "watchChange",
-      "arguments": {
-        "id": 1,
-        "updated": [
-          "/user/username/projects/myproject/b.ts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "unknown",
-      "request_seq": 4,
-      "success": false,
-      "message": "Unrecognized JSON command: watchChange"
-    }
-After request
-
-Change File: /user/username/projects/myproject/c.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/c.ts 1:: WatchInfo: /user/username/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -723,13 +734,465 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
-Custom watch:: /user/username/projects/myproject/c.ts /user/username/projects/myproject/c.ts updated
-Custom watch:: /user/username/projects/myproject /user/username/projects/myproject/c.ts updated
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 6,
+      "success": false,
+      "message": "Unrecognized JSON command: watchChange"
+    }
+After request
+
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
 
-update with npm install
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 2
+7: /user/username/projects/myproject/tsconfig.json
+8: *ensureProjectForOpenFiles*
+//// [/user/username/projects/myproject/d.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }
+
+
+Timeout callback:: count: 2
+7: /user/username/projects/myproject/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
+	/user/username/projects/myproject/m.ts Text-1 "import { x } from \"something\""
+	/user/username/projects/myproject/c.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }export const y = 20;"
+	/user/username/projects/myproject/d.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	a.ts
+	  Matched by default include pattern '**/*'
+	b.ts
+	  Matched by default include pattern '**/*'
+	node_modules/something/index.d.ts
+	  Imported via "something" from file 'm.ts'
+	m.ts
+	  Matched by default include pattern '**/*'
+	c.ts
+	  Matched by default include pattern '**/*'
+	d.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+After running Timeout callback:: count: 0
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts: *new*
+  {}
+/user/username/projects/myproject/m.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/c.ts 1:: WatchInfo: /user/username/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/c.ts 1:: WatchInfo: /user/username/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
+Before running Timeout callback:: count: 2
+9: /user/username/projects/myproject/tsconfig.json
+10: *ensureProjectForOpenFiles*
+//// [/user/username/projects/myproject/c.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }export const y = 20;export const z = 30;
+
+
+Timeout callback:: count: 2
+9: /user/username/projects/myproject/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6 *changed*
+    projectProgramVersion: 3
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts *changed*
+    version: Text-2
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
+	/user/username/projects/myproject/m.ts Text-1 "import { x } from \"something\""
+	/user/username/projects/myproject/c.ts Text-3 "export class a { prop = \"hello\"; foo() { return this.prop; } }export const y = 20;export const z = 30;"
+	/user/username/projects/myproject/d.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (7)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+After running Timeout callback:: count: 0
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6
+    projectProgramVersion: 3
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts *changed*
+    version: Text-3 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/e.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/e.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 2
+11: /user/username/projects/myproject/tsconfig.json
+12: *ensureProjectForOpenFiles*
+//// [/user/username/projects/myproject/e.ts]
+export class a { prop = "hello"; foo() { return this.prop; } }
+
+
+Timeout callback:: count: 2
+11: /user/username/projects/myproject/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7 *changed*
+    projectProgramVersion: 3
+    dirty: true *changed*
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/e.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 7 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (8)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/user/username/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
+	/user/username/projects/myproject/m.ts Text-1 "import { x } from \"something\""
+	/user/username/projects/myproject/c.ts Text-3 "export class a { prop = \"hello\"; foo() { return this.prop; } }export const y = 20;export const z = 30;"
+	/user/username/projects/myproject/d.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+	/user/username/projects/myproject/e.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library for target 'es5'
+	a.ts
+	  Matched by default include pattern '**/*'
+	b.ts
+	  Matched by default include pattern '**/*'
+	node_modules/something/index.d.ts
+	  Imported via "something" from file 'm.ts'
+	m.ts
+	  Matched by default include pattern '**/*'
+	c.ts
+	  Matched by default include pattern '**/*'
+	d.ts
+	  Matched by default include pattern '**/*'
+	e.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (8)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (8)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+After running Timeout callback:: count: 0
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts:
+  {}
+/user/username/projects/myproject/e.ts: *new*
+  {}
+/user/username/projects/myproject/m.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 4 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/b.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/c.ts
+    version: Text-3
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/e.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/m.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/something/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 7,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 7,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 7,
+      "success": false,
+      "message": "Unrecognized JSON command: watchChange"
+    }
+After request
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
 Before running Timeout callback:: count: 0
 //// [/user/username/projects/myproject/node_modules/something/index.d.ts]
 export const x = 10;export const y = 20;
@@ -737,7 +1200,37 @@ export const x = 10;export const y = 20;
 
 After running Timeout callback:: count: 0
 
-Custom watch:: /user/username/projects/myproject/node_modules /user/username/projects/myproject/node_modules/something/index.d.ts updated
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 8,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Err:: Unrecognized JSON command:
+    {
+      "command": "watchChange",
+      "arguments": [],
+      "seq": 8,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "unknown",
+      "request_seq": 8,
+      "success": false,
+      "message": "Unrecognized JSON command: watchChange"
+    }
+After request
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
 Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
