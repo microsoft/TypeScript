@@ -493,7 +493,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -563,10 +570,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -715,10 +718,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 2
       }
     }
 After running Immedidate callback:: count: 0
@@ -767,10 +767,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 3,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1064,10 +1060,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 3
       }
     }
 After running Immedidate callback:: count: 0
@@ -1116,10 +1109,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 4,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1393,10 +1382,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 4
       }
     }
 After running Immedidate callback:: count: 0
@@ -1447,10 +1433,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 5,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1732,10 +1714,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 5
       }
     }
 After running Immedidate callback:: count: 0
@@ -1786,10 +1765,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 6,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2050,10 +2025,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 6
       }
     }
 After running Immedidate callback:: count: 0
@@ -2112,10 +2084,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 7,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2383,10 +2351,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 7
       }
     }
 After running Immedidate callback:: count: 0
@@ -2447,10 +2412,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 8,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2736,10 +2697,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 8,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 8
       }
     }
 After running Immedidate callback:: count: 0
@@ -2797,10 +2755,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 9,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -3148,10 +3102,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 9,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 9
       }
     }
 After running Immedidate callback:: count: 0
@@ -3211,10 +3162,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 10,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -3513,10 +3460,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 10,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 10
       }
     }
 After running Immedidate callback:: count: 0
@@ -3591,10 +3535,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 11,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -3888,10 +3828,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 11,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 11
       }
     }
 After running Immedidate callback:: count: 0
@@ -3968,10 +3905,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 12,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4245,10 +4178,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 12,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 12
       }
     }
 After running Immedidate callback:: count: 0
@@ -4327,10 +4257,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 13,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4612,10 +4538,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 13,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 13
       }
     }
 After running Immedidate callback:: count: 0
@@ -4693,10 +4616,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 14,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4957,10 +4876,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 14,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 14
       }
     }
 After running Immedidate callback:: count: 0

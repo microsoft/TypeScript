@@ -180,7 +180,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: C:/a/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: C:/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

@@ -260,7 +260,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -338,10 +345,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/projects/myproject
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/projects/myproject/c.ts :: WatchInfo: c:/projects/myproject 1 undefined Config: c:/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 2
@@ -509,10 +512,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with c:/projects/myproject/b.ts
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with c:/projects/myproject/b.ts 1:: WatchInfo: c:/projects/myproject/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 2
@@ -666,7 +665,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/b.ts ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -753,7 +756,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: c:/projects/myproject/a.ts ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 5,
+      "success": true
     }
 After request
 
@@ -834,10 +841,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with c:/projects/myproject/b.ts
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with c:/projects/myproject/b.ts 1:: WatchInfo: c:/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 2
@@ -987,10 +990,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/proj
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/projects/myproject/node_modules/something/index.d.ts :: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 3
@@ -1186,10 +1185,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with c:/projects/myproject/c.ts
 Info seq  [hh:mm:ss:mss] Scheduled: c:/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with c:/projects/myproject/c.ts 1:: WatchInfo: c:/projects/myproject/c.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 2
