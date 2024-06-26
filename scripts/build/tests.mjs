@@ -29,7 +29,7 @@ export const coverageDir = "coverage";
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
-    const testTimeout = cmdLineOptions.timeout;
+    let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const skipSysTests = cmdLineOptions.skipSysTests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -42,6 +42,12 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     const coverage = cmdLineOptions.coverage;
+
+    if (coverage && testTimeout) {
+        testTimeout *= 2;
+        console.log(chalk.yellowBright(`[coverage] doubling test timeout to ${testTimeout}ms...`));
+    }
+
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
