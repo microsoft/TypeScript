@@ -310,10 +310,7 @@ type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 interface TypingsCacheEntry {
     readonly typeAcquisition: TypeAcquisition;
     readonly compilerOptions: CompilerOptions;
-    readonly typings: SortedReadonlyArray<string>;
     readonly unresolvedImports: SortedReadonlyArray<string> | undefined;
-    /* mainly useful for debugging */
-    poisoned: boolean;
 }
 
 function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
@@ -1477,9 +1474,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.typingsCache = {
                 compilerOptions: this.getCompilationSettings(),
                 typeAcquisition,
-                typings: entry ? entry.typings : emptyArray,
                 unresolvedImports: this.lastCachedUnresolvedImportsList,
-                poisoned: true,
             };
             // something has been changed, issue a request to update typings
             this.projectService.typingsInstaller.enqueueInstallTypingsRequest(this, typeAcquisition, this.lastCachedUnresolvedImportsList);
@@ -1488,15 +1483,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     updateTypingFiles(compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
-        const typings = sort(newTypings);
         this.typingsCache = {
             compilerOptions,
             typeAcquisition,
-            typings,
             unresolvedImports,
-            poisoned: false,
         };
-        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
+        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : sort(newTypings);
         if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
