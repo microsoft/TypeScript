@@ -7,7 +7,7 @@ declare function test1<T>(arg: {
 >test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
 >      : ^ ^^   ^^                         ^^^^^ 
 >arg : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: T[K];
 }): T;
@@ -29,7 +29,7 @@ declare function test2<T extends readonly unknown[]>(arg: {
 >test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
 >      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
 >arg : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T]: T[K];
 }): T;

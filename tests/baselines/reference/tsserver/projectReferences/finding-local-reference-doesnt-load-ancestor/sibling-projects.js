@@ -218,7 +218,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/solution/compiler/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -623,7 +630,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 25,
         "symbolDisplayString": "(method) ts.Program.getSourceFiles(): string[]"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

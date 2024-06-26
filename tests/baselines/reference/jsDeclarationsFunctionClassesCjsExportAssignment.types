@@ -132,31 +132,31 @@ function Context(input) {
 >                                   : ^^^^^
 >this.state : any
 >this : this & { construct(input: Input, handle?: HookHandler | undefined): State; }
->     : ^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>     : ^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >state : any
 >      : ^^^
 >this.construct(input) : State
 >                      : ^^^^^
 >this.construct : (input: Input, handle?: HookHandler | undefined) => State
->               : ^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^^^     
+>               : ^     ^^     ^^      ^^^              ^^^^^^^^^^^^^^     
 >this : this & { construct(input: Input, handle?: HookHandler | undefined): State; }
->     : ^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>     : ^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >construct : (input: Input, handle?: HookHandler | undefined) => State
->          : ^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^^^     
+>          : ^     ^^     ^^      ^^^              ^^^^^^^^^^^^^^     
 >input : Input
 >      : ^^^^^
 }
 Context.prototype = {
 >Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: HookHandler | undefined): State; }
->                                                                                                                                                                                                 : ^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>                                                                                                                                                                                                 : ^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >Context.prototype : { construct(input: Input, handle?: HookHandler | undefined): State; }
->                  : ^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>                  : ^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >Context : typeof Context
 >        : ^^^^^^^^^^^^^^
 >prototype : { construct(input: Input, handle?: HookHandler | undefined): State; }
->          : ^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>          : ^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 >{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: HookHandler | undefined): State; }
->                                                                                                                                                                             : ^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^
+>                                                                                                                                                                             : ^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^
 
     /**
      * @param {Input} input
@@ -165,7 +165,7 @@ Context.prototype = {
      */
     construct(input, handle = () => void 0) {
 >construct : (input: Input, handle?: HookHandler | undefined) => State
->          : ^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^^^     
+>          : ^     ^^     ^^      ^^^              ^^^^^^^^^^^^^^     
 >input : Input
 >      : ^^^^^
 >handle : import("hook").HookHandler
@@ -184,13 +184,13 @@ Context.prototype = {
 }
 module.exports = Context;
 >module.exports = Context : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
->                         : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^^^^
+>                         : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^^^^
 >module.exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
->               : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^^^^
+>               : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^^^^
 >module : { exports: { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }; }
->       : ^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^^^^^^^
+>       : ^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^^^^^^^
 >exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
->        : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^     ^^^^^^
+>        : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^              ^^^^^^^^^^^^     ^^^^^^
 >Context : typeof Context
 >        : ^^^^^^^^^^^^^^
 

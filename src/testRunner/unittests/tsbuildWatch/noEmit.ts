@@ -10,7 +10,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     function verify(outFile?: object) {
         verifyTscWatch({
             scenario: "noEmit",
-            subScenario: `does not go in loop when watching when no files are emitted${outFile ? " with outFile" : ""}`,
+            subScenario: `${outFile ? "outFile" : "multiFile"}/does not go in loop when watching when no files are emitted`,
             commandLineArgs: ["-b", "-w", "-verbose"],
             sys: () =>
                 createWatchedSystem({

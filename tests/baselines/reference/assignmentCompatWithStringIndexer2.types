@@ -141,7 +141,7 @@ module Generics {
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
->    : ^^^^^^^^^^^    ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
         var b3: { [x: string]: Derived; };
 >b3 : { [x: string]: Derived; }

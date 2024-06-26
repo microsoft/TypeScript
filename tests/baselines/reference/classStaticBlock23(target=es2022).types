@@ -7,7 +7,7 @@ const nums = [1, 2, 3].map(n => Promise.resolve(n))
 >[1, 2, 3].map(n => Promise.resolve(n)) : Promise<number>[]
 >                                       : ^^^^^^^^^^^^^^^^^
 >[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>              : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -17,7 +17,7 @@ const nums = [1, 2, 3].map(n => Promise.resolve(n))
 >3 : 3
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >n => Promise.resolve(n) : (n: number) => Promise<number>
 >                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number

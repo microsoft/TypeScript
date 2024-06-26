@@ -33,7 +33,7 @@ declare function createMachine<
   TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
 >(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
 >config : { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const inferredParams1 = createMachine({
 >inferredParams1 : ["foo", StateConfig<"foo">]
@@ -128,15 +128,15 @@ const inferredParams2 = createMachine({
 
 const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const checked = checkType<{x: number, y: string}>()({
 >checked : { x: number; y: "y"; }
@@ -144,9 +144,9 @@ const checked = checkType<{x: number, y: string}>()({
 >checkType<{x: number, y: string}>()({  x: 1 as number,  y: "y",  z: "z", // undesirable property z is *not* allowed}) : { x: number; y: "y"; }
 >                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^
 >checkType<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
->                                    : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -196,7 +196,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
 >                 : ^ ^^^^^^^^^     ^^ ^^                                       ^^^^^ 
 >s : { [K in keyof T & keyof Stuff]: T[K]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if(Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -216,12 +216,12 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 >s as T : T
 >       : ^
 >s : { [K in keyof T & keyof Stuff]: T[K]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
       return s
 >s : { [K in keyof T & keyof Stuff]: T[K]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -249,7 +249,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
 >                    : ^ ^^^^^^^^^     ^^   ^^                                         ^^^^^   
 >arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if(Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -269,12 +269,12 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 >arr as T[] : T[]
 >           : ^^^
 >arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
       return arr
 >arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -316,7 +316,7 @@ declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: 
 >foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 >    : ^ ^^^^^^^^^       ^^     ^^                                         ^^^^^    
 >props : { [K in keyof T & "x"]: T[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function bar(props: {x: number, y: string}) {
 >bar : (props: { x: number; y: string; }) => void
@@ -385,7 +385,7 @@ declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof 
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
 >    : ^ ^^^^^^^^^                 ^^     ^^                                                   ^^^^^    
 >props : { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 baz({x: 1});
 >baz({x: 1}) : void
@@ -472,7 +472,7 @@ declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T 
 >withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
 >               : ^ ^^^^^^^^^              ^^     ^^                                                ^^^^^ 
 >props : { [K in keyof T & keyof WithNestedProp]: T[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >wnp : { prop: "foo"; nested: { prop: string; }; }
@@ -582,7 +582,7 @@ declare function createXMachine<
 
 >(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
 >config : { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const child = () => Promise.resolve("foo");
 >child : () => any

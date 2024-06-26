@@ -15,7 +15,7 @@ declare function test<
 
 >(obj: { [K in keyof T]: T[K] }): T;
 >obj : { [K in keyof T]: T[K]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 const result = test({
 >result : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }

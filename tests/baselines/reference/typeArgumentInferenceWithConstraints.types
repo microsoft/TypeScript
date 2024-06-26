@@ -4,30 +4,30 @@
 // Generic call with no parameters
 function noParams<T extends {}>() { }
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^  ^^^^^^^^^^^
+>         : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 noParams();
 >noParams() : void
 >           : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^  ^^^^^^^^^^^
+>         : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 noParams<string>();
 >noParams<string>() : void
 >                   : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^  ^^^^^^^^^^^
+>         : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 noParams<{}>();
 >noParams<{}>() : void
 >               : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^  ^^^^^^^^^^^
+>         : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 // Generic call with parameters but none use type parameter type
 function noGenericParams<T extends number>(n: string) { }
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>                : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >n : string
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ noGenericParams(''); // Valid
 >noGenericParams('') : void
 >                    : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>                : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -43,7 +43,7 @@ noGenericParams<number>('');
 >noGenericParams<number>('') : void
 >                            : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>                : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -51,14 +51,14 @@ noGenericParams<{}>(''); // Error
 >noGenericParams<{}>('') : void
 >                        : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>                : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U extends T>(n: T, m: number) { }
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >n : T
 >  : ^
 >m : number
@@ -68,7 +68,7 @@ someGenerics1(3, 4); // Valid
 >someGenerics1(3, 4) : void
 >                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -78,7 +78,7 @@ someGenerics1<string, number>(3, 4); // Error
 >someGenerics1<string, number>(3, 4) : void
 >                                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -88,7 +88,7 @@ someGenerics1<number, {}>(3, 4); // Error
 >someGenerics1<number, {}>(3, 4) : void
 >                                : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -98,7 +98,7 @@ someGenerics1<number, number>(3, 4);
 >someGenerics1<number, number>(3, 4) : void
 >                                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4

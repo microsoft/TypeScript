@@ -56,14 +56,8 @@ define("src/file2", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -98,7 +92,10 @@ Program files::
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
 
 No shapes updated in the builder::
 
@@ -161,14 +158,8 @@ define("src/file3", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -208,7 +199,11 @@ Program files::
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file3.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+/user/username/projects/myproject/src/file3.ts
 
 No shapes updated in the builder::
 

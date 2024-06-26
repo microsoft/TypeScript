@@ -18,7 +18,7 @@ export function appendToOptionalArray<
 >(
   object: { [x in K]?: Lower<T>[] },
 >object : { [x in K]?: Lower<T>[] | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   key: K,
 >key : K
@@ -31,17 +31,17 @@ export function appendToOptionalArray<
 ) {
   const array = object[key];
 >array : { [x in K]?: Lower<T>[] | undefined; }[K]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >object[key] : { [x in K]?: Lower<T>[] | undefined; }[K]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >object : { [x in K]?: Lower<T>[] | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 
   if (array) {
 >array : { [x in K]?: Lower<T>[] | undefined; }[K]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     array.push(value);
 >array.push(value) : number
@@ -60,9 +60,9 @@ export function appendToOptionalArray<
 >object[key] = [value] : T[]
 >                      : ^^^
 >object[key] : { [x in K]?: Lower<T>[] | undefined; }[K]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >object : { [x in K]?: Lower<T>[] | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >[value] : T[]

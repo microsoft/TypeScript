@@ -84,11 +84,11 @@ const result1 = createAndUnbox(() => thing.pipe(
 >thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : Thing<Box<number>>
 >                                                                 : ^^^^^^^^^^^^^^^^^^
 >thing.pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
->           : ^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
+>           : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
 >thing : Thing<number>
 >      : ^^^^^^^^^^^^^
 >pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
->     : ^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
+>     : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
 
     map((data) => box(data)),
 >map((data) => box(data)) : Op<number, Box<number>>
@@ -136,11 +136,11 @@ const result2 = createAndUnbox(() => thing.pipe(
 >thing.pipe(    tap((v) => log(v)),    map((data) => box(data)),) : Thing<Box<number>>
 >                                                                 : ^^^^^^^^^^^^^^^^^^
 >thing.pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
->           : ^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
+>           : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
 >thing : Thing<number>
 >      : ^^^^^^^^^^^^^
 >pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
->     : ^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
+>     : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^ 
 
     tap((v) => log(v)),
 >tap((v) => log(v)) : Op<number, number>
