@@ -799,6 +799,16 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 }
 
 /** @internal */
+export function getResolvedModuleFromResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+    return resolution.resolvedModule;
+}
+
+/** @internal */
+export function getResolvedTypeReferenceDirectiveFromResolution(resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+    return resolution.resolvedTypeReferenceDirective;
+}
+
+/** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
     const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
@@ -10942,7 +10952,7 @@ export function isExpandoPropertyDeclaration(declaration: Declaration | undefine
 }
 
 /** @internal */
-export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | JSDocImportTag | undefined) {
     if (node === undefined) {
         return false;
     }
