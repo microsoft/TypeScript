@@ -13558,20 +13558,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
-            const restName = sig.parameters[restIndex].escapedName;
-            const restType = getTypeOfSymbol(sig.parameters[restIndex]);
+            const restSymbol = sig.parameters[restIndex];
+            const restType = getTypeOfSymbol(restSymbol);
             if (isTupleType(restType)) {
-                return [expandSignatureParametersWithTupleMembers(restType, restIndex, restName)];
+                return [expandSignatureParametersWithTupleMembers(restType, restIndex, restSymbol)];
             }
             else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
-                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restName));
+                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restSymbol));
             }
         }
         return [sig.parameters];
 
-        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, restName: __String) {
+        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, restSymbol: Symbol) {
             const elementTypes = getTypeArguments(restType);
-            const associatedNames = getUniqAssociatedNamesFromTupleType(restType, restName);
+            const associatedNames = getUniqAssociatedNamesFromTupleType(restType, restSymbol);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                 const name = associatedNames && associatedNames[i] ? associatedNames[i] :
@@ -13586,10 +13586,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return concatenate(sig.parameters.slice(0, restIndex), restParams);
         }
 
-        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restName: __String) {
+        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restSymbol: Symbol) {
             const associatedNamesMap = new Map<__String, number>();
             return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
-                const name = getTupleElementLabel(labeledElement, i, restName);
+                const name = getTupleElementLabel(labeledElement, i, restSymbol);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
                     associatedNamesMap.set(name, 1);
@@ -37231,11 +37231,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    /**
+     * Gets a tuple element label by recursively walking `ArrayBindingPattern` nodes in a `BindingName`.
+     */
+    function getTupleElementLabelFromBindingName(node: BindingName, index: number): __String | undefined {
+        if (isArrayBindingPattern(node)) {
+            const elements = node.elements;
+            const lastElement = tryCast(lastOrUndefined(elements), isBindingElement);
+            const elementCount = elements.length - (lastElement?.dotDotDotToken ? 1 : 0);
+            if (index < elementCount) {
+                const element = elements[index];
+                if (isBindingElement(element) && isIdentifier(element.name)) {
+                    return element.name.escapedText;
+                }
+            }
+            else if (lastElement?.dotDotDotToken) {
+                const restIndex = index - elementCount;
+                return getTupleElementLabelFromBindingName(lastElement.name, restIndex);
+            }
+        }
+        else if (isIdentifier(node)) {
+            return `${node.escapedText}_${index}` as __String;
+        }
+    }
+
     function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String) {
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restSymbol?: Symbol): __String;
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index = 0, restSymbol?: Symbol) {
         if (!d) {
-            return `${restParameterName}_${index}` as __String;
+            const restParameter = tryCast(restSymbol?.valueDeclaration, isParameter);
+            const label = restParameter && getTupleElementLabelFromBindingName(restParameter.name, index);
+            return label ?? `${restSymbol?.escapedName ?? "arg"}_${index}` as __String;
         }
         Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
         return d.name.escapedText;
@@ -37251,7 +37277,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isTupleType(restType)) {
             const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
             const index = pos - paramCount;
-            return getTupleElementLabel(associatedNames?.[index], index, restParameter.escapedName);
+            return getTupleElementLabel(associatedNames?.[index], index, restParameter);
         }
         return restParameter.escapedName;
     }
