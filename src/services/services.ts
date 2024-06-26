@@ -60,7 +60,6 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
-    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
@@ -194,7 +193,6 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JSDoc,
     JsDoc,
     JSDocContainer,
     JSDocParsingMode,
@@ -322,15 +320,12 @@ import {
     timestamp,
     TodoComment,
     TodoCommentDescriptor,
-    Token,
     toPath,
     tracing,
-    TransformFlags,
     Type,
     TypeChecker,
     TypeFlags,
     TypeImpl,
-    TypeNode,
     TypeParameter,
     TypeReference,
     typeToDisplayParts,
@@ -376,6 +371,16 @@ class NodeObject<TKind extends SyntaxKind> extends NodeImpl implements Node {
 
     constructor(kind: TKind, pos: number, end: number) {
         super(kind, pos, end);
+    }
+
+    override get text(): string {
+        if (this.kind === SyntaxKind.Identifier || this.kind === SyntaxKind.PrivateIdentifier) {
+            return idText(this as any as Identifier);
+        }
+        return super.text;
+    }
+    override set text(value) {
+        super.text = value;
     }
     private assertHasRealPosition(message?: string) {
         // eslint-disable-next-line local/debug-assert
@@ -514,7 +519,7 @@ class NodeObject<TKind extends SyntaxKind> extends NodeImpl implements Node {
 
     public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
         Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
-        return updateSourceFile(this as any as SourceFile, newText, textChangeRange);
+        return updateSourceFile(this as SourceFile, newText, textChangeRange);
     }
 
     public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
@@ -778,98 +783,6 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     return list;
 }
 
-class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache!: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol;
-    public jsDocComments?: JSDoc[];
-    public id?: number;
-    public emitNode?: EmitNode | undefined;
-    get data() {
-        return this;
-    }
-
-    constructor(kind: TKind, pos: number, end: number) {
-        // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.emitNode = undefined;
-    }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(): number {
-        return this.getChildren().length;
-    }
-
-    public getChildAt(index: number): Node {
-        return this.getChildren()[index];
-    }
-
-    public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
-    }
-
-    public getFirstToken(): Node | undefined {
-        return undefined;
-    }
-
-    public getLastToken(): Node | undefined {
-        return undefined;
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
-}
-
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
     escapedName: __String;
@@ -1004,37 +917,6 @@ class SymbolObject implements Symbol {
     }
 }
 
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKind> implements Token<TKind> {
-    constructor(kind: TKind, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-}
-
-class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
-    public escapedText: __String = undefined!;
-    public original?: Node | undefined = undefined;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare _declarationBrand: any;
-    declare _jsdocContainerBrand: any;
-    declare _flowContainerBrand: any;
-    typeArguments!: NodeArray<TypeNode>;
-    jsDoc = undefined; // initialized by parser (JsDocContainer)
-    flowNode = undefined; // initialized by binder (FlowContainer)
-    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(kind, pos, end);
-        this.jsDocComments = undefined;
-        this.symbol = undefined!;
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
 class TypeObject extends TypeImpl implements Type {
     getFlags(): TypeFlags {
         return this.flags;
@@ -1249,12 +1131,12 @@ class SourceMapSourceObject implements SourceMapSource {
 
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
-        getNodeConstructor: () => NodeObject as any,
-        getTokenConstructor: () => TokenObject as any,
+        getNodeConstructor: () => NodeObject,
+        getTokenConstructor: () => NodeObject,
 
-        getIdentifierConstructor: () => IdentifierObject as any,
-        getPrivateIdentifierConstructor: () => IdentifierObject as any,
-        getSourceFileConstructor: () => NodeObject as any,
+        getIdentifierConstructor: () => NodeObject as any,
+        getPrivateIdentifierConstructor: () => NodeObject as any,
+        getSourceFileConstructor: () => NodeObject,
         getSymbolConstructor: () => SymbolObject,
         getTypeConstructor: () => TypeObject,
         getSignatureConstructor: () => SignatureObject,

@@ -56,7 +56,6 @@ import {
     containsObjectRestOrSpread,
     ContinueStatement,
     createBaseNodeFactory,
-    createEmptyObjectArray,
     createNodeConverters,
     createParenthesizerRules,
     createScanner,
@@ -179,7 +178,6 @@ import {
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isLabeledStatement,
-    isLiteralKind,
     isLocalName,
     isLogicalOrCoalescingAssignmentOperator,
     isMemberName,
@@ -478,12 +476,10 @@ export const enum NodeFactoryFlags {
 }
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
-type NodeData<T extends Node> = Readonly<Omit<T, "transformFlags" | "flags" | "emitNode" | "original">> & {
-    flags: NodeFlags;
-    original?: Node;
-    transformFlags: TransformFlags;
-    emitNode: EmitNode | undefined;
-    data: Mutable<Omit<T, keyof Node>>;
+type NodeData<T extends Node> = Readonly<Omit<T, keyof Identifier>> & 
+     Mutable<Pick<T, Extract<keyof Identifier, keyof T>>> &
+{
+    data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> |  Exclude<keyof Identifier, 'localSymbol'>>>> | undefined;
 };
 /** @internal */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
@@ -1174,10 +1170,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
-        let pos = -1;
-        let end = -1;
-        let transformFlags;
-        if (elements !== undefined && isNodeArray(elements)) {
+        if (elements === undefined || elements === emptyArray) {
+            elements = [];
+        }
+        else if (isNodeArray(elements)) {
             if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
                 // Ensure the transform flags have been aggregated for this NodeArray
                 if (elements.transformFlags === undefined) {
@@ -1190,47 +1186,42 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
             // array with the same elements, text range, and transform flags but with the updated
             // value for `hasTrailingComma`
-            pos = elements.pos;
-            end = elements.end;
-            transformFlags = elements.transformFlags;
-            elements = elements.slice();
-        } 
-        else if (elements === undefined || elements === emptyArray || elements.length === 0) {
-            // Ensure we have an object array
-            elements = createEmptyObjectArray();
+            const array = elements.slice() as MutableNodeArray<T>;
+            array.pos = elements.pos;
+            array.end = elements.end;
+            array.hasTrailingComma = hasTrailingComma;
+            array.transformFlags = elements.transformFlags;
+            Debug.attachNodeArrayDebugInfo(array);
+            return array;
         }
 
-        const array = elements as MutableNodeArray<T>;
-        array.pos = pos;
-        array.end = end;
+        // Since the element list of a node array is typically created by starting with an empty array and
+        // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
+        // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
+        const length = elements.length;
+        const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
+        array.pos = -1;
+        array.end = -1;
         array.hasTrailingComma = !!hasTrailingComma;
-        if(transformFlags === undefined) {
-            array.transformFlags = TransformFlags.None;
-            aggregateChildrenFlags(array);
-        }
-        else {
-            array.transformFlags = transformFlags;
-        }
+        array.transformFlags = TransformFlags.None;
+        aggregateChildrenFlags(array);
         Debug.attachNodeArrayDebugInfo(array);
         return array;
     }
 
     function createBaseNode<T extends Node>(kind: T["kind"]) {
-        return baseFactory.createBaseNode(kind) as NodeData<T>;
+        return baseFactory.createBaseNode(kind) as any as NodeData<T>;
     }
 
     function createBaseDeclaration<T extends Declaration>(kind: T["kind"]) {
         const node = createBaseNode(kind);
-        const nodeData = node.data;
-        nodeData.symbol = undefined!; // initialized by binder
-        nodeData.localSymbol = undefined; // initialized by binder
         return node;
     }
 
     function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: T, original: T) {
         if (updated !== original) {
             // copy children used for quick info
-            (updated as unknown as NodeData<T>).data.typeArguments = original.typeArguments;
+            (updated as unknown as NodeData<SignatureDeclarationBase>).data!.typeArguments = original.typeArguments!;
         }
         return update(updated, original);
     }
@@ -1244,9 +1235,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const text = typeof value === "number" ? value + "" : value;
         Debug.assert(text.charCodeAt(0) !== CharacterCodes.minus, "Negative numbers should be created in combination with createPrefixUnaryExpression");
         const node = createBaseDeclaration<NumericLiteral>(SyntaxKind.NumericLiteral);
-        const nodeData = node.data;
-        nodeData.text = text;
-        nodeData.numericLiteralFlags = numericLiteralFlags;
+        node.data = {
+            numericLiteralFlags: numericLiteralFlags,
+            hasExtendedUnicodeEscape: false,
+            isUnterminated: false,
+            text: text,
+            // localSymbol: undefined!
+        }
         if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
     }
@@ -1254,38 +1249,49 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
         const node = createBaseToken<BigIntLiteral>(SyntaxKind.BigIntLiteral);
-        node.data.text = typeof value === "string" ? value : pseudoBigIntToString(value) + "n";
+        node.data = {
+            hasExtendedUnicodeEscape: false,
+            isUnterminated: false,
+            text: typeof value === "string" ? value : pseudoBigIntToString(value) + "n",
+        };
         node.transformFlags |= TransformFlags.ContainsES2020;
         return node;
     }
 
     function createBaseStringLiteral(text: string, isSingleQuote?: boolean) {
-        const node = createBaseDeclaration<StringLiteral>(SyntaxKind.StringLiteral);
-        const nodeData = node.data;
-        nodeData.text = text;
-        nodeData.singleQuote = isSingleQuote;
-        return node;
+        return createBaseDeclaration<StringLiteral>(SyntaxKind.StringLiteral);
     }
 
     // @api
     function createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean): StringLiteral {
         const node = createBaseStringLiteral(text, isSingleQuote);
-        node.data.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+        node.data = {
+            hasExtendedUnicodeEscape: !!hasExtendedUnicodeEscape, 
+            singleQuote: !!isSingleQuote,
+            // isUnterminated: false,
+            text,
+            // textSourceNode: undefined!,
+            // localSymbol: undefined!,
+        };
         if (hasExtendedUnicodeEscape) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
     }
 
     // @api
     function createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier): StringLiteral {
-        const node = createBaseStringLiteral(getTextOfIdentifierOrLiteral(sourceNode), /*isSingleQuote*/ undefined);
-        node.data.textSourceNode = sourceNode;
+        const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode), /*isSingleQuote*/ undefined, /*hasExtendedUnicodeEscape*/ undefined) as NodeData<StringLiteral>;
+        node.data!.textSourceNode = sourceNode;
         return node;
     }
 
     // @api
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral {
-        const node = createBaseNode<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral);
-        node.data.text = text;
+        const node = createBaseToken<RegularExpressionLiteral>(SyntaxKind.RegularExpressionLiteral);
+        node.data = { 
+            hasExtendedUnicodeEscape: false,
+            isUnterminated: false,
+            text,
+        };
         return node;
     }
 
@@ -1314,12 +1320,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createBaseIdentifier(escapedText: __String) {
-        const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as NodeData<Identifier>;
-        const nodeData = node.data;
-        nodeData.escapedText = escapedText;
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.symbol = undefined!; // initialized by checker
+        const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
+        node.escapedText = escapedText;
         return node;
     }
 
@@ -1400,7 +1402,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBasePrivateIdentifier(escapedText: __String) {
         const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as NodeData<PrivateIdentifier>;
-        node.data.escapedText = escapedText;
+        node.escapedText = escapedText;
         node.transformFlags |= TransformFlags.ContainsClassFields;
         return node;
     }
@@ -1447,7 +1449,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createBaseToken<T extends Node>(kind: T["kind"]) {
-        return baseFactory.createBaseTokenNode(kind) as NodeData<T>;
+        return baseFactory.createBaseTokenNode(kind) as any as NodeData<T>;
     }
 
     // @api
@@ -1468,28 +1470,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
         Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
         Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
-
-        if (token === SyntaxKind.EndOfFileToken) {
-            const node = createBaseNode<EndOfFileToken>(token);
-            node.data.jsDoc = undefined;
-            return node;
-        }
-        if (token === SyntaxKind.ThisKeyword) {
-            const node = createBaseNode<ThisExpression>(token);
-            // 'this' indicates a lexical 'this'
-            node.transformFlags = TransformFlags.ContainsLexicalThis;
-            (node as NodeData<Token<SyntaxKind.ThisKeyword>> as NodeData<ThisExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
-            return node;
-        }
-
-        if (token === SyntaxKind.SuperKeyword) {
-            const node = createBaseNode<SuperExpression>(token);
-
-            node.transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
-            (node as NodeData<Token<SyntaxKind.SuperKeyword>> as NodeData<SuperExpression>).data.flowNode = undefined; // initialized by binder (FlowContainer)
-            return node;
-        }
-
         const node = createBaseToken<Token<TKind>>(token);
         let transformFlags = TransformFlags.None;
         switch (token) {
@@ -1526,11 +1506,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                 transformFlags = TransformFlags.ContainsTypeScript;
                 break;
+            case SyntaxKind.SuperKeyword:
+                transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+                (node as NodeData<Token<SyntaxKind.SuperKeyword>> as NodeData<SuperExpression>).flowNode = undefined; // initialized by binder (FlowContainer)
+                break;
             case SyntaxKind.StaticKeyword:
                 transformFlags = TransformFlags.ContainsES2015;
                 break;
             case SyntaxKind.AccessorKeyword:
                 transformFlags = TransformFlags.ContainsClassFields;
+                break;
+            case SyntaxKind.ThisKeyword:
+                // 'this' indicates a lexical 'this'
+                transformFlags = TransformFlags.ContainsLexicalThis;
+                (node as NodeData<Token<SyntaxKind.ThisKeyword>> as NodeData<ThisExpression>).flowNode = undefined; // initialized by binder (FlowContainer)
                 break;
         }
         if (transformFlags) {
@@ -1605,13 +1594,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createQualifiedName(left: EntityName, right: string | Identifier) {
         const node = createBaseNode<QualifiedName>(SyntaxKind.QualifiedName);
-        const nodeData = node.data;
-        nodeData.left = left;
-        nodeData.right = asName(right);
+        const nodeData = node.data = {
+            left: left,
+            right: asName(right),
+        };
         node.transformFlags |= propagateChildFlags(nodeData.left) |
             propagateIdentifierNameFlags(nodeData.right);
 
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -1626,7 +1616,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createComputedPropertyName(expression: Expression) {
         const node = createBaseNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
-        node.data.expression = parenthesizerRules().parenthesizeExpressionOfComputedPropertyName(expression);
+        node.data = {
+            expression: parenthesizerRules().parenthesizeExpressionOfComputedPropertyName(expression),
+        };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsComputedPropertyName;
@@ -1647,15 +1639,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
         const node = createBaseDeclaration<TypeParameterDeclaration>(SyntaxKind.TypeParameter);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.constraint = constraint;
-        nodeData.default = defaultType;
         node.transformFlags = TransformFlags.ContainsTypeScript;
-
-        nodeData.expression = undefined; // initialized by parser to report grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        node.data = {
+            modifiers : asNodeArray(modifiers),
+            name : asName(name),
+            constraint : constraint,
+            default : defaultType,
+            expression : undefined, // initialized by parser to report grammar errors
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1679,13 +1672,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         initializer?: Expression,
     ) {
         const node = createBaseDeclaration<ParameterDeclaration>(SyntaxKind.Parameter);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.dotDotDotToken = dotDotDotToken;
-        nodeData.name = asName(name);
-        nodeData.questionToken = questionToken;
-        nodeData.type = type;
-        nodeData.initializer = asInitializer(initializer);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            dotDotDotToken: dotDotDotToken,
+            name: asName(name),
+            questionToken: questionToken,
+            type: type,
+            initializer: asInitializer(initializer),
+            // localSymbol: undefined
+        }
 
         if (isThisIdentifier(nodeData.name)) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1701,7 +1696,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 (modifiersToFlags(nodeData.modifiers) & ModifierFlags.ParameterPropertyModifier ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None);
         }
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1728,7 +1723,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createDecorator(expression: Expression) {
         const node = createBaseNode<Decorator>(SyntaxKind.Decorator);
-        node.data.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
+        node.data = {
+            expression: parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false),
+        };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsTypeScript |
             TransformFlags.ContainsTypeScriptClassSyntax |
@@ -1755,15 +1752,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode | undefined,
     ) {
         const node = createBaseDeclaration<PropertySignature>(SyntaxKind.PropertySignature);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.type = type;
-        nodeData.questionToken = questionToken;
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            type: type,
+            questionToken: questionToken,
+            initializer: undefined, // initialized by parser to report grammar errors
+            localSymbol: undefined,
+        };
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        nodeData.initializer = undefined; // initialized by parser to report grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1786,7 +1785,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdatePropertySignature(updated: NodeData<PropertySignature>, original: PropertySignature) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.initializer = original.initializer;
+            updated.data!.initializer = original.initializer;
         }
         return update(updated, original);
     }
@@ -1800,13 +1799,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         initializer: Expression | undefined,
     ) {
         const node = createBaseDeclaration<PropertyDeclaration>(SyntaxKind.PropertyDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.questionToken = questionOrExclamationToken && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
-        nodeData.exclamationToken = questionOrExclamationToken && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
-        nodeData.type = type;
-        nodeData.initializer = asInitializer(initializer);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            questionToken: questionOrExclamationToken && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined,
+            exclamationToken: questionOrExclamationToken && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined,
+            type: type,
+            initializer: asInitializer(initializer),
+        }
 
         const isAmbient = node.flags & NodeFlags.Ambient || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient;
 
@@ -1817,7 +1817,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (isComputedPropertyName(nodeData.name) || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Static && nodeData.initializer ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None) |
             TransformFlags.ContainsClassFields;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1850,19 +1850,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode | undefined,
     ) {
         const node = createBaseDeclaration<MethodSignature>(SyntaxKind.MethodSignature);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.questionToken = questionToken;
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
-
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            questionToken: questionToken,
+            typeParameters: asNodeArray(typeParameters),
+            parameters: asNodeArray(parameters),
+            type: type,
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1898,17 +1899,25 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block | undefined,
     ) {
         const node = createBaseDeclaration<MethodDeclaration>(SyntaxKind.MethodDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.asteriskToken = asteriskToken;
-        nodeData.name = asName(name);
-        nodeData.questionToken = questionToken;
-        nodeData.exclamationToken = undefined; // initialized by parser for grammar errors
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
-        nodeData.body = body;
-
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            asteriskToken: asteriskToken,
+            name: asName(name),
+            questionToken: questionToken,
+            exclamationToken: undefined, // initialized by parser for grammar errors
+            typeParameters: asNodeArray(typeParameters),
+            parameters: createNodeArray(parameters),
+            type: type,
+            body: body,
+            typeArguments: undefined, // used in quick inf,
+            locals: undefined, // initialized by binder (LocalsContainer,
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         if (!nodeData.body) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -1933,13 +1942,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 TransformFlags.ContainsES2015;
         }
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -1970,7 +1972,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateMethodDeclaration(updated: NodeData<MethodDeclaration>, original: MethodDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.exclamationToken = original.exclamationToken;
+            updated.data!.exclamationToken = original.exclamationToken;
         }
         return update(updated, original);
     }
@@ -1980,16 +1982,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block,
     ) {
         const node = createBaseDeclaration<ClassStaticBlockDeclaration>(SyntaxKind.ClassStaticBlockDeclaration);
-        const nodeData = node.data;
-        nodeData.body = body;
         node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
-
-        nodeData.modifiers = undefined; // initialized by parser for grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
+        node.data = {
+            body: body,
+            modifiers: undefined, // initialized by parser for grammar errors
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            name: undefined,
+            // localSymbol: undefined
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2006,7 +2010,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateClassStaticBlockDeclaration(updated: NodeData<ClassStaticBlockDeclaration>, original: ClassStaticBlockDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.modifiers = original.modifiers;
+            updated.data!.modifiers = original.modifiers;
         }
         return update(updated, original);
     }
@@ -2018,24 +2022,30 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block | undefined,
     ) {
         const node = createBaseDeclaration<ConstructorDeclaration>(SyntaxKind.Constructor);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.body = body;
-
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            parameters: createNodeArray(parameters),
+            body: body,
+            typeParameters: undefined, // initialized by parser for grammar errors
+            type: undefined, // initialized by parser for grammar errors
+            typeArguments: undefined, // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            localSymbol: undefined,
+            // asteriskToken: undefined,
+            // exclamationToken: undefined,
+            // name: undefined,
+            // questionToken: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        
         node.transformFlags = propagateChildrenFlags(nodeData.modifiers) |
             propagateChildrenFlags(nodeData.parameters) |
             (propagateChildFlags(nodeData.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
             TransformFlags.ContainsES2015;
 
-        nodeData.typeParameters = undefined; // initialized by parser for grammar errors
-        nodeData.type = undefined; // initialized by parser for grammar errors
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -2055,8 +2065,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function finishUpdateConstructorDeclaration(updated: NodeData<ConstructorDeclaration>, original: ConstructorDeclaration) {
         if (updated !== original) {
-            updated.data.typeParameters = original.typeParameters;
-            updated.data.type = original.type;
+            updated.data!.typeParameters = original.typeParameters;
+            updated.data!.type = original.type;
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
     }
@@ -2070,12 +2080,25 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block | undefined,
     ) {
         const node = createBaseDeclaration<GetAccessorDeclaration>(SyntaxKind.GetAccessor);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
-        nodeData.body = body;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            parameters: createNodeArray(parameters),
+            type: type,
+            body: body,
+            typeArguments: undefined, // used in quick info,
+            typeParameters: undefined, // initialized by parser for grammar errors,
+            locals: undefined, // initialized by binder (LocalsContainer),
+            nextContainer: undefined, // initialized by binder (LocalsContainer),
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            // asteriskToken: undefined,
+            // exclamationToken: undefined,
+            localSymbol: undefined,
+            // questionToken: undefined
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         if (!nodeData.body) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -2089,14 +2112,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 (nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
         }
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.typeParameters = undefined; // initialized by parser for grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -2121,7 +2136,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateGetAccessorDeclaration(updated: NodeData<GetAccessorDeclaration>, original: GetAccessorDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.typeParameters = original.typeParameters;
+            updated.data!.typeParameters = original.typeParameters;
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
     }
@@ -2134,12 +2149,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block | undefined,
     ) {
         const node = createBaseDeclaration<SetAccessorDeclaration>(SyntaxKind.SetAccessor);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.body = body;
-
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            parameters: createNodeArray(parameters),
+            body: body,
+            typeArguments: undefined, // used in quick info
+            typeParameters: undefined, // initialized by parser for grammar errors
+            type: undefined, // initialized by parser for grammar errors
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            // asteriskToken: undefined,
+            // exclamationToken: undefined,
+            localSymbol: undefined,
+            // questionToken: undefined,
+        }
+        
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         if (!nodeData.body) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -2151,15 +2180,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 (nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
         }
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.typeParameters = undefined; // initialized by parser for grammar errors
-        nodeData.type = undefined; // initialized by parser for grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -2182,8 +2202,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateSetAccessorDeclaration(updated: NodeData<SetAccessorDeclaration>, original: SetAccessorDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.typeParameters = original.typeParameters;
-            updated.data.type = original.type;
+            updated.data!.typeParameters = original.typeParameters;
+            updated.data!.type = original.type;
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
     }
@@ -2195,16 +2215,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode | undefined,
     ): CallSignatureDeclaration {
         const node = createBaseDeclaration<CallSignatureDeclaration>(SyntaxKind.CallSignature);
-        const nodeData = node.data;
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            typeParameters: asNodeArray(typeParameters),
+            parameters: asNodeArray(parameters),
+            type: type,
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+            // questionToken: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2229,16 +2253,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode | undefined,
     ): ConstructSignatureDeclaration {
         const node = createBaseDeclaration<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature);
-        const nodeData = node.data;
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
-        node.transformFlags = TransformFlags.ContainsTypeScript;
-
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+        node.transformFlags = TransformFlags.ContainsTypeScript,
+        node.data = {
+            typeParameters: asNodeArray(typeParameters),
+            parameters: asNodeArray(parameters),
+            type: type,
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+            // questionToken: undefined
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2263,16 +2290,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode | undefined,
     ): IndexSignatureDeclaration {
         const node = createBaseDeclaration<IndexSignatureDeclaration>(SyntaxKind.IndexSignature);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type!; // TODO(rbuckton): We mark this as required in IndexSignatureDeclaration, but it looks like the parser allows it to be elided.
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            parameters: asNodeArray(parameters),
+            type: type!, // TODO(rbuckton): We mark this as required in IndexSignatureDeclaration, but it looks like the parser allows it to be elided.
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+            // questionToken: undefined,
+            // typeParameters: undefined
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2293,10 +2325,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail) {
         const node = createBaseNode<TemplateLiteralTypeSpan>(SyntaxKind.TemplateLiteralTypeSpan);
-        const nodeData = node.data;
-        nodeData.type = type;
-        nodeData.literal = literal;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            type: type,
+            literal: literal,
+        }
         return node;
     }
 
@@ -2320,11 +2353,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined) {
         const node = createBaseNode<TypePredicateNode>(SyntaxKind.TypePredicate);
-        const nodeData = node.data;
-        nodeData.assertsModifier = assertsModifier;
-        nodeData.parameterName = asName(parameterName);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            assertsModifier: assertsModifier,
+            parameterName: asName(parameterName),
+            type: type,
+        }
         return node;
     }
 
@@ -2340,10 +2374,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeReferenceNode(typeName: string | EntityName, typeArguments: readonly TypeNode[] | undefined) {
         const node = createBaseNode<TypeReferenceNode>(SyntaxKind.TypeReference);
-        const nodeData = node.data;
-        nodeData.typeName = asName(typeName);
-        nodeData.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(createNodeArray(typeArguments));
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            typeName: asName(typeName),
+            typeArguments: typeArguments && parenthesizerRules().parenthesizeTypeArguments(createNodeArray(typeArguments)),
+        };
         return node;
     }
 
@@ -2362,17 +2397,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode,
     ) {
         const node = createBaseDeclaration<FunctionTypeNode>(SyntaxKind.FunctionType);
-        const nodeData = node.data;
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            typeParameters: asNodeArray(typeParameters),
+            parameters: asNodeArray(parameters),
+            type: type,
 
-        nodeData.modifiers = undefined; // initialized by parser for grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+            modifiers: undefined, // initialized by parser for grammar errors
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+        }
+
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2393,7 +2432,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateFunctionTypeNode(updated: NodeData<FunctionTypeNode>, original: FunctionTypeNode) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.modifiers = original.modifiers;
+            updated.data!.modifiers = original.modifiers;
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
     }
@@ -2412,17 +2451,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode,
     ): ConstructorTypeNode {
         const node = createBaseDeclaration<ConstructorTypeNode>(SyntaxKind.ConstructorType);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            typeParameters: asNodeArray(typeParameters),
+            parameters: asNodeArray(parameters),
+            type: type,
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2470,10 +2512,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]) {
         const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
-        const nodeData = node.data;
-        nodeData.exprName = exprName;
-        nodeData.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            exprName: exprName,
+            typeArguments: typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments),
+        }
         return node;
     }
 
@@ -2488,8 +2531,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeLiteralNode(members: readonly TypeElement[] | undefined) {
         const node = createBaseDeclaration<TypeLiteralNode>(SyntaxKind.TypeLiteral);
-        node.data.members = createNodeArray(members);
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            members: createNodeArray(members),
+            localSymbol: undefined,
+        }
         return node;
     }
 
@@ -2503,8 +2549,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createArrayTypeNode(elementType: TypeNode) {
         const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
-        node.data.elementType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(elementType);
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            elementType: parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(elementType),
+        }
         return node;
     }
 
@@ -2518,8 +2566,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
         const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
-        node.data.elements = createNodeArray(parenthesizerRules().parenthesizeElementTypesOfTupleType(elements));
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            elements: createNodeArray(parenthesizerRules().parenthesizeElementTypesOfTupleType(elements)),
+        }
         return node;
     }
 
@@ -2533,14 +2583,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
         const node = createBaseDeclaration<NamedTupleMember>(SyntaxKind.NamedTupleMember);
-        const nodeData = node.data;
-        nodeData.dotDotDotToken = dotDotDotToken;
-        nodeData.name = name;
-        nodeData.questionToken = questionToken;
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            dotDotDotToken: dotDotDotToken,
+            name: name,
+            questionToken: questionToken,
+            type: type,
+            localSymbol: undefined,
+        };
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2557,7 +2609,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createOptionalTypeNode(type: TypeNode) {
         const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
-        node.data.type = parenthesizerRules().parenthesizeTypeOfOptionalType(type);
+        node.data = {
+            type: parenthesizerRules().parenthesizeTypeOfOptionalType(type),
+        }
         node.transformFlags = TransformFlags.ContainsTypeScript;
         return node;
     }
@@ -2572,8 +2626,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createRestTypeNode(type: TypeNode) {
         const node = createBaseNode<RestTypeNode>(SyntaxKind.RestType);
-        node.data.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = { type: type };
         return node;
     }
 
@@ -2586,8 +2640,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[], parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]) {
         const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
-        node.data.types = factory.createNodeArray(parenthesize(types));
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            types: factory.createNodeArray(parenthesize(types)),
+        }
         return node;
     }
 
@@ -2620,15 +2676,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
         const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
-        const nodeData = node.data;
-        nodeData.checkType = parenthesizerRules().parenthesizeCheckTypeOfConditionalType(checkType);
-        nodeData.extendsType = parenthesizerRules().parenthesizeExtendsTypeOfConditionalType(extendsType);
-        nodeData.trueType = trueType;
-        nodeData.falseType = falseType;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            checkType: parenthesizerRules().parenthesizeCheckTypeOfConditionalType(checkType),
+            extendsType: parenthesizerRules().parenthesizeExtendsTypeOfConditionalType(extendsType),
+            trueType: trueType,
+            falseType: falseType,
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
         return node;
     }
 
@@ -2645,7 +2702,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
         const node = createBaseNode<InferTypeNode>(SyntaxKind.InferType);
-        node.data.typeParameter = typeParameter;
+        node.data = { typeParameter: typeParameter }
         node.transformFlags = TransformFlags.ContainsTypeScript;
         return node;
     }
@@ -2660,10 +2717,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
         const node = createBaseNode<TemplateLiteralTypeNode>(SyntaxKind.TemplateLiteralType);
-        const nodeData = node.data;
-        nodeData.head = head;
-        nodeData.templateSpans = createNodeArray(templateSpans);
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            head: head,
+            templateSpans: createNodeArray(templateSpans),
+        }
         return node;
     }
 
@@ -2684,16 +2742,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isTypeOf = false,
     ): ImportTypeNode {
         const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
-        const nodeData = node.data;
-        nodeData.argument = argument;
-        nodeData.attributes = attributes;
-        if (nodeData.assertions && nodeData.assertions.assertClause && nodeData.attributes) {
-            (nodeData.assertions as NodeData<ImportTypeAssertionContainer>).data.assertClause = nodeData.attributes;
-        }
-        nodeData.qualifier = qualifier;
-        nodeData.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
-        nodeData.isTypeOf = isTypeOf;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        const nodeData = node.data = {
+            argument: argument,
+            attributes: attributes,
+            qualifier: qualifier,
+            typeArguments: typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments),
+            isTypeOf: isTypeOf,
+        }
+
+        // dragomirtitian: Seems unused
+        // if (nodeData.assertions && nodeData.assertions.assertClause && nodeData.attributes) {
+        //     (nodeData.assertions as NodeData<ImportTypeAssertionContainer>).data.assertClause = nodeData.attributes;
+        // }
         return node;
     }
 
@@ -2718,7 +2779,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createParenthesizedType(type: TypeNode) {
         const node = createBaseNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
-        node.data.type = type;
+        node.data = { type: type }
         node.transformFlags = TransformFlags.ContainsTypeScript;
         return node;
     }
@@ -2740,12 +2801,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
         const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
-        const nodeData = node.data;
-        nodeData.operator = operator;
-        nodeData.type = operator === SyntaxKind.ReadonlyKeyword ?
-            parenthesizerRules().parenthesizeOperandOfReadonlyTypeOperator(type) :
-            parenthesizerRules().parenthesizeOperandOfTypeOperator(type);
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            operator: operator,
+            type: operator === SyntaxKind.ReadonlyKeyword ?
+                parenthesizerRules().parenthesizeOperandOfReadonlyTypeOperator(type) :
+                parenthesizerRules().parenthesizeOperandOfTypeOperator(type),
+        }
         return node;
     }
 
@@ -2759,10 +2821,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
         const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
-        const nodeData = node.data;
-        nodeData.objectType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(objectType);
-        nodeData.indexType = indexType;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            objectType: parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(objectType),
+            indexType: indexType,
+        }
         return node;
     }
 
@@ -2777,17 +2840,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
         const node = createBaseDeclaration<MappedTypeNode>(SyntaxKind.MappedType);
-        const nodeData = node.data;
-        nodeData.readonlyToken = readonlyToken;
-        nodeData.typeParameter = typeParameter;
-        nodeData.nameType = nameType;
-        nodeData.questionToken = questionToken;
-        nodeData.type = type;
-        nodeData.members = members && createNodeArray(members);
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+        node.data = {
+            readonlyToken: readonlyToken,
+            typeParameter: typeParameter,
+            nameType: nameType,
+            questionToken: questionToken,
+            type: type,
+            members: members && createNodeArray(members),
+
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            localSymbol: undefined,
+        }
         return node;
     }
 
@@ -2806,7 +2872,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createBaseNode<LiteralTypeNode>(SyntaxKind.LiteralType);
-        node.data.literal = literal;
+        node.data = { literal: literal }
         node.transformFlags = TransformFlags.ContainsTypeScript;
         return node;
     }
@@ -2825,7 +2891,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createObjectBindingPattern(elements: readonly BindingElement[]) {
         const node = createBaseNode<ObjectBindingPattern>(SyntaxKind.ObjectBindingPattern);
-        node.data.elements = createNodeArray(elements);
+        node.data = { elements: createNodeArray(elements) }
         node.transformFlags |= propagateChildrenFlags(node.elements) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsBindingPattern;
@@ -2846,7 +2912,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createArrayBindingPattern(elements: readonly ArrayBindingElement[]) {
         const node = createBaseNode<ArrayBindingPattern>(SyntaxKind.ArrayBindingPattern);
-        node.data.elements = createNodeArray(elements);
+        node.data = { elements: createNodeArray(elements) }
         node.transformFlags |= propagateChildrenFlags(node.elements) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsBindingPattern;
@@ -2863,11 +2929,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression) {
         const node = createBaseDeclaration<BindingElement>(SyntaxKind.BindingElement);
-        const nodeData = node.data;
-        nodeData.dotDotDotToken = dotDotDotToken;
-        nodeData.propertyName = asName(propertyName);
-        nodeData.name = asName(name);
-        nodeData.initializer = asInitializer(initializer);
+        const nodeData = node.data = {
+            dotDotDotToken: dotDotDotToken,
+            propertyName: asName(propertyName),
+            name: asName(name),
+            initializer: asInitializer(initializer),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.dotDotDotToken) |
             propagateNameFlags(nodeData.propertyName) |
             propagateNameFlags(nodeData.name) |
@@ -2875,7 +2943,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (nodeData.dotDotDotToken ? TransformFlags.ContainsRestOrSpread : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -2901,9 +2969,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         // a trailing comma.
         const lastElement = elements && lastOrUndefined(elements);
         const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
-        const nodeData = node.data;
-        nodeData.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
-        nodeData.multiLine = multiLine;
+        const nodeData = node.data = {
+            elements: parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray),
+            multiLine: multiLine,
+        };
         node.transformFlags |= propagateChildrenFlags(node.elements);
         return node;
     }
@@ -2918,12 +2987,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean) {
         const node = createBaseDeclaration<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression);
-        const nodeData = node.data;
-        nodeData.properties = createNodeArray(properties);
-        nodeData.multiLine = multiLine;
+        node.data = {
+            properties: createNodeArray(properties),
+            multiLine: multiLine,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildrenFlags(node.properties);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2936,18 +3007,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBasePropertyAccessExpression(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, name: MemberName) {
         const node = createBaseDeclaration<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.questionDotToken = questionDotToken;
-        nodeData.name = name;
+        const nodeData = node.data = {
+            expression: expression,
+            questionDotToken: questionDotToken,
+            name: name,
+            localSymbol: undefined,
+        };
         node.transformFlags = propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
             (isIdentifier(nodeData.name) ?
                 propagateIdentifierNameFlags(nodeData.name) :
                 propagateChildFlags(nodeData.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3004,16 +3077,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBaseElementAccessExpression(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression) {
         const node = createBaseDeclaration<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.questionDotToken = questionDotToken;
-        nodeData.argumentExpression = argumentExpression;
+        const nodeData = node.data = {
+            expression: expression,
+            questionDotToken: questionDotToken,
+            argumentExpression: argumentExpression,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
             propagateChildFlags(nodeData.argumentExpression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3070,11 +3145,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBaseCallExpression(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, typeArguments: NodeArray<TypeNode> | undefined, argumentsArray: NodeArray<Expression>) {
         const node = createBaseDeclaration<CallExpression>(SyntaxKind.CallExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.questionDotToken = questionDotToken;
-        nodeData.typeArguments = typeArguments;
-        nodeData.arguments = argumentsArray;
+        const nodeData = node.data = {
+            expression: expression,
+            questionDotToken: questionDotToken,
+            typeArguments: typeArguments,
+            arguments: argumentsArray,
+            localSymbol: undefined,
+        }
+
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
             propagateChildrenFlags(nodeData.typeArguments) |
@@ -3141,10 +3219,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
         const node = createBaseDeclaration<NewExpression>(SyntaxKind.NewExpression);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionOfNew(expression);
-        nodeData.typeArguments = asNodeArray(typeArguments);
-        nodeData.arguments = argumentsArray ? parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(argumentsArray) : undefined;
+        const nodeData = node.data = {
+            expression: parenthesizerRules().parenthesizeExpressionOfNew(expression),
+            typeArguments: asNodeArray(typeArguments),
+            arguments: argumentsArray ? parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(argumentsArray) : undefined,
+            localSymbol: undefined,
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildrenFlags(nodeData.typeArguments) |
             propagateChildrenFlags(nodeData.arguments) |
@@ -3167,10 +3247,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
         const node = createBaseNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
-        const nodeData = node.data;
-        nodeData.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag, /*optionalChain*/ false);
-        nodeData.typeArguments = asNodeArray(typeArguments);
-        nodeData.template = template;
+        const nodeData = node.data = {
+            tag: parenthesizerRules().parenthesizeLeftSideOfAccess(tag, /*optionalChain*/ false),
+            typeArguments: asNodeArray(typeArguments),
+            template: template,
+            // questionDotToken: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.tag) |
             propagateChildrenFlags(nodeData.typeArguments) |
             propagateChildFlags(nodeData.template) |
@@ -3196,9 +3278,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeAssertion(type: TypeNode, expression: Expression) {
         const node = createBaseNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
-        nodeData.type = type;
+        node.data = {
+            expression: parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression),
+            type: type,
+        };
         node.transformFlags |= propagateChildFlags(node.expression) |
             propagateChildFlags(node.type) |
             TransformFlags.ContainsTypeScript;
@@ -3216,11 +3299,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createParenthesizedExpression(expression: Expression) {
         const node = createBaseNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
+        node.data = { expression };
         node.transformFlags = propagateChildFlags(node.expression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3242,14 +3324,27 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block,
     ) {
         const node = createBaseDeclaration<FunctionExpression>(SyntaxKind.FunctionExpression);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.asteriskToken = asteriskToken;
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
-        nodeData.body = body;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            asteriskToken: asteriskToken,
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            parameters: createNodeArray(parameters),
+            type: type,
+            body: body,
+            
+            typeArguments: undefined, // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            // exclamationToken: undefined,
+            localSymbol: undefined,
+            // questionToken: undefined,
+        }
+
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         const isAsync = modifiersToFlags(nodeData.modifiers) & ModifierFlags.Async;
         const isGenerator = !!nodeData.asteriskToken;
@@ -3269,13 +3364,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (nodeData.typeParameters || nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -3311,13 +3399,27 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: ConciseBody,
     ) {
         const node = createBaseDeclaration<ArrowFunction>(SyntaxKind.ArrowFunction);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
-        nodeData.equalsGreaterThanToken = equalsGreaterThanToken ?? createToken(SyntaxKind.EqualsGreaterThanToken);
-        nodeData.body = parenthesizerRules().parenthesizeConciseBodyOfArrowFunction(body);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            typeParameters: asNodeArray(typeParameters),
+            parameters: createNodeArray(parameters),
+            type: type,
+            equalsGreaterThanToken: equalsGreaterThanToken ?? createToken(SyntaxKind.EqualsGreaterThanToken),
+            body: parenthesizerRules().parenthesizeConciseBodyOfArrowFunction(body),
+
+            typeArguments: undefined, // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            // asteriskToken: undefined,
+            // exclamationToken: undefined,
+            localSymbol: undefined,
+            // name: undefined,
+            // questionToken: undefined
+        };
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
 
         const isAsync = modifiersToFlags(nodeData.modifiers) & ModifierFlags.Async;
 
@@ -3331,13 +3433,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (isAsync ? TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -3364,8 +3459,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createDeleteExpression(expression: Expression) {
         const node = createBaseNode<DeleteExpression>(SyntaxKind.DeleteExpression);
-        node.data.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
         node.transformFlags |= propagateChildFlags(node.expression);
+        node.data = { expression: parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression) }
         return node;
     }
 
@@ -3379,7 +3474,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTypeOfExpression(expression: Expression) {
         const node = createBaseNode<TypeOfExpression>(SyntaxKind.TypeOfExpression);
-        node.data.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
+        node.data = { expression:parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression) };
         node.transformFlags |= propagateChildFlags(node.expression);
         return node;
     }
@@ -3394,7 +3489,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createVoidExpression(expression: Expression) {
         const node = createBaseNode<VoidExpression>(SyntaxKind.VoidExpression);
-        node.data.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
+        node.data = { expression: parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression) }
         node.transformFlags |= propagateChildFlags(node.expression);
         return node;
     }
@@ -3409,7 +3504,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createAwaitExpression(expression: Expression) {
         const node = createBaseNode<AwaitExpression>(SyntaxKind.AwaitExpression);
-        node.data.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
+        node.data = { expression: parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression) };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2017 |
             TransformFlags.ContainsES2018 |
@@ -3427,10 +3522,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createPrefixUnaryExpression(operator: PrefixUnaryOperator, operand: Expression) {
         const node = createBaseNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
-        const nodeData = node.data;
-        nodeData.operator = operator;
-        nodeData.operand = parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand);
         node.transformFlags |= propagateChildFlags(node.operand);
+        node.data = {
+            operator: operator,
+            operand: parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand),
+        }
         // Only set this flag for non-generated identifiers and non-"local" names. See the
         // comment in `visitPreOrPostfixUnaryExpression` in module.ts
         if (
@@ -3454,9 +3550,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator) {
         const node = createBaseNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
-        const nodeData = node.data;
-        nodeData.operator = operator;
-        nodeData.operand = parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand);
+        node.data = {
+            operator: operator,
+            operand: parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand),
+        };
         node.transformFlags |= propagateChildFlags(node.operand);
         // Only set this flag for non-generated identifiers and non-"local" names. See the
         // comment in `visitPreOrPostfixUnaryExpression` in module.ts
@@ -3482,10 +3579,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseDeclaration<BinaryExpression>(SyntaxKind.BinaryExpression);
         const operatorToken = asToken(operator);
         const operatorKind = operatorToken.kind;
-        const nodeData = node.data;
-        nodeData.left = parenthesizerRules().parenthesizeLeftSideOfBinary(operatorKind, left);
-        nodeData.operatorToken = operatorToken;
-        nodeData.right = parenthesizerRules().parenthesizeRightSideOfBinary(operatorKind, node.left, right);
+        node.data = {
+            left: parenthesizerRules().parenthesizeLeftSideOfBinary(operatorKind, left),
+            operatorToken: operatorToken,
+            right: parenthesizerRules().parenthesizeRightSideOfBinary(operatorKind, node.left, right),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(node.left) |
             propagateChildFlags(node.operatorToken) |
             propagateChildFlags(node.right);
@@ -3515,7 +3614,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             node.transformFlags |= TransformFlags.ContainsPrivateIdentifierInExpression;
         }
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3535,12 +3634,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createConditionalExpression(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression) {
         const node = createBaseNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
-        const nodeData = node.data;
-        nodeData.condition = parenthesizerRules().parenthesizeConditionOfConditionalExpression(condition);
-        nodeData.questionToken = questionToken ?? createToken(SyntaxKind.QuestionToken);
-        nodeData.whenTrue = parenthesizerRules().parenthesizeBranchOfConditionalExpression(whenTrue);
-        nodeData.colonToken = colonToken ?? createToken(SyntaxKind.ColonToken);
-        nodeData.whenFalse = parenthesizerRules().parenthesizeBranchOfConditionalExpression(whenFalse);
+        const nodeData = node.data = {
+            condition: parenthesizerRules().parenthesizeConditionOfConditionalExpression(condition),
+            questionToken: questionToken ?? createToken(SyntaxKind.QuestionToken),
+            whenTrue: parenthesizerRules().parenthesizeBranchOfConditionalExpression(whenTrue),
+            colonToken: colonToken ?? createToken(SyntaxKind.ColonToken),
+            whenFalse: parenthesizerRules().parenthesizeBranchOfConditionalExpression(whenFalse),
+        }
         node.transformFlags |= propagateChildFlags(nodeData.condition) |
             propagateChildFlags(nodeData.questionToken) |
             propagateChildFlags(nodeData.whenTrue) |
@@ -3570,9 +3670,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]) {
         const node = createBaseNode<TemplateExpression>(SyntaxKind.TemplateExpression);
-        const nodeData = node.data;
-        nodeData.head = head;
-        nodeData.templateSpans = createNodeArray(templateSpans);
+        node.data = {
+            head: head,
+            templateSpans: createNodeArray(templateSpans),
+        }
         node.transformFlags |= propagateChildFlags(node.head) |
             propagateChildrenFlags(node.templateSpans) |
             TransformFlags.ContainsES2015;
@@ -3622,21 +3723,27 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //       the underlying nodes they create. To avoid polymorphism due to two different node shapes, these
     //       functions are intentionally duplicated.
     function createTemplateLiteralLikeToken(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
-        const node = createBaseNode<TemplateLiteralLikeNode>(kind);
-        const nodeData = node.data;
-        nodeData.text = text;
-        nodeData.rawText = rawText;
-        nodeData.templateFlags = templateFlags! & TokenFlags.TemplateLiteralLikeFlags;
+        const node = createBaseToken<TemplateLiteralLikeNode>(kind);
+        const nodeData = node.data = {
+            // hasExtendedUnicodeEscape: false,
+            // isUnterminated: false,
+            text: text,
+            rawText: rawText,
+            templateFlags: templateFlags! & TokenFlags.TemplateLiteralLikeFlags,
+        }
         node.transformFlags = getTransformFlagsOfTemplateLiteralLike(nodeData.templateFlags);
         return node;
     }
 
     function createTemplateLiteralLikeDeclaration(kind: SyntaxKind.NoSubstitutionTemplateLiteral, text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
         const node = createBaseDeclaration<NoSubstitutionTemplateLiteral>(kind);
-        const nodeData = node.data;
-        nodeData.text = text;
-        nodeData.rawText = rawText;
-        nodeData.templateFlags = templateFlags! & TokenFlags.TemplateLiteralLikeFlags;
+        const nodeData = node.data = {
+            // hasExtendedUnicodeEscape: false,
+            // isUnterminated: false,
+            text: text,
+            rawText: rawText,
+            templateFlags: templateFlags! & TokenFlags.TemplateLiteralLikeFlags,
+        }
         node.transformFlags = getTransformFlagsOfTemplateLiteralLike(nodeData.templateFlags);
         return node;
     }
@@ -3677,9 +3784,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createYieldExpression(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
         Debug.assert(!asteriskToken || !!expression, "A `YieldExpression` with an asteriskToken must have an expression.");
         const node = createBaseNode<YieldExpression>(SyntaxKind.YieldExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression && parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
-        nodeData.asteriskToken = asteriskToken;
+        const nodeData = node.data = {
+            expression: expression && parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
+            asteriskToken: asteriskToken,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.asteriskToken) |
             TransformFlags.ContainsES2015 |
@@ -3699,7 +3807,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSpreadElement(expression: Expression) {
         const node = createBaseNode<SpreadElement>(SyntaxKind.SpreadElement);
-        node.data.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
+        node.data = { expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression) };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsRestOrSpread;
@@ -3722,12 +3830,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         members: readonly ClassElement[],
     ) {
         const node = createBaseDeclaration<ClassExpression>(SyntaxKind.ClassExpression);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.heritageClauses = asNodeArray(heritageClauses);
-        nodeData.members = createNodeArray(members);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            heritageClauses: asNodeArray(heritageClauses),
+            members: createNodeArray(members),
+            // localSymbol: undefined.
+        }
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateNameFlags(nodeData.name) |
             propagateChildrenFlags(nodeData.typeParameters) |
@@ -3736,7 +3846,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (nodeData.typeParameters ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3766,9 +3876,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
         const node = createBaseNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
-        nodeData.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
+        const nodeData = node.data = {
+            expression: parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false),
+            typeArguments: typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments),
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildrenFlags(nodeData.typeArguments) |
             TransformFlags.ContainsES2015;
@@ -3786,9 +3897,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createAsExpression(expression: Expression, type: TypeNode) {
         const node = createBaseNode<AsExpression>(SyntaxKind.AsExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.type = type;
+        const nodeData = node.data = {
+            expression: expression,
+            type: type,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.type) |
             TransformFlags.ContainsTypeScript;
@@ -3806,7 +3918,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNonNullExpression(expression: Expression) {
         const node = createBaseNode<NonNullExpression>(SyntaxKind.NonNullExpression);
-        node.data.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
+        node.data = { expression:  parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false) };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsTypeScript;
         return node;
@@ -3825,9 +3937,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSatisfiesExpression(expression: Expression, type: TypeNode) {
         const node = createBaseNode<SatisfiesExpression>(SyntaxKind.SatisfiesExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.type = type;
+        const nodeData = node.data = {
+            expression: expression,
+            type: type,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.type) |
             TransformFlags.ContainsTypeScript;
@@ -3846,7 +3959,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createNonNullChain(expression: Expression) {
         const node = createBaseNode<NonNullChain>(SyntaxKind.NonNullExpression);
         node.flags |= NodeFlags.OptionalChain;
-        node.data.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
+        node.data = { expression: parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true) }
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsTypeScript;
         return node;
@@ -3863,9 +3976,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier) {
         const node = createBaseNode<MetaProperty>(SyntaxKind.MetaProperty);
-        const nodeData = node.data;
-        nodeData.keywordToken = keywordToken;
-        nodeData.name = name;
+        const nodeData = node.data = {
+            keywordToken: keywordToken,
+            name: name,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.name);
         switch (keywordToken) {
             case SyntaxKind.NewKeyword:
@@ -3878,7 +3992,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 return Debug.assertNever(keywordToken);
         }
 
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3896,9 +4010,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail) {
         const node = createBaseNode<TemplateSpan>(SyntaxKind.TemplateSpan);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.literal = literal;
+        const nodeData = node.data = {
+            expression: expression,
+            literal: literal,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.literal) |
             TransformFlags.ContainsES2015;
@@ -3927,14 +4042,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBlock(statements: readonly Statement[], multiLine?: boolean): Block {
         const node = createBaseNode<Block>(SyntaxKind.Block);
-        const nodeData = node.data;
-        nodeData.statements = createNodeArray(statements);
-        nodeData.multiLine = multiLine;
+        const nodeData = node.data = {
+            statements: createNodeArray(statements),
+            multiLine: multiLine,
+            
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+        
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         node.transformFlags |= propagateChildrenFlags(nodeData.statements);
-
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -3948,17 +4065,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createVariableStatement(modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
         const node = createBaseNode<VariableStatement>(SyntaxKind.VariableStatement);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            declarationList: isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateChildFlags(nodeData.declarationList);
+        
         if (modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3973,19 +4093,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createEmptyStatement() {
         const node = createBaseNode<EmptyStatement>(SyntaxKind.EmptyStatement);
-        node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
     // @api
     function createExpressionStatement(expression: Expression): ExpressionStatement {
         const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
+        const nodeData = node.data = { expression: parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression) }
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3999,16 +4118,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createIfStatement(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = createBaseNode<IfStatement>(SyntaxKind.IfStatement);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.thenStatement = asEmbeddedStatement(thenStatement);
-        nodeData.elseStatement = asEmbeddedStatement(elseStatement);
+        const nodeData = node.data = {
+            expression: expression,
+            thenStatement: asEmbeddedStatement(thenStatement),
+            elseStatement: asEmbeddedStatement(elseStatement),
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.thenStatement) |
             propagateChildFlags(nodeData.elseStatement);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4024,14 +4144,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createDoStatement(statement: Statement, expression: Expression) {
         const node = createBaseNode<DoStatement>(SyntaxKind.DoStatement);
-        const nodeData = node.data;
-        nodeData.statement = asEmbeddedStatement(statement);
-        nodeData.expression = expression;
+        const nodeData = node.data = {
+            statement: asEmbeddedStatement(statement),
+            expression: expression,
+        };
         node.transformFlags |= propagateChildFlags(nodeData.statement) |
             propagateChildFlags(nodeData.expression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4046,14 +4167,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createWhileStatement(expression: Expression, statement: Statement) {
         const node = createBaseNode<WhileStatement>(SyntaxKind.WhileStatement);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.statement = asEmbeddedStatement(statement);
+        const nodeData = node.data = {
+            expression: expression,
+            statement: asEmbeddedStatement(statement),
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4068,20 +4190,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createForStatement(initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
         const node = createBaseNode<ForStatement>(SyntaxKind.ForStatement);
-        const nodeData = node.data;
-        nodeData.initializer = initializer;
-        nodeData.condition = condition;
-        nodeData.incrementor = incrementor;
-        nodeData.statement = asEmbeddedStatement(statement);
+        const nodeData = node.data  = {
+            initializer: initializer,
+            condition: condition,
+            incrementor: incrementor,
+            statement: asEmbeddedStatement(statement),
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+
         node.transformFlags |= propagateChildFlags(nodeData.initializer) |
             propagateChildFlags(nodeData.condition) |
             propagateChildFlags(nodeData.incrementor) |
             propagateChildFlags(nodeData.statement);
-
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4098,18 +4221,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createForInStatement(initializer: ForInitializer, expression: Expression, statement: Statement) {
         const node = createBaseNode<ForInStatement>(SyntaxKind.ForInStatement);
-        const nodeData = node.data;
-        nodeData.initializer = initializer;
-        nodeData.expression = expression;
-        nodeData.statement = asEmbeddedStatement(statement);
+        
+        const nodeData = node.data = {
+            initializer: initializer,
+            expression: expression,
+            statement: asEmbeddedStatement(statement),
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         node.transformFlags |= propagateChildFlags(nodeData.initializer) |
             propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
-
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        
+        
         return node;
     }
 
@@ -4125,11 +4252,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createForOfStatement(awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
         const node = createBaseNode<ForOfStatement>(SyntaxKind.ForOfStatement);
-        const nodeData = node.data;
-        nodeData.awaitModifier = awaitModifier;
-        nodeData.initializer = initializer;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
-        nodeData.statement = asEmbeddedStatement(statement);
+        const nodeData = node.data = {
+            awaitModifier: awaitModifier,
+            initializer: initializer,
+            expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
+            statement: asEmbeddedStatement(statement),
+            
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        
         node.transformFlags |= propagateChildFlags(nodeData.awaitModifier) |
             propagateChildFlags(nodeData.initializer) |
             propagateChildFlags(nodeData.expression) |
@@ -4137,10 +4271,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             TransformFlags.ContainsES2015;
         if (awaitModifier) node.transformFlags |= TransformFlags.ContainsES2018;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4157,13 +4287,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createContinueStatement(label?: string | Identifier): ContinueStatement {
         const node = createBaseNode<ContinueStatement>(SyntaxKind.ContinueStatement);
-        const nodeData = node.data;
-        nodeData.label = asName(label);
+        const nodeData = node.data = { label: asName(label) };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4177,13 +4306,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBreakStatement(label?: string | Identifier): BreakStatement {
         const node = createBaseNode<BreakStatement>(SyntaxKind.BreakStatement);
-        const nodeData = node.data;
-        nodeData.label = asName(label);
+        const nodeData = node.data = { label: asName(label) }
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4197,15 +4325,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createReturnStatement(expression?: Expression): ReturnStatement {
         const node = createBaseNode<ReturnStatement>(SyntaxKind.ReturnStatement);
-        const nodeData = node.data;
-        nodeData.expression = expression;
+        const nodeData = node.data = { expression: expression };
         // return in an ES2018 async generator must be awaited
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4219,14 +4346,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createWithStatement(expression: Expression, statement: Statement) {
         const node = createBaseNode<WithStatement>(SyntaxKind.WithStatement);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.statement = asEmbeddedStatement(statement);
+        const nodeData = node.data = {
+            expression: expression,
+            statement: asEmbeddedStatement(statement),
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4241,15 +4369,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSwitchStatement(expression: Expression, caseBlock: CaseBlock): SwitchStatement {
         const node = createBaseNode<SwitchStatement>(SyntaxKind.SwitchStatement);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
-        nodeData.caseBlock = caseBlock;
+        const nodeData = node.data = {
+            possiblyExhaustive: false, // initialized by binder
+            expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
+            caseBlock: caseBlock,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.caseBlock);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        nodeData.possiblyExhaustive = false; // initialized by binder
         return node;
     }
 
@@ -4264,14 +4393,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createLabeledStatement(label: string | Identifier, statement: Statement) {
         const node = createBaseNode<LabeledStatement>(SyntaxKind.LabeledStatement);
-        const nodeData = node.data;
-        nodeData.label = asName(label);
-        nodeData.statement = asEmbeddedStatement(statement);
+        const nodeData = node.data = {
+            label: asName(label),
+            statement: asEmbeddedStatement(statement),
+        }
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             propagateChildFlags(nodeData.statement);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4286,12 +4416,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createThrowStatement(expression: Expression) {
         const node = createBaseNode<ThrowStatement>(SyntaxKind.ThrowStatement);
-        const nodeData = node.data;
-        nodeData.expression = expression;
+        const nodeData = node.data =  { expression: expression };
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4305,16 +4434,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createTryStatement(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined) {
         const node = createBaseNode<TryStatement>(SyntaxKind.TryStatement);
-        const nodeData = node.data;
-        nodeData.tryBlock = tryBlock;
-        nodeData.catchClause = catchClause;
-        nodeData.finallyBlock = finallyBlock;
+        const nodeData = node.data = {
+            tryBlock: tryBlock,
+            catchClause: catchClause,
+            finallyBlock: finallyBlock,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.tryBlock) |
             propagateChildFlags(nodeData.catchClause) |
             propagateChildFlags(nodeData.finallyBlock);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4332,24 +4462,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseNode<DebuggerStatement>(SyntaxKind.DebuggerStatement);
         const nodeData = node.data;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
     // @api
     function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         const node = createBaseDeclaration<VariableDeclaration>(SyntaxKind.VariableDeclaration);
-        const nodeData = node.data;
-        nodeData.name = asName(name);
-        nodeData.exclamationToken = exclamationToken;
-        nodeData.type = type;
-        nodeData.initializer = asInitializer(initializer);
+        const nodeData = node.data = {
+            name: asName(name),
+            exclamationToken: exclamationToken,
+            type: type,
+            initializer: asInitializer(initializer),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.initializer) |
             (nodeData.exclamationToken ?? nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4367,7 +4499,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags = NodeFlags.None) {
         const node = createBaseNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList);
         node.flags |= flags & NodeFlags.BlockScoped;
-        node.data.declarations = createNodeArray(declarations);
+        node.data = { declarations: createNodeArray(declarations) }
         node.transformFlags |= propagateChildrenFlags(node.declarations) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
         if (flags & NodeFlags.BlockScoped) {
@@ -4398,15 +4530,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         body: Block | undefined,
     ) {
         const node = createBaseDeclaration<FunctionDeclaration>(SyntaxKind.FunctionDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.asteriskToken = asteriskToken;
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
-        nodeData.body = body;
-
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            asteriskToken: asteriskToken,
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            parameters: createNodeArray(parameters),
+            type: type,
+            body: body,
+            
+            typeArguments: undefined, // used in quick info
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+            returnFlowNode: undefined,
+            // exclamationToken: undefined,
+            localSymbol: undefined,
+            // questionToken: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+        
         if (!nodeData.body || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -4430,12 +4573,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 TransformFlags.ContainsHoistedDeclarationOrCompletion;
         }
 
-        nodeData.typeArguments = undefined; // used in quick info
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.endFlowNode = undefined;
-        nodeData.returnFlowNode = undefined;
         return node;
     }
 
@@ -4465,7 +4602,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (updated !== original) {
             // copy children used only for error reporting
             if (updated.modifiers === original.modifiers) {
-                updated.data.modifiers = original.modifiers;
+                updated.data!.modifiers = original.modifiers;
             }
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
@@ -4480,12 +4617,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         members: readonly ClassElement[],
     ) {
         const node = createBaseDeclaration<ClassDeclaration>(SyntaxKind.ClassDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.heritageClauses = asNodeArray(heritageClauses);
-        nodeData.members = createNodeArray(members);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            heritageClauses: asNodeArray(heritageClauses),
+            members: createNodeArray(members),
+            localSymbol: undefined,
+        }
 
         if (modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -4503,7 +4642,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             }
         }
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4534,15 +4673,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         members: readonly TypeElement[],
     ) {
         const node = createBaseDeclaration<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.heritageClauses = asNodeArray(heritageClauses);
-        nodeData.members = createNodeArray(members);
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            heritageClauses: asNodeArray(heritageClauses),
+            members: createNodeArray(members),
+            localSymbol: undefined,
+        }
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4572,16 +4713,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         type: TypeNode,
     ) {
         const node = createBaseDeclaration<TypeAliasDeclaration>(SyntaxKind.TypeAliasDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.type = type;
         node.transformFlags = TransformFlags.ContainsTypeScript;
+        node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            typeParameters: asNodeArray(typeParameters),
+            type: type,
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4608,17 +4751,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         members: readonly EnumMember[],
     ) {
         const node = createBaseDeclaration<EnumDeclaration>(SyntaxKind.EnumDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.members = createNodeArray(members);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            members: createNodeArray(members),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateChildFlags(nodeData.name) |
             propagateChildrenFlags(nodeData.members) |
             TransformFlags.ContainsTypeScript;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4644,11 +4789,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         flags = NodeFlags.None,
     ) {
         const node = createBaseDeclaration<ModuleDeclaration>(SyntaxKind.ModuleDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
         node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
-        nodeData.name = name;
-        nodeData.body = body;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: name,
+            body: body,
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         if (modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -4660,9 +4810,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Module declarations cannot contain `await`.
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -4683,11 +4830,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createModuleBlock(statements: readonly Statement[]) {
         const node = createBaseNode<ModuleBlock>(SyntaxKind.ModuleBlock);
-        const nodeData = node.data;
-        nodeData.statements = createNodeArray(statements);
+        const nodeData = node.data = { statements: createNodeArray(statements) }
         node.transformFlags |= propagateChildrenFlags(nodeData.statements);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4701,12 +4847,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock {
         const node = createBaseNode<CaseBlock>(SyntaxKind.CaseBlock);
-        const nodeData = node.data;
-        nodeData.clauses = createNodeArray(clauses);
+        const nodeData = node.data = {
+            clauses: createNodeArray(clauses),
+            
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+
         node.transformFlags |= propagateChildrenFlags(nodeData.clauses);
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -4720,13 +4869,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamespaceExportDeclaration(name: string | Identifier) {
         const node = createBaseDeclaration<NamespaceExportDeclaration>(SyntaxKind.NamespaceExportDeclaration);
-        const nodeData = node.data;
-        nodeData.name = asName(name);
+        const nodeData = node.data = {
+            name: asName(name),
+            modifiers: undefined, // initialized by parser to report grammar errors
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateIdentifierNameFlags(nodeData.name) |
             TransformFlags.ContainsTypeScript;
 
-        nodeData.modifiers = undefined; // initialized by parser to report grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4740,7 +4891,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateNamespaceExportDeclaration(updated: NodeData<NamespaceExportDeclaration>, original: NamespaceExportDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.modifiers = original.modifiers;
+            updated.data!.modifiers = original.modifiers;
         }
         return update(updated, original);
     }
@@ -4753,11 +4904,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         moduleReference: ModuleReference,
     ) {
         const node = createBaseDeclaration<ImportEqualsDeclaration>(SyntaxKind.ImportEqualsDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.name = asName(name);
-        nodeData.isTypeOnly = isTypeOnly;
-        nodeData.moduleReference = moduleReference;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            name: asName(name),
+            isTypeOnly: isTypeOnly,
+            moduleReference: moduleReference,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateIdentifierNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.moduleReference);
@@ -4768,7 +4921,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4796,16 +4949,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         attributes: ImportAttributes | undefined,
     ): ImportDeclaration {
         const node = createBaseNode<ImportDeclaration>(SyntaxKind.ImportDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.importClause = importClause;
-        nodeData.moduleSpecifier = moduleSpecifier;
-        nodeData.attributes = nodeData.assertClause = attributes;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            importClause: importClause,
+            moduleSpecifier: moduleSpecifier,
+            attributes: attributes,
+            assertClause: attributes,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.importClause) |
             propagateChildFlags(nodeData.moduleSpecifier);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4828,10 +4983,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = createBaseDeclaration<ImportClause>(SyntaxKind.ImportClause);
-        const nodeData = node.data;
-        nodeData.isTypeOnly = isTypeOnly;
-        nodeData.name = name;
-        nodeData.namedBindings = namedBindings;
+        const nodeData = node.data = {
+            isTypeOnly: isTypeOnly,
+            name: name,
+            namedBindings: namedBindings,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.name) |
             propagateChildFlags(nodeData.namedBindings);
         if (isTypeOnly) {
@@ -4853,10 +5010,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createAssertClause(elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
         const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
-        const nodeData = node.data;
-        nodeData.elements = createNodeArray(elements);
-        nodeData.multiLine = multiLine;
-        nodeData.token = SyntaxKind.AssertKeyword;
+        node.data = {
+            elements: createNodeArray(elements),
+            multiLine: multiLine,
+            token: SyntaxKind.AssertKeyword,
+        }
         node.transformFlags |= TransformFlags.ContainsESNext;
         return node;
     }
@@ -4872,9 +5030,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createAssertEntry(name: AssertionKey, value: Expression): AssertEntry {
         const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.value = value;
+        node.data = {
+            name: name,
+            value: value,
+        }
         node.transformFlags |= TransformFlags.ContainsESNext;
         return node;
     }
@@ -4890,9 +5049,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
         const node = createBaseNode<ImportTypeAssertionContainer>(SyntaxKind.ImportTypeAssertionContainer);
-        const nodeData = node.data;
-        nodeData.assertClause = clause;
-        nodeData.multiLine = multiLine;
+        node.data = {
+            assertClause: clause,
+            multiLine: multiLine,
+        }
         return node;
     }
 
@@ -4909,10 +5069,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes;
     function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes {
         const node = createBaseNode<ImportAttributes>(SyntaxKind.ImportAttributes);
-        const nodeData = node.data;
-        nodeData.token = token ?? SyntaxKind.WithKeyword;
-        nodeData.elements = createNodeArray(elements);
-        nodeData.multiLine = multiLine;
+        node.data = {
+            token: token ?? SyntaxKind.WithKeyword,
+            elements: createNodeArray(elements),
+            multiLine: multiLine,
+        }
         node.transformFlags |= TransformFlags.ContainsESNext;
         return node;
     }
@@ -4928,9 +5089,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute {
         const node = createBaseNode<ImportAttribute>(SyntaxKind.ImportAttribute);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.value = value;
+        node.data = {
+            name: name,
+            value: value,
+        }
         node.transformFlags |= TransformFlags.ContainsESNext;
         return node;
     }
@@ -4946,7 +5108,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamespaceImport(name: Identifier): NamespaceImport {
         const node = createBaseDeclaration<NamespaceImport>(SyntaxKind.NamespaceImport);
-        node.data.name = name;
+        node.data = { 
+            name: name,
+            // localSymbol: undefined
+        };
         node.transformFlags |= propagateChildFlags(node.name);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -4962,7 +5127,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamespaceExport(name: ModuleExportName): NamespaceExport {
         const node = createBaseDeclaration<NamespaceExport>(SyntaxKind.NamespaceExport);
-        node.data.name = name;
+        node.data = { 
+            name: name,
+            // localSymbol: undefined
+        };
         node.transformFlags |= propagateChildFlags(node.name) |
             TransformFlags.ContainsES2020;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -4979,7 +5147,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamedImports(elements: readonly ImportSpecifier[]): NamedImports {
         const node = createBaseNode<NamedImports>(SyntaxKind.NamedImports);
-        node.data.elements = createNodeArray(elements);
+        node.data = { elements: createNodeArray(elements) };
         node.transformFlags |= propagateChildrenFlags(node.elements);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -4995,10 +5163,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier) {
         const node = createBaseDeclaration<ImportSpecifier>(SyntaxKind.ImportSpecifier);
-        const nodeData = node.data;
-        nodeData.isTypeOnly = isTypeOnly;
-        nodeData.propertyName = propertyName;
-        nodeData.name = name;
+        const nodeData = node.data = {
+            isTypeOnly: isTypeOnly,
+            propertyName: propertyName,
+            name: name,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.propertyName) |
             propagateChildFlags(nodeData.name);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -5021,16 +5191,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         expression: Expression,
     ) {
         const node = createBaseDeclaration<ExportAssignment>(SyntaxKind.ExportAssignment);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.isExportEquals = isExportEquals;
-        nodeData.expression = isExportEquals
-            ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
-            : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            isExportEquals: isExportEquals,
+            expression: isExportEquals
+                ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
+                : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression),
+            localSymbol: undefined,
+            // name: undefined,
+        }
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) | propagateChildFlags(nodeData.expression);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5055,18 +5228,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         attributes?: ImportAttributes,
     ) {
         const node = createBaseDeclaration<ExportDeclaration>(SyntaxKind.ExportDeclaration);
-        const nodeData = node.data;
-        nodeData.modifiers = asNodeArray(modifiers);
-        nodeData.isTypeOnly = isTypeOnly;
-        nodeData.exportClause = exportClause;
-        nodeData.moduleSpecifier = moduleSpecifier;
-        nodeData.attributes = nodeData.assertClause = attributes;
+        const nodeData = node.data = {
+            modifiers: asNodeArray(modifiers),
+            isTypeOnly: isTypeOnly,
+            exportClause: exportClause,
+            moduleSpecifier: moduleSpecifier,
+            attributes: attributes,
+            assertClause: attributes,
+            localSymbol: undefined,
+            // name: undefined,
+        }
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateChildFlags(nodeData.exportClause) |
             propagateChildFlags(nodeData.moduleSpecifier);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5092,7 +5269,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (updated !== original) {
             // copy children used only for error reporting
             if (updated.modifiers === original.modifiers) {
-                updated.data.modifiers = original.modifiers;
+                updated.data!.modifiers = original.modifiers;
             }
         }
         return update(updated, original);
@@ -5101,7 +5278,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createNamedExports(elements: readonly ExportSpecifier[]) {
         const node = createBaseNode<NamedExports>(SyntaxKind.NamedExports);
-        node.data.elements = createNodeArray(elements);
+        node.data = { elements: createNodeArray(elements) }
         node.transformFlags |= propagateChildrenFlags(node.elements);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -5117,15 +5294,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createExportSpecifier(isTypeOnly: boolean, propertyName: string | ModuleExportName | undefined, name: string | ModuleExportName) {
         const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
-        const nodeData = node.data;
-        nodeData.isTypeOnly = isTypeOnly;
-        nodeData.propertyName = asName(propertyName);
-        nodeData.name = asName(name);
+        const nodeData = node.data = {
+            isTypeOnly: isTypeOnly,
+            propertyName: asName(propertyName),
+            name: asName(name),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.propertyName) |
             propagateChildFlags(nodeData.name);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5142,7 +5321,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createMissingDeclaration(): MissingDeclaration {
         const node = createBaseDeclaration<MissingDeclaration>(SyntaxKind.MissingDeclaration);
 
-        node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5153,7 +5332,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createExternalModuleReference(expression: Expression) {
         const node = createBaseNode<ExternalModuleReference>(SyntaxKind.ExternalModuleReference);
-        node.data.expression = expression;
+        node.data = { expression: expression };
         node.transformFlags |= propagateChildFlags(node.expression);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -5185,7 +5364,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             kind,
             postfix ? type && parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(type) : type,
         );
-        (node as unknown as NodeData<T>).data.postfix = postfix;
+        (node as unknown as NodeData<JSDocType & { postfix: boolean; }>).data!.postfix = postfix;
         return node;
     }
 
@@ -5195,7 +5374,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocNamepathType
     function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
         const node = createBaseNode<T>(kind);
-        node.data.type = type;
+        node.data = { type: type, postfix: undefined } as any;
         return node as unknown as T;
     }
 
@@ -5221,16 +5400,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocFunctionType(parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
         const node = createBaseDeclaration<JSDocFunctionType>(SyntaxKind.JSDocFunctionType);
-        const nodeData = node.data;
-        nodeData.parameters = asNodeArray(parameters);
-        nodeData.type = type;
+        const nodeData = node.data = {
+            parameters: asNodeArray(parameters),
+            type: type,
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            typeArguments: undefined, // used in quick info
+            localSymbol: undefined,
+            // name: undefined,
+            // typeParameters: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         node.transformFlags = propagateChildrenFlags(nodeData.parameters) |
             (nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.typeArguments = undefined; // used in quick info
         return node;
     }
 
@@ -5245,9 +5428,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType = false): JSDocTypeLiteral {
         const node = createBaseDeclaration<JSDocTypeLiteral>(SyntaxKind.JSDocTypeLiteral);
-        const nodeData = node.data;
-        nodeData.jsDocPropertyTags = asNodeArray(propertyTags);
-        nodeData.isArrayType = isArrayType;
+        const nodeData = node.data = {
+            jsDocPropertyTags: asNodeArray(propertyTags),
+            isArrayType: isArrayType,
+        }
         return node;
     }
 
@@ -5262,7 +5446,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
         const node = createBaseNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression);
-        node.data.type = type;
+        node.data = { type: type };
         return node;
     }
 
@@ -5276,14 +5460,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature {
         const node = createBaseDeclaration<JSDocSignature>(SyntaxKind.JSDocSignature);
-        const nodeData = node.data;
-        nodeData.typeParameters = asNodeArray(typeParameters);
-        nodeData.parameters = createNodeArray(parameters);
-        nodeData.type = type;
+        node.data  ={
+            typeParameters: asNodeArray(typeParameters),
+            parameters: createNodeArray(parameters),
+            type: type,
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5306,26 +5491,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined) {
         const node = createBaseNode<T>(kind);
-        const nodeData = node.data;
-        nodeData.tagName = tagName;
-        nodeData.comment = comment;
-        return node;
-    }
-
-    function createBaseJSDocTagDeclaration<T extends JSDocTag & Declaration>(kind: T["kind"], tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined) {
-        const node = createBaseDeclaration<T>(kind);
-        const nodeData = node.data;
-        nodeData.tagName = tagName;
-        nodeData.comment = comment;
+        node.data = {
+            tagName: tagName,
+            comment: comment,
+        } as NodeData<JSDocTag>['data'] as NodeData<T>['data']
         return node;
     }
 
     // @api
     function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag {
-        const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName ?? createIdentifier("template"), comment);
-        const nodeData = node.data;
-        nodeData.constraint = constraint;
-        nodeData.typeParameters = createNodeArray(typeParameters);
+        const node = createBaseNode<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag);
+        node.data = {
+            tagName: tagName ?? createIdentifier("template"), 
+            comment,
+            constraint: constraint,
+            typeParameters: createNodeArray(typeParameters),
+        }
         return node;
     }
 
@@ -5341,14 +5522,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocTypedefTag {
-        const node = createBaseJSDocTagDeclaration<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName ?? createIdentifier("typedef"), comment);
-        const nodeData = node.data;
-        nodeData.typeExpression = typeExpression;
-        nodeData.fullName = fullName;
-        nodeData.name = getJSDocTypeAliasName(fullName);
+        const node = createBaseNode<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag);
+        node.data = {
+            tagName: tagName ?? createIdentifier("typedef"),
+            comment,
+            typeExpression: typeExpression,
+            fullName: fullName,
+            name: getJSDocTypeAliasName(fullName),
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            localSymbol: undefined,
+        }
         return node;
     }
 
@@ -5364,12 +5549,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocParameterTag {
-        const node = createBaseJSDocTagDeclaration<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
-        const nodeData = node.data;
-        nodeData.typeExpression = typeExpression;
-        nodeData.name = name;
-        nodeData.isNameFirst = !!isNameFirst;
-        nodeData.isBracketed = isBracketed;
+        const node = createBaseNode<JSDocParameterTag>(SyntaxKind.JSDocParameterTag);
+        node.data = {
+            isNameFirst: !!isNameFirst,
+            isBracketed: isBracketed,
+            name: name,
+            typeExpression: typeExpression,
+            tagName: tagName ?? createIdentifier("param"), 
+            comment,
+            localSymbol: undefined,
+        }
         return node;
     }
 
@@ -5387,12 +5576,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocPropertyTag {
-        const node = createBaseJSDocTagDeclaration<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
-        const nodeData = node.data;
-        nodeData.typeExpression = typeExpression;
-        nodeData.name = name;
-        nodeData.isNameFirst = !!isNameFirst;
-        nodeData.isBracketed = isBracketed;
+        const node = createBaseNode<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag);
+        node.data = {
+            isBracketed: isBracketed,
+            isNameFirst: !!isNameFirst,
+            tagName: tagName ?? createIdentifier("prop"), 
+            comment,
+            name: name,
+            typeExpression: typeExpression,
+            localSymbol: undefined,
+        }
         return node;
     }
 
@@ -5410,14 +5603,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag {
-        const node = createBaseJSDocTagDeclaration<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName ?? createIdentifier("callback"), comment);
-        const nodeData = node.data;
-        nodeData.typeExpression = typeExpression;
-        nodeData.fullName = fullName;
-        nodeData.name = getJSDocTypeAliasName(fullName);
+        const node = createBaseNode<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag);
+        node.data = {
+            tagName: tagName ?? createIdentifier("callback"), 
+            comment,
+            typeExpression: typeExpression,
+            fullName: fullName,
+            name: getJSDocTypeAliasName(fullName),
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
         return node;
     }
 
@@ -5433,8 +5629,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag {
-        const node = createBaseJSDocTag<JSDocOverloadTag>(SyntaxKind.JSDocOverloadTag, tagName ?? createIdentifier("overload"), comment);
-        node.data.typeExpression = typeExpression;
+        const node = createBaseNode<JSDocOverloadTag>(SyntaxKind.JSDocOverloadTag);
+        node.data = { tagName: tagName ?? createIdentifier("overload"), comment, typeExpression: typeExpression };
         return node;
     }
 
@@ -5449,8 +5645,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag {
-        const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
-        node.data.class = className;
+        const node = createBaseNode<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag);
+        node.data = {
+            tagName: tagName ?? createIdentifier("augments"),
+            comment,
+            class:className,
+        }
         return node;
     }
 
@@ -5465,15 +5665,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag {
-        const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
-        node.data.class = className;
+        const node = createBaseNode<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag);
+        node.data = { tagName: tagName ?? createIdentifier("implements"), comment, class: className };
         return node;
     }
 
     // @api
     function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
-        const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
-        node.data.name = name;
+        const node = createBaseNode<JSDocSeeTag>(SyntaxKind.JSDocSeeTag);
+        node.data = { tagName: tagName ?? createIdentifier("see"), comment, name: name };
         return node;
     }
 
@@ -5489,7 +5689,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocNameReference(name: EntityName | JSDocMemberName): JSDocNameReference {
         const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
-        node.data.name = name;
+        node.data = { name: name };
         return node;
     }
 
@@ -5503,9 +5703,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier) {
         const node = createBaseNode<JSDocMemberName>(SyntaxKind.JSDocMemberName);
-        const nodeData = node.data;
-        nodeData.left = left;
-        nodeData.right = right;
+        const nodeData = node.data = {
+            left: left,
+            right: right,
+        }
         node.transformFlags |= propagateChildFlags(node.left) |
             propagateChildFlags(node.right);
         return node;
@@ -5522,9 +5723,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
         const node = createBaseNode<JSDocLink>(SyntaxKind.JSDocLink);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.text = text;
+        node.data = {
+            name: name,
+            text: text,
+        }
         return node;
     }
 
@@ -5538,9 +5740,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
         const node = createBaseNode<JSDocLinkCode>(SyntaxKind.JSDocLinkCode);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.text = text;
+        node.data =  {
+            name: name,
+            text: text,
+        }
         return node;
     }
 
@@ -5554,9 +5757,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
         const node = createBaseNode<JSDocLinkPlain>(SyntaxKind.JSDocLinkPlain);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.text = text;
+        node.data =  {
+            name: name,
+            text: text,
+        }
         return node;
     }
 
@@ -5611,9 +5815,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocEnumTag
     // createJSDocSatisfiesTag
     function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
-        const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
-        node.data.typeExpression = typeExpression;
-        return node;
+        const node = createBaseNode<JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind);
+        node.data = {
+            tagName: tagName ?? createIdentifier(getDefaultTagNameForKind(kind)),
+            comment,
+            typeExpression: typeExpression,
+        }
+        return node as any as T;
     }
 
     // @api
@@ -5626,7 +5834,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
-            ? update(createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment), node as unknown as NodeData<T>)
+            ? update(createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment), node)
             : node;
     }
 
@@ -5646,12 +5854,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
-        const node = createBaseJSDocTagDeclaration<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName ?? createIdentifier(getDefaultTagNameForKind(SyntaxKind.JSDocEnumTag)), comment);
-        const nodeData = node.data;
-        nodeData.typeExpression = typeExpression;
+        const node = createBaseNode<JSDocEnumTag>(SyntaxKind.JSDocEnumTag);
+        const nodeData = node.data = {
+            tagName: tagName ?? createIdentifier(getDefaultTagNameForKind(SyntaxKind.JSDocEnumTag)), 
+            comment,
+            typeExpression: typeExpression,
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
         return node;
     }
 
@@ -5666,12 +5877,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
-        const node = createBaseJSDocTag<JSDocImportTag>(SyntaxKind.JSDocImportTag, tagName ?? createIdentifier("import"), comment);
-        const nodeData = node.data;
-        nodeData.importClause = importClause;
-        nodeData.moduleSpecifier = moduleSpecifier;
-        nodeData.attributes = attributes;
-        nodeData.comment = comment;
+        const node = createBaseNode<JSDocImportTag>(SyntaxKind.JSDocImportTag);
+        node.data = {
+            tagName: tagName ?? createIdentifier("import"), 
+            comment,
+            importClause: importClause,
+            moduleSpecifier: moduleSpecifier,
+            attributes: attributes,
+        }
         return node;
     }
 
@@ -5688,7 +5901,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocText(text: string): JSDocText {
         const node = createBaseNode<JSDocText>(SyntaxKind.JSDocText);
-        node.data.text = text;
+        node.data = { text: text };
         return node;
     }
 
@@ -5702,9 +5915,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined) {
         const node = createBaseNode<JSDoc>(SyntaxKind.JSDoc);
-        const nodeData = node.data;
-        nodeData.comment = comment;
-        nodeData.tags = asNodeArray(tags);
+        node.data = {
+            comment: comment,
+            tags: asNodeArray(tags),
+        }
         return node;
     }
 
@@ -5723,10 +5937,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement) {
         const node = createBaseNode<JsxElement>(SyntaxKind.JsxElement);
-        const nodeData = node.data;
-        nodeData.openingElement = openingElement;
-        nodeData.children = createNodeArray(children);
-        nodeData.closingElement = closingElement;
+        const nodeData = node.data = {
+            openingElement: openingElement,
+            children: createNodeArray(children),
+            closingElement: closingElement,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.openingElement) |
             propagateChildrenFlags(nodeData.children) |
             propagateChildFlags(nodeData.closingElement) |
@@ -5746,10 +5961,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
         const node = createBaseNode<JsxSelfClosingElement>(SyntaxKind.JsxSelfClosingElement);
-        const nodeData = node.data;
-        nodeData.tagName = tagName;
-        nodeData.typeArguments = asNodeArray(typeArguments);
-        nodeData.attributes = attributes;
+        const nodeData = node.data = {
+            tagName: tagName,
+            typeArguments: asNodeArray(typeArguments),
+            attributes: attributes,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.tagName) |
             propagateChildrenFlags(nodeData.typeArguments) |
             propagateChildFlags(nodeData.attributes) |
@@ -5772,10 +5988,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
         const node = createBaseNode<JsxOpeningElement>(SyntaxKind.JsxOpeningElement);
-        const nodeData = node.data;
-        nodeData.tagName = tagName;
-        nodeData.typeArguments = asNodeArray(typeArguments);
-        nodeData.attributes = attributes;
+        const nodeData = node.data = {
+            tagName: tagName,
+            typeArguments: asNodeArray(typeArguments),
+            attributes: attributes,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.tagName) |
             propagateChildrenFlags(nodeData.typeArguments) |
             propagateChildFlags(nodeData.attributes) |
@@ -5798,7 +6015,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxClosingElement(tagName: JsxTagNameExpression) {
         const node = createBaseNode<JsxClosingElement>(SyntaxKind.JsxClosingElement);
-        node.data.tagName = tagName;
+        node.data = { tagName: tagName }
         node.transformFlags |= propagateChildFlags(node.tagName) |
             TransformFlags.ContainsJsx;
         return node;
@@ -5814,10 +6031,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) {
         const node = createBaseNode<JsxFragment>(SyntaxKind.JsxFragment);
-        const nodeData = node.data;
-        nodeData.openingFragment = openingFragment;
-        nodeData.children = createNodeArray(children);
-        nodeData.closingFragment = closingFragment;
+        const nodeData = node.data = {
+            openingFragment: openingFragment,
+            children: createNodeArray(children),
+            closingFragment: closingFragment,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.openingFragment) |
             propagateChildrenFlags(nodeData.children) |
             propagateChildFlags(nodeData.closingFragment) |
@@ -5837,9 +6055,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
         const node = createBaseNode<JsxText>(SyntaxKind.JsxText);
-        const nodeData = node.data;
-        nodeData.text = text;
-        nodeData.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
+        node.data = {
+            // hasExtendedUnicodeEscape: false,
+            // isUnterminated: false,
+            text: text,
+            containsOnlyTriviaWhiteSpaces: !!containsOnlyTriviaWhiteSpaces,
+        }
         node.transformFlags |= TransformFlags.ContainsJsx;
         return node;
     }
@@ -5869,9 +6090,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
         const node = createBaseDeclaration<JsxAttribute>(SyntaxKind.JsxAttribute);
-        const nodeData = node.data;
-        nodeData.name = name;
-        nodeData.initializer = initializer;
+        node.data = {
+            name: name,
+            initializer: initializer,
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.initializer) |
             TransformFlags.ContainsJsx;
@@ -5889,7 +6112,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxAttributes(properties: readonly JsxAttributeLike[]) {
         const node = createBaseDeclaration<JsxAttributes>(SyntaxKind.JsxAttributes);
-        node.data.properties = createNodeArray(properties);
+        node.data = { properties: createNodeArray(properties) };
         node.transformFlags |= propagateChildrenFlags(node.properties) |
             TransformFlags.ContainsJsx;
         return node;
@@ -5905,7 +6128,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxSpreadAttribute(expression: Expression) {
         const node = createBaseNode<JsxSpreadAttribute>(SyntaxKind.JsxSpreadAttribute);
-        node.data.expression = expression;
+        node.data = { 
+            expression: expression,
+            localSymbol: undefined,
+            name: undefined
+        };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsJsx;
         return node;
@@ -5921,9 +6148,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined) {
         const node = createBaseNode<JsxExpression>(SyntaxKind.JsxExpression);
-        const nodeData = node.data;
-        nodeData.dotDotDotToken = dotDotDotToken;
-        nodeData.expression = expression;
+        const nodeData = node.data = {
+            dotDotDotToken: dotDotDotToken,
+            expression: expression,
+        }
         node.transformFlags |= propagateChildFlags(node.dotDotDotToken) |
             propagateChildFlags(node.expression) |
             TransformFlags.ContainsJsx;
@@ -5940,9 +6168,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createJsxNamespacedName(namespace: Identifier, name: Identifier) {
         const node = createBaseNode<JsxNamespacedName>(SyntaxKind.JsxNamespacedName);
-        const nodeData = node.data;
-        nodeData.namespace = namespace;
-        nodeData.name = name;
+        node.data = {
+            namespace: namespace,
+            name: name,
+        }
         node.transformFlags |= propagateChildFlags(node.namespace) |
             propagateChildFlags(node.name) |
             TransformFlags.ContainsJsx;
@@ -5964,13 +6193,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createCaseClause(expression: Expression, statements: readonly Statement[]) {
         const node = createBaseNode<CaseClause>(SyntaxKind.CaseClause);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
-        nodeData.statements = createNodeArray(statements);
+        const nodeData = node.data  = {
+            expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
+            statements: createNodeArray(statements),
+            // fallthroughFlowNode: undefined,
+        }
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildrenFlags(nodeData.statements);
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5985,7 +6216,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createDefaultClause(statements: readonly Statement[]) {
         const node = createBaseNode<DefaultClause>(SyntaxKind.DefaultClause);
-        node.data.statements = createNodeArray(statements);
+        node.data = { statements: createNodeArray(statements) };
         node.transformFlags = propagateChildrenFlags(node.statements);
         return node;
     }
@@ -6000,9 +6231,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]) {
         const node = createBaseNode<HeritageClause>(SyntaxKind.HeritageClause);
-        const nodeData = node.data;
-        nodeData.token = token;
-        nodeData.types = createNodeArray(types);
+        node.data = {
+            token: token,
+            types: createNodeArray(types),
+        }
         node.transformFlags |= propagateChildrenFlags(node.types);
         switch (token) {
             case SyntaxKind.ExtendsKeyword:
@@ -6027,16 +6259,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block) {
         const node = createBaseNode<CatchClause>(SyntaxKind.CatchClause);
-        const nodeData = node.data;
-        nodeData.variableDeclaration = asVariableDeclaration(variableDeclaration);
-        nodeData.block = block;
+        const nodeData = node.data = {
+            variableDeclaration: asVariableDeclaration(variableDeclaration),
+            block: block,
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+        }
 
         node.transformFlags |= propagateChildFlags(nodeData.variableDeclaration) |
             propagateChildFlags(nodeData.block) |
             (!variableDeclaration ? TransformFlags.ContainsES2019 : TransformFlags.None);
 
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -6055,16 +6288,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createPropertyAssignment(name: string | PropertyName, initializer: Expression) {
         const node = createBaseDeclaration<PropertyAssignment>(SyntaxKind.PropertyAssignment);
-        const nodeData = node.data;
-        nodeData.name = asName(name);
-        nodeData.initializer = parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer);
+        const nodeData = node.data = {
+            name: asName(name),
+            initializer: parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer),
+
+            modifiers: undefined ,// initialized by parser to report grammar errors
+            questionToken: undefined, // initialized by parser to report grammar errors
+            exclamationToken: undefined, // initialized by parser to report grammar errors
+            localSymbol: undefined,
+        }
+
         node.transformFlags |= propagateNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.initializer);
-
-        nodeData.modifiers = undefined; // initialized by parser to report grammar errors
-        nodeData.questionToken = undefined; // initialized by parser to report grammar errors
-        nodeData.exclamationToken = undefined; // initialized by parser to report grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6080,9 +6316,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         // copy children used only for error reporting
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.modifiers = original.modifiers;
-            updated.data.questionToken = original.questionToken;
-            updated.data.exclamationToken = original.exclamationToken;
+            updated.data!.modifiers = original.modifiers;
+            updated.data!.questionToken = original.questionToken;
+            updated.data!.exclamationToken = original.exclamationToken;
         }
         return update(updated, original);
     }
@@ -6090,18 +6326,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression) {
         const node = createBaseDeclaration<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment);
-        const nodeData = node.data;
-        nodeData.name = asName(name);
-        nodeData.objectAssignmentInitializer = objectAssignmentInitializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer);
+        const nodeData = node.data = {
+            name: asName(name),
+            objectAssignmentInitializer: objectAssignmentInitializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer),
+
+            equalsToken: undefined, // initialized by parser to report grammar errors
+            modifiers: undefined, // initialized by parser to report grammar errors
+            questionToken: undefined, // initialized by parser to report grammar errors
+            exclamationToken: undefined, // initialized by parser to report grammar errors
+            localSymbol: undefined,
+        }
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
+
+        
         node.transformFlags |= propagateIdentifierNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.objectAssignmentInitializer) |
             TransformFlags.ContainsES2015;
-
-        nodeData.equalsToken = undefined; // initialized by parser to report grammar errors
-        nodeData.modifiers = undefined; // initialized by parser to report grammar errors
-        nodeData.questionToken = undefined; // initialized by parser to report grammar errors
-        nodeData.exclamationToken = undefined; // initialized by parser to report grammar errors
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6116,10 +6356,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function finishUpdateShorthandPropertyAssignment(updated: NodeData<ShorthandPropertyAssignment>, original: ShorthandPropertyAssignment) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.data.modifiers = original.modifiers;
-            updated.data.questionToken = original.questionToken;
-            updated.data.exclamationToken = original.exclamationToken;
-            updated.data.equalsToken = original.equalsToken;
+            updated.data!.modifiers = original.modifiers;
+            updated.data!.questionToken = original.questionToken;
+            updated.data!.exclamationToken = original.exclamationToken;
+            updated.data!.equalsToken = original.equalsToken;
         }
         return update(updated, original);
     }
@@ -6127,13 +6367,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSpreadAssignment(expression: Expression) {
         const node = createBaseDeclaration<SpreadAssignment>(SyntaxKind.SpreadAssignment);
-        const nodeData = node.data;
-        nodeData.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
+        node.data =  { expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression) }
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsObjectRestOrSpread;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6151,14 +6390,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createEnumMember(name: string | PropertyName, initializer?: Expression) {
         const node = createBaseDeclaration<EnumMember>(SyntaxKind.EnumMember);
-        const nodeData = node.data;
-        nodeData.name = asName(name);
-        nodeData.initializer = initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer);
+        node.data = {
+            name: asName(name),
+            initializer: initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer),
+            localSymbol: undefined,
+        }
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.initializer) |
             TransformFlags.ContainsTypeScript;
 
-        nodeData.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6181,52 +6422,55 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         flags: NodeFlags,
     ) {
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as NodeData<SourceFile>;
-        const nodeData = node.data;
-        nodeData.statements = createNodeArray(statements);
-        nodeData.endOfFileToken = endOfFileToken;
-        node.flags |= flags;
-        nodeData.text = "";
-        nodeData.fileName = "";
-        nodeData.path = "" as Path;
-        nodeData.resolvedPath = "" as Path;
-        nodeData.originalFileName = "";
-        nodeData.languageVersion = ScriptTarget.ES5;
-        nodeData.languageVariant = 0;
-        nodeData.scriptKind = 0;
-        nodeData.isDeclarationFile = false;
-        nodeData.hasNoDefaultLib = false;
+        node.flags = flags;
 
+        const nodeData = node.data = {
+            statements: createNodeArray(statements),
+            endOfFileToken: endOfFileToken,
+            text: "",
+            fileName: "",
+            path: "" as Path,
+            resolvedPath: "" as Path,
+            originalFileName: "",
+            languageVersion: ScriptTarget.ES5,
+            languageVariant: 0,
+            scriptKind: 0,
+            isDeclarationFile: false,
+            hasNoDefaultLib: false,
+
+
+            locals: undefined, // initialized by binder (LocalsContainer)
+            nextContainer: undefined, // initialized by binder (LocalsContainer)
+            endFlowNode: undefined,
+
+            nodeCount: 0,
+            identifierCount: 0,
+            symbolCount: 0,
+            parseDiagnostics: undefined!,
+            bindDiagnostics: undefined!,
+            bindSuggestionDiagnostics: undefined,
+            lineMap: undefined!,
+            externalModuleIndicator: undefined,
+            setExternalModuleIndicator: undefined,
+            pragmas: undefined!,
+            checkJsDirective: undefined,
+            referencedFiles: undefined!,
+            typeReferenceDirectives: undefined!,
+            libReferenceDirectives: undefined!,
+            amdDependencies: undefined!,
+            commentDirectives: undefined,
+            identifiers: undefined!,
+            packageJsonLocations: undefined,
+            packageJsonScope: undefined,
+            imports: undefined!,
+            moduleAugmentations: undefined!,
+            ambientModuleNames: undefined!,
+            classifiableNames: undefined,
+            impliedNodeFormat: undefined,
+        }
+        
         node.transformFlags |= propagateChildrenFlags(nodeData.statements) |
             propagateChildFlags(nodeData.endOfFileToken);
-
-        nodeData.locals = undefined; // initialized by binder (LocalsContainer)
-        nodeData.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        nodeData.endFlowNode = undefined;
-
-        nodeData.nodeCount = 0;
-        nodeData.identifierCount = 0;
-        nodeData.symbolCount = 0;
-        nodeData.parseDiagnostics = undefined!;
-        nodeData.bindDiagnostics = undefined!;
-        nodeData.bindSuggestionDiagnostics = undefined;
-        nodeData.lineMap = undefined!;
-        nodeData.externalModuleIndicator = undefined;
-        nodeData.setExternalModuleIndicator = undefined;
-        nodeData.pragmas = undefined!;
-        nodeData.checkJsDirective = undefined;
-        nodeData.referencedFiles = undefined!;
-        nodeData.typeReferenceDirectives = undefined!;
-        nodeData.libReferenceDirectives = undefined!;
-        nodeData.amdDependencies = undefined!;
-        nodeData.commentDirectives = undefined;
-        nodeData.identifiers = undefined!;
-        nodeData.packageJsonLocations = undefined;
-        nodeData.packageJsonScope = undefined;
-        nodeData.imports = undefined!;
-        nodeData.moduleAugmentations = undefined!;
-        nodeData.ambientModuleNames = undefined!;
-        nodeData.classifiableNames = undefined;
-        nodeData.impliedNodeFormat = undefined;
         return node;
     }
 
@@ -6260,7 +6504,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function cloneRedirectedSourceFile(source: SourceFile) {
         const node = createRedirectedSourceFile(source.redirectInfo!) as NodeData<SourceFile>;
-        const nodeData = node.data;
+        const nodeData = node.data!;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         nodeData.fileName = source.fileName;
         nodeData.path = source.path;
@@ -6277,8 +6521,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as NodeData<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
-        const sourceData = (source as any).data ?? source;
-        const nodeData = (node as any).data ?? node;
+        const sourceData = (source as any).data;
+        const nodeData = (node as any).data = {};
         for (const p in sourceData) {
             if (hasProperty(nodeData, p) || !hasProperty(sourceData, p)) {
                 continue;
@@ -6308,7 +6552,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         libReferences: readonly FileReference[],
     ) {
         const node = cloneSourceFile(source);
-        const nodeData = node.data;
+        const nodeData = node.data!;
         nodeData.statements = createNodeArray(statements);
         nodeData.isDeclarationFile = isDeclarationFile;
         nodeData.referencedFiles = referencedFiles;
@@ -6343,12 +6587,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBundle(sourceFiles: readonly SourceFile[]) {
         const node = createBaseNode<Bundle>(SyntaxKind.Bundle);
-        const nodeData = node.data;
-        nodeData.sourceFiles = sourceFiles;
-        nodeData.syntheticFileReferences = undefined;
-        nodeData.syntheticTypeReferences = undefined;
-        nodeData.syntheticLibReferences = undefined;
-        nodeData.hasNoDefaultLib = undefined;
+        node.data = {
+            sourceFiles: sourceFiles,
+            syntheticFileReferences: undefined,
+            syntheticTypeReferences: undefined,
+            syntheticLibReferences: undefined,
+            hasNoDefaultLib: undefined,
+        }
         return node;
     }
 
@@ -6366,10 +6611,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSyntheticExpression(type: Type, isSpread = false, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
         const node = createBaseNode<SyntheticExpression>(SyntaxKind.SyntheticExpression);
-        const nodeData = node.data;
-        nodeData.type = type;
-        nodeData.isSpread = isSpread;
-        nodeData.tupleNameSource = tupleNameSource;
+        const nodeData = node.data = {
+            type: type,
+            isSpread: isSpread,
+            tupleNameSource: tupleNameSource,
+        }
         return node;
     }
 
@@ -6408,8 +6654,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createPartiallyEmittedExpression(expression: Expression, original?: Node) {
         const node = createBaseNode<PartiallyEmittedExpression>(SyntaxKind.PartiallyEmittedExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
+        const nodeData = node.data = { expression: expression }
         node.original = original;
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             TransformFlags.ContainsTypeScript;
@@ -6439,7 +6684,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createCommaListExpression(elements: readonly Expression[]) {
         const node = createBaseNode<CommaListExpression>(SyntaxKind.CommaListExpression);
-        node.data.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
+        node.data = { elements: createNodeArray(sameFlatMap(elements, flattenCommaElements)) }
         node.transformFlags |= propagateChildrenFlags(node.elements);
         return node;
     }
@@ -6454,9 +6699,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression) {
         const node = createBaseNode<SyntheticReferenceExpression>(SyntaxKind.SyntheticReferenceExpression);
-        const nodeData = node.data;
-        nodeData.expression = expression;
-        nodeData.thisArg = thisArg;
+        node.data = {
+            expression: expression,
+            thisArg: thisArg,
+        }
         node.transformFlags |= propagateChildFlags(node.expression) |
             propagateChildFlags(node.thisArg);
         return node;
@@ -6481,11 +6727,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function cloneIdentifier(node: Identifier): Identifier {
         const clone = createBaseIdentifier(node.escapedText);
-        const cloneData = clone.data;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        cloneData.jsDoc = node.jsDoc;
-        cloneData.flowNode = node.flowNode;
-        cloneData.symbol = node.symbol;
+        clone.jsDoc = node.jsDoc;
+        clone.flowNode = node.flowNode;
+        clone.symbol = node.symbol;
         clone.transformFlags = node.transformFlags;
         setOriginal(clone, node);
 
@@ -6536,15 +6781,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (isPrivateIdentifier(node)) {
             return clonePrivateIdentifier(node) as T & PrivateIdentifier;
         }
-        const clone = baseFactory.createBaseNode(node.kind);
 
-        (clone as unknown as NodeData<T>).flags |= node.flags & ~NodeFlags.Synthesized;
-        (clone as unknown as NodeData<T>).transformFlags = node.transformFlags;
+        const clone = baseFactory.createBaseNode(node.kind) as Mutable<T>;
+
+        clone.flags |= node.flags & ~NodeFlags.Synthesized;
+        clone.transformFlags = node.transformFlags;
         setOriginal(clone, node);
         const nodeData = (node as any).data ?? node;
-        const cloneData = (clone as any).data ?? clone;
+        const cloneData = (clone as any).data = {};
         for (const key in nodeData) {
-            if (hasProperty(cloneData, key) || hasProperty(clone, key) || !hasProperty(nodeData, key)) {
+            if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
                 continue;
             }
             (clone as any)[key] = nodeData[key];
