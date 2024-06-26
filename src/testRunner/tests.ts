@@ -138,6 +138,7 @@ export * from "./unittests/tscWatch/incremental.js";
 export * from "./unittests/tscWatch/libraryResolution.js";
 export * from "./unittests/tscWatch/moduleResolution.js";
 export * from "./unittests/tscWatch/nodeNextWatch.js";
+export * from "./unittests/tscWatch/noEmit.js";
 export * from "./unittests/tscWatch/noEmitOnError.js";
 export * from "./unittests/tscWatch/programUpdates.js";
 export * from "./unittests/tscWatch/projectsWithReferences.js";
