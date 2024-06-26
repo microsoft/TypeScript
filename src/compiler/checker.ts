@@ -39377,7 +39377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return state;
             }
 
-            checkGrammarNullishCoalesceWithLogicalExpression(node);
+            checkNullishCoalesceOperand(node);
 
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -39476,7 +39476,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
+    function checkNullishCoalesceOperand(node: BinaryExpression) {
         const { left, operatorToken, right } = node;
         if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
             if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
@@ -39485,7 +39485,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
                 grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
             }
+            if (isNotPossiblyNullish(node.left)) {
+                error(left, Diagnostics.Left_operand_of_is_never_undefined_Slashnull_Are_you_missing_parentheses);
+            }
         }
+    }
+
+    // Returns true if we know that, syntactically, a node cannot evaluate
+    // to undefined or null
+    function isNotPossiblyNullish(node: Node) {
+        if (node.kind === SyntaxKind.BinaryExpression) {
+            switch ((node as BinaryExpression).operatorToken.kind) {
+                // TODO: More?
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.EqualsToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandToken:
+                    return true;
+            }
+        }
+        else {
+            switch (node.kind) {
+                // TODO: More?
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                    return true;
+            }
+        }
+        return false;
     }
 
     // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some

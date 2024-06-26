@@ -3907,6 +3907,10 @@
         "category": "Error",
         "code": 2868
     },
+    "Left operand of ?? is never undefined/null. Are you missing parentheses?": {
+        "category": "Error",
+        "code": 2869
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
