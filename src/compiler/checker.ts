@@ -51097,6 +51097,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // fallthrough
                             case ModuleKind.ES2022:
                             case ModuleKind.ESNext:
+                            case ModuleKind.Preserve:
                             case ModuleKind.System:
                                 if (languageVersion >= ScriptTarget.ES2017) {
                                     break;
