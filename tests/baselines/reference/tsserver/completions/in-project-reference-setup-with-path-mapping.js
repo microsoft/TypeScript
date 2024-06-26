@@ -114,10 +114,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -227,8 +223,6 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 0 depe
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -366,7 +360,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/app/src/index.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 
@@ -377,8 +379,6 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/shared/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/app/package.json: *new*
@@ -386,8 +386,6 @@ FsWatches::
 /user/username/projects/app/tsconfig.json: *new*
   {}
 /user/username/projects/mylib/tsconfig.json: *new*
-  {}
-/user/username/projects/shared/package.json: *new*
   {}
 /user/username/projects/shared/src/helper.ts: *new*
   {}
@@ -1430,7 +1428,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1441,8 +1442,6 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/shared/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/app/package.json:
@@ -1450,8 +1449,6 @@ FsWatches::
 /user/username/projects/app/tsconfig.json:
   {}
 /user/username/projects/mylib/tsconfig.json:
-  {}
-/user/username/projects/shared/package.json:
   {}
 /user/username/projects/shared/src/helper.ts:
   {}
@@ -2014,7 +2011,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -2048,15 +2048,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 6,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *,
-        "createAutoImportProviderProgramDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -2088,8 +2080,6 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -2516,49 +2506,12 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/user/username/projects/shared/src/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/app/package.json:
-  {}
-/user/username/projects/app/tsconfig.json:
-  {}
-/user/username/projects/mylib/tsconfig.json:
-  {}
-/user/username/projects/shared/src/helper.ts:
-  {}
-/user/username/projects/shared/src/index.ts:
-  {}
-/user/username/projects/shared/src/other.ts:
-  {}
-/user/username/projects/shared/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/shared/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/app/src:
-  {}
-/user/username/projects/mylib/src:
-  {}
-/user/username/projects/shared/src:
-  {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*

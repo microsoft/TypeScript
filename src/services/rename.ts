@@ -16,7 +16,6 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     getTouchingPropertyName,
-    ImportSpecifier,
     isExternalModuleNameRelative,
     isIdentifier,
     isImportOrExportSpecifierName,
@@ -51,7 +50,7 @@ import {
     TypeFlags,
     UnionType,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
@@ -136,7 +135,7 @@ function wouldRenameInOtherNodeModules(
 ): DiagnosticMessage | undefined {
     if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
         const importSpecifier = symbol.declarations && find(symbol.declarations, decl => isImportSpecifier(decl));
-        if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
+        if (importSpecifier && !importSpecifier.propertyName) {
             symbol = checker.getAliasedSymbol(symbol);
         }
     }

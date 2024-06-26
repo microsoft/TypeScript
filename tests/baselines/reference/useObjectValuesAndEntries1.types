@@ -21,11 +21,11 @@ for (var x of Object.values(o)) {
 >Object.values(o) : number[]
 >                 : ^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -42,11 +42,11 @@ var entries = Object.entries(o);                    // [string, number][]
 >Object.entries(o) : [string, number][]
 >                  : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -56,11 +56,11 @@ var values = Object.values(o);                      // number[]
 >Object.values(o) : number[]
 >                 : ^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -70,11 +70,11 @@ var entries1 = Object.entries(1);                   // [string, any][]
 >Object.entries(1) : [string, any][]
 >                  : ^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >1 : 1
 >  : ^
 
@@ -84,11 +84,11 @@ var values1 = Object.values(1);                     // any[]
 >Object.values(1) : any[]
 >                 : ^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >1 : 1
 >  : ^
 
@@ -98,11 +98,11 @@ var entries2 = Object.entries({ a: true, b: 2 });   // [string, number|boolean][
 >Object.entries({ a: true, b: 2 }) : [string, number | boolean][]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >{ a: true, b: 2 } : { a: true; b: number; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : true
@@ -120,11 +120,11 @@ var values2 = Object.values({ a: true, b: 2 });     // (number|boolean)[]
 >Object.values({ a: true, b: 2 }) : (number | boolean)[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >{ a: true, b: 2 } : { a: true; b: number; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : true
@@ -142,11 +142,11 @@ var entries3 = Object.entries({});                  // [string, {}][]
 >Object.entries({}) : [string, unknown][]
 >                   : ^^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >{} : {}
 >   : ^^
 
@@ -156,11 +156,11 @@ var values3 = Object.values({});                    // {}[]
 >Object.values({}) : unknown[]
 >                  : ^^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >{} : {}
 >   : ^^
 
@@ -182,11 +182,11 @@ var entries4 = Object.entries(a);                   // [string, string][]
 >Object.entries(a) : [string, string][]
 >                  : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >a : string[]
 >  : ^^^^^^^^
 
@@ -196,11 +196,11 @@ var values4 = Object.values(a);                     // string[]
 >Object.values(a) : string[]
 >                 : ^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >a : string[]
 >  : ^^^^^^^^
 
@@ -218,11 +218,11 @@ var entries5 = Object.entries(E);                   // [string, any][]
 >Object.entries(E) : [string, string | E][]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -232,11 +232,11 @@ var values5 = Object.values(E);                     // any[]
 >Object.values(E) : (string | E)[]
 >                 : ^^^^^^^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >E : typeof E
 >  : ^^^^^^^^
 
@@ -253,11 +253,11 @@ var entries6 = Object.entries(i);                   // [string, any][]
 >Object.entries(i) : [string, any][]
 >                  : ^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >i : I
 >  : ^
 
@@ -267,11 +267,11 @@ var values6 = Object.values(i);                     // any[]
 >Object.values(i) : any[]
 >                 : ^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->              : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->       : ^^^ ^^ ^^                                  ^^^^^^^^^ ^^  ^^^^^^^^^^^
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >i : I
 >  : ^
 

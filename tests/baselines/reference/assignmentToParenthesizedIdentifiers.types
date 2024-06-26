@@ -363,9 +363,9 @@ function fn2(x: number, y: { t: number }) {
 >(y).t : number
 >      : ^^^^^^
 >(y) : { t: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : number
 >  : ^^^^^^
 >3 : 3
@@ -379,7 +379,7 @@ function fn2(x: number, y: { t: number }) {
 >y.t : number
 >    : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : number
 >  : ^^^^^^
 >3 : 3
@@ -391,9 +391,9 @@ function fn2(x: number, y: { t: number }) {
 >(y).t : number
 >      : ^^^^^^
 >(y) : { t: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : number
 >  : ^^^^^^
 >'' : ""
@@ -407,7 +407,7 @@ function fn2(x: number, y: { t: number }) {
 >y.t : number
 >    : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : number
 >  : ^^^^^^
 >'' : ""
@@ -419,7 +419,7 @@ function fn2(x: number, y: { t: number }) {
 >y['t'] : number
 >       : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >3 : 3
@@ -431,9 +431,9 @@ function fn2(x: number, y: { t: number }) {
 >(y)['t'] : number
 >         : ^^^^^^
 >(y) : { t: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >3 : 3
@@ -447,7 +447,7 @@ function fn2(x: number, y: { t: number }) {
 >y['t'] : number
 >       : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >3 : 3
@@ -459,7 +459,7 @@ function fn2(x: number, y: { t: number }) {
 >y['t'] : number
 >       : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >'' : ""
@@ -471,9 +471,9 @@ function fn2(x: number, y: { t: number }) {
 >(y)['t'] : number
 >         : ^^^^^^
 >(y) : { t: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >'' : ""
@@ -487,7 +487,7 @@ function fn2(x: number, y: { t: number }) {
 >y['t'] : number
 >       : ^^^^^^
 >y : { t: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >'t' : "t"
 >    : ^^^
 >'' : ""

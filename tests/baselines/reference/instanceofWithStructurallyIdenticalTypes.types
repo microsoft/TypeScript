@@ -130,7 +130,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC1(x) : boolean
 >        : ^^^^^^^
 >isC1 : (c: C1 | C2 | C3) => c is C1
->     : ^ ^^            ^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^       
 >x : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 
@@ -146,7 +146,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC2(x) : boolean
 >        : ^^^^^^^
 >isC2 : (c: C1 | C2 | C3) => c is C2
->     : ^ ^^            ^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^       
 >x : C2
 >  : ^^
 
@@ -166,7 +166,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC3(x) : boolean
 >        : ^^^^^^^
 >isC3 : (c: C1 | C2 | C3) => c is C3
->     : ^ ^^            ^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^       
 >x : never
 >  : ^^^^^
 

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixActionMaybeFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixAllContext,
     CodeFixContext,
     ConstructorDeclaration,
@@ -31,12 +36,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixActionMaybeFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";

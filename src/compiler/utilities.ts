@@ -5,6 +5,7 @@ import {
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
     AmpersandAmpersandEqualsToken,
@@ -40,7 +41,6 @@ import {
     canHaveDecorators,
     canHaveLocals,
     canHaveModifiers,
-    type CanHaveModuleSpecifier,
     CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
@@ -168,7 +168,6 @@ import {
     getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
-    getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -420,6 +419,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleExportName,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -585,7 +585,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
@@ -631,6 +631,15 @@ export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
 /** @internal */
 export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
     return (symbol.flags & SymbolFlags.Transient) !== 0;
+}
+
+/**
+ * True if the symbol is for an external module, as opposed to a namespace.
+ *
+ * @internal
+ */
+export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
+    return !!(moduleSymbol.flags & SymbolFlags.Module) && (moduleSymbol.escapedName as string).charCodeAt(0) === CharacterCodes.doubleQuote;
 }
 
 const stringWriter = createSingleLineStringWriter();
@@ -1218,7 +1227,28 @@ function isJSDocTypeExpressionOrChild(node: Node): boolean {
 
 /** @internal */
 export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
-    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
+    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && moduleExportNameIsDefault(node.exportClause.name));
+}
+
+/** @internal */
+export function moduleExportNameTextUnescaped(node: ModuleExportName): string {
+    return node.kind === SyntaxKind.StringLiteral ? node.text : unescapeLeadingUnderscores(node.escapedText);
+}
+
+/** @internal */
+export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
+    return node.kind === SyntaxKind.StringLiteral ? escapeLeadingUnderscores(node.text) : node.escapedText;
+}
+
+/**
+ * Equality checks against a keyword without underscores don't need to bother
+ * to turn "__" into "___" or vice versa, since they will never be equal in
+ * either case. So we can ignore those cases to improve performance.
+ *
+ * @internal
+ */
+export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
+    return (node.kind === SyntaxKind.StringLiteral ? node.text : node.escapedText) === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -1306,6 +1336,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Iterator: new Map(Object.entries({
@@ -1583,6 +1617,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8Array: new Map(Object.entries({
@@ -1592,6 +1630,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
@@ -1601,6 +1643,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int16Array: new Map(Object.entries({
@@ -1610,6 +1656,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint16Array: new Map(Object.entries({
@@ -1619,6 +1669,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int32Array: new Map(Object.entries({
@@ -1628,6 +1682,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint32Array: new Map(Object.entries({
@@ -1637,6 +1695,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float32Array: new Map(Object.entries({
@@ -1646,6 +1708,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float64Array: new Map(Object.entries({
@@ -1655,6 +1721,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigInt64Array: new Map(Object.entries({
@@ -1665,6 +1735,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigUint64Array: new Map(Object.entries({
@@ -1675,6 +1749,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Error: new Map(Object.entries({
@@ -2309,6 +2387,17 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
             const pos = skipTrivia(sourceFile.text, (node as JSDocSatisfiesTag).tagName.pos);
             return getSpanOfTokenAtPosition(sourceFile, pos);
         }
+        case SyntaxKind.Constructor: {
+            const constructorDeclaration = node as ConstructorDeclaration;
+            const start = skipTrivia(sourceFile.text, constructorDeclaration.pos);
+            const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, start);
+            let token = scanner.scan();
+            while (token !== SyntaxKind.ConstructorKeyword && token !== SyntaxKind.EndOfFileToken) {
+                token = scanner.scan();
+            }
+            const end = scanner.getTokenEnd();
+            return createTextSpanFromBounds(start, end);
+        }
     }
 
     if (errorNode === undefined) {
@@ -2474,6 +2563,7 @@ export function getJSDocCommentRanges(node: Node, text: string) {
         getLeadingCommentRanges(text, node.pos);
     // True if the comment starts with '/**' but not if it is '/**/'
     return filter(commentRanges, comment =>
+        comment.end <= node.end && // Due to parse errors sometime empty parameter may get comments assigned to it that end up not in parameter range
         text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
         text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
         text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
@@ -4046,26 +4136,7 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function canHaveModuleSpecifier(node: Node | undefined): node is CanHaveModuleSpecifier {
-    switch (node?.kind) {
-        case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.BindingElement:
-        case SyntaxKind.ImportDeclaration:
-        case SyntaxKind.ExportDeclaration:
-        case SyntaxKind.ImportEqualsDeclaration:
-        case SyntaxKind.ImportClause:
-        case SyntaxKind.NamespaceExport:
-        case SyntaxKind.NamespaceImport:
-        case SyntaxKind.ExportSpecifier:
-        case SyntaxKind.ImportSpecifier:
-        case SyntaxKind.ImportType:
-            return true;
-    }
-    return false;
-}
-
-/** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: CanHaveModuleSpecifier | JSDocImportTag): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode | JSDocImportTag): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
@@ -6668,6 +6739,7 @@ export function getAllAccessorDeclarations(declarations: readonly Declaration[] 
  */
 export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
     if (!isInJSFile(node) && isFunctionDeclaration(node)) return undefined;
+    if (isTypeAliasDeclaration(node)) return undefined; // has a .type, is not a type annotation
     const type = (node as HasType).type;
     if (type || !isInJSFile(node)) return type;
     return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
@@ -8735,13 +8807,11 @@ function isFileModuleFromUsingJSXTag(file: SourceFile): Node | undefined {
  * Note that this requires file.impliedNodeFormat be set already; meaning it must be set very early on
  * in SourceFile construction.
  */
-function isFileForcedToBeModuleByFormat(file: SourceFile, options: CompilerOptions): true | undefined {
+function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     // Excludes declaration files - they still require an explicit `export {}` or the like
     // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
     // that aren't esm-mode (meaning not in a `type: module` scope).
-    //
-    // TODO: extension check never considered compilerOptions; should impliedNodeFormat?
-    return (getImpliedNodeFormatForEmitWorker(file, options) === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }
 
 /** @internal */
@@ -8762,27 +8832,15 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
             // If module is nodenext or node16, all esm format files are modules
             // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
             // otherwise, the presence of import or export statments (or import.meta) implies module-ness
-            const checks: ((file: SourceFile, options: CompilerOptions) => Node | true | undefined)[] = [isFileProbablyExternalModule];
+            const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
             if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
                 checks.push(isFileModuleFromUsingJSXTag);
             }
             checks.push(isFileForcedToBeModuleByFormat);
             const combined = or(...checks);
-            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file, options));
+            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
             return callback;
     }
-}
-
-/**
- * @internal
- * Returns true if an `import` and a `require` of the same module specifier
- * can resolve to a different file.
- */
-export function importSyntaxAffectsModuleResolution(options: CompilerOptions) {
-    const moduleResolution = getEmitModuleResolutionKind(options);
-    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
-        || getResolvePackageJsonExports(options)
-        || getResolvePackageJsonImports(options);
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
@@ -10073,14 +10131,57 @@ export interface HostWithIsSourceOfProjectReferenceRedirect {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 }
 /** @internal */
-export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions, host: HostWithIsSourceOfProjectReferenceRedirect) {
+export function skipTypeChecking(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+) {
+    return skipTypeCheckingWorker(sourceFile, options, host, /*ignoreNoCheck*/ false);
+}
+
+/** @internal */
+export function skipTypeCheckingIgnoringNoCheck(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+) {
+    return skipTypeCheckingWorker(sourceFile, options, host, /*ignoreNoCheck*/ true);
+}
+
+function skipTypeCheckingWorker(
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    host: HostWithIsSourceOfProjectReferenceRedirect,
+    ignoreNoCheck: boolean,
+) {
     // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
     // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
     // '/// <reference no-default-lib="true"/>' directive.
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
-        options.noCheck ||
-        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
+        (!ignoreNoCheck && options.noCheck) ||
+        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
+        !canIncludeBindAndCheckDiagnostics(sourceFile, options);
+}
+
+/** @internal */
+export function canIncludeBindAndCheckDiagnostics(sourceFile: SourceFile, options: CompilerOptions) {
+    if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
+    if (
+        sourceFile.scriptKind === ScriptKind.TS ||
+        sourceFile.scriptKind === ScriptKind.TSX ||
+        sourceFile.scriptKind === ScriptKind.External
+    ) return true;
+
+    const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+    const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+    const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
+
+    // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+    // - plain JS: .js files with no // ts-check and checkJs: undefined
+    // - check JS: .js files with either // ts-check or checkJs: true
+    // - external: files that are added by plugins
+    return isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
 }
 
 /** @internal */
@@ -10841,7 +10942,7 @@ export function isExpandoPropertyDeclaration(declaration: Declaration | undefine
 }
 
 /** @internal */
-export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | JSDocImportTag | undefined) {
     if (node === undefined) {
         return false;
     }
@@ -10862,6 +10963,107 @@ export function replaceFirstStar(s: string, replacement: string): string {
 /** @internal */
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
+}
+
+/** @internal */
+export function isSourceElement(node: Node): boolean {
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.TypeReference:
+        case SyntaxKind.TypePredicate:
+        case SyntaxKind.TypeQuery:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.ArrayType:
+        case SyntaxKind.TupleType:
+        case SyntaxKind.UnionType:
+        case SyntaxKind.IntersectionType:
+        case SyntaxKind.ParenthesizedType:
+        case SyntaxKind.OptionalType:
+        case SyntaxKind.RestType:
+        case SyntaxKind.ThisType:
+        case SyntaxKind.TypeOperator:
+        case SyntaxKind.ConditionalType:
+        case SyntaxKind.InferType:
+        case SyntaxKind.TemplateLiteralType:
+        case SyntaxKind.ImportType:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.JSDocAugmentsTag:
+        case SyntaxKind.JSDocImplementsTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocEnumTag:
+        case SyntaxKind.JSDocTemplateTag:
+        case SyntaxKind.JSDocTypeTag:
+        case SyntaxKind.JSDocLink:
+        case SyntaxKind.JSDocLinkCode:
+        case SyntaxKind.JSDocLinkPlain:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocNonNullableType:
+        case SyntaxKind.JSDocNullableType:
+        case SyntaxKind.JSDocAllType:
+        case SyntaxKind.JSDocUnknownType:
+        case SyntaxKind.JSDocTypeLiteral:
+        case SyntaxKind.JSDocVariadicType:
+        case SyntaxKind.JSDocTypeExpression:
+        case SyntaxKind.JSDocPublicTag:
+        case SyntaxKind.JSDocProtectedTag:
+        case SyntaxKind.JSDocPrivateTag:
+        case SyntaxKind.JSDocSatisfiesTag:
+        case SyntaxKind.JSDocThisTag:
+        case SyntaxKind.IndexedAccessType:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.Block:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.LabeledStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.TryStatement:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.EmptyStatement:
+        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.MissingDeclaration:
+            return true;
+    }
+    return false;
 }
 
 /** @internal */
@@ -11105,7 +11307,8 @@ export function createNameResolver({
                         if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDoc) {
                             useResult = result.flags & SymbolFlags.TypeParameter
                                 // type parameters are visible in parameter list, return type and type parameter list
-                                ? lastLocation === (location as FunctionLikeDeclaration).type ||
+                                ? !!(lastLocation.flags & NodeFlags.Synthesized) || // Synthetic fake scopes are added for signatures so type parameters are accessible from them
+                                    lastLocation === (location as FunctionLikeDeclaration).type ||
                                     lastLocation.kind === SyntaxKind.Parameter ||
                                     lastLocation.kind === SyntaxKind.JSDocParameterTag ||
                                     lastLocation.kind === SyntaxKind.JSDocReturnTag ||
@@ -11124,6 +11327,7 @@ export function createNameResolver({
                                 // however it is detected separately when checking initializers of parameters
                                 // to make sure that they reference no variables declared after them.
                                 useResult = lastLocation.kind === SyntaxKind.Parameter ||
+                                    !!(lastLocation.flags & NodeFlags.Synthesized) || // Synthetic fake scopes are added for signatures so parameters are accessible from them
                                     (
                                         lastLocation === (location as FunctionLikeDeclaration).type &&
                                         !!findAncestor(result.valueDeclaration, isParameter)
@@ -11403,7 +11607,7 @@ export function createNameResolver({
                     }
                     break;
             }
-            if (isSelfReferenceLocation(location)) {
+            if (isSelfReferenceLocation(location, lastLocation)) {
                 lastSelfReferenceLocation = location;
             }
             lastLocation = location;
@@ -11537,6 +11741,7 @@ export function createNameResolver({
     }
 
     type SelfReferenceLocation =
+        | ParameterDeclaration
         | FunctionDeclaration
         | ClassDeclaration
         | InterfaceDeclaration
@@ -11544,8 +11749,10 @@ export function createNameResolver({
         | TypeAliasDeclaration
         | ModuleDeclaration;
 
-    function isSelfReferenceLocation(node: Node): node is SelfReferenceLocation {
+    function isSelfReferenceLocation(node: Node, lastLocation: Node | undefined): node is SelfReferenceLocation {
         switch (node.kind) {
+            case SyntaxKind.Parameter:
+                return !!lastLocation && lastLocation === (node as ParameterDeclaration).name;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:

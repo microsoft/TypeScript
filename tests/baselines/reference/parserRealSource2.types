@@ -1613,31 +1613,31 @@ module TypeScript {
 
     export function ToDeclFlags(fncFlags: FncFlags) : DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
->            : ^^^        ^^        ^^^         ^^^        ^^        ^^^^^^^^^^^^^^^        ^^           ^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^
+>            : ^^^        ^^        ^^^         ^^^        ^^        ^^^         ^^^        ^^           ^^^         ^^^           ^^           ^^^         ^^^
 >fncFlags : FncFlags
 >         : ^^^^^^^^
 
     export function ToDeclFlags(varFlags: VarFlags) : DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
->            : ^^^        ^^        ^^^^^^^^^^^^^^^        ^^        ^^^         ^^^        ^^           ^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^
+>            : ^^^        ^^        ^^^         ^^^        ^^        ^^^         ^^^        ^^           ^^^         ^^^           ^^           ^^^         ^^^
 >varFlags : VarFlags
 >         : ^^^^^^^^
 
     export function ToDeclFlags(symFlags: SymbolFlags): DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
->            : ^^^        ^^        ^^^^^^^^^^^^^^^        ^^        ^^^^^^^^^^^^^^^        ^^           ^^^         ^^^           ^^           ^^^^^^^^^^^^^^^
+>            : ^^^        ^^        ^^^         ^^^        ^^        ^^^         ^^^        ^^           ^^^         ^^^           ^^           ^^^         ^^^
 >symFlags : SymbolFlags
 >         : ^^^^^^^^^^^
 
     export function ToDeclFlags(moduleFlags: ModuleFlags): DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
->            : ^^^        ^^        ^^^^^^^^^^^^^^^        ^^        ^^^^^^^^^^^^^^^        ^^           ^^^^^^^^^^^^^^^           ^^           ^^^         ^^^
+>            : ^^^        ^^        ^^^         ^^^        ^^        ^^^         ^^^        ^^           ^^^         ^^^           ^^           ^^^         ^^^
 >moduleFlags : ModuleFlags
 >            : ^^^^^^^^^^^
 
     export function ToDeclFlags(fncOrVarOrSymbolOrModuleFlags: any) {
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
->            : ^^^        ^^        ^^^^^^^^^^^^^^^        ^^        ^^^^^^^^^^^^^^^        ^^           ^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^
+>            : ^^^        ^^        ^^^         ^^^        ^^        ^^^         ^^^        ^^           ^^^         ^^^           ^^           ^^^         ^^^
 >fncOrVarOrSymbolOrModuleFlags : any
 >                              : ^^^
 

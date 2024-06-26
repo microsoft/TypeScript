@@ -301,11 +301,11 @@ function foo7(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
         // do not change value
         : ((y = x) && x.toString()))); // x is boolean
@@ -324,10 +324,10 @@ function foo7(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : true
 >  : ^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 

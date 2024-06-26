@@ -53,7 +53,7 @@ class D1 extends getBase() {
 >getBase() : Base<string, string>
 >          : ^^^^^^^^^^^^^^^^^^^^
 >getBase : () => BaseConstructor
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^               
 
     constructor() {
         super("abc", "def");
@@ -98,7 +98,7 @@ class D2 extends getBase() <number> {
 >getBase() : Base<number, number>
 >          : ^^^^^^^^^^^^^^^^^^^^
 >getBase : () => BaseConstructor
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^               
 
     constructor() {
         super(10);
@@ -151,7 +151,7 @@ class D3 extends getBase() <string, number> {
 >getBase() : Base<string, number>
 >          : ^^^^^^^^^^^^^^^^^^^^
 >getBase : () => BaseConstructor
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^               
 
     constructor() {
         super("abc", 42);
@@ -197,7 +197,7 @@ class D4 extends getBase() <string, string, string> {
 >getBase() : BaseConstructor
 >          : ^^^^^^^^^^^^^^^
 >getBase : () => BaseConstructor
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^               
 }
 
 interface BadBaseConstructor {
@@ -221,6 +221,6 @@ class D5 extends getBadBase() {
 >getBadBase() : Base<string, string>
 >             : ^^^^^^^^^^^^^^^^^^^^
 >getBadBase : () => BadBaseConstructor
->           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                  
 }
 

@@ -23,11 +23,11 @@ tseslint.config(eslintReact)
 >tseslint.config(eslintReact) : void
 >                             : ^^^^
 >tseslint.config : (...configs: Config[]) => void
->                : ^^^^       ^^        ^^^^^^^^^
+>                : ^^^^       ^^        ^^^^^    
 >tseslint : typeof tseslint
 >         : ^^^^^^^^^^^^^^^
 >config : (...configs: Config[]) => void
->       : ^^^^       ^^        ^^^^^^^^^
+>       : ^^^^       ^^        ^^^^^    
 >eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -124,7 +124,7 @@ module.exports = { config };
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >{ config } : { config: (...configs: Config[]) => void; }
->           : ^^^^^^^^^^^^^^       ^^        ^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^       ^^        ^^^^^    ^^^
 >config : (...configs: Config[]) => void
->       : ^^^^       ^^        ^^^^^^^^^
+>       : ^^^^       ^^        ^^^^^    
 

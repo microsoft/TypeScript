@@ -1,15 +1,18 @@
-import * as compiler from "./_namespaces/compiler";
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
+import * as Diff from "diff";
+import fs from "fs";
+import pathModule from "path";
+import * as compiler from "./_namespaces/compiler.js";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
 import {
     RunnerBase,
     TypeWriterResult,
     TypeWriterWalker,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export interface IO {
     newLine(): string;
@@ -54,14 +57,6 @@ export const virtualFileSystemRoot = "/";
 
 function createNodeIO(): IO {
     const workspaceRoot = Utils.findUpRoot();
-    let fs: any, pathModule: any;
-    if (require) {
-        fs = require("fs");
-        pathModule = require("path");
-    }
-    else {
-        fs = pathModule = {};
-    }
 
     function deleteFile(path: string) {
         try {
@@ -222,6 +217,9 @@ export namespace Compiler {
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
+        // Set ParseForTypeErrors like tsc.
+        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : { languageVersion: languageVersionOrOptions };
+        languageVersionOrOptions = { ...languageVersionOrOptions, jsDocParsingMode: ts.JSDocParsingMode.ParseForTypeErrors };
         const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
 
         if (shouldAssertInvariants) {
@@ -1001,9 +999,10 @@ export namespace Compiler {
             jsCode += "\r\n\r\n";
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
-        else if (!options.noCheck && !options.noEmit && (options.composite || options.declaration || options.emitDeclarationOnly)) {
-            const withoutChecking = result.repeat({ noCheck: "true", emitDeclarationOnly: "true" });
+        else if (!options.noCheck && !options.noEmit) {
+            const withoutChecking = result.repeat({ noCheck: "true" });
             compareResultFileSets(withoutChecking.dts, result.dts);
+            compareResultFileSets(withoutChecking.js, result.js);
         }
 
         // eslint-disable-next-line no-restricted-syntax
@@ -1018,7 +1017,6 @@ export namespace Compiler {
                 }
                 else if (original.text !== doc.text) {
                     jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} differs from original emit in noCheck emit\r\n`;
-                    const Diff = require("diff");
                     const expected = original.text;
                     const actual = doc.text;
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The full check baseline", "with noCheck set");
@@ -1514,8 +1512,7 @@ export namespace Baseline {
                 IO.writeFile(actualFileName, encodedActual);
             }
             const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
-            if (!!require && opts && opts.PrintDiff) {
-                const Diff = require("diff");
+            if (opts && opts.PrintDiff) {
                 const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                 throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
             }

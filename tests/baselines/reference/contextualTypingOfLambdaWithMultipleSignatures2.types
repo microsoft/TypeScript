@@ -19,7 +19,7 @@ f = (a) => { return a.asdf }
 >f = (a) => { return a.asdf } : (a: any) => any
 >                             : ^ ^^^^^^^^^^^^^
 >f : { (x: string): string; (x: number): string; }
->  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >(a) => { return a.asdf } : (a: any) => any
 >                         : ^ ^^^^^^^^^^^^^
 >a : any

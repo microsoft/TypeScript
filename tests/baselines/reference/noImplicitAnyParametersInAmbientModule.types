@@ -65,7 +65,7 @@ declare module D_M {
     // No implicit-'any' errors.
     function dm_f8(x1, y1: number): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -73,7 +73,7 @@ declare module D_M {
 
     function dm_f8(x2: string, y2): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^^^^^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -81,7 +81,7 @@ declare module D_M {
 
     function dm_f8(x3, y3): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^   ^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any

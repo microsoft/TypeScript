@@ -77,23 +77,23 @@ declare const _virtualOn: (eventQrl: VirtualEvent<Keys>) => void;
 >_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
 >           : ^        ^^                  ^^^^^    
 >eventQrl : (event: {}) => any
->         : ^     ^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^   
 
 export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
 >virtualOn : <T extends string>(eventQrl: VirtualEvent<T>) => void
->          : ^ ^^^^^^^^^^^^^^^^^        ^^               ^^^^^^^^^
+>          : ^ ^^^^^^^^^      ^^        ^^               ^^^^^^^^^
 ><T extends string>(eventQrl: VirtualEvent<T>) => {    _virtualOn(eventQrl);} : <T extends string>(eventQrl: VirtualEvent<T>) => void
->                                                                             : ^ ^^^^^^^^^^^^^^^^^        ^^               ^^^^^^^^^
+>                                                                             : ^ ^^^^^^^^^      ^^        ^^               ^^^^^^^^^
 >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 
     _virtualOn(eventQrl);
 >_virtualOn(eventQrl) : void
 >                     : ^^^^
 >_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
->           : ^        ^^                  ^^^^^^^^^
+>           : ^        ^^                  ^^^^^    
 >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 
 };
 

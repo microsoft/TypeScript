@@ -1,6 +1,6 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
 describe("unittests:: JSDocParsing", () => {
     describe("TypeExpressions", () => {
@@ -519,7 +519,7 @@ oh.no
             assert.equal(root.kind, ts.SyntaxKind.SourceFile);
             const first = root.getFirstToken();
             assert.isDefined(first);
-            assert.equal(first!.kind, ts.SyntaxKind.VarKeyword);
+            assert.equal(first.kind, ts.SyntaxKind.VarKeyword);
         });
     });
     describe("getLastToken", () => {
@@ -528,7 +528,7 @@ oh.no
             assert.isDefined(root);
             const last = root.getLastToken();
             assert.isDefined(last);
-            assert.equal(last!.kind, ts.SyntaxKind.EndOfFileToken);
+            assert.equal(last.kind, ts.SyntaxKind.EndOfFileToken);
         });
     });
     describe("getStart", () => {
@@ -558,6 +558,24 @@ class Foo  {};
             const [seeTag] = ts.getJSDocTags(classDecl);
 
             assert.equal(ts.getTextOfJSDocComment(seeTag.comment), "{@link foo#bar label}");
+        });
+    });
+
+    describe("getTextOfJSDocComment", () => {
+        it("should preserve link without introducing space", () => {
+            const sourceText = `
+/**
+ *
+ * @see {@link foo}
+ */
+class Foo  {};
+`;
+
+            const root = ts.createSourceFile("foo.ts", sourceText, ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+            const [classDecl] = root.statements;
+            const [seeTag] = ts.getJSDocTags(classDecl);
+
+            assert.equal(ts.getTextOfJSDocComment(seeTag.comment), "{@link foo}");
         });
     });
 });
