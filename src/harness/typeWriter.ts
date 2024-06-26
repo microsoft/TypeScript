@@ -314,8 +314,8 @@ export class TypeWriterWalker {
                 }
                 count++;
                 symbolString += ", ";
-                if ((declaration as any).data.__symbolTestOutputCache) {
-                    symbolString += (declaration as any).data.__symbolTestOutputCache;
+                if ((declaration as any).__symbolTestOutputCache) {
+                    symbolString += (declaration as any).__symbolTestOutputCache;
                     continue;
                 }
                 const declSourceFile = declaration.getSourceFile();
@@ -324,7 +324,7 @@ export class TypeWriterWalker {
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
                 const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
                 symbolString += declText;
-                (declaration as any).data.__symbolTestOutputCache = declText;
+                (declaration as any).__symbolTestOutputCache = declText;
             }
         }
         symbolString += ")";

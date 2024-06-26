@@ -918,6 +918,10 @@ class SymbolObject implements Symbol {
 }
 
 class TypeObject extends TypeImpl implements Type {
+    constructor(checker: TypeChecker, flags: TypeFlags) {
+        super(checker, flags);
+        this.checker = checker;
+    }
     getFlags(): TypeFlags {
         return this.flags;
     }

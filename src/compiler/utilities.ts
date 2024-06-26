@@ -546,6 +546,7 @@ import {
     TokenFlags,
     tokenToString,
     toPath,
+    tracing,
     TransformFlags,
     TransientSymbol,
     TriviaSyntaxKind,
@@ -8279,10 +8280,10 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
 class TypeDataImpl {
 }
 
-export const allTypes: TypeImpl[] = [];
+// export const allTypes: TypeImpl[] = [];
 /** @internal */
 export class TypeImpl {
-    checker: TypeChecker;
+    checker!: TypeChecker;
     flags: TypeFlags;
     symbol: Symbol;
     _data: any = undefined;
@@ -8290,11 +8291,13 @@ export class TypeImpl {
     objectFlags: number;
     constructor(checker: TypeChecker, flags: TypeFlags) {
         this.id = 0;
-        this.checker = checker;
+        if (Debug.isDebugging || tracing) {
+            this.checker = checker;
+        }
         this.flags = flags;
         this.symbol = undefined!;
         this.objectFlags = 0;
-        allTypes.push(this);
+        // allTypes.push(this);
     }
 
     get data() {
@@ -9151,6 +9154,7 @@ export class NodeImpl {
     jsDoc: any;
     flowNode: any;
     symbol: any;
+    __symbolTestOutputCache?: any; // For tests only
     constructor(kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
@@ -9162,12 +9166,16 @@ export class NodeImpl {
 
         this.parent = undefined!;
         this.emitNode = undefined;
-        
+
         this.original = undefined;
         this.escapedText = undefined;
         this.jsDoc = undefined;
         this.flowNode = undefined;
         this.symbol = undefined;
+
+        if (Debug.isDebugging || tracing) {
+            this.__symbolTestOutputCache = undefined;
+        }
     }
     data: any = undefined;
 
@@ -13928,11 +13936,11 @@ export function hasInferredType(node: Node): node is HasInferredType {
 }
 
 const objectArray = [{} as never];
-/** 
+/**
  * @internal
  * Ensures V8 creates a PACKED_ELEMENTS array and not a PACKED_SMI_ELEMENTS array
- **/
+ */
 export function createEmptyObjectArray<T>(): T[] {
-    const elements = objectArray.slice(0,0);
+    const elements = objectArray.slice(0, 0);
     return elements as T[];
 }

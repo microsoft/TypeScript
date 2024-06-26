@@ -207,6 +207,12 @@ export function sourceFileToJSON(file: ts.Node): string {
                 o.modifierFlagsCache = n.modifierFlagsCache;
             }
             o.transformFlags = n.transformFlags;
+            if (n.kind === ts.SyntaxKind.Identifier) {
+                o.escapedText = n.escapedText;
+            }
+            if (n.jsDoc) {
+                o.jsDoc = n.jsDoc;
+            }
         }
         else {
             nodeData = n;
