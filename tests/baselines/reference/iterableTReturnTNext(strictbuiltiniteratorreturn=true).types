@@ -12,7 +12,7 @@ declare const set: Set<number>;
 // based on:
 // - https://github.com/apollographql/apollo-client/blob/8740f198805a99e01136617c4055d611b92cc231/src/react/hooks/__tests__/useMutation.test.tsx#L2328
 // - https://github.com/continuedev/continue/blob/046bca088a833f8b3620412ff64e4b6f41fbb959/extensions/vscode/src/autocomplete/lsp.ts#L60
-const r1: number = map.values().next().value; // error as result is potentially `{ done: true, value: void }`
+const r1: number = map.values().next().value; // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
 >r1 : number
 >   : ^^^^^^
 >map.values().next().value : number | undefined
@@ -44,7 +44,7 @@ interface Next<A> {
 >value : A
 >      : ^
 }
-const r2: Next<number> = map.values().next(); // error as result is potentially `{ done: true, value: void }`
+const r2: Next<number> = map.values().next(); // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
 >r2 : Next<number>
 >   : ^^^^^^^^^^^^
 >map.values().next() : IteratorResult<number, undefined>
@@ -119,4 +119,136 @@ const r3: number | undefined = set.values().next().value;
 >     : ^^^^    ^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^^^^^^^ 
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
+
+// based on: https://github.com/microsoft/TypeScript/blob/15f67e0b482faf9f6a3ab9965f3c11196bf3e99b/src/harness/compilerImpl.ts#L77
+class MyMap implements Map<string, number> {
+>MyMap : MyMap
+>      : ^^^^^
+
+    declare private _keys: string[];
+>_keys : string[]
+>      : ^^^^^^^^
+
+    declare private _values: number[];
+>_values : number[]
+>        : ^^^^^^^^
+
+    declare size: number;
+>size : number
+>     : ^^^^^^
+
+    declare [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : string
+>                     : ^^^^^^
+>Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
+
+    clear(): void { }
+>clear : () => void
+>      : ^^^^^^    
+
+    delete(key: string): boolean { return false; }
+>delete : (key: string) => boolean
+>       : ^   ^^      ^^^^^       
+>key : string
+>    : ^^^^^^
+>false : false
+>      : ^^^^^
+
+    forEach(callbackfn: (value: number, key: string, map: Map<string, number>) => void, thisArg?: any): void { }
+>forEach : (callbackfn: (value: number, key: string, map: Map<string, number>) => void, thisArg?: any) => void
+>        : ^          ^^                                                              ^^       ^^^   ^^^^^    
+>callbackfn : (value: number, key: string, map: Map<string, number>) => void
+>           : ^     ^^      ^^   ^^      ^^   ^^                   ^^^^^    
+>value : number
+>      : ^^^^^^
+>key : string
+>    : ^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>thisArg : any
+>        : ^^^
+
+    get(key: string): number | undefined { return undefined; }
+>get : (key: string) => number | undefined
+>    : ^   ^^      ^^^^^                  
+>key : string
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    has(key: string): boolean { return false; }
+>has : (key: string) => boolean
+>    : ^   ^^      ^^^^^       
+>key : string
+>    : ^^^^^^
+>false : false
+>      : ^^^^^
+
+    set(key: string, value: number): this { return this; }
+>set : (key: string, value: number) => this
+>    : ^   ^^      ^^     ^^      ^^^^^    
+>key : string
+>    : ^^^^^^
+>value : number
+>      : ^^^^^^
+>this : this
+>     : ^^^^
+
+    entries(): IterableIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+>entries : () => IterableIterator<[string, number], BuiltinIteratorReturn>
+>        : ^^^^^^                                                         
+>new Error("Method not implemented.") : Error
+>                                     : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Method not implemented." : "Method not implemented."
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    keys(): IterableIterator<string, BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+>keys : () => IterableIterator<string, BuiltinIteratorReturn>
+>     : ^^^^^^                                               
+>new Error("Method not implemented.") : Error
+>                                     : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Method not implemented." : "Method not implemented."
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Symbol.iterator](): IterableIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+>[Symbol.iterator] : () => IterableIterator<[string, number], BuiltinIteratorReturn>
+>                  : ^^^^^^                                                         
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+>new Error("Method not implemented.") : Error
+>                                     : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Method not implemented." : "Method not implemented."
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
+    * values() {
+>values : () => Generator<number, void, any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        yield* this._values;
+>yield* this._values : undefined
+>                    : ^^^^^^^^^
+>this._values : number[]
+>             : ^^^^^^^^
+>this : this
+>     : ^^^^
+>_values : number[]
+>        : ^^^^^^^^
+    }
+}
 
