@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/interfaceIdentifierSatifiesObjectExpression.ts.ts] ////
+
+=== interfaceIdentifierSatifiesObjectExpression.ts.ts ===
+interface satisfies {};
+>satisfies : Symbol(satisfies, Decl(interfaceIdentifierSatifiesObjectExpression.ts.ts, 0, 0))
+
