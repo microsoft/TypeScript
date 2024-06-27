@@ -23389,7 +23389,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // types are invariant, if any of the type parameters are invariant we reset the reported
                     // errors and instead force a structural comparison (which will include elaborations that
                     // reveal the reason).
-                    // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
                     // we can return `False` early here to skip calculating the structural error message we don't need.
                     if (varianceCheckFailed && !some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant)) {
                         return Ternary.False;
