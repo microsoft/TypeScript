@@ -1380,6 +1380,11 @@ const addDisposableResourceHelper: UnscopedEmitHelper = {
         };`,
 };
 
+/**
+ * The `s` variable represents two boolean flags from the `DisposeResources` algorithm:
+ * - `needsAwait` (`1`) — Indicates that an `await using` for a `null` or `undefined` resource was encountered.
+ * - `hasAwaited` (`2`) — Indicates that the algorithm has performed an Await.
+ */
 const disposeResourcesHelper: UnscopedEmitHelper = {
     name: "typescript:disposeResources",
     importName: "__disposeResources",
