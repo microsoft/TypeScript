@@ -10033,7 +10033,7 @@ export const enum JSDocParsingMode {
      * Parse only JSDoc comments which are needed to provide correct type errors.
      *
      * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
-     * containing `@see` and `@link` in TS files.
+     * containing `see`, `link`, and `internal` in TS files.
      */
     ParseForTypeErrors,
     /**
@@ -10041,7 +10041,8 @@ export const enum JSDocParsingMode {
      *
      * This will always parse JSDoc in non-TS files, but never in TS files.
      *
-     * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+     * Note: Do not use this mode if you require accurate type errors or need to
+     * observe `internal` JSDoc tags; use {@link ParseForTypeErrors} instead.
      */
     ParseForTypeInfo,
 }
