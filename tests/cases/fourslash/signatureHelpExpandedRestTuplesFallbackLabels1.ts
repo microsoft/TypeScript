@@ -52,6 +52,10 @@
 //// logFruitTuple9("apple", /*19*/);
 //// logFruitTuple9("apple", { color: "red" }, /*20*/);
 
+//// function withPair(...[first, second]: [number, named: string]) {}
+//// withPair(/*21*/);
+//// withPair(101, /*22*/);
+
 verify.signatureHelp(
     {
         marker: "1",
@@ -231,6 +235,24 @@ verify.signatureHelp(
         parameterCount: 3,
         parameterName: "__0_2",
         parameterSpan: `__0_2: number`,
+        isVariadic: false,
+    },
+    {
+        marker: "21",
+        text: `withPair(first: number, second: string): void`,
+        overloadsCount: 1,
+        parameterCount: 2,
+        parameterName: "first",
+        parameterSpan: `first: number`,
+        isVariadic: false,
+    },
+    {
+        marker: "22",
+        text: `withPair(first: number, second: string): void`,
+        overloadsCount: 1,
+        parameterCount: 2,
+        parameterName: "second",
+        parameterSpan: `second: string`,
         isVariadic: false,
     },
 );
