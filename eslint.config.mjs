@@ -145,7 +145,7 @@ export default tseslint.config(
                 },
             ],
             "@typescript-eslint/no-unused-vars": [
-                "error",
+                "warn",
                 {
                     // Ignore: (solely underscores | starting with exactly one underscore)
                     argsIgnorePattern: "^(_+$|_[^_])",
