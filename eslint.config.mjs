@@ -191,6 +191,9 @@ export default tseslint.config(
             // likely yes
             "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
 
+            // likely no
+            "unicorn/prefer-string-raw": "off",
+
             // no
             "unicorn/filename-case": "off",
             "unicorn/prevent-abbreviations": "off",
