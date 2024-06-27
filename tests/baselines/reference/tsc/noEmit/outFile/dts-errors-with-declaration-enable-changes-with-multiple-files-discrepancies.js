@@ -1,5 +1,6 @@
 3:: no-change-run
-*** Needs explanation
+Clean build will not have declaration and declarationMap
+Incremental build will have previous buildInfo so will have dts and declaration and declarationMap
 TsBuild info text without affectedFilesPendingEmit:: /home/src/projects/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {

@@ -66,7 +66,7 @@ import {
     getNonIncrementalBuildInfoRoots,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
-    getPendingEmitKind,
+    getPendingEmitKindWithSeen,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
     getWatchErrorSummaryDiagnosticMessage,
@@ -1515,7 +1515,6 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 incrementalBuildInfo.changeFileSet?.length ||
                 incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
                 (
-                    !project.options.noEmit &&
                     getEmitDeclarations(project.options) &&
                     incrementalBuildInfo.emitDiagnosticsPerFile?.length
                 )
@@ -1543,7 +1542,18 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         }
 
         // Has not emitted some of the files, project is out of date
-        if (!project.options.noEmit && getPendingEmitKind(project.options, incrementalBuildInfo.options || {})) {
+        if (
+            (
+                !project.options.noEmit ||
+                (project.options.noEmit && getEmitDeclarations(project.options))
+            ) &&
+            getPendingEmitKindWithSeen(
+                project.options,
+                incrementalBuildInfo.options || {},
+                /*emitOnlyDtsFiles*/ undefined,
+                !!project.options.noEmit,
+            )
+        ) {
             return {
                 type: UpToDateStatusType.OutOfDateOptions,
                 buildInfoFile: buildInfoPath,

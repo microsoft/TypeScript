@@ -30,7 +30,15 @@ declare const console: { log(msg: any): void; };
 
 Output::
 /lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -56,7 +64,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -93,14 +101,31 @@ Shape signatures in builder refreshed for::
   "options": {
     "declaration": true
   },
-  "affectedFilesPendingEmit": [
+  "emitDiagnosticsPerFile": [
     [
       "./a.ts",
-      "Js | Dts"
+      [
+        {
+          "start": 6,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "affectedFilesPendingEmit": [
+    [
+      [
+        "./a.ts",
+        17
+      ],
+      "Js | DtsEmit"
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 731
+  "size": 908
 }
 
 
@@ -111,7 +136,15 @@ Input::
 
 Output::
 /lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -168,7 +201,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3528887741-const a = \"hello\";","signature":"-5460434953-declare const a = \"hello\";\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3528887741-const a = \"hello\";","signature":"-5460434953-declare const a = \"hello\";\n","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -208,12 +241,15 @@ Shape signatures in builder refreshed for::
   },
   "affectedFilesPendingEmit": [
     [
-      "./a.ts",
-      "Js | Dts"
+      [
+        "./a.ts",
+        17
+      ],
+      "Js | DtsEmit"
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 772
+  "size": 777
 }
 
 
@@ -364,7 +400,15 @@ const a = class { private p = 10; };
 
 Output::
 /lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -389,7 +433,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"affectedFilesPendingEmit":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -427,14 +471,31 @@ Shape signatures in builder refreshed for::
   "options": {
     "declaration": true
   },
-  "affectedFilesPendingEmit": [
+  "emitDiagnosticsPerFile": [
     [
       "./a.ts",
-      "Js | Dts"
+      [
+        {
+          "start": 6,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "affectedFilesPendingEmit": [
+    [
+      [
+        "./a.ts",
+        17
+      ],
+      "Js | DtsEmit"
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 915
+  "size": 1092
 }
 
 
@@ -547,7 +608,15 @@ Input::
 
 Output::
 /lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]

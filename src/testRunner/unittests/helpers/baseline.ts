@@ -137,7 +137,7 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
 
 export type ReadableIncrementalBuildInfoDiagnosticOfFile = [file: string, diagnostics: readonly ts.ReusableDiagnostic[]];
 export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
-export type ReadableIncrementalBuildInfoEmitDiagnostic = ReadableIncrementalBuildInfoDiagnosticOfFile;
+export type ReadableIncrementalBuildInfoEmitDiagnostic = [file: string, diagnostics: readonly ts.ReusableDiagnosticWithLocation[]];
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [file: string] | [file: string, emitKind: ts.BuilderFileEmit], emitKind: ReadableBuilderFileEmit];
 export type ReadableIncrementalBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];
@@ -360,7 +360,11 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
             if (emit & ts.BuilderFileEmit.Js) addFlags("Js");
             if (emit & ts.BuilderFileEmit.JsMap) addFlags("JsMap");
             if (emit & ts.BuilderFileEmit.JsInlineMap) addFlags("JsInlineMap");
-            if (emit & ts.BuilderFileEmit.Dts) addFlags("Dts");
+            if ((emit & ts.BuilderFileEmit.Dts) === ts.BuilderFileEmit.Dts) addFlags("Dts");
+            else {
+                if (emit & ts.BuilderFileEmit.DtsEmit) addFlags("DtsEmit");
+                if (emit & ts.BuilderFileEmit.DtsErrors) addFlags("DtsErrors");
+            }
             if (emit & ts.BuilderFileEmit.DtsMap) addFlags("DtsMap");
         }
         return (result || "None") as ReadableBuilderFileEmit;

@@ -165,7 +165,12 @@ export function forEachNoEmitChanges(commandType: string[]) {
     });
 }
 
-function editsForDtsChanges(commandType: string[], aContent: string): TestTscEdit[] {
+function editsForDtsChanges(
+    commandType: string[],
+    aContent: string,
+    incremental: boolean | undefined,
+    multiFile: boolean,
+): TestTscEdit[] {
     return [
         noChangeRun,
         {
@@ -178,7 +183,13 @@ function editsForDtsChanges(commandType: string[], aContent: string): TestTscEdi
             edit: noop,
             commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit", "--declaration", "--declarationMap"],
         },
-        noChangeRun,
+        incremental ? {
+            ...noChangeRun,
+            discrepancyExplanation: () => [
+                "Clean build will not have declaration and declarationMap",
+                "Incremental build will have previous buildInfo so will have dts and declaration and declarationMap",
+            ],
+        } : noChangeRun,
         {
             caption: "Dts Emit with error",
             edit: noop,
@@ -197,6 +208,11 @@ function editsForDtsChanges(commandType: string[], aContent: string): TestTscEdi
             caption: "With declaration and declarationMap noEmit",
             edit: noop,
             commandLineArgs: [...commandType, "/home/src/projects/project", "--noEmit", "--declaration", "--declarationMap"],
+            // Multi file still needs to report error so will emit build info (for pending dtsMap)
+            discrepancyExplanation: incremental && !multiFile ? () => [
+                "Clean build will have declaration and declarationMap",
+                "Incremental build will have previous buildInfo so will have declaration and declarationMap",
+            ] : undefined,
         },
     ];
 }
@@ -223,7 +239,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         modifyFs: asModules ?
                             fs => fs.writeFileSync("/home/src/projects/project/b.ts", `export const b = 10;`) :
                             undefined,
-                        edits: editsForDtsChanges(commandType, aContent),
+                        edits: editsForDtsChanges(commandType, aContent, incremental, false),
                         baselinePrograms: true,
                     });
                 })
@@ -249,7 +265,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         }),
                     }),
                 edits: [
-                    ...editsForDtsChanges(commandType, aContent),
+                    ...editsForDtsChanges(commandType, aContent, /*incremental*/ true, /*multiFile*/ true),
                     {
                         caption: "Fix the another ",
                         edit: fs => fs.writeFileSync("/home/src/projects/project/c.ts", aContent.replace("a", "c").replace("private", "public")),

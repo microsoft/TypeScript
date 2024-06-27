@@ -678,8 +678,21 @@ Output::
 
 
 
-//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
-//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"root":["./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 148
+}
+
 
 
 Program root files: [
@@ -730,7 +743,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -793,7 +806,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../dev-build.tsbuildinfo' is older than input 'src/main.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../dev-build.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -801,8 +814,20 @@ Output::
 
 
 
-//// [/user/username/projects/dev-build.tsbuildinfo] file written with same contents
-//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"root":["./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 134
+}
+
 //// [/user/username/projects/dev-build.js]
 define("shared/types/db", ["require", "exports"], function (require, exports) {
     "use strict";

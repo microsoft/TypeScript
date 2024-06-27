@@ -39,20 +39,26 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"root":["./a.ts"],"version":"FakeTSVersion"}
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./a.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 45
+  "size": 59
 }
 
 
@@ -110,7 +116,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -118,8 +124,18 @@ Output::
 
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 45
+}
+
 
 
 Program root files: [
@@ -287,12 +303,28 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo]
+{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./a.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 59
+}
+
 
 
 Program root files: [
@@ -342,7 +374,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/a.js' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -357,19 +389,8 @@ Output::
 
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"root":["./a.ts"],"errors":true,"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./a.ts"
-  ],
-  "errors": true,
-  "version": "FakeTSVersion",
-  "size": 59
-}
-
+//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
 var a = /** @class */ (function () {
     function class_1() {
@@ -430,7 +451,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m const a = class { private p = 10; };
+[7m [0m [91m      ~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

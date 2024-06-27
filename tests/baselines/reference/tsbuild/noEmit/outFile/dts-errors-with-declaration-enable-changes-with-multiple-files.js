@@ -152,10 +152,140 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/d.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const a = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const c = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+
+Found 3 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "declaration": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;","-17233149573-export const c = class { private p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[4,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[5,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts",
+    "./project/c.ts",
+    "./project/d.ts"
+  ],
+  "fileInfos": {
+    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;",
+    "./project/c.ts": "-17233149573-export const c = class { private p = 10; };",
+    "./project/d.ts": "2523684124-export const d = class { private p = 10; };"
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./project/a.ts",
+        "./project/b.ts",
+        "./project/c.ts",
+        "./project/d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./project/a.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/c.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/d.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js | DtsEmit",
+    17
+  ],
+  "version": "FakeTSVersion",
+  "size": 1362
+}
 
 
 
@@ -168,10 +298,142 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/d.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const a = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const c = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+
+Found 3 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;","-17233149573-export const c = class { private p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[4,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[5,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":49,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts",
+    "./project/c.ts",
+    "./project/d.ts"
+  ],
+  "fileInfos": {
+    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;",
+    "./project/c.ts": "-17233149573-export const c = class { private p = 10; };",
+    "./project/d.ts": "2523684124-export const d = class { private p = 10; };"
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./project/a.ts",
+        "./project/b.ts",
+        "./project/c.ts",
+        "./project/d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./project/a.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/c.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/d.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js | DtsEmit | DtsMap",
+    49
+  ],
+  "version": "FakeTSVersion",
+  "size": 1384
+}
 
 
 
@@ -200,7 +462,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -479,10 +741,123 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates there is change in compilerOptions
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
+[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const c = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+
+Found 2 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "declaration": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9483521475-export const a = class { public p = 10; };","-13368947479-export const b = 10;","-17233149573-export const c = class { private p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[4,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[5,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts",
+    "./project/c.ts",
+    "./project/d.ts"
+  ],
+  "fileInfos": {
+    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9483521475-export const a = class { public p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;",
+    "./project/c.ts": "-17233149573-export const c = class { private p = 10; };",
+    "./project/d.ts": "2523684124-export const d = class { private p = 10; };"
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./project/a.ts",
+        "./project/b.ts",
+        "./project/c.ts",
+        "./project/d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./project/c.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/d.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js | DtsEmit",
+    17
+  ],
+  "version": "FakeTSVersion",
+  "size": 1215
+}
 
 
 
@@ -495,10 +870,125 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
+[96mhome/src/projects/project/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const c = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+
+Found 2 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts",
+  "/home/src/projects/project/c.ts",
+  "/home/src/projects/project/d.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "declaration": true,
+  "declarationMap": true,
+  "noEmit": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
+/home/src/projects/project/c.ts
+/home/src/projects/project/d.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9483521475-export const a = class { public p = 10; };","-13368947479-export const b = 10;","-17233149573-export const c = class { private p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[4,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]],[5,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":49,"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts",
+    "./project/c.ts",
+    "./project/d.ts"
+  ],
+  "fileInfos": {
+    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9483521475-export const a = class { public p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;",
+    "./project/c.ts": "-17233149573-export const c = class { private p = 10; };",
+    "./project/d.ts": "2523684124-export const d = class { private p = 10; };"
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./project/a.ts",
+        "./project/b.ts",
+        "./project/c.ts",
+        "./project/d.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "declarationMap": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./project/c.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ],
+    [
+      "./project/d.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "pendingEmit": [
+    "Js | DtsEmit | DtsMap",
+    49
+  ],
+  "version": "FakeTSVersion",
+  "size": 1237
+}
 
 
 
@@ -514,11 +1004,19 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * home/src/projects/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/c.ts'
+[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96mhome/src/projects/project/d.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+
+[7m1[0m export const d = class { private p = 10; };
+[7m [0m [91m             ~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts",
@@ -554,7 +1052,7 @@ No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9483521475-export const a = class { public p = 10; };","-13368947479-export const b = 10;","-15184115393-export const c = class { public p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts","./project/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9483521475-export const a = class { public p = 10; };","-13368947479-export const b = 10;","-15184115393-export const c = class { public p = 10; };","2523684124-export const d = class { private p = 10; };"],"root":[[2,5]],"options":{"declaration":true,"declarationMap":true,"module":2,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[5,[{"start":13,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":49,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -592,11 +1090,25 @@ No shapes updated in the builder::
     "module": 2,
     "outFile": "./outFile.js"
   },
+  "emitDiagnosticsPerFile": [
+    [
+      "./project/d.ts",
+      [
+        {
+          "start": 13,
+          "length": 1,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
   "pendingEmit": [
-    "Js | Dts | DtsMap",
-    false
+    "Js | DtsEmit | DtsMap",
+    49
   ],
   "version": "FakeTSVersion",
-  "size": 920
+  "size": 1090
 }
 
