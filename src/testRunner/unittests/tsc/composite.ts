@@ -114,4 +114,58 @@ describe("unittests:: tsc:: composite::", () => {
             },
         ],
     });
+
+    verifyTsc({
+        scenario: "composite",
+        subScenario: "synthetic jsx import of ESM module from CJS module no crash no jsx element",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/main.ts": "export default 42;",
+                "/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        module: "Node16",
+                        jsx: "react-jsx",
+                        jsxImportSource: "solid-js",
+                    },
+                }),
+                "/node_modules/solid-js/package.json": jsonToReadableText({
+                    name: "solid-js",
+                    type: "module",
+                }),
+                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                    export namespace JSX {
+                        type IntrinsicElements = { div: {}; };
+                    }
+                `,
+            }),
+        commandLineArgs: [],
+    });
+
+    verifyTsc({
+        scenario: "composite",
+        subScenario: "synthetic jsx import of ESM module from CJS module error on jsx element",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/main.tsx": "export default <div/>;",
+                "/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        module: "Node16",
+                        jsx: "react-jsx",
+                        jsxImportSource: "solid-js",
+                    },
+                }),
+                "/node_modules/solid-js/package.json": jsonToReadableText({
+                    name: "solid-js",
+                    type: "module",
+                }),
+                "/node_modules/solid-js/jsx-runtime.d.ts": Utils.dedent`
+                    export namespace JSX {
+                        type IntrinsicElements = { div: {}; };
+                    }
+                `,
+            }),
+        commandLineArgs: [],
+    });
 });
