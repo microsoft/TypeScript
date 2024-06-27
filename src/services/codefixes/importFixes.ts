@@ -275,10 +275,9 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const checker = program.getTypeChecker();
-        const useRequire = shouldUseRequire(sourceFile, program);
         const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+        const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         if (!exportInfo) {
@@ -287,6 +286,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             Debug.assert(preferences.autoImportFileExcludePatterns?.length);
             return;
         }
+        const useRequire = shouldUseRequire(sourceFile, program);
         let fix = getImportFixForSymbol(sourceFile, exportInfo, program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
         if (fix) {
             const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
