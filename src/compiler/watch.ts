@@ -155,8 +155,7 @@ function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diag
     return false;
 }
 
-/** @internal */
-export const screenStartingMessageCodes: number[] = [
+const screenStartingMessageCodes: number[] = [
     Diagnostics.Starting_compilation_in_watch_mode.code,
     Diagnostics.File_change_detected_Starting_incremental_compilation.code,
 ];
@@ -667,6 +666,7 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
         clearTimeout: maybeBind(system, system.clearTimeout) || noop,
+        preferNonRecursiveWatch: system.preferNonRecursiveWatch,
     };
 }
 

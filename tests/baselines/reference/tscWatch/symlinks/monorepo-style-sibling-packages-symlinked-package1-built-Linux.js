@@ -104,7 +104,7 @@ export type BarType = "bar";
 }
 
 
-/a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics
+/a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics --explainFiles --traceResolution
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -113,7 +113,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/ts
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src/index.ts 250 undefined Source file
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -158,6 +158,12 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@t
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
+../../../../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package1/dist/index.d.ts
+  Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
@@ -233,6 +239,7 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: Not
@@ -253,14 +260,7 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: No change
-
-Input::
-
-
-exitCode:: ExitStatus.undefined
-
-Change:: Clean package1 build
+Change:: Clean dependencies build
 
 Input::
 //// [/home/src/projects/project/packages/package1/dist/index.js] deleted
@@ -337,7 +337,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -414,6 +414,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 [7m1[0m import { FooType, BarType } from "package1"
 [7m [0m [91m                                 ~~~~~~~~~~[0m
 
+../../../../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 sysLog:: onTimerToUpdateChildWatches:: 3
@@ -497,6 +501,7 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: Not
@@ -540,7 +545,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -615,10 +620,18 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m1[0m import { FooType, BarType } from "package1"
 [7m [0m [91m                                 ~~~~~~~~~~[0m
 
+../../../../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
+
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
 
 
 Program root files: [
@@ -638,6 +651,7 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: SafeModules
@@ -651,7 +665,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Build package1
+Change:: Build dependencies
 
 Input::
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 24
@@ -753,7 +767,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/project/packages/package2/src/index.ts"]
-  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
+  options: {"target":3,"module":1,"rootDir":"/home/src/projects/project/packages/package2/src","declaration":true,"outDir":"/home/src/projects/project/packages/package2/dist","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"traceResolution":true,"watch":true,"project":"/home/src/projects/project/packages/package2","extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/projects/project/packages/package2/tsconfig.json"}
 ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -779,6 +793,12 @@ Resolving real path for '/home/src/projects/project/node_modules/package1/dist/i
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+../../../../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+packages/package1/dist/index.d.ts
+  Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
+packages/package2/src/index.ts
+  Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -850,6 +870,7 @@ Program options: {
   "watch": true,
   "project": "/home/src/projects/project/packages/package2",
   "extendedDiagnostics": true,
+  "explainFiles": true,
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
 }
 Program structureReused: SafeModules
