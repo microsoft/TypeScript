@@ -17,7 +17,7 @@ export interface Foo {
  */
 export function f(foo) {}
 >f : (foo: types.Foo) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^^^^^^^^^^^^^^^^^^^
 >foo : types.Foo
 >    : ^^^^^^^^^
 

@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/jsxChildrenWrongType.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 400 / 400 (nearest 100)
-Type Count: 1,400 / 1,400 (nearest 100)
-Instantiation count: 1,500 / 1,500 (nearest 500)
-Symbol count: 32,000 / 32,000 (nearest 500)
+Type Count: 1,000
+Instantiation count: 1,000
 
 === other.tsx ===
 /// <reference path="react18/react18.d.ts" />

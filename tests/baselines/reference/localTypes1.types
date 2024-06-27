@@ -149,7 +149,7 @@ function f2() {
 
 function f3(b: boolean) {
 >f3 : (b: boolean) => I[]
->   : ^^^^       ^^^^^^^^
+>   : ^ ^^       ^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 

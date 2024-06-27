@@ -27,7 +27,7 @@ class Food {
     }
     public eat(amountToEat: number): boolean {
 >eat : (amountToEat: number) => boolean
->    : ^^^^^^^^^^^^^^      ^^^^^       
+>    : ^           ^^      ^^^^^       
 >amountToEat : number
 >            : ^^^^^^
 

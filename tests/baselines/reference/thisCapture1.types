@@ -13,7 +13,7 @@ class X {
 
     public getSettings(keys: string[]): any {
 >getSettings : (keys: string[]) => any
->            : ^^^^^^^        ^^^^^   
+>            : ^    ^^        ^^^^^   
 >keys : string[]
 >     : ^^^^^^^^
 

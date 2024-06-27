@@ -21,7 +21,6 @@ verify.moveToFile({
 
         "/bar.ts":
 `import { a } from './a';
-
 import { b } from './other';
 
 export const tt = 2;

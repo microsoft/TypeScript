@@ -19,7 +19,7 @@ class C {
 
     public foo(x: string, t = false) { }
 >foo : (x: string, t?: boolean) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >t : boolean
@@ -29,7 +29,7 @@ class C {
 
     public foo1(x: string, t = false, ...rest) { }
 >foo1 : (x: string, t?: boolean, ...rest: any[]) => void
->     : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >t : boolean
@@ -41,7 +41,7 @@ class C {
 
     public bar(t = false) { }
 >bar : (t?: boolean) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >t : boolean
 >  : ^^^^^^^
 >false : false
@@ -49,7 +49,7 @@ class C {
 
     public boo(t = false, ...rest) { }
 >boo : (t?: boolean, ...rest: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >t : boolean
 >  : ^^^^^^^
 >false : false

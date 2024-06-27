@@ -1,0 +1,936 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsExpressions.ts] ////
+
+=== isolatedDeclarationErrorsExpressions.ts ===
+declare function time(): bigint
+>time : () => bigint
+>     : ^^^^^^      
+
+export const numberConst = 1;
+>numberConst : 1
+>            : ^
+>1 : 1
+>  : ^
+
+export const numberConstBad1 = 1 + 1;
+>numberConstBad1 : number
+>                : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export const numberConstBad2 = Math.random();
+>numberConstBad2 : number
+>                : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+export const numberConstBad3 = numberConst;
+>numberConstBad3 : 1
+>                : ^
+>numberConst : 1
+>            : ^
+
+export const bigIntConst = 1n;
+>bigIntConst : 1n
+>            : ^^
+>1n : 1n
+>   : ^^
+
+export const bigIntConstBad1 = 1n + 1n;
+>bigIntConstBad1 : bigint
+>                : ^^^^^^
+>1n + 1n : bigint
+>        : ^^^^^^
+>1n : 1n
+>   : ^^
+>1n : 1n
+>   : ^^
+
+export const bigIntConstBad2 = time();
+>bigIntConstBad2 : bigint
+>                : ^^^^^^
+>time() : bigint
+>       : ^^^^^^
+>time : () => bigint
+>     : ^^^^^^      
+
+export const bigIntConstBad3 = bigIntConst;
+>bigIntConstBad3 : 1n
+>                : ^^
+>bigIntConst : 1n
+>            : ^^
+
+export const stringConst = "s";
+>stringConst : "s"
+>            : ^^^
+>"s" : "s"
+>    : ^^^
+
+export const stringConstBad = "s" + "s";
+>stringConstBad : string
+>               : ^^^^^^
+>"s" + "s" : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+// These are just strings
+export const templateConstOk1 = `s`;
+>templateConstOk1 : "s"
+>                 : ^^^
+>`s` : "s"
+>    : ^^^
+
+export const templateConstNotOk2 = `s${1n}`;
+>templateConstNotOk2 : string
+>                    : ^^^^^^
+>`s${1n}` : string
+>         : ^^^^^^
+>1n : 1n
+>   : ^^
+
+export const templateConstNotOk3 = `s${1} - ${"S"}`;
+>templateConstNotOk3 : "s1 - S"
+>                    : ^^^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export const templateConstNotOk4 = `s${1} - ${"S"} - ${false}`;
+>templateConstNotOk4 : string
+>                    : ^^^^^^
+>`s${1} - ${"S"} - ${false}` : string
+>                            : ^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+export const templateConstNotOk5 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateConstNotOk5 : string
+>                    : ^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : string
+>                                 : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+export let numberLet = 1;
+>numberLet : number
+>          : ^^^^^^
+>1 : 1
+>  : ^
+
+export let numberLetBad1 = 1 + 1;
+>numberLetBad1 : number
+>              : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export let numberLetBad2 = Math.random();
+>numberLetBad2 : number
+>              : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+export let numberLetBad3 = numberLet;
+>numberLetBad3 : number
+>              : ^^^^^^
+>numberLet : number
+>          : ^^^^^^
+
+export let bigIntLet = 1n;
+>bigIntLet : bigint
+>          : ^^^^^^
+>1n : 1n
+>   : ^^
+
+export let bigIntLetBad1 = 1n + 1n;
+>bigIntLetBad1 : bigint
+>              : ^^^^^^
+>1n + 1n : bigint
+>        : ^^^^^^
+>1n : 1n
+>   : ^^
+>1n : 1n
+>   : ^^
+
+export let bigIntLetBad2 = time();
+>bigIntLetBad2 : bigint
+>              : ^^^^^^
+>time() : bigint
+>       : ^^^^^^
+>time : () => bigint
+>     : ^^^^^^      
+
+export let bigIntLetBad3 = bigIntLet;
+>bigIntLetBad3 : bigint
+>              : ^^^^^^
+>bigIntLet : bigint
+>          : ^^^^^^
+
+export let stringLet = "s";
+>stringLet : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+
+export let stringLetBad = "s" + "s";
+>stringLetBad : string
+>             : ^^^^^^
+>"s" + "s" : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+export let templateLetOk1 = `s`;
+>templateLetOk1 : string
+>               : ^^^^^^
+>`s` : "s"
+>    : ^^^
+
+export let templateLetOk2 = `s${1} - ${"S"}`;
+>templateLetOk2 : string
+>               : ^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export let templateLetOk3 = `s${1} - ${"S"} - ${false}`;
+>templateLetOk3 : string
+>               : ^^^^^^
+>`s${1} - ${"S"} - ${false}` : string
+>                            : ^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+export let templateLetOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateLetOk4 : string
+>               : ^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : string
+>                                 : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+// As const
+
+export let numberLetAsConst = 1 as const;
+>numberLetAsConst : 1
+>                 : ^
+>1 as const : 1
+>           : ^
+>1 : 1
+>  : ^
+
+export let bigIntLetAsConst = 1n as const;
+>bigIntLetAsConst : 1n
+>                 : ^^
+>1n as const : 1n
+>            : ^^
+>1n : 1n
+>   : ^^
+
+export let stringLetAsConst = "s" as const;
+>stringLetAsConst : "s"
+>                 : ^^^
+>"s" as const : "s"
+>             : ^^^
+>"s" : "s"
+>    : ^^^
+
+export let templateLetOk1AsConst = `s` as const;
+>templateLetOk1AsConst : "s"
+>                      : ^^^
+>`s` as const : "s"
+>             : ^^^
+>`s` : "s"
+>    : ^^^
+
+export let templateLetOk2AsConst = `s${1} - ${"S"}` as const;
+>templateLetOk2AsConst : "s1 - S"
+>                      : ^^^^^^^^
+>`s${1} - ${"S"}` as const : "s1 - S"
+>                          : ^^^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export let templateLetOk3AsConst = `s${1} - ${"S"} - ${false}` as const;
+>templateLetOk3AsConst : "s1 - S - false"
+>                      : ^^^^^^^^^^^^^^^^
+>`s${1} - ${"S"} - ${false}` as const : "s1 - S - false"
+>                                     : ^^^^^^^^^^^^^^^^
+>`s${1} - ${"S"} - ${false}` : "s1 - S - false"
+>                            : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+export let templateLetOk4AsConst = `s${1 + 1} - ${"S"} - ${!false}` as const;
+>templateLetOk4AsConst : `s${number} - S - true`
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` as const : `s${number} - S - true`
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : `s${number} - S - true`
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+export let arr = [1, 2, 3];
+>arr : number[]
+>    : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+export let arrConst = [1, 2, 3] as const;
+>arrConst : readonly [1, 2, 3]
+>         : ^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>                   : ^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] : readonly [1, 2, 3]
+>          : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+export let arrWithSpread = [1, 2, 3, ...arr] as const;
+>arrWithSpread : readonly [1, 2, 3, ...number[]]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, ...arr] as const : readonly [1, 2, 3, ...number[]]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, ...arr] : readonly [1, 2, 3, ...number[]]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>...arr : number
+>       : ^^^^^^
+>arr : number[]
+>    : ^^^^^^^^
+
+export class Exported {
+>Exported : Exported
+>         : ^^^^^^^^
+
+    public numberLet = 1;
+>numberLet : number
+>          : ^^^^^^
+>1 : 1
+>  : ^
+
+    public numberLetBad1 = 1 + 1;
+>numberLetBad1 : number
+>              : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    public numberLetBad2 = Math.random();
+>numberLetBad2 : number
+>              : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    public numberLetBad3 = numberLet;
+>numberLetBad3 : number
+>              : ^^^^^^
+>numberLet : number
+>          : ^^^^^^
+
+    public bigIntLet = 1n;
+>bigIntLet : bigint
+>          : ^^^^^^
+>1n : 1n
+>   : ^^
+
+    public bigIntLetBad1 = 1n + 1n;
+>bigIntLetBad1 : bigint
+>              : ^^^^^^
+>1n + 1n : bigint
+>        : ^^^^^^
+>1n : 1n
+>   : ^^
+>1n : 1n
+>   : ^^
+
+    public bigIntLetBad2 = time();
+>bigIntLetBad2 : bigint
+>              : ^^^^^^
+>time() : bigint
+>       : ^^^^^^
+>time : () => bigint
+>     : ^^^^^^      
+
+    public bigIntLetBad3 = bigIntLet;
+>bigIntLetBad3 : bigint
+>              : ^^^^^^
+>bigIntLet : bigint
+>          : ^^^^^^
+
+    public stringLet = "s";
+>stringLet : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+
+    public stringLetBad = "s" + "s";
+>stringLetBad : string
+>             : ^^^^^^
+>"s" + "s" : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+    public templateLetOk1 = `s`;
+>templateLetOk1 : string
+>               : ^^^^^^
+>`s` : "s"
+>    : ^^^
+
+    public templateLetOk2 = `s${1} - ${"S"}`;
+>templateLetOk2 : string
+>               : ^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+    public templateLetOk3 = `s${1} - ${"S"} - ${false}`;
+>templateLetOk3 : string
+>               : ^^^^^^
+>`s${1} - ${"S"} - ${false}` : string
+>                            : ^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+    public templateLetOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateLetOk4 : string
+>               : ^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : string
+>                                 : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+
+    readonly numberConst = 1;
+>numberConst : 1
+>            : ^
+>1 : 1
+>  : ^
+
+    readonly numberConstBad1 = 1 + 1;
+>numberConstBad1 : number
+>                : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    readonly numberConstBad2 = Math.random();
+>numberConstBad2 : number
+>                : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    readonly numberConstBad3 = numberConst;
+>numberConstBad3 : 1
+>                : ^
+>numberConst : 1
+>            : ^
+
+    readonly bigIntConst = 1n;
+>bigIntConst : 1n
+>            : ^^
+>1n : 1n
+>   : ^^
+
+    readonly bigIntConstBad1 = 1n + 1n;
+>bigIntConstBad1 : bigint
+>                : ^^^^^^
+>1n + 1n : bigint
+>        : ^^^^^^
+>1n : 1n
+>   : ^^
+>1n : 1n
+>   : ^^
+
+    readonly bigIntConstBad2 = time();
+>bigIntConstBad2 : bigint
+>                : ^^^^^^
+>time() : bigint
+>       : ^^^^^^
+>time : () => bigint
+>     : ^^^^^^      
+
+    readonly bigIntConstBad3 = bigIntConst;
+>bigIntConstBad3 : 1n
+>                : ^^
+>bigIntConst : 1n
+>            : ^^
+
+    readonly stringConst = "s";
+>stringConst : "s"
+>            : ^^^
+>"s" : "s"
+>    : ^^^
+
+    readonly stringConstBad = "s" + "s";
+>stringConstBad : string
+>               : ^^^^^^
+>"s" + "s" : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+    readonly templateConstOk1 = `s`;
+>templateConstOk1 : "s"
+>                 : ^^^
+>`s` : "s"
+>    : ^^^
+
+    readonly templateConstNotOk2 = `s${1} - ${"S"}`;
+>templateConstNotOk2 : "s1 - S"
+>                    : ^^^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+    readonly templateConstNotOk3 = `s${1} - ${"S"} - ${false}`;
+>templateConstNotOk3 : string
+>                    : ^^^^^^
+>`s${1} - ${"S"} - ${false}` : string
+>                            : ^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+    readonly templateConstNotOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+>templateConstNotOk4 : string
+>                    : ^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : string
+>                                 : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+    numberLetAsConst = 1 as const;
+>numberLetAsConst : 1
+>                 : ^
+>1 as const : 1
+>           : ^
+>1 : 1
+>  : ^
+
+    bigIntLetAsConst = 1n as const;
+>bigIntLetAsConst : 1n
+>                 : ^^
+>1n as const : 1n
+>            : ^^
+>1n : 1n
+>   : ^^
+
+    stringLetAsConst = "s" as const;
+>stringLetAsConst : "s"
+>                 : ^^^
+>"s" as const : "s"
+>             : ^^^
+>"s" : "s"
+>    : ^^^
+
+    templateLetOk1AsConst = `s` as const;
+>templateLetOk1AsConst : "s"
+>                      : ^^^
+>`s` as const : "s"
+>             : ^^^
+>`s` : "s"
+>    : ^^^
+
+    templateLetOk2AsConst = `s${1} - ${"S"}` as const;
+>templateLetOk2AsConst : "s1 - S"
+>                      : ^^^^^^^^
+>`s${1} - ${"S"}` as const : "s1 - S"
+>                          : ^^^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+    templateLetOk3AsConst = `s${1} - ${"S"} - ${false}` as const;
+>templateLetOk3AsConst : "s1 - S - false"
+>                      : ^^^^^^^^^^^^^^^^
+>`s${1} - ${"S"} - ${false}` as const : "s1 - S - false"
+>                                     : ^^^^^^^^^^^^^^^^
+>`s${1} - ${"S"} - ${false}` : "s1 - S - false"
+>                            : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+    templateLetOk4AsConst = `s${1 + 1} - ${"S"} - ${!false}` as const;
+>templateLetOk4AsConst : `s${number} - S - true`
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` as const : `s${number} - S - true`
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : `s${number} - S - true`
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+}
+
+export function numberParam(p = 1): void { }
+>numberParam : (p?: number) => void
+>            : ^ ^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+export function numberParamBad1(p = 1 + 1): void { }
+>numberParamBad1 : (p?: number) => void
+>                : ^ ^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export function numberParamBad2(p = Math.random()): void { }
+>numberParamBad2 : (p?: number) => void
+>                : ^ ^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+export function numberParamBad3(p = numberParam): void { }
+>numberParamBad3 : (p?: (p?: number) => void) => void
+>                : ^ ^^^^ ^^^^^^^^^^^^^^    ^^^^^    
+>p : (p?: number) => void
+>  : ^ ^^^^^^^^^^^^^^    
+>numberParam : (p?: number) => void
+>            : ^ ^^^^^^^^^^^^^^    
+
+export function bigIntParam(p = 1n): void { }
+>bigIntParam : (p?: bigint) => void
+>            : ^ ^^^^^^^^^^^^^^    
+>p : bigint
+>  : ^^^^^^
+>1n : 1n
+>   : ^^
+
+export function bigIntParamBad1(p = 1n + 1n): void { }
+>bigIntParamBad1 : (p?: bigint) => void
+>                : ^ ^^^^^^^^^^^^^^    
+>p : bigint
+>  : ^^^^^^
+>1n + 1n : bigint
+>        : ^^^^^^
+>1n : 1n
+>   : ^^
+>1n : 1n
+>   : ^^
+
+export function bigIntParamBad2(p = time()): void { }
+>bigIntParamBad2 : (p?: bigint) => void
+>                : ^ ^^^^^^^^^^^^^^    
+>p : bigint
+>  : ^^^^^^
+>time() : bigint
+>       : ^^^^^^
+>time : () => bigint
+>     : ^^^^^^      
+
+export function bigIntParamBad3(p = bigIntParam): void { }
+>bigIntParamBad3 : (p?: (p?: bigint) => void) => void
+>                : ^ ^^^^ ^^^^^^^^^^^^^^    ^^^^^    
+>p : (p?: bigint) => void
+>  : ^ ^^^^^^^^^^^^^^    
+>bigIntParam : (p?: bigint) => void
+>            : ^ ^^^^^^^^^^^^^^    
+
+export function stringParam(p = "s"): void { }
+>stringParam : (p?: string) => void
+>            : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>"s" : "s"
+>    : ^^^
+
+export function stringParamBad(p = "s" + "s"): void { }
+>stringParamBad : (p?: string) => void
+>               : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>"s" + "s" : string
+>          : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"s" : "s"
+>    : ^^^
+
+export function templateParamOk1(p = `s`): void { }
+>templateParamOk1 : (p?: string) => void
+>                 : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>`s` : "s"
+>    : ^^^
+
+export function templateParamOk2(p = `s${1} - ${"S"}`): void { }
+>templateParamOk2 : (p?: string) => void
+>                 : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>`s${1} - ${"S"}` : "s1 - S"
+>                 : ^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export function templateParamOk3(p = `s${1} - ${"S"} - ${false}`): void { }
+>templateParamOk3 : (p?: string) => void
+>                 : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>`s${1} - ${"S"} - ${false}` : string
+>                            : ^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+export function templateParamOk4(p = `s${1 + 1} - ${"S"} - ${!false}`): void { }
+>templateParamOk4 : (p?: string) => void
+>                 : ^ ^^^^^^^^^^^^^^    
+>p : string
+>  : ^^^^^^
+>`s${1 + 1} - ${"S"} - ${!false}` : string
+>                                 : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+>!false : true
+>       : ^^^^
+>false : false
+>      : ^^^^^
+
+
+export const { a } = { a: 1 };
+>a : number
+>  : ^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>[0, 1, 2] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+export function foo([, , b]: [
+>foo : ([, , b]?: [number, number, number]) => void
+>    : ^       ^^^                        ^^^^^    
+> : undefined
+> : ^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
+    number,
+    number,
+    number
+] = [0, 1, 2]): void {
+>[0, 1, 2] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+}

@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: a1.ts
 
 
@@ -124,7 +124,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: SafeModules
+Program 2 Reused:: SafeModules
 File: a1.ts
 
 
@@ -241,7 +241,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: SafeModules
+Program 3 Reused:: SafeModules
 File: a1.ts
 
 
@@ -341,7 +341,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: SafeModules
+Program 4 Reused:: SafeModules
 File: a1.ts
 
 
@@ -441,7 +441,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: Completely
+Program 5 Reused:: Completely
 File: a1.ts
 
 
@@ -538,7 +538,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: SafeModules
+Program 6 Reused:: SafeModules
 File: a1.ts
 
 
@@ -638,7 +638,7 @@ node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare b
 
 
 
-Program Reused:: SafeModules
+Program 7 Reused:: SafeModules
 File: a1.ts
 
 

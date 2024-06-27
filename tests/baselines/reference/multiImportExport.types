@@ -56,7 +56,7 @@ class Adder {
 
     add(a: number, b: number) {
 >add : (a: number, b: number) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number

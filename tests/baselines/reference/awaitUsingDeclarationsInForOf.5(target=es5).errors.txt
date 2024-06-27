@@ -1,0 +1,19 @@
+awaitUsingDeclarationsInForOf.5.ts(5,17): error TS1123: Variable declaration list cannot be empty.
+awaitUsingDeclarationsInForOf.5.ts(8,19): error TS1123: Variable declaration list cannot be empty.
+
+
+==== awaitUsingDeclarationsInForOf.5.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
+    
+    declare const x: any[]
+    
+    for (await using of x);
+                    
+!!! error TS1123: Variable declaration list cannot be empty.
+    
+    export async function test() {
+      for (await using of x);
+                      
+!!! error TS1123: Variable declaration list cannot be empty.
+    }
+    

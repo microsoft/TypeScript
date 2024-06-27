@@ -10,11 +10,11 @@ import z1 = require("interface");
 
 import z2 = require("variable");
 >z2 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import z3 = require("interface-variable");
 >z3 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import z4 = require("module");
 >z4 : typeof z4
@@ -26,7 +26,7 @@ import z5 = require("interface-module");
 
 import z6 = require("variable-module");
 >z6 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import z7 = require("function");
 >z7 : () => any
@@ -56,7 +56,7 @@ z2.a;
 >z2.a : number
 >     : ^^^^^^
 >z2 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -64,7 +64,7 @@ z3.a;
 >z3.a : number
 >     : ^^^^^^
 >z3 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -88,7 +88,7 @@ z6.a;
 >z6.a : number
 >     : ^^^^^^
 >z6 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -172,11 +172,11 @@ import * as y1 from "interface";
 
 import * as y2 from "variable";
 >y2 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y3 from "interface-variable";
 >y3 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y4 from "module";
 >y4 : typeof z4
@@ -188,7 +188,7 @@ import * as y5 from "interface-module";
 
 import * as y6 from "variable-module";
 >y6 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 
 import * as y7 from "function";
 >y7 : () => any
@@ -218,7 +218,7 @@ y2.a;
 >y2.a : number
 >     : ^^^^^^
 >y2 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -226,7 +226,7 @@ y3.a;
 >y3.a : number
 >     : ^^^^^^
 >y3 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -250,7 +250,7 @@ y6.a;
 >y6.a : number
 >     : ^^^^^^
 >y6 : { a: number; b: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -497,7 +497,7 @@ declare module "variable" {
     }
     export = Foo;
 >Foo : { a: number; b: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^      ^^^
 }
 
 declare module "interface-variable" {
@@ -610,7 +610,7 @@ declare module "variable-module" {
     }
     export = Foo;
 >Foo : { a: number; b: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^      ^^^
 }
 
 declare module "function" {

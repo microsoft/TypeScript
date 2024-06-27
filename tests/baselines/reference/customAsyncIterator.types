@@ -12,7 +12,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
     }
     async next(value?: T): Promise<IteratorResult<T>> {
 >next : (value?: T) => Promise<IteratorResult<T>>
->     : ^^^^^^^^^ ^^^^^                          
+>     : ^     ^^^ ^^^^^                          
 >value : T
 >      : ^
 

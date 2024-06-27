@@ -20,8 +20,8 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
     UnionType,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /* Tracing events for the compiler. */
 
@@ -51,7 +51,7 @@ export namespace tracingEnabled {
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
     interface Args {
-        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
+        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[]; // eslint-disable-line no-restricted-syntax
     }
 
     /** Starts tracing for the given project. */

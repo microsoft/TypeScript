@@ -1,5 +1,5 @@
 circularReferenceInReturnType.ts(3,7): error TS7022: 'res1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-circularReferenceInReturnType.ts(9,7): error TS7022: 'res3' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularReferenceInReturnType.ts(3,18): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
 ==== circularReferenceInReturnType.ts (2 errors) ====
@@ -8,12 +8,22 @@ circularReferenceInReturnType.ts(9,7): error TS7022: 'res3' implicitly has type 
     const res1 = fn1(() => res1);
           ~~~~
 !!! error TS7022: 'res1' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                     ~~~~~~~~~~
+!!! error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
     
     declare function fn2<T>(): (cb: () => any) => (a: T) => void;
     const res2 = fn2()(() => res2);
     
     declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
     const res3 = fn3()(() => res3);
-          ~~~~
-!!! error TS7022: 'res3' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    
+    // https://github.com/microsoft/TypeScript/issues/58616
+    
+    function foo(arg: Parameters<typeof bar>[0]) {
+        return arg;
+    }
+    
+    function bar(arg: string) {
+        return foo(arg);
+    }
     

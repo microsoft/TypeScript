@@ -8,7 +8,7 @@ interface I1 {
 
     f2(x: number, y: string);
 >f2 : (x: number, y: string) => any
->   : ^^^^      ^^^^^      ^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string

@@ -82,7 +82,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -148,89 +148,81 @@ export type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-6073194916-export type TheStr = string;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts",
-      "../other.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../const.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../../../a/lib/lib.d.ts",
+    "../const.ts",
+    "../index.ts",
+    "../other.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../const.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "../const.ts": {
-        "original": {
-          "version": "-11202312776-export type TheNum = 42;",
-          "signature": "-13194036030-export type TheNum = 42;\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "../const.ts": {
+      "original": {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n"
       },
-      "../index.ts": {
-        "original": {
-          "version": "-11225381282-export type { TheNum } from './const.js';",
-          "signature": "-9660329432-export type { TheNum } from './const.js';\n"
-        },
+      "version": "-11202312776-export type TheNum = 42;",
+      "signature": "-13194036030-export type TheNum = 42;\n"
+    },
+    "../index.ts": {
+      "original": {
         "version": "-11225381282-export type { TheNum } from './const.js';",
         "signature": "-9660329432-export type { TheNum } from './const.js';\n"
       },
-      "../other.ts": {
-        "original": {
-          "version": "-4609154030-export type TheStr = string;",
-          "signature": "-6073194916-export type TheStr = string;\n"
-        },
+      "version": "-11225381282-export type { TheNum } from './const.js';",
+      "signature": "-9660329432-export type { TheNum } from './const.js';\n"
+    },
+    "../other.ts": {
+      "original": {
         "version": "-4609154030-export type TheStr = string;",
         "signature": "-6073194916-export type TheStr = string;\n"
-      }
-    },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "../const.ts",
-          "../index.ts",
-          "../other.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts",
-      "../other.ts"
-    ],
-    "latestChangedDtsFile": "./other.d.ts"
+      },
+      "version": "-4609154030-export type TheStr = string;",
+      "signature": "-6073194916-export type TheStr = string;\n"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "../const.ts",
+        "../index.ts",
+        "../other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../index.ts": [
+      "../const.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./other.d.ts",
   "version": "FakeTSVersion",
-  "size": 1082
+  "size": 1031
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -239,6 +231,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = 42;
 
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 50
+}
 
 
 FsWatches::
@@ -274,6 +278,7 @@ Program options: {
   "baseUrl": "/user/username/projects/myproject/packages/pkg2",
   "watch": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
 }
 Program structureReused: Not
@@ -302,6 +307,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "watch": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
 }
 Program structureReused: Not
@@ -342,12 +348,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/package.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -381,6 +388,20 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 
 
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 64
+}
+
 
 
 Program root files: [
@@ -390,6 +411,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "watch": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
 }
 Program structureReused: Not
@@ -425,12 +447,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because buildinfo file 'packages/pkg1/build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -469,6 +492,18 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 50
+}
+
 
 
 Program root files: [
@@ -478,6 +513,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "watch": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
 }
 Program structureReused: Not

@@ -23,7 +23,7 @@ function Foo(); // error
 
 function F1(s:string) {return s;} // error
 >F1 : (s: string) => string
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -31,7 +31,7 @@ function F1(s:string) {return s;} // error
 
 function F1(a:any) { return a;} // error
 >F1 : (s: string) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >a : any
 >  : ^^^
 >a : any
@@ -39,13 +39,13 @@ function F1(a:any) { return a;} // error
 
 function Goo(s:string); // error - no implementation
 >Goo : (s: string) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 declare function Gar(s:String); // expect no error
 >Gar : (s: String) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >s : String
 >  : ^^^^^^
 

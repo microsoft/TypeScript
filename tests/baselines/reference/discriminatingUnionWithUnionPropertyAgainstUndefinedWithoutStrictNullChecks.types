@@ -29,16 +29,16 @@ opts.objectRef || opts.getObjectRef();
 >opts.objectRef : A | B
 >               : ^^^^^
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >objectRef : A | B
 >          : ^^^^^
 >opts.getObjectRef() : any
 >opts.getObjectRef : () => any
->                  : ^^^^^^^^^
+>                  : ^^^^^^   
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^
 >getObjectRef : () => any
->             : ^^^^^^^^^
+>             : ^^^^^^   
 
 // repro #49643 issuecomment-1174455723
 
@@ -72,9 +72,9 @@ interface B2 {
 
 const testMethod = (m: A2 | B2) => {
 >testMethod : (m: A2 | B2) => void
->           : ^^^^       ^^^^^^^^^
+>           : ^ ^^       ^^^^^^^^^
 >(m: A2 | B2) => {    if (m.error) {        m; // should be A2 | B2    } else {        m; // should be A2 | B2    }} : (m: A2 | B2) => void
->                                                                                                                    : ^^^^       ^^^^^^^^^
+>                                                                                                                    : ^ ^^       ^^^^^^^^^
 >m : A2 | B2
 >  : ^^^^^^^
 

@@ -55,5 +55,5 @@ let unionedSpread = <Empty {...obj} />;
 >Empty : typeof Empty
 >      : ^^^^^^^^^^^^
 >obj : { a: number | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^                  ^^^^^^^^^^^^^^^
 

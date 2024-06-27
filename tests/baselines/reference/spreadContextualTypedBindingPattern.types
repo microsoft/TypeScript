@@ -27,7 +27,7 @@ const { naam, age } = {...bob, ...alice}
 >age : number
 >    : ^^^^^^
 >{...bob, ...alice} : { naam: string; age: number; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^      ^^^^^^^      ^^^
 >bob : Person
 >    : ^^^^^^
 >alice : Person

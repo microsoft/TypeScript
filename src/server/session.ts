@@ -100,8 +100,8 @@ import {
     OperationCanceledException,
     OrganizeImportsMode,
     OutliningSpan,
+    PasteEdits,
     Path,
-    perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
     Program,
@@ -130,13 +130,14 @@ import {
     TextRange,
     TextSpan,
     textSpanEnd,
+    timestamp,
     toArray,
     toFileNameLowerCase,
     tracing,
     unmangleScopedPackageName,
     version,
     WithMetadata,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AuxiliaryProject,
     CloseFileWatcherEvent,
@@ -180,8 +181,8 @@ import {
     stringifyIndented,
     toNormalizedPath,
     updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 interface StackTraceError extends Error {
     stack?: string;
@@ -298,7 +299,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         : common;
 }
 
-export interface PendingErrorCheck {
+interface PendingErrorCheck {
     fileName: NormalizedPath;
     project: Project;
 }
@@ -342,10 +343,11 @@ interface NextStep {
  */
 interface MultistepOperationHost {
     getCurrentRequestId(): number;
-    sendRequestCompletedEvent(requestId: number): void;
+    getPerformanceData(): protocol.PerformanceData | undefined;
+    sendRequestCompletedEvent(requestId: number, performanceData: protocol.PerformanceData | undefined): void;
     getServerHost(): ServerHost;
     isCancellationRequested(): boolean;
-    executeWithRequestId(requestId: number, action: () => void): void;
+    executeWithRequestId(requestId: number, action: () => void, performanceData: protocol.PerformanceData | undefined): void;
     logError(error: Error, message: string): void;
 }
 
@@ -355,6 +357,7 @@ interface MultistepOperationHost {
  */
 class MultistepOperation implements NextStep {
     private requestId: number | undefined;
+    private performanceData: protocol.PerformanceData | undefined;
     private timerHandle: any;
     private immediateId: number | undefined;
 
@@ -368,11 +371,12 @@ class MultistepOperation implements NextStep {
 
     private complete() {
         if (this.requestId !== undefined) {
-            this.operationHost.sendRequestCompletedEvent(this.requestId);
+            this.operationHost.sendRequestCompletedEvent(this.requestId, this.performanceData);
             this.requestId = undefined;
         }
         this.setTimerHandle(undefined);
         this.setImmediateId(undefined);
+        this.performanceData = undefined;
     }
 
     public immediate(actionType: string, action: () => void) {
@@ -381,7 +385,7 @@ class MultistepOperation implements NextStep {
         this.setImmediateId(
             this.operationHost.getServerHost().setImmediate(() => {
                 this.immediateId = undefined;
-                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
             }, actionType),
         );
     }
@@ -393,7 +397,7 @@ class MultistepOperation implements NextStep {
             this.operationHost.getServerHost().setTimeout(
                 () => {
                     this.timerHandle = undefined;
-                    this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+                    this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
                 },
                 ms,
                 actionType,
@@ -428,6 +432,7 @@ class MultistepOperation implements NextStep {
                 this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
             }
         }
+        this.performanceData = this.operationHost.getPerformanceData();
         if (stop || !this.hasPendingWork()) {
             this.complete();
         }
@@ -910,6 +915,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.PrepareCallHierarchy,
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+    protocol.CommandTypes.GetPasteEdits,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
@@ -991,6 +997,10 @@ export class Session<TMessage = string> implements EventSender {
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
 
+    // Minimum number of lines for attempting to use region diagnostics for a file.
+    /** @internal */
+    protected regionDiagLineCountThreshold = 500;
+
     constructor(opts: SessionOptions) {
         this.host = opts.host;
         this.cancellationToken = opts.cancellationToken;
@@ -1008,11 +1018,12 @@ export class Session<TMessage = string> implements EventSender {
             ? opts.eventHandler || (event => this.defaultEventHandler(event))
             : undefined;
         const multistepOperationHost: MultistepOperationHost = {
-            executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
+            executeWithRequestId: (requestId, action, performanceData) => this.executeWithRequestId(requestId, action, performanceData),
             getCurrentRequestId: () => this.currentRequestId,
+            getPerformanceData: () => this.performanceData,
             getServerHost: () => this.host,
             logError: (err, cmd) => this.logError(err, cmd),
-            sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
+            sendRequestCompletedEvent: (requestId, performanceData) => this.sendRequestCompletedEvent(requestId, performanceData),
             isCancellationRequested: () => this.cancellationToken.isCancellationRequested(),
         };
         this.errorCheck = new MultistepOperation(multistepOperationHost);
@@ -1062,8 +1073,8 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private sendRequestCompletedEvent(requestId: number): void {
-        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+    private sendRequestCompletedEvent(requestId: number, performanceData: protocol.PerformanceData | undefined): void {
+        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData }, "requestCompleted");
     }
 
     private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
@@ -1204,7 +1215,6 @@ export class Session<TMessage = string> implements EventSender {
 
     protected writeMessage(msg: protocol.Message) {
         const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
-        perfLogger?.logEvent(`Response message size: ${msgText.length}`);
         this.host.write(msgText);
     }
 
@@ -1213,14 +1223,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** @internal */
-    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    doOutput(
+        info: {} | undefined,
+        cmdName: string,
+        reqSeq: number,
+        success: boolean,
+        performanceData: protocol.PerformanceData | undefined,
+        message?: string,
+    ): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",
             command: cmdName,
             request_seq: reqSeq,
             success,
-            performanceData: this.performanceData,
+            performanceData,
         };
 
         if (success) {
@@ -1255,29 +1272,71 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
             : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
-        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
+        const diagnosticsStartTime = timestamp();
+        tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
+        let diagnosticsResult;
+        if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
+            tracing?.pop();
+            return;
+        }
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, diagnosticsResult.spans);
+        tracing?.pop();
+        return;
+    }
+
+    // We should only do the region-based semantic check if we think it would be
+    // considerably faster than a whole-file semantic check.
+    /** @internal */
+    protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.textStorage.getLineInfo().getLineCount();
+        return !!(lineCount && lineCount >= this.regionDiagLineCountThreshold);
+    }
+
+    private sendDiagnosticsEvent(
+        file: NormalizedPath,
+        project: Project,
+        diagnostics: readonly Diagnostic[],
+        kind: protocol.DiagnosticEventKind,
+        diagnosticsStartTime: number,
+        spans?: TextSpan[],
+    ): void {
         try {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const duration = timestamp() - diagnosticsStartTime;
+            const body: protocol.DiagnosticEventBody = {
+                file,
+                diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+                duration,
+            };
+            this.event<protocol.DiagnosticEventBody>(
+                body,
+                kind,
+            );
         }
         catch (err) {
             this.logError(err, kind);
@@ -1285,7 +1344,15 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-    private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
+    private updateErrorCheck(
+        next: NextStep,
+        checkList: PendingErrorCheck[] | (string | protocol.FileRangesRequestArgs)[],
+        ms: number,
+        requireOpen = true,
+    ) {
+        if (checkList.length === 0) {
+            return;
+        }
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
@@ -1295,23 +1362,43 @@ export class Session<TMessage = string> implements EventSender {
         const goNext = () => {
             index++;
             if (checkList.length > index) {
-                next.delay("checkOne", followMs, checkOne);
+                return next.delay("checkOne", followMs, checkOne);
             }
         };
+
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project) => {
+            this.semanticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            if (this.getPreferences(fileName).disableSuggestions) {
+                return goNext();
+            }
+            next.immediate("suggestionCheck", () => {
+                this.suggestionCheck(fileName, project);
+                goNext();
+            });
+        };
+
         const checkOne = () => {
             if (this.changeSeq !== seq) {
                 return;
             }
 
-            let item: string | PendingErrorCheck | undefined = checkList[index];
+            let ranges: protocol.FileRange[] | undefined;
+            let item: string | protocol.FileRangesRequestArgs | PendingErrorCheck | undefined = checkList[index];
             if (isString(item)) {
-                // Find out project for the file name
                 item = this.toPendingErrorCheck(item);
-                if (!item) {
-                    // Ignore file if there is no project for the file
-                    goNext();
-                    return;
-                }
+            }
+            // eslint-disable-next-line local/no-in-operator
+            else if ("ranges" in item) {
+                ranges = item.ranges;
+                item = this.toPendingErrorCheck(item.file);
+            }
+
+            if (!item) {
+                return goNext();
             }
 
             const { fileName, project } = item;
@@ -1329,24 +1416,23 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
-                return;
+                return goNext();
             }
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
 
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNext();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
-                    goNext();
+            if (ranges) {
+                return next.immediate("regionSemanticCheck", () => {
+                    const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+                    if (scriptInfo) {
+                        this.regionSemanticCheck(fileName, project, ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)));
+                    }
+                    if (this.changeSeq !== seq) {
+                        return;
+                    }
+                    next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
                 });
-            });
+            }
+
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
@@ -1575,6 +1661,7 @@ export class Session<TMessage = string> implements EventSender {
                         fileNameToSearch,
                         noDtsProject.currentDirectory,
                         noDtsProject.directoryStructureHost,
+                        /*deferredDeleteOk*/ false,
                     );
                     if (!info) continue;
                     if (!noDtsProject.containsScriptInfo(info)) {
@@ -1901,6 +1988,26 @@ export class Session<TMessage = string> implements EventSender {
                 }),
             };
         });
+    }
+
+    private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
+        const formatOptions = this.getHostFormatOptions();
+        const preferences = this.getHostPreferences();
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+        const focusLocations = args.mapping.focusLocations?.map(spans => {
+            return spans.map(loc => {
+                const start = scriptInfo.lineOffsetToPosition(loc.start.line, loc.start.offset);
+                const end = scriptInfo.lineOffsetToPosition(loc.end.line, loc.end.offset);
+                return {
+                    start,
+                    length: end - start,
+                };
+            });
+        });
+
+        const changes = languageService.mapCode(file, args.mapping.contents, focusLocations, formatOptions, preferences);
+        return this.mapTextChangesToCodeEdits(changes);
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -2482,13 +2589,13 @@ export class Session<TMessage = string> implements EventSender {
         return project && { fileName, project };
     }
 
-    private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
-        if (fileNames.length > 0) {
-            this.updateErrorCheck(next, fileNames, delay);
+        if (fileArgs.length > 0) {
+            this.updateErrorCheck(next, fileArgs, delay);
         }
     }
 
@@ -2511,16 +2618,14 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
+    private reload(args: protocol.ReloadRequestArgs) {
         const file = toNormalizedPath(args.file);
         const tempFileName = args.tmpfile === undefined ? undefined : toNormalizedPath(args.tmpfile);
         const info = this.projectService.getScriptInfoForNormalizedPath(file);
         if (info) {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
-            if (info.reloadFromFile(tempFileName)) {
-                this.doOutput(/*info*/ undefined, protocol.CommandTypes.Reload, reqSeq, /*success*/ true);
-            }
+            info.reloadFromFile(tempFileName);
         }
     }
 
@@ -2795,6 +2900,24 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
+    private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
+        const { file, project } = this.getFileAndProject(args);
+        const copiedFrom = args.copiedFrom
+            ? { file: args.copiedFrom.file, range: args.copiedFrom.spans.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
+            : undefined;
+        const result = project.getLanguageService().getPasteEdits(
+            {
+                targetFile: file,
+                pastedText: args.pastedText,
+                pasteLocations: args.pasteLocations.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)),
+                copiedFrom,
+                preferences: this.getPreferences(file),
+            },
+            this.getFormatOptions(file),
+        );
+        return result && this.mapPasteEditsAction(result);
+    }
+
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");
         const { file, project } = this.getFileAndProject(args.scope.args);
@@ -2925,6 +3048,10 @@ export class Session<TMessage = string> implements EventSender {
 
     private mapCodeFixAction({ fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
+    }
+
+    private mapPasteEditsAction({ edits, fixId }: PasteEdits): protocol.PasteEditsAction {
+        return { edits: this.mapTextChangesToCodeEdits(edits), fixId };
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {
@@ -3175,12 +3302,13 @@ export class Session<TMessage = string> implements EventSender {
 
     exit() {/*overridden*/}
 
-    private notRequired(): HandlerResponse {
-        return { responseRequired: false };
+    private notRequired(request: protocol.Request | undefined): HandlerResponse {
+        if (request) this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ true, this.performanceData);
+        return { responseRequired: false, performanceData: this.performanceData };
     }
 
     private requiredResponse(response: {} | undefined): HandlerResponse {
-        return { response, responseRequired: true };
+        return { response, responseRequired: true, performanceData: this.performanceData };
     }
 
     private handlers = new Map(Object.entries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
@@ -3189,7 +3317,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(response);
         },
         [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-            this.projectService.openExternalProject(request.arguments, /*print*/ true);
+            this.projectService.openExternalProject(request.arguments, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3199,7 +3327,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
-            this.projectService.closeExternalProject(request.arguments.projectFileName, /*print*/ true);
+            this.projectService.closeExternalProject(request.arguments.projectFileName, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3259,7 +3387,7 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.Exit]: () => {
             this.exit();
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Definition]: (request: protocol.DefinitionRequest) => {
             return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
@@ -3310,7 +3438,7 @@ export class Session<TMessage = string> implements EventSender {
                 convertScriptKindName(request.arguments.scriptKindName!), // TODO: GH#18217
                 request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined,
             );
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Quickinfo]: (request: protocol.QuickInfoRequest) => {
             return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
@@ -3417,34 +3545,33 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
             this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
             this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
             this.change(request.arguments);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Configure]: (request: protocol.ConfigureRequest) => {
             this.projectService.setHostConfiguration(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Configure, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Reload]: (request: protocol.ReloadRequest) => {
-            this.reload(request.arguments, request.seq);
+            this.reload(request.arguments);
             return this.requiredResponse({ reloadFinished: true });
         },
         [protocol.CommandTypes.Saveto]: (request: protocol.Request) => {
             const savetoArgs = request.arguments as protocol.SavetoRequestArgs;
             this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Close]: (request: protocol.Request) => {
             const closeArgs = request.arguments as protocol.FileRequestArgs;
             this.closeClientFile(closeArgs.file);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Navto]: (request: protocol.NavtoRequest) => {
             return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
@@ -3483,9 +3610,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
             return this.requiredResponse(this.getProjectInfo(request.arguments));
         },
-        [protocol.CommandTypes.ReloadProjects]: () => {
+        [protocol.CommandTypes.ReloadProjects]: request => {
             this.projectService.reloadProjects();
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
@@ -3520,6 +3647,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
+        [protocol.CommandTypes.GetPasteEdits]: (request: protocol.GetPasteEditsRequest) => {
+            return this.requiredResponse(this.getPasteEdits(request.arguments));
+        },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
         },
@@ -3537,8 +3667,7 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
             this.configurePlugin(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.ConfigurePlugin, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
             return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
@@ -3582,6 +3711,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
             return this.requiredResponse(this.provideInlayHints(request.arguments));
         },
+        [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
+            return this.requiredResponse(this.mapCode(request.arguments));
+        },
     }));
 
     public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
@@ -3603,36 +3735,40 @@ export class Session<TMessage = string> implements EventSender {
         this.cancellationToken.resetRequest(requestId);
     }
 
-    public executeWithRequestId<T>(requestId: number, f: () => T) {
+    public executeWithRequestId<T>(requestId: number, f: () => T): T;
+    /** @internal */
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData: protocol.PerformanceData | undefined): T; // eslint-disable-line @typescript-eslint/unified-signatures
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData?: protocol.PerformanceData) {
+        const currentPerformanceData = this.performanceData;
         try {
+            this.performanceData = perfomanceData;
             this.setCurrentRequest(requestId);
             return f();
         }
         finally {
             this.resetCurrentRequest(requestId);
+            this.performanceData = currentPerformanceData;
         }
     }
 
     public executeCommand(request: protocol.Request): HandlerResponse {
         const handler = this.handlers.get(request.command);
         if (handler) {
-            const response = this.executeWithRequestId(request.seq, () => handler(request));
+            const response = this.executeWithRequestId(request.seq, () => handler(request), /*perfomanceData*/ undefined);
             this.projectService.enableRequestedPlugins();
             return response;
         }
         else {
             this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, /*performanceData*/ undefined, `Unrecognized JSON command: ${request.command}`);
             return { responseRequired: false };
         }
     }
 
     public onMessage(message: TMessage) {
         this.gcTimer.scheduleCollect();
-
-        this.performanceData = undefined;
-
         let start: [number, number] | undefined;
+        const currentPerformanceData = this.performanceData;
         if (this.logger.hasLevel(LogLevel.requestTime)) {
             start = this.hrtime();
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -3647,10 +3783,9 @@ export class Session<TMessage = string> implements EventSender {
             relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-            perfLogger?.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
             tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
-            const { response, responseRequired } = this.executeCommand(request);
+            const { response, responseRequired, performanceData } = this.executeCommand(request);
             tracing?.pop();
 
             if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -3664,13 +3799,25 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             // Note: Log before writing the response, else the editor can complete its activity before the server does
-            perfLogger?.logStopCommand("" + request.command, "Success");
             tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
             if (response) {
-                this.doOutput(response, request.command, request.seq, /*success*/ true);
+                this.doOutput(
+                    response,
+                    request.command,
+                    request.seq,
+                    /*success*/ true,
+                    performanceData,
+                );
             }
             else if (responseRequired) {
-                this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                this.doOutput(
+                    /*info*/ undefined,
+                    request.command,
+                    request.seq,
+                    /*success*/ false,
+                    performanceData,
+                    "No content available.",
+                );
             }
         }
         catch (err) {
@@ -3679,14 +3826,12 @@ export class Session<TMessage = string> implements EventSender {
 
             if (err instanceof OperationCanceledException) {
                 // Handle cancellation exceptions
-                perfLogger?.logStopCommand("" + (request && request.command), "Canceled: " + err);
                 tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
-                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
+                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true, this.performanceData);
                 return;
             }
 
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
-            perfLogger?.logStopCommand("" + (request && request.command), "Error: " + err);
             tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
 
             this.doOutput(
@@ -3694,8 +3839,12 @@ export class Session<TMessage = string> implements EventSender {
                 request ? request.command : protocol.CommandTypes.Unknown,
                 request ? request.seq : 0,
                 /*success*/ false,
+                this.performanceData,
                 "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack,
             );
+        }
+        finally {
+            this.performanceData = currentPerformanceData;
         }
     }
 
@@ -3779,6 +3928,7 @@ function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): proto
 export interface HandlerResponse {
     response?: {};
     responseRequired?: boolean;
+    /** @internal */ performanceData?: protocol.PerformanceData;
 }
 
 /** @internal */
