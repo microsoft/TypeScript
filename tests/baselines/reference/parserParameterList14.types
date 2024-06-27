@@ -7,7 +7,7 @@ declare class C {
 
   foo(a = 1): void;
 >foo : (a?: number) => void
->    : ^^^^^^^^^^^^^^^^    
+>    : ^ ^^^^^^^^^^^^^^    
 >a : number
 >  : ^^^^^^
 >1 : 1

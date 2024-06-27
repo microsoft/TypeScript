@@ -126,6 +126,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
+/user/username/projects/myproject/node_modules/pkg2: *new*
+  {}
 /user/username/projects/myproject/packages/pkg1: *new*
   {}
 /user/username/projects/myproject/packages/pkg2: *new*
@@ -179,6 +181,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -187,6 +190,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -259,6 +263,8 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
+/user/username/projects/myproject/node_modules/pkg2:
+  {}
 /user/username/projects/myproject/packages/pkg1:
   {}
 
@@ -310,6 +316,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -318,6 +325,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -392,6 +400,8 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/pkg2:
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}

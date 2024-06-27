@@ -11,7 +11,7 @@ class Bar {
 
     public prop1(x) {
 >prop1 : (x: any) => any
->      : ^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

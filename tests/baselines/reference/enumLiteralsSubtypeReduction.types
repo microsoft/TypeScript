@@ -1,8 +1,7 @@
 //// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
 
 === Performance Stats ===
-Type Count: 3,200 / 3,200 (nearest 100)
-Symbol count: 26,500 / 26,500 (nearest 500)
+Type Count: 2,500
 
 === enumLiteralsSubtypeReduction.ts ===
 enum E {
@@ -4107,7 +4106,7 @@ enum E {
 }
 function run(a: number) {
 >run : (a: number) => E[]
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >a : number
 >  : ^^^^^^
 

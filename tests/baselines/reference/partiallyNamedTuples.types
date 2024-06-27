@@ -13,7 +13,7 @@ function fa1(...args: NamedAndAnonymous) {}
 
 function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
 >fa2 : (a: NamedAndAnonymous, a: string, args_1: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : NamedAndAnonymous
 >  : ^^^^^^^^^^^^^^^^^
 >args : NamedAndAnonymous
@@ -31,7 +31,7 @@ function fb1(...args: NamedAnonymousMixed) {}
 
 function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
 >fb2 : (a: NamedAnonymousMixed, a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : NamedAnonymousMixed
 >  : ^^^^^^^^^^^^^^^^^^^
 >args : NamedAnonymousMixed
@@ -39,7 +39,7 @@ function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
 
 function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
 >fb3 : (a: NamedAnonymousMixed, a: string, args_1: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : NamedAnonymousMixed
 >  : ^^^^^^^^^^^^^^^^^^^
 >args : NamedAndAnonymous
@@ -119,11 +119,11 @@ type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
 
 declare function test<T extends readonly unknown[]>(
 >test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^ 
 
   arg: [
 >arg : [...{ [K in keyof T]: { type: T[K]; }; }]
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
 
     ...{
       [K in keyof T]: {
@@ -150,7 +150,7 @@ const output = test(input);
 >test(input) : [first: number, string]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^ 
 >input : [first: { type: number; }, { type: string; }]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
 

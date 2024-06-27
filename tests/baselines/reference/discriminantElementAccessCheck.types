@@ -26,7 +26,7 @@ interface TypeB {
 
 function assertNever(x: never) {
 >assertNever : (x: never) => never
->            : ^^^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -37,7 +37,7 @@ function assertNever(x: never) {
 
 function IfWithString(val: U) {
 >IfWithString : (val: U) => string | number
->             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -74,7 +74,7 @@ function IfWithString(val: U) {
 
 function SwitchWithString(val: U) {
 >SwitchWithString : (val: U) => string | number
->                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -115,7 +115,7 @@ function SwitchWithString(val: U) {
 >assertNever(val) : never
 >                 : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >val : never
 >    : ^^^^^
     }
@@ -123,7 +123,7 @@ function SwitchWithString(val: U) {
 
 function IfWithTemplate(val: U) {
 >IfWithTemplate : (val: U) => string | number
->               : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>               : ^   ^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -160,7 +160,7 @@ function IfWithTemplate(val: U) {
 
 function SwitchWithTemplate(val: U) {
 >SwitchWithTemplate : (val: U) => string | number
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^^^^^^^^^^^^^
 >val : U
 >    : ^
 
@@ -201,7 +201,7 @@ function SwitchWithTemplate(val: U) {
 >assertNever(val) : never
 >                 : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >val : never
 >    : ^^^^^
     }

@@ -35,7 +35,7 @@ obj1 = obj2; // Error - indexer doesn't match
 
 function f(x: { [s: string]: string }) { }
 >f : (x: { [s: string]: string; }) => void
->  : ^^^^                        ^^^^^^^^^
+>  : ^ ^^                        ^^^^^^^^^
 >x : { [s: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -45,7 +45,7 @@ f({}); // Ok
 >f({}) : void
 >      : ^^^^
 >f : (x: { [s: string]: string; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                        ^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -53,7 +53,7 @@ f(obj1); // Ok
 >f(obj1) : void
 >        : ^^^^
 >f : (x: { [s: string]: string; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                        ^^^^^^^^^
 >obj1 : { [x: string]: string; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ f(obj2); // Error - indexer doesn't match
 >f(obj2) : void
 >        : ^^^^
 >f : (x: { [s: string]: string; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                        ^^^^^^^^^
 >obj2 : { x: string; }
 >     : ^^^^^^^^^^^^^^
 

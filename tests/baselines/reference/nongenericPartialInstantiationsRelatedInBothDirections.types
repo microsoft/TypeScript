@@ -33,17 +33,17 @@ declare let cfoo: ObjectContaining<Foo>;
 
 cfoo = cafoo;
 >cfoo = cafoo : ObjectContaining<{ a: number; foo: number; }>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^
 >cfoo : ObjectContaining<Foo>
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >cafoo : ObjectContaining<{ a: number; foo: number; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^
 
 cafoo = cfoo;
 >cafoo = cfoo : ObjectContaining<Foo>
 >             : ^^^^^^^^^^^^^^^^^^^^^
 >cafoo : ObjectContaining<{ a: number; foo: number; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^
 >cfoo : ObjectContaining<Foo>
 >     : ^^^^^^^^^^^^^^^^^^^^^
 

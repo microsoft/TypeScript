@@ -13,7 +13,7 @@ class C1 implements I1 {
 
     method(a = 0, b) { }
 >method : (a: number, b: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >0 : 0

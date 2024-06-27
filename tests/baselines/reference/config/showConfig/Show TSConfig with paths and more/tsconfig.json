@@ -32,6 +32,6 @@
         "./src/**/*"
     ],
     "exclude": [
-        "./lib"
+        "/Show TSConfig with paths and more/lib"
     ]
 }

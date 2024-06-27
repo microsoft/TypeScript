@@ -24,7 +24,7 @@ declare module "express" {
         interface IRoute {
             all(...handler: RequestHandler[]): IRoute;
 >all : (...handler: RequestHandler[]) => IRoute
->    : ^^^^^^^^^^^^^                ^^^^^      
+>    : ^^^^       ^^                ^^^^^      
 >handler : RequestHandler[]
 >        : ^^^^^^^^^^^^^^^^
         }
@@ -40,14 +40,14 @@ declare module "express" {
         interface IRouter<T> extends RequestHandler {
             route(path: string): IRoute;
 >route : (path: string) => IRoute
->      : ^^^^^^^      ^^^^^      
+>      : ^    ^^      ^^^^^      
 >path : string
 >     : ^^^^^^
         }
 
         export function Router(options?: any): Router;
 >Router : (options?: any) => Router
->       : ^^^^^^^^^^^   ^^^^^      
+>       : ^       ^^^   ^^^^^      
 >options : any
 
         export interface Router extends IRouter<Router> {}
@@ -62,7 +62,7 @@ declare module "express" {
 
             get (name: string): string;
 >get : (name: string) => string
->    : ^^^^^^^      ^^^^^      
+>    : ^    ^^      ^^^^^      
 >name : string
 >     : ^^^^^^
         }

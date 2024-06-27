@@ -37,19 +37,19 @@ module __test2__ {
 
     export var __val__aa = aa;
 >__val__aa : { one: number[]; }
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^        ^^^
 >aa : { one: number[]; }
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^        ^^^
 }
 __test2__.__val__aa = __test1__.__val__obj4
 >__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__aa : { one: number[]; }
->                    : ^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^        ^^^
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 >__val__aa : { one: number[]; }
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^        ^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__

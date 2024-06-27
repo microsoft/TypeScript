@@ -362,13 +362,13 @@ project1/file2.ts
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/core.d.ts (used version)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/file.ts (used version)
 /home/src/projects/project1/index.ts (used version)
 /home/src/projects/project1/file2.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -394,6 +394,7 @@ Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
 2: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -571,6 +572,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -670,6 +672,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -796,6 +799,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -808,6 +812,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -959,6 +964,7 @@ Before running Timeout callback:: count: 2
 7: timerToUpdateProgram
 8: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1100,7 +1106,6 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.webworker.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/file.ts (computed .d.ts)
 /home/src/projects/project1/index.ts (computed .d.ts)
@@ -1127,6 +1132,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1139,6 +1145,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
@@ -1260,7 +1267,6 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/file.ts (computed .d.ts)
 /home/src/projects/project1/index.ts (computed .d.ts)

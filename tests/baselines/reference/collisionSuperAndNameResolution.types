@@ -3,11 +3,11 @@
 === collisionSuperAndNameResolution.ts ===
 var console: {
 >console : { log(message: any): any; }
->        : ^^^^^^^^^^^^^^^   ^^^^^^^^^
+>        : ^^^^^^       ^^   ^^^^^^^^^
 
     log(message: any);
 >log : (message: any) => any
->    : ^^^^^^^^^^   ^^^^^^^^
+>    : ^       ^^   ^^^^^^^^
 >message : any
 }
 var _super = 10; // No error
@@ -33,11 +33,11 @@ class Foo extends base {
         console.log(_super); // Error as this doesnt not resolve to user defined _super
 >console.log(_super) : any
 >console.log : (message: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^       ^^   ^^^^^^^^
 >console : { log(message: any): any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^   ^^^^^^^^^
 >log : (message: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^   ^^^^^^^^
 >_super : number
 >       : ^^^^^^
     }

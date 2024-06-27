@@ -51,7 +51,7 @@ class C {
 
         function container(f) {
 >container : (f: any) => void
->          : ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^
 >f : any
 >  : ^^^
 
@@ -77,7 +77,7 @@ class C {
 >delete container : boolean
 >                 : ^^^^^^^
 >container : (f: any) => void
->          : ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^
     }
     evalArguments() {
 >evalArguments : () => void

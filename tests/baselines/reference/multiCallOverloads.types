@@ -9,7 +9,7 @@ interface ICallback {
 
 function load(f: ICallback) {}
 >load : (f: ICallback) => void
->     : ^^^^         ^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^
 >f : ICallback
 >  : ^^^^^^^^^
 
@@ -17,7 +17,7 @@ var f1: ICallback = function(z?) {}
 >f1 : ICallback
 >   : ^^^^^^^^^
 >function(z?) {} : (z?: string) => void
->                : ^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ var f2: ICallback = function(z?) {}
 >f2 : ICallback
 >   : ^^^^^^^^^
 >function(z?) {} : (z?: string) => void
->                : ^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 
@@ -33,7 +33,7 @@ load(f1) // ok
 >load(f1) : void
 >         : ^^^^
 >load : (f: ICallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^
 >f1 : ICallback
 >   : ^^^^^^^^^
 
@@ -41,7 +41,7 @@ load(f2) // ok
 >load(f2) : void
 >         : ^^^^
 >load : (f: ICallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^
 >f2 : ICallback
 >   : ^^^^^^^^^
 
@@ -49,7 +49,7 @@ load(function() {}) // this shouldn’t be an error
 >load(function() {}) : void
 >                    : ^^^^
 >load : (f: ICallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^
 >function() {} : () => void
 >              : ^^^^^^^^^^
 
@@ -57,9 +57,9 @@ load(function(z?) {}) // this shouldn't be an error
 >load(function(z?) {}) : void
 >                      : ^^^^
 >load : (f: ICallback) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^
 >function(z?) {} : (z?: string) => void
->                : ^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 

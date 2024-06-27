@@ -12,12 +12,15 @@ verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
 `"use strict";
+
+import { b } from "./b";
+
 "prologue directive like statement";
 b();`,
 
         "/b.ts":
 `"use strict";
-function b() {
+export function b() {
     return this;
 }
 `,

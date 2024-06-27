@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a.ts
 
 
@@ -21,7 +21,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a.ts
 
 

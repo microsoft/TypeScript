@@ -4,7 +4,7 @@
 export interface Encoder<T> {
     encode(value: T): Uint8Array
 >encode : (value: T) => Uint8Array
->       : ^^^^^^^^ ^^^^^          
+>       : ^     ^^ ^^^^^          
 >value : T
 >      : ^
 }
@@ -22,7 +22,7 @@ export class Encoder {
      */
     encode(value) {
 >encode : (value: T) => Uint8Array
->       : ^^^^^^^^ ^^^^^^^^^^^^^^^
+>       : ^     ^^ ^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 

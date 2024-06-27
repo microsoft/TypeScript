@@ -18,7 +18,7 @@ class C<T extends Options> {
 
     foo!: { [P in keyof T]: T[P] }
 >foo : { [P in keyof T]: T[P]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     method() {
 >method : () => void
@@ -30,11 +30,11 @@ class C<T extends Options> {
 >b : T["b"]
 >  : ^^^^^^
 >this.foo : { [P in keyof T]: T[P]; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >foo : { [P in keyof T]: T[P]; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
         !(a && b);
 >!(a && b) : boolean
