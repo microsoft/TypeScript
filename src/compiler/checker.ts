@@ -16572,7 +16572,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSubstitutionType(baseType: Type, constraint: Type) {
-        return constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType || baseType.flags & TypeFlags.Any || !isGenericType(constraint) && !isGenericType(baseType) && isTypeAssignableTo(baseType, constraint) ?
+        return constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType || baseType.flags & TypeFlags.Any ?
             baseType :
             getOrCreateSubstitutionType(baseType, constraint);
     }
@@ -18538,6 +18538,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+        if (indexType.flags & TypeFlags.Substitution) {
+            indexType = (indexType as SubstitutionType).baseType;
+        }
         const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
         const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
 
