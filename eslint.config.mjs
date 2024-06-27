@@ -65,15 +65,6 @@ export default tseslint.config(
             "no-new-func": "error",
             "no-new-wrappers": "error",
             "no-return-await": "error",
-            "no-restricted-globals": [
-                "error",
-                { name: "setTimeout" },
-                { name: "clearTimeout" },
-                { name: "setInterval" },
-                { name: "clearInterval" },
-                { name: "setImmediate" },
-                { name: "clearImmediate" },
-            ],
             "no-template-curly-in-string": "error",
             "no-throw-literal": "error",
             "no-undef-init": "error",
@@ -213,6 +204,12 @@ export default tseslint.config(
         },
     },
     {
+        files: ["src/harness/**", "src/testRunner/**"],
+        rules: {
+            "no-restricted-globals": "off",
+        },
+    },
+    {
         files: ["src/lib/*.d.ts"],
         ...tseslint.configs.disableTypeChecked,
     },
@@ -242,12 +239,6 @@ export default tseslint.config(
         files: ["src/lib/es2019.array.d.ts"],
         rules: {
             "@typescript-eslint/array-type": "off",
-        },
-    },
-    {
-        files: ["src/harness/**", "src/testRunner/**"],
-        rules: {
-            "no-restricted-globals": "off",
         },
     },
 );
