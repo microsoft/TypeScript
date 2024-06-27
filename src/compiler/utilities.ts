@@ -10063,9 +10063,12 @@ export const emptyFileSystemEntries: FileSystemEntries = {
     directories: emptyArray,
 };
 
-let lastPatternOrStringsArray: readonly (string | Pattern)[];
-let matchableStringSet: Set<string>;
-let sortedPatterns: Pattern[];
+interface MatchPatternOrExactCacheEntry {
+    matchableStringSet: Set<string>;
+    sortedPatterns: Pattern[];
+}
+
+const patternOrStringsCache = new WeakMap<readonly (string | Pattern)[], MatchPatternOrExactCacheEntry>()
 
 /**
  * patternOrStrings contains both patterns (containing "*") and regular strings.
@@ -10075,12 +10078,16 @@ let sortedPatterns: Pattern[];
  * @internal
  */
 export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
-    if (patternOrStrings !== lastPatternOrStringsArray) {
-        lastPatternOrStringsArray = patternOrStrings;
+    let matchableStringSet: Set<string>;
+    let sortedPatterns: Pattern[];
+
+    const cacheEntry = patternOrStringsCache.get(patternOrStrings);
+    if (cacheEntry !== undefined) {
+        ({ matchableStringSet, sortedPatterns } = cacheEntry);
+    }
+    else {
         matchableStringSet = new Set();
         sortedPatterns = [];
-
-        // TODO: avoid falling out of the below logic.
 
         for (const patternOrString of patternOrStrings) {
             if (typeof patternOrString === "string") {
@@ -10092,6 +10099,11 @@ export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern
         }
 
         sortedPatterns.sort((a, b) => compareStringsCaseSensitive(a.prefix, b.prefix));
+
+        patternOrStringsCache.set(patternOrStrings, {
+            matchableStringSet,
+            sortedPatterns,
+        })
     }
 
     if (matchableStringSet.has(candidate)) {
