@@ -65,30 +65,30 @@ function boxify<T>(obj: T): Boxified<T> {
 >   : ^^
 
     for (let k in obj) {
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 
         result[k] = box(obj[k]);
->result[k] = box(obj[k]) : Box<T[Extract<keyof T, string>]>
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->result[k] : Boxified<T>[Extract<keyof T, string>]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result[k] = box(obj[k]) : Box<NonNullable<T>[Extract<keyof NonNullable<T>, string>]>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result[k] : any
+>          : ^^^
 >result : Boxified<T>
 >       : ^^^^^^^^^^^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
->box(obj[k]) : Box<T[Extract<keyof T, string>]>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>box(obj[k]) : Box<NonNullable<T>[Extract<keyof NonNullable<T>, string>]>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >box : <T_1>(x: T_1) => Box<T_1>
 >    : ^^^^^^ ^^   ^^^^^        
->obj[k] : T[Extract<keyof T, string>]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : T
->    : ^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[k] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return result;
 >result : Boxified<T>
@@ -149,30 +149,30 @@ function assignBoxified<T>(obj: Boxified<T>, values: T) {
 >       : ^
 
     for (let k in values) {
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >values : T
 >       : ^
 
         obj[k].value = values[k];
->obj[k].value = values[k] : T[Extract<keyof T, string>]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[k].value : T[Extract<keyof T, string>]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[k] : Boxified<T>[Extract<keyof T, string>]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[k].value = values[k] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[k].value : any
+>             : ^^^
+>obj[k] : any
+>       : ^^^
 >obj : Boxified<T>
 >    : ^^^^^^^^^^^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
->value : T[Extract<keyof T, string>]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->values[k] : T[Extract<keyof T, string>]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->values : T
->       : ^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : any
+>      : ^^^
+>values[k] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : NonNullable<T>
+>       : ^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -695,6 +695,7 @@ var g1 = applySpec({
 >(a: any) => 3 : (a: any) => number
 >              : ^ ^^   ^^^^^^^^^^^
 >a : any
+>  : ^^^
 >3 : 3
 >  : ^
 
@@ -710,6 +711,7 @@ var g1 = applySpec({
 >(b: any) => "n" : (b: any) => string
 >                : ^ ^^   ^^^^^^^^^^^
 >b : any
+>  : ^^^
 >"n" : "n"
 >    : ^^^
     }
@@ -738,6 +740,7 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 >(x: any) => true : (x: any) => boolean
 >                 : ^ ^^   ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >true : true
 >     : ^^^^
 
@@ -944,12 +947,14 @@ function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K> {
 
     return {} as any;
 >{} as any : any
+>          : ^^^
 >{} : {}
 >   : ^^
 }
 
 const myAny: any = {};
 >myAny : any
+>      : ^^^
 >{} : {}
 >   : ^^
 
@@ -961,6 +966,7 @@ const o1 = getProps(myAny, ['foo', 'bar']);
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
 >         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^          
 >myAny : any
+>      : ^^^
 >['foo', 'bar'] : ("foo" | "bar")[]
 >               : ^^^^^^^^^^^^^^^^^
 >'foo' : "foo"
@@ -972,12 +978,15 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 >o2 : { foo: any; bar: any; }
 >   : ^^^^^^^   ^^^^^^^   ^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
 >         : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^          
 >myAny : any
+>      : ^^^
 >['foo', 'bar'] : ("foo" | "bar")[]
 >               : ^^^^^^^^^^^^^^^^^
 >'foo' : "foo"

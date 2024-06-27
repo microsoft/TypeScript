@@ -1,19 +1,47 @@
-keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
-  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-    Type 'T[string]' is not assignable to type 'object'.
-keyofAndIndexedAccess.ts(211,24): error TS2322: Type 'T[K]' is not assignable to type 'object'.
-  Type 'T[keyof T]' is not assignable to type 'object'.
-    Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-      Type 'T[string]' is not assignable to type 'object'.
+keyofAndIndexedAccess.ts(80,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(84,5): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(84,5): error TS2322: Type 'T[K]' is not assignable to type 'NonNullable<T>[K]'.
+  Type 'T' is not assignable to type 'NonNullable<T>'.
+    Type 'T' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(116,16): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(119,9): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(119,9): error TS2322: Type 'PropType[K]' is not assignable to type 'NonNullable<PropType>[K]'.
+  Type 'PropType' is not assignable to type 'NonNullable<PropType>'.
+    Type 'PropType' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(133,27): error TS18049: 'x' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(203,19): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(205,24): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(205,24): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(209,19): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(211,24): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(211,24): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(216,9): error TS18049: 'target' is possibly 'null' or 'undefined'.
 keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
 keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
     Type 'T[string]' is not assignable to type '{}'.
 keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
   Type 'T[keyof T]' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(390,27): error TS18049: 'object' is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(390,27): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(390,27): error TS2322: Type 'T[K1][K2]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>[K2]'.
+  Type 'T[K1]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+    Type 'T[keyof T]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+      Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+        Type 'T[string]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+          Type 'T[string]' is not assignable to type 'NonNullable<T>[K1]'.
+            Type 'T' is not assignable to type 'NonNullable<T>'.
+              Type 'T[keyof T]' is not assignable to type 'NonNullable<T>[K1]'.
+                Type 'T' is not assignable to type 'NonNullable<T>'.
+                  Type 'T[K1]' is not assignable to type 'NonNullable<T>[K1]'.
+                    Type 'T' is not assignable to type 'NonNullable<T>'.
+                      Type 'T' is not assignable to type '{}'.
+keyofAndIndexedAccess.ts(566,9): error TS2322: Type 'T[K]' is not assignable to type 'NonNullable<T>[Extract<keyof NonNullable<T>, string>]'.
+  Type 'T' is not assignable to type 'NonNullable<T>'.
+    Type 'T' is not assignable to type '{}'.
 
 
-==== keyofAndIndexedAccess.ts (5 errors) ====
+==== keyofAndIndexedAccess.ts (21 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -94,10 +122,20 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
     
     function getProperty<T, K extends keyof T>(obj: T, key: K) {
         return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
     }
     
     function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
         obj[key] = value;
+        ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+        ~~~~~~~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'NonNullable<T>[K]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:     Type 'T' is not assignable to type '{}'.
+!!! related TS2208 keyofAndIndexedAccess.ts:83:22: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:83:22: This type parameter might need an `extends NonNullable<T>` constraint.
     }
     
     function f10(shape: Shape) {
@@ -130,9 +168,19 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         props: PropType;
         getProperty<K extends keyof PropType>(key: K) {
             return this.props[key];
+                   ~~~~~~~~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
         }
         setProperty<K extends keyof PropType>(key: K, value: PropType[K]) {
             this.props[key] = value;
+            ~~~~~~~~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+            ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'PropType[K]' is not assignable to type 'NonNullable<PropType>[K]'.
+!!! error TS2322:   Type 'PropType' is not assignable to type 'NonNullable<PropType>'.
+!!! error TS2322:     Type 'PropType' is not assignable to type '{}'.
+!!! related TS2208 keyofAndIndexedAccess.ts:113:17: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:113:17: This type parameter might need an `extends NonNullable<PropType>` constraint.
         }
     }
     
@@ -147,6 +195,8 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
     
     function pluck<T, K extends keyof T>(array: T[], key: K) {
         return array.map(x => x[key]);
+                              ~
+!!! error TS18049: 'x' is possibly 'null' or 'undefined'.
     }
     
     function f30(shapes: Shape[]) {
@@ -217,28 +267,33 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
     
     function f54<T>(obj: T, key: keyof T) {
         for (let s in obj[key]) {
+                      ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
         }
         const b = "foo" in obj[key];
+                           ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
                            ~~~~~~~~
-!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
-!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-!!! error TS2322:     Type 'T[string]' is not assignable to type 'object'.
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
     }
     
     function f55<T, K extends keyof T>(obj: T, key: K) {
         for (let s in obj[key]) {
+                      ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
         }
         const b = "foo" in obj[key];
+                           ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
                            ~~~~~~~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'object'.
-!!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'object'.
-!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
-!!! error TS2322:       Type 'T[string]' is not assignable to type 'object'.
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
     }
     
     function f60<T>(source: T, target: T) {
         for (let k in source) {
             target[k] = source[k];
+            ~~~~~~
+!!! error TS18049: 'target' is possibly 'null' or 'undefined'.
         }
     }
     
@@ -423,6 +478,27 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
     
     const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
         (value: T[K1][K2]) => object[key1][key2] = value;
+                              ~~~~~~
+!!! error TS18049: 'object' is possibly 'null' or 'undefined'.
+                              ~~~~~~~~~~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+                              ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T[K1][K2]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>[K2]'.
+!!! error TS2322:   Type 'T[K1]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+!!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+!!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+!!! error TS2322:         Type 'T[string]' is not assignable to type 'NonNullable<NonNullable<T>[K1]>'.
+!!! error TS2322:           Type 'T[string]' is not assignable to type 'NonNullable<T>[K1]'.
+!!! error TS2322:             Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:               Type 'T[keyof T]' is not assignable to type 'NonNullable<T>[K1]'.
+!!! error TS2322:                 Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:                   Type 'T[K1]' is not assignable to type 'NonNullable<T>[K1]'.
+!!! error TS2322:                     Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:                       Type 'T' is not assignable to type '{}'.
+!!! related TS2208 keyofAndIndexedAccess.ts:389:20: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:389:20: This type parameter might need an `extends NonNullable<T>` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:389:20: This type parameter might need an `extends NonNullable<T>` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:389:20: This type parameter might need an `extends NonNullable<T>` constraint.
     
     // Modified repro from #12573
     
@@ -599,6 +675,12 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         for (let key in t) {
             key = k // ok, K ==> keyof T
             t[key] = tk; // ok, T[K] ==> T[keyof T]
+            ~~~~~~
+!!! error TS2322: Type 'T[K]' is not assignable to type 'NonNullable<T>[Extract<keyof NonNullable<T>, string>]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:     Type 'T' is not assignable to type '{}'.
+!!! related TS2208 keyofAndIndexedAccess.ts:563:13: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 keyofAndIndexedAccess.ts:563:13: This type parameter might need an `extends NonNullable<T>` constraint.
         }
     }
     

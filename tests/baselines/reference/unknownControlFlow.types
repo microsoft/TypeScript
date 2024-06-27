@@ -481,8 +481,8 @@ function f23<T>(x: T | undefined | null) {
 >          : ^^^^^^^^^
 
         x;  // T & {} | null
->x : (T & {}) | null
->  : ^^^^^^^^^^^^^^^
+>x : (T & ({} | null)) | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x !== null) {
 >x !== null : boolean
@@ -491,8 +491,8 @@ function f23<T>(x: T | undefined | null) {
 >  : ^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & {} | undefined
->x : (T & {}) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^
+>x : (T & ({} | undefined)) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x != undefined) {
 >x != undefined : boolean
@@ -1062,8 +1062,8 @@ function ff1<T>(t: T, k: keyof T) {
 >  : ^^^^^^^
 
     t[k];
->t[k] : T[keyof T]
->     : ^^^^^^^^^^
+>t[k] : NonNullable<T>[keyof T]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 >k : keyof T
@@ -1096,8 +1096,8 @@ function ff3<T>(t: T, k: keyof (T & {})) {
 >  : ^^^^^^^^^^^^^^
 
     t[k];  // Error
->t[k] : any
->     : ^^^
+>t[k] : NonNullable<T>[keyof (T & {})]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 >k : keyof (T & {})

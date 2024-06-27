@@ -19,8 +19,16 @@ mappedTypeErrors.ts(75,45): error TS2345: Argument of type '{ x: number; }' is n
   Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
 mappedTypeErrors.ts(77,59): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
 mappedTypeErrors.ts(83,58): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
+mappedTypeErrors.ts(95,9): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+mappedTypeErrors.ts(95,9): error TS2322: Type 'T[Extract<K, string>]' is not assignable to type 'NonNullable<T>[Extract<K, string>]'.
+  Type 'T' is not assignable to type 'NonNullable<T>'.
+    Type 'T' is not assignable to type '{}'.
 mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
 mappedTypeErrors.ts(106,17): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+mappedTypeErrors.ts(112,13): error TS2533: Object is possibly 'null' or 'undefined'.
+mappedTypeErrors.ts(112,13): error TS2322: Type 'T[Extract<K, string>]' is not assignable to type 'NonNullable<T>[Extract<K, string>]'.
+  Type 'T' is not assignable to type 'NonNullable<T>'.
+    Type 'T' is not assignable to type '{}'.
 mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
 mappedTypeErrors.ts(124,14): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
 mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -32,7 +40,7 @@ mappedTypeErrors.ts(148,17): error TS2339: Property 'foo' does not exist on type
 mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
 
 
-==== mappedTypeErrors.ts (27 errors) ====
+==== mappedTypeErrors.ts (31 errors) ====
     interface Shape {
         name: string;
         width: number;
@@ -171,6 +179,14 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
     function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
         for (let k in props) {
             obj[k] = props[k];
+            ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+            ~~~~~~
+!!! error TS2322: Type 'T[Extract<K, string>]' is not assignable to type 'NonNullable<T>[Extract<K, string>]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:     Type 'T' is not assignable to type '{}'.
+!!! related TS2208 mappedTypeErrors.ts:93:19: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 mappedTypeErrors.ts:93:19: This type parameter might need an `extends NonNullable<T>` constraint.
         }
     }
     
@@ -193,6 +209,14 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
         setState<K extends keyof T>(props: Pick<T, K>) {
             for (let k in props) {
                 this.state[k] = props[k];
+                ~~~~~~~~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+                ~~~~~~~~~~~~~
+!!! error TS2322: Type 'T[Extract<K, string>]' is not assignable to type 'NonNullable<T>[Extract<K, string>]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322:     Type 'T' is not assignable to type '{}'.
+!!! related TS2208 mappedTypeErrors.ts:108:9: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 mappedTypeErrors.ts:108:9: This type parameter might need an `extends NonNullable<T>` constraint.
             }
         }
     }

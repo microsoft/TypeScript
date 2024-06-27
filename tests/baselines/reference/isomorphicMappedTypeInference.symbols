@@ -118,10 +118,8 @@ function assignBoxified<T>(obj: Boxified<T>, values: T) {
 >values : Symbol(values, Decl(isomorphicMappedTypeInference.ts, 32, 44))
 
         obj[k].value = values[k];
->obj[k].value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 0, 15))
 >obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 32, 27))
 >k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 33, 12))
->value : Symbol(value, Decl(isomorphicMappedTypeInference.ts, 0, 15))
 >values : Symbol(values, Decl(isomorphicMappedTypeInference.ts, 32, 44))
 >k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 33, 12))
     }

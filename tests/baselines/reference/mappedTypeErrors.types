@@ -407,8 +407,8 @@ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
         obj[k] = props[k];
 >obj[k] = props[k] : Pick<T, K>[Extract<K, string>]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[k] : T[Extract<K, string>]
->       : ^^^^^^^^^^^^^^^^^^^^^
+>obj[k] : NonNullable<T>[Extract<K, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 >k : Extract<K, string>
@@ -553,8 +553,8 @@ class C<T> {
             this.state[k] = props[k];
 >this.state[k] = props[k] : Pick<T, K>[Extract<K, string>]
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.state[k] : T[Extract<K, string>]
->              : ^^^^^^^^^^^^^^^^^^^^^
+>this.state[k] : NonNullable<T>[Extract<K, string>]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state : T
 >           : ^
 >this : this

@@ -1170,7 +1170,7 @@ type Q50 = Dictionary<Shape>["howdy"];
 type Q51 = Dictionary<Shape>[123];
 type Q52 = Dictionary<Shape>[E.B];
 declare let cond: boolean;
-declare function getProperty<T, K extends keyof T>(obj: T, key: K): T[K];
+declare function getProperty<T, K extends keyof T>(obj: T, key: K): NonNullable<T>[K];
 declare function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]): void;
 declare function f10(shape: Shape): void;
 declare function f11(a: Shape[]): void;
@@ -1178,15 +1178,15 @@ declare function f12(t: [Shape, boolean]): void;
 declare function f13(foo: any, bar: any): void;
 declare class Component<PropType> {
     props: PropType;
-    getProperty<K extends keyof PropType>(key: K): PropType[K];
+    getProperty<K extends keyof PropType>(key: K): NonNullable<PropType>[K];
     setProperty<K extends keyof PropType>(key: K, value: PropType[K]): void;
 }
 declare function f20(component: Component<Shape>): void;
-declare function pluck<T, K extends keyof T>(array: T[], key: K): T[K][];
+declare function pluck<T, K extends keyof T>(array: T[], key: K): NonNullable<T>[K][];
 declare function f30(shapes: Shape[]): void;
 declare function f31<K extends keyof Shape>(key: K): Shape[K];
 declare function f32<K extends "width" | "height">(key: K): Shape[K];
-declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): S[K];
+declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): NonNullable<S>[K];
 declare function f34(ts: TaggedShape): void;
 declare class C {
     x: string;
@@ -1252,7 +1252,7 @@ declare class Person extends Base {
 declare class OtherPerson {
     parts: number;
     constructor(parts: number);
-    getParts(): this["parts"];
+    getParts(): NonNullable<this>["parts"];
 }
 declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
