@@ -2532,12 +2532,12 @@ export function matchedText(pattern: Pattern, candidate: string): string {
  *
  * @internal
  */
-export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value: T) => Pattern, candidate: string, endIndex: number = values.length): T | undefined {
     let matchedValue: T | undefined;
     // use length of prefix as betterness criteria
     let longestMatchPrefixLength = -1;
 
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < endIndex; i++) {
         const v = values[i];
         const pattern = getPattern(v);
         if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
