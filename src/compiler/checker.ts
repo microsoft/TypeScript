@@ -26178,6 +26178,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const sourceType of sourceTypes) {
                     inferFromTypes(sourceType, target);
                 }
+
+                const singleSignature = getSingleCallOrConstructSignature(source);
+                if (singleSignature) {
+                    inferFromTypes(getOrCreateTypeFromSignature(singleSignature), target);
+                }
+                else {
+                    // Source is a union type, infer from each constituent type
+                    const sourceTypes = (source as UnionType).types;
+                    for (const sourceType of sourceTypes) {
+                        inferFromTypes(sourceType, target);
+                    }
+                }
             }
             else if (target.flags & TypeFlags.TemplateLiteral) {
                 inferToTemplateLiteralType(source, target as TemplateLiteralType);
