@@ -1,13 +1,12 @@
-import * as fakes from "./_namespaces/fakes";
-import * as FourSlashInterface from "./_namespaces/FourSlashInterface";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
-import {
-    LoggerWithInMemoryLogs,
-} from "./tsserverLogger";
+import sourceMapSupport from "source-map-support";
+import * as fakes from "./_namespaces/fakes.js";
+import * as FourSlashInterface from "./_namespaces/FourSlashInterface.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -1801,13 +1800,44 @@ export class TestState {
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
-    public getSemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
-        const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    public getSemanticDiagnostics(): ts.Diagnostic[] {
+        return this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    }
+
+    public verifySemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
+        const diagnostics = this.getSemanticDiagnostics();
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
     public getSuggestionDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
         this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+    }
+
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expectedDiagnostics: readonly FourSlashInterface.Diagnostic[] | undefined,
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
+        const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
+        if (diagnosticsResult && expectedDiagnostics) {
+            this.testDiagnostics(expectedDiagnostics, diagnosticsResult.diagnostics, "error");
+        }
+        else if (diagnosticsResult !== expectedDiagnostics) {
+            if (expectedDiagnostics) this.raiseError("Expected diagnostics to be defined.");
+            else {assert.deepEqual(
+                    diagnosticsResult!.diagnostics,
+                    expectedDiagnostics,
+                    "Expected diagnostics to be undefined.",
+                );}
+        }
+
+        if (expectedRanges && diagnosticsResult) {
+            const spans = expectedRanges.map(range => ({ start: range.pos, length: range.end - range.pos }));
+            assert.deepEqual(diagnosticsResult.spans, spans);
+        }
+        else if (expectedRanges && !diagnosticsResult) {
+            this.raiseError("Expected spans to be defined.");
+        }
     }
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
@@ -2644,17 +2674,12 @@ export class TestState {
         if (info === undefined) return "No completion info.";
         const { entries } = info;
 
-        function pad(s: string, length: number) {
-            return s + new Array(length - s.length + 1).join(" ");
-        }
-        function max<T>(arr: T[], selector: (x: T) => number): number {
-            return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
-        }
-        const longestNameLength = max(entries, m => m.name.length);
-        const longestKindLength = max(entries, m => m.kind.length);
+        const longestNameLength = ts.maxBy(entries, 0, m => m.name.length);
+        const longestKindLength = ts.maxBy(entries, 0, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
-        Harness.IO.log(membersString);
+
+        const formattedEntries = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source ?? ""}`);
+        Harness.IO.log(formattedEntries.join("\n"));
     }
 
     public printContext() {
@@ -3562,6 +3587,11 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
+    public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
+        const editInfo = this.languageService.getPasteEdits({ targetFile: this.activeFile.fileName, pastedText: options.args.pastedText, pasteLocations: options.args.pasteLocations, copiedFrom: options.args.copiedFrom, preferences: options.args.preferences }, this.formatCodeSettings);
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+    }
+
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
         const name = "verifyDocCommentTemplate";
         const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings)!;
@@ -3979,8 +4009,8 @@ export class TestState {
         };
     }
 
-    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
-        let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
+    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        let refactors = this.getApplicableRefactorsAtSelection(triggerReason, kind, preferences, includeInteractiveActions);
         refactors = refactors.filter(r => r.name === name);
 
         if (actionName !== undefined) {
@@ -4445,8 +4475,8 @@ export class TestState {
         test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
     }
 
-    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
-        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
+    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
     private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
         return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
@@ -4506,6 +4536,57 @@ export class TestState {
         this.applyEdits(this.activeFile.fileName, changes);
 
         this.verifyCurrentFileContent(newFileContent);
+    }
+
+    public baselineMapCode(
+        ranges: Range[][],
+        changes: string[] = [],
+    ): void {
+        const fileName = this.activeFile.fileName;
+        const focusLocations = ranges.map(r =>
+            r.map(({ pos, end }) => {
+                return { start: pos, length: end - pos };
+            })
+        );
+        let before = this.getFileContent(fileName);
+        const edits = this.languageService.mapCode(
+            fileName,
+            // We trim the leading whitespace stuff just so our test cases can be more readable.
+            changes,
+            focusLocations,
+            this.formatCodeSettings,
+            {},
+        );
+        this.applyChanges(edits);
+        focusLocations.forEach(r => {
+            r.sort((a, b) => a.start - b.start);
+        });
+        focusLocations.sort((a, b) => a[0].start - b[0].start);
+        for (const subLoc of focusLocations) {
+            for (const { start, length } of subLoc) {
+                let offset = 0;
+                for (const sl2 of focusLocations) {
+                    for (const { start: s2, length: l2 } of sl2) {
+                        if (s2 < start) {
+                            offset += 4;
+                            if ((s2 + l2) > start) {
+                                offset -= 2;
+                            }
+                        }
+                    }
+                }
+                before = before.slice(0, start + offset) + "[|" + before.slice(start + offset, start + offset + length) + "|]" + before.slice(start + offset + length);
+            }
+        }
+        const after = this.getFileContent(fileName);
+        const baseline = `
+// === ORIGINAL ===
+${before}
+// === INCOMING CHANGES ===
+${changes.join("\n// ---\n")}
+// === MAPPED ===
+${after}`;
+        this.baseline("mapCode", baseline, ".mapCode.ts");
     }
 }
 
@@ -4579,22 +4660,9 @@ function runCode(code: string, state: TestState, fileName: string): void {
     const generatedFile = ts.changeExtension(fileName, ".js");
     const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
-    type SourceMapSupportModule = typeof import("source-map-support") & {
-        // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
-        resetRetrieveHandlers(): void;
-    };
-
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
     // for test failures.
-    let sourceMapSupportModule: SourceMapSupportModule | undefined;
-    try {
-        sourceMapSupportModule = require("source-map-support");
-    }
-    catch {
-        // do nothing
-    }
-
-    sourceMapSupportModule?.install({
+    sourceMapSupport.install({
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
@@ -4620,7 +4688,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         throw err;
     }
     finally {
-        sourceMapSupportModule?.resetRetrieveHandlers();
+        sourceMapSupport.resetRetrieveHandlers();
     }
 }
 

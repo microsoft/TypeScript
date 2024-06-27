@@ -18,11 +18,12 @@ import {
     DiagnosticWithLocation,
     FileTextChanges,
     flatMap,
+    getEmitDeclarations,
     isString,
     map,
     TextChange,
     textChanges,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
@@ -124,9 +125,15 @@ export function eachDiagnostic(context: CodeFixAllContext, errorCodes: readonly 
 }
 
 function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
-    return [
+    const diagnostics = [
         ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
         ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken),
     ];
+    if (getEmitDeclarations(program.getCompilerOptions())) {
+        diagnostics.push(
+            ...program.getDeclarationDiagnostics(sourceFile, cancellationToken),
+        );
+    }
+    return diagnostics;
 }

@@ -40,11 +40,10 @@ export * from '@emotion/core';
 //// [get-comp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getComp = void 0;
+exports.getComp = getComp;
 function getComp() {
     return {};
 }
-exports.getComp = getComp;
 //// [inferred-comp-export.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -79,7 +78,6 @@ __exportStar(require("@emotion/core"), exports);
 import { Component } from 'react';
 export declare function getComp(): Component;
 //// [inferred-comp-export.d.ts]
-/// <reference types="react" />
 export declare const obj: {
     comp: import("react").Component;
 };

@@ -113,6 +113,7 @@ import {
     HasModifiers,
     HeritageClause,
     Identifier,
+    identity,
     idText,
     IfStatement,
     ImportAttribute,
@@ -175,6 +176,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -254,6 +256,7 @@ import {
     modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
     ModuleKind,
     Mutable,
     NamedExportBindings,
@@ -290,7 +293,6 @@ import {
     ParenthesizedExpression,
     ParenthesizedTypeNode,
     PartiallyEmittedExpression,
-    perfLogger,
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
@@ -317,7 +319,6 @@ import {
     QuestionToken,
     ReadonlyKeyword,
     ReadonlyPragmaMap,
-    ReadonlyTextRange,
     ResolutionMode,
     RestTypeNode,
     ReturnStatement,
@@ -386,6 +387,7 @@ import {
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
+    unsetNodeChildren,
     UpdateExpression,
     VariableDeclaration,
     VariableDeclarationList,
@@ -394,8 +396,8 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 const enum SignatureFlags {
     None = 0,
@@ -1125,6 +1127,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
+    [SyntaxKind.JSDocImportTag]: forEachChildInJSDocImportTag,
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
 };
 
@@ -1211,6 +1214,14 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode |
 
 function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName)
+        || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+}
+
+function forEachChildInJSDocImportTag<T>(node: JSDocImportTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    return visitNode(cbNode, node.tagName)
+        || visitNode(cbNode, node.importClause)
+        || visitNode(cbNode, node.moduleSpecifier)
+        || visitNode(cbNode, node.attributes)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
@@ -1331,7 +1342,6 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
     performance.mark("beforeParse");
     let result: SourceFile;
 
-    perfLogger?.logStartParseSourceFile(fileName);
     const {
         languageVersion,
         setExternalModuleIndicator: overrideSetExternalModuleIndicator,
@@ -1348,7 +1358,6 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
         };
         result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator, jsDocParsingMode);
     }
-    perfLogger?.logStopParseSourceFile();
 
     performance.mark("afterParse");
     performance.measure("Parse", "beforeParse", "afterParse");
@@ -1939,7 +1948,7 @@ namespace Parser {
         function currentNode(position: number) {
             const node = baseSyntaxCursor.currentNode(position);
             if (topLevel && node && containsPossibleTopLevelAwait(node)) {
-                node.intersectsChange = true;
+                markAsIntersectingIncrementalChange(node);
             }
             return node;
         }
@@ -2388,7 +2397,7 @@ namespace Parser {
         }
 
         // The user alternatively might have misspelled or forgotten to add a space after a common keyword.
-        const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) ?? getSpaceSuggestion(expressionText);
+        const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, identity) ?? getSpaceSuggestion(expressionText);
         if (suggestion) {
             parseErrorAt(pos, node.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
             return;
@@ -2895,6 +2904,9 @@ namespace Parser {
                 if (token() === SyntaxKind.FromKeyword && lookAhead(nextTokenIsStringLiteral)) {
                     return false;
                 }
+                if (token() === SyntaxKind.StringLiteral) {
+                    return true; // For "arbitrary module namespace identifiers"
+                }
                 return tokenIsIdentifierOrKeyword(token());
             case ParsingContext.JsxAttributes:
                 return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.OpenBraceToken;
@@ -3109,7 +3121,7 @@ namespace Parser {
         // Can't reuse a node that intersected the change range.
         // Can't reuse a node that contains a parse error.  This is necessary so that we
         // produce the same set of errors again.
-        if (nodeIsMissing(node) || node.intersectsChange || containsParseError(node)) {
+        if (nodeIsMissing(node) || intersectsIncrementalChange(node) || containsParseError(node)) {
             return undefined;
         }
 
@@ -3875,7 +3887,7 @@ namespace Parser {
     }
 
     function parseJSDocType(): TypeNode {
-        scanner.setInJSDocType(true);
+        scanner.setSkipJsDocLeadingAsterisks(true);
         const pos = getNodePos();
         if (parseOptional(SyntaxKind.ModuleKeyword)) {
             // TODO(rbuckton): We never set the type for a JSDocNamepathType. What should we put here?
@@ -3893,13 +3905,13 @@ namespace Parser {
                 }
             }
 
-            scanner.setInJSDocType(false);
+            scanner.setSkipJsDocLeadingAsterisks(false);
             return finishNode(moduleTag, pos);
         }
 
         const hasDotDotDot = parseOptional(SyntaxKind.DotDotDotToken);
         let type = parseTypeOrTypePredicate();
-        scanner.setInJSDocType(false);
+        scanner.setSkipJsDocLeadingAsterisks(false);
         if (hasDotDotDot) {
             type = finishNode(factory.createJSDocVariadicType(type), pos);
         }
@@ -8346,6 +8358,16 @@ namespace Parser {
             return parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly);
         }
 
+        const importClause = tryParseImportClause(identifier, afterImportPos, isTypeOnly);
+        const moduleSpecifier = parseModuleSpecifier();
+        const attributes = tryParseImportAttributes();
+
+        parseSemicolon();
+        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
+        return withJSDoc(finishNode(node, pos), hasJSDoc);
+    }
+
+    function tryParseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks = false) {
         // ImportDeclaration:
         //  import ImportClause from ModuleSpecifier ;
         //  import ModuleSpecifier;
@@ -8355,18 +8377,17 @@ namespace Parser {
             token() === SyntaxKind.AsteriskToken || // import *
             token() === SyntaxKind.OpenBraceToken // import {
         ) {
-            importClause = parseImportClause(identifier, afterImportPos, isTypeOnly);
+            importClause = parseImportClause(identifier, pos, isTypeOnly, skipJsDocLeadingAsterisks);
             parseExpected(SyntaxKind.FromKeyword);
         }
-        const moduleSpecifier = parseModuleSpecifier();
+        return importClause;
+    }
+
+    function tryParseImportAttributes() {
         const currentToken = token();
-        let attributes: ImportAttributes | undefined;
         if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
-            attributes = parseImportAttributes(currentToken);
+            return parseImportAttributes(currentToken);
         }
-        parseSemicolon();
-        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
-        return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
     function parseImportAttribute() {
@@ -8422,7 +8443,7 @@ namespace Parser {
         return finished;
     }
 
-    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean) {
+    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks: boolean) {
         // ImportClause:
         //  ImportedDefaultBinding
         //  NameSpaceImport
@@ -8437,7 +8458,9 @@ namespace Parser {
             !identifier ||
             parseOptional(SyntaxKind.CommaToken)
         ) {
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(true);
             namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(false);
         }
 
         return finishNode(factory.createImportClause(isTypeOnly, identifier, namedBindings), pos);
@@ -8482,6 +8505,14 @@ namespace Parser {
         return finishNode(factory.createNamespaceImport(name), pos);
     }
 
+    function canParseModuleExportName(): boolean {
+        return tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.StringLiteral;
+    }
+
+    function parseModuleExportName(parseName: () => Identifier): ModuleExportName {
+        return token() === SyntaxKind.StringLiteral ? parseLiteralNode() as StringLiteral : parseName();
+    }
+
     function parseNamedImportsOrExports(kind: SyntaxKind.NamedImports): NamedImports;
     function parseNamedImportsOrExports(kind: SyntaxKind.NamedExports): NamedExports;
     function parseNamedImportsOrExports(kind: SyntaxKind): NamedImportsOrExports {
@@ -8514,18 +8545,18 @@ namespace Parser {
         const pos = getNodePos();
         // ImportSpecifier:
         //   BindingIdentifier
-        //   IdentifierName as BindingIdentifier
+        //   ModuleExportName as BindingIdentifier
         // ExportSpecifier:
-        //   IdentifierName
-        //   IdentifierName as IdentifierName
+        //   ModuleExportName
+        //   ModuleExportName as ModuleExportName
         let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
         let checkIdentifierStart = scanner.getTokenStart();
         let checkIdentifierEnd = scanner.getTokenEnd();
         let isTypeOnly = false;
-        let propertyName: Identifier | undefined;
+        let propertyName: ModuleExportName | undefined;
         let canParseAsKeyword = true;
-        let name = parseIdentifierName();
-        if (name.escapedText === "type") {
+        let name = parseModuleExportName(parseIdentifierName);
+        if (name.kind === SyntaxKind.Identifier && name.escapedText === "type") {
             // If the first token of an import specifier is 'type', there are a lot of possibilities,
             // especially if we see 'as' afterwards:
             //
@@ -8539,11 +8570,12 @@ namespace Parser {
                 if (token() === SyntaxKind.AsKeyword) {
                     // { type as as ...? }
                     const secondAs = parseIdentifierName();
-                    if (tokenIsIdentifierOrKeyword(token())) {
+                    if (canParseModuleExportName()) {
                         // { type as as something }
+                        // { type as as "something" }
                         isTypeOnly = true;
                         propertyName = firstAs;
-                        name = parseNameWithKeywordCheck();
+                        name = parseModuleExportName(parseNameWithKeywordCheck);
                         canParseAsKeyword = false;
                     }
                     else {
@@ -8553,11 +8585,12 @@ namespace Parser {
                         canParseAsKeyword = false;
                     }
                 }
-                else if (tokenIsIdentifierOrKeyword(token())) {
+                else if (canParseModuleExportName()) {
                     // { type as something }
+                    // { type as "something" }
                     propertyName = name;
                     canParseAsKeyword = false;
-                    name = parseNameWithKeywordCheck();
+                    name = parseModuleExportName(parseNameWithKeywordCheck);
                 }
                 else {
                     // { type as }
@@ -8565,23 +8598,31 @@ namespace Parser {
                     name = firstAs;
                 }
             }
-            else if (tokenIsIdentifierOrKeyword(token())) {
+            else if (canParseModuleExportName()) {
                 // { type something ...? }
+                // { type "something" ...? }
                 isTypeOnly = true;
-                name = parseNameWithKeywordCheck();
+                name = parseModuleExportName(parseNameWithKeywordCheck);
             }
         }
 
         if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
             propertyName = name;
             parseExpected(SyntaxKind.AsKeyword);
-            name = parseNameWithKeywordCheck();
+            name = parseModuleExportName(parseNameWithKeywordCheck);
         }
-        if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
-            parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
+        if (kind === SyntaxKind.ImportSpecifier) {
+            if (name.kind !== SyntaxKind.Identifier) {
+                // ImportSpecifier casts "name" to Identifier below, so make sure it's an identifier
+                parseErrorAt(skipTrivia(sourceText, name.pos), name.end, Diagnostics.Identifier_expected);
+                name = setTextRangePosEnd(createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false), name.pos, name.pos);
+            }
+            else if (checkIdentifierIsKeyword) {
+                parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
+            }
         }
         const node = kind === SyntaxKind.ImportSpecifier
-            ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
+            ? factory.createImportSpecifier(isTypeOnly, propertyName, name as Identifier)
             : factory.createExportSpecifier(isTypeOnly, propertyName, name);
         return finishNode(node, pos);
 
@@ -8594,7 +8635,7 @@ namespace Parser {
     }
 
     function parseNamespaceExport(pos: number): NamespaceExport {
-        return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
+        return finishNode(factory.createNamespaceExport(parseModuleExportName(parseIdentifierName)), pos);
     }
 
     function parseExportDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ExportDeclaration {
@@ -8760,7 +8801,7 @@ namespace Parser {
                 if (!jsDocDiagnostics) {
                     jsDocDiagnostics = [];
                 }
-                jsDocDiagnostics.push(...parseDiagnostics);
+                addRange(jsDocDiagnostics, parseDiagnostics, saveParseDiagnosticsLength);
             }
             currentToken = saveToken;
             parseDiagnostics.length = saveParseDiagnosticsLength;
@@ -9073,6 +9114,9 @@ namespace Parser {
                     case "throws":
                         tag = parseThrowsTag(start, tagName, margin, indentText);
                         break;
+                    case "import":
+                        tag = parseImportTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9227,7 +9271,7 @@ namespace Parser {
 
                     let name: EntityName | JSDocMemberName = parseIdentifierName();
                     while (parseOptional(SyntaxKind.DotToken)) {
-                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier()), pos);
+                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifierName()), pos);
                     }
                     while (token() === SyntaxKind.PrivateIdentifier) {
                         reScanHashToken();
@@ -9445,13 +9489,29 @@ namespace Parser {
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
 
+            function parseImportTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImportTag {
+                const afterImportTagPos = scanner.getTokenFullStart();
+
+                let identifier: Identifier | undefined;
+                if (isIdentifier()) {
+                    identifier = parseIdentifier();
+                }
+
+                const importClause = tryParseImportClause(identifier, afterImportTagPos, /*isTypeOnly*/ true, /*skipJsDocLeadingAsterisks*/ true);
+                const moduleSpecifier = parseModuleSpecifier();
+                const attributes = tryParseImportAttributes();
+
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start);
+            }
+
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
                 const expression = parsePropertyAccessEntityNameExpression();
-                scanner.setInJSDocType(true);
+                scanner.setSkipJsDocLeadingAsterisks(true);
                 const typeArguments = tryParseTypeArguments();
-                scanner.setInJSDocType(false);
+                scanner.setSkipJsDocLeadingAsterisks(false);
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
@@ -9803,6 +9863,25 @@ namespace Parser {
     }
 }
 
+const incrementallyParsedFiles = new WeakSet<SourceFile>();
+
+function markAsIncrementallyParsed(sourceFile: SourceFile) {
+    if (incrementallyParsedFiles.has(sourceFile)) {
+        Debug.fail("Source file has already been incrementally parsed");
+    }
+    incrementallyParsedFiles.add(sourceFile);
+}
+
+const intersectingChangeSet = new WeakSet<Node | NodeArray<Node>>();
+
+function intersectsIncrementalChange(node: Node | NodeArray<Node>): boolean {
+    return intersectingChangeSet.has(node);
+}
+
+function markAsIntersectingIncrementalChange(node: Node | NodeArray<Node>) {
+    intersectingChangeSet.add(node);
+}
+
 namespace IncrementalParser {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
         aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
@@ -9825,10 +9904,8 @@ namespace IncrementalParser {
         // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
         // tree and give them new positions and parents.  From that point on, trusting the old
         // tree at all is not possible as far too much of it may violate invariants.
-        const incrementalSourceFile = sourceFile as Node as IncrementalNode;
-        Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
-        incrementalSourceFile.hasBeenIncrementallyParsed = true;
-        Parser.fixupParentReferences(incrementalSourceFile);
+        markAsIncrementallyParsed(sourceFile);
+        Parser.fixupParentReferences(sourceFile);
         const oldText = sourceFile.text;
         const syntaxCursor = createSyntaxCursor(sourceFile);
 
@@ -9867,7 +9944,7 @@ namespace IncrementalParser {
         //
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
-        updateTokenPositionsAndMarkElements(incrementalSourceFile, changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+        updateTokenPositionsAndMarkElements(sourceFile, changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
 
         // Now that we've set up our internal incremental state just proceed and parse the
         // source file in the normal fashion.  When possible the parser will retrieve and
@@ -9943,18 +10020,18 @@ namespace IncrementalParser {
         }
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
-    function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
-    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+    function moveElementEntirelyPastChangeRange(element: Node, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: NodeArray<Node>, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: Node | NodeArray<Node>, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
         if (isArray) {
-            visitArray(element as IncrementalNodeArray);
+            visitArray(element as NodeArray<Node>);
         }
         else {
-            visitNode(element as IncrementalNode);
+            visitNode(element as Node);
         }
         return;
 
-        function visitNode(node: IncrementalNode) {
+        function visitNode(node: Node) {
             let text = "";
             if (aggressiveChecks && shouldCheckNode(node)) {
                 text = oldText.substring(node.pos, node.end);
@@ -9962,9 +10039,7 @@ namespace IncrementalParser {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            if (node._children) {
-                node._children = undefined;
-            }
+            unsetNodeChildren(node);
 
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
@@ -9975,14 +10050,13 @@ namespace IncrementalParser {
             forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
             if (hasJSDocNodes(node)) {
                 for (const jsDocComment of node.jsDoc!) {
-                    visitNode(jsDocComment as Node as IncrementalNode);
+                    visitNode(jsDocComment);
                 }
             }
             checkNodePositions(node, aggressiveChecks);
         }
 
-        function visitArray(array: IncrementalNodeArray) {
-            array._children = undefined;
+        function visitArray(array: NodeArray<Node>) {
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
             for (const node of array) {
@@ -10002,7 +10076,7 @@ namespace IncrementalParser {
         return false;
     }
 
-    function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+    function adjustIntersectingElement(element: Node | NodeArray<Node>, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
         Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
         Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
         Debug.assert(element.pos <= element.end);
@@ -10068,9 +10142,10 @@ namespace IncrementalParser {
             Math.min(element.end, changeRangeNewEnd);
 
         Debug.assert(pos <= end);
-        if (element.parent) {
-            Debug.assertGreaterThanOrEqual(pos, element.parent.pos);
-            Debug.assertLessThanOrEqual(end, element.parent.end);
+        if ((element as any).parent) {
+            const parent = (element as any).parent as Node;
+            Debug.assertGreaterThanOrEqual(pos, parent.pos);
+            Debug.assertLessThanOrEqual(end, parent.end);
         }
 
         setTextRangePosEnd(element, pos, end);
@@ -10094,7 +10169,7 @@ namespace IncrementalParser {
     }
 
     function updateTokenPositionsAndMarkElements(
-        sourceFile: IncrementalNode,
+        sourceFile: SourceFile,
         changeStart: number,
         changeRangeOldEnd: number,
         changeRangeNewEnd: number,
@@ -10106,7 +10181,7 @@ namespace IncrementalParser {
         visitNode(sourceFile);
         return;
 
-        function visitNode(child: IncrementalNode) {
+        function visitNode(child: Node) {
             Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
@@ -10120,15 +10195,15 @@ namespace IncrementalParser {
             // be able to use.
             const fullEnd = child.end;
             if (fullEnd >= changeStart) {
-                child.intersectsChange = true;
-                child._children = undefined;
+                markAsIntersectingIncrementalChange(child);
+                unsetNodeChildren(child);
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                 forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
                 if (hasJSDocNodes(child)) {
                     for (const jsDocComment of child.jsDoc!) {
-                        visitNode(jsDocComment as Node as IncrementalNode);
+                        visitNode(jsDocComment);
                     }
                 }
                 checkNodePositions(child, aggressiveChecks);
@@ -10139,7 +10214,7 @@ namespace IncrementalParser {
             Debug.assert(fullEnd < changeStart);
         }
 
-        function visitArray(array: IncrementalNodeArray) {
+        function visitArray(array: NodeArray<Node>) {
             Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
@@ -10153,8 +10228,7 @@ namespace IncrementalParser {
             // be able to use.
             const fullEnd = array.end;
             if (fullEnd >= changeStart) {
-                array.intersectsChange = true;
-                array._children = undefined;
+                markAsIntersectingIncrementalChange(array);
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10303,26 +10377,11 @@ namespace IncrementalParser {
         }
     }
 
-    interface IncrementalElement extends ReadonlyTextRange {
-        readonly parent: Node;
-        intersectsChange: boolean;
-        length?: number;
-        _children: Node[] | undefined;
-    }
-
-    export interface IncrementalNode extends Node, IncrementalElement {
-        hasBeenIncrementallyParsed: boolean;
-    }
-
-    interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
-        length: number;
-    }
-
     // Allows finding nodes in the source file at a certain position in an efficient manner.
     // The implementation takes advantage of the calling pattern it knows the parser will
     // make in order to optimize finding nodes as quickly as possible.
     export interface SyntaxCursor {
-        currentNode(position: number): IncrementalNode;
+        currentNode(position: number): Node;
     }
 
     export function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
@@ -10364,7 +10423,7 @@ namespace IncrementalParser {
 
                 // Either we don'd have a node, or we have a node at the position being asked for.
                 Debug.assert(!current || current.pos === position);
-                return current as IncrementalNode;
+                return current;
             },
         };
 
@@ -10510,19 +10569,20 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const typeReferenceDirectives = context.typeReferenceDirectives;
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
-                    const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
-                    if (arg.arguments["no-default-lib"]) {
+                    const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
+                    const preserve = _preserve === "true" ? true : undefined;
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);
-                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}) });
+                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}), ...(preserve ? { preserve } : {}) });
                     }
                     else if (lib) {
-                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
+                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value, ...(preserve ? { preserve } : {}) });
                     }
                     else if (path) {
-                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
+                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value, ...(preserve ? { preserve } : {}) });
                     }
                     else {
                         reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
@@ -10635,7 +10695,7 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
 
     if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
         const multiLinePragmaRegEx = /@(\S+)(\s+.*)?$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-        let multiLineMatch: RegExpExecArray | null;
+        let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
             addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
         }

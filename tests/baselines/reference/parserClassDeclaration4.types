@@ -3,6 +3,9 @@
 === parserClassDeclaration4.ts ===
 class C extends A implements B extends C {
 >C : C
+>  : ^
 >A : any
+>  : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 }

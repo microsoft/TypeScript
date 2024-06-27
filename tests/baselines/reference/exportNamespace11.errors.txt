@@ -1,0 +1,14 @@
+main.ts(2,52): error TS2339: Property 'Ghost' does not exist on type 'typeof import("intermediate")'.
+
+
+==== main.ts (1 errors) ====
+    import * as intermediate from './intermediate'
+    const ghost: intermediate.Ghost = new intermediate.Ghost()
+                                                       ~~~~~
+!!! error TS2339: Property 'Ghost' does not exist on type 'typeof import("intermediate")'.
+    
+==== intermediate.ts (0 errors) ====
+    export type * from './ghost'
+    
+==== ghost.ts (0 errors) ====
+    export class Ghost {}

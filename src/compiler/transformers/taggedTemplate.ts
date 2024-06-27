@@ -23,7 +23,7 @@ import {
     visitEachChild,
     visitNode,
     Visitor,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export enum ProcessLevel {

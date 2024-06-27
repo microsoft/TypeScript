@@ -3,6 +3,9 @@
 === parserForInStatement4.ts ===
 for (var a = 1 in X) {
 >a : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >X : any
+>  : ^^^
 }

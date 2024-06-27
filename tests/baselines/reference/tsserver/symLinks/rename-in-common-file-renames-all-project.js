@@ -50,8 +50,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/a
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/a/a.ts :: Config file name: /users/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/a/a.ts ProjectRootPath: /users/username/projects/a:: Result: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/a/tsconfig.json 2000 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -83,7 +82,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/a/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -172,7 +171,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/a/a.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -194,6 +200,25 @@ FsWatchesRecursive::
 /users/username/projects/a: *new*
   {}
 
+Projects::
+/users/username/projects/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+/users/username/projects/a/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -206,8 +231,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/b
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/b/b.ts :: Config file name: /users/username/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/b/b.ts ProjectRootPath: /users/username/projects/b:: Result: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/b/tsconfig.json 2000 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -238,7 +262,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/b/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -333,7 +357,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/b/b.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -363,6 +394,37 @@ FsWatchesRecursive::
 /users/username/projects/b: *new*
   {}
 
+Projects::
+/users/username/projects/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/users/username/projects/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json *new*
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+/users/username/projects/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -376,8 +438,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/a/c/fc.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/a/c
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/a/c/fc.ts :: Config file name: /users/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/a/c/fc.ts ProjectRootPath: /users/username/projects/a:: Result: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -395,7 +456,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/a/c/fc.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -427,6 +492,30 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -440,8 +529,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/b/c/fc.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/b/c
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/b/c/fc.ts :: Config file name: /users/username/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/b/c/fc.ts ProjectRootPath: /users/username/projects/b:: Result: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -461,7 +549,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/b/c/fc.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -490,6 +582,30 @@ FsWatchesRecursive::
   {}
 /users/username/projects/b:
   {}
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
 
 Before request
 

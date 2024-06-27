@@ -51,8 +51,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/app
-Info seq  [hh:mm:ss:mss] For info: /packages/app/package.json :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/package.json ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -105,7 +104,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -131,54 +130,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/app/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Creating configuration project /packages/dep/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/packages/dep/tsconfig.json",
-        "reason": "Creating project referenced in solution /packages/app/tsconfig.json to find possible configured project for /packages/app/package.json to open"
-      }
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/folder/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/dep/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/dep/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/dep/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/packages/dep/src/sub/folder/index.ts Text-1 "export const dep = 0;"
-	/packages/dep/src/index.ts Text-1 "import \"./sub/folder\";"
-
-
-	../../lib.d.ts
-	  Default library for target 'es5'
-	../../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../lib.d.ts'
-	../../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../lib.d.ts'
-	src/sub/folder/index.ts
-	  Imported via "./sub/folder" from file 'src/index.ts'
-	  Matched by default include pattern '**/*'
-	src/index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/packages/dep/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -221,6 +172,54 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] Creating configuration project /packages/dep/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/packages/dep/tsconfig.json",
+        "reason": "Creating project referenced in solution /packages/app/tsconfig.json to find possible configured project for /packages/app/package.json to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/dep/src/sub/folder/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/dep/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /packages/dep/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/dep/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/packages/dep/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+	/lib.d.ts Text-1 lib.d.ts-Text
+	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/packages/dep/src/sub/folder/index.ts Text-1 "export const dep = 0;"
+	/packages/dep/src/index.ts Text-1 "import \"./sub/folder\";"
+
+
+	../../lib.d.ts
+	  Default library for target 'es5'
+	../../lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../lib.d.ts'
+	../../lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../lib.d.ts'
+	src/sub/folder/index.ts
+	  Imported via "./sub/folder" from file 'src/index.ts'
+	  Matched by default include pattern '**/*'
+	src/index.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/packages/dep/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -232,8 +231,9 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -268,6 +268,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -297,6 +308,55 @@ watchedDirectoriesRecursive::
 /packages/dep/src: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/packages/dep/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/packages/app/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/packages/app/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json
+/packages/dep/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/dep/tsconfig.json
+/packages/dep/src/sub/folder/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/dep/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -307,8 +367,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/app/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/app/src
-Info seq  [hh:mm:ss:mss] For info: /packages/app/src/index.ts :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/src/index.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -326,6 +385,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -356,6 +423,56 @@ watchedDirectoriesRecursive::
   {}
 /packages/dep/src:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/packages/dep/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/packages/app/src/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json *default*
+/packages/dep/src/index.ts
+    version: Text-1
+    containingProjects: 1
+        /packages/dep/tsconfig.json
+/packages/dep/src/sub/folder/index.ts
+    version: Text-1
+    containingProjects: 1
+        /packages/dep/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -463,11 +580,11 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/packages/dep/src/sub/folder/index.ts Text-1 "export const dep = 0;"
@@ -549,6 +666,59 @@ watchedDirectoriesRecursive::
   {}
   {} *new*
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1* *changed*
+/packages/dep/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/packages/app/src/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json *default*
+/packages/dep/src/index.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1* *new*
+/packages/dep/src/sub/folder/index.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 7,
@@ -563,6 +733,69 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/packages/dep/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/packages/app/src/index.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /packages/app/tsconfig.json *default*
+/packages/dep/src/index.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1*
+/packages/dep/src/sub/folder/index.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 8,
@@ -577,3 +810,49 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/packages/app/src/index.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /packages/app/tsconfig.json *default*
+/packages/dep/src/index.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1*
+/packages/dep/src/sub/folder/index.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/dep/tsconfig.json
+        /dev/null/autoImportProviderProject1*

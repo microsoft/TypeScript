@@ -3,8 +3,11 @@
 === parserES5ComputedPropertyName9.ts ===
 class C {
 >C : C
+>  : ^
 
    [e]: Type
 >[e] : Type
+>    : ^^^^
 >e : any
+>  : ^^^
 }

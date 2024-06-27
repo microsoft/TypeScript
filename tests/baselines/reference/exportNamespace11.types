@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace11.ts] ////
+
+=== main.ts ===
+import * as intermediate from './intermediate'
+>intermediate : typeof intermediate
+>             : ^^^^^^^^^^^^^^^^^^^
+
+const ghost: intermediate.Ghost = new intermediate.Ghost()
+>ghost : intermediate.Ghost
+>      : ^^^^^^^^^^^^^^^^^^
+>intermediate : any
+>             : ^^^
+>new intermediate.Ghost() : any
+>                         : ^^^
+>intermediate.Ghost : any
+>                   : ^^^
+>intermediate : typeof intermediate
+>             : ^^^^^^^^^^^^^^^^^^^
+>Ghost : any
+>      : ^^^
+
+=== intermediate.ts ===
+
+export type * from './ghost'
+
+=== ghost.ts ===
+export class Ghost {}
+>Ghost : Ghost
+>      : ^^^^^
+

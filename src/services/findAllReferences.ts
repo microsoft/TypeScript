@@ -1,4 +1,16 @@
 import {
+    createImportTracker,
+    ExportInfo,
+    ExportKind,
+    findModuleReferences,
+    getExportInfo,
+    getImportOrExportSymbol,
+    ImportExport,
+    ImportsResult,
+    ImportTracker,
+    ModuleReference,
+} from "./_namespaces/ts.FindAllReferences.js";
+import {
     __String,
     addToSeen,
     append,
@@ -189,13 +201,14 @@ import {
     isVoidExpression,
     isWriteAccess,
     JSDocPropertyLikeTag,
-    JSDocTag,
     length,
     map,
     mapDefined,
     MethodDeclaration,
     ModifierFlags,
     ModuleDeclaration,
+    ModuleExportName,
+    moduleExportNameIsDefault,
     MultiMap,
     NamedDeclaration,
     Node,
@@ -228,7 +241,6 @@ import {
     skipAlias,
     some,
     SourceFile,
-    Statement,
     StringLiteral,
     StringLiteralLike,
     stripQuotes,
@@ -253,19 +265,7 @@ import {
     TypeChecker,
     TypeLiteralNode,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import {
-    createImportTracker,
-    ExportInfo,
-    ExportKind,
-    findModuleReferences,
-    getExportInfo,
-    getImportOrExportSymbol,
-    ImportExport,
-    ImportsResult,
-    ImportTracker,
-    ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface SymbolAndEntries {
@@ -375,7 +375,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 const declOrStatement = findAncestor(validImport, node =>
                     isDeclaration(node) ||
                     isStatement(node) ||
-                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
+                    isJSDocTag(node))!;
                 return isDeclaration(declOrStatement) ?
                     getContextNode(declOrStatement) :
                     declOrStatement;
@@ -757,7 +757,7 @@ interface PrefixAndSuffix {
     readonly suffixText?: string;
 }
 function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
-    if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
+    if (entry.kind !== EntryKind.Span && (isIdentifier(originalNode) || isStringLiteralLike(originalNode))) {
         const { node, kind } = entry;
         const parent = node.parent;
         const name = originalNode.text;
@@ -1563,7 +1563,7 @@ export namespace Core {
         exportingModuleSymbol: Symbol,
         exportName: string,
         isDefaultExport: boolean,
-        cb: (ref: Identifier) => void,
+        cb: (ref: ModuleExportName) => void,
     ): void {
         const importTracker = createImportTracker(sourceFiles, new Set(sourceFiles.map(f => f.fileName)), checker, cancellationToken);
         const { importSearches, indirectUsers, singleReferences } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
@@ -1591,9 +1591,9 @@ export namespace Core {
         if (!hasMatchingMeaning(singleRef, state)) return false;
         if (state.options.use !== FindReferencesUse.Rename) return true;
         // Don't rename an import type `import("./module-name")` when renaming `name` in `export = name;`
-        if (!isIdentifier(singleRef)) return false;
+        if (!isIdentifier(singleRef) && !isImportOrExportSpecifier(singleRef.parent)) return false;
         // At `default` in `import { default as x }` or `export { default as x }`, do add a reference, but do not rename.
-        return !(isImportOrExportSpecifier(singleRef.parent) && singleRef.escapedText === InternalSymbolName.Default);
+        return !(isImportOrExportSpecifier(singleRef.parent) && moduleExportNameIsDefault(singleRef));
     }
 
     // Go to the symbol we imported from and find references for it.
@@ -1840,8 +1840,13 @@ export namespace Core {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) || (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node)) &&
-                    str.text.length === searchSymbolName.length;
+                return str.text.length === searchSymbolName.length && (
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(str) ||
+                    isNameOfModuleDeclaration(node) ||
+                    isExpressionOfExternalModuleImportEqualsDeclaration(node) ||
+                    (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node) ||
+                    isImportOrExportSpecifier(node.parent)
+                );
             }
 
             case SyntaxKind.NumericLiteral:
@@ -1936,8 +1941,8 @@ export namespace Core {
         }
 
         if (isExportSpecifier(parent)) {
-            Debug.assert(referenceLocation.kind === SyntaxKind.Identifier);
-            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, parent, search, state, addReferencesHere);
+            Debug.assert(referenceLocation.kind === SyntaxKind.Identifier || referenceLocation.kind === SyntaxKind.StringLiteral);
+            getReferencesAtExportSpecifier(referenceLocation as Identifier | StringLiteral, referenceSymbol, parent, search, state, addReferencesHere);
             return;
         }
 
@@ -1997,7 +2002,7 @@ export namespace Core {
     }
 
     function getReferencesAtExportSpecifier(
-        referenceLocation: Identifier,
+        referenceLocation: ModuleExportName,
         referenceSymbol: Symbol,
         exportSpecifier: ExportSpecifier,
         search: Search,
@@ -2016,7 +2021,7 @@ export namespace Core {
 
         if (!propertyName) {
             // Don't rename at `export { default } from "m";`. (but do continue to search for imports of the re-export)
-            if (!(state.options.use === FindReferencesUse.Rename && (name.escapedText === InternalSymbolName.Default))) {
+            if (!(state.options.use === FindReferencesUse.Rename && moduleExportNameIsDefault(name))) {
                 addRef();
             }
         }
@@ -2039,8 +2044,8 @@ export namespace Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
-            const isDefaultExport = referenceLocation.escapedText === "default"
-                || exportSpecifier.name.escapedText === "default";
+            const isDefaultExport = moduleExportNameIsDefault(referenceLocation)
+                || moduleExportNameIsDefault(exportSpecifier.name);
             const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.checkDefined(exportSpecifier.symbol);
             const exportInfo = getExportInfo(exportSymbol, exportKind, state.checker);
@@ -2060,11 +2065,11 @@ export namespace Core {
         }
     }
 
-    function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
+    function getLocalSymbolForExportSpecifier(referenceLocation: ModuleExportName, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
         return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
-    function isExportSpecifierAlias(referenceLocation: Identifier, exportSpecifier: ExportSpecifier): boolean {
+    function isExportSpecifierAlias(referenceLocation: ModuleExportName, exportSpecifier: ExportSpecifier): boolean {
         const { parent, propertyName, name } = exportSpecifier;
         Debug.assert(propertyName === referenceLocation || name === referenceLocation);
         if (propertyName) {

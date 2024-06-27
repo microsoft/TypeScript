@@ -3,9 +3,12 @@
 === a.ts ===
 import a = require('./b');
 >a : typeof a
+>  : ^^^^^^^^
 
 === b.ts ===
 export var c = '';
 >c : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 

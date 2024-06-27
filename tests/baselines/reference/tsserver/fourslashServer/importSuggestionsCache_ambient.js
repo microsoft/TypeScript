@@ -28,8 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -61,7 +60,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefine
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -102,8 +101,9 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -133,6 +133,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /ambient.d.ts: *new*
@@ -150,6 +161,40 @@ watchedDirectoriesRecursive::
 : *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/ambient.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -160,8 +205,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /ambient.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /ambient.d.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /ambient.d.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -175,6 +219,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /ambient.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -193,6 +245,41 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -560,6 +647,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -567,12 +660,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -818,18 +905,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -837,6 +912,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -863,6 +950,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -944,6 +1037,49 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 4,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 5,
@@ -976,7 +1112,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -1322,6 +1458,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -1329,12 +1471,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1580,18 +1716,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -1599,6 +1723,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1625,6 +1761,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -1672,6 +1814,16 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 7,
@@ -1686,6 +1838,49 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 8,
@@ -1700,6 +1895,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-3 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 9,
@@ -1714,6 +1943,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-4 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 10,
@@ -1728,6 +1991,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-5 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 11,
@@ -1742,6 +2039,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-6 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 12,
@@ -1756,6 +2087,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 12,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-7 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 13,
@@ -1770,6 +2135,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 13,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-8 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 14,
@@ -1784,6 +2183,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 14,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-9 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 15,
@@ -1798,6 +2231,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 15,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-10 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 16,
@@ -1812,6 +2279,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 16,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-11 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 17,
@@ -1826,6 +2327,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 17,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-12 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 18,
@@ -1840,6 +2375,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 18,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-13 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 19,
@@ -1854,6 +2423,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-14 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 20,
@@ -1868,6 +2471,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 20,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-15 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 21,
@@ -1882,6 +2519,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 21,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-16 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 22,
@@ -1896,6 +2567,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 22,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-17 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 23,
@@ -1910,6 +2615,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 23,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-18 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 24,
@@ -1924,6 +2663,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 24,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-19 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 25,
@@ -1938,6 +2711,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 25,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-20 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 26,
@@ -1952,6 +2759,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 26,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-21 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 27,
@@ -1966,6 +2807,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 27,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-22 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 28,
@@ -1980,6 +2855,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 28,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-23 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 29,
@@ -1994,6 +2903,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 29,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-24 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 30,
@@ -2008,6 +2951,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 30,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-25 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 31,
@@ -2022,6 +2999,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 31,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-26 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 32,
@@ -2036,6 +3047,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 32,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-27 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 33,
@@ -2050,6 +3095,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 33,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-28 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 34,
@@ -2064,6 +3143,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 34,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-29 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 35,
@@ -2078,6 +3191,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 35,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-30 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 36,
@@ -2092,6 +3239,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 36,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-31 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 37,
@@ -2106,6 +3287,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 37,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-32 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 38,
@@ -2120,6 +3335,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 38,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-33 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 39,
@@ -2134,6 +3383,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 39,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-34 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 40,
@@ -2148,6 +3431,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 40,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-35 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 41,
@@ -2162,6 +3479,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 41,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-36 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 42,
@@ -2176,6 +3527,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 42,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-37 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 43,
@@ -2190,6 +3575,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 43,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-38 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 44,
@@ -2204,6 +3623,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 44,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-39 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 45,
@@ -2218,6 +3671,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 45,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-40 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 46,
@@ -2232,6 +3719,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 46,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-41 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 47,
@@ -2246,6 +3767,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 47,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-42 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 48,
@@ -2260,6 +3815,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 48,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-43 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 49,
@@ -2274,6 +3863,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 49,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-44 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 50,
@@ -2288,6 +3911,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 50,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-45 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 51,
@@ -2302,6 +3959,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 51,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-46 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 52,
@@ -2316,6 +4007,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 52,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-47 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 53,
@@ -2330,6 +4055,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 53,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-48 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 54,
@@ -2344,6 +4103,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 54,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-49 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 55,
@@ -2358,6 +4151,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 55,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-50 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 56,
@@ -2372,6 +4199,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 56,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-51 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 57,
@@ -2386,6 +4247,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 57,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-52 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 58,
@@ -2400,6 +4295,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 58,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-53 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 59,
@@ -2414,6 +4343,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 59,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-54 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 60,
@@ -2428,6 +4391,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 60,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-55 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 61,
@@ -2442,6 +4439,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 61,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-56 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 62,
@@ -2456,6 +4487,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 62,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-57 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 63,
@@ -2470,6 +4535,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 63,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-58 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 64,
@@ -2484,6 +4583,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 64,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-59 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 65,
@@ -2498,6 +4631,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 65,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-60 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 66,
@@ -2530,7 +4697,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -2876,6 +5043,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -2883,12 +5056,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -3134,18 +5301,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -3153,6 +5308,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -3179,6 +5346,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -3246,6 +5419,16 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 68,
@@ -3268,6 +5451,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /ambient.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 68,
+      "success": true
+    }
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 69,
@@ -3282,6 +5473,49 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 69,
+      "success": true
+    }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-61 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 70,
@@ -3296,6 +5530,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 70,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-62 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 71,
@@ -3310,6 +5578,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 71,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-63 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 72,
@@ -3324,6 +5626,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 72,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-64 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 73,
@@ -3338,6 +5674,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 73,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-65 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 74,
@@ -3352,6 +5722,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 74,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-66 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 75,
@@ -3366,6 +5770,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 75,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-67 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 76,
@@ -3380,6 +5818,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 76,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-68 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 77,
@@ -3394,6 +5866,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 77,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-69 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 78,
@@ -3408,6 +5914,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 78,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-70 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 79,
@@ -3422,6 +5962,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 79,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-71 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 80,
@@ -3436,6 +6010,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 80,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-72 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 81,
@@ -3450,6 +6058,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 81,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-73 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 82,
@@ -3464,6 +6106,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 82,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-74 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 83,
@@ -3478,6 +6154,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 83,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-75 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 84,
@@ -3492,6 +6202,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 84,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-76 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 85,
@@ -3506,6 +6250,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 85,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-77 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 86,
@@ -3520,6 +6298,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 86,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-78 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 87,
@@ -3534,6 +6346,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 87,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-79 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 88,
@@ -3548,6 +6394,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 88,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-80 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 89,
@@ -3562,6 +6442,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 89,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-81 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 90,
@@ -3576,6 +6490,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 90,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-82 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 91,
@@ -3590,6 +6538,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 91,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-83 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 92,
@@ -3604,6 +6586,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 92,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-84 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 93,
@@ -3618,6 +6634,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 93,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-85 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 94,
@@ -3632,6 +6682,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 94,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-86 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 95,
@@ -3646,6 +6730,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 95,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-87 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 96,
@@ -3660,6 +6778,40 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 96,
+      "success": true
+    }
+After Request
+ScriptInfos::
+/ambient.d.ts (Open) *changed*
+    version: SVC-2-88 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 97,
@@ -3692,7 +6844,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -4038,6 +7190,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -4045,12 +7203,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -4296,18 +7448,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -4315,6 +7455,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -4341,6 +7493,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -4408,6 +7566,16 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 99,
@@ -4772,6 +7940,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -4779,12 +7953,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -5030,18 +8198,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -5049,6 +8205,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -5075,6 +8243,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {

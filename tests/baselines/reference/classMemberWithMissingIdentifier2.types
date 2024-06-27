@@ -3,11 +3,17 @@
 === classMemberWithMissingIdentifier2.ts ===
 class C { 
 >C : C
+>  : ^
 
     public {[name:string]:VariableDeclaration};
 > : any
+> : ^^^
 >[name:string] : any[]
+>              : ^^^^^
 >name : void
+>     : ^^^^
 >string : any
+>       : ^^^
 >VariableDeclaration : any
+>                    : ^^^
 }

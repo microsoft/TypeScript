@@ -55,7 +55,6 @@ import {
     transformECMAScriptModule,
     Transformer,
     TransformerFactory,
-    transformES5,
     transformES2015,
     transformES2016,
     transformES2017,
@@ -73,8 +72,8 @@ import {
     transformSystemModule,
     transformTypeScript,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
@@ -177,12 +176,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     }
 
     transformers.push(getModuleTransformer(moduleKind));
-
-    // The ES5 transformer is last so that it can substitute expressions like `exports.default`
-    // for ES3.
-    if (languageVersion < ScriptTarget.ES5) {
-        transformers.push(transformES5);
-    }
 
     addRange(transformers, customTransformers && map(customTransformers.after, wrapScriptTransformerFactory));
     return transformers;

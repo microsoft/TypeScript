@@ -3,12 +3,12 @@ import {
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
