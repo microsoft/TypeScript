@@ -15,8 +15,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /a.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -168,7 +167,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -199,10 +205,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -218,7 +220,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -236,7 +239,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a.js",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -269,7 +273,8 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ]
+        ],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

@@ -21,6 +21,7 @@ import {
     contains,
     createDiagnosticForNode,
     createEmptyExports,
+    createGetIsolatedDeclarationErrors,
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
     createSymbolTable,
@@ -39,6 +40,7 @@ import {
     EnumDeclaration,
     ExportAssignment,
     ExportDeclaration,
+    Expression,
     ExpressionWithTypeArguments,
     factory,
     FileReference,
@@ -50,6 +52,7 @@ import {
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
+    getAllAccessorDeclarations,
     getCommentRange,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
@@ -67,6 +70,7 @@ import {
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
+    getSourceFilesToEmit,
     GetSymbolAccessibilityDiagnostic,
     getTextOfNode,
     getThisParameter,
@@ -86,6 +90,7 @@ import {
     isAmbientModule,
     isArray,
     isArrayBindingElement,
+    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
@@ -110,6 +115,7 @@ import {
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isInternalDeclaration,
+    isJSDocImportTag,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
     isLiteralImportTypeNode,
@@ -118,7 +124,9 @@ import {
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
+    isObjectLiteralExpression,
     isOmittedExpression,
+    isPrimitiveLiteralValue,
     isPrivateIdentifier,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -131,6 +139,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -193,6 +202,7 @@ import {
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
+    unwrapParenthesizedExpression,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -201,12 +211,21 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
-    const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
+    const files = filter(getSourceFilesToEmit(host, file), isSourceFileNotJson);
+    const result = transformNodes(
+        resolver,
+        host,
+        factory,
+        compilerOptions,
+        file ? contains(files, file) ? [file] : emptyArray : files,
+        [transformDeclarations],
+        /*allowDtsFiles*/ false,
+    );
     return result.diagnostics;
 }
 
@@ -215,6 +234,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     NodeBuilderFlags.UseTypeOfFunction |
     NodeBuilderFlags.UseStructuralFallback |
     NodeBuilderFlags.AllowEmptyTuple |
+    NodeBuilderFlags.AllowUnresolvedNames |
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
@@ -252,6 +272,7 @@ export function transformDeclarations(context: TransformationContext) {
         moduleResolverHost: host,
         reportNonlocalAugmentation,
         reportNonSerializableProperty,
+        reportInferenceFallback,
     };
     let errorNameNode: DeclarationName | undefined;
     let errorFallbackNode: Declaration | undefined;
@@ -262,9 +283,33 @@ export function transformDeclarations(context: TransformationContext) {
     let rawLibReferenceDirectives: readonly FileReference[];
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
-    const { stripInternal } = options;
+    const getIsolatedDeclarationError = createGetIsolatedDeclarationErrors(resolver);
+    const { stripInternal, isolatedDeclarations } = options;
     return transformRoot;
 
+    function reportExpandoFunctionErrors(node: FunctionDeclaration | VariableDeclaration) {
+        resolver.getPropertiesOfContainerFunction(node).forEach(p => {
+            if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
+                const errorTarget = isBinaryExpression(p.valueDeclaration) ?
+                    p.valueDeclaration.left :
+                    p.valueDeclaration;
+
+                context.addDiagnostic(createDiagnosticForNode(
+                    errorTarget,
+                    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                ));
+            }
+        });
+    }
+    function reportInferenceFallback(node: Node) {
+        if (!isolatedDeclarations || isSourceFileJS(currentSourceFile)) return;
+        if (isVariableDeclaration(node) && resolver.isExpandoFunctionDeclaration(node)) {
+            reportExpandoFunctionErrors(node);
+        }
+        else {
+            context.addDiagnostic(getIsolatedDeclarationError(node));
+        }
+    }
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
         if (symbolAccessibilityResult.accessibility === SymbolAccessibility.Accessible) {
             // Add aliases back onto the possible imports list if they're not there so we can try them again with updated visibility info
@@ -280,7 +325,8 @@ export function transformDeclarations(context: TransformationContext) {
             }
             // TODO: Do all these accessibility checks inside/after the first pass in the checker when declarations are enabled, if possible
         }
-        else {
+        // The checker should issue errors on unresolvable names, skip the declaration emit error for using a private/unreachable name for those
+        else if (symbolAccessibilityResult.accessibility !== SymbolAccessibility.NotResolved) {
             // Report error
             const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
             if (errorInfo) {
@@ -366,7 +412,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
+    function transformDeclarationsForJS(sourceFile: SourceFile) {
         const oldDiag = getSymbolAccessibilityDiagnostic;
         getSymbolAccessibilityDiagnostic = s => (s.errorNode && canProduceDiagnostics(s.errorNode) ? createGetSymbolAccessibilityDiagnosticForNode(s.errorNode)(s) : ({
             diagnosticMessage: s.errorModuleName
@@ -374,7 +420,7 @@ export function transformDeclarations(context: TransformationContext) {
                 : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
             errorNode: s.errorNode || sourceFile,
         }));
-        const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
+        const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker);
         getSymbolAccessibilityDiagnostic = oldDiag;
         return result;
     }
@@ -409,7 +455,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
-                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
+                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                         const newFile = factory.updateSourceFile(
                             sourceFile,
                             [factory.createModuleDeclaration(
@@ -558,7 +604,7 @@ export function transformDeclarations(context: TransformationContext) {
                 elem.dotDotDotToken,
                 elem.propertyName,
                 filterBindingPatternInitializers(elem.name),
-                shouldPrintWithInitializer(elem) ? elem.initializer : undefined,
+                /*initializer*/ undefined,
             );
         }
     }
@@ -584,13 +630,19 @@ export function transformDeclarations(context: TransformationContext) {
         return newParam;
     }
 
-    function shouldPrintWithInitializer(node: Node) {
-        return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
+    function shouldPrintWithInitializer(node: Node): node is CanHaveLiteralInitializer & { initializer: Expression; } {
+        return canHaveLiteralInitializer(node)
+            && !!node.initializer
+            && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safea
     }
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
-            return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
+            const unwrappedInitializer = unwrapParenthesizedExpression(node.initializer);
+            if (!isPrimitiveLiteralValue(unwrappedInitializer)) {
+                reportInferenceFallback(node);
+            }
+            return resolver.createLiteralConstValue(getParseTreeNode(node, canHaveLiteralInitializer)!, symbolTracker);
         }
         return undefined;
     }
@@ -635,7 +687,7 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                typeNode = resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldAddImplicitUndefined);
+                typeNode = resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ConstructSignature:
@@ -727,7 +779,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, getAllAccessorDeclarations(isObjectLiteralExpression(input.parent) ? input.parent.properties : input.parent.members, input));
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }
@@ -868,6 +920,9 @@ export function transformDeclarations(context: TransformationContext) {
         }
         // Augmentation of export depends on import
         if (resolver.isImportRequiredByAugmentation(decl)) {
+            if (isolatedDeclarations) {
+                context.addDiagnostic(createDiagnosticForNode(decl, Diagnostics.Declaration_emit_for_this_file_requires_preserving_this_import_for_augmentations_This_is_not_supported_with_isolatedDeclarations));
+            }
             return factory.updateImportDeclaration(
                 decl,
                 decl.modifiers,
@@ -941,8 +996,28 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
-            if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                return;
+            if (hasDynamicName(input)) {
+                if (isolatedDeclarations) {
+                    // Classes and object literals usually elide properties with computed names that are not of a literal type
+                    // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
+                    if (!resolver.isDefinitelyReferenceToGlobalSymbolObject(input.name.expression)) {
+                        if (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) {
+                            context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
+                            return;
+                        }
+                        else if (
+                            // Type declarations just need to double-check that the input computed name is an entity name expression
+                            (isInterfaceDeclaration(input.parent) || isTypeLiteralNode(input.parent))
+                            && !isEntityNameExpression(input.name.expression)
+                        ) {
+                            context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
+                            return;
+                        }
+                    }
+                }
+                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isEntityNameExpression(input.name.expression)) {
+                    return;
+                }
             }
         }
 
@@ -1036,7 +1111,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, getAllAccessorDeclarations(isObjectLiteralExpression(input.parent) ? input.parent.properties : input.parent.members, input));
                     return cleanup(factory.updateGetAccessorDeclaration(
                         input,
                         ensureModifiers(input),
@@ -1313,6 +1388,8 @@ export function transformDeclarations(context: TransformationContext) {
         }
         if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
 
+        if (isJSDocImportTag(input)) return;
+
         // Elide implementation signatures from overload sets
         if (isFunctionLike(input) && resolver.isImplementationOfOverload(input)) return;
 
@@ -1366,6 +1443,10 @@ export function transformDeclarations(context: TransformationContext) {
                 ));
                 if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                     const props = resolver.getPropertiesOfContainerFunction(input);
+
+                    if (isolatedDeclarations) {
+                        reportExpandoFunctionErrors(input);
+                    }
                     // Use parseNodeFactory so it is usable as an enclosing declaration
                     const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                     setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
@@ -1381,7 +1462,7 @@ export function transformDeclarations(context: TransformationContext) {
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags | NodeBuilderFlags.NoSyntacticPrinter, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
@@ -1623,7 +1704,15 @@ export function transformDeclarations(context: TransformationContext) {
                     factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
-                        const constValue = resolver.getConstantValue(m);
+                        const enumValue = resolver.getEnumMemberValue(m);
+                        const constValue = enumValue?.value;
+                        if (
+                            isolatedDeclarations && m.initializer && enumValue?.hasExternalReferences &&
+                            // This will be its own compiler error instead, so don't report.
+                            !isComputedPropertyName(m.name)
+                        ) {
+                            context.addDiagnostic(createDiagnosticForNode(m, Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations));
+                        }
                         const newInitializer = constValue === undefined ? undefined
                             : typeof constValue === "string" ? factory.createStringLiteral(constValue)
                             : constValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
@@ -1700,7 +1789,7 @@ export function transformDeclarations(context: TransformationContext) {
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
         }
         errorNameNode = (node as NamedDeclaration).name;
-        Debug.assert(resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
+        Debug.assert(hasDynamicName(node as NamedDeclaration)); // Should only be called with dynamic names
         const decl = node as NamedDeclaration as LateBoundDeclaration;
         const entityName = decl.name.expression;
         checkEntityNameVisibility(entityName, enclosingDeclaration);
@@ -1811,7 +1900,7 @@ function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode 
 }
 
 type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
-function canHaveLiteralInitializer(node: Node): boolean {
+function canHaveLiteralInitializer(node: Node): node is CanHaveLiteralInitializer {
     switch (node.kind) {
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:

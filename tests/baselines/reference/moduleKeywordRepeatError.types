@@ -5,6 +5,9 @@
 
 module.module { }
 >module.module : any
+>              : ^^^
 >module : any
+>       : ^^^
 >module : any
+>       : ^^^
 

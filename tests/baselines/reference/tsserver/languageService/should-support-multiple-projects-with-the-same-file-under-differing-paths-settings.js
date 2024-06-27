@@ -35,8 +35,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project/a
-Info seq  [hh:mm:ss:mss] For info: /project/a/index.ts :: Config file name: /project/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a/index.ts ProjectRootPath: undefined:: Result: /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/tsconfig.json 2000 undefined Project: /project/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -203,7 +202,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/a/index.ts ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -249,8 +255,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project/b
-Info seq  [hh:mm:ss:mss] For info: /project/b/index.ts :: Config file name: /project/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/b/index.ts ProjectRootPath: undefined:: Result: /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/b/tsconfig.json 2000 undefined Project: /project/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -422,7 +427,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/b/index.ts ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

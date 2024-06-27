@@ -21,8 +21,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/project/file1Consumer1.ts :: Config file name: /users/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -179,7 +178,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consum
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -328,6 +334,17 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/username/projects/project/tsconfig.json",
+        "configFile": "/users/username/projects/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -459,7 +476,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/users/username/projects/project/file1Consumer1.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json

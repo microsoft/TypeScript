@@ -17,7 +17,7 @@ CompilerOptions::
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": true,
   "noEmit": true,
-  "configFilePath": "jsconfig.json"
+  "configFilePath": "/apath/jsconfig.json"
 }
 Errors::
 

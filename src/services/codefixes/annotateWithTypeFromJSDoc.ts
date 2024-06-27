@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Debug,
     Diagnostics,
     EmitFlags,
@@ -40,12 +45,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];

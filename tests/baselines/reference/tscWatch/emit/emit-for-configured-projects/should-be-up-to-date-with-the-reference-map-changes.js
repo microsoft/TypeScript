@@ -35,9 +35,9 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -145,17 +145,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -210,17 +211,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -280,12 +282,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -340,10 +343,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
@@ -360,7 +364,7 @@ Output::
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:01:16 AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
@@ -422,12 +426,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:23 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -3,8 +3,11 @@
 === sourceMapValidationLabeled.ts ===
 x:
 >x : any
+>  : ^^^
 
 var b = 10;
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

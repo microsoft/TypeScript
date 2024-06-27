@@ -137,16 +137,16 @@ export interface B {
 export interface C<T, U> {
     new (): string;
     new (x: T): U;
-    new <Q_3>(x: Q_3): T & Q_3;
+    new <Q>(x: Q): T & Q;
     (): number;
     (x: T): U;
-    <Q_2>(x: Q_2): T & Q_2;
+    <Q>(x: Q): T & Q;
     field: T & U;
     optionalField?: T;
     readonly readonlyField: T & U;
     readonly readonlyOptionalField?: U;
     method<Q = number>(): number;
-    method<Q_1>(a: T & Q_1): Q_1 & number;
+    method<Q>(a: T & Q): Q & number;
     method(a?: number): number;
     method(...args: any[]): number;
     optMethod?(): number;

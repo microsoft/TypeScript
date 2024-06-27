@@ -20,8 +20,6 @@ verify.moveToFile({
         "/bar.ts":
 `//
 import { p } from './a';
-
-
 import { b } from './other';
 
 
