@@ -8,6 +8,7 @@ import {
     identifierToKeywordKind,
     isAnyImportOrRequireStatement,
     isClassLike,
+    isExternalModuleSymbol,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     ModuleBlock,
@@ -81,7 +82,7 @@ export function addTargetFileImports(
             importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
         }
         else {
-            importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
+            isExternalModuleSymbol(targetSymbol) ? importAdder.addImportForExternalModuleSymbol(symbol, targetSymbol, isValidTypeOnlyUseSite) : importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
         }
     });
 
