@@ -1568,7 +1568,7 @@ function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: s
             trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
         }
         const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-        const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ||= tryParsePatterns(paths) : undefined;
+        const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ??= tryParsePatterns(paths) : undefined;
         return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
     }
 }
@@ -3126,8 +3126,14 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
 }
 
+const pathsToPatternsCache = new WeakMap<MapLike<string[]>, readonly (string | Pattern)[]>();
+
 function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: readonly (string | Pattern)[] | undefined, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
-    pathPatterns ||= tryParsePatterns(paths);
+    pathPatterns ??= pathsToPatternsCache.get(paths);
+    if (pathPatterns === undefined) {
+        pathsToPatternsCache.set(paths, pathPatterns = tryParsePatterns(paths));
+    }
+
     const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
     if (matchedPattern) {
         const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
