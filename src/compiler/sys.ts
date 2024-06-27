@@ -563,7 +563,7 @@ export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
-/** @internal @knipignore */
+/** @internal */
 export function sysLog(s: string) {
     return curSysLog(s);
 }

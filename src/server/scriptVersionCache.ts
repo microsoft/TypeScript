@@ -582,8 +582,7 @@ export class LineIndex {
     }
 }
 
-// TODO: knip doesn't see that LineNode is visible via LineIndexWalker
-/** @internal @knipignore */
+/** @internal */
 export class LineNode implements LineCollection {
     totalChars = 0;
     totalLines = 0;
@@ -835,7 +834,7 @@ export class LineNode implements LineCollection {
     }
 }
 
-/** @internal @knipignore */
+/** @internal */
 export class LineLeaf implements LineCollection {
     constructor(public text: string) {
     }
