@@ -1374,8 +1374,7 @@ export function getImpliedNodeFormatForFileWorker(
     }
 }
 
-/** @internal */
-export const plainJSErrors = new Set<number>([
+const plainJSErrors = new Set<number>([
     // binder errors
     Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,

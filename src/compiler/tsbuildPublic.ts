@@ -198,10 +198,8 @@ function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap
 
 /**
  * Helper to use now method instead of current date for testing purposes to get consistent baselines
- *
- * @internal
  */
-export function getCurrentTime(host: { now?(): Date; }) {
+function getCurrentTime(host: { now?(): Date; }) {
     return host.now ? host.now() : new Date();
 }
 

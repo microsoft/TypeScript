@@ -52131,8 +52131,7 @@ export function signatureHasRestParameter(s: Signature) {
     return !!(s.flags & SignatureFlags.HasRestParameter);
 }
 
-/** @internal */
-export function signatureHasLiteralTypes(s: Signature) {
+function signatureHasLiteralTypes(s: Signature) {
     return !!(s.flags & SignatureFlags.HasLiteralTypes);
 }
 

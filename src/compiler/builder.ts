@@ -1144,8 +1144,7 @@ export interface NonIncrementalBuildInfo extends BuildInfo {
     checkPending: true | undefined;
 }
 
-/** @internal */
-export function isNonIncrementalBuildInfo(info: BuildInfo): info is NonIncrementalBuildInfo {
+function isNonIncrementalBuildInfo(info: BuildInfo): info is NonIncrementalBuildInfo {
     return !isIncrementalBuildInfo(info) && !!(info as NonIncrementalBuildInfo).root;
 }
 
@@ -1599,8 +1598,7 @@ export function computeSignatureWithDiagnostics(
     }
 }
 
-/** @internal */
-export function computeSignature(text: string, host: HostForComputeHash, data?: WriteFileCallbackData) {
+function computeSignature(text: string, host: HostForComputeHash, data?: WriteFileCallbackData) {
     return (host.createHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
 }
 

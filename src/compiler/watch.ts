@@ -155,8 +155,7 @@ function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diag
     return false;
 }
 
-/** @internal */
-export const screenStartingMessageCodes: number[] = [
+const screenStartingMessageCodes: number[] = [
     Diagnostics.Starting_compilation_in_watch_mode.code,
     Diagnostics.File_change_detected_Starting_incremental_compilation.code,
 ];

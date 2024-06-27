@@ -1996,7 +1996,7 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/** @internal */
+/** @internal @knipignore */
 export function setSys(s: System) {
     sys = s;
 }
