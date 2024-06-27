@@ -45,12 +45,6 @@ T.bar();
 
 
 
-PolledWatches::
-/users/username/projects/package.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json: *new*
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
@@ -114,12 +108,6 @@ Output::
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 
-PolledWatches::
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
-
 FsWatches::
 /a/lib/lib.d.ts:
   {}
@@ -172,6 +160,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -180,6 +169,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -198,12 +188,6 @@ function bar() { }
 ;
 
 
-
-PolledWatches::
-/users/username/projects/package.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

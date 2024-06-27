@@ -15,7 +15,7 @@ function f1() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -51,7 +51,7 @@ function f2() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x !== "string") {
 >typeof x !== "string" : boolean
@@ -88,7 +88,7 @@ function f3() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -124,7 +124,7 @@ function f4() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x !== "string") {
 >typeof x !== "string" : boolean
@@ -161,7 +161,7 @@ function f5() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean

@@ -81,7 +81,7 @@ import {
     toPath,
     tryCast,
     TryStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface DocumentHighlights {
     fileName: string;

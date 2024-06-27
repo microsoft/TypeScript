@@ -73,9 +73,9 @@ async function fn11() { return a; } // valid: Promise<any>
 
 async function fn12() { return obj; } // valid: Promise<{ then: string; }>
 >fn12 : () => Promise<{ then: string; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >obj : { then: string; }
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^      ^^^
 
 async function fn13() { return thenable; } // error
 >fn13 : () => Promise<any>
@@ -117,9 +117,9 @@ async function fn18() { await obj; } // valid: Promise<void>
 >fn18 : () => Promise<void>
 >     : ^^^^^^^^^^^^^^^^^^^
 >await obj : { then: string; }
->          : ^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^      ^^^
 >obj : { then: string; }
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^      ^^^
 
 async function fn19() { await thenable; } // error
 >fn19 : () => Promise<void>

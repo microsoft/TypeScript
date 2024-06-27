@@ -1,5 +1,5 @@
-import * as ts from "../../../_namespaces/ts";
-import { extractTest } from "./helpers";
+import * as ts from "../../../_namespaces/ts.js";
+import { extractTest } from "./helpers.js";
 
 function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
     return it(caption, () => {

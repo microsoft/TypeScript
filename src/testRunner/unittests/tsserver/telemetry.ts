@@ -1,5 +1,5 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -7,11 +7,11 @@ import {
     openFilesForSession,
     TestSession,
     toExternalFiles,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {

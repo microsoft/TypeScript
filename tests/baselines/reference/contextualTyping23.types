@@ -9,13 +9,13 @@ var foo:(a:{():number; (i:number):number; })=>number; foo = function(a){return 5
 >i : number
 >  : ^^^^^^
 >foo = function(a){return 5} : (a: { (): number; (i: number): number; }) => number
->                            : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^      ^^^ ^^      ^^^      ^^^^^^^^^^^^^^
 >foo : (a: { (): number; (i: number): number; }) => number
->    : ^ ^^                                    ^^^^^^^^^^^
+>    : ^ ^^                                    ^^^^^      
 >function(a){return 5} : (a: { (): number; (i: number): number; }) => number
->                      : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^      ^^^ ^^      ^^^      ^^^^^^^^^^^^^^
 >a : { (): number; (i: number): number; }
->  : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>  : ^^^^^^      ^^^ ^^      ^^^      ^^^
 >5 : 5
 >  : ^
 

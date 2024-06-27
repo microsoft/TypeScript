@@ -44,7 +44,7 @@ module C {
 
     function hello(): b.B { return null; }
 >hello : () => b.B
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >b : any
 >  : ^^^
 }

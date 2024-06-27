@@ -24,8 +24,8 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {

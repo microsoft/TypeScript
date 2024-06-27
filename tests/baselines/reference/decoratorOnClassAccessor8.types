@@ -16,7 +16,7 @@ class A {
 
     @dec get x() { return 0; }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -41,7 +41,7 @@ class B {
 
     @dec set x(value: number) { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >value : number
@@ -54,7 +54,7 @@ class C {
 
     @dec set x(value: number) { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >value : number
@@ -79,7 +79,7 @@ class D {
 
     @dec get x() { return 0; }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -92,7 +92,7 @@ class E {
 
     @dec get x() { return 0; }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -105,7 +105,7 @@ class F {
 
     @dec set x(value: number) { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
 >value : number

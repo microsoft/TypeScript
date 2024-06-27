@@ -1,17 +1,17 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
     it("should be set to 2 if the project has js root files", () => {

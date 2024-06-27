@@ -13,7 +13,7 @@ interface MyComponentProp {
 
 function MyComponent1<T extends MyComponentProp>(attr: T) {
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^^
 >attr : T
 >     : ^
 
@@ -34,7 +34,7 @@ let i1 = <MyComponent1 values={5}/>;
 ><MyComponent1 values={5}/> : JSX.Element
 >                           : ^^^^^^^^^^^
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => JSX.Element
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^^
 >values : number
 >       : ^^^^^^
 >5 : 5

@@ -53,12 +53,10 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
-    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
-    getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -180,7 +178,7 @@ import {
     TransformFlags,
     TypeNode,
     WrappedExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Compound nodes
 
@@ -714,7 +712,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions) === ModuleKind.ESNext) {
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
@@ -771,8 +769,10 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactor
             return externalHelpersModuleName;
         }
 
+        const moduleKind = getEmitModuleKind(compilerOptions);
         let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
+            && moduleKind !== ModuleKind.System
+            && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
         if (!create) {
             const helpers = getEmitHelpers(node);
             if (helpers) {
@@ -802,6 +802,9 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
+        if (name.kind === SyntaxKind.StringLiteral) {
+            return factory.getGeneratedNameForNode(node);
+        }
         return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
     if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {

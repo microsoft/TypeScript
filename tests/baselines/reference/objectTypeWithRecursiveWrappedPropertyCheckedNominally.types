@@ -119,7 +119,7 @@ rList1 = rMyList1; // error, not nominally equal
 
 function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 >foo : <T extends List<number>, U extends MyList<number>>(t: T, u: U) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^            ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -184,7 +184,7 @@ function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 
 function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 >foo2 : <T extends U, U extends MyList<number>>(t: T, u: U) => void
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

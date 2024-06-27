@@ -107,10 +107,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -179,11 +175,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 500 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -193,19 +184,7 @@ Info seq  [hh:mm:ss:mss] Trying substitution '/home/src/projects/myproject/types
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/types/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/sometype.ts 500 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/src/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
@@ -227,18 +206,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 500 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -251,13 +219,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/types/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src/package.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -363,29 +324,22 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/myproject/src/secondary.t
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /home/src/projects/myproject/other: *new*
   {"pollingInterval":500}
-/home/src/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/sometype2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/myproject/types/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -471,7 +425,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -515,11 +468,6 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
  }
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -529,18 +477,6 @@ Info seq  [hh:mm:ss:mss] Trying substitution '/home/src/projects/myproject/types
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
@@ -561,17 +497,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/other/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/root2/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -638,22 +563,8 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/myproject/other:
   {"pollingInterval":500}
-/home/src/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/other/sometype2/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/root2/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/home/src/projects/myproject/types/package.json:
-  {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

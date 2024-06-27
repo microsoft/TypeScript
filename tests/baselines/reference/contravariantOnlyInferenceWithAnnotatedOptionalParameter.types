@@ -19,7 +19,7 @@ const a = filter((pose?: number) => true);
 >filter((pose?: number) => true) : number | undefined
 >                                : ^^^^^^^^^^^^^^^^^^
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->       : ^ ^^         ^^                                    ^^^^^^
+>       : ^ ^^         ^^                                    ^^^^^ 
 >(pose?: number) => true : (pose?: number) => true
 >                        : ^    ^^^      ^^^^^^^^^
 >pose : number | undefined
@@ -33,7 +33,7 @@ const b = filter((pose?: number, _?: number) => true);
 >filter((pose?: number, _?: number) => true) : number | undefined
 >                                            : ^^^^^^^^^^^^^^^^^^
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->       : ^ ^^         ^^                                    ^^^^^^
+>       : ^ ^^         ^^                                    ^^^^^ 
 >(pose?: number, _?: number) => true : (pose?: number, _?: number) => true
 >                                    : ^    ^^^      ^^ ^^^      ^^^^^^^^^
 >pose : number | undefined

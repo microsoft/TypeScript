@@ -39,7 +39,8 @@ declare global {
 
   namespace FullCalendarVDom {
     type VNode = preact.VNode<any>;
->VNode : any
+>VNode : VNode
+>      : ^^^^^
 >preact : any
 >       : ^^^
   }
@@ -47,6 +48,7 @@ declare global {
 
 export type EventInput = any;
 >EventInput : any
+>           : ^^^
 
 === /node_modules/@types/react/index.d.ts ===
 export = React;
@@ -63,6 +65,7 @@ declare namespace React {
 
     type ReactNode = any;
 >ReactNode : any
+>          : ^^^
 
     function useMemo<T>(factory: () => T, deps: undefined): T;
 >useMemo : <T>(factory: () => T, deps: undefined) => T

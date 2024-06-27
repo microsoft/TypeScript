@@ -13,7 +13,7 @@ abstract class BaseEntity<T> {
 >d() : PropertyDecorator
 >    : ^^^^^^^^^^^^^^^^^
 >d : () => PropertyDecorator
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                 
 
     public attributes: T extends { attributes: infer A } ? A : undefined;
 >attributes : T extends { attributes: infer A; } ? A : undefined
@@ -29,7 +29,7 @@ class C {
 >d() : PropertyDecorator
 >    : ^^^^^^^^^^^^^^^^^
 >d : () => PropertyDecorator
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                 
 
     x: number extends string ? false : true;
 >x : true

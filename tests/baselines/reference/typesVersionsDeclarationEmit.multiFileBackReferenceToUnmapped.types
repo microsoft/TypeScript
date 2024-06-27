@@ -3,13 +3,13 @@
 === main.ts ===
 import { fa } from "ext";
 >fa : () => import("node_modules/ext/other").A2
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 
 import { fa as fa2 } from "ext/other";
 >fa : () => import("node_modules/ext/other").A2
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 >fa2 : () => import("node_modules/ext/other").A2
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 
 export const va = fa();
 >va : import("node_modules/ext/other").A2
@@ -17,7 +17,7 @@ export const va = fa();
 >fa() : import("node_modules/ext/other").A2
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa : () => import("node_modules/ext/other").A2
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 
 export const va2 = fa2();
 >va2 : import("node_modules/ext/other").A2
@@ -25,7 +25,7 @@ export const va2 = fa2();
 >fa2() : import("node_modules/ext/other").A2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa2 : () => import("node_modules/ext/other").A2
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 
 === node_modules/ext/other.d.ts ===
 export interface A2 {}

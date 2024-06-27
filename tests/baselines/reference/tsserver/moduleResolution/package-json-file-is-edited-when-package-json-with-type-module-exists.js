@@ -196,7 +196,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/fileA.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -358,10 +365,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -377,7 +380,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -409,7 +413,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 1479,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -427,7 +432,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -557,10 +563,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -576,7 +578,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -594,7 +597,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -612,7 +616,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -772,10 +777,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -791,7 +792,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -823,7 +825,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 1479,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -841,7 +844,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -991,10 +995,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -1010,7 +1010,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1042,7 +1043,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 1479,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1060,7 +1062,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1211,10 +1214,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -1230,7 +1229,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -1262,7 +1262,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 1479,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1280,7 +1281,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/src/fileA.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

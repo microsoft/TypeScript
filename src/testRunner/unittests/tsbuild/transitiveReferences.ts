@@ -1,9 +1,9 @@
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
-import { getFsContentsForTransitiveReferences } from "../helpers/transitiveReferences";
-import { verifyTsc } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
-import { libFile } from "../helpers/virtualFileSystemWithWatch";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getFsContentsForTransitiveReferences } from "../helpers/transitiveReferences.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;

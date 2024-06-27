@@ -4,12 +4,12 @@
 ///<reference path='exportEqualCallable_0.ts'/>
 import connect = require('exportEqualCallable_0');
 >connect : () => any
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
 connect();
 >connect() : any
 >connect : () => any
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
 === exportEqualCallable_0.ts ===
 var server: {
@@ -20,5 +20,5 @@ var server: {
 };
 export = server;
 >server : () => any
->       : ^^^^^^^^^
+>       : ^^^^^^   
 

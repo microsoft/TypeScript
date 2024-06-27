@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/noUnusedLocals_potentialPredicateUnusedParam.ts] ////
+
+=== noUnusedLocals_potentialPredicateUnusedParam.ts ===
+function potentialPredicateUnusedParam(a: unknown) {
+>potentialPredicateUnusedParam : Symbol(potentialPredicateUnusedParam, Decl(noUnusedLocals_potentialPredicateUnusedParam.ts, 0, 0))
+>a : Symbol(a, Decl(noUnusedLocals_potentialPredicateUnusedParam.ts, 0, 39))
+
+  return !!Math.random();
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+}
+

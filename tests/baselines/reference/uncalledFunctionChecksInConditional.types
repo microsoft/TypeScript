@@ -15,44 +15,44 @@ declare const isUndefinedFoo: (() => boolean) | undefined;
 
 if (isFoo) {
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo
 }
 
 if (isFoo || isBar) {
 >isFoo || isBar : () => boolean
->               : ^^^^^^^^^^^^^
+>               : ^^^^^^       
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 >isBar : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo, isBar
 }
 
 if (isFoo || isFoo()) {
 >isFoo || isFoo() : () => boolean
->                 : ^^^^^^^^^^^^^
+>                 : ^^^^^^       
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 >isFoo() : boolean
 >        : ^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo
 }
 
 if (isUndefinedFoo || isFoo()) {
 >isUndefinedFoo || isFoo() : boolean | (() => boolean)
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^^^^^^^^^^^^^       ^
 >isUndefinedFoo : (() => boolean) | undefined
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^       ^^^^^^^^^^^^^
 >isFoo() : boolean
 >        : ^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // no error
 }
@@ -61,11 +61,11 @@ if (isFoo && isFoo()) {
 >isFoo && isFoo() : boolean
 >                 : ^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 >isFoo() : boolean
 >        : ^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // no error
 }
@@ -96,20 +96,20 @@ declare const uz: (() => boolean) | undefined;
 
 if (x || isFoo) {
 >x || isFoo : true | (() => boolean)
->           : ^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^       ^
 >x : boolean
 >  : ^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo
 }
 
 if (isFoo || x) {
 >isFoo || x : () => boolean
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^       
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 >x : boolean
 >  : ^^^^^^^
 
@@ -118,7 +118,7 @@ if (isFoo || x) {
 
 if (x || y || z() || isFoo) {
 >x || y || z() || isFoo : true | (() => boolean)
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^^^^       ^
 >x || y || z() : boolean
 >              : ^^^^^^^
 >x || y : boolean
@@ -130,18 +130,18 @@ if (x || y || z() || isFoo) {
 >z() : boolean
 >    : ^^^^^^^
 >z : () => boolean
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^       
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo
 }
 
 if (x || uy || z || isUndefinedFoo) {
 >x || uy || z || isUndefinedFoo : true | (() => boolean)
->                               : ^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^^^^^^^^^^^^^       ^
 >x || uy || z : true | (() => boolean)
->             : ^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^       ^
 >x || uy : boolean | undefined
 >        : ^^^^^^^^^^^^^^^^^^^
 >x : boolean
@@ -149,18 +149,18 @@ if (x || uy || z || isUndefinedFoo) {
 >uy : boolean | undefined
 >   : ^^^^^^^^^^^^^^^^^^^
 >z : () => boolean
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^       
 >isUndefinedFoo : (() => boolean) | undefined
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^       ^^^^^^^^^^^^^
 
     // error on z
 }
 
 if (ux || y || uz || isFoo) {
 >ux || y || uz || isFoo : true | (() => boolean)
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^^^^       ^
 >ux || y || uz : true | (() => boolean) | undefined
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^
 >ux || y : boolean
 >        : ^^^^^^^
 >ux : boolean | undefined
@@ -168,25 +168,25 @@ if (ux || y || uz || isFoo) {
 >y : boolean
 >  : ^^^^^^^
 >uz : (() => boolean) | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^       ^^^^^^^^^^^^^
 >isFoo : () => boolean
->      : ^^^^^^^^^^^^^
+>      : ^^^^^^       
 
     // error on isFoo
 }
 
 if (x && z) {
 >x && z : false | (() => boolean)
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^       ^
 >x : boolean
 >  : ^^^^^^^
 >z : () => boolean
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^       
 
     // no error
     z();
 >z() : boolean
 >    : ^^^^^^^
 >z : () => boolean
->  : ^^^^^^^^^^^^^
+>  : ^^^^^^       
 }

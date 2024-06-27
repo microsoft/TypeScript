@@ -58,19 +58,19 @@ A.bar(); // valid
 >A.bar() : string
 >        : ^^^^^^
 >A.bar : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >A : typeof A
 >  : ^^^^^^^^
 >bar : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 C2.bar(); // valid
 >C2.bar() : string
 >         : ^^^^^^
 >C2.bar : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >C2 : typeof C2
 >   : ^^^^^^^^^
 >bar : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

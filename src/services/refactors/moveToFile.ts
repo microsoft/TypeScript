@@ -1,4 +1,4 @@
-import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers";
+import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -118,6 +118,7 @@ import {
     ModifierLike,
     ModuleDeclaration,
     ModuleKind,
+    moduleSpecifierToValidIdentifier,
     NamedImportBindings,
     Node,
     NodeFlags,
@@ -153,9 +154,9 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
-} from "../_namespaces/ts";
-import { addTargetFileImports } from "../_namespaces/ts.refactor";
-import { registerRefactor } from "../refactorProvider";
+} from "../_namespaces/ts.js";
+import { addTargetFileImports } from "../_namespaces/ts.refactor.js";
+import { registerRefactor } from "../refactorProvider.js";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -175,7 +176,7 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
          *  This condition is used in order to show less often the `Move to file` code action */
-        if (context.endPosition !== undefined) {
+        if (context.triggerReason === "implicit" && context.endPosition !== undefined) {
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
             if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
@@ -307,7 +308,8 @@ export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Sta
     }
 }
 
-function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+/** @internal */
+export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {
@@ -392,7 +394,7 @@ function updateNamespaceLikeImport(
     oldImportNode: SupportedImport,
     quotePreference: QuotePreference,
 ): void {
-    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
@@ -889,7 +891,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations) {
+            if (!symbol.declarations || isGlobalType(checker, symbol)) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
@@ -948,6 +950,10 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             ? jsxNamespaceSymbol
             : undefined;
     }
+}
+
+function isGlobalType(checker: TypeChecker, symbol: Symbol) {
+    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
@@ -1118,7 +1124,8 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
     return undefined;
 }
 
-function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+/** @internal */
+export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
     const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);
@@ -1146,7 +1153,7 @@ function getExistingLocals(sourceFile: SourceFile, statements: readonly Statemen
     for (const statement of statements) {
         forEachReference(statement, checker, s => {
             const symbol = skipAlias(s, checker);
-            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration) === sourceFile) {
+            if (symbol.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration).path === sourceFile.path) {
                 existingLocals.add(symbol);
             }
         });
