@@ -187,6 +187,7 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     toPath(fileName: string): Path;
     getCanonicalFileName: GetCanonicalFileName;
     getCompilationSettings(): CompilerOptions;
+    preferNonRecursiveWatch: boolean | undefined;
     watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
     watchAffectingFileLocation(file: string, cb: FileWatcherCallback): FileWatcher;
     onInvalidatedResolution(): void;
@@ -346,6 +347,7 @@ export function getDirectoryToWatchFailedLookupLocation(
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
     getCurrentDirectory: () => string | undefined,
+    preferNonRecursiveWatch: boolean | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
     const failedLookupPathComponents: Readonly<PathPathComponents> = getPathComponents(failedLookupLocationPath);
     // Ensure failed look up is normalized path
@@ -385,6 +387,7 @@ export function getDirectoryToWatchFailedLookupLocation(
         nodeModulesIndex,
         rootPathComponents,
         lastNodeModulesIndex,
+        preferNonRecursiveWatch,
     );
 }
 
@@ -396,6 +399,7 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
     nodeModulesIndex: number,
     rootPathComponents: Readonly<PathPathComponents>,
     lastNodeModulesIndex: number,
+    preferNonRecursiveWatch: boolean | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
     // If directory path contains node module, get the most parent node_modules directory for watching
     if (nodeModulesIndex !== -1) {
@@ -407,14 +411,17 @@ function getDirectoryToWatchFromFailedLookupLocationDirectory(
             lastNodeModulesIndex,
         );
     }
+
     // Use some ancestor of the root directory
     let nonRecursive = true;
     let length = dirPathComponentsLength;
-    for (let i = 0; i < dirPathComponentsLength; i++) {
-        if (dirPathComponents[i] !== rootPathComponents[i]) {
-            nonRecursive = false;
-            length = Math.max(i + 1, perceivedOsRootLength + 1);
-            break;
+    if (!preferNonRecursiveWatch) {
+        for (let i = 0; i < dirPathComponentsLength; i++) {
+            if (dirPathComponents[i] !== rootPathComponents[i]) {
+                nonRecursive = false;
+                length = Math.max(i + 1, perceivedOsRootLength + 1);
+                break;
+            }
         }
     }
     return getDirectoryOfFailedLookupWatch(
@@ -458,6 +465,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
     getCurrentDirectory: () => string | undefined,
+    preferNonRecursiveWatch: boolean | undefined,
     filterCustomPath: (path: Path) => boolean, // Return true if this path can be used
 ): Path | undefined {
     const typeRootPathComponents = getPathComponents(typeRootPath);
@@ -474,6 +482,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
         typeRootPathComponents.indexOf("node_modules" as Path),
         rootPathComponents,
         typeRootPathComponents.lastIndexOf("node_modules" as Path),
+        preferNonRecursiveWatch,
     );
     return toWatch && filterCustomPath(toWatch.dirPath) ? toWatch.dirPath : undefined;
 }
@@ -1120,6 +1129,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootPath,
             rootPathComponents,
             getCurrentDirectory,
+            resolutionHost.preferNonRecursiveWatch,
         );
         if (toWatch) {
             const { dir, dirPath, nonRecursive, packageDir, packageDirPath } = toWatch;
@@ -1334,6 +1344,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootPath,
             rootPathComponents,
             getCurrentDirectory,
+            resolutionHost.preferNonRecursiveWatch,
         );
         if (toWatch) {
             const { dirPath, packageDirPath } = toWatch;
@@ -1640,6 +1651,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     rootPath,
                     rootPathComponents,
                     getCurrentDirectory,
+                    resolutionHost.preferNonRecursiveWatch,
                     dirPath => directoryWatchesOfFailedLookups.has(dirPath) || dirPathToSymlinkPackageRefCount.has(dirPath),
                 );
                 if (dirPath) {
