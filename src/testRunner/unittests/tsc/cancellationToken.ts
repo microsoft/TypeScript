@@ -1,25 +1,23 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../helpers/baseline";
+} from "../helpers/baseline.js";
 import {
     applyEdit,
     createBaseline,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc:: builder cancellationToken", () => {
+describe("unittests:: tsc:: builder cancellationToken::", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
     verifyCancellation(/*useBuildInfo*/ false, "when using state");
     function verifyCancellation(useBuildInfo: boolean, scenario: string) {
@@ -43,9 +41,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
                 content: Utils.dedent`
-                    export class C {
+                    export var C = class CReal {
                         d = 1;
-                    }`,
+                    };`,
             };
             const dFile: File = {
                 path: `/user/username/projects/myproject/d.ts`,

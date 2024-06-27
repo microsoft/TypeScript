@@ -1,9 +1,6 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
     openExternalProjectForSession,
@@ -14,13 +11,14 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
     verifyGetErrScenario,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     Folder,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHostOsFlavor,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectErrors::", () => {
     it("external project - diagnostics for missing files", () => {
@@ -241,7 +239,6 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                     projectRootPath: useProjectRoot ? folderPath : undefined,
                 },
             });
-            appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });
@@ -583,8 +580,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
         const session = new TestSession(host);
         openFilesForSession([f1], session);
 
-        const projectService = session.getProjectService();
-        const projectFileName = projectService.inferredProjects[0].getProjectName();
+        const projectFileName = session.getProjectService().inferredProjects[0].getProjectName();
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },
@@ -811,5 +807,29 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
 
     it("timeout occurs after installation", () => {
         verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
+    });
+});
+
+describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", () => {
+    it("rename a file", () => {
+        const host = createServerHost({
+            "/home/username/project/src/a.ts": `export const a = 10;`,
+            "/home/username/project/src/b.ts": `export const b = 10;`,
+            "/home/username/project/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    strictNullChecks: true,
+                },
+                include: ["src/**/*.ts"],
+            }),
+            [libFile.path]: libFile.content,
+        }, { osFlavor: TestServerHostOsFlavor.Linux });
+        const session = new TestSession(host);
+        openFilesForSession([{ file: "/home/username/project/src/a.ts", projectRootPath: "/home/username/project" }], session);
+        host.renameFile("/home/username/project/src/b.ts", "/home/username/project/src/c.ts");
+        openFilesForSession([{ file: "/home/username/project/src/c.ts", content: `export const b = 10;`, projectRootPath: "/home/username/project" }], session);
+        host.runQueuedTimeoutCallbacks(); // Updates the project that c.ts now exists on the disk and schedules one more update
+        host.runQueuedTimeoutCallbacks();
+        closeFilesForSession(["/home/username/project/src/c.ts"], session);
+        baselineTsserverLogs("projectErrors", "file rename on wsl2", session);
     });
 });

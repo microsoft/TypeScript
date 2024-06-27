@@ -3,11 +3,17 @@
 === classExtendsEveryObjectType2.ts ===
 class C2 extends { foo: string; } { } // error
 >C2 : C2
+>   : ^^
 >{ foo: string; } : { foo: any; }
+>                 : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >string : any
+>       : ^^^
 
 class C6 extends []{ } // error
 >C6 : C6
+>   : ^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

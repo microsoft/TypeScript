@@ -1,7 +1,6 @@
 import {
     __String,
     ArrayLiteralExpression,
-    arrayToMap,
     BindingOrAssignmentElement,
     Block,
     compareValues,
@@ -36,7 +35,7 @@ import {
     TextRange,
     TransformationContext,
     UnscopedEmitHelper,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const enum PrivateIdentifierKind {
@@ -129,7 +128,6 @@ export interface EmitHelperFactory {
     // ES2015 Generator Helpers
     createGeneratorHelper(body: FunctionExpression): Expression;
     // ES Module Helpers
-    createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
     createImportStarHelper(expression: Expression): Expression;
     createImportStarCallbackHelper(): Expression;
     createImportDefaultHelper(expression: Expression): Expression;
@@ -180,7 +178,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // ES2015 Generator Helpers
         createGeneratorHelper,
         // ES Module Helpers
-        createCreateBindingHelper,
         createImportStarHelper,
         createImportStarCallbackHelper,
         createImportDefaultHelper,
@@ -607,15 +604,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     // ES Module Helpers
-
-    function createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined) {
-        context.requestEmitHelper(createBindingHelper);
-        return factory.createCallExpression(
-            getUnscopedHelperName("__createBinding"),
-            /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])],
-        );
-    }
 
     function createImportStarHelper(expression: Expression) {
         context.requestEmitHelper(importStarHelper);
@@ -1407,7 +1395,7 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
         var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
             if (value !== null && value !== void 0) {
                 if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-                var dispose;
+                var dispose, inner;
                 if (async) {
                     if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
                     dispose = value[Symbol.asyncDispose];
@@ -1415,8 +1403,10 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
                 if (dispose === void 0) {
                     if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
                     dispose = value[Symbol.dispose];
+                    if (async) inner = dispose;
                 }
                 if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+                if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
                 env.stack.push({ value: value, dispose: dispose, async: async });
             }
             else if (async) {
@@ -1427,6 +1417,10 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
 };
 
 /**
+ * The `s` variable represents two boolean flags from the `DisposeResources` algorithm:
+ * - `needsAwait` (`1`) — Indicates that an `await using` for a `null` or `undefined` resource was encountered.
+ * - `hasAwaited` (`2`) — Indicates that the algorithm has performed an Await.
+ *
  * @internal
  */
 export const disposeResourcesHelper: UnscopedEmitHelper = {
@@ -1440,17 +1434,22 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
                     env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
                     env.hasError = true;
                 }
+                var r, s = 0;
                 function next() {
-                    while (env.stack.length) {
-                        var rec = env.stack.pop();
+                    while (r = env.stack.pop()) {
                         try {
-                            var result = rec.dispose && rec.dispose.call(rec.value);
-                            if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                            if (r.dispose) {
+                                var result = r.dispose.call(r.value);
+                                if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            }
+                            else s |= 1;
                         }
                         catch (e) {
                             fail(e);
                         }
                     }
+                    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
                     if (env.hasError) throw env.error;
                 }
                 return next();
@@ -1460,44 +1459,6 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
 };
-
-let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
-
-/** @internal */
-export function getAllUnscopedEmitHelpers() {
-    return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
-        decorateHelper,
-        metadataHelper,
-        paramHelper,
-        esDecorateHelper,
-        runInitializersHelper,
-        assignHelper,
-        awaitHelper,
-        asyncGeneratorHelper,
-        asyncDelegator,
-        asyncValues,
-        restHelper,
-        awaiterHelper,
-        extendsHelper,
-        templateObjectHelper,
-        spreadArrayHelper,
-        valuesHelper,
-        readHelper,
-        propKeyHelper,
-        setFunctionNameHelper,
-        generatorHelper,
-        importStarHelper,
-        importDefaultHelper,
-        exportStarHelper,
-        classPrivateFieldGetHelper,
-        classPrivateFieldSetHelper,
-        classPrivateFieldInHelper,
-        createBindingHelper,
-        setModuleDefaultHelper,
-        addDisposableResourceHelper,
-        disposeResourcesHelper,
-    ], helper => helper.name));
-}
 
 /** @internal */
 export const asyncSuperHelper: EmitHelper = {

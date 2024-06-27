@@ -1,10 +1,10 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Test harness compiler functionality.
@@ -92,8 +92,8 @@ export class CompilationResult {
         // correlate inputs and outputs
         this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
         if (program) {
-            if (this.options.out || this.options.outFile) {
-                const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
+            if (this.options.outFile) {
+                const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile);
                 const inputs: documents.TextDocument[] = [];
                 for (const sourceFile of program.getSourceFiles()) {
                     if (sourceFile) {
@@ -166,7 +166,7 @@ export class CompilationResult {
     }
 
     public get singleFile(): boolean {
-        return !!this.options.outFile || !!this.options.out;
+        return !!this.options.outFile;
     }
 
     public get commonSourceDirectory(): string {
@@ -208,8 +208,8 @@ export class CompilationResult {
     }
 
     public getOutputPath(path: string, ext: string): string {
-        if (this.options.outFile || this.options.out) {
-            path = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
+        if (this.options.outFile) {
+            path = vpath.resolve(this.vfs.cwd(), this.options.outFile);
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
@@ -257,7 +257,6 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     }
 
     // establish defaults (aligns with old harness)
-    if (compilerOptions.target === undefined && compilerOptions.module !== ts.ModuleKind.Node16 && compilerOptions.module !== ts.ModuleKind.NodeNext) compilerOptions.target = ts.ScriptTarget.ES3;
     if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
     if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
     if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;

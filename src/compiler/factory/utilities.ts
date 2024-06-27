@@ -145,7 +145,6 @@ import {
     ObjectLiteralExpression,
     OuterExpression,
     OuterExpressionKinds,
-    outFile,
     ParenthesizedExpression,
     parseNodeFactory,
     PlusToken,
@@ -179,7 +178,7 @@ import {
     TransformFlags,
     TypeNode,
     WrappedExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Compound nodes
 
@@ -803,6 +802,9 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
+        if (name.kind === SyntaxKind.StringLiteral) {
+            return factory.getGeneratedNameForNode(node);
+        }
         return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
     if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
@@ -860,7 +862,7 @@ export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile 
     if (file.moduleName) {
         return factory.createStringLiteral(file.moduleName);
     }
-    if (!file.isDeclarationFile && outFile(options)) {
+    if (!file.isDeclarationFile && options.outFile) {
         return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
     }
     return undefined;
@@ -1675,7 +1677,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

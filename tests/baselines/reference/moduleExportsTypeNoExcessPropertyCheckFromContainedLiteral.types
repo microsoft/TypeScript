@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.ts] ////
+
+=== eslint.config.js ===
+const eslintReact = require('./eslint-plugin-react.js');
+>eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./eslint-plugin-react.js') : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require : any
+>'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const tseslint = require('./typescript-eslint.js');
+>tseslint : typeof tseslint
+>         : ^^^^^^^^^^^^^^^
+>require('./typescript-eslint.js') : typeof tseslint
+>                                  : ^^^^^^^^^^^^^^^
+>require : any
+>'./typescript-eslint.js' : "./typescript-eslint.js"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tseslint.config(eslintReact)
+>tseslint.config(eslintReact) : void
+>                             : ^^^^
+>tseslint.config : (...configs: Config[]) => void
+>                : ^^^^       ^^        ^^^^^    
+>tseslint : typeof tseslint
+>         : ^^^^^^^^^^^^^^^
+>config : (...configs: Config[]) => void
+>       : ^^^^       ^^        ^^^^^    
+>eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== eslint-plugin-react.js ===
+const deprecatedRules = {
+>deprecatedRules : { "jsx-sort-default-props": boolean; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  "jsx-sort-default-props": true} : { "jsx-sort-default-props": boolean; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  "jsx-sort-default-props": true
+>"jsx-sort-default-props" : boolean
+>                         : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+const allRules = {
+>allRules : { 'no-unsafe': boolean; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  'no-unsafe': true} : { 'no-unsafe': boolean; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  'no-unsafe': true
+>'no-unsafe' : boolean
+>            : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+module.exports = {
+>module.exports = {  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>module.exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  plugins: {
+>plugins : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    react: {      deprecatedRules,      rules: allRules,    },  } : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    react: {
+>react : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      deprecatedRules,      rules: allRules,    } : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      deprecatedRules,
+>deprecatedRules : { "jsx-sort-default-props": boolean; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      rules: allRules,
+>rules : { 'no-unsafe': boolean; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>allRules : { 'no-unsafe': boolean; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    },
+  },
+};
+
+=== typescript-eslint.js ===
+/**
+ * @typedef {{ rules: Record<string, boolean> }} Plugin
+ */
+
+/**
+ * @typedef {{ plugins: Record<string, Plugin> }} Config
+ */
+
+/**
+ * @type {(...configs: Config[]) => void}
+ */
+function config(...configs) { }
+>config : (...configs: Config[]) => void
+>       : ^^^^       ^^        ^^^^^    
+>configs : Config[]
+>        : ^^^^^^^^
+
+module.exports = { config };
+>module.exports = { config } : typeof module.exports
+>                            : ^^^^^^^^^^^^^^^^^^^^^
+>module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>{ config } : { config: (...configs: Config[]) => void; }
+>           : ^^^^^^^^^^^^^^       ^^        ^^^^^    ^^^
+>config : (...configs: Config[]) => void
+>       : ^^^^       ^^        ^^^^^    
+

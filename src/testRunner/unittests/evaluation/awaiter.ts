@@ -1,4 +1,4 @@
-import * as evaluator from "../../_namespaces/evaluator";
+import * as evaluator from "../../_namespaces/evaluator.js";
 
 describe("unittests:: evaluation:: awaiter", () => {
     // NOTE: This could break if the ECMAScript spec ever changes the timing behavior for Promises (again)

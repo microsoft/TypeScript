@@ -17,6 +17,7 @@ module m1 {
     }
 }
 
+
 //// [fooResult.js]
 var M;
 (function (M) {

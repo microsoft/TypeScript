@@ -1,30 +1,25 @@
-import * as collections from "./_namespaces/collections";
-import * as fakes from "./_namespaces/fakes";
+import * as collections from "./_namespaces/collections.js";
+import * as fakes from "./_namespaces/fakes.js";
 import {
     Compiler,
     mockHash,
     virtualFileSystemRoot,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import {
-    getNewLineCharacter,
-} from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
-import {
-    incrementalVerifier,
-} from "./incrementalUtils";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import { getNewLineCharacter } from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
+import { incrementalVerifier } from "./incrementalUtils.js";
+import { patchServiceForStateBaseline } from "./projectServiceStateLogger.js";
 import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
     LoggerWithInMemoryLogs,
-} from "./tsserverLogger";
-import {
-    createWatchUtils,
-} from "./watchUtils";
+} from "./tsserverLogger.js";
+import { createWatchUtils } from "./watchUtils.js";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
@@ -395,6 +390,7 @@ class SessionServerHost implements ts.server.ServerHost {
         "watchedFiles",
         "watchedDirectories",
         ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames),
+        this,
     );
 
     constructor(private host: NativeLanguageServiceHost) {
@@ -595,6 +591,7 @@ class SessionServerHost implements ts.server.ServerHost {
 class FourslashSession extends ts.server.Session {
     constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
         super(opts);
+        patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
@@ -608,6 +605,10 @@ class FourslashSession extends ts.server.Session {
         this.baselineHost("Before Request");
         super.onMessage(message);
         this.baselineHost("After Request");
+    }
+
+    getProjectService() {
+        return this.projectService;
     }
 }
 
@@ -642,6 +643,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             if (baseline.length) {
                 this.logger.log(when);
                 baseline.forEach(s => this.logger.log(s));
+                this.server.getProjectService().baseline();
+            }
+            else {
+                this.server.getProjectService().baseline(when);
             }
         });
 

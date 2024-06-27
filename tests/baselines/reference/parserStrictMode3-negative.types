@@ -3,6 +3,9 @@
 === parserStrictMode3-negative.ts ===
 eval = 1;
 >eval = 1 : 1
+>         : ^
 >eval : any
+>     : ^^^
 >1 : 1
+>  : ^
 

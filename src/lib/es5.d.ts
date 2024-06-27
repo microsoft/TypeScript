@@ -800,7 +800,7 @@ interface Date {
     getMilliseconds(): number;
     /** Gets the milliseconds of a Date object using Universal Coordinated Time (UTC). */
     getUTCMilliseconds(): number;
-    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
     getTimezoneOffset(): number;
     /**
      * Sets the date and time value in the Date object.
@@ -4415,12 +4415,33 @@ declare namespace Intl {
 
     var Collator: CollatorConstructor;
 
+    interface NumberFormatOptionsStyleRegistry {
+        decimal: never;
+        percent: never;
+        currency: never;
+    }
+
+    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        code: never;
+        symbol: never;
+        name: never;
+    }
+
+    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+
+    interface NumberFormatOptionsUseGroupingRegistry {}
+
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+
     interface NumberFormatOptions {
-        localeMatcher?: string | undefined;
-        style?: string | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
-        currencySign?: string | undefined;
-        useGrouping?: boolean | undefined;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
+        useGrouping?: NumberFormatOptionsUseGrouping | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
         maximumFractionDigits?: number | undefined;
@@ -4431,14 +4452,15 @@ declare namespace Intl {
     interface ResolvedNumberFormatOptions {
         locale: string;
         numberingSystem: string;
-        style: string;
+        style: NumberFormatOptionsStyle;
         currency?: string;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay;
         minimumIntegerDigits: number;
-        minimumFractionDigits: number;
-        maximumFractionDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
-        useGrouping: boolean;
+        useGrouping: ResolvedNumberFormatOptionsUseGrouping;
     }
 
     interface NumberFormat {
