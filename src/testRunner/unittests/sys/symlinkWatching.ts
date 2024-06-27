@@ -1,6 +1,9 @@
 import * as fs from "fs";
 
-import { IO } from "../../_namespaces/Harness.js";
+import {
+    IO,
+    skipSysTests,
+} from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
@@ -30,6 +33,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         watchOptions: Pick<ts.WatchOptions, "watchFile">,
         getFileName?: (file: string) => string,
     ) {
+        if (skipSysTests) return;
         it(scenario, async () => {
             const fileResult = watchFile(file);
             const linkResult = watchFile(link);
@@ -191,6 +195,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         link: string,
         osFlavor: TestServerHostOsFlavor,
     ) {
+        if (skipSysTests) return;
         it(`watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
             const tableOfEvents: FsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
                 {
@@ -355,6 +360,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         link: string,
         osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs,
     ) {
+        if (skipSysTests) return;
         const tableOfEvents: RecursiveFsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
             {
                 fileCreate: [

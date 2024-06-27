@@ -796,6 +796,16 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 }
 
 /** @internal */
+export function getResolvedModuleFromResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+    return resolution.resolvedModule;
+}
+
+/** @internal */
+export function getResolvedTypeReferenceDirectiveFromResolution(resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+    return resolution.resolvedTypeReferenceDirective;
+}
+
+/** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
     const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
@@ -1334,6 +1344,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Iterator: new Map(Object.entries({
@@ -1611,6 +1625,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8Array: new Map(Object.entries({
@@ -1620,6 +1638,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
@@ -1629,6 +1651,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int16Array: new Map(Object.entries({
@@ -1638,6 +1664,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint16Array: new Map(Object.entries({
@@ -1647,6 +1677,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int32Array: new Map(Object.entries({
@@ -1656,6 +1690,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint32Array: new Map(Object.entries({
@@ -1665,6 +1703,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float32Array: new Map(Object.entries({
@@ -1674,6 +1716,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float64Array: new Map(Object.entries({
@@ -1683,6 +1729,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigInt64Array: new Map(Object.entries({
@@ -1693,6 +1743,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigUint64Array: new Map(Object.entries({
@@ -1703,6 +1757,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Error: new Map(Object.entries({
@@ -10734,7 +10792,7 @@ export function isExpandoPropertyDeclaration(declaration: Declaration | undefine
 }
 
 /** @internal */
-export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | JSDocImportTag | undefined) {
     if (node === undefined) {
         return false;
     }

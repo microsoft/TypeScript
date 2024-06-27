@@ -2497,6 +2497,7 @@ export interface RequestCompletedEvent extends Event {
 
 export interface RequestCompletedEventBody {
     request_seq: number;
+    performanceData?: PerformanceData;
 }
 
 /**

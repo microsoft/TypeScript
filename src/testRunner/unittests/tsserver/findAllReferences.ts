@@ -8,7 +8,7 @@ import {
     File,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: services:: findAllReferences", () => {
+describe("unittests:: tsserver:: services:: findAllReferences", () => {
     it("does not try to open a file in a project that was updated and no longer has the file", () => {
         const files: File[] = [
             {

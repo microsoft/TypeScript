@@ -1380,7 +1380,12 @@ const addDisposableResourceHelper: UnscopedEmitHelper = {
         };`,
 };
 
-const disposeResourcesHelper: UnscopedEmitHelper = {
+/**
+ * The `s` variable represents two boolean flags from the `DisposeResources` algorithm:
+ * - `needsAwait` (`1`) — Indicates that an `await using` for a `null` or `undefined` resource was encountered.
+ * - `hasAwaited` (`2`) — Indicates that the algorithm has performed an Await.
+ */
+export const disposeResourcesHelper: UnscopedEmitHelper = {
     name: "typescript:disposeResources",
     importName: "__disposeResources",
     scoped: false,
@@ -1391,17 +1396,22 @@ const disposeResourcesHelper: UnscopedEmitHelper = {
                     env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
                     env.hasError = true;
                 }
+                var r, s = 0;
                 function next() {
-                    while (env.stack.length) {
-                        var rec = env.stack.pop();
+                    while (r = env.stack.pop()) {
                         try {
-                            var result = rec.dispose && rec.dispose.call(rec.value);
-                            if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                            if (r.dispose) {
+                                var result = r.dispose.call(r.value);
+                                if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            }
+                            else s |= 1;
                         }
                         catch (e) {
                             fail(e);
                         }
                     }
+                    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
                     if (env.hasError) throw env.error;
                 }
                 return next();
