@@ -94,8 +94,7 @@ interface RenameEntry {
     readonly locations: RenameLocation[];
 }
 
-/** @internal */
-export function extractMessage(message: string): string {
+function extractMessage(message: string): string {
     // Read the content length
     const contentLengthPrefix = "Content-Length: ";
     const lines = message.split(/\r?\n/);

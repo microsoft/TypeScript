@@ -511,6 +511,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         fileIsOpen: project.fileIsOpen.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
+        preferNonRecursiveWatch: project.preferNonRecursiveWatch,
         watchDirectoryOfFailedLookupLocation: ts.returnNoopFileWatcher,
         watchAffectingFileLocation: ts.returnNoopFileWatcher,
         onInvalidatedResolution: ts.noop,
