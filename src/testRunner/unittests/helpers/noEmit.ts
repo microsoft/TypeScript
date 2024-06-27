@@ -271,12 +271,12 @@ function forEachNoEmitAndErrorsWorker(
         fsContents: FsContents,
         aTsContent: string,
         fixedATsContent: string,
-        compilerOptions: object,
+        compilerOptions: CompilerOptions,
     ) => void,
 ) {
     [false, true].forEach(asModules =>
         [undefined, true].forEach(incremental =>
-            [{}, { outFile: "../outFile.js", module: asModules ? "amd" : undefined }].forEach(options => {
+            [{}, { outFile: "../outFile.js", module: asModules ? ModuleKind.AMD : undefined }].forEach(options => {
                 if (!incremental && asModules) return; // Not the interesting case
                 const aContent = asModules ? `export ${aTsContent}` : aTsContent;
                 const compilerOptions = {
@@ -287,7 +287,7 @@ function forEachNoEmitAndErrorsWorker(
                 const fsContents: FsContents = {
                     "/home/src/projects/project/a.ts": aContent,
                     "/home/src/projects/project/tsconfig.json": jsonToReadableText({
-                        compilerOptions,
+                        compilerOptions: compilerOptionsToConfigJson(compilerOptions),
                     }),
                 };
                 if (asModules) fsContents["/home/src/projects/project/b.ts"] = `export const b = 10;`;
@@ -309,7 +309,7 @@ function forEachNoEmitAndErrors(
         fsContents: FsContents,
         aTsContent: string,
         fixedATsContent: string,
-        compilerOptions: object,
+        compilerOptions: CompilerOptions,
     ) => void,
 ) {
     forEachNoEmitAndErrorsWorker(
@@ -335,7 +335,7 @@ function forEachNoEmitAndErrors(
 }
 
 export function forEachNoEmitTsc(commandType: string[]) {
-    forEachNoEmitAndErrors((subScenario, fsContents, aTsContent, fixedATsContent) =>
+    forEachNoEmitAndErrors((subScenario, fsContents, aTsContent, fixedATsContent, compilerOptions) =>
         verifyTsc({
             scenario: "noEmit",
             subScenario,
@@ -357,13 +357,21 @@ export function forEachNoEmitTsc(commandType: string[]) {
                 {
                     caption: "Introduce error",
                     edit: fs => fs.writeFileSync("/home/src/projects/project/a.ts", aTsContent),
+                    discrepancyExplanation: compilerOptions.incremental && subScenario.indexOf("multiFile/syntax") !== -1 ? () => [
+                        "DtsSignature of ts files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version",
+                    ] : undefined,
                 },
                 {
                     caption: "Emit when error",
                     edit: noop,
                     commandLineArgs: [...commandType, "/home/src/projects/project"],
                 },
-                noChangeRun,
+                compilerOptions.incremental && subScenario.indexOf("multiFile/syntax") !== -1 ? {
+                    ...noChangeRun,
+                    discrepancyExplanation: () => [
+                        "DtsSignature of files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version",
+                    ],
+                } : noChangeRun,
             ],
             baselinePrograms: true,
         })
@@ -378,10 +386,10 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
             commandLineArgs: [...commandType, "/home/src/projects/project", "-w"],
             sys: () => {
                 fsContents["/home/src/projects/project/tsconfig.json"] = jsonToReadableText({
-                    compilerOptions: {
+                    compilerOptions: compilerOptionsToConfigJson({
                         ...compilerOptions,
                         noEmit: true,
-                    },
+                    }),
                 });
                 fsContents[libFile.path] = libContent;
                 return createWatchedSystem(fsContents);
@@ -394,7 +402,13 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                 },
                 {
                     caption: "Emit after fixing error",
-                    edit: sys => sys.writeFile("/home/src/projects/project/tsconfig.json", jsonToReadableText({ compilerOptions })),
+                    edit: sys =>
+                        sys.writeFile(
+                            "/home/src/projects/project/tsconfig.json",
+                            jsonToReadableText({
+                                compilerOptions: compilerOptionsToConfigJson(compilerOptions),
+                            }),
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -403,10 +417,10 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                         sys.writeFile(
                             "/home/src/projects/project/tsconfig.json",
                             jsonToReadableText({
-                                compilerOptions: {
+                                compilerOptions: compilerOptionsToConfigJson({
                                     ...compilerOptions,
                                     noEmit: true,
-                                },
+                                }),
                             }),
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -418,7 +432,13 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                 },
                 {
                     caption: "Emit when error",
-                    edit: sys => sys.writeFile("/home/src/projects/project/tsconfig.json", jsonToReadableText({ compilerOptions })),
+                    edit: sys =>
+                        sys.writeFile(
+                            "/home/src/projects/project/tsconfig.json",
+                            jsonToReadableText({
+                                compilerOptions: compilerOptionsToConfigJson(compilerOptions),
+                            }),
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -427,10 +447,10 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                         sys.writeFile(
                             "/home/src/projects/project/tsconfig.json",
                             jsonToReadableText({
-                                compilerOptions: {
+                                compilerOptions: compilerOptionsToConfigJson({
                                     ...compilerOptions,
                                     noEmit: true,
-                                },
+                                }),
                             }),
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),

@@ -56,13 +56,9 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -115,13 +111,9 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
@@ -318,13 +310,9 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -426,13 +414,9 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents

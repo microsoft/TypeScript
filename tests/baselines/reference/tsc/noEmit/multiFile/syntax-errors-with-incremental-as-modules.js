@@ -57,19 +57,13 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
-/home/src/projects/project/b.ts (used version)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"affectedFilesPendingEmit":[2,3],"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":false},{"version":"-13368947479-export const b = 10;","signature":false}],"root":[2,3],"changeFileSet":[2,3,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -82,19 +76,25 @@ Shape signatures in builder refreshed for::
     "../../../../lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": false,
         "affectsGlobalScope": true
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./a.ts": {
-      "version": "-14000546910-export const a = \"hello",
-      "signature": "-14000546910-export const a = \"hello"
+      "original": {
+        "version": "-14000546910-export const a = \"hello",
+        "signature": false
+      },
+      "version": "-14000546910-export const a = \"hello"
     },
     "./b.ts": {
-      "version": "-13368947479-export const b = 10;",
-      "signature": "-13368947479-export const b = 10;"
+      "original": {
+        "version": "-13368947479-export const b = 10;",
+        "signature": false
+      },
+      "version": "-13368947479-export const b = 10;"
     }
   },
   "root": [
@@ -107,19 +107,13 @@ Shape signatures in builder refreshed for::
       "./b.ts"
     ]
   ],
-  "affectedFilesPendingEmit": [
-    [
-      "./a.ts",
-      "Js"
-    ],
-    [
-      "./b.ts",
-      "Js"
-    ]
+  "changeFileSet": [
+    "./a.ts",
+    "./b.ts",
+    "../../../../lib/lib.d.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 715
+  "size": 770
 }
 
 
@@ -155,7 +149,7 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -189,14 +183,18 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
 /home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
 
 Shape signatures in builder refreshed for::
 /home/src/projects/project/a.ts (computed .d.ts)
+/home/src/projects/project/b.ts (computed .d.ts)
+/lib/lib.d.ts (used version)
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},"-13368947479-export const b = 10;"],"root":[2,3],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -224,8 +222,12 @@ Shape signatures in builder refreshed for::
       "signature": "-2692717255-export declare const a = \"hello\";\n"
     },
     "./b.ts": {
+      "original": {
+        "version": "-13368947479-export const b = 10;",
+        "signature": "-3829150557-export declare const b = 10;\n"
+      },
       "version": "-13368947479-export const b = 10;",
-      "signature": "-13368947479-export const b = 10;"
+      "signature": "-3829150557-export declare const b = 10;\n"
     }
   },
   "root": [
@@ -249,7 +251,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 780
+  "size": 849
 }
 
 
@@ -326,7 +328,7 @@ exports.b = 10;
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},"-13368947479-export const b = 10;"],"root":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -354,8 +356,12 @@ exports.b = 10;
       "signature": "-2692717255-export declare const a = \"hello\";\n"
     },
     "./b.ts": {
+      "original": {
+        "version": "-13368947479-export const b = 10;",
+        "signature": "-3829150557-export declare const b = 10;\n"
+      },
       "version": "-13368947479-export const b = 10;",
-      "signature": "-13368947479-export const b = 10;"
+      "signature": "-3829150557-export declare const b = 10;\n"
     }
   },
   "root": [
@@ -369,7 +375,7 @@ exports.b = 10;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 747
+  "size": 816
 }
 
 
@@ -441,12 +447,11 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /home/src/projects/project/a.ts
 
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
+No shapes updated in the builder::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},"-13368947479-export const b = 10;"],"root":[2,3],"affectedFilesPendingEmit":[2],"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -474,8 +479,12 @@ Shape signatures in builder refreshed for::
       "signature": "-2692717255-export declare const a = \"hello\";\n"
     },
     "./b.ts": {
+      "original": {
+        "version": "-13368947479-export const b = 10;",
+        "signature": "-3829150557-export declare const b = 10;\n"
+      },
       "version": "-13368947479-export const b = 10;",
-      "signature": "-13368947479-export const b = 10;"
+      "signature": "-3829150557-export declare const b = 10;\n"
     }
   },
   "root": [
@@ -488,15 +497,11 @@ Shape signatures in builder refreshed for::
       "./b.ts"
     ]
   ],
-  "affectedFilesPendingEmit": [
-    [
-      "./a.ts",
-      "Js"
-    ]
+  "changeFileSet": [
+    "./a.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 789
+  "size": 833
 }
 
 
@@ -532,8 +537,10 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
 
 
 //// [/home/src/projects/project/a.js]
@@ -544,7 +551,7 @@ exports.a = "hello;
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},"-13368947479-export const b = 10;"],"root":[2,3],"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"semanticDiagnosticsPerFile":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -572,8 +579,12 @@ exports.a = "hello;
       "signature": "-2692717255-export declare const a = \"hello\";\n"
     },
     "./b.ts": {
+      "original": {
+        "version": "-13368947479-export const b = 10;",
+        "signature": "-3829150557-export declare const b = 10;\n"
+      },
       "version": "-13368947479-export const b = 10;",
-      "signature": "-13368947479-export const b = 10;"
+      "signature": "-3829150557-export declare const b = 10;\n"
     }
   },
   "root": [
@@ -586,9 +597,14 @@ exports.a = "hello;
       "./b.ts"
     ]
   ],
-  "errors": true,
+  "semanticDiagnosticsPerFile": [
+    [
+      "./a.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 758
+  "size": 846
 }
 
 
@@ -625,6 +641,7 @@ Program files::
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
 No shapes updated in the builder::
 

@@ -85,13 +85,9 @@ Program files::
 /a/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/home/src/projects/project/a.ts (used version)
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -155,6 +151,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -332,8 +329,7 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /home/src/projects/project/a.ts
 
-Shape signatures in builder refreshed for::
-/home/src/projects/project/a.ts (computed .d.ts)
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
@@ -393,8 +389,10 @@ Program files::
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/home/src/projects/project/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -451,6 +449,7 @@ Program files::
 /home/src/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/projects/project/a.ts
 
 No shapes updated in the builder::
 

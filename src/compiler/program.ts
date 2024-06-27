@@ -5360,8 +5360,6 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
 ): EmitResult | undefined {
     const options = program.getCompilerOptions();
     if (options.noEmit) {
-        // Cache the semantic diagnostics
-        program.getSemanticDiagnostics(sourceFile, cancellationToken);
         return sourceFile ?
             emitSkippedWithNoDiagnostics :
             program.emitBuildInfo(writeFile, cancellationToken);

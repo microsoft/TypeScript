@@ -679,11 +679,11 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   "semanticDiagnosticsPerFile": [
     [
       "../project1/class1.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./class2.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./class2.d.ts",

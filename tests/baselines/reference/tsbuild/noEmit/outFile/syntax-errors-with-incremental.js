@@ -61,15 +61,13 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -90,13 +88,12 @@ No shapes updated in the builder::
   "options": {
     "outFile": "./outFile.js"
   },
-  "pendingEmit": [
-    "Js",
-    false
+  "changeFileSet": [
+    "./project/a.ts",
+    "../../../lib/lib.d.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 650
+  "size": 638
 }
 
 
@@ -138,7 +135,7 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -353,15 +350,13 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -382,13 +377,11 @@ No shapes updated in the builder::
   "options": {
     "outFile": "./outFile.js"
   },
-  "pendingEmit": [
-    "Js",
-    false
+  "changeFileSet": [
+    "./project/a.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 650
+  "size": 636
 }
 
 
@@ -429,7 +422,7 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -439,7 +432,7 @@ var a = "hello;
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -460,9 +453,18 @@ var a = "hello;
   "options": {
     "outFile": "./outFile.js"
   },
-  "errors": true,
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 630
+  "size": 651
 }
 
 
@@ -504,7 +506,7 @@ Program files::
 /lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

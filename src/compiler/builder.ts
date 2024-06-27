@@ -59,6 +59,7 @@ import {
     isJsonSourceFile,
     isNumber,
     isString,
+    map,
     mapDefinedIterator,
     maybeBind,
     noop,
@@ -1090,6 +1091,7 @@ export interface IncrementalBuildInfoBase extends BuildInfo {
     options: CompilerOptions | undefined;
     semanticDiagnosticsPerFile: IncrementalBuildInfoDiagnostic[] | undefined;
     emitDiagnosticsPerFile: IncrementalBuildInfoEmitDiagnostic[] | undefined;
+    changeFileSet: readonly IncrementalBuildInfoFileId[] | undefined;
     // Because this is only output file in the program, we dont need fileId to deduplicate name
     latestChangedDtsFile?: string | undefined;
     errors: true | undefined;
@@ -1224,8 +1226,9 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
             root,
             resolvedRoot: toResolvedRoot(),
             options: toIncrementalBuildInfoCompilerOptions(state.compilerOptions),
-            semanticDiagnosticsPerFile: toIncrementalBuildInfoDiagnostics(),
+            semanticDiagnosticsPerFile: !state.changedFilesSet.size ? toIncrementalBuildInfoDiagnostics() : undefined,
             emitDiagnosticsPerFile: toIncrementalBuildInfoEmitDiagnostics(),
+            changeFileSet: toChangeFileSet(),
             outSignature: state.outSignature,
             latestChangedDtsFile,
             pendingEmit: !state.programEmitPending ?
@@ -1321,6 +1324,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         referencedMap,
         semanticDiagnosticsPerFile,
         emitDiagnosticsPerFile: toIncrementalBuildInfoEmitDiagnostics(),
+        changeFileSet: toChangeFileSet(),
         affectedFilesPendingEmit,
         emitSignatures,
         latestChangedDtsFile,
@@ -1427,7 +1431,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         state.fileInfos.forEach((_value, key) => {
             const value = state.semanticDiagnosticsPerFile.get(key);
             if (!value) {
-                result = append(result, toFileId(key));
+                if (!state.changedFilesSet.has(key)) result = append(result, toFileId(key));
             }
             else if (value.length) {
                 result = append(result, [
@@ -1506,6 +1510,16 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
             }
             return result;
         }) || array;
+    }
+
+    function toChangeFileSet() {
+        let changeFileSet: IncrementalBuildInfoFileId[] | undefined;
+        if (state.changedFilesSet.size) {
+            for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
+                changeFileSet = append(changeFileSet, toFileId(path));
+            }
+        }
+        return changeFileSet;
     }
 }
 
@@ -2097,6 +2111,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
     let filePathsSetList: Set<Path>[] | undefined;
     const latestChangedDtsFile = buildInfo.latestChangedDtsFile ? toAbsolutePath(buildInfo.latestChangedDtsFile) : undefined;
     const fileInfos = new Map<Path, BuilderState.FileInfo>();
+    const changedFilesSet = new Set(map(buildInfo.changeFileSet, toFilePath));
     if (isIncrementalBundleEmitBuildInfo(buildInfo)) {
         buildInfo.fileInfos.forEach((fileInfo, index) => {
             const path = toFilePath(index + 1 as IncrementalBuildInfoFileId);
@@ -2108,6 +2123,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             semanticDiagnosticsPerFile: toPerFileSemanticDiagnostics(buildInfo.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toPerFileEmitDiagnostics(buildInfo.emitDiagnosticsPerFile),
             hasReusableDiagnostic: true,
+            changedFilesSet,
             latestChangedDtsFile,
             outSignature: buildInfo.outSignature,
             programEmitPending: buildInfo.pendingEmit === undefined ? undefined : toProgramEmitPending(buildInfo.pendingEmit, buildInfo.options),
@@ -2145,6 +2161,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
             semanticDiagnosticsPerFile: toPerFileSemanticDiagnostics(buildInfo.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toPerFileEmitDiagnostics(buildInfo.emitDiagnosticsPerFile),
             hasReusableDiagnostic: true,
+            changedFilesSet,
             affectedFilesPendingEmit: buildInfo.affectedFilesPendingEmit && arrayToMap(buildInfo.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), value => toBuilderFileEmit(value, fullEmitForOptions!)),
             latestChangedDtsFile,
             emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
@@ -2206,7 +2223,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
         const semanticDiagnostics = new Map<Path, readonly ReusableDiagnostic[]>(
             mapDefinedIterator(
                 fileInfos.keys(),
-                key => [key, emptyArray],
+                key => !changedFilesSet.has(key) ? [key, emptyArray] : undefined,
             ),
         );
         diagnostics?.forEach(value => {

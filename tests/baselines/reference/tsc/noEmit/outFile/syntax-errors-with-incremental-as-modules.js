@@ -61,16 +61,13 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"changeFileSet":[2,3,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -98,13 +95,13 @@ No shapes updated in the builder::
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "pendingEmit": [
-    "Js",
-    false
+  "changeFileSet": [
+    "./project/a.ts",
+    "./project/b.ts",
+    "../../../lib/lib.d.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 725
+  "size": 715
 }
 
 
@@ -142,7 +139,7 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -403,16 +400,13 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -440,13 +434,11 @@ No shapes updated in the builder::
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "pendingEmit": [
-    "Js",
-    false
+  "changeFileSet": [
+    "./project/a.ts"
   ],
-  "errors": true,
   "version": "FakeTSVersion",
-  "size": 725
+  "size": 711
 }
 
 
@@ -483,7 +475,7 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -504,7 +496,7 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14000546910-export const a = \"hello","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -532,9 +524,22 @@ define("b", ["require", "exports"], function (require, exports) {
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "errors": true,
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/a.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./project/b.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 705
+  "size": 728
 }
 
 
@@ -572,7 +577,7 @@ Program files::
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

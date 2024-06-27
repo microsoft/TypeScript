@@ -1,44 +1,46 @@
-6:: Emit when error
-*** Needs explanation
-TsBuild info text without affectedFilesPendingEmit:: /home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt::
-CleanBuild:
-{
-  "fileInfos": {
-    "../../../../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./a.ts": {
-      "version": "2464268576-const a = \"hello",
-      "affectsGlobalScope": true
-    }
+5:: Introduce error
+DtsSignature of ts files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version
+Incremental signature is neither dts signature nor file version for File:: ./a.ts
+Incremental:: {
+  "original": {
+    "version": "2464268576-const a = \"hello",
+    "signature": "-5460434953-declare const a = \"hello\";\n",
+    "affectsGlobalScope": true
   },
-  "root": [
-    [
-      2,
-      "./a.ts"
-    ]
-  ],
-  "version": "FakeTSVersion"
+  "version": "2464268576-const a = \"hello",
+  "signature": "-5460434953-declare const a = \"hello\";\n",
+  "affectsGlobalScope": true
 }
-IncrementalBuild:
-{
-  "fileInfos": {
-    "../../../../lib/lib.d.ts": {
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./a.ts": {
-      "version": "2464268576-const a = \"hello",
-      "affectsGlobalScope": true
-    }
+Clean:: {
+  "original": {
+    "version": "2464268576-const a = \"hello",
+    "signature": false,
+    "affectsGlobalScope": true
   },
-  "root": [
-    [
-      2,
-      "./a.ts"
-    ]
-  ],
-  "errors": true,
-  "version": "FakeTSVersion"
+  "version": "2464268576-const a = \"hello",
+  "affectsGlobalScope": true
 }
+Dts Signature:: undefined
+7:: no-change-run
+DtsSignature of files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version
+Incremental signature is neither dts signature nor file version for File:: ./a.ts
+Incremental:: {
+  "original": {
+    "version": "2464268576-const a = \"hello",
+    "signature": "-5460434953-declare const a = \"hello\";\n",
+    "affectsGlobalScope": true
+  },
+  "version": "2464268576-const a = \"hello",
+  "signature": "-5460434953-declare const a = \"hello\";\n",
+  "affectsGlobalScope": true
+}
+Clean:: {
+  "original": {
+    "version": "2464268576-const a = \"hello",
+    "signature": false,
+    "affectsGlobalScope": true
+  },
+  "version": "2464268576-const a = \"hello",
+  "affectsGlobalScope": true
+}
+Dts Signature:: undefined
