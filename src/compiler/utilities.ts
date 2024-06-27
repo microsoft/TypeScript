@@ -10068,7 +10068,7 @@ interface MatchPatternOrExactCacheEntry {
     sortedPatterns: Pattern[];
 }
 
-const patternOrStringsCache = new WeakMap<readonly (string | Pattern)[], MatchPatternOrExactCacheEntry>()
+const patternOrStringsCache = new WeakMap<readonly (string | Pattern)[], MatchPatternOrExactCacheEntry>();
 
 /**
  * patternOrStrings contains both patterns (containing "*") and regular strings.
@@ -10103,7 +10103,7 @@ export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern
         patternOrStringsCache.set(patternOrStrings, {
             matchableStringSet,
             sortedPatterns,
-        })
+        });
     }
 
     if (matchableStringSet.has(candidate)) {
