@@ -909,7 +909,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
 /home/src/lib/lib.webworker.d.ts (used version)
 /home/src/lib/lib.scripthost.d.ts (used version)
 /home/src/projects/project1/core.d.ts (used version)
@@ -918,6 +917,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts during emit)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project2/index.ts",
@@ -951,9 +951,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
 /home/src/projects/project2/index.ts (computed .d.ts during emit)
 /home/src/projects/project2/utils.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project3/index.ts",
@@ -987,9 +987,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
 /home/src/projects/project3/index.ts (computed .d.ts during emit)
 /home/src/projects/project3/utils.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project4/index.ts",
@@ -1026,9 +1026,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.esnext.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.webworker.d.ts (used version)
 /home/src/projects/project4/index.ts (computed .d.ts during emit)
 /home/src/projects/project4/utils.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.webworker.d.ts (used version)
 
 exitCode:: ExitStatus.undefined

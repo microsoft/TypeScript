@@ -633,6 +633,15 @@ export function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
     return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
+/**
+ * True if the symbol is for an external module, as opposed to a namespace.
+ *
+ * @internal
+ */
+export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
+    return !!(moduleSymbol.flags & SymbolFlags.Module) && (moduleSymbol.escapedName as string).charCodeAt(0) === CharacterCodes.doubleQuote;
+}
+
 const stringWriter = createSingleLineStringWriter();
 
 function createSingleLineStringWriter(): EmitTextWriter {
@@ -787,6 +796,16 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
             oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
             packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
             oldResolution.alternateResult === newResolution.alternateResult;
+}
+
+/** @internal */
+export function getResolvedModuleFromResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+    return resolution.resolvedModule;
+}
+
+/** @internal */
+export function getResolvedTypeReferenceDirectiveFromResolution(resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+    return resolution.resolvedTypeReferenceDirective;
 }
 
 /** @internal */
@@ -1327,6 +1346,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Iterator: new Map(Object.entries({
@@ -1604,6 +1627,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8Array: new Map(Object.entries({
@@ -1613,6 +1640,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
@@ -1622,6 +1653,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int16Array: new Map(Object.entries({
@@ -1631,6 +1666,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint16Array: new Map(Object.entries({
@@ -1640,6 +1679,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Int32Array: new Map(Object.entries({
@@ -1649,6 +1692,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Uint32Array: new Map(Object.entries({
@@ -1658,6 +1705,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float32Array: new Map(Object.entries({
@@ -1667,6 +1718,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Float64Array: new Map(Object.entries({
@@ -1676,6 +1731,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigInt64Array: new Map(Object.entries({
@@ -1686,6 +1745,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         BigUint64Array: new Map(Object.entries({
@@ -1696,6 +1759,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2023: [
                 "findLastIndex",
                 "findLast",
+                "toReversed",
+                "toSorted",
+                "toSpliced",
+                "with",
             ],
         })),
         Error: new Map(Object.entries({
@@ -10885,7 +10952,7 @@ export function isExpandoPropertyDeclaration(declaration: Declaration | undefine
 }
 
 /** @internal */
-export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | JSDocImportTag | undefined) {
     if (node === undefined) {
         return false;
     }

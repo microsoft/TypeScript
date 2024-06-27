@@ -68,6 +68,7 @@ export default options;
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
+ * @property {boolean} skipSysTests
  * @property {string | boolean} break
  * @property {string | boolean} inspect
  * @property {string} runners
