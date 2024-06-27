@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,600 / 7,600 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxEmptyExpressionNotCountedAsChild.tsx ===
 /// <reference path="react16.d.ts" />
@@ -22,7 +22,7 @@ interface Props {
 
 function Wrapper(props: Props) {
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^     ^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 
@@ -51,7 +51,7 @@ const element = (
 ><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : JSX.Element
 >                                                                : ^^^^^^^^^^^
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 
     {/* comment */}
      <div>Hello</div>
@@ -64,6 +64,6 @@ const element = (
 
     </Wrapper>
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 
 )

@@ -2,6 +2,11 @@
 /// Worker Iterable APIs
 /////////////////////////////
 
+interface AbortSignal {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static) */
+    any(signals: Iterable<AbortSignal>): AbortSignal;
+}
+
 interface CSSNumericArray {
     [Symbol.iterator](): IterableIterator<CSSNumericValue>;
     entries(): IterableIterator<[number, CSSNumericValue]>;

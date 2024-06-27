@@ -20,8 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/f1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/f1.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/c/f3.ts 500 undefined WatchType: Closed Script info
@@ -51,7 +50,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -96,8 +102,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/c/f3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a/c
-Info seq  [hh:mm:ss:mss] For info: /a/c/f3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/c/f3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -109,7 +114,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -141,7 +150,6 @@ ScriptInfos::
         /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/f2.ts 2:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/f2.ts 2:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
@@ -149,14 +157,6 @@ Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
 //// [/a/b/f2.ts] deleted
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches *deleted*::
-/a/b/f2.ts:
-  {}
 
 Timeout callback:: count: 2
 1: /dev/null/inferredProject1* *new*
@@ -173,8 +173,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/a/b/f2.ts *deleted*
+/a/b/f2.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/c/f3.ts (Open)
@@ -254,6 +256,10 @@ PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
 
+FsWatches::
+/a/b/f2.ts:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
@@ -268,6 +274,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/a/b/f2.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /a/c/f3.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*

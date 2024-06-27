@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AnyFunction,
     AssertionLevel,
@@ -61,9 +61,11 @@ import {
     LiteralType,
     map,
     MatchingKeys,
+    maxBy,
     ModifierFlags,
     Node,
     NodeArray,
+    NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
     noop,
@@ -91,7 +93,7 @@ import {
     unescapeLeadingUnderscores,
     VarianceFlags,
     zipWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum LogLevel {
@@ -244,13 +246,13 @@ export namespace Debug {
     }
 
     export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (value === undefined || value === null) {
             fail(message, stackCrawlMark || assertIsDefined);
         }
     }
 
-    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
+    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T { // eslint-disable-line no-restricted-syntax
         assertIsDefined(value, message, stackCrawlMark || checkDefined);
         return value;
     }
@@ -453,6 +455,10 @@ export namespace Debug {
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
+    }
+
+    export function formatNodeCheckFlags(flags: NodeCheckFlags | undefined): string {
+        return formatEnum(flags, (ts as any).NodeCheckFlags, /*isFlags*/ true);
     }
 
     export function formatModifierFlags(flags: ModifierFlags | undefined): string {
@@ -935,7 +941,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             FlowFlags.Condition |
             FlowFlags.ArrayMutation;
 
-        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
         const nodes: FlowGraphNode[] = [];
         const edges: FlowGraphEdge[] = [];
         const root = buildGraphNode(flowNode, new Set());
@@ -1121,7 +1127,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         function renderGraph() {
             const columnCount = columnWidths.length;
-            const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
+            const laneCount = maxBy(nodes, 0, n => n.lane) + 1;
             const lanes: string[] = fill(Array(laneCount), "");
             const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
             const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));

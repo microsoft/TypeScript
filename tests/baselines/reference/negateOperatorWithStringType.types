@@ -101,15 +101,15 @@ var ResultIsNumber5 = -{ x: "", y: (s: string) => { return s; } };
 >-{ x: "", y: (s: string) => { return s; } } : number
 >                                            : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->                                           : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 >y : (s: string) => string
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             : ^^^^      ^^^^^^^^^^^
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -160,7 +160,7 @@ var ResultIsNumber9 = -foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber10 = -A.foo();
 >ResultIsNumber10 : number
@@ -198,11 +198,11 @@ var ResultIsNumber12 = -STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -231,7 +231,7 @@ var ResultIsNumber12 = -STRING.charAt(0);
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 -objA.a,M.n;
 >-objA.a,M.n : string

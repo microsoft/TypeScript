@@ -27,7 +27,7 @@ switch (x) {
 >randBool() : boolean
 >           : ^^^^^^^
 >randBool : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
 >"foo" : "foo"
 >      : ^^^^^
 >"baz" : "baz"
@@ -42,7 +42,7 @@ switch (x) {
 >randBool() : boolean
 >           : ^^^^^^^
 >randBool : () => boolean
->         : ^^^^^^^^^^^^^
+>         : ^^^^^^       
 >("bar") : "bar"
 >        : ^^^^^
 >"bar" : "bar"

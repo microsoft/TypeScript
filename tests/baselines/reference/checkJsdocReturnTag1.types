@@ -19,7 +19,7 @@ function f() {
  */
 function f1() {
 >f1 : () => string | undefined
->   : ^^^^^^      ^^^^^^^^^^^^
+>   : ^^^^^^         ^^^^^^^^^
 
     return "hello world";
 >"hello world" : "hello world"

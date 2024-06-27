@@ -15,7 +15,7 @@ const itemNumber: number | undefined = [0].findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -39,7 +39,7 @@ const itemString: string | undefined = ["string"].findLast((item) => item === "s
 >findLast : any
 >         : ^^^
 >(item) => item === "string" : (item: any) => boolean
->                            : ^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === "string" : boolean
@@ -61,7 +61,7 @@ new Int8Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -83,7 +83,7 @@ new Uint8Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -105,7 +105,7 @@ new Uint8ClampedArray().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -127,7 +127,7 @@ new Int16Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -149,7 +149,7 @@ new Uint16Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -171,7 +171,7 @@ new Int32Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -193,7 +193,7 @@ new Uint32Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -215,7 +215,7 @@ new Float32Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -237,7 +237,7 @@ new Float64Array().findLast((item) => item === 0);
 >findLast : any
 >         : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -259,7 +259,7 @@ new BigInt64Array().findLast((item) => item === BigInt(0));
 >findLast : any
 >         : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === BigInt(0) : boolean
@@ -285,7 +285,7 @@ new BigUint64Array().findLast((item) => item === BigInt(0));
 >findLast : any
 >         : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === BigInt(0) : boolean
@@ -313,7 +313,7 @@ const indexNumber: number = [0].findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -337,7 +337,7 @@ const indexString: number = ["string"].findLastIndex((item) => item === "string"
 >findLastIndex : any
 >              : ^^^
 >(item) => item === "string" : (item: any) => boolean
->                            : ^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === "string" : boolean
@@ -359,7 +359,7 @@ new Int8Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -381,7 +381,7 @@ new Uint8Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -403,7 +403,7 @@ new Uint8ClampedArray().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -425,7 +425,7 @@ new Int16Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -447,7 +447,7 @@ new Uint16Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -469,7 +469,7 @@ new Int32Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -491,7 +491,7 @@ new Uint32Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -513,7 +513,7 @@ new Float32Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -535,7 +535,7 @@ new Float64Array().findLastIndex((item) => item === 0);
 >findLastIndex : any
 >              : ^^^
 >(item) => item === 0 : (item: any) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === 0 : boolean
@@ -557,7 +557,7 @@ new BigInt64Array().findLastIndex((item) => item === BigInt(0));
 >findLastIndex : any
 >              : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === BigInt(0) : boolean
@@ -583,7 +583,7 @@ new BigUint64Array().findLastIndex((item) => item === BigInt(0));
 >findLastIndex : any
 >              : ^^^
 >(item) => item === BigInt(0) : (item: any) => boolean
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^    ^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 >item === BigInt(0) : boolean

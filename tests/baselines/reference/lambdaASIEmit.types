@@ -3,7 +3,7 @@
 === lambdaASIEmit.ts ===
 function Foo(x: any)
 >Foo : (x: any) => void
->    : ^^^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >x : any
 {
 }
@@ -12,7 +12,7 @@ Foo(() =>
 >Foo(() =>    // do something    127) : void
 >                                     : ^^^^
 >Foo : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >() =>    // do something    127 : () => number
 >                                : ^^^^^^^^^^^^
 

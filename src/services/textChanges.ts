@@ -174,7 +174,7 @@ import {
     visitEachChild,
     visitNodes,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.
@@ -655,7 +655,7 @@ export class ChangeTracker {
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
 
-    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+    public insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
         if (!this.newFileChanges) {
             this.newFileChanges = createMultiMap<string, NewFileInsertion>();
         }

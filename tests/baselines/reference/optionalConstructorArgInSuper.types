@@ -10,7 +10,7 @@ class Base {
 
     foo(other?) { }
 >foo : (other?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^
 >other : any
 }
 class Derived extends Base {
@@ -35,9 +35,9 @@ d2.foo();
 >d2.foo() : void
 >         : ^^^^
 >d2.foo : (other?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^
 >d2 : Derived
 >   : ^^^^^^^
 >foo : (other?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^
 

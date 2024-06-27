@@ -3,7 +3,7 @@
 === strictTypeofUnionNarrowing.ts ===
 function stringify1(anything: { toString(): string } | undefined): string {
 >stringify1 : (anything: { toString(): string; } | undefined) => string
->           : ^^^^^^^^^^^                                   ^^^^^      
+>           : ^        ^^                                   ^^^^^      
 >anything : { toString(): string; } | undefined
 >         : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >toString : () => string
@@ -17,24 +17,24 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString(): string; } | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
 
 function stringify2(anything: {} | undefined): string {
 >stringify2 : (anything: {} | undefined) => string
->           : ^^^^^^^^^^^              ^^^^^      
+>           : ^        ^^              ^^^^^      
 >anything : {} | undefined
 >         : ^^^^^^^^^^^^^^
 
@@ -52,18 +52,18 @@ function stringify2(anything: {} | undefined): string {
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
 
 function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
 >stringify3 : (anything: unknown | undefined) => string
->           : ^^^^^^^^^^^                   ^^^^^      
+>           : ^        ^^                   ^^^^^      
 >anything : unknown
 >         : ^^^^^^^
 
@@ -81,18 +81,18 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }
 
 function stringify4(anything: { toString?(): string } | undefined): string {
 >stringify4 : (anything: { toString?(): string; } | undefined) => string
->           : ^^^^^^^^^^^                                    ^^^^^      
+>           : ^        ^^                                    ^^^^^      
 >anything : { toString?(): string; } | undefined
 >         : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >toString : (() => string) | undefined
@@ -106,17 +106,17 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : { toString?(): string; } | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >anything.toUpperCase() : string
 >                       : ^^^^^^
 >anything.toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >anything : string
 >         : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >"" : ""
 >   : ^^
 }

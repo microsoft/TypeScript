@@ -86,8 +86,8 @@ import {
     WatchCompilerHost,
     WatchOfConfigFile,
     WatchOptions,
-} from "./_namespaces/ts";
-import * as performance from "./performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./performance.js";
 
 interface Statistic {
     name: string;
@@ -653,7 +653,7 @@ function executeCommandLineWorker(
                 configParseResult.errors.forEach(reportDiagnostic);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }
@@ -693,7 +693,7 @@ function executeCommandLineWorker(
     }
     else {
         if (commandLineOptions.showConfig) {
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
             return sys.exit(ExitStatus.Success);
         }

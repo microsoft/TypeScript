@@ -15,7 +15,7 @@ class Foo {
 
     isFoo(v: any): v is Foo {
 >isFoo : (v: any) => v is Foo
->      : ^^^^   ^^^^^        
+>      : ^ ^^   ^^^^^        
 >v : any
 >  : ^^^
 

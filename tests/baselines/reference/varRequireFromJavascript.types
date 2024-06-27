@@ -40,7 +40,7 @@ crunch.n
  */
 function f(wrap) {
 >f : (wrap: ex.Crunch) => void
->  : ^^^^^^^         ^^^^^^^^^
+>  : ^    ^^         ^^^^^^^^^
 >wrap : ex.Crunch
 >     : ^^^^^^^^^
 

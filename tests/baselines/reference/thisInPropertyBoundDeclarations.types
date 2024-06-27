@@ -13,11 +13,11 @@ class Bug {
 >func : Function[]
 >     : ^^^^^^^^^^
 >[     (that: Bug, name: string) => {         that.foo(name);     }    ] : ((that: Bug, name: string) => void)[]
->                                                                        : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^
+>                                                                        : ^^    ^^   ^^    ^^      ^^^^^^^^^^^^
 
      (that: Bug, name: string) => {
 >(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
->                                                             : ^^^^^^^   ^^^^^^^^      ^^^^^^^^^
+>                                                             : ^    ^^   ^^    ^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >name : string
@@ -27,11 +27,11 @@ class Bug {
 >that.foo(name) : void
 >               : ^^^^
 >that.foo : (name: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >foo : (name: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
      }
@@ -39,7 +39,7 @@ class Bug {
 
     private foo(name: string) {
 >foo : (name: string) => void
->    : ^^^^^^^      ^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 

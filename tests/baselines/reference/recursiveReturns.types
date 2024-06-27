@@ -24,7 +24,7 @@ function R2() { R2(); }
 
 function R3(n:number) {
 >R3 : (n: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -43,7 +43,7 @@ function R3(n:number) {
 >R3(n--) : void
 >        : ^^^^
 >R3 : (n: number) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >n-- : number
 >    : ^^^^^^
 >n : number

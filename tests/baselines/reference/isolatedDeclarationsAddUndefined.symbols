@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/isolatedDeclarationsAddUndefined.ts] ////
+
+=== file1.ts ===
+type N = 1;
+>N : Symbol(N, Decl(file1.ts, 0, 0))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(file1.ts, 0, 11))
+
+    c? = [2 as N] as const;
+>c : Symbol(Bar.c, Decl(file1.ts, 1, 18))
+>N : Symbol(N, Decl(file1.ts, 0, 0))
+>const : Symbol(const)
+
+    c3? = 1 as N;
+>c3 : Symbol(Bar.c3, Decl(file1.ts, 2, 27))
+>N : Symbol(N, Decl(file1.ts, 0, 0))
+
+    readonly r = 1;
+>r : Symbol(Bar.r, Decl(file1.ts, 3, 17))
+
+    f = 2;
+>f : Symbol(Bar.f, Decl(file1.ts, 4, 19))
+}
+
+=== file2.ts ===
+export function foo(p = (ip = 10, v: number): void => {}): void{
+>foo : Symbol(foo, Decl(file2.ts, 0, 0))
+>p : Symbol(p, Decl(file2.ts, 0, 20))
+>ip : Symbol(ip, Decl(file2.ts, 0, 25))
+>v : Symbol(v, Decl(file2.ts, 0, 33))
+}
+type T = number
+>T : Symbol(T, Decl(file2.ts, 1, 1))
+
+export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+>foo2 : Symbol(foo2, Decl(file2.ts, 2, 15))
+>p : Symbol(p, Decl(file2.ts, 3, 21))
+>ip : Symbol(ip, Decl(file2.ts, 3, 26))
+>T : Symbol(T, Decl(file2.ts, 1, 1))
+>v : Symbol(v, Decl(file2.ts, 3, 39))
+
+export class Bar2 {
+>Bar2 : Symbol(Bar2, Decl(file2.ts, 3, 71))
+
+    readonly r = 1;
+>r : Symbol(Bar2.r, Decl(file2.ts, 4, 19))
+
+    f = 2;
+>f : Symbol(Bar2.f, Decl(file2.ts, 5, 19))
+}

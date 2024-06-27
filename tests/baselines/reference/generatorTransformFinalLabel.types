@@ -3,7 +3,7 @@
 === generatorTransformFinalLabel.ts ===
 async function test(skip: boolean) {
 >test : (skip: boolean) => Promise<void>
->     : ^^^^^^^       ^^^^^^^^^^^^^^^^^^
+>     : ^    ^^       ^^^^^^^^^^^^^^^^^^
 >skip : boolean
 >     : ^^^^^^^
 

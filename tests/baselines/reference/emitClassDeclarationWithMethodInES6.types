@@ -21,7 +21,7 @@ class D {
 
     ["computedName2"](a: string) { }
 >["computedName2"] : (a: string) => void
->                  : ^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^
 >"computedName2" : "computedName2"
 >                : ^^^^^^^^^^^^^^^
 >a : string
@@ -29,7 +29,7 @@ class D {
 
     ["computedName3"](a: string): number { return 1; }
 >["computedName3"] : (a: string) => number
->                  : ^^^^      ^^^^^      
+>                  : ^ ^^      ^^^^^      
 >"computedName3" : "computedName3"
 >                : ^^^^^^^^^^^^^^^
 >a : string
@@ -51,7 +51,7 @@ class D {
     } 
     baz(a: any, x: string): string {
 >baz : (a: any, x: string) => string
->    : ^^^^   ^^^^^      ^^^^^      
+>    : ^ ^^   ^^ ^^      ^^^^^      
 >a : any
 >x : string
 >  : ^^^^^^
@@ -68,7 +68,7 @@ class D {
 
     static ["computedname5"](a: string) { }
 >["computedname5"] : (a: string) => void
->                  : ^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^
 >"computedname5" : "computedname5"
 >                : ^^^^^^^^^^^^^^^
 >a : string
@@ -76,7 +76,7 @@ class D {
 
     static ["computedname6"](a: string): boolean { return true; }
 >["computedname6"] : (a: string) => boolean
->                  : ^^^^      ^^^^^       
+>                  : ^ ^^      ^^^^^       
 >"computedname6" : "computedname6"
 >                : ^^^^^^^^^^^^^^^
 >a : string
@@ -104,13 +104,13 @@ class D {
     }
     static foo(a: string) { }
 >foo : (a: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     static bar(a: string): number { return 1; }
 >bar : (a: string) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >1 : 1

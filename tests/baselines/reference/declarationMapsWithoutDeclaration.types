@@ -14,13 +14,13 @@ module m2 {
     export interface connectExport {
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
->    : ^^^^^^             ^^^^^             
+>    : ^   ^^             ^^^^^             
 >mod : connectModule
 >    : ^^^^^^^^^^^^^
 
         listen: (port: number) => void;
 >listen : (port: number) => void
->       : ^^^^^^^      ^^^^^    
+>       : ^    ^^      ^^^^^    
 >port : number
 >     : ^^^^^^
     }
@@ -51,5 +51,5 @@ var m2: {
 
 export = m2;
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^                ^^^^^^^^^                ^^^^^^^^^^^                ^^^
 

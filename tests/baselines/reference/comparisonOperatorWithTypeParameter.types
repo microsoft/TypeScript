@@ -11,7 +11,7 @@ var b: Object;
 
 function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
 >foo : <T, U, V>(t: T, u: U, v: V) => void
->    : ^ ^^ ^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

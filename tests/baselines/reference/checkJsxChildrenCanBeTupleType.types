@@ -1,10 +1,10 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,800 / 7,800 (nearest 100)
-Instantiation count: 90,000 / 90,000 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === checkJsxChildrenCanBeTupleType.tsx ===
 /// <reference path="react16.d.ts" />

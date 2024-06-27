@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/awaitedTypeNoLib.ts] ////
+
+=== awaitedTypeNoLib.ts ===
+type NotPromise<T> = T extends Thenable<unknown>
+>NotPromise : NotPromise<T>
+>           : ^^^^^^^^^^^^^
+
+  ? T
+  : T extends PromiseLike<unknown>
+  ? never
+  : T;
+
+type Receiver<T> = (value: NotPromise<T>) => void;
+>Receiver : Receiver<T>
+>         : ^^^^^^^^^^^
+>value : NotPromise<T>
+>      : ^^^^^^^^^^^^^
+
+class Thenable<T> {
+>Thenable : Thenable<T>
+>         : ^^^^^^^^^^^
+
+  then(a: Receiver<T>) {}
+>then : (a: Receiver<T>) => void
+>     : ^ ^^           ^^^^^^^^^
+>a : Receiver<T>
+>  : ^^^^^^^^^^^
+
+  private handleResolve<TResult>(
+>handleResolve : <TResult>(result: NotPromise<TResult> | Thenable<NotPromise<TResult>>, resolve: Receiver<TResult>) => void
+>              : ^       ^^      ^^                                                   ^^       ^^                 ^^^^^^^^^
+
+    result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
+>result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    resolve: Receiver<TResult>,
+>resolve : Receiver<TResult>
+>        : ^^^^^^^^^^^^^^^^^
+
+  ) {
+    if (result instanceof Thenable) {
+>result instanceof Thenable : boolean
+>                           : ^^^^^^^
+>result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Thenable : typeof Thenable
+>         : ^^^^^^^^^^^^^^^
+
+      //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+      this.resolvePromise(result, resolve);
+>this.resolvePromise(result, resolve) : void
+>                                     : ^^^^
+>this.resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
+>                    : ^^^^^^^^^^^^      ^^                   ^^       ^^                   ^^^^^^^^^
+>this : this
+>     : ^^^^
+>resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
+>               : ^^^^^^^^^^^^      ^^                   ^^       ^^                   ^^^^^^^^^
+>result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : Receiver<TResult>
+>        : ^^^^^^^^^^^^^^^^^
+    }
+  }
+
+  private resolvePromise<TResult>(
+>resolvePromise : <TResult>(result: Thenable<TResult>, resolve: Receiver<TResult>) => void
+>               : ^       ^^      ^^                 ^^       ^^                 ^^^^^^^^^
+
+    result: Thenable<TResult>,
+>result : Thenable<TResult>
+>       : ^^^^^^^^^^^^^^^^^
+
+    resolve: Receiver<TResult>,
+>resolve : Receiver<TResult>
+>        : ^^^^^^^^^^^^^^^^^
+
+  ) {}
+}

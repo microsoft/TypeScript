@@ -7,7 +7,7 @@ class A<T1, T2> {
 
     constructor(private map: (value: T1) => T2) {
 >map : (value: T1) => T2
->    : ^^^^^^^^  ^^^^^  
+>    : ^     ^^  ^^^^^  
 >value : T1
 >      : ^^
 
@@ -27,7 +27,7 @@ class B extends A<number, string> {
 >super : A<number, string>
 >      : ^^^^^^^^^^^^^^^^^
 >value => String(value) : (value: any) => string
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 >String(value) : string

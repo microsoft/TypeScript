@@ -7,7 +7,7 @@ var x = `abc${ x => x }def`;
 >`abc${ x => x }def` : string
 >                    : ^^^^^^
 >x => x : (x: any) => any
->       : ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 

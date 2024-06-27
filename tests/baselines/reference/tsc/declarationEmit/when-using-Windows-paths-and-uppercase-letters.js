@@ -119,11 +119,6 @@ Output::
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
-[96msrc/utils/type-helpers.ts[0m:[93m5[0m:[93m42[0m - [91merror[0m[90m TS4022: [0m'extends' clause of exported interface 'MyType' has or is using private name 'Function'.
-
-[7m5[0m export interface MyType<T = any> extends Function {
-[7m [0m [91m                                         ~~~~~~~~[0m
-
 src/utils/type-helpers.ts
   Imported via './type-helpers' from file 'src/utils/index.ts'
   Matched by include pattern 'src' in 'tsconfig.json'
@@ -133,7 +128,7 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 10 errors in the same file, starting at: src/utils/type-helpers.ts[90m:5[0m
+Found 9 errors.
 
 
 
@@ -144,6 +139,15 @@ Found 10 errors in the same file, starting at: src/utils/type-helpers.ts[90m:5
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=type-helpers.js.map
+
+//// [D:/Work/pkg1/dist/utils/type-helpers.d.ts]
+export type MyReturnType = {
+    new (...args: any[]): any;
+};
+export interface MyType<T = any> extends Function {
+    new (...args: any[]): T;
+}
+
 
 //// [D:/Work/pkg1/dist/utils/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
@@ -225,4 +229,4 @@ D:/Work/pkg1/src/utils/type-helpers.ts
 D:/Work/pkg1/src/utils/index.ts
 D:/Work/pkg1/src/main.ts
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitPartialNodeReuseTypeReferences.ts] ////
+
+=== a.ts ===
+export type SpecialString = string;
+>SpecialString : Symbol(SpecialString, Decl(a.ts, 0, 0))
+
+type PrivateSpecialString = string;
+>PrivateSpecialString : Symbol(PrivateSpecialString, Decl(a.ts, 0, 35))
+
+export namespace N {
+>N : Symbol(N, Decl(a.ts, 1, 35))
+
+    export type SpecialString = string;
+>SpecialString : Symbol(SpecialString, Decl(a.ts, 3, 20))
+}
+export const o = (p1: SpecialString, p2: PrivateSpecialString, p3: N.SpecialString) => null! as { foo: SpecialString, bar: PrivateSpecialString, baz: N.SpecialString };
+>o : Symbol(o, Decl(a.ts, 6, 12))
+>p1 : Symbol(p1, Decl(a.ts, 6, 18))
+>SpecialString : Symbol(SpecialString, Decl(a.ts, 0, 0))
+>p2 : Symbol(p2, Decl(a.ts, 6, 36))
+>PrivateSpecialString : Symbol(PrivateSpecialString, Decl(a.ts, 0, 35))
+>p3 : Symbol(p3, Decl(a.ts, 6, 62))
+>N : Symbol(N, Decl(a.ts, 1, 35))
+>SpecialString : Symbol(N.SpecialString, Decl(a.ts, 3, 20))
+>foo : Symbol(foo, Decl(a.ts, 6, 97))
+>SpecialString : Symbol(SpecialString, Decl(a.ts, 0, 0))
+>bar : Symbol(bar, Decl(a.ts, 6, 117))
+>PrivateSpecialString : Symbol(PrivateSpecialString, Decl(a.ts, 0, 35))
+>baz : Symbol(baz, Decl(a.ts, 6, 144))
+>N : Symbol(N, Decl(a.ts, 1, 35))
+>SpecialString : Symbol(N.SpecialString, Decl(a.ts, 3, 20))
+
+=== b.ts ===
+import * as a from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+export const g = a.o
+>g : Symbol(g, Decl(b.ts, 1, 12))
+>a.o : Symbol(a.o, Decl(a.ts, 6, 12))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>o : Symbol(a.o, Decl(a.ts, 6, 12))
+
+=== c.ts ===
+import { o, SpecialString } from "./a";
+>o : Symbol(o, Decl(c.ts, 0, 8))
+>SpecialString : Symbol(SpecialString, Decl(c.ts, 0, 11))
+
+export const g = o
+>g : Symbol(g, Decl(c.ts, 1, 12))
+>o : Symbol(o, Decl(c.ts, 0, 8))
+

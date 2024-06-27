@@ -192,13 +192,13 @@ type G9 = ([a, b, c]) => void;
 interface I {
   method1(arg: number): any; 
 >method1 : (arg: number) => any
->        : ^^^^^^      ^^^^^   
+>        : ^   ^^      ^^^^^   
 >arg : number
 >    : ^^^^^^
 
   method2({ a: string }): any; 
 >method2 : ({ a: string }: { a: any; }) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>        : ^             ^^^^^^^^^^^^^^^^^^   
 >a : any
 >  : ^^^
 >string : any

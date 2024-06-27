@@ -39,7 +39,7 @@ function Zet(t) {
  */
 Zet.prototype.add = function(v, o) {
 >Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
->                                                                                 : ^^^^ ^^^^^^          ^^ ^^^^^^^^
+>                                                                                 : ^ ^^ ^^ ^^           ^^ ^ ^^^^^^
 >Zet.prototype.add : any
 >                  : ^^^
 >Zet.prototype : any
@@ -51,11 +51,11 @@ Zet.prototype.add = function(v, o) {
 >add : any
 >    : ^^^
 >function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
->                                                             : ^^^^ ^^^^^^          ^^ ^^^^^^^^
+>                                                             : ^ ^^ ^^ ^^           ^^ ^ ^^^^^^
 >v : T
 >  : ^
 >o : { nested: T; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^
 
     this.u = v || o.nested
 >this.u = v || o.nested : T
@@ -73,7 +73,7 @@ Zet.prototype.add = function(v, o) {
 >o.nested : T
 >         : ^
 >o : { nested: T; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^
 >nested : T
 >       : ^
 
@@ -126,11 +126,11 @@ let answer = z.add(3, { nested: 4 })
 >z.add(3, { nested: 4 }) : number
 >                        : ^^^^^^
 >z.add : (v: number, o: { nested: number; }) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : Zet<number>
 >  : ^^^^^^^^^^^
 >add : (v: number, o: { nested: number; }) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 >{ nested: 4 } : { nested: number; }

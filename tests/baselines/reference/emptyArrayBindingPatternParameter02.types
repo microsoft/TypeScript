@@ -3,7 +3,7 @@
 === emptyArrayBindingPatternParameter02.ts ===
 function f(a, []) {
 >f : (a: any, []: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^  ^^^^^^^^^^^^^^^^
 >a : any
 
     var x, y, z;

@@ -11,13 +11,13 @@ var x: string = alpha.a + beta.b;
 >alpha.a : string
 >        : ^^^^^^
 >alpha : { a: string; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 >beta.b : string
 >       : ^^^^^^
 >beta : { b: string; }
->     : ^^^^^^^^^^^^^^
+>     : ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
 
