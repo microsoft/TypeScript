@@ -13,7 +13,7 @@ export interface IPromise<T, V> {
 export interface Promise<T, V> {
     then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
 >then : <U, W>(callback: (x: T) => Promise<any, any>) => Promise<any, any>
->     : ^^^^^^^        ^^                           ^^^^^                 
+>     : ^ ^^ ^^        ^^                           ^^^^^                 
 >callback : (x: T) => Promise<any, any>
 >         : ^ ^^ ^^^^^                 
 >x : T

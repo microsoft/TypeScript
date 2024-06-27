@@ -1,4 +1,17 @@
 import {
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createCombinedCodeActions,
+    createImportAdder,
+    createSignatureDeclarationFromCallExpression,
+    createSignatureDeclarationFromSignature,
+    createStubbedBody,
+    eachDiagnostic,
+    getAllSupers,
+    ImportAdder,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     addToSeen,
     arrayFrom,
@@ -112,20 +125,7 @@ import {
     TypeNode,
     TypeReference,
     UnionType,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    createCombinedCodeActions,
-    createImportAdder,
-    createSignatureDeclarationFromCallExpression,
-    createSignatureDeclarationFromSignature,
-    createStubbedBody,
-    eachDiagnostic,
-    getAllSupers,
-    ImportAdder,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixMissingMember = "fixMissingMember";
 const fixMissingProperties = "fixMissingProperties";
@@ -385,7 +385,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!classDeclaration && isPrivateIdentifier(token)) return undefined;
 
     // Prefer to change the class instead of the interface if they are merged
-    const declaration = classDeclaration || find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
+    const declaration = classDeclaration || find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d));
     if (declaration && !isSourceFileFromLibrary(program, declaration.getSourceFile())) {
         const makeStatic = !isTypeLiteralNode(declaration) && ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
         if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(declaration))) return undefined;

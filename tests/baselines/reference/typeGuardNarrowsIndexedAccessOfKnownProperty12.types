@@ -40,7 +40,7 @@ if (m[E.A] !== null) {
 >m[E.A].toString() : string
 >                  : ^^^^^^
 >m[E.A].toString : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >m[E.A] : string
 >       : ^^^^^^
 >m : { A: string | null; B: string | null; }
@@ -52,6 +52,6 @@ if (m[E.A] !== null) {
 >A : E.A
 >  : ^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 

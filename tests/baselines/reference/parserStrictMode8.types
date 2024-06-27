@@ -12,5 +12,5 @@ Instantiation count: 2,500
 
 function eval() {
 >eval : { (x: string): any; (): void; }
->     : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^   ^^^^^^^^^^^^^
 }

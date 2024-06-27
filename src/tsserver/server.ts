@@ -1,6 +1,7 @@
-import * as ts from "../typescript/typescript";
-import { StartInput } from "./common";
-import { initializeNodeSystem } from "./nodeServer";
+import os from "os";
+import * as ts from "../typescript/typescript.js";
+import { StartInput } from "./common.js";
+import { initializeNodeSystem } from "./nodeServer.js";
 
 function findArgumentStringArray(argName: string): readonly string[] {
     const arg = ts.server.findArgument(argName);
@@ -53,4 +54,4 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
 }
 
 ts.setStackTraceLimit();
-start(initializeNodeSystem(), require("os").platform());
+start(initializeNodeSystem(), os.platform());

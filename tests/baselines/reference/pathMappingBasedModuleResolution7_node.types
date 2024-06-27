@@ -22,11 +22,11 @@ use(x.toFixed());
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 use(y.toFixed());
 >use(y.toFixed()) : any
@@ -35,11 +35,11 @@ use(y.toFixed());
 >y.toFixed() : string
 >            : ^^^^^^
 >y.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >y : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 === c:/root/src/file3/index.d.ts ===
 export let x: number;

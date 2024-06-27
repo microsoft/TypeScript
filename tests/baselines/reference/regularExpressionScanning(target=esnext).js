@@ -7,8 +7,13 @@ const regexes: RegExp[] = [
 	// Pattern modifiers
 	/(?med-ium:bar)/,
 	// Capturing groups
-	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/,
-	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/u,
+	/\0/,
+	/\1/,
+	/\2/,
+	/(hi)\1/,
+	/(hi) (hello) \2/,
+	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
+	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
 	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
 	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
 	// Quantifiers
@@ -53,8 +58,13 @@ const regexes = [
     // Pattern modifiers
     /(?med-ium:bar)/,
     // Capturing groups
-    /\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/,
-    /\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/u,
+    /\0/,
+    /\1/,
+    /\2/,
+    /(hi)\1/,
+    /(hi) (hello) \2/,
+    /\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
+    /\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
     /(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
     /(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
     // Quantifiers

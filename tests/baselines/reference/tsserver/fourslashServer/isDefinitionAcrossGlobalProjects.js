@@ -239,6 +239,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /a/tsconfig.json: *new*
@@ -309,7 +320,6 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "references-full"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /a/index.ts position 35 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -536,6 +546,17 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/b/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/b/tsconfig.json",
+        "configFile": "/b/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/index.ts ProjectRootPath: undefined:: Result: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/index.ts ProjectRootPath: undefined:: Result: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
@@ -577,6 +598,17 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/c/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/c/tsconfig.json",
+        "configFile": "/c/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
@@ -898,6 +930,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
+    }
 After Request
 watchedFiles::
 /a/index.d.ts:
@@ -1404,6 +1444,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /c/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 8,
+      "success": true
+    }
 After Request
 watchedFiles::
 /a/index.d.ts:

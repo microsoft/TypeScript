@@ -1,6 +1,6 @@
 flatArrayNoExcessiveStackDepth.ts(20,5): error TS2322: Type 'FlatArray<Arr, any>' is not assignable to type 'FlatArray<Arr, D>'.
   Type 'Arr' is not assignable to type 'FlatArray<Arr, D>'.
-    Type 'Arr' is not assignable to type '(Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr) & Arr'.
+    Type 'Arr' is not assignable to type 'Arr & (Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr)'.
       Type 'Arr' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
 
 
@@ -28,7 +28,7 @@ flatArrayNoExcessiveStackDepth.ts(20,5): error TS2322: Type 'FlatArray<Arr, any>
         ~
 !!! error TS2322: Type 'FlatArray<Arr, any>' is not assignable to type 'FlatArray<Arr, D>'.
 !!! error TS2322:   Type 'Arr' is not assignable to type 'FlatArray<Arr, D>'.
-!!! error TS2322:     Type 'Arr' is not assignable to type '(Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr) & Arr'.
+!!! error TS2322:     Type 'Arr' is not assignable to type 'Arr & (Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr)'.
 !!! error TS2322:       Type 'Arr' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
     }
     

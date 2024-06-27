@@ -131,7 +131,7 @@ var r10 = undefined + foo();
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 var r11 = undefined + (() => { });
 >r11 : any

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitScopeConsistency3.ts] ////
+
+=== a.ts ===
+export const g = (v: "outer") => {
+>g : (v: "outer") => () => "inner"
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>(v: "outer") => {    const f = (v: "inner") => () => null! as typeof v;    const r = f(null!)    return r;} : (v: "outer") => () => "inner"
+>                                                                                                            : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>v : "outer"
+>  : ^^^^^^^
+
+    const f = (v: "inner") => () => null! as typeof v;
+>f : (v: "inner") => () => typeof v
+>  : ^ ^^       ^^^^^^^^^^^        
+>(v: "inner") => () => null! as typeof v : (v: "inner") => () => typeof v
+>                                        : ^ ^^       ^^^^^^^^^^^        
+>v : "inner"
+>  : ^^^^^^^
+>() => null! as typeof v : () => typeof v
+>                        : ^^^^^^        
+>null! as typeof v : "inner"
+>                  : ^^^^^^^
+>null! : never
+>      : ^^^^^
+>v : "inner"
+>  : ^^^^^^^
+
+    const r = f(null!)
+>r : () => "inner"
+>  : ^^^^^^^^^^^^^
+>f(null!) : () => "inner"
+>         : ^^^^^^^^^^^^^
+>f : (v: "inner") => () => typeof v
+>  : ^ ^^       ^^^^^^^^^^^        
+>null! : never
+>      : ^^^^^
+
+    return r;
+>r : () => "inner"
+>  : ^^^^^^^^^^^^^
+}

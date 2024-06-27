@@ -17,5 +17,5 @@ class C {
 
     @dec constructor() {}
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 }

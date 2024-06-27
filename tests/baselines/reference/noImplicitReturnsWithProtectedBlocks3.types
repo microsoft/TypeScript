@@ -20,7 +20,7 @@ function main1() : number {
 >get() : number
 >      : ^^^^^^
 >get : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
     catch(e) {
 >e : any
@@ -30,7 +30,7 @@ function main1() : number {
 >log("in catch") : void
 >                : ^^^^
 >log : (s: string) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >"in catch" : "in catch"
 >           : ^^^^^^^^^^
     }

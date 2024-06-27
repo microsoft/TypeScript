@@ -51,11 +51,11 @@ function invoke(item: ADT) {
 >item.method("") : number
 >                : ^^^^^^
 >item.method : (x: string) => number
->            : ^ ^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^^^^      
 >item : { kind: "a"; method(x: string): number; }
->     : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: string) => number
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >"" : ""
 >   : ^^
     }
@@ -64,11 +64,11 @@ function invoke(item: ADT) {
 >item.method(42) : string
 >                : ^^^^^^
 >item.method : (x: number) => string
->            : ^ ^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^^^^      
 >item : { kind: "b"; method(x: number): string; }
->     : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 >42 : 42
 >   : ^^
     }

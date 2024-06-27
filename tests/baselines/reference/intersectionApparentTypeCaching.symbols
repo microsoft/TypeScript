@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/intersectionApparentTypeCaching.ts] ////
+
+=== intersectionApparentTypeCaching.ts ===
+// https://github.com/microsoft/TypeScript/issues/58175
+
+type TX<T extends any[] & object> = T["length"];
+>TX : Symbol(TX, Decl(intersectionApparentTypeCaching.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionApparentTypeCaching.ts, 2, 8))
+>T : Symbol(T, Decl(intersectionApparentTypeCaching.ts, 2, 8))
+
+type T0<U extends any[] & object> = U;
+>T0 : Symbol(T0, Decl(intersectionApparentTypeCaching.ts, 2, 48))
+>U : Symbol(U, Decl(intersectionApparentTypeCaching.ts, 3, 8))
+>U : Symbol(U, Decl(intersectionApparentTypeCaching.ts, 3, 8))
+
+type T1 = T0<string[]>;
+>T1 : Symbol(T1, Decl(intersectionApparentTypeCaching.ts, 3, 38))
+>T0 : Symbol(T0, Decl(intersectionApparentTypeCaching.ts, 2, 48))
+

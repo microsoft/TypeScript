@@ -24,8 +24,8 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 /** @internal */
 export interface SourceMapGeneratorOptions {
@@ -405,8 +405,7 @@ function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
-/** @internal */
-export function isRawSourceMap(x: any): x is RawSourceMap {
+function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
         && x.version === 3

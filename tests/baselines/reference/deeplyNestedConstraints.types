@@ -17,7 +17,7 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 
     setArray2<K extends E[keyof E]>(_: K, array: Extract<M[K], ArrayLike<any>>) {
 >setArray2 : <K extends E[keyof E]>(_: K, array: Extract<M[K], ArrayLike<any>>) => void
->          : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^ ^^     ^^                             ^^^^^^^^^
+>          : ^ ^^^^^^^^^          ^^ ^^ ^^     ^^                             ^^^^^^^^^
 >_ : K
 >  : ^
 >array : Extract<M[K], ArrayLike<any>>

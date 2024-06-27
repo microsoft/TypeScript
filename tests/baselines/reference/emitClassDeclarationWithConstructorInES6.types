@@ -71,7 +71,7 @@ class B {
 
     baz(z: string, v: number): string {
 >baz : (...args: any[]) => string
->    : ^^^^    ^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^      
 >z : string
 >  : ^^^^^^
 >v : number
