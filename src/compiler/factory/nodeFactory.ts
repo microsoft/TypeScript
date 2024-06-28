@@ -6777,13 +6777,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.symbol = (node as any).symbol;
 
         const nodeData = (node as any).data;
-        const cloneData = (clone as any).data = {};
+        const cloneData: any = (clone as any).data = {};
         if (nodeData) {
             for (const key in nodeData) {
                 if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
                     continue;
                 }
                 (clone as any)[key] = nodeData[key];
+            }
+            if(cloneData.emitNode) {
+                cloneData.emitNode = undefined;
             }
         }
         setOriginal(clone, node);
