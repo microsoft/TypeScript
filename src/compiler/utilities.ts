@@ -10017,21 +10017,21 @@ const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
  * Divides patterns into a set of exact specifiers and sorted patterns.
  * NOTE that this function caches, and assumes the same `paths` argument will
  * never be provided with a different value for `sortByAggregateLength`.
- * 
+ *
  * @internal
- **/
+ */
 export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength: boolean = false): ParsedPatterns {
-    let result = parsedPatternsCache.get(paths)
+    let result = parsedPatternsCache.get(paths);
     if (result !== undefined) {
         return result;
     }
 
     let matchableStringSet: Set<string> | undefined;
     let sortedPatterns: Pattern[] | undefined;
-    
+
     const pathList = getOwnKeys(paths);
     for (const path of pathList) {
-        const patternOrStr = tryParsePattern(path)
+        const patternOrStr = tryParsePattern(path);
         if (patternOrStr === undefined) {
             continue;
         }
@@ -10044,17 +10044,20 @@ export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength
     }
 
     sortedPatterns?.sort((a, b) => {
-        const prefixComparison = compareStringsCaseSensitive(a.prefix, b.prefix)
+        const prefixComparison = compareStringsCaseSensitive(a.prefix, b.prefix);
         if (prefixComparison === 0 && sortByAggregateLength) {
             return a.suffix.length - b.suffix.length;
         }
         return prefixComparison;
     });
 
-    parsedPatternsCache.set(paths, result = {
-        matchableStringSet,
-        sortedPatterns,
-    });
+    parsedPatternsCache.set(
+        paths,
+        result = {
+            matchableStringSet,
+            sortedPatterns,
+        },
+    );
 
     return result;
 }
