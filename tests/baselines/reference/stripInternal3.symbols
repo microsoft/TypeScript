@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/stripInternal3.ts] ////
+
+=== stripInternal3.ts ===
+export interface FindOptions {
+>FindOptions : Symbol(FindOptions, Decl(stripInternal3.ts, 0, 0))
+
+  /** Ports to avoid */
+  avoids?: readonly number[] | undefined;
+>avoids : Symbol(FindOptions.avoids, Decl(stripInternal3.ts, 0, 30))
+
+  /**
+   * Minimum port.
+   * @default 8000
+   */
+  min?: number | undefined;
+>min : Symbol(FindOptions.min, Decl(stripInternal3.ts, 2, 41))
+
+  /**
+   * Maximum port.
+   * @default 10000
+   */
+  max?: number | undefined;
+>max : Symbol(FindOptions.max, Decl(stripInternal3.ts, 7, 27))
+
+  /**
+   * @internal
+   * The current port to check.
+   * This is an internal value, initialized and incremented
+   * while {@link find} is run, and starts at {@link min} if unspecified.
+   * It is unlikely that this needs to be set manually
+   */
+  port?: number | undefined;
+>port : Symbol(FindOptions.port, Decl(stripInternal3.ts, 12, 27))
+}
+

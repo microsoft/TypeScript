@@ -1036,6 +1036,7 @@ export type ForEachChildNodes =
     | JSDocProtectedTag
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
+    | JSDocInternalTag
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
