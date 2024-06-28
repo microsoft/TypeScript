@@ -2,12 +2,11 @@ const { AST_NODE_TYPES, ESLintUtils } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
 
-/** @import { TSESTree } from "@typescript-eslint/utils" */
-void 0;
-
 /**
+ * @import { TSESTree } from "@typescript-eslint/utils"
  * @typedef {TSESTree.CallExpression | TSESTree.NewExpression} CallOrNewExpression
  */
+void 0;
 
 const unset = Symbol();
 /**

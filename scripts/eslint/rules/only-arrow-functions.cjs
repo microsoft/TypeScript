@@ -1,10 +1,11 @@
 const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
-/** @import { TSESTree } from "@typescript-eslint/utils" */
+/**
+ * @import { TSESTree } from "@typescript-eslint/utils"
+ * @typedef {TSESTree.FunctionDeclaration | TSESTree.FunctionExpression} FunctionDeclarationOrExpression
+ */
 void 0;
-
-/** @typedef {TSESTree.FunctionDeclaration | TSESTree.FunctionExpression} FunctionDeclarationOrExpression */
 
 module.exports = createRule({
     name: "only-arrow-functions",
