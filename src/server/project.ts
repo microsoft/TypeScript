@@ -1622,7 +1622,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                                 !sourceFile ||
                                 sourceFile.resolvedPath !== source ||
                                 !this.isValidGeneratedFileWatcher(
-                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.program!),
                                     watcher,
                                 )
                             ) {

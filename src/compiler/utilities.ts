@@ -6343,15 +6343,15 @@ export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, exten
 
 /** @internal */
 export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host);
 }
 
 /** @internal */
-export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, host: Pick<EmitHost, "getCommonSourceDirectory" | "getCurrentDirectory" | "getCanonicalFileName">): string {
     const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
     const path = outputDir
-        ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
+        ? getSourceFilePathInNewDirWorker(fileName, outputDir, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f))
         : fileName;
     const declarationExtension = getDeclarationEmitExtensionForPath(path);
     return removeFileExtension(path) + declarationExtension;
