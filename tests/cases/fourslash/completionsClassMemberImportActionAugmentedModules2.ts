@@ -8,21 +8,30 @@
 //// }
 ////
 //// declare class Piece {
-////   container: Container;
+////   get container(): Container;
 //// }
 ////
-//// export { Piece, type Container };
+//// declare class AliasPiece extends Piece {}
+////
+//// export { AliasPiece, type Container };
 
-// @FileName: /augmentation.ts
+// @Filename: /node_modules/@sapphire/framework/index.d.ts
+//// import { AliasPiece } from "@sapphire/pieces";
+////
+//// declare class Command extends AliasPiece {}
+////
 //// declare module "@sapphire/pieces" {
 ////   interface Container {
 ////     client: unknown;
 ////   }
 //// }
+////
+//// export { Command };
 
 // @Filename: /index.ts
-//// import { Piece } from "@sapphire/pieces";
-//// class FullPiece extends Piece {
+//// import "@sapphire/pieces";
+//// import { Command } from "@sapphire/framework";
+//// class PingCommand extends Command {
 ////   /*1*/
 //// }
 
@@ -36,7 +45,7 @@ verify.completions({
   includes: [
     {
       name: "container",
-      insertText: "container: Container;",
+      insertText: "get container(): Container {\n}",
       filterText: "container",
       hasAction: true,
       source: "ClassMemberSnippet/",
@@ -50,8 +59,10 @@ verify.applyCodeActionFromCompletion("1", {
   name: "container",
   source: "ClassMemberSnippet/",
   description: `Includes imports of types referenced by 'container'`,
-  newFileContent: `import { Container, Piece } from "@sapphire/pieces";
-class FullPiece extends Piece {
+  newFileContent: `import "@sapphire/pieces";
+import { Command } from "@sapphire/framework";
+import { Container } from "@sapphire/pieces";
+class PingCommand extends Command {
   
 }`,
   preferences,
