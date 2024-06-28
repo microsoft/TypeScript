@@ -12,6 +12,7 @@ import {
     OptionsNameMap,
     PackageJsonInfo,
     PackageJsonInfoCache,
+    ParsedPatterns,
     Pattern,
     SymlinkCache,
     ThisContainer,
@@ -7512,6 +7513,7 @@ export interface ConfigFileSpecs {
     validatedFilesSpecBeforeSubstitution: readonly string[] | undefined;
     validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined;
     validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
+    pathPatterns: ParsedPatterns | undefined;
     isDefaultIncludeSpec: boolean;
 }
 

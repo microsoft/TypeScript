@@ -3042,6 +3042,7 @@ function parseJsonConfigFileContentWorker(
             validatedFilesSpecBeforeSubstitution,
             validatedIncludeSpecsBeforeSubstitution,
             validatedExcludeSpecsBeforeSubstitution,
+            pathPatterns: undefined, // Initialized on first use
             isDefaultIncludeSpec,
         };
     }
