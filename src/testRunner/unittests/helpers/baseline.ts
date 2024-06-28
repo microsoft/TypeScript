@@ -139,7 +139,7 @@ export type ReadableIncrementalBuildInfoDiagnosticOfFile = [file: string, diagno
 export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableIncrementalBuildInfoEmitDiagnostic = ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
-export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
+export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [file: string] | [file: string, emitKind: ts.BuilderFileEmit], emitKind: ReadableBuilderFileEmit];
 export type ReadableIncrementalBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];
 export type ReadableIncrementalBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impliedFormat"> & {
     impliedFormat: string | undefined;
@@ -339,7 +339,11 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
         fullEmitForOptions: ts.BuilderFileEmit,
     ): ReadableIncrementalBuilderInfoFilePendingEmit {
         return [
-            ts.isNumber(value) ? toFileName(value) : [toFileName(value[0])],
+            ts.isNumber(value) ?
+                toFileName(value) :
+                !value[1] ?
+                [toFileName(value[0])] :
+                [toFileName(value[0]), value[1]],
             toReadableBuilderFileEmit(ts.toBuilderFileEmit(value, fullEmitForOptions)),
         ];
     }
