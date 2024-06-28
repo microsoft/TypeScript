@@ -13,7 +13,7 @@ verify.moveToNewFile({
     newFileContents: {
         "/b.ts": "",
         "/f.ts":
-`import { type A } from "./a";
+`import type { A } from "./a";
 
 function f(a: A) { }
 `,

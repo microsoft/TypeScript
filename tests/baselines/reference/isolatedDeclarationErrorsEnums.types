@@ -1,0 +1,272 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsEnums.ts] ////
+
+=== isolatedDeclarationErrorsEnums.ts ===
+declare function computed(x: number): number;
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+
+enum E {
+>E : E
+>  : ^
+
+    A = computed(0),
+>A : E.A
+>  : ^^^
+>computed(0) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>0 : 0
+>  : ^
+
+    B = computed(1),
+>B : E.B
+>  : ^^^
+>computed(1) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>1 : 1
+>  : ^
+
+    C = computed(2),
+>C : E.C
+>  : ^^^
+>computed(2) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>2 : 2
+>  : ^
+
+    D = computed(3),
+>D : E.D
+>  : ^^^
+>computed(3) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>3 : 3
+>  : ^
+}
+
+
+enum F {
+>F : F
+>  : ^
+
+    A = E.A,
+>A : F.A
+>  : ^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+
+    B = A,
+>B : F.B
+>  : ^^^
+>A : F.A
+>  : ^^^
+}
+
+
+enum Flag {
+>Flag : Flag
+>     : ^^^^
+
+    A = 1 >> 1,
+>A : Flag.A
+>  : ^^^^^^
+>1 >> 1 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    B = 2 >> 2,
+>B : Flag.A
+>  : ^^^^^^
+>2 >> 2 : number
+>       : ^^^^^^
+>2 : 2
+>  : ^
+>2 : 2
+>  : ^
+
+    C = 3 >> 2,
+>C : Flag.A
+>  : ^^^^^^
+>3 >> 2 : number
+>       : ^^^^^^
+>3 : 3
+>  : ^
+>2 : 2
+>  : ^
+
+    AB = A | B,
+>AB : Flag.A
+>   : ^^^^^^
+>A | B : number
+>      : ^^^^^^
+>A : Flag
+>  : ^^^^
+>B : Flag
+>  : ^^^^
+
+    ABC = Flag.AB | C,
+>ABC : Flag.A
+>    : ^^^^^^
+>Flag.AB | C : number
+>            : ^^^^^^
+>Flag.AB : Flag
+>        : ^^^^
+>Flag : typeof Flag
+>     : ^^^^^^^^^^^
+>AB : Flag
+>   : ^^^^
+>C : Flag
+>  : ^^^^
+
+    AC = Flag["A"] | C,
+>AC : Flag.A
+>   : ^^^^^^
+>Flag["A"] | C : number
+>              : ^^^^^^
+>Flag["A"] : Flag
+>          : ^^^^
+>Flag : typeof Flag
+>     : ^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>C : Flag
+>  : ^^^^
+}
+
+const EV = 1;
+>EV : 1
+>   : ^
+>1 : 1
+>  : ^
+
+enum ExtFlags {
+>ExtFlags : ExtFlags
+>         : ^^^^^^^^
+
+    D = 4 >> 1,
+>D : ExtFlags.D
+>  : ^^^^^^^^^^
+>4 >> 1 : number
+>       : ^^^^^^
+>4 : 4
+>  : ^
+>1 : 1
+>  : ^
+
+    E = EV,
+>E : ExtFlags.E
+>  : ^^^^^^^^^^
+>EV : 1
+>   : ^
+
+    ABCD = Flag.ABC | D,
+>ABCD : ExtFlags.D
+>     : ^^^^^^^^^^
+>Flag.ABC | D : number
+>             : ^^^^^^
+>Flag.ABC : Flag
+>         : ^^^^
+>Flag : typeof Flag
+>     : ^^^^^^^^^^^
+>ABC : Flag
+>    : ^^^^
+>D : ExtFlags.D
+>  : ^^^^^^^^^^
+
+    AC = Flag["A"] | D,
+>AC : ExtFlags.D
+>   : ^^^^^^^^^^
+>Flag["A"] | D : number
+>              : ^^^^^^
+>Flag["A"] : Flag
+>          : ^^^^
+>Flag : typeof Flag
+>     : ^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>D : ExtFlags.D
+>  : ^^^^^^^^^^
+}
+
+
+enum Str {
+>Str : Str
+>    : ^^^
+
+    A = "A",
+>A : Str.A
+>  : ^^^^^
+>"A" : "A"
+>    : ^^^
+
+    B = "B",
+>B : Str.B
+>  : ^^^^^
+>"B" : "B"
+>    : ^^^
+
+    AB = A + B
+>AB : Str.AB
+>   : ^^^^^^
+>A + B : string
+>      : ^^^^^^
+>A : Str.A
+>  : ^^^^^
+>B : Str.B
+>  : ^^^^^
+}
+
+
+enum StrExt {
+>StrExt : StrExt
+>       : ^^^^^^
+
+    D = "D",
+>D : StrExt.D
+>  : ^^^^^^^^
+>"D" : "D"
+>    : ^^^
+
+    ABD = Str.AB + D,
+>ABD : StrExt.ABD
+>    : ^^^^^^^^^^
+>Str.AB + D : string
+>           : ^^^^^^
+>Str.AB : Str.AB
+>       : ^^^^^^
+>Str : typeof Str
+>    : ^^^^^^^^^^
+>AB : Str.AB
+>   : ^^^^^^
+>D : StrExt.D
+>  : ^^^^^^^^
+
+    AD = Str["A"] + D,
+>AD : StrExt.AD
+>   : ^^^^^^^^^
+>Str["A"] + D : string
+>             : ^^^^^^
+>Str["A"] : Str.A
+>         : ^^^^^
+>Str : typeof Str
+>    : ^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>D : StrExt.D
+>  : ^^^^^^^^
+}

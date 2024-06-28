@@ -109,7 +109,7 @@ var ResultIsNumber5 = ++{ x: 1, y: (n: number) => { return n; } };
 >y : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -153,7 +153,7 @@ var ResultIsNumber8 = { x: 1, y: (n: number) => { return n; } }++;
 >y : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number
@@ -168,7 +168,7 @@ var ResultIsNumber9 = ++foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber10 = ++A.foo();
 >ResultIsNumber10 : number
@@ -206,7 +206,7 @@ var ResultIsNumber12 = foo()++;
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsNumber13 = A.foo()++;
 >ResultIsNumber13 : number
@@ -255,7 +255,7 @@ var ResultIsNumber14 = (NUMBER + NUMBER)++;
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 1++;
 >1++ : number
@@ -275,5 +275,5 @@ foo()++;
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

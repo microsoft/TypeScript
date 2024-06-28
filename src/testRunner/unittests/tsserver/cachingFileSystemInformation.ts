@@ -1,14 +1,14 @@
-import { IncrementalVerifierCallbacks } from "../../../harness/incrementalUtils";
-import { LoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import { IncrementalVerifierCallbacks } from "../../../harness/incrementalUtils.js";
+import { LoggerWithInMemoryLogs } from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     logDiagnostics,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
@@ -16,7 +16,7 @@ import {
     libFile,
     SymLink,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
     type CalledMapsWithSingleArg = "fileExists" | "directoryExists" | "getDirectories" | "readFile";

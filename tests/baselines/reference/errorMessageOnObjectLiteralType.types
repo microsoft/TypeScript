@@ -20,7 +20,7 @@ x.getOwnPropertyNamess();
 >x.getOwnPropertyNamess : any
 >                       : ^^^
 >x : { a: string; b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >getOwnPropertyNamess : any
 >                     : ^^^
 

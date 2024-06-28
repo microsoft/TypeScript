@@ -21,7 +21,7 @@ class Derived extends Base {
 >r2 : () => void
 >   : ^^^^^^^^^^
 >() => super() : () => void
->              :           
+>              : ^^^^^^^^^^
 >super() : void
 >        : ^^^^
 >super : any
@@ -31,7 +31,7 @@ class Derived extends Base {
 >r3 : () => void
 >   : ^^^^^^^^^^
 >() => { super(); } : () => void
->                   :           
+>                   : ^^^^^^^^^^
 >super() : void
 >        : ^^^^
 >super : any
@@ -41,7 +41,7 @@ class Derived extends Base {
 >r4 : () => void
 >   : ^^^^^^^^^^
 >function () { super(); } : () => void
->                         :           
+>                         : ^^^^^^^^^^
 >super() : void
 >        : ^^^^
 >super : any

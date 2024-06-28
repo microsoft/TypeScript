@@ -38,4 +38,4 @@
 ////    "files": ["/src/index.ts", "typings/global.d.ts"]
 ////}
 
-verify.baselineFindAllReferences('0', '1', '2')
+verify.baselineFindAllReferences('0', '1', '2', '3');

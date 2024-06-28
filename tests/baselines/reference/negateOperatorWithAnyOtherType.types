@@ -29,7 +29,7 @@ var obj1 = { x: "", y: () => { }};
 >obj1 : { x: string; y: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: "", y: () => { }} : { x: string; y: () => void; }
->                       : ^^^^^^^^^^^^^^^^          ^^^
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
@@ -37,7 +37,7 @@ var obj1 = { x: "", y: () => { }};
 >y : () => void
 >  : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
 function foo(): any {
 >foo : () => any
@@ -127,7 +127,7 @@ var ResultIsNumber5 = -obj;
 >-obj : number
 >     : ^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsNumber6 = -obj1;
 >ResultIsNumber6 : number
@@ -221,7 +221,7 @@ var ResultIsNumber13 = -foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : number
@@ -231,11 +231,11 @@ var ResultIsNumber14 = -A.foo();
 >A.foo() : any
 >        : ^^^
 >A.foo : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >A : typeof A
 >  : ^^^^^^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber15 = -(ANY - ANY1);
 >ResultIsNumber15 : number

@@ -23,7 +23,7 @@ const Info = (props: InfoProps) =>
 >Info : (props: InfoProps) => JSX.Element
 >     : ^     ^^         ^^^^^^^^^^^^^^^^
 >(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => JSX.Element
->                                                                                             :                                  
+>                                                                                             : ^     ^^         ^^^^^^^^^^^^^^^^
 >props : InfoProps
 >      : ^^^^^^^^^
 
@@ -55,7 +55,7 @@ props.status === "hidden"
 >props.content : string
 >              : ^^^^^^
 >props : { status: "visible"; content: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^         ^^^^^^^^^^^      ^^^
 >content : string
 >        : ^^^^^^
 >div : any

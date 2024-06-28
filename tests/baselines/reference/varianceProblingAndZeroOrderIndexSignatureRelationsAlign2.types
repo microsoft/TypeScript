@@ -92,7 +92,7 @@ class Right<L, A> {
 >f(this.value) : B
 >              : ^
 >f : (a: A) => B
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 >this.value : A
 >           : ^
 >this : this
@@ -204,8 +204,8 @@ const tmp1: MyInfo = null!;
 >      : ^^^^^
 
 function tmp2<N extends NeededInfo>(n: N) {}
->tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>tmp2 : <N extends NeededInfo>(n: N) => void
+>     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >n : N
 >  : ^
 

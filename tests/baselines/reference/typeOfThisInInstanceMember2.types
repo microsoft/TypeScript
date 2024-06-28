@@ -161,11 +161,11 @@ rs.forEach(x => {
 >rs.forEach(x => {    x.foo;    x.x;    x.y;    x.z;}) : void
 >                                                      : ^^^^
 >rs.forEach : (callbackfn: (value: C<string>, index: number, array: C<string>[]) => void, thisArg?: any) => void
->           : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>           : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >rs : C<string>[]
 >   : ^^^^^^^^^^^
 >forEach : (callbackfn: (value: C<string>, index: number, array: C<string>[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >x => {    x.foo;    x.x;    x.y;    x.z;} : (x: C<string>) => void
 >                                          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : C<string>

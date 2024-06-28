@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
@@ -115,7 +115,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: Not
+Program 2 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 

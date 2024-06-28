@@ -35,15 +35,15 @@ class Howl {
 >console.log(name, fn) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >name : "unlock"
 >     : ^^^^^^^^
 >fn : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
   }
 }
 
@@ -61,7 +61,7 @@ const instance = new Howl({
 >onplayerror : () => undefined
 >            : ^^^^^^^^^^^^^^^
 >() => void instance.once("unlock", () => {}) : () => undefined
->                                             :                
+>                                             : ^^^^^^^^^^^^^^^
 >void instance.once("unlock", () => {}) : undefined
 >                                       : ^^^^^^^^^
 >instance.once("unlock", () => {}) : void

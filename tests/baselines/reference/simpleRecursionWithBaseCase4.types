@@ -5,7 +5,7 @@ var fn2 = function(name) {
 >fn2 : (name: any) => any
 >    : ^    ^^^^^^^^^^^^^
 >function(name) {  fn2 = compose(this, 0, 1)  return fn2(name)  function compose(child, level, find) {    if (child === find) {      return level    }    return compose(child, level + 1, find)  }} : (name: any) => any
->                                                                                                                                                                                                    :                   
+>                                                                                                                                                                                                    : ^    ^^^^^^^^^^^^^
 >name : any
 
   fn2 = compose(this, 0, 1)

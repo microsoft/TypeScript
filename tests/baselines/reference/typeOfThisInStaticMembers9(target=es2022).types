@@ -22,7 +22,7 @@ class D extends C {
 >arrowFunctionBoundary : () => number
 >                      : ^^^^^^^^^^^^
 >() => super.f + 1 : () => number
->                  :             
+>                  : ^^^^^^^^^^^^
 >super.f + 1 : number
 >            : ^^^^^^
 >super.f : number
@@ -38,7 +38,7 @@ class D extends C {
 >functionExprBoundary : () => any
 >                     : ^^^^^^^^^
 >function () { return super.f + 2 } : () => any
->                                   :          
+>                                   : ^^^^^^^^^
 >super.f + 2 : any
 >            : ^^^
 >super.f : any

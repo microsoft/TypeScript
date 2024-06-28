@@ -37,7 +37,7 @@ const a = new Test<{
 >a : Test<{ property: string; }>
 >  : ^^^^^^^^^^^^^^^^^      ^^^^
 >new Test<{    property: string}>() : Test<{ property: string; }>
->                                   : ^^^^^                     ^
+>                                   : ^^^^^^^^^^^^^^^^^      ^^^^
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 
@@ -49,41 +49,41 @@ const a = new Test<{
 
 a.value = (item) => item.property
 >a.value = (item) => item.property : (item: { property: string; }) => string
->                                  : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >a.value : string | ((item: { property: string; }) => string)
->        : ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
 >a : Test<{ property: string; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^      ^^^^
 >value : string | ((item: { property: string; }) => string)
->      : ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
 >(item) => item.property : (item: { property: string; }) => string
->                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >item : { property: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^      ^^^
 >item.property : string
 >              : ^^^^^^
 >item : { property: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^      ^^^
 >property : string
 >         : ^^^^^^
 
 a['value'] = (item) => item.property
 >a['value'] = (item) => item.property : (item: { property: string; }) => string
->                                     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >a['value'] : string | ((item: { property: string; }) => string)
->           : ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^    ^^^^^^^^^^^^^^      ^^^^^^^^      ^
 >a : Test<{ property: string; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^      ^^^^
 >'value' : "value"
 >        : ^^^^^^^
 >(item) => item.property : (item: { property: string; }) => string
->                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^    ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >item : { property: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^      ^^^
 >item.property : string
 >              : ^^^^^^
 >item : { property: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^      ^^^
 >property : string
 >         : ^^^^^^
 

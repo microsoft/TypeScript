@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry) {
     const str: string[] = [];
@@ -254,15 +254,11 @@ export function verifyResolutionCache(
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
         ts.Debug.assert(
-            resolution.refCount === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.refCount}`,
+            resolution.files?.size === info.length,
+            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
             () =>
                 `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
-                `Actual from: ${resolution.refCount}`,
-        );
-        ts.Debug.assert(
-            resolutionToExpected.get(resolution)!.refCount === resolution.refCount,
-            `${projectName}:: Expected Resolution ref count ${resolutionToExpected.get(resolution)!.refCount} but got ${resolution.refCount}`,
+                `Actual from: ${resolution.files?.size}`,
         );
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
     });
@@ -271,6 +267,8 @@ export function verifyResolutionCache(
     verifyResolutionSet(expected.resolutionsWithOnlyAffectingLocations, actual.resolutionsWithOnlyAffectingLocations, `resolutionsWithOnlyAffectingLocations`);
     verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
+    verifyPackageDirWatchers(expected.packageDirWatchers, actual.packageDirWatchers);
+    verifyDirPathToSymlinkPackageRefCount(expected.dirPathToSymlinkPackageRefCount, actual.dirPathToSymlinkPackageRefCount);
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -278,10 +276,9 @@ export function verifyResolutionCache(
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram);
 
-    resolutionToExpected.forEach(expected => {
-        ts.Debug.assert(!expected.refCount, `${projectName}:: All the resolution should be released`);
-        ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`);
-    });
+    resolutionToExpected.forEach(
+        expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`),
+    );
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
@@ -368,11 +365,17 @@ export function verifyResolutionCache(
     }
 
     function verifyDirectoryWatchesOfFailedLookups(expected: Map<string, ts.DirectoryWatchesOfFailedLookup>, actual: Map<string, ts.DirectoryWatchesOfFailedLookup>) {
-        verifyMap(expected, actual, (expected, actual, caption) => {
-            ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
-            ts.Debug.assert(!!expected?.refCount, `${projectName}:: ${caption}:: expected refCount to be non zero`);
-            ts.Debug.assert(expected?.nonRecursive === actual?.nonRecursive, `${projectName}:: ${caption}:: nonRecursive`);
-        }, "directoryWatchesOfFailedLookups");
+        verifyMap(expected, actual, verifyDirectoryWatchesOfFailedLookup, "directoryWatchesOfFailedLookups");
+    }
+
+    function verifyDirectoryWatchesOfFailedLookup(
+        expected: ts.DirectoryWatchesOfFailedLookup | undefined,
+        actual: ts.DirectoryWatchesOfFailedLookup | undefined,
+        caption: string,
+    ) {
+        ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
+        ts.Debug.assert(!!expected?.refCount, `${projectName}:: ${caption}:: expected refCount to be non zero`);
+        ts.Debug.assert(expected?.nonRecursive === actual?.nonRecursive, `${projectName}:: ${caption}:: nonRecursive`);
     }
 
     function verifyFileWatchesOfAffectingLocations(
@@ -390,6 +393,40 @@ export function verifyResolutionCache(
         ts.Debug.assert(expected?.resolutions === actual?.resolutions, `${projectName}:: ${caption}:: resolutions`);
         ts.Debug.assert(expected?.files === actual?.files, `${projectName}:: ${caption}:: files`);
         verifySet(expected?.symlinks, actual?.symlinks, `${projectName}:: ${caption}:: symlinks`);
+    }
+
+    function verifyPackageDirWatchers(
+        expected: Map<ts.Path, ts.PackageDirWatcher>,
+        actual: Map<ts.Path, ts.PackageDirWatcher>,
+    ) {
+        verifyMap(expected, actual, verifyPackageDirWatcher, "packageDirWatchers");
+    }
+
+    function verifyPackageDirWatcher(
+        expected: ts.PackageDirWatcher | undefined,
+        actual: ts.PackageDirWatcher | undefined,
+        caption: string,
+    ) {
+        ts.Debug.assert(expected?.isSymlink === actual?.isSymlink, `${projectName}:: ${caption}:: isSymlink`);
+        verifyMap(expected?.dirPathToWatcher, actual?.dirPathToWatcher, verfiyDirPathToWatcherOfPackageDirWatcher, `${projectName}:: ${caption}:: dirPathToWatcher`);
+    }
+
+    function verfiyDirPathToWatcherOfPackageDirWatcher(
+        expected: ts.DirPathToWatcherOfPackageDirWatcher | undefined,
+        actual: ts.DirPathToWatcherOfPackageDirWatcher | undefined,
+        caption: string,
+    ) {
+        ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
+        verifyDirectoryWatchesOfFailedLookup(expected?.watcher, actual?.watcher, `${projectName}:: ${caption}:: directoryWatchesOfFailedLookup`);
+    }
+
+    function verifyDirPathToSymlinkPackageRefCount(
+        expected: Map<ts.Path, number>,
+        actual: Map<ts.Path, number>,
+    ) {
+        verifyMap(expected, actual, (expected, actual, caption) => {
+            ts.Debug.assert(expected === actual, `${projectName}:: ${caption}`);
+        }, "dirPathToSymlinkPackageRefCount");
     }
 }
 
@@ -474,6 +511,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         fileIsOpen: project.fileIsOpen.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
+        preferNonRecursiveWatch: project.preferNonRecursiveWatch,
         watchDirectoryOfFailedLookupLocation: ts.returnNoopFileWatcher,
         watchAffectingFileLocation: ts.returnNoopFileWatcher,
         onInvalidatedResolution: ts.noop,

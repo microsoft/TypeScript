@@ -7,7 +7,7 @@ let foo = (async bar => bar);
 >foo : (bar: any) => Promise<any>
 >    : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >(async bar => bar) : (bar: any) => Promise<any>
->                   :                           
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >async bar => bar : (bar: any) => Promise<any>
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >bar : any

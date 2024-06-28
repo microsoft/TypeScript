@@ -159,11 +159,11 @@ export var tests: TestRunner = (function () {
 >bytes.push(fb.readByte()) : number
 >                          : ^^^^^^
 >bytes.push : (...items: any[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^      
 >bytes : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >fb.readByte() : any
 >              : ^^^
 >fb.readByte : any
@@ -185,11 +185,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(bytes, expected) : boolean
 >                                         : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^       
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >bytes : any[]
 >      : ^^^^^
 >expected : number[]

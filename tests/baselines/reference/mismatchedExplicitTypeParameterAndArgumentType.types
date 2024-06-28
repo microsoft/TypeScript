@@ -21,11 +21,11 @@ function map<T, U>(xs: T[], f: (x: T) => U) {
 >xs.forEach(x => ys.push(f(x))) : void
 >                               : ^^^^
 >xs.forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
->           : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>           : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >xs : T[]
 >   : ^^^
 >forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >x => ys.push(f(x)) : (x: T) => number
 >                   : ^ ^^^^^^^^^^^^^^
 >x : T
@@ -33,15 +33,15 @@ function map<T, U>(xs: T[], f: (x: T) => U) {
 >ys.push(f(x)) : number
 >              : ^^^^^^
 >ys.push : (...items: U[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^      
 >ys : U[]
 >   : ^^^
 >push : (...items: U[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^      
 >f(x) : U
 >     : ^
 >f : (x: T) => U
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -70,11 +70,11 @@ var r0 = map([1, ""], (x) => x.toString());
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (() => string) | ((radix?: number) => string)
->           : ^^^^^^^^^^^^^^^^^^^     ^^^      ^^^^^^^^^^^^
+>           : ^^^^^^^      ^^^^^^     ^^^      ^^^^^      ^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >toString : (() => string) | ((radix?: number) => string)
->         : ^^^^^^^^^^^^^^^^^^^     ^^^      ^^^^^^^^^^^^
+>         : ^^^^^^^      ^^^^^^     ^^^      ^^^^^      ^
 
 var r5 = map<any, any>([1, ""], (x) => x.toString());
 >r5 : any[]
@@ -122,11 +122,11 @@ var r6 = map<Object, Object>([1, ""], (x) => x.toString());
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : Object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >r7 : string[]
@@ -148,11 +148,11 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >r7b : unknown[]
@@ -174,11 +174,11 @@ var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var r8 = map<any, string>([1, ""], (x) => x.toString());
 >r8 : string[]

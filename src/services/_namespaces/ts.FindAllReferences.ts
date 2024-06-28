@@ -1,4 +1,4 @@
 /* Generated file to emulate the ts.FindAllReferences namespace. */
 
-export * from "../importTracker";
-export * from "../findAllReferences";
+export * from "../importTracker.js";
+export * from "../findAllReferences.js";

@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/errorOnEnumReferenceInCondition.ts] ////
+
+=== errorOnEnumReferenceInCondition.ts ===
+enum Nums {
+>Nums : Nums
+>     : ^^^^
+
+    Zero = 0,
+>Zero : Nums.Zero
+>     : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+    One = 1,
+>One : Nums.One
+>    : ^^^^^^^^
+>1 : 1
+>  : ^
+}
+
+const a = Nums.Zero ? "a" : "b";
+>a : "a" | "b"
+>  : ^^^^^^^^^
+>Nums.Zero ? "a" : "b" : "a" | "b"
+>                      : ^^^^^^^^^
+>Nums.Zero : Nums.Zero
+>          : ^^^^^^^^^
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+>Zero : Nums.Zero
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+const b = Nums.One ? "a" : "b";
+>b : "a" | "b"
+>  : ^^^^^^^^^
+>Nums.One ? "a" : "b" : "a" | "b"
+>                     : ^^^^^^^^^
+>Nums.One : Nums.One
+>         : ^^^^^^^^
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+>One : Nums.One
+>    : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+if (Nums.Zero) {
+>Nums.Zero : Nums.Zero
+>          : ^^^^^^^^^
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+>Zero : Nums.Zero
+>     : ^^^^^^^^^
+
+    Nums;
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+}
+else {
+    Nums;
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+}
+
+
+if (Nums.One) {
+>Nums.One : Nums.One
+>         : ^^^^^^^^
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+>One : Nums.One
+>    : ^^^^^^^^
+
+    Nums;
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+}
+else {
+    Nums;
+>Nums : typeof Nums
+>     : ^^^^^^^^^^^
+}
+
+
+enum Strs {
+>Strs : Strs
+>     : ^^^^
+
+    Empty = "",
+>Empty : Strs.Empty
+>      : ^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    A = "A",
+>A : Strs.A
+>  : ^^^^^^
+>"A" : "A"
+>    : ^^^
+}
+
+const c = Strs.Empty ? "a" : "b";
+>c : "a" | "b"
+>  : ^^^^^^^^^
+>Strs.Empty ? "a" : "b" : "a" | "b"
+>                       : ^^^^^^^^^
+>Strs.Empty : Strs.Empty
+>           : ^^^^^^^^^^
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+>Empty : Strs.Empty
+>      : ^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+const d = Strs.A ? "a" : "b";
+>d : "a" | "b"
+>  : ^^^^^^^^^
+>Strs.A ? "a" : "b" : "a" | "b"
+>                   : ^^^^^^^^^
+>Strs.A : Strs.A
+>       : ^^^^^^
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+>A : Strs.A
+>  : ^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+
+if (Strs.Empty) {
+>Strs.Empty : Strs.Empty
+>           : ^^^^^^^^^^
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+>Empty : Strs.Empty
+>      : ^^^^^^^^^^
+
+    Strs;
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+}
+else {
+    Strs;
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+}
+
+
+if (Strs.A) {
+>Strs.A : Strs.A
+>       : ^^^^^^
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+>A : Strs.A
+>  : ^^^^^^
+
+    Strs;
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+}
+else {
+    Strs;
+>Strs : typeof Strs
+>     : ^^^^^^^^^^^
+}
