@@ -1,6 +1,23 @@
 //// [tests/cases/compiler/unconstrainedTypeComparisons.ts] ////
 
 === unconstrainedTypeComparisons.ts ===
+export function f<T extends {} | undefined | null>(a: T, b: T): boolean {
+>f : <T extends {} | undefined | null>(a: T, b: T) => boolean
+>  : ^ ^^^^^^^^^                     ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+  return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+}
+
 export function g<T>(a: T, b: T): boolean {
 >g : <T>(a: T, b: T) => boolean
 >  : ^ ^^ ^^ ^^ ^^ ^^^^^       
@@ -14,6 +31,36 @@ export function g<T>(a: T, b: T): boolean {
 >      : ^^^^^^^
 >a : T
 >  : ^
+>b : T
+>  : ^
+}
+
+function h<T>(a: T, b: T): boolean {
+>h : <T>(a: T, b: T) => boolean
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+  if (a === undefined) {
+>a === undefined : boolean
+>                : ^^^^^^^
+>a : T
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+      return true;
+>true : true
+>     : ^^^^
+  }
+
+  return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T & ({} | null)
+>  : ^^^^^^^^^^^^^^^
 >b : T
 >  : ^
 }
