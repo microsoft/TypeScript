@@ -1559,7 +1559,7 @@ function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, mo
 }
 
 function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
-    const { baseUrl, paths, configFile } = state.compilerOptions;
+    const { baseUrl, paths } = state.compilerOptions;
     if (paths && !pathIsRelative(moduleName)) {
         if (state.traceEnabled) {
             if (baseUrl) {
@@ -1569,15 +1569,7 @@ function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: s
         }
         const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
         // TODO: do we need to sort by aggregate length?
-        let pathPatterns;
-        if (configFile?.configFileSpecs) {
-            // Cache on this object instead of internally through a WeakMap.
-            // This seems to do a bit better.
-            pathPatterns = configFile.configFileSpecs.pathPatterns ??= tryParsePatterns(paths, /*shouldCache*/ false);
-        }
-        else {
-            pathPatterns = tryParsePatterns(paths);
-        }
+        const pathPatterns = tryParsePatterns(paths);
         return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
     }
 }

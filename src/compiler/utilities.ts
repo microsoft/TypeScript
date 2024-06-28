@@ -10020,13 +10020,10 @@ const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
  *
  * @internal
  */
-export function tryParsePatterns(paths: MapLike<string[]>, shouldCache: boolean = true, sortByAggregateLength: boolean = false): ParsedPatterns {
-    let result: ParsedPatterns | undefined;
-    if (shouldCache) {
-        result = parsedPatternsCache.get(paths);
-        if (result !== undefined) {
-            return result;
-        }
+export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength: boolean = false): ParsedPatterns {
+    let result = parsedPatternsCache.get(paths);
+    if (result !== undefined) {
+        return result;
     }
 
     let matchableStringSet: Set<string> | undefined;
@@ -10054,14 +10051,13 @@ export function tryParsePatterns(paths: MapLike<string[]>, shouldCache: boolean 
         return prefixComparison;
     });
 
-    result = {
-        matchableStringSet,
-        sortedPatterns,
-    };
-
-    if (shouldCache) {
-        parsedPatternsCache.set(paths, result);
-    }
+    parsedPatternsCache.set(
+        paths,
+        result = {
+            matchableStringSet,
+            sortedPatterns,
+        },
+    );
 
     return result;
 }
