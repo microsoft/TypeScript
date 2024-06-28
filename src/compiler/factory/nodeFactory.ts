@@ -478,7 +478,7 @@ type NodeData<T extends Node> =
     & Readonly<Omit<T, keyof Identifier>>
     & Mutable<Pick<T, Extract<keyof Identifier, keyof T>>>
     & {
-        data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol">>>> | undefined;
+        data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol" | 'flowNode'>>>> | undefined;
     };
 /** @internal */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
@@ -1910,6 +1910,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             endFlowNode: undefined,
             returnFlowNode: undefined,
             localSymbol: undefined,
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -2091,6 +2092,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -2160,6 +2162,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined,
+            flowNode: undefined,
         };
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
@@ -2938,7 +2941,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (nodeData.dotDotDotToken ? TransformFlags.ContainsRestOrSpread : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
-        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3007,6 +3010,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionDotToken,
             name,
             localSymbol: undefined,
+            flowNode: undefined,
         };
         node.transformFlags = propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
@@ -3083,7 +3087,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildFlags(nodeData.argumentExpression);
 
         // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
-        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -3339,7 +3343,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         };
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
-        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         const isAsync = modifiersToFlags(nodeData.modifiers) & ModifierFlags.Async;
         const isGenerator = !!nodeData.asteriskToken;
@@ -3412,6 +3416,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             localSymbol: undefined,
             // name: undefined,
             // questionToken: undefined
+            flowNode: undefined,
         };
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
@@ -3974,6 +3979,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             keywordToken,
             name,
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.name);
         switch (keywordToken) {
@@ -4063,6 +4069,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             modifiers: asNodeArray(modifiers),
             declarationList: isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList,
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -4095,7 +4102,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createExpressionStatement(expression: Expression): ExpressionStatement {
         const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
-        const nodeData = node.data = { expression: parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression) };
+        const nodeData = node.data = { 
+            expression: parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression), 
+            flowNode: undefined,
+         };
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
@@ -4123,7 +4133,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildFlags(nodeData.elseStatement);
 
         // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
-        // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4142,6 +4152,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             statement: asEmbeddedStatement(statement),
             expression,
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.statement) |
             propagateChildFlags(nodeData.expression);
@@ -4165,6 +4176,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             expression,
             statement: asEmbeddedStatement(statement),
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
@@ -4192,6 +4204,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             statement: asEmbeddedStatement(statement),
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -4223,6 +4236,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             statement: asEmbeddedStatement(statement),
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            flowNode: undefined,
         };
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
@@ -4254,6 +4268,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -4281,12 +4296,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createContinueStatement(label?: string | Identifier): ContinueStatement {
         const node = createBaseNode<ContinueStatement>(SyntaxKind.ContinueStatement);
-        const nodeData = node.data = { label: asName(label) };
+        const nodeData = node.data = { label: asName(label), 
+            flowNode: undefined,
+         };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
-        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4300,7 +4317,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBreakStatement(label?: string | Identifier): BreakStatement {
         const node = createBaseNode<BreakStatement>(SyntaxKind.BreakStatement);
-        const nodeData = node.data = { label: asName(label) };
+        const nodeData = node.data = { 
+            label: asName(label),
+            flowNode: undefined,
+        };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
@@ -4319,14 +4339,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createReturnStatement(expression?: Expression): ReturnStatement {
         const node = createBaseNode<ReturnStatement>(SyntaxKind.ReturnStatement);
-        const nodeData = node.data = { expression };
+        const nodeData = node.data = { 
+            expression,
+            flowNode: undefined,
+         };
         // return in an ES2018 async generator must be awaited
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
-        // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
+        nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
 
@@ -4343,6 +4366,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             expression,
             statement: asEmbeddedStatement(statement),
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
@@ -4367,6 +4391,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             possiblyExhaustive: false, // initialized by binder
             expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
             caseBlock,
+            flowNode: undefined,
         };
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -4390,6 +4415,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             label: asName(label),
             statement: asEmbeddedStatement(statement),
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             propagateChildFlags(nodeData.statement);
@@ -4410,7 +4436,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createThrowStatement(expression: Expression) {
         const node = createBaseNode<ThrowStatement>(SyntaxKind.ThrowStatement);
-        const nodeData = node.data = { expression };
+        const nodeData = node.data = { 
+            expression,
+            flowNode: undefined,
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
         // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
@@ -4432,6 +4461,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             tryBlock,
             catchClause,
             finallyBlock,
+            flowNode: undefined,
         };
         node.transformFlags |= propagateChildFlags(nodeData.tryBlock) |
             propagateChildFlags(nodeData.catchClause) |
@@ -6776,10 +6806,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.flowNode = (node as any).flowNode;
         clone.symbol = (node as any).symbol;
 
-        setOriginal(clone, node);
         const nodeData = (node as any).data;
+        const cloneData = (clone as any).data = {};
         if (nodeData) {
-            const cloneData = (clone as any).data = {};
             for (const key in nodeData) {
                 if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
                     continue;
@@ -6787,6 +6816,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 (clone as any)[key] = nodeData[key];
             }
         }
+        setOriginal(clone, node);
         return clone;
     }
     // compound nodes

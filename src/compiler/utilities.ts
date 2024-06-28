@@ -9147,9 +9147,9 @@ export class NodeImpl {
     flags: NodeFlags;
     transformFlags: TransformFlags;
     parent: Node;
-    emitNode: EmitNode | undefined;
+    // emitNode: EmitNode | undefined;
     modifierFlagsCache: ModifierFlags;
-    original: undefined;
+    // original: undefined;
     escapedText: undefined;
     jsDoc: any;
     flowNode: any;
@@ -9165,19 +9165,41 @@ export class NodeImpl {
         this.modifierFlagsCache = ModifierFlags.None;
 
         this.parent = undefined!;
-        this.emitNode = undefined;
+        // this.emitNode = undefined;
 
-        this.original = undefined;
+        // this.original = undefined;
         this.escapedText = undefined;
         this.jsDoc = undefined;
         this.flowNode = undefined;
         this.symbol = undefined;
 
-        if (Debug.isDebugging || tracing) {
-            this.__symbolTestOutputCache = undefined;
-        }
+        // if (Debug.isDebugging || tracing) {
+        //     this.__symbolTestOutputCache = undefined;
+        // }
     }
     data: any = undefined;
+    
+    get emitNode() {
+        return this.data?.emitNode;
+    }
+    set emitNode(value: any) {
+        if(!this.data) {
+            this.data = { emitNode: value};
+        } else  {
+            this.data.emitNode = value;
+        }
+    }
+
+    get original() {
+        return this.data?.original;
+    }
+    set original(value: any) {
+        if(!this.data) {
+            this.data = { original: value};
+        } else  {
+            this.data.original = value;
+        }
+    }
 
     get sourceText() {
         return this.data?.sourceText;
