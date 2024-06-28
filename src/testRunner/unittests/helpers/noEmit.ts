@@ -239,7 +239,7 @@ export function forEachNoEmitDtsChanges(commandType: string[]) {
                         modifyFs: asModules ?
                             fs => fs.writeFileSync("/home/src/projects/project/b.ts", `export const b = 10;`) :
                             undefined,
-                        edits: editsForDtsChanges(commandType, aContent, incremental, false),
+                        edits: editsForDtsChanges(commandType, aContent, incremental, /*multiFile*/ false),
                         baselinePrograms: true,
                     });
                 })
