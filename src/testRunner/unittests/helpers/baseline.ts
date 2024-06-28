@@ -137,7 +137,7 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
 
 export type ReadableIncrementalBuildInfoDiagnosticOfFile = [file: string, diagnostics: readonly ts.ReusableDiagnostic[]];
 export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
-export type ReadableIncrementalBuildInfoEmitDiagnostic = [file: string, diagnostics: readonly ts.ReusableDiagnosticWithLocation[]];
+export type ReadableIncrementalBuildInfoEmitDiagnostic = ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [file: string] | [file: string, emitKind: ts.BuilderFileEmit], emitKind: ReadableBuilderFileEmit];
 export type ReadableIncrementalBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];

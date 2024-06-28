@@ -101,13 +101,6 @@ export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation
 }
 
 /** @internal */
-export interface ReusableDiagnosticWithLocation extends ReusableDiagnostic {
-    file: string | undefined;
-    start: number;
-    length: number;
-}
-
-/** @internal */
 export interface ReusableDiagnosticRelatedInformation {
     category: DiagnosticCategory;
     code: number;
@@ -145,7 +138,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
      */
     semanticDiagnosticsPerFile: Map<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]>;
     /** Cache of dts emit diagnostics for files with their Path being the key */
-    emitDiagnosticsPerFile?: Map<Path, readonly ReusableDiagnosticWithLocation[] | readonly DiagnosticWithLocation[]> | undefined;
+    emitDiagnosticsPerFile?: Map<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
     /**
      * The map has key by source file's path that has been changed
      */
@@ -218,7 +211,7 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
      */
     semanticDiagnosticsPerFile: Map<Path, readonly Diagnostic[]>;
     /** Cache of dts emit diagnostics for files with their Path being the key */
-    emitDiagnosticsPerFile?: Map<Path, readonly DiagnosticWithLocation[]> | undefined;
+    emitDiagnosticsPerFile?: Map<Path, readonly Diagnostic[]> | undefined;
     /**
      * The map has key by source file's path that has been changed
      */
@@ -767,9 +760,7 @@ function getNextAffectedFilePendingEmit(
             emitOnlyDtsFiles,
             isForDtsErrors,
         );
-        if (pendingKind) {
-            return { affectedFile, emitKind: pendingKind };
-        }
+        if (pendingKind) return { affectedFile, emitKind: pendingKind };
     });
 }
 
@@ -1079,13 +1070,11 @@ export type IncrementalBuildInfoFileIdListId = number & { __incrementalBuildInfo
 /** @internal */
 export type IncrementalBuildInfoDiagnosticOfFile = [fileId: IncrementalBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
 /** @internal */
-export type IncrementalBuildInfoEmitDiagnosticOfFile = [fileId: IncrementalBuildInfoFileId, diagnostics: readonly ReusableDiagnosticWithLocation[]];
-/** @internal */
 export type IncrementalBuildInfoDiagnostic =
     | IncrementalBuildInfoFileId // File is not in changedSet and still doesnt have cached diagnostics
     | IncrementalBuildInfoDiagnosticOfFile; // Diagnostics for file
 /** @internal */
-export type IncrementalBuildInfoEmitDiagnostic = IncrementalBuildInfoEmitDiagnosticOfFile; // Diagnostics for file
+export type IncrementalBuildInfoEmitDiagnostic = IncrementalBuildInfoDiagnosticOfFile; // Diagnostics for the file
 
 /**
  * fileId if pending emit is same as what compilerOptions suggest
@@ -1497,7 +1486,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
             const value = state.emitDiagnosticsPerFile.get(key)!;
             result = append(result, [
                 toFileId(key),
-                toReusableDiagnostic(value, key) as ReusableDiagnosticWithLocation[],
+                toReusableDiagnostic(value, key),
             ]);
         }
         return result;
@@ -1871,16 +1860,16 @@ export function createBuilderProgram(
                 getPendingEmitKind(state.programEmitPending, emitKind) :
                 undefined;
             state.seenProgramEmit = emitKind | (state.seenProgramEmit || BuilderFileEmit.None);
-            setEmitDiagnosticsPerFile(result.diagnostics as readonly DiagnosticWithLocation[]);
+            setEmitDiagnosticsPerFile(result.diagnostics);
             state.buildInfoEmitPending = true;
         }
         return { result, affected };
     }
 
-    function setEmitDiagnosticsPerFile(diagnostics: readonly DiagnosticWithLocation[]) {
+    function setEmitDiagnosticsPerFile(diagnostics: readonly Diagnostic[]) {
         // Update the d.ts diagnostics since they always come with Location, skip diagnsotics without file,
         // they could be semantic diagnsotic with noEmitOnError or other kind of diagnostics
-        let emitDiagnosticsPerFile: Map<Path, DiagnosticWithLocation[]> | undefined;
+        let emitDiagnosticsPerFile: Map<Path, Diagnostic[]> | undefined;
         diagnostics.forEach(d => {
             if (!d.file) return; // Dont cache without fileName
             let diagnostics = emitDiagnosticsPerFile?.get(d.file.resolvedPath);
@@ -2070,7 +2059,7 @@ export function createBuilderProgram(
             targetSourceFile,
             emitOnlyDtsFiles,
             /*isForDtsErrors*/ false,
-            emitResult.diagnostics as readonly DiagnosticWithLocation[],
+            emitResult.diagnostics,
         );
         return emitResult;
     }
@@ -2083,7 +2072,7 @@ export function createBuilderProgram(
     ) {
         if (!targetSourceFile && kind !== BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
             clearAffectedFilesPendingEmit(state, emitOnlyDtsFiles, isForDtsErrors);
-            setEmitDiagnosticsPerFile(diagnostics as readonly DiagnosticWithLocation[]);
+            setEmitDiagnosticsPerFile(diagnostics);
         }
     }
 
@@ -2095,7 +2084,7 @@ export function createBuilderProgram(
         if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
             assertSourceFileOkWithoutNextAffectedCall(state, sourceFile);
             let affectedEmitResult: AffectedFileResult<EmitResult>;
-            let diagnostics: DiagnosticWithLocation[] | undefined;
+            let diagnostics: Diagnostic[] | undefined;
             while (
                 affectedEmitResult = emitNextAffectedFileOrDtsErrors(
                     /*writeFile*/ undefined,
@@ -2105,11 +2094,11 @@ export function createBuilderProgram(
                     /*isForDtsErrors*/ true,
                 )
             ) {
-                if (!sourceFile) diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics as DiagnosticWithLocation[]);
+                if (!sourceFile) diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
             }
-            return !sourceFile ?
-                diagnostics || emptyArray :
-                state.emitDiagnosticsPerFile?.get(sourceFile.resolvedPath) || emptyArray;
+            return (
+                !sourceFile ? diagnostics : state.emitDiagnosticsPerFile?.get(sourceFile.resolvedPath)
+            ) as readonly DiagnosticWithLocation[] | undefined || emptyArray;
         }
         else {
             const result = state.program.getDeclarationDiagnostics(sourceFile, cancellationToken);
@@ -2390,7 +2379,7 @@ export function createBuilderProgramUsingIncrementalBuildInfo(
         return semanticDiagnostics;
     }
 
-    function toPerFileEmitDiagnostics(diagnostics: readonly IncrementalBuildInfoEmitDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnosticWithLocation[]> | undefined {
+    function toPerFileEmitDiagnostics(diagnostics: readonly IncrementalBuildInfoEmitDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
         return diagnostics && arrayToMap(diagnostics, value => toFilePath(value[0]), value => value[1]);
     }
 }
