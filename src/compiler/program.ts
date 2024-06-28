@@ -4437,16 +4437,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (!getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "emitDeclarationOnly", "declaration", "composite");
             }
-
-            if (options.noEmit) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
-            }
-        }
-
-        if (options.noCheck) {
-            if (options.noEmit) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noCheck", "noEmit");
-            }
         }
 
         if (
