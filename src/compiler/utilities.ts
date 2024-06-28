@@ -10006,8 +10006,57 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
 }
 
 /** @internal */
-export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
-    return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
+export interface ParsedPatterns {
+    matchableStringSet: ReadonlySet<string> | undefined;
+    sortedPatterns: (readonly Pattern[]) | undefined;
+}
+
+const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
+
+/**
+ * Divides patterns into a set of exact specifiers and sorted patterns.
+ * NOTE that this function caches, and assumes the same `paths` argument will
+ * never be provided with a different value for `sortByAggregateLength`.
+ * 
+ * @internal
+ **/
+export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength: boolean = false): ParsedPatterns {
+    let result = parsedPatternsCache.get(paths)
+    if (result !== undefined) {
+        return result;
+    }
+
+    let matchableStringSet: Set<string> | undefined;
+    let sortedPatterns: Pattern[] | undefined;
+    
+    const pathList = getOwnKeys(paths);
+    for (const path of pathList) {
+        const patternOrStr = tryParsePattern(path)
+        if (patternOrStr === undefined) {
+            continue;
+        }
+        else if (typeof patternOrStr === "string") {
+            (matchableStringSet ??= new Set()).add(patternOrStr);
+        }
+        else {
+            (sortedPatterns ??= []).push(patternOrStr);
+        }
+    }
+
+    sortedPatterns?.sort((a, b) => {
+        const prefixComparison = compareStringsCaseSensitive(a.prefix, b.prefix)
+        if (prefixComparison === 0 && sortByAggregateLength) {
+            return a.suffix.length - b.suffix.length;
+        }
+        return prefixComparison;
+    });
+
+    parsedPatternsCache.set(paths, result = {
+        matchableStringSet,
+        sortedPatterns,
+    });
+
+    return result;
 }
 
 /** @internal */
@@ -10063,13 +10112,6 @@ export const emptyFileSystemEntries: FileSystemEntries = {
     directories: emptyArray,
 };
 
-interface MatchPatternOrExactCacheEntry {
-    matchableStringSet: Set<string>;
-    sortedPatterns: Pattern[];
-}
-
-const patternOrStringsCache = new WeakMap<readonly (string | Pattern)[], MatchPatternOrExactCacheEntry>();
-
 /**
  * patternOrStrings contains both patterns (containing "*") and regular strings.
  * Return an exact match if possible, or a pattern match, or undefined.
@@ -10077,39 +10119,14 @@ const patternOrStringsCache = new WeakMap<readonly (string | Pattern)[], MatchPa
  *
  * @internal
  */
-export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
-    let matchableStringSet: Set<string>;
-    let sortedPatterns: Pattern[];
+export function matchPatternOrExact(patternOrStrings: ParsedPatterns, candidate: string): string | Pattern | undefined {
+    const { matchableStringSet, sortedPatterns } = patternOrStrings;
 
-    const cacheEntry = patternOrStringsCache.get(patternOrStrings);
-    if (cacheEntry !== undefined) {
-        ({ matchableStringSet, sortedPatterns } = cacheEntry);
-    }
-    else {
-        matchableStringSet = new Set();
-        sortedPatterns = [];
-
-        for (const patternOrString of patternOrStrings) {
-            if (typeof patternOrString === "string") {
-                matchableStringSet.add(patternOrString);
-            }
-            else {
-                sortedPatterns.push(patternOrString);
-            }
-        }
-
-        sortedPatterns.sort((a, b) => compareStringsCaseSensitive(a.prefix, b.prefix));
-
-        patternOrStringsCache.set(patternOrStrings, {
-            matchableStringSet,
-            sortedPatterns,
-        });
-    }
-
-    if (matchableStringSet.has(candidate)) {
+    if (matchableStringSet?.has(candidate)) {
         return candidate;
     }
-    if (sortedPatterns.length === 0) {
+
+    if (sortedPatterns === undefined || sortedPatterns.length === 0) {
         return undefined;
     }
 

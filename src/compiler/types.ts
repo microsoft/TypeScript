@@ -7512,7 +7512,6 @@ export interface ConfigFileSpecs {
     validatedFilesSpecBeforeSubstitution: readonly string[] | undefined;
     validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined;
     validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
-    pathPatterns: readonly (string | Pattern)[] | undefined;
     isDefaultIncludeSpec: boolean;
 }
 
