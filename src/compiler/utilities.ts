@@ -28,7 +28,6 @@ import {
     BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
-    binarySearchKey,
     BindableObjectDefinePropertyCall,
     BindableStaticAccessExpression,
     BindableStaticElementAccessExpression,
@@ -340,7 +339,6 @@ import {
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isParenthesizedTypeNode,
-    isPatternMatch,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -10133,60 +10131,7 @@ export function matchPatternOrExact(patternOrStrings: ParsedPatterns, candidate:
         return undefined;
     }
 
-    let index = binarySearchKey(sortedPatterns, candidate, getPatternPrefix, compareStringsCaseSensitive);
-    if (index < 0) {
-        index = ~index;
-    }
-
-    if (index >= sortedPatterns.length) {
-        // If we are past the end of the array, then the candidate length just exceeds the last prefix.
-        // Bump us back into a reasonable range.
-        index--;
-    }
-
-    // `sortedPatterns` is sorted by prefixes, where longer prefixes should occur later;
-    // however, the sort is stable, so the original input order of patterns is preserved within each group.
-    // So for something like
-    //
-    //  { prefix: "foo/", suffix: "bar"}, { "prefix: "", suffix: "" }, { prefix: "foo/", suffix: "" }, { "prefix: "", suffix: "bar" },
-    //
-    // we will end up with
-    //
-    //  { "prefix: "", suffix: "" }, { "prefix: "", suffix: "bar" }, { prefix: "foo/", suffix: "bar"}, { prefix: "foo/", suffix: "" }
-    //
-    // guaranteeing that within a group, the first match is ideal.
-    //
-    // Now the binary search may have landed us in the very middle of a group. If we are searching for "foo/" in
-    //
-    //  ..., { prefix: "foo/", suffix: "" }, { prefix: "foo/", suffix: "my-suffix" }, ...
-    //
-    // then we could have ended up on an exact match. Keep walking backwards on exact matches until we find the first.
-    // This will allow us to try out all patterns with an identical prefix, while maintaining the relative original order of the
-    // patterns as specified.
-    const groupPrefix = sortedPatterns[index].prefix;
-    while (index > 0 && groupPrefix === sortedPatterns[index - 1].prefix) {
-        index--;
-    }
-
-    for (let i = index; i < sortedPatterns.length; i++) {
-        const currentPattern = sortedPatterns[i];
-        if (currentPattern.prefix !== groupPrefix) {
-            break;
-        }
-
-        if (isPatternMatch(currentPattern, candidate)) {
-            return currentPattern;
-        }
-    }
-
-    // We could not find a pattern within the group that matched.
-    // Technically we could walk backwards from here and find likely matches.
-    // For now, we'll just do a simple linear search up to the current group index.
-    return findBestPatternMatch(sortedPatterns, _ => _, candidate, /*endIndex*/ index);
-}
-
-function getPatternPrefix(pattern: Pattern) {
-    return pattern.prefix;
+    return findBestPatternMatch(sortedPatterns, _ => _, candidate);
 }
 
 /** @internal */
