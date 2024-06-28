@@ -1,71 +1,13 @@
 import { jsonToReadableText } from "../helpers.js";
-import { forEachNoEmitOnErrorScenario } from "../helpers/noEmitOnError.js";
-import {
-    noChangeRun,
-    TestTscEdit,
-    verifyTsc,
-} from "../helpers/tsc.js";
+import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
+import { verifyTsc } from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: noEmitOnError::", () => {
-    forEachNoEmitOnErrorScenario(
-        (fsContents, cwd, executingFilePath) => loadProjectFromFiles(fsContents, { cwd, executingFilePath }),
-        (scnearioName, fs) => {
-            describe(scnearioName("verify noEmitOnError"), () => {
-                function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
-                    verifyTsc({
-                        scenario: "noEmitOnError",
-                        subScenario: scnearioName(subScenario),
-                        fs,
-                        commandLineArgs: [],
-                        modifyFs,
-                        edits: [
-                            noChangeRun,
-                            {
-                                caption: "incremental-declaration-doesnt-change",
-                                edit: fixModifyFs,
-                            },
-                            noChangeRun,
-                        ],
-                        baselinePrograms: true,
-                    });
-                }
-                verifyNoEmitOnError(
-                    "syntax errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                            "utf-8",
-                        ),
-                );
-
-                verifyNoEmitOnError(
-                    "semantic errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                            "utf-8",
-                        ),
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                            "utf-8",
-                        ),
-                );
-            });
-        },
-    );
+    forEachNoEmitOnErrorScenarioTsc([]);
 
     verifyTsc({
         scenario: "noEmitOnError",

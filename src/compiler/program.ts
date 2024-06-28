@@ -1165,11 +1165,6 @@ function getLibFileNameFromLibReference(libReference: FileReference) {
     return libMap.get(libName);
 }
 
-interface DiagnosticCache<T extends Diagnostic> {
-    perFile?: Map<Path, readonly T[]>;
-    allDiagnostics?: readonly T[];
-}
-
 /** @internal */
 export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile {
     switch (reason?.kind) {
@@ -1555,8 +1550,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let filesWithReferencesProcessed: Set<Path> | undefined;
     let fileReasonsToChain: Map<Path, FileReasonToChainCache> | undefined;
     let reasonToRelatedInfo: Map<FileIncludeReason, DiagnosticWithLocation | false> | undefined;
-    const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
-    const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
+    let cachedBindAndCheckDiagnosticsForFile: Map<Path, readonly Diagnostic[]> | undefined;
+    let cachedDeclarationDiagnosticsForFile: Map<Path, readonly DiagnosticWithLocation[]> | undefined;
 
     let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
     let automaticTypeDirectiveNames: string[] | undefined;
@@ -2921,10 +2916,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         );
     }
 
-    function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
-        return sourceFile
-            ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
-            : cachedBindAndCheckDiagnosticsForFile.allDiagnostics;
+    function getCachedSemanticDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] | undefined {
+        return cachedBindAndCheckDiagnosticsForFile?.get(sourceFile.path);
     }
 
     function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
@@ -2945,14 +2938,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
-        const options = program.getCompilerOptions();
-        // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
-        if (!sourceFile || options.outFile) {
-            return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
-        }
-        else {
-            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
-        }
+        return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
     }
 
     function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): readonly DiagnosticWithLocation[] {
@@ -3001,7 +2987,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (nodesToCheck) {
             return getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken, nodesToCheck);
         }
-        return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
+        let result = cachedBindAndCheckDiagnosticsForFile?.get(sourceFile.path);
+        if (!result) {
+            (cachedBindAndCheckDiagnosticsForFile ??= new Map()).set(
+                sourceFile.path,
+                result = getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken),
+            );
+        }
+        return result;
     }
 
     function getBindAndCheckDiagnosticsForFileNoCache(
@@ -3361,11 +3354,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
-        return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
+    function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
+        let result = cachedDeclarationDiagnosticsForFile?.get(sourceFile.path);
+        if (!result) {
+            (cachedDeclarationDiagnosticsForFile ??= new Map()).set(
+                sourceFile.path,
+                result = getDeclarationDiagnosticsForFileNoCache(sourceFile, cancellationToken),
+            );
+        }
+        return result;
     }
 
-    function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
+    function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
         return runWithCancellationToken(() => {
             const resolver = getTypeChecker().getEmitResolver(sourceFile, cancellationToken);
             // Don't actually write any files since we're just getting diagnostics.
@@ -3373,31 +3373,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function getAndCacheDiagnostics<T extends SourceFile | undefined, U extends Diagnostic>(
-        sourceFile: T,
-        cancellationToken: CancellationToken | undefined,
-        cache: DiagnosticCache<U>,
-        getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined) => readonly U[],
-    ): readonly U[] {
-        const cachedResult = sourceFile
-            ? cache.perFile?.get(sourceFile.path)
-            : cache.allDiagnostics;
-
-        if (cachedResult) {
-            return cachedResult;
-        }
-        const result = getDiagnostics(sourceFile, cancellationToken);
-        if (sourceFile) {
-            (cache.perFile || (cache.perFile = new Map())).set(sourceFile.path, result);
-        }
-        else {
-            cache.allDiagnostics = result;
-        }
-        return result;
-    }
-
     function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
-        return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
+        return sourceFile.isDeclarationFile ? emptyArray : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
     }
 
     function getOptionsDiagnostics(): SortedReadonlyArray<Diagnostic> {
@@ -5360,8 +5337,6 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
 ): EmitResult | undefined {
     const options = program.getCompilerOptions();
     if (options.noEmit) {
-        // Cache the semantic diagnostics
-        program.getSemanticDiagnostics(sourceFile, cancellationToken);
         return sourceFile ?
             emitSkippedWithNoDiagnostics :
             program.emitBuildInfo(writeFile, cancellationToken);
