@@ -247,6 +247,7 @@ export default tseslint.config(
             "unicorn/prefer-negative-index": "off",
             "unicorn/no-unreadable-array-destructuring": "off",
             "unicorn/no-negation-in-equality-check": "off", // inaccurate
+            "unicorn/prefer-structured-clone": "off", // Unavailable until Node 17
         },
     },
     {
