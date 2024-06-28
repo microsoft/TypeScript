@@ -9178,14 +9178,15 @@ export class NodeImpl {
         // }
     }
     data: any = undefined;
-    
+
     get emitNode() {
         return this.data?.emitNode;
     }
-    set emitNode(value: any) {
-        if(!this.data) {
-            this.data = { emitNode: value};
-        } else  {
+    set emitNode(value: EmitNode) {
+        if (!this.data) {
+            this.data = { emitNode: value };
+        }
+        else {
             this.data.emitNode = value;
         }
     }
@@ -9194,9 +9195,10 @@ export class NodeImpl {
         return this.data?.original;
     }
     set original(value: any) {
-        if(!this.data) {
-            this.data = { original: value};
-        } else  {
+        if (!this.data) {
+            this.data = { original: value };
+        }
+        else {
             this.data.original = value;
         }
     }
