@@ -474,18 +474,13 @@ export const enum NodeFactoryFlags {
 }
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
-<<<<<<< experiment-monomorphic-node
 type NodeData<T extends Node> =
     & Readonly<Omit<T, keyof Identifier>>
     & Mutable<Pick<T, Extract<keyof Identifier, keyof T>>>
     & {
         data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol">>>> | undefined;
     };
-/** @internal */
-=======
-
 /** @internal @knipignore */
->>>>>>> main
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
     nodeFactoryPatchers.push(fn);
 }
