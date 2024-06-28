@@ -246,6 +246,7 @@ export default tseslint.config(
             "unicorn/prefer-top-level-await": "off",
             "unicorn/prefer-negative-index": "off",
             "unicorn/no-unreadable-array-destructuring": "off",
+            "unicorn/no-negation-in-equality-check": "off", // inaccurate
         },
     },
     {

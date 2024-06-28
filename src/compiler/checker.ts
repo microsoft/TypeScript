@@ -42326,6 +42326,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // For a union, get a union of the awaited types of each constituent.
         if (type.flags & TypeFlags.Union) {
+            // We want to indicate that the search should go backwards for perf.
+            // eslint-disable-next-line unicorn/prefer-includes
             if (awaitedTypeStack.lastIndexOf(type.id) >= 0) {
                 if (errorNode) {
                     error(errorNode, Diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method);
@@ -42350,6 +42352,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const thisTypeForErrorOut: { value: Type | undefined; } = { value: undefined };
         const promisedType = getPromisedTypeOfPromise(type, /*errorNode*/ undefined, thisTypeForErrorOut);
         if (promisedType) {
+            // We want to indicate that the search should go backwards for perf.
+            // eslint-disable-next-line unicorn/prefer-includes
             if (type.id === promisedType.id || awaitedTypeStack.lastIndexOf(promisedType.id) >= 0) {
                 // Verify that we don't have a bad actor in the form of a promise whose
                 // promised type is the same as the promise type, or a mutually recursive

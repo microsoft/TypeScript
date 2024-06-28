@@ -195,7 +195,7 @@ export async function cleanTestDirs() {
 export function writeTestConfigFile(tests, skipSysTests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
-        skipSysTests: skipSysTests ? skipSysTests : undefined,
+        skipSysTests: skipSysTests ? true : undefined,
         runners: runners ? runners.split(",") : undefined,
         light,
         workerCount,
