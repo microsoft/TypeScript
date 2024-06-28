@@ -474,6 +474,7 @@ export const enum NodeFactoryFlags {
 }
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
+<<<<<<< experiment-monomorphic-node
 type NodeData<T extends Node> =
     & Readonly<Omit<T, keyof Identifier>>
     & Mutable<Pick<T, Extract<keyof Identifier, keyof T>>>
@@ -481,6 +482,10 @@ type NodeData<T extends Node> =
         data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol">>>> | undefined;
     };
 /** @internal */
+=======
+
+/** @internal @knipignore */
+>>>>>>> main
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
     nodeFactoryPatchers.push(fn);
 }
@@ -7696,10 +7701,8 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
- *
- * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }

@@ -210,7 +210,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -521,7 +528,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

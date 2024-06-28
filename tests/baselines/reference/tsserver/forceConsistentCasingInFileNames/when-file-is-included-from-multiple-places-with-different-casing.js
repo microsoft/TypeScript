@@ -196,7 +196,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/src/struct.d.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -264,10 +271,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -687,7 +690,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -799,10 +805,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 6,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1134,7 +1136,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -1242,7 +1247,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1331,10 +1339,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 10,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1527,7 +1531,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 10
+        "request_seq": 10,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0

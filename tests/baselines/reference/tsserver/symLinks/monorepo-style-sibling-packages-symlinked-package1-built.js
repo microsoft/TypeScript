@@ -289,7 +289,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -361,10 +368,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -463,6 +466,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+Clean dependencies build
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -696,10 +700,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -811,6 +811,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+Build dependencies
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
@@ -1025,10 +1026,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 4,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 

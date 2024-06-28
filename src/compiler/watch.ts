@@ -155,8 +155,7 @@ function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diag
     return false;
 }
 
-/** @internal */
-export const screenStartingMessageCodes: number[] = [
+const screenStartingMessageCodes: number[] = [
     Diagnostics.Starting_compilation_in_watch_mode.code,
     Diagnostics.File_change_detected_Starting_incremental_compilation.code,
 ];
@@ -279,18 +278,18 @@ export function getErrorSummaryText(
 ) {
     if (errorCount === 0) return "";
     const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
-    const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
+    const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError.fileName}:${fileInError.line}`)
         .filter((value, index, self) => self.indexOf(value) === index);
 
     const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
 
     let messageAndArgs: DiagnosticAndArguments;
     if (errorCount === 1) {
-        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
+        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference] : [Diagnostics.Found_1_error];
     }
     else {
         messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
-            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
+            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference] :
             [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
 
@@ -667,6 +666,7 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
         clearTimeout: maybeBind(system, system.clearTimeout) || noop,
+        preferNonRecursiveWatch: system.preferNonRecursiveWatch,
     };
 }
 

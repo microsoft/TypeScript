@@ -83,6 +83,7 @@ import {
     noop,
     normalizePath,
     normalizeSlashes,
+    notImplemented,
     optionDeclarations,
     optionsForWatch,
     orderedRemoveItem,
@@ -170,7 +171,6 @@ import {
     Msg,
     NormalizedPath,
     normalizedPathToPath,
-    nullTypingsInstaller,
     PackageInstalledResponse,
     PackageJsonCache,
     Project,
@@ -183,7 +183,6 @@ import {
     SetTypings,
     ThrottledOperations,
     toNormalizedPath,
-    TypingsCache,
     WatchTypingLocations,
 } from "./_namespaces/ts.server.js";
 import * as protocol from "./protocol.js";
@@ -569,6 +568,16 @@ function findProjectByName<T extends Project>(projectName: string, projects: T[]
     }
 }
 
+export const nullTypingsInstaller: ITypingsInstaller = {
+    isKnownTypesPackageName: returnFalse,
+    // Should never be called because we never provide a types registry.
+    installPackage: notImplemented,
+    enqueueInstallTypingsRequest: noop,
+    attach: noop,
+    onProjectClosed: noop,
+    globalTypingsCacheLocation: undefined!, // TODO: GH#18217
+};
+
 const noopConfigFileWatcher: FileWatcher = { close: noop };
 
 /** @internal */
@@ -787,9 +796,8 @@ function forEachAncestorProject<T>(
  * Goes through project's resolved project references and finds, creates or reloads project per kind
  * If project for this resolved reference exists its used immediately otherwise,
  * follows all references in order, deciding if references of the visited project can be loaded or not
- * @internal
  */
-export function forEachResolvedProjectReferenceProject<T>(
+function forEachResolvedProjectReferenceProject<T>(
     project: ConfiguredProject,
     fileName: string | undefined,
     cb: (child: ConfiguredProject, sentConfigFileDiag: boolean) => T | undefined,
@@ -1074,13 +1082,17 @@ function getHostWatcherMap<T>(): HostWatcherMap<T> {
     return { idToCallbacks: new Map(), pathToId: new Map() };
 }
 
+function getCanUseWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined) {
+    return !!canUseWatchEvents && !!service.eventHandler && !!service.session;
+}
+
 function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined): WatchFactoryHost | undefined {
-    if (!canUseWatchEvents || !service.eventHandler || !service.session) return undefined;
+    if (!getCanUseWatchEvents(service, canUseWatchEvents)) return undefined;
     const watchedFiles = getHostWatcherMap<FileWatcherCallback>();
     const watchedDirectories = getHostWatcherMap<DirectoryWatcherCallback>();
     const watchedDirectoriesRecursive = getHostWatcherMap<DirectoryWatcherCallback>();
     let ids = 1;
-    service.session.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
+    service.session!.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
         onWatchChange((req as protocol.WatchChangeRequest).arguments);
         return { responseRequired: false };
     });
@@ -1173,9 +1185,6 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
 }
 
 export class ProjectService {
-    /** @internal */
-    readonly typingsCache: TypingsCache;
-
     /** @internal */
     readonly documentRegistry: DocumentRegistry;
 
@@ -1321,6 +1330,7 @@ export class ProjectService {
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
+    /** @internal */ canUseWatchEvents: boolean;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -1367,8 +1377,6 @@ export class ProjectService {
 
         this.typingsInstaller.attach(this);
 
-        this.typingsCache = new TypingsCache(this.typingsInstaller);
-
         this.hostConfiguration = {
             formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
             preferences: emptyOptions,
@@ -1392,6 +1400,7 @@ export class ProjectService {
                 log,
                 getDetailWatchInfo,
             );
+        this.canUseWatchEvents = getCanUseWatchEvents(this, opts.canUseWatchEvents);
         opts.incrementalVerifier?.(this);
     }
 
@@ -1481,11 +1490,16 @@ export class ProjectService {
         switch (response.kind) {
             case ActionSet:
                 // Update the typing files and update the project
-                project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
+                project.updateTypingFiles(
+                    response.compilerOptions,
+                    response.typeAcquisition,
+                    response.unresolvedImports,
+                    response.typings,
+                );
                 return;
             case ActionInvalidate:
                 // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
-                this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
+                project.enqueueInstallTypingsForProject(/*forceRefresh*/ true);
                 return;
         }
     }
