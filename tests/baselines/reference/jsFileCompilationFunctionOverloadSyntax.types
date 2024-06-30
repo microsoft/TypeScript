@@ -3,4 +3,5 @@
 === a.js ===
 function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 

@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/file1.js :: Config file name: /a/b/jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/file1.js ProjectRootPath: undefined:: Result: /a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/jsconfig.json 2000 undefined Project: /a/b/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -294,7 +293,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

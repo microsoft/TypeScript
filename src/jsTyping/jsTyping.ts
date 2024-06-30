@@ -29,10 +29,8 @@ import {
     TypeAcquisition,
     Version,
     versionMajorMinor,
-} from "./_namespaces/ts";
-import {
-    stringifyIndented,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { stringifyIndented } from "./_namespaces/ts.server.js";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
@@ -113,8 +111,7 @@ const unprefixedNodeCoreModuleList = [
     "zlib",
 ];
 
-/** @internal */
-export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
+const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
 
 /** @internal */
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];

@@ -6,18 +6,22 @@ module Moclodule {
     export interface Someinterface {
         foo(): void;
 >foo : () => void
+>    : ^^^^^^    
     }
 }
 
 class Moclodule {
 >Moclodule : Moclodule
+>          : ^^^^^^^^^
 }
 
 // Instantiated module.
 module Moclodule {
 >Moclodule : typeof Moclodule
+>          : ^^^^^^^^^^^^^^^^
 
     export class Manager {
 >Manager : Manager
+>        : ^^^^^^^
     }
 }

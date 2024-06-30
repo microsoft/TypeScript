@@ -33,87 +33,113 @@ export class myClass { }
 /a/lib/tsc.js -b -w app
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/user/username/projects/solution/app/fileWithError.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myClassWithError = void 0;
+exports.myClassWithError = /** @class */ (function () {
+    function class_1() {
+        this.p = 12;
+    }
+    class_1.prototype.tags = function () { };
+    return class_1;
+}());
+
+
+//// [/user/username/projects/solution/app/fileWithoutError.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myClass = void 0;
+var myClass = /** @class */ (function () {
+    function myClass() {
+    }
+    return myClass;
+}());
+exports.myClass = myClass;
+
+
+//// [/user/username/projects/solution/app/fileWithoutError.d.ts]
+export declare class myClass {
+}
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"emitDiagnosticsPerFile":[[2,[{"start":11,"length":16,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"emitSignatures":[2],"latestChangedDtsFile":"./fileWithoutError.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./filewitherror.ts",
-      "./filewithouterror.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./filewitherror.ts",
+    "./filewithouterror.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./filewitherror.ts": {
-        "version": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
-        "signature": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };"
-      },
-      "./filewithouterror.ts": {
-        "original": {
-          "version": "-11785903855-export class myClass { }",
-          "signature": "-7432826827-export declare class myClass {\n}\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./filewitherror.ts": {
+      "version": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",
+      "signature": "-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };"
+    },
+    "./filewithouterror.ts": {
+      "original": {
         "version": "-11785903855-export class myClass { }",
         "signature": "-7432826827-export declare class myClass {\n}\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./filewitherror.ts"
-      ],
-      [
-        3,
-        "./filewithouterror.ts"
-      ]
+      },
+      "version": "-11785903855-export class myClass { }",
+      "signature": "-7432826827-export declare class myClass {\n}\n"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./filewitherror.ts"
     ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./filewitherror.ts",
-      "./filewithouterror.ts"
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./filewitherror.ts",
-        "Js | Dts"
-      ],
-      [
-        "./filewithouterror.ts",
-        "Js | Dts"
-      ]
-    ],
-    "emitSignatures": [
-      "./filewitherror.ts",
+    [
+      3,
       "./filewithouterror.ts"
     ]
+  ],
+  "options": {
+    "composite": true
   },
+  "emitDiagnosticsPerFile": [
+    [
+      "./filewitherror.ts",
+      [
+        {
+          "start": 11,
+          "length": 16,
+          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "category": 1,
+          "code": 4094
+        }
+      ]
+    ]
+  ],
+  "emitSignatures": [
+    "./filewitherror.ts"
+  ],
+  "latestChangedDtsFile": "./fileWithoutError.d.ts",
   "version": "FakeTSVersion",
-  "size": 915
+  "size": 1035
 }
 
 
@@ -136,6 +162,7 @@ Program root files: [
 Program options: {
   "composite": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
 }
 Program structureReused: Not
@@ -172,77 +199,15 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:51 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./fileWithoutError.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./filewitherror.ts",
-      "./filewithouterror.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
-      },
-      "./filewitherror.ts": {
-        "original": {
-          "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
-          "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
-        },
-        "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
-        "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
-      },
-      "./filewithouterror.ts": {
-        "original": {
-          "version": "-11785903855-export class myClass { }",
-          "signature": "-7432826827-export declare class myClass {\n}\n"
-        },
-        "version": "-11785903855-export class myClass { }",
-        "signature": "-7432826827-export declare class myClass {\n}\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./filewitherror.ts"
-      ],
-      [
-        3,
-        "./filewithouterror.ts"
-      ]
-    ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./filewitherror.ts",
-      "./filewithouterror.ts"
-    ],
-    "latestChangedDtsFile": "./fileWithoutError.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1022
-}
 
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
@@ -256,29 +221,67 @@ exports.myClassWithError = /** @class */ (function () {
 }());
 
 
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"latestChangedDtsFile":"./fileWithError.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./filewitherror.ts",
+    "./filewithouterror.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./filewitherror.ts": {
+      "original": {
+        "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
+        "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
+      },
+      "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
+      "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
+    },
+    "./filewithouterror.ts": {
+      "original": {
+        "version": "-11785903855-export class myClass { }",
+        "signature": "-7432826827-export declare class myClass {\n}\n"
+      },
+      "version": "-11785903855-export class myClass { }",
+      "signature": "-7432826827-export declare class myClass {\n}\n"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./filewitherror.ts"
+    ],
+    [
+      3,
+      "./filewithouterror.ts"
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "latestChangedDtsFile": "./fileWithError.d.ts",
+  "version": "FakeTSVersion",
+  "size": 951
+}
+
 //// [/user/username/projects/solution/app/fileWithError.d.ts]
 export declare var myClassWithError: {
     new (): {
         tags(): void;
     };
 };
-
-
-//// [/user/username/projects/solution/app/fileWithoutError.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.myClass = void 0;
-var myClass = /** @class */ (function () {
-    function myClass() {
-    }
-    return myClass;
-}());
-exports.myClass = myClass;
-
-
-//// [/user/username/projects/solution/app/fileWithoutError.d.ts]
-export declare class myClass {
-}
 
 
 
@@ -290,6 +293,7 @@ Program root files: [
 Program options: {
   "composite": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
 }
 Program structureReused: Not

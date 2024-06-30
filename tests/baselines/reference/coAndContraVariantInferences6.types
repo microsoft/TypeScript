@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/coAndContraVariantInferences6.ts] ////
+
+=== coAndContraVariantInferences6.ts ===
+// https://github.com/microsoft/TypeScript/issues/57911
+
+interface ExactProps {
+  value: "A" | "B";
+>value : "A" | "B"
+>      : ^^^^^^^^^
+}
+interface FunctionComponent<P = {}> {
+  (props: P): ReactElement<any> | null;
+>props : P
+>      : ^
+}
+declare class Component<P> {
+>Component : Component<P>
+>          : ^^^^^^^^^^^^
+
+  constructor(props: P);
+>props : P
+>      : ^
+}
+interface ComponentClass<P = {}> {
+  new (props: P): Component<P>;
+>props : P
+>      : ^
+}
+
+interface ReactElement<
+  T extends string | JSXElementConstructor<any> =
+    | string
+    | JSXElementConstructor<any>,
+> {
+  type: T;
+>type : T
+>     : ^
+}
+
+type JSXElementConstructor<P> =
+>JSXElementConstructor : JSXElementConstructor<P>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  | ((props: P) => ReactElement<any> | null)
+>props : P
+>      : ^
+
+  | (new (props: P) => Component<any>);
+>props : P
+>      : ^
+
+declare function createElementIsolated<P extends {}>(
+>createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
+>                      : ^ ^^^^^^^^^  ^^    ^^                                                 ^^     ^^^        ^^^^^    
+
+  type: FunctionComponent<P> | ComponentClass<P> | string,
+>type : string | FunctionComponent<P> | ComponentClass<P>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  props?: P | null,
+>props : P | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+declare let WrapperIsolated: JSXElementConstructor<ExactProps>;
+>WrapperIsolated : JSXElementConstructor<ExactProps>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+createElementIsolated(WrapperIsolated, { value: "C" });
+>createElementIsolated(WrapperIsolated, { value: "C" }) : void
+>                                                       : ^^^^
+>createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
+>                      : ^ ^^^^^^^^^  ^^    ^^                                                 ^^     ^^^        ^^^^^    
+>WrapperIsolated : JSXElementConstructor<ExactProps>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ value: "C" } : { value: "C"; }
+>               : ^^^^^^^^^^^^^^^
+>value : "C"
+>      : ^^^
+>"C" : "C"
+>    : ^^^
+
+declare const props: any[];
+>props : any[]
+>      : ^^^^^
+
+declare const stat: any;
+>stat : any
+>     : ^^^
+
+[].push.apply(props, stat.properties);
+>[].push.apply(props, stat.properties) : number
+>                                      : ^^^^^^
+>[].push.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>              : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>[].push : (...items: never[]) => number
+>        : ^^^^     ^^^^^^^^^^^^^^      
+>[] : never[]
+>   : ^^^^^^^
+>push : (...items: never[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^      
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>props : any[]
+>      : ^^^^^
+>stat.properties : any
+>                : ^^^
+>stat : any
+>     : ^^^
+>properties : any
+>           : ^^^
+

@@ -4,3 +4,7 @@
 type A<T extends Unknown> = {}
 
 //// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js]
+
+
+//// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts]
+type A<T extends Unknown> = {};

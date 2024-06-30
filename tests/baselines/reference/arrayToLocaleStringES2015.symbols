@@ -1,0 +1,306 @@
+//// [tests/cases/compiler/arrayToLocaleStringES2015.ts] ////
+
+=== arrayToLocaleStringES2015.ts ===
+let str: string;
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+
+const arr = [1, 2, 3];
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
+
+str = arr.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = arr.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 1, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 4, 35))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 4, 54))
+
+const dates: readonly Date[] = [new Date(), new Date()];
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = dates.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = dates.toLocaleString('fr'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 9, 34))
+
+const mixed = [1, new Date(), 59782, new Date()];
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = mixed.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = mixed.toLocaleString('fr'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 14, 34))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 14, 53))
+
+str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 11, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 15, 68))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 15, 85))
+>timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 15, 104))
+
+const int8Array = new Int8Array(3);
+>int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2015.ts, 17, 5))
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = int8Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2015.ts, 17, 5))
+>toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int8Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2015.ts, 17, 5))
+>toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES2015.ts, 17, 5))
+>toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 20, 41))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 20, 60))
+
+const uint8Array = new Uint8Array(3);
+>uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2015.ts, 22, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = uint8Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2015.ts, 22, 5))
+>toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint8Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2015.ts, 22, 5))
+>toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES2015.ts, 22, 5))
+>toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 25, 42))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 25, 61))
+
+const uint8ClampedArray = new Uint8ClampedArray(3);
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2015.ts, 27, 5))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = uint8ClampedArray.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2015.ts, 27, 5))
+>toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint8ClampedArray.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2015.ts, 27, 5))
+>toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES2015.ts, 27, 5))
+>toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 30, 49))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 30, 68))
+
+const int16Array = new Int16Array(3);
+>int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2015.ts, 32, 5))
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = int16Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2015.ts, 32, 5))
+>toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int16Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2015.ts, 32, 5))
+>toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES2015.ts, 32, 5))
+>toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 35, 42))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 35, 61))
+
+const uint16Array = new Uint16Array(3);
+>uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2015.ts, 37, 5))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = uint16Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2015.ts, 37, 5))
+>toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint16Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2015.ts, 37, 5))
+>toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES2015.ts, 37, 5))
+>toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 40, 43))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 40, 62))
+
+const int32Array = new Int32Array(3);
+>int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2015.ts, 42, 5))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = int32Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2015.ts, 42, 5))
+>toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int32Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2015.ts, 42, 5))
+>toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES2015.ts, 42, 5))
+>toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 45, 42))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 45, 61))
+
+const uint32Array = new Uint32Array(3);
+>uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2015.ts, 47, 5))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = uint32Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2015.ts, 47, 5))
+>toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint32Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2015.ts, 47, 5))
+>toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES2015.ts, 47, 5))
+>toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 50, 43))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 50, 62))
+
+const float32Array = new Float32Array(3);
+>float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2015.ts, 52, 5))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = float32Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2015.ts, 52, 5))
+>toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = float32Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2015.ts, 52, 5))
+>toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES2015.ts, 52, 5))
+>toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 55, 44))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 55, 63))
+
+const float64Array = new Float64Array(3);
+>float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2015.ts, 57, 5))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+str = float64Array.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2015.ts, 57, 5))
+>toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = float64Array.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2015.ts, 57, 5))
+>toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 0, 3))
+>float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES2015.ts, 57, 5))
+>toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 60, 44))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 60, 63))
+
