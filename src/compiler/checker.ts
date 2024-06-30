@@ -16215,9 +16215,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const length = types.length;
             let i = 0;
             while (i < length) {
-                const startId = types[i].id;
+                const startId = types[i]?.id;
                 let count = 1;
-                while (i + count < length && types[i + count].id === startId + count) {
+                while (i + count < length && types[i + count]?.id === startId + count) {
                     count++;
                 }
                 if (result.length) {

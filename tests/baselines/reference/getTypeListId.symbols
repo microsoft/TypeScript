@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/getTypeListId.ts] ////
+
+=== getTypeListId.ts ===
+function f<_T, _S>() {
+>f : Symbol(f, Decl(getTypeListId.ts, 0, 0))
+>_T : Symbol(_T, Decl(getTypeListId.ts, 0, 11))
+>_S : Symbol(_S, Decl(getTypeListId.ts, 0, 14))
+
+	interface NumArray<T extends number> extends Array<T> {}
+>NumArray : Symbol(NumArray, Decl(getTypeListId.ts, 0, 22))
+>T : Symbol(T, Decl(getTypeListId.ts, 1, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(getTypeListId.ts, 1, 20))
+
+	type X = NumArray<X extends {} ? number : number>;
+>X : Symbol(X, Decl(getTypeListId.ts, 1, 57))
+>NumArray : Symbol(NumArray, Decl(getTypeListId.ts, 0, 22))
+>X : Symbol(X, Decl(getTypeListId.ts, 1, 57))
+}
+
