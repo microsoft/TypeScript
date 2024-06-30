@@ -20530,6 +20530,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // TYPE CHECKING
 
     function isTypeIdenticalTo(source: Type, target: Type): boolean {
+        // const potentiallyRelated = isTypePotentiallyRelated(source, target);
+        // if (potentiallyRelated !== Ternary.Maybe) return !!potentiallyRelated;
         return isTypeRelatedTo(source, target, identityRelation);
     }
 
@@ -20556,6 +20558,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeAssignableTo(source: Type, target: Type): boolean {
         return isTypeRelatedTo(source, target, assignableRelation);
     }
+
+    // function isTypePotentiallyRelated(source: Type, target: Type): Ternary {
+    //     if (source === target) return Ternary.True;
+
+    //     if (
+    //         source.flags & TypeFlags.Literal
+    //         && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
+    //         && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
+    //     ) {
+    //         if (source.flags & TypeFlags.BooleanLiteral) {
+    //             const sourceIsTrue = source === trueType || source === regularTrueType;
+    //             const targetIsTrue = target === trueType || target === regularTrueType;
+    //             return sourceIsTrue === targetIsTrue ? Ternary.True : Ternary.False;
+    //         }
+    //         return (source as LiteralType).value === (target as LiteralType).value ? Ternary.True : Ternary.False;
+    //     }
+
+    //     return Ternary.Maybe;
+    // }
 
     // An object type S is considered to be derived from an object type T if
     // S is a union type and every constituent of S is derived from T,
@@ -21553,6 +21574,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (source === target) {
             return true;
+        }
+        if (
+            source.flags & TypeFlags.Literal
+            && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
+            && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
+        ) {
+            if (source.flags & TypeFlags.BooleanLiteral) {
+                const sourceIsTrue = source === regularTrueType;
+                const targetIsTrue = target === regularTrueType;
+                return sourceIsTrue === targetIsTrue;
+            }
+            return (source as LiteralType).value === (target as LiteralType).value;
         }
         if (relation !== identityRelation) {
             if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
