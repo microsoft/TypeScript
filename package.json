@@ -39,9 +39,9 @@
         "!**/.gitattributes"
     ],
     "devDependencies": {
-        "@babel/cli": "^7.23.4",
-        "@babel/core": "^7.23.7",
-        "@babel/plugin-transform-block-scoping": "^7.23.4",
+        "@babel/cli": "^7.24.7",
+        "@babel/core": "^7.24.7",
+        "@babel/plugin-transform-block-scoping": "^7.24.7",
         "@dprint/formatter": "^0.3.0",
         "@dprint/typescript": "0.91.1",
         "@esfx/canceltoken": "^1.0.0",
