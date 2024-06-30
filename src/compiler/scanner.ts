@@ -65,6 +65,8 @@ export interface Scanner {
     hasPrecedingLineBreak(): boolean;
     /** @internal */
     hasPrecedingJSDocComment(): boolean;
+    /** @internal */
+    hasPrecedingJSDocLeadingAsterisks(): boolean;
     isIdentifier(): boolean;
     isReservedWord(): boolean;
     isUnterminated(): boolean;
@@ -112,8 +114,6 @@ export interface Scanner {
     resetTokenState(pos: number): void;
     /** @internal */
     setSkipJsDocLeadingAsterisks(skip: boolean): void;
-    /** @internal */
-    hasLeadingAsterisks(): boolean;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
     // was in immediately prior to invoking the callback.  The result of invoking the callback
     // is returned from this function.
@@ -1044,7 +1044,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     var commentDirectives: CommentDirective[] | undefined;
     var skipJsDocLeadingAsterisks = 0;
-    var asteriskSeen = false;
 
     var scriptKind = ScriptKind.Unknown;
     var jsDocParsingMode = JSDocParsingMode.ParseAll;
@@ -1065,6 +1064,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
         hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
         hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
+        hasPrecedingJSDocLeadingAsterisks: () => (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) !== 0,
         isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
         isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
         isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
@@ -1099,7 +1099,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         resetTokenState,
         setTextPos: resetTokenState,
         setSkipJsDocLeadingAsterisks,
-        hasLeadingAsterisks,
         tryScan,
         lookAhead,
         scanRange,
@@ -1881,7 +1880,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scan(): SyntaxKind {
         fullStartPos = pos;
         tokenFlags = TokenFlags.None;
-        asteriskSeen = false;
         while (true) {
             tokenStart = pos;
             if (pos >= end) {
@@ -2002,9 +2000,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                     }
                     pos++;
-                    if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                    if (
+                        skipJsDocLeadingAsterisks &&
+                        (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) === 0 &&
+                        (tokenFlags & TokenFlags.PrecedingLineBreak)
+                    ) {
                         // decoration at the start of a JSDoc comment line
-                        asteriskSeen = true;
+                        tokenFlags |= TokenFlags.PrecedingJSDocLeadingAsterisks;
                         continue;
                     }
                     return token = SyntaxKind.AsteriskToken;
@@ -4015,10 +4017,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     function setSkipJsDocLeadingAsterisks(skip: boolean) {
         skipJsDocLeadingAsterisks += skip ? 1 : -1;
-    }
-
-    function hasLeadingAsterisks() {
-        return asteriskSeen;
     }
 }
 
