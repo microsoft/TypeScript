@@ -7989,7 +7989,7 @@ export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclar
 
 /** @internal */
 export function getObjectFlags(type: Type): ObjectFlags {
-    return type.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
+    return type?.flags & TypeFlags.ObjectFlagsType ? (type as ObjectFlagsType).objectFlags : 0;
 }
 
 /** @internal */

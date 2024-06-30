@@ -1,0 +1,11 @@
+getTypeListId.ts(3,11): error TS4109: Type arguments for 'NumArray' circularly reference themselves.
+
+
+==== getTypeListId.ts (1 errors) ====
+    function f<_T, _S>() {
+    	interface NumArray<T extends number> extends Array<T> {}
+    	type X = NumArray<X extends {} ? number : number>;
+    	         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4109: Type arguments for 'NumArray' circularly reference themselves.
+    }
+    

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/getTypeListId.ts] ////
+
+=== getTypeListId.ts ===
+function f<_T, _S>() {
+>f : <_T, _S>() => void
+>  : ^  ^^  ^^^^^^^^^^^
+
+	interface NumArray<T extends number> extends Array<T> {}
+	type X = NumArray<X extends {} ? number : number>;
+>X : f<any>.NumArray
+>  : ^^^^^^^^^^^^^^^
+}
+
