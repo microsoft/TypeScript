@@ -7,8 +7,11 @@ declare module X { export interface bar { } }
 === exportSpecifierReferencingOuterDeclaration2_B.ts ===
 export { X };
 >X : any
+>  : ^^^
 
 export declare function foo(): X.bar;
 >foo : () => X.bar
+>    : ^^^^^^     
 >X : any
+>  : ^^^
 

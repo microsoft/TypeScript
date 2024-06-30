@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts] ////
+
+=== mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts ===
+// https://github.com/microsoft/TypeScript/issues/55932
+
+type Replace<T extends [...any], A, B> = {
+>Replace : Replace<T, A, B>
+>        : ^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K] extends A ? B : T[K];
+};
+
+type ReplaceParams1<ARRAY extends [...any], A, B> = (
+>ReplaceParams1 : ReplaceParams1<ARRAY, A, B>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...args: Replace<ARRAY, A, B>
+>args : Replace<ARRAY, A, B>
+>     : ^^^^^^^^^^^^^^^^^^^^
+
+) => any;
+

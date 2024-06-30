@@ -8,9 +8,13 @@ export module a {
 
 import b = a.I;
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >I : b
+>  : ^
 
 export var x: b;
 >x : b
+>  : ^
 

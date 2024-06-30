@@ -3,12 +3,16 @@
 === es6ImportNameSpaceImportNoNamedExports_0.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export = a;
 >a : number
+>  : ^^^^^^
 
 === es6ImportNameSpaceImportNoNamedExports_1.ts ===
 import * as nameSpaceBinding from "./es6ImportNameSpaceImportNoNamedExports_0"; // error
 >nameSpaceBinding : number
+>                 : ^^^^^^
 

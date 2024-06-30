@@ -1,0 +1,220 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsClasses.ts] ////
+
+=== isolatedDeclarationErrorsClasses.ts ===
+export class Cls {
+>Cls : Cls
+>    : ^^^
+
+    field = 1 + 1;
+>field : number
+>      : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    method() {}
+>method : () => void
+>       : ^^^^^^^^^^
+
+    methodOk(): void {}
+>methodOk : () => void
+>         : ^^^^^^    
+
+    methodParams(p): void {}
+>methodParams : (p: any) => void
+>             : ^ ^^^^^^^^^^    
+>p : any
+>  : ^^^
+
+    methodParams2(p = 1 + 1): void {}
+>methodParams2 : (p?: number) => void
+>              : ^ ^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    get getOnly() { return 1 + 1 }
+>getOnly : number
+>        : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    set setOnly(value) { }
+>setOnly : any
+>        : ^^^
+>value : any
+>      : ^^^
+
+    get getSetBad() { return 0 }
+>getSetBad : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetBad(value) { }
+>getSetBad : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    get getSetOk(): number { return 0 }
+>getSetOk : number
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk(value) { }
+>getSetOk : number
+>         : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    get getSetOk2() { return 0 }
+>getSetOk2 : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk2(value: number) { }
+>getSetOk2 : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    get getSetOk3(): number { return 0 }
+>getSetOk3 : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk3(value: number) { }
+>getSetOk3 : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+let noAnnotationStringName: string = "noAnnotationStringName";
+>noAnnotationStringName : string
+>                       : ^^^^^^
+>"noAnnotationStringName" : "noAnnotationStringName"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+let noParamAnnotationStringName: string = "noParamAnnotationStringName";
+>noParamAnnotationStringName : string
+>                            : ^^^^^^
+>"noParamAnnotationStringName" : "noParamAnnotationStringName"
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const noAnnotationLiteralName = "noAnnotationLiteralName";
+>noAnnotationLiteralName : "noAnnotationLiteralName"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>"noAnnotationLiteralName" : "noAnnotationLiteralName"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
+>noParamAnnotationLiteralName : "noParamAnnotationLiteralName"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"noParamAnnotationLiteralName" : "noParamAnnotationLiteralName"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export class C {
+>C : C
+>  : ^
+
+    // Should not be reported as an isolated declaration error
+    [missing] = 1;
+>[missing] : number
+>          : ^^^^^^
+>missing : any
+>        : ^^^
+>1 : 1
+>  : ^
+    
+    [noAnnotationLiteralName](): void { }
+>[noAnnotationLiteralName] : () => void
+>                          : ^^^^^^    
+>noAnnotationLiteralName : "noAnnotationLiteralName"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [noParamAnnotationLiteralName](v: string): void { }
+>[noParamAnnotationLiteralName] : (v: string) => void
+>                               : ^ ^^      ^^^^^    
+>noParamAnnotationLiteralName : "noParamAnnotationLiteralName"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+
+    [noAnnotationStringName]() { }
+>[noAnnotationStringName] : () => void
+>                         : ^^^^^^^^^^
+>noAnnotationStringName : string
+>                       : ^^^^^^
+
+    [noParamAnnotationStringName](v): void { }
+>[noParamAnnotationStringName] : (v: any) => void
+>                              : ^ ^^^^^^^^^^    
+>noParamAnnotationStringName : string
+>                            : ^^^^^^
+>v : any
+>  : ^^^
+
+    get [noAnnotationStringName]() { return 0;}
+>[noAnnotationStringName] : number
+>                         : ^^^^^^
+>noAnnotationStringName : string
+>                       : ^^^^^^
+>0 : 0
+>  : ^
+
+    set [noParamAnnotationStringName](value) { }
+>[noParamAnnotationStringName] : any
+>                              : ^^^
+>noParamAnnotationStringName : string
+>                            : ^^^^^^
+>value : any
+>      : ^^^
+
+    [("A" + "B") as "AB"] =  1;
+>[("A" + "B") as "AB"] : number
+>                      : ^^^^^^
+>("A" + "B") as "AB" : "AB"
+>                    : ^^^^
+>("A" + "B") : string
+>            : ^^^^^^
+>"A" + "B" : string
+>          : ^^^^^^
+>"A" : "A"
+>    : ^^^
+>"B" : "B"
+>    : ^^^
+>1 : 1
+>  : ^
+
+}
+
+export interface I {
+    [noAnnotationStringName]: 10;
+>[noAnnotationStringName] : 10
+>                         : ^^
+>noAnnotationStringName : string
+>                       : ^^^^^^
+
+    [noAnnotationLiteralName]();
+>[noAnnotationLiteralName] : () => any
+>                          : ^^^^^^^^^
+>noAnnotationLiteralName : "noAnnotationLiteralName"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}

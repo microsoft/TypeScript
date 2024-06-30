@@ -18,7 +18,7 @@ import {
     Version,
     version,
     versionMajorMinor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionPackageInstalled,
     ActionSet,
@@ -39,7 +39,7 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     WatchTypingLocations,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;
@@ -113,7 +113,6 @@ export abstract class TypingsInstaller {
     private readonly knownCachesSet = new Set<string>();
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
-    /** @internal */
     private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;
@@ -526,7 +525,7 @@ export abstract class TypingsInstaller {
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
     /** @internal */
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void;
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void; // eslint-disable-line @typescript-eslint/unified-signatures
     protected readonly latestDistTag = "latest";
 }
 

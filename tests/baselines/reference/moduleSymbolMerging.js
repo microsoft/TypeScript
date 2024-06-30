@@ -4,7 +4,7 @@
 module A { export interface I {} }
 
 //// [B.ts]
-///<reference path="A.ts" />
+///<reference path="A.ts" preserve="true" />
 module A { ; }
 module B {
 	export function f(): A.I { return null; }
@@ -14,7 +14,7 @@ module B {
 
 //// [A.js]
 //// [B.js]
-///<reference path="A.ts" />
+///<reference path="A.ts" preserve="true" />
 var A;
 (function (A) {
     ;
@@ -32,7 +32,7 @@ declare namespace A {
     }
 }
 //// [B.d.ts]
-/// <reference path="A.d.ts" />
+/// <reference path="A.d.ts" preserve="true" />
 declare namespace A { }
 declare namespace B {
     function f(): A.I;

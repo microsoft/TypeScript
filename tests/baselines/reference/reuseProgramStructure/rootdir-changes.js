@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: c.ts
 
 
@@ -44,7 +44,7 @@ b.ts(1,22): error TS6059: File 'c.ts' is not under 'rootDir' '/a/b'. 'rootDir' i
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: c.ts
 
 

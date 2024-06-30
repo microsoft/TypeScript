@@ -6,7 +6,6 @@ import {
     assertType,
     BindingElement,
     Block,
-    BlockLike,
     BreakStatement,
     CancellationToken,
     canHaveModifiers,
@@ -48,6 +47,7 @@ import {
     getEffectiveTypeParameterDeclarations,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
+    getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
     getNodeId,
@@ -61,12 +61,12 @@ import {
     hasEffectiveModifier,
     hasSyntacticModifier,
     Identifier,
-    identifierToKeywordKind,
     isArray,
     isArrowFunction,
     isAssignmentExpression,
     isBinaryExpression,
     isBlock,
+    isBlockLike,
     isBlockScope,
     isCaseClause,
     isClassLike,
@@ -91,7 +91,6 @@ import {
     isModuleBlock,
     isParenthesizedTypeNode,
     isPartOfTypeNode,
-    isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isQualifiedName,
@@ -158,11 +157,12 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
+    getIdentifierForNode,
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Extract Symbol";
 
@@ -219,7 +219,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         return errors;
     }
 
-    const extractions = getPossibleExtractions(targetRange, context);
+    const { affectedTextRange, extractions } = getPossibleExtractions(targetRange, context);
     if (extractions === undefined) {
         // No extractions possible
         return emptyArray;
@@ -247,6 +247,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `function_scope_${i}`,
                         kind: extractFunctionAction.kind,
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
@@ -272,6 +276,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `constant_scope_${i}`,
                         kind: extractConstantAction.kind,
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
@@ -909,8 +917,8 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
-function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
-    const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
+function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): { readonly affectedTextRange: TextRange; readonly extractions: ScopeExtractions[] | undefined; } {
+    const { scopes, affectedTextRange, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
     const extractions = scopes.map((scope, i): ScopeExtractions => {
         const functionDescriptionPart = getDescriptionForFunctionInScope(scope);
@@ -953,10 +961,10 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
             },
         };
     });
-    return extractions;
+    return { affectedTextRange, extractions };
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly readsAndWrites: ReadsAndWrites; } {
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly affectedTextRange: TextRange; readonly readsAndWrites: ReadsAndWrites; } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -969,7 +977,7 @@ function getPossibleExtractionsWorker(targetRange: TargetRange, context: Refacto
         context.program.getTypeChecker(),
         context.cancellationToken!,
     );
-    return { scopes, readsAndWrites };
+    return { scopes, affectedTextRange: enclosingTextRange, readsAndWrites };
 }
 
 function getDescriptionForFunctionInScope(scope: Scope): string {
@@ -1365,9 +1373,7 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const localNameText = getIdentifierForNode(node, scope, checker, file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -2219,18 +2225,6 @@ function isExtractableExpression(node: Node): boolean {
                 parent.kind !== SyntaxKind.ExportSpecifier;
     }
     return true;
-}
-
-function isBlockLike(node: Node): node is BlockLike {
-    switch (node.kind) {
-        case SyntaxKind.Block:
-        case SyntaxKind.SourceFile:
-        case SyntaxKind.ModuleBlock:
-        case SyntaxKind.CaseClause:
-            return true;
-        default:
-            return false;
-    }
 }
 
 function isInJSXContent(node: Node) {

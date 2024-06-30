@@ -17,15 +17,15 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.js":
-`const { a, } = require("./other");
+`const { a } = require("./other");
 const { y, z } = require("./y");
 const p = 0;
 exports.p = p;
 a; y; z;`,
 
         "/y.js":
-`const { b } = require("./other");
-const { p } = require("./a");
+`const { p } = require("./a");
+const { b } = require("./other");
 
 const y = p + b;
 exports.y = y;

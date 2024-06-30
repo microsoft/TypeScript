@@ -13,6 +13,7 @@ import {
     getKeyForCompilerOptions,
     getOrUpdate,
     getSetExternalModuleIndicator,
+    getSnapshotText,
     identity,
     IScriptSnapshot,
     isDeclarationFileName,
@@ -27,7 +28,7 @@ import {
     toPath,
     tracing,
     updateLanguageServiceSourceFile,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * The document registry represents a store of SourceFile objects that can be shared between
@@ -300,7 +301,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
         if (!entry && externalCache) {
             const sourceFile = externalCache.getDocument(keyWithMode, path);
-            if (sourceFile) {
+            if (sourceFile && sourceFile.scriptKind === scriptKind && sourceFile.text === getSnapshotText(scriptSnapshot)) {
                 Debug.assert(acquiring);
                 entry = {
                     sourceFile,

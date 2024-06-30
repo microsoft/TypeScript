@@ -23,13 +23,12 @@ function test(obj: string | null): void {
 //// [asserts.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isNonNullable = void 0;
+exports.isNonNullable = isNonNullable;
 function isNonNullable(obj) {
     if (obj === undefined || obj === null) {
         throw new Error("Must not be a nullable value");
     }
 }
-exports.isNonNullable = isNonNullable;
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
