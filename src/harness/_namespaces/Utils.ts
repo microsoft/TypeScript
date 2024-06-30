@@ -1,5 +1,5 @@
 /* Generated file to emulate the Utils namespace. */
 
-export * from "../util";
-export * from "../findUpDir";
-export * from "../harnessUtils";
+export * from "../util.js";
+export * from "../findUpDir.js";
+export * from "../harnessUtils.js";

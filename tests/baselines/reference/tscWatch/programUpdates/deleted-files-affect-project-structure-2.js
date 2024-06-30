@@ -26,44 +26,11 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w /a/b/f1.ts /a/c/f3.ts --noImplicitAny
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a/b/f1.ts","/a/c/f3.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/c/f3.ts (used version)
-/a/b/f2.ts (used version)
-/a/b/f1.ts (used version)
-
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/f2.ts: *new*
-  {}
-/a/c/f3.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/c/f3.js]
 "use strict";
@@ -113,40 +80,72 @@ __exportStar(require("./f2"), exports);
 
 
 
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/c/f3.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/c/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "noImplicitAny": true
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/c/f3.ts (used version)
+/a/b/f2.ts (used version)
+/a/b/f1.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Delete f2
 
 Input::
 //// [/a/b/f2.ts] deleted
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/f1.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './f2'. '/a/b/f2.js' implicitly has an 'any' type.
 
 [7m1[0m export * from "./f2"
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a/b/f1.ts","/a/c/f3.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/f1.ts
-/a/c/f3.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/b/f1.ts
-
-Shape signatures in builder refreshed for::
-/a/b/f1.ts (computed .d.ts)
+//// [/a/b/f1.js] file written with same contents
 
 PolledWatches::
 /a/b/f2: *new*
@@ -164,6 +163,25 @@ FsWatches *deleted*::
 /a/b/f2.ts:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/a/b/f1.js] file written with same contents
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/c/f3.ts"
+]
+Program options: {
+  "watch": true,
+  "noImplicitAny": true
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/f1.ts
+/a/c/f3.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/f1.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

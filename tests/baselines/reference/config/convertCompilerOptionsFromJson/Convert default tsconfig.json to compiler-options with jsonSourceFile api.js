@@ -12,7 +12,7 @@ Fs::
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

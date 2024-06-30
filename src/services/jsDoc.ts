@@ -1,5 +1,5 @@
 import {
-    arraysEqual,
+    arrayIsEqualTo,
     ArrowFunction,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -8,6 +8,7 @@ import {
     CompletionEntry,
     CompletionEntryDetails,
     Completions,
+    concatenate,
     ConstructorDeclaration,
     contains,
     Declaration,
@@ -43,7 +44,10 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isJSDoc,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
+    isJSDocPropertyLikeTag,
+    isJSDocTypeLiteral,
     isWhiteSpaceSingleLine,
     JSDoc,
     JSDocAugmentsTag,
@@ -88,7 +92,7 @@ import {
     TypeChecker,
     typeParameterNamePart,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const jsDocTagNames = [
     "abstract",
@@ -127,6 +131,7 @@ const jsDocTagNames = [
     "host",
     "ignore",
     "implements",
+    "import",
     "inheritdoc",
     "inner",
     "instance",
@@ -217,7 +222,7 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
 }
 
 function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
-    return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
+    return arrayIsEqualTo(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
 }
 
 function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -228,6 +233,11 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
             return [declaration as JSDocTypedefTag, (declaration as JSDocTypedefTag).parent];
+        case SyntaxKind.JSDocSignature:
+            if (isJSDocOverloadTag(declaration.parent)) {
+                return [declaration.parent.parent];
+            }
+            // falls through
         default:
             return getJSDocCommentsAndTags(declaration);
     }
@@ -250,9 +260,19 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+            infos.push(...getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(tag), checker));
         }
     });
     return infos;
+}
+
+function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
+    return flatMap(nodes, propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)));
+}
+
+function tryGetJSDocPropertyTags(node: JSDocTag) {
+    return isJSDocPropertyLikeTag(node) && node.isNameFirst && node.typeExpression &&
+            isJSDocTypeLiteral(node.typeExpression.type) ? node.typeExpression.type.jsDocPropertyTags : undefined;
 }
 
 function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {

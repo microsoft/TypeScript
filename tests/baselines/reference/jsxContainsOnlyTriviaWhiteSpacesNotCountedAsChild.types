@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx] ////
+
+=== jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx ===
+namespace JSX {
+  export interface ElementChildrenAttribute {
+    children: {};
+>children : {}
+>         : ^^
+  }
+}
+
+interface Props {
+  className?: string | undefined;
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+}
+
+function NoticeList(props: Props) {
+>NoticeList : (props: Props) => null
+>           : ^     ^^     ^^^^^^^^^
+>props : Props
+>      : ^^^^^
+
+  return null;
+}
+
+<NoticeList className="my-notice-list">
+><NoticeList className="my-notice-list"></NoticeList> : error
+>NoticeList : (props: Props) => null
+>           : ^     ^^     ^^^^^^^^^
+>className : string
+>          : ^^^^^^
+
+</NoticeList>;
+>NoticeList : (props: Props) => null
+>           : ^     ^^     ^^^^^^^^^
+
+<NoticeList className="my-notice-list">
+><NoticeList className="my-notice-list"></NoticeList> : error
+>NoticeList : (props: Props) => null
+>           : ^     ^^     ^^^^^^^^^
+>className : string
+>          : ^^^^^^
+
+</NoticeList>;
+>NoticeList : (props: Props) => null
+>           : ^     ^^     ^^^^^^^^^
+

@@ -5,7 +5,9 @@ interface foo { }
 interface bar { }
 let bar: bar | foo;
 >bar : foo | bar
+>    : ^^^^^^^^^
 
 let foo: bar | foo;
 >foo : foo | bar
+>    : ^^^^^^^^^
 

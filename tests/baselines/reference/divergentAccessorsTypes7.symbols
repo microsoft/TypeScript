@@ -18,12 +18,12 @@ class Test<S> {
 
         return null!;
     }
-    
+
     // -- Replacing the getter such that the getter/setter types match, removes the error:
     // get value(): string | ((item: S) => string) {
     //     return null!;
     // }
-    
+
     // -- Or, replacing the setter such that a concrete type is used, removes the error:
     // set value(value: string | ((item: { property: string }) => string)) {}
 }
@@ -44,5 +44,13 @@ a.value = (item) => item.property
 >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
 >item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
 >item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 22, 11))
+>property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+
+a['value'] = (item) => item.property
+>a : Symbol(a, Decl(divergentAccessorsTypes7.ts, 18, 5))
+>'value' : Symbol(Test.value, Decl(divergentAccessorsTypes7.ts, 1, 20), Decl(divergentAccessorsTypes7.ts, 3, 55))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))
+>item.property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
+>item : Symbol(item, Decl(divergentAccessorsTypes7.ts, 23, 14))
 >property : Symbol(property, Decl(divergentAccessorsTypes7.ts, 18, 20))
 

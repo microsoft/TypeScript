@@ -4,5 +4,6 @@
 interface HTMLElement {
     type: string;
 >type : string
+>     : ^^^^^^
 }
 

@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: services:: PatternMatcher", () => {
     describe("BreakIntoCharacterSpans", () => {
@@ -248,14 +248,6 @@ describe("unittests:: services:: PatternMatcher", () => {
             assertSegmentMatch("AddMetadataReference", "AMRe", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
-        it("BlankPattern", () => {
-            assertInvalidPattern("");
-        });
-
-        it("WhitespaceOnlyPattern", () => {
-            assertInvalidPattern(" ");
-        });
-
         it("EachWordSeparately1", () => {
             assertSegmentMatch("AddMetadataReference", "add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
         });
@@ -322,10 +314,6 @@ describe("unittests:: services:: PatternMatcher", () => {
 
     function assertSegmentMatch(candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
         assert.deepEqual(ts.createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
-    }
-
-    function assertInvalidPattern(pattern: string) {
-        assert.equal(ts.createPatternMatcher(pattern), undefined);
     }
 
     function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {

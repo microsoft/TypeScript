@@ -7,23 +7,23 @@ Fs::
 
 //// [/apath/tsconfig.json]
 {
- "compilerOptions": {
-  "moduleSuffixes": [
-   ".ios",
-   ""
-  ]
- }
+  "compilerOptions": {
+    "moduleSuffixes": [
+      ".ios",
+      ""
+    ]
+  }
 }
 
 
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "moduleSuffixes": [
-  ".ios",
-  ""
- ],
- "configFilePath": "tsconfig.json"
+  "moduleSuffixes": [
+    ".ios",
+    ""
+  ],
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

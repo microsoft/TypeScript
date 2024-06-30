@@ -1,12 +1,37 @@
-import * as Harness from "../../../_namespaces/Harness";
-import * as ts from "../../../_namespaces/ts";
-import {
-    createProjectService,
-} from "../../helpers/tsserver";
+import { incrementalVerifier } from "../../../../harness/incrementalUtils.js";
+import { createHasErrorMessageLogger } from "../../../../harness/tsserverLogger.js";
+import * as Harness from "../../../_namespaces/Harness.js";
+import * as ts from "../../../_namespaces/ts.js";
+import { customTypesMap } from "../../helpers/typingsInstaller.js";
 import {
     createServerHost,
     libFile,
-} from "../../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../../helpers/virtualFileSystemWithWatch.js";
+
+export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
+    host: TestServerHost;
+}
+export type TestProjectServicePartialOptionsAndHost = Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">> & Pick<TestProjectServiceOptions, "host">;
+
+export class TestProjectService extends ts.server.ProjectService {
+    constructor(optsOrHost: TestServerHost | TestProjectServicePartialOptionsAndHost) {
+        // eslint-disable-next-line local/no-in-operator
+        const opts = "host" in optsOrHost ?
+            optsOrHost :
+            { host: optsOrHost };
+        super({
+            logger: createHasErrorMessageLogger(),
+            session: undefined,
+            cancellationToken: ts.server.nullCancellationToken,
+            useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
+            typesMapLocation: customTypesMap.path,
+            incrementalVerifier,
+            ...opts,
+        });
+    }
+}
 
 interface Range {
     pos: number;
@@ -141,7 +166,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
 
     function makeProgram(f: { path: string; content: string; }, includeLib?: boolean) {
         const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
-        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
+        const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
@@ -166,7 +191,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             content: t.source,
         };
         const host = createServerHost([f, libFile]);
-        const projectService = createProjectService(host, { allowNonBaseliningLogger: true });
+        const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFile(f.path)!;

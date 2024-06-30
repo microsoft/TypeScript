@@ -1,4 +1,8 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     arrayFrom,
     ArrowFunction,
@@ -26,9 +30,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getEmitScriptTarget,
-    getModeForUsageLocation,
     getQuotePreference,
-    getResolvedModule,
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
     getSynthesizedDeepClonesWithReplacements,
@@ -56,11 +58,13 @@ import {
     mapIterator,
     MethodDeclaration,
     Modifier,
+    moduleSpecifierToValidIdentifier,
     Node,
     NodeArray,
     NodeFlags,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
+    Program,
     PropertyAccessExpression,
     QuotePreference,
     rangeContainsRange,
@@ -75,12 +79,7 @@ import {
     textChanges,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
@@ -90,7 +89,7 @@ registerCodeFix({
             const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
-                    fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
+                    fixImportOfModuleExports(importingFile, sourceFile, program, changes, getQuotePreference(importingFile, preferences));
                 }
             }
         });
@@ -99,9 +98,15 @@ registerCodeFix({
     },
 });
 
-function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
+function fixImportOfModuleExports(
+    importingFile: SourceFile,
+    exportingFile: SourceFile,
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    quotePreference: QuotePreference,
+) {
     for (const moduleSpecifier of importingFile.imports) {
-        const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
+        const imported = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, importingFile)?.resolvedModule;
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
             continue;
         }

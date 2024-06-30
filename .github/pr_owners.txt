@@ -13,3 +13,4 @@ jakebailey
 DanielRosenwasser
 navya9singh
 iisaduan
+dependabot

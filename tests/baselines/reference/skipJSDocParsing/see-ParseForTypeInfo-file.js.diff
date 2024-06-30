@@ -1,0 +1,13 @@
+===================================================================
+--- default
++++ ParseForTypeInfo
+@@ -295,7 +295,7 @@
+     "typeReferenceDirectives": [],
+     "libReferenceDirectives": [],
+     "amdDependencies": [],
+     "identifiers": {},
+-    "jsDocParsingMode": 0,
++    "jsDocParsingMode": 3,
+     "jsDocDiagnostics": []
+ }
+\ No newline at end of file

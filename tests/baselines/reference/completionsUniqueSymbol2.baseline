@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsUniqueSymbol2.ts ===
 // const a = {
 //     KEY_1: 'key_1',

@@ -9,13 +9,14 @@ import {
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
     GetCanonicalFileName,
+    getDeclarationFileExtension,
     getStringComparer,
     identity,
     lastOrUndefined,
     Path,
     some,
     startsWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.
@@ -756,6 +757,25 @@ export function changeAnyExtension(path: string, ext: string, extensions?: strin
     return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
 }
 
+/**
+ * @internal
+ * Like `changeAnyExtension`, but declaration file extensions are recognized
+ * and replaced starting from the `.d`.
+ *
+ * ```ts
+ * changeAnyExtension("file.d.ts", ".js") === "file.d.js"
+ * changeFullExtension("file.d.ts", ".js") === "file.js"
+ * ```
+ */
+export function changeFullExtension(path: string, newExtension: string) {
+    const declarationExtension = getDeclarationFileExtension(path);
+    if (declarationExtension) {
+        return path.slice(0, path.length - declarationExtension.length) +
+            (startsWith(newExtension, ".") ? newExtension : ("." + newExtension));
+    }
+    return changeAnyExtension(path, newExtension);
+}
+
 //// Path Comparisons
 
 // check path for these segments: '', '.'. '..'
@@ -887,8 +907,7 @@ export function startsWithDirectory(fileName: string, directoryName: string, get
 
 //// Relative Paths
 
-/** @internal */
-export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
+function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
     const fromComponents = reducePathComponents(getPathComponents(from));
     const toComponents = reducePathComponents(getPathComponents(to));
 

@@ -1,20 +1,19 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
@@ -28,7 +27,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `foo()`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -45,7 +44,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -114,7 +112,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -143,7 +141,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [{
                 caption: "write imported file",
@@ -172,7 +169,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;export const x = 10;`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -199,7 +196,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -306,6 +302,10 @@ declare module "fs" {
 `,
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                // This is currently issue with ambient modules in same file not leading to resolution watching
+                // In this case initially resolution is watched and will continued to be watched but
+                // incremental check will determine that the resolution should not be watched as thats what would have happened if we had started tsc --watch at this state.
+                skipStructureCheck: true,
             },
         ],
     });
@@ -330,7 +330,7 @@ declare module "fs" {
             };
             const configFile: File = {
                 path: configDir + "tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         allowJs: true,
                         rootDir: ".",
@@ -402,9 +402,9 @@ declare module "fs" {
                         edit: sys =>
                             sys.ensureFileOrFolder({
                                 path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-                                content: JSON.stringify({ something: 10 }),
+                                content: jsonToReadableText({ something: 10 }),
                             }),
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                 ],
             });
@@ -424,7 +424,7 @@ declare module "fs" {
             };
             const tsconfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         types: ["@myapp/ts-types"],
@@ -439,7 +439,7 @@ declare module "fs" {
                 edit: sys => {
                     sys.ensureFileOrFolder({
                         path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             version: "1.65.1",
                             types: "types/somefile.define.d.ts",
                         }),
@@ -460,8 +460,7 @@ declare namespace myapp {
             {
                 caption: "No change, just check program",
                 edit: ts.noop,
-                timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    sys.logTimeoutQueueLength();
+                timeouts: (_sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
                     const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>).getProgram();
                     assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                     assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
@@ -483,7 +482,7 @@ declare namespace myapp {
             };
             const config: File = {
                 path: `${mainPackageRoot}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
                     files: ["index.ts"],
                 }),
@@ -494,7 +493,7 @@ declare namespace myapp {
             };
             const linkedPackageJson: File = {
                 path: `${linkedPackageRoot}/package.json`,
-                content: JSON.stringify({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" }),
+                content: jsonToReadableText({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" }),
             };
             const linkedPackageIndex: File = {
                 path: `${linkedPackageRoot}/dist/index.d.ts`,
@@ -594,7 +593,7 @@ declare namespace NodeJS {
         subScenario: "reusing type ref resolution",
         sys: () =>
             createWatchedSystem({
-                "/users/username/projects/project/tsconfig.json": JSON.stringify({
+                "/users/username/projects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         traceResolution: true,

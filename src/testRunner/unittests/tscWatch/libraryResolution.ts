@@ -1,14 +1,17 @@
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     getCommandLineArgsForLibResolution,
     getSysForLibResolution,
-} from "../helpers/libraryResolution";
+    getSysForLibResolutionUnknown,
+} from "../helpers/libraryResolution.js";
 import {
     TscWatchCompileChange,
     TscWatchSystem,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 
-describe("unittests:: tsc-watch:: libraryResolution", () => {
+describe("unittests:: tsc-watch:: libraryResolution::", () => {
     function commandLineArgs(withoutConfig: true | undefined) {
         return ["-w", ...getCommandLineArgsForLibResolution(withoutConfig), "--extendedDiagnostics"];
     }
@@ -20,7 +23,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 edit: sys =>
                     sys.writeFile(
                         "/home/src/projects/project1/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 typeRoots: ["./typeroot1", "./typeroot2"],
@@ -36,7 +39,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 edit: sys => {
                     sys.writeFile(
                         "/home/src/projects/project1/tsconfig.json",
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: {
                                 composite: true,
                                 typeRoots: ["./typeroot1"],
@@ -146,4 +149,47 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
     }
     verify();
     verify(/*withoutConfig*/ true);
+
+    verifyTscWatch({
+        scenario: "libraryResolution",
+        subScenario: "unknwon lib",
+        sys: () => getSysForLibResolutionUnknown(),
+        commandLineArgs: commandLineArgs(/*withoutConfig*/ undefined),
+        edits: [
+            {
+                caption: "edit index",
+                edit: sys => sys.appendFile("/home/src/projects/project1/index.ts", "export const xyz = 10;"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "delete core",
+                edit: sys => sys.deleteFile("/home/src/projects/project1/core.d.ts"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "remove unknown lib",
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project1/file2.ts",
+                        dedent`
+                            /// <reference lib="webworker2"/>
+                            /// <reference lib="scripthost"/>
+                        `,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "correct webworker lib",
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project1/file2.ts",
+                        dedent`
+                            /// <reference lib="webworker"/>
+                            /// <reference lib="scripthost"/>
+                        `,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
 });

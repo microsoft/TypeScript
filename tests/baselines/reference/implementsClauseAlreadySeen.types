@@ -3,11 +3,14 @@
 === implementsClauseAlreadySeen.ts ===
 class C {
 >C : C
+>  : ^
     
 }
 class D implements C implements C {
 >D : D
+>  : ^
 
     baz() { }
 >baz : () => void
+>    : ^^^^^^^^^^
 }

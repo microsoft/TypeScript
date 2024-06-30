@@ -1,14 +1,13 @@
-import {
-    CancelError,
-} from "@esfx/canceltoken";
+import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
-import {
-    spawn,
-} from "child_process";
+import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
 import which from "which";
+
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -21,14 +20,14 @@ import which from "which";
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
  * @property {boolean} [ignoreStdout]
- * @property {import("@esfx/canceltoken").CancelToken} [token]
+ * @property {CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/ (new Promise((resolve, reject) => {
         const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore" });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();
@@ -52,8 +51,7 @@ export async function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
-            // wait a short period in order to allow the process to start successfully before Node exits.
-            setTimeout(() => resolve({ exitCode: undefined }), 100);
+            resolve({ exitCode: undefined });
         }
     }));
 }
@@ -72,12 +70,18 @@ export class ExecError extends Error {
 }
 
 /**
- * Reads JSON data with optional comments using the LKG TypeScript compiler
+ * Reads JSON data with optional comments
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    return JSONC.parse(jsonText);
+    /** @type {JSONC.ParseError[]} */
+    const errors = [];
+    const result = JSONC.parse(jsonText, errors);
+    if (errors.length) {
+        throw new Error(`Error parsing ${jsonPath}`);
+    }
+    return result;
 }
 
 /**

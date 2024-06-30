@@ -1,12 +1,6 @@
-import * as Harness from "../../_namespaces/Harness";
-import {
-    getDirectoryPath,
-} from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import * as vpath from "../../_namespaces/vpath";
-import {
-    libContent,
-} from "./contents";
+import { getDirectoryPath } from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { libContent } from "./contents.js";
 
 export interface FsOptions {
     libContentToAppend?: string;
@@ -19,19 +13,6 @@ function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, k
     return typeof options === "string" ?
         key === "libContentToAppend" ? options : undefined :
         options?.[key];
-}
-
-/**
- * Load project from disk into /src folder
- */
-export function loadProjectFromDisk(
-    root: string,
-    options?: FsOptionsOrLibContentsToAppend,
-): vfs.FileSystem {
-    const resolver = vfs.createResolver(Harness.IO);
-    return loadProjectFromFiles({
-        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver),
-    }, options);
 }
 
 /**

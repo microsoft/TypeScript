@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ignoreExtraVariables = void 0;
+exports.ignoreExtraVariables = ignoreExtraVariables;
 var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported
 function ignoreExtraVariables(ctor) {
@@ -45,7 +45,6 @@ function ignoreExtraVariables(ctor) {
         _a = IGNORE_EXTRA_VARIABLES,
         _b;
 }
-exports.ignoreExtraVariables = ignoreExtraVariables;
 
 
 //// [file.d.ts]

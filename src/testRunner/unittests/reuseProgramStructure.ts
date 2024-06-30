@@ -1,8 +1,9 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 import {
     createTestCompilerHost,
+    jsonToReadableText,
     NamedSourceText,
     newLine,
     newProgram,
@@ -11,38 +12,69 @@ import {
     TestCompilerHost,
     updateProgram,
     updateProgramText,
-} from "./helpers";
+} from "./helpers.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "./helpers/virtualFileSystemWithWatch";
+} from "./helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: Reuse program structure:: General", () => {
-    function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
-        baselines.push(`${cacheType}: ${!cache ? cache : ""}`);
-        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`));
+describe("unittests:: reuseProgramStructure:: General", () => {
+    type ProgramToBaseline = ts.Program & Pick<ProgramWithSourceTexts, "version">;
+    function baselineCache<File, T>(
+        baselines: string[],
+        cacheType: string,
+        file: File,
+        forEach: (
+            callback: (resolvedModule: T, moduleName: string, mode: ts.ResolutionMode) => void,
+            file: File,
+        ) => void,
+    ) {
+        let addedHeader = false;
+        forEach(baselineResolution, file);
+
+        function baselineResolution(resolved: T, key: string, mode: ts.ResolutionMode) {
+            if (!addedHeader) {
+                addedHeader = true;
+                baselines.push(`${cacheType}:`);
+            }
+            baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${jsonToReadableText(resolved)}`);
+        }
     }
-    function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {
-        baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
-        program.getSourceFiles().forEach(f => {
-            baselines.push(`File: ${f.fileName}`, f.text);
-            baselineCache(baselines, "resolvedModules", f.resolvedModules);
-            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f.resolvedTypeReferenceDirectiveNames);
-            baselines.push("");
-        });
-        host ??= (program as ProgramWithSourceTexts).host;
-        host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
-        host.clearTrace();
-        baselines.push("");
-        baselines.push(`MissingPaths:: ${JSON.stringify(program.getMissingFilePaths())}`);
-        baselines.push("");
+
+    function baselineDiagnostics(baselines: string[], program: ProgramToBaseline, skipHeader?: boolean) {
+        if (!skipHeader) {
+            baselines.push(`Program ${program.version} Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
+            baselines.push(`Diagnostics:`);
+        }
         baselines.push(ts.formatDiagnostics(program.getSemanticDiagnostics(), {
             getCurrentDirectory: () => program.getCurrentDirectory(),
             getNewLine: () => "\n",
             getCanonicalFileName: ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames()),
         }));
         baselines.push("", "");
+    }
+    function baselineProgram(baselines: string[], program: ProgramToBaseline, host?: TestCompilerHost, skipDiagnostics?: boolean) {
+        baselines.push(`Program ${program.version} Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
+        program.getSourceFiles().forEach(f => {
+            baselines.push(`File: ${f.fileName}`, f.text);
+            baselineCache(baselines, "resolvedModules", f, program.forEachResolvedModule);
+            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f, program.forEachResolvedTypeReferenceDirective);
+            baselines.push("");
+        });
+        baselineCache(baselines, "automaticTypeDirectiveResolutions", /*file*/ undefined, cb => program.getAutomaticTypeDirectiveResolutions().forEach(cb));
+        host ??= (program as ProgramWithSourceTexts).host;
+        host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
+        host.clearTrace();
+        baselines.push("");
+        baselines.push(`MissingPaths:: ${jsonToReadableText(ts.arrayFrom(program.getMissingFilePaths().values()))}`);
+        baselines.push("");
+        if (!skipDiagnostics) {
+            baselineDiagnostics(baselines, program, /*skipHeader*/ true);
+        }
+        else {
+            baselines.push("Skipped diagnostics", "", "");
+        }
     }
 
     function runBaseline(scenario: string, baselines: readonly string[]) {
@@ -86,7 +118,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
             { name: "/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
             { name: "/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
-            { name: "/node_modules/b/package.json", text: SourceText.New("", "", JSON.stringify({ name: "b", version: "1.2.3" })) },
+            { name: "/node_modules/b/package.json", text: SourceText.New("", "", jsonToReadableText({ name: "b", version: "1.2.3" })) },
         ];
 
         const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
@@ -263,7 +295,8 @@ describe("unittests:: Reuse program structure:: General", () => {
         ];
         const host = createTestCompilerHost(files, target);
         const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
-        const program1 = ts.createProgram(["/a.ts"], options, host);
+        const program1 = ts.createProgram(["/a.ts"], options, host) as ProgramToBaseline;
+        program1.version = 1;
         let sourceFile = program1.getSourceFile("/a.ts")!;
         const baselines: string[] = [];
         baselineProgram(baselines, program1, host);
@@ -275,7 +308,8 @@ describe("unittests:: Reuse program structure:: General", () => {
                 return fileName === sourceFile.fileName ? sourceFile : program1.getSourceFile(fileName);
             },
         };
-        const program2 = ts.createProgram(["/a.ts"], options, updateHost, program1);
+        const program2 = ts.createProgram(["/a.ts"], options, updateHost, program1) as ProgramToBaseline;
+        program2.version = 2;
         baselineProgram(baselines, program2, updateHost);
         baselines.push(`parent pointers are not altered: ${sourceFile.statements[2].getSourceFile() === sourceFile}`);
         runBaseline("works with updated SourceFiles", baselines);
@@ -445,7 +479,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                 },
                 {
                     name: axPackage,
-                    text: SourceText.New("", "", JSON.stringify({ name: "x", version: "1.2.3" })),
+                    text: SourceText.New("", "", jsonToReadableText({ name: "x", version: "1.2.3" })),
                 },
                 {
                     name: "/node_modules/b/index.d.ts",
@@ -457,7 +491,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                 },
                 {
                     name: bxPackage,
-                    text: SourceText.New("", "", JSON.stringify({ name: "x", version: options ? options.bVersion : "1.2.3" })),
+                    text: SourceText.New("", "", jsonToReadableText({ name: "x", version: options ? options.bVersion : "1.2.3" })),
                 },
                 {
                     name: root,
@@ -496,7 +530,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
-                    updateProgramText(files, axPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
+                    updateProgramText(files, axPackage, jsonToReadableText('{ name: "x", version: "1.2.4" }'));
                 }, useGetSourceFileByPath);
                 baselineProgram(baselines, program2);
                 runRedirectsBaseline("target changes", useGetSourceFileByPath, baselines);
@@ -509,7 +543,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
-                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
+                    updateProgramText(files, bxPackage, jsonToReadableText({ name: "x", version: "1.2.4" }));
                 }, useGetSourceFileByPath);
                 baselineProgram(baselines, program2);
                 runRedirectsBaseline("underlying changes", useGetSourceFileByPath, baselines);
@@ -522,7 +556,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
                 const program2 = updateRedirectProgram(program1, files => {
                     updateProgramText(files, bxIndex, "export default class X { private x: number; }");
-                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
+                    updateProgramText(files, bxPackage, jsonToReadableText({ name: "x", version: "1.2.3" }));
                 }, useGetSourceFileByPath);
                 baselineProgram(baselines, program2);
                 runRedirectsBaseline(`previous duplicate packages`, useGetSourceFileByPath, baselines);
@@ -536,15 +570,217 @@ describe("unittests:: Reuse program structure:: General", () => {
             verifyRedirects(/*useGetSourceFileByPath*/ true);
         });
     });
+
+    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics", () => {
+        const files = [
+            {
+                name: "/src/project/src/struct.d.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/anotherFile.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/oneMore.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                text: SourceText.New("", "", `export function foo(): void`),
+            },
+        ];
+
+        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
+        const rootNames = files.map(f => f.name);
+        const program1 = newProgram(files, rootNames, options, /*useGetSourceFileByPath*/ undefined, /*useCaseSensitiveFileNames*/ false);
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1);
+
+        const program2 = updateProgram(
+            program1,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const y = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program2);
+
+        const program3 = updateProgram(
+            program2,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program3);
+        runBaseline("handles file preprocessing dignostics", baselines);
+    });
+
+    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics when diagnostics are not queried", () => {
+        const files = [
+            {
+                name: "/src/project/src/struct.d.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/anotherFile.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/oneMore.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                text: SourceText.New("", "", `export function foo(): void`),
+            },
+        ];
+
+        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
+        const rootNames = files.map(f => f.name);
+        const program1 = newProgram(files, rootNames, options, /*useGetSourceFileByPath*/ undefined, /*useCaseSensitiveFileNames*/ false);
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1, /*host*/ undefined, /*skipDiagnostics*/ true);
+
+        const program2 = updateProgram(
+            program1,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const y = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program2, /*host*/ undefined, /*skipDiagnostics*/ true);
+        baselineDiagnostics(baselines, program1);
+
+        const program3 = updateProgram(
+            program2,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const z = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program3);
+        baselineDiagnostics(baselines, program2);
+
+        const program4 = updateProgram(
+            program3,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program4, /*host*/ undefined, /*skipDiagnostics*/ true);
+
+        const program5 = updateProgram(
+            program4,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program5);
+        baselineDiagnostics(baselines, program4);
+        runBaseline("handles file preprocessing dignostics when diagnostics are not queried", baselines);
+    });
 });
 
-describe("unittests:: Reuse program structure:: host is optional", () => {
+describe("unittests:: reuseProgramStructure:: host is optional", () => {
     it("should work if host is not provided", () => {
         ts.createProgram([], {});
     });
 });
 
-describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
+describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
     function getWhetherProgramIsUptoDate(
         program: ts.Program,
         newRootFileNames: string[],
@@ -567,7 +803,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
     function duplicate(options: ts.CompilerOptions): ts.CompilerOptions;
     function duplicate(fileNames: string[]): string[];
     function duplicate(filesOrOptions: ts.CompilerOptions | string[]) {
-        return JSON.parse(JSON.stringify(filesOrOptions));
+        return JSON.parse(jsonToReadableText(filesOrOptions));
     }
 
     describe("should return true when there is no change in compiler options and", () => {
@@ -629,7 +865,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             };
             const configFile: File = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify({ compilerOptions }),
+                content: jsonToReadableText({ compilerOptions }),
             };
             const es5Lib: File = {
                 path: "/compiler/lib.es5.d.ts",
@@ -675,7 +911,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             };
             const configFile: File = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify({ compilerOptions }),
+                content: jsonToReadableText({ compilerOptions }),
             };
 
             verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
@@ -713,7 +949,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             };
             const configFile: File = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] }),
+                content: jsonToReadableText({ compilerOptions, include: ["packages/**/*.ts"] }),
             };
             verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
         });

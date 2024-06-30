@@ -1,0 +1,470 @@
+//// [tests/cases/compiler/narrowByBooleanComparison.ts] ////
+
+=== narrowByBooleanComparison.ts ===
+type A = { type: "A" };
+>A : A
+>  : ^
+>type : "A"
+>     : ^^^
+
+type B = { type: "B" };
+>B : B
+>  : ^
+>type : "B"
+>     : ^^^
+
+type C = { type: "C" };
+>C : C
+>  : ^
+>type : "C"
+>     : ^^^
+
+type MyUnion = A | B | C;
+>MyUnion : MyUnion
+>        : ^^^^^^^
+
+const isA = (x: MyUnion): x is A => x.type === "A";
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>(x: MyUnion): x is A => x.type === "A" : (x: MyUnion) => x is A
+>                                       : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>x.type === "A" : boolean
+>               : ^^^^^^^
+>x.type : "A" | "B" | "C"
+>       : ^^^^^^^^^^^^^^^
+>x : MyUnion
+>  : ^^^^^^^
+>type : "A" | "B" | "C"
+>     : ^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+function test1(x: MyUnion) {
+>test1 : (x: MyUnion) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : MyUnion
+>  : ^^^^^^^
+
+    if (isA(x) !== true) {
+>isA(x) !== true : boolean
+>                : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        x;
+>x : B | C
+>  : ^^^^^
+    }
+
+    if (isA(x) !== false) {
+>isA(x) !== false : boolean
+>                 : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        x;
+>x : A
+>  : ^
+    }
+
+    if (isA(x) === false) {
+>isA(x) === false : boolean
+>                 : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        x;
+>x : B | C
+>  : ^^^^^
+    }
+
+    if (isA(x) === true) {
+>isA(x) === true : boolean
+>                : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        x;
+>x : A
+>  : ^
+    }
+
+    if (isA(x) != true) {
+>isA(x) != true : boolean
+>               : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        x;
+>x : B | C
+>  : ^^^^^
+    }
+
+    if (isA(x) == true) {
+>isA(x) == true : boolean
+>               : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        x;
+>x : A
+>  : ^
+    }
+
+    if (true !== isA(x)) {
+>true !== isA(x) : boolean
+>                : ^^^^^^^
+>true : true
+>     : ^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+
+        x;
+>x : B | C
+>  : ^^^^^
+    }
+
+    if (true === isA(x)) {
+>true === isA(x) : boolean
+>                : ^^^^^^^
+>true : true
+>     : ^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: MyUnion) => x is A
+>    : ^ ^^       ^^^^^      
+>x : MyUnion
+>  : ^^^^^^^
+
+        x;
+>x : A
+>  : ^
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/53093
+function test2(x: unknown) {
+>test2 : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+    if (x instanceof Error === false) {
+>x instanceof Error === false : boolean
+>                             : ^^^^^^^
+>x instanceof Error : boolean
+>                   : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+        return;
+    }
+    x;
+>x : Error
+>  : ^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/50712
+function test3(foo: unknown) {
+>test3 : (foo: unknown) => void
+>      : ^   ^^       ^^^^^^^^^
+>foo : unknown
+>    : ^^^^^^^
+
+    if (typeof foo !== 'string' && Array.isArray(foo) === false) {
+>typeof foo !== 'string' && Array.isArray(foo) === false : boolean
+>                                                        : ^^^^^^^
+>typeof foo !== 'string' : boolean
+>                        : ^^^^^^^
+>typeof foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : unknown
+>    : ^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+>Array.isArray(foo) === false : boolean
+>                             : ^^^^^^^
+>Array.isArray(foo) : boolean
+>                   : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>foo : unknown
+>    : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        throw new Error('Not a string or an array');
+>new Error('Not a string or an array') : Error
+>                                      : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'Not a string or an array' : "Not a string or an array"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    foo;
+>foo : string | any[]
+>    : ^^^^^^^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/55395
+class WebError extends URIError {
+>WebError : WebError
+>         : ^^^^^^^^
+>URIError : URIError
+>         : ^^^^^^^^
+
+    status?: number;
+>status : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+}
+function test4() {
+>test4 : () => void
+>      : ^^^^^^^^^^
+
+    try {
+        // make a request
+    } catch (err) {
+>err : unknown
+>    : ^^^^^^^
+
+        if (err instanceof WebError === false || err.status != 401) {
+>err instanceof WebError === false || err.status != 401 : boolean
+>                                                       : ^^^^^^^
+>err instanceof WebError === false : boolean
+>                                  : ^^^^^^^
+>err instanceof WebError : boolean
+>                        : ^^^^^^^
+>err : unknown
+>    : ^^^^^^^
+>WebError : typeof WebError
+>         : ^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+>err.status != 401 : boolean
+>                  : ^^^^^^^
+>err.status : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>err : WebError
+>    : ^^^^^^^^
+>status : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>401 : 401
+>    : ^^^
+
+            console.error(err);
+>console.error(err) : void
+>                   : ^^^^
+>console.error : (...data: any[]) => void
+>              : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>error : (...data: any[]) => void
+>      : ^^^^    ^^     ^^^^^    
+>err : unknown
+>    : ^^^^^^^
+        }
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/44366
+interface Entity {
+    type: string;
+>type : string
+>     : ^^^^^^
+}
+const ACTOR_TYPE = "actor";
+>ACTOR_TYPE : "actor"
+>           : ^^^^^^^
+>"actor" : "actor"
+>        : ^^^^^^^
+
+interface Actor extends Entity {
+    type: typeof ACTOR_TYPE;
+>type : "actor"
+>     : ^^^^^^^
+>ACTOR_TYPE : "actor"
+>           : ^^^^^^^
+}
+function isActor(entity: Entity): entity is Actor {
+>isActor : (entity: Entity) => entity is Actor
+>        : ^      ^^      ^^^^^               
+>entity : Entity
+>       : ^^^^^^
+
+    return entity.type === ACTOR_TYPE;
+>entity.type === ACTOR_TYPE : boolean
+>                           : ^^^^^^^
+>entity.type : string
+>            : ^^^^^^
+>entity : Entity
+>       : ^^^^^^
+>type : string
+>     : ^^^^^^
+>ACTOR_TYPE : "actor"
+>           : ^^^^^^^
+}
+function test5(bin: Entity) {
+>test5 : (bin: Entity) => void
+>      : ^   ^^      ^^^^^^^^^
+>bin : Entity
+>    : ^^^^^^
+
+    if (isActor(bin) === false) {
+>isActor(bin) === false : boolean
+>                       : ^^^^^^^
+>isActor(bin) : boolean
+>             : ^^^^^^^
+>isActor : (entity: Entity) => entity is Actor
+>        : ^      ^^      ^^^^^               
+>bin : Entity
+>    : ^^^^^^
+>false : false
+>      : ^^^^^
+
+        bin;
+>bin : Entity
+>    : ^^^^^^
+
+    } else {
+        bin;
+>bin : Actor
+>    : ^^^^^
+    }
+}
+function test6(bin: Entity) {
+>test6 : (bin: Entity) => void
+>      : ^   ^^      ^^^^^^^^^
+>bin : Entity
+>    : ^^^^^^
+
+    if (isActor(bin) == false) {
+>isActor(bin) == false : boolean
+>                      : ^^^^^^^
+>isActor(bin) : boolean
+>             : ^^^^^^^
+>isActor : (entity: Entity) => entity is Actor
+>        : ^      ^^      ^^^^^               
+>bin : Entity
+>    : ^^^^^^
+>false : false
+>      : ^^^^^
+
+        bin;
+>bin : Entity
+>    : ^^^^^^
+
+    } else {
+        bin;
+>bin : Actor
+>    : ^^^^^
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/53005
+function isFunction(x: unknown): x is Function {
+>isFunction : (x: unknown) => x is Function
+>           : ^ ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+    return typeof x === "function";
+>typeof x === "function" : boolean
+>                        : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"function" : "function"
+>           : ^^^^^^^^^^
+}
+
+function test7(x: unknown) {
+>test7 : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+    if (isFunction(x) !== false) {
+>isFunction(x) !== false : boolean
+>                        : ^^^^^^^
+>isFunction(x) : boolean
+>              : ^^^^^^^
+>isFunction : (x: unknown) => x is Function
+>           : ^ ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        x;
+>x : Function
+>  : ^^^^^^^^
+    }
+    if (isFunction(x) === true) {
+>isFunction(x) === true : boolean
+>                       : ^^^^^^^
+>isFunction(x) : boolean
+>              : ^^^^^^^
+>isFunction : (x: unknown) => x is Function
+>           : ^ ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+        x;
+>x : Function
+>  : ^^^^^^^^
+    }
+}
+

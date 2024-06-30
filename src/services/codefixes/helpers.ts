@@ -1,3 +1,4 @@
+import { ImportAdder } from "../_namespaces/ts.codefix.js";
 import {
     AccessorDeclaration,
     append,
@@ -70,7 +71,6 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectFlags,
     ObjectLiteralExpression,
     ObjectType,
@@ -111,10 +111,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
-import {
-    ImportAdder,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
@@ -222,7 +219,8 @@ export function addNewNodeForMemberSymbol(
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+            let flags = NodeBuilderFlags.NoTruncation;
+            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -400,7 +398,7 @@ export function createSignatureDeclarationFromSignature(
 
     let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = isJs ? undefined : signatureDeclaration.type;
+    let type = isJs ? undefined : getSynthesizedDeepClone(signatureDeclaration.type);
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
@@ -612,8 +610,7 @@ function typeContainsTypeParameter(type: Type) {
     return type.flags & TypeFlags.TypeParameter;
 }
 
-/** @internal */
-export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
     // Types to be used as the types of the parameters in the new function
     // E.g. from this source:
     //   added("", 0)
@@ -876,13 +873,11 @@ export function setJsonCompilerOptionValue(
     setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
 }
 
-/** @internal */
-export function createJsonPropertyAssignment(name: string, initializer: Expression) {
+function createJsonPropertyAssignment(name: string, initializer: Expression) {
     return factory.createPropertyAssignment(factory.createStringLiteral(name), initializer);
 }
 
-/** @internal */
-export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
+function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
     return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
 }
 
@@ -913,7 +908,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
-        return visitEachChild(node, visit, nullTransformationContext);
+        return visitEachChild(node, visit, /*context*/ undefined);
     }
 }
 

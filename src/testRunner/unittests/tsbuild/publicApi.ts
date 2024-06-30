@@ -1,31 +1,30 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselinePrograms,
     commandLineCallbacks,
     toPathWithSystem,
-} from "../helpers/baseline";
+} from "../helpers/baseline.js";
 import {
     TscCompileSystem,
     verifyTscBaseline,
-} from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+} from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
     before(() => {
         const inputFs = loadProjectFromFiles({
-            "/src/tsconfig.json": JSON.stringify({
+            "/src/tsconfig.json": jsonToReadableText({
                 references: [
                     { path: "./shared/tsconfig.json" },
                     { path: "./webpack/tsconfig.json" },
                 ],
                 files: [],
             }),
-            "/src/shared/tsconfig.json": JSON.stringify({
+            "/src/shared/tsconfig.json": jsonToReadableText({
                 compilerOptions: { composite: true },
             }),
             "/src/shared/index.ts": `export function f1() { }
@@ -33,7 +32,7 @@ export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`,
-            "/src/webpack/tsconfig.json": JSON.stringify({
+            "/src/webpack/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                 },
@@ -49,6 +48,7 @@ export function f22() { } // trailing`,
 
         // Create system
         sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
@@ -70,13 +70,12 @@ export function f22() { } // trailing`,
             (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
-        baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
+        baselinePrograms(baseline, getPrograms(), ts.emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {

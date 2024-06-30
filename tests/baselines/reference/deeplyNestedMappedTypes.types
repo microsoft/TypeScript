@@ -1,0 +1,551 @@
+//// [tests/cases/compiler/deeplyNestedMappedTypes.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 10,000
+
+=== deeplyNestedMappedTypes.ts ===
+// Simplified repro from #55535
+
+type Id<T> = { [K in keyof T]: Id<T[K]> };
+>Id : Id<T>
+>   : ^^^^^
+
+type Foo1 = Id<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^                                              ^^^^
+>x : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>  : ^^^^^                                      ^^^
+>y : { z: { a: { b: { c: number; }; }; }; }
+>  : ^^^^^                              ^^^
+>z : { a: { b: { c: number; }; }; }
+>  : ^^^^^                      ^^^
+>a : { b: { c: number; }; }
+>  : ^^^^^              ^^^
+>b : { c: number; }
+>  : ^^^^^      ^^^
+>c : number
+>  : ^^^^^^
+
+type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo2 : Id<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>     : ^^^^^^^^                                              ^^^^
+>x : { y: { z: { a: { b: { c: string; }; }; }; }; }
+>  : ^^^^^                                      ^^^
+>y : { z: { a: { b: { c: string; }; }; }; }
+>  : ^^^^^                              ^^^
+>z : { a: { b: { c: string; }; }; }
+>  : ^^^^^                      ^^^
+>a : { b: { c: string; }; }
+>  : ^^^^^              ^^^
+>b : { c: string; }
+>  : ^^^^^      ^^^
+>c : string
+>  : ^^^^^^
+
+declare const foo1: Foo1;
+>foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^                                              ^^^^
+
+const foo2: Foo2 = foo1;  // Error expected
+>foo2 : Id<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>     : ^^^^^^^^                                              ^^^^
+>foo1 : Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^                                              ^^^^
+
+type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
+>Id2 : Id2<T>
+>    : ^^^^^^
+
+type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^^                                              ^^^^
+>x : { y: { z: { a: { b: { c: number; }; }; }; }; }
+>  : ^^^^^                                      ^^^
+>y : { z: { a: { b: { c: number; }; }; }; }
+>  : ^^^^^                              ^^^
+>z : { a: { b: { c: number; }; }; }
+>  : ^^^^^                      ^^^
+>a : { b: { c: number; }; }
+>  : ^^^^^              ^^^
+>b : { c: number; }
+>  : ^^^^^      ^^^
+>c : number
+>  : ^^^^^^
+
+type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo4 : Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>     : ^^^^^^^^^                                              ^^^^
+>x : { y: { z: { a: { b: { c: string; }; }; }; }; }
+>  : ^^^^^                                      ^^^
+>y : { z: { a: { b: { c: string; }; }; }; }
+>  : ^^^^^                              ^^^
+>z : { a: { b: { c: string; }; }; }
+>  : ^^^^^                      ^^^
+>a : { b: { c: string; }; }
+>  : ^^^^^              ^^^
+>b : { c: string; }
+>  : ^^^^^      ^^^
+>c : string
+>  : ^^^^^^
+
+declare const foo3: Foo3;
+>foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^^                                              ^^^^
+
+const foo4: Foo4 = foo3;  // Error expected
+>foo4 : Id2<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>
+>     : ^^^^^^^^^                                              ^^^^
+>foo3 : Id2<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>
+>     : ^^^^^^^^^                                              ^^^^
+
+// Repro from issue linked in #55535
+
+type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
+>RequiredDeep : RequiredDeep<T>
+>             : ^^^^^^^^^^^^^^^
+
+type A = { a?: { b: { c: 1 | { d: 2000 } }}}
+>A : A
+>  : ^
+>a : { b: { c: 1 | { d: 2000; }; }; } | undefined
+>  : ^^^^^                        ^^^^^^^^^^^^^^^
+>b : { c: 1 | { d: 2000; }; }
+>  : ^^^^^                ^^^
+>c : { d: 2000; } | 1
+>  : ^^^^^    ^^^^^^^
+>d : 2000
+>  : ^^^^
+
+type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
+>B : B
+>  : ^
+>a : { b: { c: { d: { e: { f: { g: 2; }; }; }; }; x: 1000; }; } | undefined
+>  : ^^^^^                                                  ^^^^^^^^^^^^^^^
+>b : { c: { d: { e: { f: { g: 2; }; }; }; }; x: 1000; }
+>  : ^^^^^                                 ^^^^^    ^^^
+>c : { d: { e: { f: { g: 2; }; }; }; }
+>  : ^^^^^                         ^^^
+>d : { e: { f: { g: 2; }; }; }
+>  : ^^^^^                 ^^^
+>e : { f: { g: 2; }; }
+>  : ^^^^^         ^^^
+>f : { g: 2; }
+>  : ^^^^^ ^^^
+>g : 2
+>  : ^
+>x : 1000
+>  : ^^^^
+
+type C = RequiredDeep<A>;
+>C : RequiredDeep<A>
+>  : ^^^^^^^^^^^^^^^
+
+type D = RequiredDeep<B>;
+>D : RequiredDeep<B>
+>  : ^^^^^^^^^^^^^^^
+
+type Test1 = [C, D] extends [D, C] ? true : false;  // false
+>Test1 : false
+>      : ^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type Test2 = C extends D ? true : false;  // false
+>Test2 : false
+>      : ^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type Test3 = D extends C ? true : false;  // false
+>Test3 : false
+>      : ^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+// Simplified repro from #54246
+
+// Except for the final non-recursive Record<K, V>, object types produced by NestedRecord all have the same symbol
+// and thus are considered deeply nested after three levels of nesting. Ideally we'd detect that recursion in this
+// type always terminates, but we're unaware of a general algorithm that accomplishes this.
+
+type NestedRecord<K extends string, V> = K extends `${infer K0}.${infer KR}` ? { [P in K0]: NestedRecord<KR, V> } : Record<K, V>;
+>NestedRecord : NestedRecord<K, V>
+>             : ^^^^^^^^^^^^^^^^^^
+
+type Bar1 = NestedRecord<"x.y.z.a.b.c", number>;
+>Bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type Bar2 = NestedRecord<"x.y.z.a.b.c", string>;
+>Bar2 : { x: { y: { z: { a: { b: Record<"c", string>; }; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const bar1: Bar1;
+>bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const bar2: Bar2 = bar1;  // Error expected
+>bar2 : { x: { y: { z: { a: { b: Record<"c", string>; }; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar1 : { x: { y: { z: { a: { b: Record<"c", number>; }; }; }; }; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Repro from #56138
+
+export type Input = Static<typeof Input>
+>Input : { level1: { level2: { foo: string; }; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const Input = Type.Object({
+>Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),        })    })} : { level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    level1: Type.Object({
+>level1 : TObject<{ level2: TObject<{ foo: TString; }>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({        level2: Type.Object({            foo: Type.String(),        })    }) : TObject<{ level2: TObject<{ foo: TString; }>; }>
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{        level2: Type.Object({            foo: Type.String(),        })    } : { level2: TObject<{ foo: TString; }>; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        level2: Type.Object({
+>level2 : TObject<{ foo: TString; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({            foo: Type.String(),        }) : TObject<{ foo: TString; }>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{            foo: Type.String(),        } : { foo: TString; }
+>                                          : ^^^^^^^^^^^^^^^^^
+
+            foo: Type.String(),
+>foo : TString
+>    : ^^^^^^^
+>Type.String() : TString
+>              : ^^^^^^^
+>Type.String : () => TString
+>            : ^^^^^^       
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>String : () => TString
+>       : ^^^^^^       
+
+        })
+    })
+})
+
+export type Output = Static<typeof Output>
+>Output : { level1: { level2: { foo: string; bar: string; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const Output = Type.Object({
+>Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    })} : { level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }
+>                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    level1: Type.Object({
+>level1 : TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    }) : TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    } : { level2: TObject<{ foo: TString; bar: TString; }>; }
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        level2: Type.Object({
+>level2 : TObject<{ foo: TString; bar: TString; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object({            foo: Type.String(),            bar: Type.String(),        }) : TObject<{ foo: TString; bar: TString; }>
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Type.Object : <T extends TProperties>(object: T) => TObject<T>
+>            : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>{            foo: Type.String(),            bar: Type.String(),        } : { foo: TString; bar: TString; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            foo: Type.String(),
+>foo : TString
+>    : ^^^^^^^
+>Type.String() : TString
+>              : ^^^^^^^
+>Type.String : () => TString
+>            : ^^^^^^       
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>String : () => TString
+>       : ^^^^^^       
+
+            bar: Type.String(),
+>bar : TString
+>    : ^^^^^^^
+>Type.String() : TString
+>              : ^^^^^^^
+>Type.String : () => TString
+>            : ^^^^^^       
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>String : () => TString
+>       : ^^^^^^       
+
+        })
+    })
+})
+
+function problematicFunction1(ors: Input[]): Output[] {
+>problematicFunction1 : (ors: Input[]) => Output[]
+>                     : ^   ^^       ^^^^^        
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return ors;  // Error
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function problematicFunction2<T extends Output[]>(ors: Input[]): T {
+>problematicFunction2 : <T extends Output[]>(ors: Input[]) => T
+>                     : ^ ^^^^^^^^^        ^^   ^^       ^^^^^ 
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return ors;  // Error
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function problematicFunction3(ors: (typeof Input.static)[]): Output[] {
+>problematicFunction3 : (ors: (typeof Input.static)[]) => Output[]
+>                     : ^   ^^                       ^^^^^        
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Input.static : { level1: { level2: { foo: string; }; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>static : { level1: { level2: { foo: string; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return ors;  // Error
+>ors : { level1: { level2: { foo: string; }; }; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+export type Evaluate<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
+>Evaluate : Evaluate<T>
+>         : ^^^^^^^^^^^
+
+export declare const Readonly: unique symbol;
+>Readonly : unique symbol
+>         : ^^^^^^^^^^^^^
+
+export declare const Optional: unique symbol;
+>Optional : unique symbol
+>         : ^^^^^^^^^^^^^
+
+export declare const Hint: unique symbol;
+>Hint : unique symbol
+>     : ^^^^^^^^^^^^^
+
+export declare const Kind: unique symbol;
+>Kind : unique symbol
+>     : ^^^^^^^^^^^^^
+
+export interface TKind {
+    [Kind]: string
+>[Kind] : string
+>       : ^^^^^^
+>Kind : unique symbol
+>     : ^^^^^^^^^^^^^
+}
+export interface TSchema extends TKind {
+    [Readonly]?: string
+>[Readonly] : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>Readonly : unique symbol
+>         : ^^^^^^^^^^^^^
+
+    [Optional]?: string
+>[Optional] : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>Optional : unique symbol
+>         : ^^^^^^^^^^^^^
+
+    [Hint]?: string
+>[Hint] : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>Hint : unique symbol
+>     : ^^^^^^^^^^^^^
+
+    params: unknown[]
+>params : unknown[]
+>       : ^^^^^^^^^
+
+    static: unknown
+>static : unknown
+>       : ^^^^^^^
+}
+
+export type TReadonlyOptional<T extends TSchema> = TOptional<T> & TReadonly<T>
+>TReadonlyOptional : TReadonlyOptional<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+export type TReadonly<T extends TSchema> = T & { [Readonly]: 'Readonly' }
+>TReadonly : TReadonly<T>
+>          : ^^^^^^^^^^^^
+>[Readonly] : "Readonly"
+>           : ^^^^^^^^^^
+>Readonly : unique symbol
+>         : ^^^^^^^^^^^^^
+
+export type TOptional<T extends TSchema> = T & { [Optional]: 'Optional' }
+>TOptional : TOptional<T>
+>          : ^^^^^^^^^^^^
+>[Optional] : "Optional"
+>           : ^^^^^^^^^^
+>Optional : unique symbol
+>         : ^^^^^^^^^^^^^
+
+export interface TString extends TSchema {
+    [Kind]: 'String';
+>[Kind] : "String"
+>       : ^^^^^^^^
+>Kind : unique symbol
+>     : ^^^^^^^^^^^^^
+
+    static: string;
+>static : string
+>       : ^^^^^^
+
+    type: 'string';
+>type : "string"
+>     : ^^^^^^^^
+}
+
+export type ReadonlyOptionalPropertyKeys<T extends TProperties> = { [K in keyof T]: T[K] extends TReadonly<TSchema> ? (T[K] extends TOptional<T[K]> ? K : never) : never }[keyof T]
+>ReadonlyOptionalPropertyKeys : ReadonlyOptionalPropertyKeys<T>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type ReadonlyPropertyKeys<T extends TProperties> = { [K in keyof T]: T[K] extends TReadonly<TSchema> ? (T[K] extends TOptional<T[K]> ? never : K) : never }[keyof T]
+>ReadonlyPropertyKeys : ReadonlyPropertyKeys<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+export type OptionalPropertyKeys<T extends TProperties> = { [K in keyof T]: T[K] extends TOptional<TSchema> ? (T[K] extends TReadonly<T[K]> ? never : K) : never }[keyof T]
+>OptionalPropertyKeys : OptionalPropertyKeys<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+export type RequiredPropertyKeys<T extends TProperties> = keyof Omit<T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
+>RequiredPropertyKeys : Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type PropertiesReducer<T extends TProperties, R extends Record<keyof any, unknown>> = Evaluate<(
+>PropertiesReducer : PropertiesReducer<T, R>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    Readonly<Partial<Pick<R, ReadonlyOptionalPropertyKeys<T>>>> &
+    Readonly<Pick<R, ReadonlyPropertyKeys<T>>> &
+    Partial<Pick<R, OptionalPropertyKeys<T>>> &
+    Required<Pick<R, RequiredPropertyKeys<T>>>
+)>
+export type PropertiesReduce<T extends TProperties, P extends unknown[]> = PropertiesReducer<T, {
+>PropertiesReduce : PropertiesReduce<T, P>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof T]: Static<T[K], P>
+}>
+export type TPropertyKey = string | number
+>TPropertyKey : TPropertyKey
+>             : ^^^^^^^^^^^^
+
+export type TProperties = Record<TPropertyKey, TSchema>
+>TProperties : TProperties
+>            : ^^^^^^^^^^^
+
+export interface TObject<T extends TProperties = TProperties> extends TSchema {
+    [Kind]: 'Object'
+>[Kind] : "Object"
+>       : ^^^^^^^^
+>Kind : unique symbol
+>     : ^^^^^^^^^^^^^
+
+    static: PropertiesReduce<T, this['params']>
+>static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: 'object'
+>type : "object"
+>     : ^^^^^^^^
+
+    properties: T
+>properties : T
+>           : ^
+}
+
+export type Static<T extends TSchema, P extends unknown[] = []> = (T & { params: P; })['static']
+>Static : Static<T, P>
+>       : ^^^^^^^^^^^^
+>params : P
+>       : ^
+
+declare namespace Type {
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+
+    function Object<T extends TProperties>(object: T): TObject<T>
+>Object : <T extends TProperties>(object: T) => TObject<T>
+>       : ^ ^^^^^^^^^           ^^      ^^ ^^^^^          
+>object : T
+>       : ^
+
+    function String(): TString
+>String : () => TString
+>       : ^^^^^^       
+}
+

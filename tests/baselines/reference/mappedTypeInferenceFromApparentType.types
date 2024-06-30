@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/mappedTypeInferenceFromApparentType.ts] ////
+
+=== mappedTypeInferenceFromApparentType.ts ===
+type Obj = {
+>Obj : Obj
+>    : ^^^
+
+    [s: string]: number;
+>s : string
+>  : ^^^^^^
+
+};
+
+type foo = <T>(target: { [K in keyof T]: T[K] }) => void;
+>foo : foo
+>    : ^^^
+>target : { [K in keyof T]: T[K]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+type bar = <U extends string[]>(source: { [K in keyof U]: Obj[K] }) => void;
+>bar : bar
+>    : ^^^
+>source : { [K in keyof U]: Obj[K]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^
+
+declare let f: foo;
+>f : foo
+>  : ^^^
+
+declare let b: bar;
+>b : bar
+>  : ^^^
+
+b = f;
+>b = f : foo
+>      : ^^^
+>b : bar
+>  : ^^^
+>f : foo
+>  : ^^^
+

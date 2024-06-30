@@ -1,6 +1,5 @@
 import {
     ArrowFunction,
-    AssertClause,
     Block,
     CallExpression,
     CancellationToken,
@@ -12,6 +11,7 @@ import {
     DefaultClause,
     findChildOfKind,
     getLeadingCommentRanges,
+    ImportAttributes,
     isAnyImportSyntax,
     isArrayLiteralExpression,
     isBinaryExpression,
@@ -53,7 +53,7 @@ import {
     TemplateExpression,
     TextSpan,
     TryStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
@@ -164,7 +164,7 @@ function isRegionDelimiter(lineText: string) {
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
     lineText = lineText.trimStart();
     if (!startsWith(lineText, "//")) {
-        return null; // eslint-disable-line no-null/no-null
+        return null; // eslint-disable-line no-restricted-syntax
     }
     lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);
@@ -300,11 +300,11 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForParenthesizedExpression(n as ParenthesizedExpression);
         case SyntaxKind.NamedImports:
         case SyntaxKind.NamedExports:
-        case SyntaxKind.AssertClause:
-            return spanForNamedImportsOrExportsOrAssertClause(n as NamedImports | NamedExports | AssertClause);
+        case SyntaxKind.ImportAttributes:
+            return spanForImportExportElements(n as NamedImports | NamedExports | ImportAttributes);
     }
 
-    function spanForNamedImportsOrExportsOrAssertClause(node: NamedImports | NamedExports | AssertClause) {
+    function spanForImportExportElements(node: NamedImports | NamedExports | ImportAttributes) {
         if (!node.elements.length) {
             return undefined;
         }

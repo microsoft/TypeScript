@@ -20,11 +20,11 @@ export { };
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": false,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": false,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/reference/b.ts]
@@ -32,16 +32,16 @@ import * as mod_0 from "../primary/a"
 
 //// [/reference/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../primary"
-  }
- ],
- "files": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../primary"
+    }
+  ],
+  "files": []
 }
 
 
@@ -52,22 +52,18 @@ exitCode:: ExitStatus.Success
 
 
 //// [/reference/bin/tsconfig.tsbuildinfo]
-{"program":{"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"fileNames":[],"fileInfos":[],"root":[],"options":{"composite":true,"outDir":"./"},"version":"FakeTSVersion"}
 
 //// [/reference/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [],
-    "fileInfos": {},
-    "root": [],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {}
+  "fileNames": [],
+  "fileInfos": {},
+  "root": [],
+  "options": {
+    "composite": true,
+    "outDir": "./"
   },
   "version": "FakeTSVersion",
-  "size": 165
+  "size": 110
 }
 

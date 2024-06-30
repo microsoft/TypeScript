@@ -1,31 +1,32 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselinePrograms,
     CommandLineCallbacks,
     commandLineCallbacks,
     CommandLineProgram,
     generateSourceMapBaselineFiles,
-    isReadableProgramBundleEmitBuildInfo,
+    isReadableIncrementalBuildInfo,
+    isReadableIncrementalBundleEmitBuildInfo,
+    isReadableIncrementalMultiFileEmitBuildInfo,
     ReadableBuildInfo,
-    ReadableProgramBuildInfoFileInfo,
-    ReadableProgramMultiFileEmitBuildInfo,
+    ReadableIncrementalBuildInfo,
+    ReadableIncrementalBuildInfoFileInfo,
+    ReadableIncrementalBundleEmitBuildInfo,
+    ReadableIncrementalMultiFileEmitBuildInfo,
+    sanitizeSysOutput,
     toPathWithSystem,
     tscBaselineName,
-} from "./baseline";
-
-export interface DtsSignatureData {
-    signature: string | undefined;
-    exportedModules: string[] | undefined;
-}
+} from "./baseline.js";
 
 export type TscCompileSystem = fakes.System & {
     writtenFiles: Set<ts.Path>;
     baseLine(): { file: string; text: string; };
-    dtsSignaures?: Map<ts.Path, Map<string, DtsSignatureData>>;
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    dtsSignaures?: Map<ts.Path, Map<string, string>>;
+    storeSignatureInfo?: boolean;
 };
 
 export const noChangeRun: TestTscEdit = {
@@ -74,7 +75,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 
     // Create system
     const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
-    sys.storeFilesChangingSignatureDuringEmit = true;
+    sys.storeSignatureInfo = true;
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
     worker(sys);
@@ -92,7 +93,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
 Output::
-${sys.output.join("")}
+${sys.output.map(sanitizeSysOutput).join("")}
 
 ${patch ? vfs.formatPatch(patch) : ""}`,
         };
@@ -136,13 +137,15 @@ export function testTscCompile(input: TestTscCompile) {
         makeSystemReadyForBaseline(sys);
         actualReadFileMap = {};
         const originalReadFile = sys.readFile;
-        sys.readFile = path => {
-            // Dont record libs
-            if (path.startsWith("/src/")) {
-                actualReadFileMap![path] = (ts.getProperty(actualReadFileMap!, path) || 0) + 1;
-            }
-            return originalReadFile.call(sys, path);
-        };
+        if (input.baselineReadFileCalls) {
+            sys.readFile = path => {
+                // Dont record libs
+                if (!path.startsWith(ts.getDirectoryPath(sys.getExecutingFilePath()))) {
+                    actualReadFileMap![path] = (ts.getProperty(actualReadFileMap!, path) || 0) + 1;
+                }
+                return originalReadFile.call(sys, path);
+            };
+        }
 
         const result = commandLineCallbacks(sys, originalReadFile);
         ts.executeCommandLine(
@@ -156,14 +159,15 @@ export function testTscCompile(input: TestTscCompile) {
 
     function additionalBaseline(sys: TscCompileSystem) {
         const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
-        if (input.computeDtsSignatures) storeDtsSignatures(sys, getPrograms!());
+        const programs = getPrograms!();
+        if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
         if (shouldBaselinePrograms) {
             const baseline: string[] = [];
-            baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
+            baselinePrograms(baseline, programs, ts.emptyArray, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
         if (baselineReadFileCalls) {
-            sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
+            sys.write(`readFiles:: ${jsonToReadableText(actualReadFileMap)} `);
         }
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         actualReadFileMap = undefined;
@@ -177,10 +181,9 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
         const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(program.getCompilerOptions());
         if (!buildInfoPath) continue;
         sys.dtsSignaures ??= new Map();
-        const dtsSignatureData = new Map<string, DtsSignatureData>();
+        const dtsSignatureData = new Map<string, string>();
         sys.dtsSignaures.set(`${toPathWithSystem(sys, buildInfoPath)}.readable.baseline.txt` as ts.Path, dtsSignatureData);
-        const state = builderProgram.getState();
-        state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
+        builderProgram.state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
             const file = program.getSourceFileByPath(resolvedPath);
             if (!file || file.isDeclarationFile) return;
             // Compute dts and exported map and store it
@@ -189,10 +192,7 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
                 file,
                 /*cancellationToken*/ undefined,
                 sys,
-                (signature, sourceFiles) => {
-                    const exportedModules = ts.BuilderState.getExportedModules(state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit);
-                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), { signature, exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo) });
-                },
+                signature => dtsSignatureData.set(relativeToBuildInfo(resolvedPath), signature),
             );
         });
 
@@ -294,74 +294,149 @@ function verifyTscEditDiscrepancies({
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
             // Verify file info sigantures
             verifyMapLike(
-                incrementalReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
-                cleanReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
+                (incrementalReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
+                (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.fileInfos,
                 (key, incrementalFileInfo, cleanFileInfo) => {
                     const dtsForKey = dtsSignaures?.get(key);
-                    if (!incrementalFileInfo || !cleanFileInfo || incrementalFileInfo.signature !== cleanFileInfo.signature && (!dtsForKey || incrementalFileInfo.signature !== dtsForKey.signature)) {
+                    if (
+                        !incrementalFileInfo ||
+                        !cleanFileInfo ||
+                        incrementalFileInfo.signature !== cleanFileInfo.signature &&
+                            incrementalFileInfo.signature !== cleanFileInfo.version &&
+                            (dtsForKey === undefined || incrementalFileInfo.signature !== dtsForKey)
+                    ) {
                         return [
                             `Incremental signature is neither dts signature nor file version for File:: ${key}`,
-                            `Incremental:: ${JSON.stringify(incrementalFileInfo, /*replacer*/ undefined, 2)}`,
-                            `Clean:: ${JSON.stringify(cleanFileInfo, /*replacer*/ undefined, 2)}`,
-                            `Dts Signature:: $${JSON.stringify(dtsForKey?.signature)}`,
+                            `Incremental:: ${jsonToReadableText(incrementalFileInfo)}`,
+                            `Clean:: ${jsonToReadableText(cleanFileInfo)}`,
+                            `Dts Signature:: ${jsonToReadableText(dtsForKey)}`,
                         ];
                     }
                 },
                 `FileInfos:: File:: ${outputFile}`,
             );
-            if (!isReadableProgramBundleEmitBuildInfo(incrementalReadableBuildInfo?.program)) {
-                ts.Debug.assert(!isReadableProgramBundleEmitBuildInfo(cleanReadableBuildInfo?.program));
-                // Verify exportedModulesMap
-                verifyMapLike(
-                    incrementalReadableBuildInfo?.program?.exportedModulesMap,
-                    cleanReadableBuildInfo?.program?.exportedModulesMap,
-                    (key, incrementalReferenceSet, cleanReferenceSet) => {
-                        const dtsForKey = dtsSignaures?.get(key);
-                        if (
-                            !ts.arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) &&
-                            (!dtsForKey || !ts.arrayIsEqualTo(incrementalReferenceSet, dtsForKey.exportedModules))
-                        ) {
-                            return [
-                                `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
-                                `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `DtsExportsMap:: ${JSON.stringify(dtsForKey?.exportedModules, /*replacer*/ undefined, 2)}`,
-                            ];
-                        }
-                    },
-                    `exportedModulesMap:: File:: ${outputFile}`,
-                );
+            if (isReadableIncrementalMultiFileEmitBuildInfo(incrementalReadableBuildInfo)) {
+                ts.Debug.assert(!isReadableIncrementalBundleEmitBuildInfo(cleanReadableBuildInfo));
                 // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
-                if (incrementalReadableBuildInfo?.program?.affectedFilesPendingEmit) {
-                    if (cleanReadableBuildInfo?.program?.affectedFilesPendingEmit === undefined) {
+                incrementalReadableBuildInfo.affectedFilesPendingEmit?.forEach(([actualFileOrArray]) => {
+                    const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
+                    if (
+                        !ts.find(
+                            (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.affectedFilesPendingEmit,
+                            ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                        )
+                    ) {
                         addBaseline(
-                            `Incremental build contains affectedFilesPendingEmit, clean build does not have it: ${outputFile}::`,
+                            `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
                             `Incremental buildInfoText:: ${incrementalBuildText}`,
                             `Clean buildInfoText:: ${cleanBuildText}`,
                         );
                     }
-                    let expectedIndex = 0;
-                    incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFileOrArray]) => {
-                        const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
-                        expectedIndex = ts.findIndex(
-                            (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
-                            ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
-                            expectedIndex,
+                });
+            }
+            else {
+                ts.Debug.assert(!isReadableIncrementalMultiFileEmitBuildInfo(cleanReadableBuildInfo));
+                // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                if ((incrementalReadableBuildInfo as ReadableIncrementalBundleEmitBuildInfo)?.pendingEmit) {
+                    if ((cleanReadableBuildInfo as ReadableIncrementalBundleEmitBuildInfo)?.pendingEmit === undefined) {
+                        addBaseline(
+                            `Incremental build contains pendingEmit, clean build does not have it: ${outputFile}::`,
+                            `Incremental buildInfoText:: ${incrementalBuildText}`,
+                            `Clean buildInfoText:: ${cleanBuildText}`,
                         );
-                        if (expectedIndex === -1) {
-                            addBaseline(
-                                `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
-                                `Incremental buildInfoText:: ${incrementalBuildText}`,
-                                `Clean buildInfoText:: ${cleanBuildText}`,
-                            );
-                        }
-                        expectedIndex++;
-                    });
+                    }
                 }
             }
+            const readableIncrementalBuildInfo = incrementalReadableBuildInfo as ReadableIncrementalBuildInfo | undefined;
+            const readableCleanBuildInfo = cleanReadableBuildInfo as ReadableIncrementalBuildInfo | undefined;
+            readableIncrementalBuildInfo?.changeFileSet?.forEach(actualFile => {
+                if (
+                    !ts.find(
+                        readableCleanBuildInfo?.changeFileSet,
+                        expectedFile => actualFile === expectedFile,
+                    )
+                ) {
+                    addBaseline(
+                        `Incremental build contains ${actualFile} file in changeFileSet, clean build does not have it: ${outputFile}::`,
+                        `Incremental buildInfoText:: ${incrementalBuildText}`,
+                        `Clean buildInfoText:: ${cleanBuildText}`,
+                    );
+                }
+            });
+            readableIncrementalBuildInfo?.semanticDiagnosticsPerFile?.forEach((
+                [actualFile, notCachedORDiagnostics],
+            ) => {
+                const cleanFileDiagnostics = ts.find(
+                    readableCleanBuildInfo?.semanticDiagnosticsPerFile,
+                    ([expectedFile]) => actualFile === expectedFile,
+                );
+                // Incremental build should have same diagnostics as clean build
+                if (
+                    cleanFileDiagnostics &&
+                    JSON.stringify(notCachedORDiagnostics) === JSON.stringify(cleanFileDiagnostics[1])
+                ) return;
+                // If the diagnostics are marked as not cached in incremental build,
+                // and clean build doesnt mark it that way because its in its change file set, its ok
+                if (
+                    !cleanFileDiagnostics &&
+                    ts.isString(notCachedORDiagnostics) &&
+                    ts.contains(readableCleanBuildInfo?.changeFileSet, actualFile)
+                ) return;
+                // Otherwise marked as "not Cached" in clean build with errors in incremental build is ok
+                if (
+                    ts.isString(cleanFileDiagnostics?.[1]) &&
+                    !ts.isString(notCachedORDiagnostics)
+                ) return;
+                addBaseline(
+                    `Incremental build contains ${actualFile} file ${!ts.isString(notCachedORDiagnostics) ? "has" : "does not have"} semantic errors, it does not match with clean build: ${outputFile}::`,
+                    `Incremental buildInfoText:: ${incrementalBuildText}`,
+                    `Clean buildInfoText:: ${cleanBuildText}`,
+                );
+            });
+            readableCleanBuildInfo?.semanticDiagnosticsPerFile?.forEach((
+                [expectedFile, cleanFileDiagnostics],
+            ) => {
+                if (
+                    // if there are errors in the file
+                    !ts.isString(cleanFileDiagnostics?.[1]) &&
+                    // and its not already verified, its issue with the error caching
+                    !ts.find(
+                        readableIncrementalBuildInfo?.semanticDiagnosticsPerFile,
+                        ([actualFile]) => actualFile === expectedFile,
+                    )
+                ) {
+                    addBaseline(
+                        `Incremental build does not contain ${expectedFile} file for semantic errors, clean build has semantic errors: ${outputFile}::`,
+                        `Incremental buildInfoText:: ${incrementalBuildText}`,
+                        `Clean buildInfoText:: ${cleanBuildText}`,
+                    );
+                }
+            });
+            readableIncrementalBuildInfo?.emitDiagnosticsPerFile?.forEach(([actualFile]) => {
+                if (
+                    // Does not have emit diagnostics in clean buildInfo
+                    !ts.find(
+                        readableCleanBuildInfo!.emitDiagnosticsPerFile,
+                        ([expectedFile]) => actualFile === expectedFile,
+                    ) &&
+                    // Is not marked as affectedFilesPendingEmit in clean buildInfo
+                    (!ts.find(
+                        (readableCleanBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit,
+                        ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                    )) &&
+                    // Program emit is not pending in clean buildInfo
+                    !(readableCleanBuildInfo as ReadableIncrementalBundleEmitBuildInfo).pendingEmit
+                ) {
+                    addBaseline(
+                        `Incremental build contains ${actualFile} file has emit errors, clean build does not have errors or does not mark is as pending emit: ${outputFile}::`,
+                        `Incremental buildInfoText:: ${incrementalBuildText}`,
+                        `Clean buildInfoText:: ${cleanBuildText}`,
+                    );
+                }
+            });
         }
     }
-    if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt file any difference");
+    if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt find any difference");
     return baselines;
 
     function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {
@@ -404,9 +479,9 @@ function verifyTscEditDiscrepancies({
         addBaseline(
             message,
             "CleanBuild:",
-            ts.isString(expected) ? expected : JSON.stringify(expected),
+            ts.isString(expected) ? expected : jsonToReadableText(expected),
             "IncrementalBuild:",
-            ts.isString(actual) ? actual : JSON.stringify(actual),
+            ts.isString(actual) ? actual : jsonToReadableText(actual),
         );
     }
 
@@ -425,36 +500,38 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
 } {
     if (!text) return { buildInfo: text };
     const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-    let sanitizedFileInfos: ts.MapLike<string | Omit<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>, "signature" | "original"> & { signature: undefined; original: undefined; }> | undefined;
-    if (readableBuildInfo.program?.fileInfos) {
+    let sanitizedFileInfos: ts.MapLike<string | Omit<ReadableIncrementalBuildInfoFileInfo<ts.IncrementalMultiFileEmitBuildInfoFileInfo> | ReadableIncrementalBuildInfoFileInfo<ts.BuilderState.FileInfo>, "signature" | "original"> & { signature: undefined; original: undefined; }> | undefined;
+    if (isReadableIncrementalBuildInfo(readableBuildInfo)) {
         sanitizedFileInfos = {};
-        for (const id in readableBuildInfo.program.fileInfos) {
-            if (ts.hasProperty(readableBuildInfo.program.fileInfos, id)) {
-                const info = readableBuildInfo.program.fileInfos[id];
+        for (const id in readableBuildInfo.fileInfos) {
+            if (ts.hasProperty(readableBuildInfo.fileInfos, id)) {
+                const info = readableBuildInfo.fileInfos[id];
                 sanitizedFileInfos[id] = ts.isString(info) ? info : { ...info, signature: undefined, original: undefined };
             }
         }
     }
     return {
-        buildInfo: JSON.stringify(
-            {
-                ...readableBuildInfo,
-                program: readableBuildInfo.program && {
-                    ...readableBuildInfo.program,
+        buildInfo: jsonToReadableText({
+            ...readableBuildInfo,
+            ...(isReadableIncrementalBuildInfo(readableBuildInfo) ?
+                {
                     fileNames: undefined,
-                    fileNamesList: undefined,
+                    fileIdsList: undefined,
                     fileInfos: sanitizedFileInfos,
                     // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
-                    options: { ...readableBuildInfo.program.options, noEmit: undefined },
-                    exportedModulesMap: undefined,
+                    options: readableBuildInfo.options && {
+                        ...readableBuildInfo.options,
+                        noEmit: undefined,
+                    },
                     affectedFilesPendingEmit: undefined,
-                    latestChangedDtsFile: readableBuildInfo.program.latestChangedDtsFile ? "FakeFileName" : undefined,
-                },
-                size: undefined, // Size doesnt need to be equal
-            },
-            /*replacer*/ undefined,
-            2,
-        ),
+                    pendingEmit: undefined,
+                    emitDiagnosticsPerFile: undefined,
+                    latestChangedDtsFile: readableBuildInfo.latestChangedDtsFile ? "FakeFileName" : undefined,
+                    semanticDiagnosticsPerFile: undefined,
+                    changeFileSet: undefined,
+                } : undefined),
+            size: undefined, // Size doesnt need to be equal
+        }),
         readableBuildInfo,
     };
 }
@@ -561,7 +638,7 @@ export function verifyTsc({
                 }
                 Harness.Baseline.runBaseline(
                     tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
-                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-null/no-null
+                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-restricted-syntax
                 );
             });
         }

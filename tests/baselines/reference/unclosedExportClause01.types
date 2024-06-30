@@ -3,11 +3,14 @@
 === t1.ts ===
 export var x = "x";
 >x : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 
 === t2.ts ===
 export { x, from "./t1"
 >x : string
+>  : ^^^^^^
 
 === t3.ts ===
 
@@ -16,10 +19,14 @@ export { from "./t1"
 === t4.ts ===
 export { x as a from "./t1"
 >x : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 === t5.ts ===
 export { x as a, from "./t1"
 >x : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 

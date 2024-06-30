@@ -1,5 +1,5 @@
 foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-foo.js(11,12): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+foo.js(11,12): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
 foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 foo.js(21,20): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
@@ -25,7 +25,7 @@ foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachabl
     
     /** @type {FunctionReturningPromise} */
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+!!! error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
     async function testPromise2() {
         return "asd";
         ~~~~~~
@@ -60,7 +60,7 @@ foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachabl
     /** @type {FunctionReturningNever} */
                ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
-!!! related TS1055 foo.js:27:14: Type 'never' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! related TS1055 foo.js:27:14: Type 'never' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
     async function testNever2() {
         return "asd";
         ~~~~~~

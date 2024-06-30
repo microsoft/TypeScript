@@ -1,16 +1,17 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
@@ -46,7 +47,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
         };
         const configFile: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({ compilerOptions }),
+            content: jsonToReadableText({ compilerOptions }),
         };
         const files = [file, configFile, libFile];
         it("using createWatchOfConfigFile ", () => {

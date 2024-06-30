@@ -1,16 +1,14 @@
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
-    getTsBuildProjectFile,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
@@ -19,7 +17,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
     };
     interface VerifyEmitAndErrorUpdates {
         subScenario: string;
-        files: () => File[];
+        files: () => FsContents | readonly File[];
         currentDirectory?: string;
         changes: TscWatchCompileChange[];
     }
@@ -251,7 +249,7 @@ getPoint().c.x;`,
     describe("updates errors when file transitively exported file changes", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: ["app.ts"],
                 compilerOptions: { baseUrl: "." },
             }),
@@ -349,52 +347,6 @@ export class Data2 {
                 "yes circular import/exports",
                 [lib2Data, lib2Data2],
             );
-        });
-    });
-
-    describe("with noEmitOnError", () => {
-        function change(caption: string, content: string): TscWatchCompileChange {
-            return {
-                caption,
-                edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
-                // build project
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            };
-        }
-        const noChange: TscWatchCompileChange = {
-            caption: "No change",
-            edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
-            // build project
-            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        };
-        verifyEmitAndErrorUpdates({
-            subScenario: "with noEmitOnError",
-            currentDirectory: `/user/username/projects/noEmitOnError`,
-            files: () =>
-                ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
-                    .map(f => getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
-            changes: [
-                noChange,
-                change(
-                    "Fix Syntax error",
-                    `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                ),
-                change(
-                    "Semantic Error",
-                    `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                ),
-                noChange,
-                change(
-                    "Fix Semantic Error",
-                    `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                ),
-                noChange,
-            ],
         });
     });
 });

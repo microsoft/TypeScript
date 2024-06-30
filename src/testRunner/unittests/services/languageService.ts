@@ -1,13 +1,12 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: services:: languageService", () => {
     const files: { [index: string]: string; } = {
@@ -152,7 +151,7 @@ export function Component(x: Config): any;`,
         function setup(useSourceOfProjectReferenceRedirect: (() => boolean) | undefined) {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -170,7 +169,7 @@ export function Component(x: Config): any;`,
             };
             const config2: File = {
                 path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,

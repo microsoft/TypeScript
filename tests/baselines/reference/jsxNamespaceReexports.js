@@ -18,14 +18,13 @@ const content = <my-element/>;
 //// [library.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createElement = void 0;
+exports.createElement = createElement;
 function createElement(element, props) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         children[_i - 2] = arguments[_i];
     }
 }
-exports.createElement = createElement;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
