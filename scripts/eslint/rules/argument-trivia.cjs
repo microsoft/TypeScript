@@ -3,8 +3,10 @@ const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
 
 /**
- * @typedef {import("@typescript-eslint/utils").TSESTree.CallExpression | import("@typescript-eslint/utils").TSESTree.NewExpression} CallOrNewExpression
+ * @import { TSESTree } from "@typescript-eslint/utils"
+ * @typedef {TSESTree.CallExpression | TSESTree.NewExpression} CallOrNewExpression
  */
+void 0;
 
 const unset = Symbol();
 /**
@@ -46,7 +48,7 @@ module.exports = createRule({
 
         /** @type {(name: string) => boolean} */
         const isSetOrAssert = name => name.startsWith("set") || name.startsWith("assert");
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        /** @type {(node: TSESTree.Node) => boolean} */
         const isTrivia = node => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
@@ -101,7 +103,7 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
+        /** @type {(node: TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
         const checkArg = (node, i, getSignature) => {
             if (!isTrivia(node)) {
                 return;
@@ -123,7 +125,7 @@ module.exports = createRule({
             });
 
             const comments = sourceCode.getCommentsBefore(node);
-            /** @type {import("@typescript-eslint/utils").TSESTree.Comment | undefined} */
+            /** @type {TSESTree.Comment | undefined} */
             const comment = comments[comments.length - 1];
 
             if (!comment || comment.type !== "Block") {

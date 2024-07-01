@@ -206,7 +206,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/usage/usag
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -379,7 +386,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -452,10 +466,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 3,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -605,10 +615,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3,
-        "performanceData": {
-          "updateGraphDurationMs": *
-        }
+        "request_seq": 3
       }
     }
 After running Immedidate callback:: count: 0

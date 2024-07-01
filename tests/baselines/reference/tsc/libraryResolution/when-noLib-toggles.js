@@ -254,11 +254,11 @@ Shape signatures in builder refreshed for::
   "semanticDiagnosticsPerFile": [
     [
       "./a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
