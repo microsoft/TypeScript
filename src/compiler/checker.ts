@@ -20589,6 +20589,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Note that this check ignores type parameters and only considers the
     // inheritance hierarchy.
     function isTypeDerivedFrom(source: Type, target: Type): boolean {
+        const triviallyRelated = isTriviallyRelated(source, target);
+        if (triviallyRelated !== Ternary.Maybe) {
+            return triviallyRelated === Ternary.True;
+        }
         return source.flags & TypeFlags.Union ? every((source as UnionType).types, t => isTypeDerivedFrom(t, target)) :
             target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
             source.flags & TypeFlags.Intersection ? some((source as IntersectionType).types, t => isTypeDerivedFrom(t, target)) :
@@ -21565,7 +21569,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function isTriviallyRelated(source: Type, target: Type): Ternary {
+        if (source === target) {
+            return Ternary.True;
+        }
+        if (
+            source.flags & TypeFlags.Literal
+            && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
+            && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
+        ) {
+            if (source.flags & TypeFlags.BooleanLiteral) {
+                const sourceIsTrue = source === trueType || source === regularTrueType;
+                const targetIsTrue = target === trueType || target === regularTrueType;
+                return sourceIsTrue === targetIsTrue ? Ternary.True : Ternary.False;
+            }
+            return (source as LiteralType).value === (target as LiteralType).value ? Ternary.True : Ternary.False;
+        }
+        return Ternary.Maybe;
+    }
+
     function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
+        const triviallyRelated = isTriviallyRelated(source, target);
+        if (triviallyRelated !== Ternary.Maybe) {
+            return triviallyRelated === Ternary.True;
+        }
+
         if (isFreshLiteralType(source)) {
             source = (source as FreshableType).regularType;
         }
@@ -21574,18 +21602,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (source === target) {
             return true;
-        }
-        if (
-            source.flags & TypeFlags.Literal
-            && (source.flags & TypeFlags.Literal) === (target.flags & TypeFlags.Literal)
-            && !(source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral)
-        ) {
-            if (source.flags & TypeFlags.BooleanLiteral) {
-                const sourceIsTrue = source === regularTrueType;
-                const targetIsTrue = target === regularTrueType;
-                return sourceIsTrue === targetIsTrue;
-            }
-            return (source as LiteralType).value === (target as LiteralType).value;
         }
         if (relation !== identityRelation) {
             if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) || isSimpleTypeRelatedTo(source, target, relation)) {
@@ -29296,8 +29312,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const directlyRelated = mapType(
                     matching || type,
                     checkDerived ?
-                        t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
-                        t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType,
+                        t => {
+                            const triviallyRelated = isTriviallyRelated(t, c);
+                            if (triviallyRelated !== Ternary.Maybe) {
+                                return triviallyRelated === Ternary.True ? t : neverType;
+                            }
+                            return isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType;
+                        } :
+                        t => {
+                            const triviallyRelated = isTriviallyRelated(t, c);
+                            if (triviallyRelated !== Ternary.Maybe) {
+                                return triviallyRelated === Ternary.True ? t : neverType;
+                            }
+                            return isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType;
+                        },
                 );
                 // If no constituents are directly related, create intersections for any generic constituents that
                 // are related by constraint.
