@@ -1801,7 +1801,7 @@
         "category": "Error",
         "code": 1537
     },
-    "A non-null assertion may not be preceded by whitespace.": {
+    "A non-null assertion must be preceded by an identifier.": {
         "category": "Error",
         "code": 1538
     },

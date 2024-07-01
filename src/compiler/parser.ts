@@ -6455,7 +6455,7 @@ namespace Parser {
                     nextToken();
                     expression = finishNode(factory.createNonNullExpression(expression), pos);
                     if (expression.end - start !== 1) {
-                        parseErrorAt(start, expression.end, Diagnostics.A_non_null_assertion_may_not_be_preceded_by_whitespace);
+                        parseErrorAt(start, expression.end, Diagnostics.A_non_null_assertion_must_be_preceded_by_an_identifier);
                     }
                     continue;
                 }
