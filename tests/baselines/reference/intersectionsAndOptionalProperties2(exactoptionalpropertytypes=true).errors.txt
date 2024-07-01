@@ -1,0 +1,63 @@
+intersectionsAndOptionalProperties2.ts(21,1): error TS2412: Type 'undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+intersectionsAndOptionalProperties2.ts(22,1): error TS2412: Type 'undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+intersectionsAndOptionalProperties2.ts(46,1): error TS2412: Type 'undefined' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+intersectionsAndOptionalProperties2.ts(47,1): error TS2412: Type 'undefined' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+
+
+==== intersectionsAndOptionalProperties2.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58174
+    
+    type A_Primitive = {
+      disabled?: boolean;
+    };
+    
+    type B_Primitive = {
+      disabled?: boolean | undefined;
+    };
+    
+    type C_Primitive = {
+      disabled?: boolean;
+    };
+    
+    declare const ab_primitive: A_Primitive & B_Primitive;
+    declare const ac_primitive: A_Primitive & C_Primitive;
+    
+    const ab_disabled_read = ab_primitive.disabled;
+    const ac_disabled_read = ac_primitive.disabled;
+    
+    ab_primitive.disabled = undefined;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    ac_primitive.disabled = undefined;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    
+    type Foo = {
+      prop: boolean;
+    };
+    
+    type A_Obj = {
+      prop?: Foo;
+    };
+    
+    type B_Obj = {
+      prop?: Foo | undefined;
+    };
+    
+    type C_Obj = {
+      prop?: Foo;
+    };
+    
+    declare const ab_obj: A_Obj & B_Obj;
+    declare const ac_obj: A_Obj & C_Obj;
+    
+    const ab_prop_read = ab_obj.prop;
+    const ac_prop_read = ac_obj.prop;
+    
+    ab_obj.prop = undefined;
+    ~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    ac_obj.prop = undefined;
+    ~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    

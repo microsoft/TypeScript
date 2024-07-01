@@ -173,6 +173,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/app.ts: *new*
@@ -316,6 +327,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/tsconfig.json ProjectRootPath: un
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
+    }
 After Request
 watchedFiles::
 /apps/app1/src/app.ts:
@@ -569,6 +588,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -633,6 +660,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -716,6 +751,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/index.ts ProjectRootPath: und
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 11,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/utils.ts:
@@ -967,6 +1013,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 18,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -1031,6 +1085,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1116,6 +1178,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /shared/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 20,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /apps/app1/src/utils.ts:
@@ -1365,6 +1438,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 27,
+      "success": true
+    }
 After Request
 Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
@@ -1429,6 +1510,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 28,
+      "success": true
     }
 After Request
 ScriptInfos::

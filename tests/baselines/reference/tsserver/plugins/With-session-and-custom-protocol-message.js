@@ -160,7 +160,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -204,8 +211,4 @@ addProtocolHandler: {
   "seq": 2,
   "type": "request"
 }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": "testProtocolCommandResponse"
-    }
 After request

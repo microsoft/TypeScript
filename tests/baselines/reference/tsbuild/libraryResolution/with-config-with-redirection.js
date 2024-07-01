@@ -442,7 +442,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/core.d.ts (used version)
 /home/src/projects/project1/file.ts (computed .d.ts during emit)
 /home/src/projects/project1/file2.ts (computed .d.ts during emit)
@@ -450,6 +449,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project2/index.ts",
@@ -481,9 +481,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project2/index.ts (computed .d.ts during emit)
 /home/src/projects/project2/utils.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project3/index.ts",
@@ -515,9 +515,9 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project3/index.ts (computed .d.ts during emit)
 /home/src/projects/project3/utils.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 
 Program root files: [
   "/home/src/projects/project4/index.ts",
@@ -552,10 +552,10 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/projects/project4/index.ts (computed .d.ts during emit)
 /home/src/projects/project4/utils.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 
 
 //// [/home/src/projects/project1/file.d.ts]
