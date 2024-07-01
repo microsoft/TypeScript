@@ -13868,13 +13868,3 @@ export function hasInferredType(node: Node): node is HasInferredType {
             return false;
     }
 }
-
-const objectArray = [{} as never];
-/**
- * @internal
- * Ensures V8 creates a PACKED_ELEMENTS array and not a PACKED_SMI_ELEMENTS array
- */
-export function createEmptyObjectArray<T>(): T[] {
-    const elements = objectArray.slice(0, 0);
-    return elements as T[];
-}

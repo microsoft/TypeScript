@@ -120,7 +120,6 @@ import {
     HasDecorators,
     hasInvalidEscape,
     HasModifiers,
-    hasProperty,
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
