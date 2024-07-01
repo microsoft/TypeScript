@@ -11,7 +11,7 @@ import {
     TransformationContext,
     transformECMAScriptModule,
     transformModule,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformNodeModule(context: TransformationContext) {
@@ -92,6 +92,6 @@ export function transformNodeModule(context: TransformationContext) {
     }
 
     function transformBundle(node: Bundle) {
-        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile));
     }
 }

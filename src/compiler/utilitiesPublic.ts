@@ -49,6 +49,7 @@ import {
     Decorator,
     Diagnostic,
     Diagnostics,
+    diagnosticsEqualityComparer,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -158,10 +159,8 @@ import {
     isKeyword,
     isModuleBlock,
     isNonNullExpression,
-    isNotEmittedStatement,
     isOmittedExpression,
     isParameter,
-    isPartiallyEmittedExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -238,7 +237,6 @@ import {
     NodeFlags,
     NonNullChain,
     normalizePath,
-    NotEmittedStatement,
     NullLiteral,
     ObjectBindingOrAssignmentElement,
     ObjectBindingOrAssignmentPattern,
@@ -248,7 +246,6 @@ import {
     OptionalChainRoot,
     OuterExpressionKinds,
     ParameterDeclaration,
-    PartiallyEmittedExpression,
     pathIsRelative,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
@@ -257,7 +254,6 @@ import {
     PrivateIdentifierPropertyAccessExpression,
     PropertyAccessChain,
     PropertyAccessExpression,
-    PropertyDeclaration,
     PropertyName,
     QualifiedName,
     ScriptTarget,
@@ -293,10 +289,8 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
-    UnparsedNode,
-    UnparsedTextLike,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1
@@ -306,13 +300,15 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 }
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
-    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
     switch (getEmitScriptTarget(options)) {
         case ScriptTarget.ESNext:
             return "lib.esnext.full.d.ts";
+        case ScriptTarget.ES2023:
+            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
             return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
@@ -347,13 +343,23 @@ export function textSpanContainsPosition(span: TextSpan, position: number) {
 }
 
 /** @internal */
-export function textRangeContainsPositionInclusive(span: TextRange, position: number): boolean {
-    return position >= span.pos && position <= span.end;
+export function textRangeContainsPositionInclusive(range: TextRange, position: number): boolean {
+    return position >= range.pos && position <= range.end;
 }
 
 // Returns true if 'span' contains 'other'.
 export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
     return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+}
+
+/** @internal */
+export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
+    return range.pos >= span.start && range.end <= textSpanEnd(span);
+}
+
+/** @internal */
+export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
+    return span.start >= range.pos && textSpanEnd(span) <= range.end;
 }
 
 export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
@@ -365,28 +371,61 @@ export function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | un
     return overlap && overlap.length === 0 ? undefined : overlap;
 }
 
-export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
+export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean {
     return decodedTextSpanIntersectsWith(span.start, span.length, other.start, other.length);
 }
 
-export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+export function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean {
     return decodedTextSpanIntersectsWith(span.start, span.length, start, length);
 }
 
-export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
+export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean {
     const end1 = start1 + length1;
     const end2 = start2 + length2;
     return start2 <= end1 && end2 >= start1;
 }
 
-export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
+export function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean {
     return position <= textSpanEnd(span) && position >= span.start;
+}
+
+/** @internal */
+export function textRangeIntersectsWithTextSpan(range: TextRange, span: TextSpan): boolean {
+    return textSpanIntersectsWith(span, range.pos, range.end - range.pos);
 }
 
 export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined {
     const start = Math.max(span1.start, span2.start);
     const end = Math.min(textSpanEnd(span1), textSpanEnd(span2));
     return start <= end ? createTextSpanFromBounds(start, end) : undefined;
+}
+
+/**
+ * Given an array of text spans, returns an equivalent sorted array of text spans
+ * where no span overlaps or is adjacent to another span in the array.
+ * @internal
+ */
+export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
+    spans = spans.filter(span => span.length > 0).sort((a, b) => {
+        return a.start !== b.start ? a.start - b.start : a.length - b.length;
+    });
+
+    const result: TextSpan[] = [];
+    let i = 0;
+    while (i < spans.length) {
+        let span = spans[i];
+        let j = i + 1;
+        while (j < spans.length && textSpanIntersectsWithTextSpan(span, spans[j])) {
+            const start = Math.min(span.start, spans[j].start);
+            const end = Math.max(textSpanEnd(span), textSpanEnd(spans[j]));
+            span = createTextSpanFromBounds(start, end);
+            j++;
+        }
+        i = j;
+        result.push(span);
+    }
+
+    return result;
 }
 
 export function createTextSpan(start: number, length: number): TextSpan {
@@ -1221,11 +1260,6 @@ export function getJSDocTags(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ false);
 }
 
-/** @internal */
-export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
-    return getJSDocTagsWorker(node, /*noCache*/ true);
-}
-
 /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
 function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
     return find(getJSDocTagsWorker(node, noCache), predicate);
@@ -1252,7 +1286,7 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
         : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
         : "linkplain";
     const name = link.name ? entityNameToString(link.name) : "";
-    const space = link.name && link.text.startsWith("://") ? "" : " ";
+    const space = link.name && (link.text === "" || link.text.startsWith("://")) ? "" : " ";
     return `{@${kind} ${name}${space}${link.text}}`;
 }
 
@@ -1397,24 +1431,6 @@ export function isNamedExportBindings(node: Node): node is NamedExportBindings {
     return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
 }
 
-/** @deprecated */
-export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
-    switch (node.kind) {
-        case SyntaxKind.UnparsedText:
-        case SyntaxKind.UnparsedInternalText:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @deprecated */
-export function isUnparsedNode(node: Node): node is UnparsedNode {
-    return isUnparsedTextLike(node) ||
-        node.kind === SyntaxKind.UnparsedPrologue ||
-        node.kind === SyntaxKind.UnparsedSyntheticReference;
-}
-
 export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
     return node.kind === SyntaxKind.JSDocPropertyTag || node.kind === SyntaxKind.JSDocParameterTag;
 }
@@ -1426,10 +1442,6 @@ export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag
 //
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
-/** @internal */
-export function isNode(node: Node) {
-    return isNodeKind(node.kind);
-}
 
 /** @internal */
 export function isNodeKind(kind: SyntaxKind) {
@@ -1735,19 +1747,6 @@ export function isMethodOrAccessor(node: Node): node is MethodDeclaration | Acce
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @internal */
-export function isNamedClassElement(node: Node): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
-    switch (node.kind) {
-        case SyntaxKind.MethodDeclaration:
-        case SyntaxKind.GetAccessor:
-        case SyntaxKind.SetAccessor:
-        case SyntaxKind.PropertyDeclaration:
             return true;
         default:
             return false;
@@ -2088,12 +2087,6 @@ export function isAssertionExpression(node: Node): node is AssertionExpression {
         || kind === SyntaxKind.AsExpression;
 }
 
-/** @internal */
-export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
-    return isNotEmittedStatement(node)
-        || isPartiallyEmittedExpression(node);
-}
-
 // Statement
 
 export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
@@ -2113,8 +2106,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
     return false;
 }
 
-/** @internal */
-export function isScopeMarker(node: Node) {
+function isScopeMarker(node: Node) {
     return isExportAssignment(node) || isExportDeclaration(node);
 }
 
@@ -2163,14 +2155,14 @@ export function isModuleBody(node: Node): node is ModuleBody {
         || kind === SyntaxKind.Identifier;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function isNamespaceBody(node: Node): node is NamespaceBody {
     const kind = node.kind;
     return kind === SyntaxKind.ModuleBlock
         || kind === SyntaxKind.ModuleDeclaration;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
     const kind = node.kind;
     return kind === SyntaxKind.Identifier
@@ -2337,7 +2329,8 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableDeclaration
         || kind === SyntaxKind.JSDocTypedefTag
         || kind === SyntaxKind.JSDocCallbackTag
-        || kind === SyntaxKind.JSDocPropertyTag;
+        || kind === SyntaxKind.JSDocPropertyTag
+        || kind === SyntaxKind.NamedTupleMember;
 }
 
 function isDeclarationStatementKind(kind: SyntaxKind) {

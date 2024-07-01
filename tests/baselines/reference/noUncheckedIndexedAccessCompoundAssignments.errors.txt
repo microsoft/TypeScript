@@ -1,0 +1,59 @@
+noUncheckedIndexedAccessCompoundAssignments.ts(3,1): error TS18048: 'stringMap.foo' is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(4,3): error TS18048: 'stringMap.foo' is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(5,1): error TS18048: 'stringMap.foo' is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(6,1): error TS18048: 'stringMap.foo' is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(7,3): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(8,1): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(9,3): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(10,1): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(11,1): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(12,1): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(13,1): error TS2532: Object is possibly 'undefined'.
+noUncheckedIndexedAccessCompoundAssignments.ts(14,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== noUncheckedIndexedAccessCompoundAssignments.ts (12 errors) ====
+    // Each line should have one error
+    // for a total of 12 errors
+    stringMap.foo++;
+    ~~~~~~~~~~~~~
+!!! error TS18048: 'stringMap.foo' is possibly 'undefined'.
+    --stringMap.foo;
+      ~~~~~~~~~~~~~
+!!! error TS18048: 'stringMap.foo' is possibly 'undefined'.
+    stringMap.foo += 1;
+    ~~~~~~~~~~~~~
+!!! error TS18048: 'stringMap.foo' is possibly 'undefined'.
+    stringMap.foo *= 1;
+    ~~~~~~~~~~~~~
+!!! error TS18048: 'stringMap.foo' is possibly 'undefined'.
+    ++stringMap['foo'];
+      ~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    stringMap['foo']--;
+    ~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    ++stringMap[s];
+      ~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    stringMap[s]--;
+    ~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    numberMap[32]++;
+    ~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    numberMap[32] += 1;
+    ~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    numberMap[n]++;
+    ~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    numberMap[n] += 1;
+    ~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    declare const stringMap: { [s: string]: number };
+    declare const s: string;
+    declare const numberMap: { [n: number]: number };
+    declare const n: number;
+    

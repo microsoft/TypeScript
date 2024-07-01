@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives7.ts] ////
 
 //// [index.d.ts]
-// local value shadows global - no need to add type reference directive 
-   
 declare let $: { x: number }
 
 

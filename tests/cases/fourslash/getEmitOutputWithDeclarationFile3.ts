@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithDeclarationFile3.baseline
-// @out: declSingle.js
+// @outFile: declSingle.js
 
 // @Filename: decl.d.ts
 //// interface I { a: string; }

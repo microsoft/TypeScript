@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 function FakeSuppressedError(error: any, suppressed: any) {
     return { error, suppressed };
@@ -232,8 +232,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
-        assert.strictEqual(output[4].error, "dispose error");
-        assert.strictEqual(output[4].suppressed, "body error");
+        assert.strictEqual((output[4] as any).error, "dispose error");
+        assert.strictEqual((output[4] as any).suppressed, "body error");
         assert.deepEqual(output.slice(5), [
             "after try",
         ]);
@@ -1789,6 +1789,89 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter block",
             "after block",
             "no interleave",
+        ]);
+    });
+
+    // https://github.com/microsoft/TypeScript/issues/58077
+    it("Promise returned by sync dispose is not awaited", async () => {
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
+        export const output: any[] = [];
+
+        export async function main() {
+            const promiseDispose = new Promise<void>((resolve) => {
+                setTimeout(() => {
+                    output.push("y dispose promise body");
+                    resolve();
+                }, 0);
+            });
+
+            {
+                await using x = {
+                    async [Symbol.asyncDispose]() {
+                        output.push("x asyncDispose body");
+                    },
+                };
+                await using y = {
+                    [Symbol.dispose]() {
+                        output.push("y dispose body");
+                        return promiseDispose;
+                    },
+                };
+            }
+
+            output.push("body");
+            await promiseDispose;
+        }
+
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
+
+        await main();
+
+        assert.deepEqual(output, [
+            "y dispose body",
+            "x asyncDispose body",
+            "body",
+            "y dispose promise body",
+        ]);
+    });
+
+    // https://github.com/microsoft/TypeScript/issues/58077
+    it("Exception thrown by sync dispose is handled as rejection", async () => {
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
+        export const output: any[] = [];
+
+        export async function main() {
+            const interleave = Promise.resolve().then(() => { output.push("interleave"); });
+
+            try {
+                await using x = {
+                    [Symbol.dispose]() {
+                        output.push("dispose");
+                        throw null;
+                    },
+                };
+            }
+            catch {
+                output.push("catch");
+            }
+
+            await interleave;
+        }
+
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
+
+        await main();
+
+        assert.deepEqual(output, [
+            "dispose",
+            "interleave",
+            "catch",
         ]);
     });
 });

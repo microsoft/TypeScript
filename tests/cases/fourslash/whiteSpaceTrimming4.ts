@@ -5,4 +5,4 @@
 goTo.marker('1');
 edit.insert("\n");
 
-verify.currentFileContentIs("var re = /\\w+   \n    /;");
+verify.currentFileContentIs("var re = /\\w+\n    /;");

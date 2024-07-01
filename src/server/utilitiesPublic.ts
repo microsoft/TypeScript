@@ -6,11 +6,11 @@ import {
     SortedArray,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     DiscoverTypings,
     Project,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export enum LogLevel {
     terse,

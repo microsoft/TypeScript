@@ -3,21 +3,29 @@
 === iteratorSpreadInArray8.ts ===
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
+>               : ^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: symbol; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: Symbol(),
 >value : symbol
+>      : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
@@ -25,8 +33,13 @@ class SymbolIterator {
 
 var array = [...new SymbolIterator];
 >array : any[]
+>      : ^^^^^
 >[...new SymbolIterator] : any[]
+>                        : ^^^^^
 >...new SymbolIterator : any
+>                      : ^^^
 >new SymbolIterator : SymbolIterator
+>                   : ^^^^^^^^^^^^^^
 >SymbolIterator : typeof SymbolIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

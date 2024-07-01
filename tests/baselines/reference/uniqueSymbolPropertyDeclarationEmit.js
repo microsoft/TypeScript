@@ -34,6 +34,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = foo;
 var op_1 = __importDefault(require("./op"));
 var po_1 = require("./po");
 function foo() {
@@ -43,7 +44,6 @@ function foo() {
         _a[po_1.Po.ro] = {},
         _a;
 }
-exports.default = foo;
 
 
 //// [op.d.ts]

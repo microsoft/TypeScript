@@ -183,8 +183,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/index.ts :: Config file name: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -304,7 +303,7 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/node_module
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot1 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebworkerInterface { }"
@@ -414,8 +413,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 
@@ -425,7 +423,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -455,6 +460,53 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1: *new*
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -472,6 +524,56 @@ Timeout callback:: count: 3
 1: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 2: /home/src/projects/project1/tsconfig.json *new*
 3: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -514,7 +616,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/lib/lib.dom.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -612,6 +714,59 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/file.ts 1:: WatchInfo: /home/src/projects/project1/file.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -627,13 +782,67 @@ Timeout callback:: count: 2
 4: /home/src/projects/project1/tsconfig.json *new*
 5: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -679,8 +888,61 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/core.d.ts 2:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/core.d.ts 2:: WatchInfo: /home/src/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info
@@ -693,39 +955,64 @@ Before running Timeout callback:: count: 2
 9: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/core.d.ts] deleted
 
-PolledWatches::
-/home/src/projects/project1/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/projects/project1/file.ts:
-  {}
-/home/src/projects/project1/file2.ts:
-  {}
-/home/src/projects/project1/tsconfig.json:
-  {}
-/home/src/projects/project1/typeroot1/sometype/index.d.ts:
-  {}
-/home/src/projects/project1/utils.d.ts:
-  {}
-
-FsWatches *deleted*::
-/home/src/projects/project1/core.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/node_modules:
-  {}
-/home/src/projects/project1:
-  {}
-/home/src/projects/project1/typeroot1:
-  {}
-
 Timeout callback:: count: 2
 8: /home/src/projects/project1/tsconfig.json *new*
 9: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -734,7 +1021,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -801,6 +1088,12 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -815,6 +1108,54 @@ interface DOMInterface { }
 Timeout callback:: count: 1
 10: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -823,6 +1164,12 @@ After running Timeout callback:: count: 2
 Timeout callback:: count: 2
 11: /home/src/projects/project1/tsconfig.json *new*
 12: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 3
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 11: /home/src/projects/project1/tsconfig.json
@@ -849,13 +1196,13 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-d
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebworkerInterface { }"
 	/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts Text-2 "interface DOMInterface { }"
+	/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
@@ -916,8 +1263,63 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 4 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
@@ -944,8 +1346,13 @@ Timeout callback:: count: 2
 13: /home/src/projects/project1/tsconfig.json *new*
 14: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6 *changed*
+    projectProgramVersion: 4
+    dirty: true *changed*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -992,13 +1399,13 @@ Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was succes
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts Text-1 "interface WebworkerInterface { }"
 	/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts Text-1 "interface ScriptHostInterface { }"
 	/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts Text-2 "interface DOMInterface { }"
+	/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts Text-1 "interface DOMInterface { }"
 	/home/src/projects/project1/file.ts Text-2 "export const file = 10;export const xyz = 10;"
 	/home/src/projects/project1/file2.ts Text-1 "/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n"
 	/home/src/projects/project1/index.ts SVC-1-0 "export const x = \"type1\";"
@@ -1035,6 +1442,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -1066,6 +1474,8 @@ PolledWatches::
 FsWatches::
 /home/src/lib/lib.dom.d.ts:
   {}
+/home/src/projects/project1/core.d.ts:
+  {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
@@ -1085,8 +1495,15 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6
+    projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1122,9 +1539,62 @@ Timeout callback:: count: 3
 18: /home/src/projects/project1/tsconfig.json *new*
 19: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7 *changed*
+    projectProgramVersion: 5
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1202,7 +1672,7 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was not resolved. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project1/typeroot2 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -1267,6 +1737,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project1/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -1300,6 +1771,8 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/lib/lib.dom.d.ts:
   {}
+/home/src/projects/project1/core.d.ts:
+  {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
@@ -1319,6 +1792,60 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 6 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1336,6 +1863,62 @@ Timeout callback:: count: 3
 20: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 21: /home/src/projects/project1/tsconfig.json *new*
 22: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8 *changed*
+    projectProgramVersion: 6
+    dirty: true *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -1378,7 +1961,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 8 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 8 projectProgramVersion: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -1454,6 +2037,8 @@ FsWatches::
   {}
 /home/src/lib/lib.webworker.d.ts: *new*
   {}
+/home/src/projects/project1/core.d.ts:
+  {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
@@ -1473,6 +2058,65 @@ FsWatchesRecursive::
 /home/src/projects/project1/typeroot1:
   {}
 
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8
+    projectProgramVersion: 7 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
@@ -1487,6 +2131,59 @@ interface WebWorkerInterface { }
 Timeout callback:: count: 1
 23: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
 
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -1495,6 +2192,12 @@ After running Timeout callback:: count: 2
 Timeout callback:: count: 2
 24: /home/src/projects/project1/tsconfig.json *new*
 25: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9 *changed*
+    projectProgramVersion: 7
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 24: /home/src/projects/project1/tsconfig.json
@@ -1521,7 +2224,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-scripthos
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometype' from '/home/src/projects/project1/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/projects/project1/typeroot1/sometype/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json Version: 9 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json projectStateVersion: 9 projectProgramVersion: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
 	/home/src/lib/lib.dom.d.ts Text-1 "interface DOMInterface { }"
@@ -1587,3 +2290,62 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9
+    projectProgramVersion: 8 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/projects/project1/core.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json *default*
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json

@@ -3,4 +3,5 @@
 === parserForInStatement2.ts ===
 for (var in X) {
 >X : any
+>  : ^^^
 }

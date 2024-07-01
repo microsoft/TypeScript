@@ -1,9 +1,9 @@
 ===================================================================
 JsFile: out.js
-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpOyJdfQ==
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19
 sourceRoot: 
 sources: a.ts,b.ts
-sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]
+sourcesContent: ["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);\n"]
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:out.js
@@ -110,4 +110,4 @@ sourceFile:b.ts
 7 >Emitted(4, 15) Source(2, 15) + SourceIndex(1)
 8 >Emitted(4, 16) Source(2, 16) + SourceIndex(1)
 ---
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpOyJdfQ==
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyIsImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0RmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYSA9IDA7XG5jb25zb2xlLmxvZyhhKTtcbiIsInZhciBiID0gMDtcbmNvbnNvbGUubG9nKGIpO1xuIl19

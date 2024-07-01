@@ -124,8 +124,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project/packages/package-b/src
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/packages/package-b/src/index.ts :: Config file name: /home/src/projects/project/packages/package-b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package-b/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/package-b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/packages/package-b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -222,6 +221,7 @@ Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/pack
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package-a/build/index.d.ts', result '/home/src/projects/project/packages/package-a/build/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-a' was successfully resolved to '/home/src/projects/project/packages/package-a/build/index.d.ts' with Package ID 'package-a/build/index.d.ts@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/index.ts 500 undefined WatchType: Closed Script info
@@ -281,6 +281,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/src 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/src 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b 0 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b 0 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
@@ -293,7 +295,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -390,8 +392,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project/packages/package-b
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/packages/package-b/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package-b/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -401,7 +402,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/package-
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/package-b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -444,12 +452,37 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules: *new*
   {}
+/home/src/projects/project/node_modules/package-a: *new*
+  {}
 /home/src/projects/project/packages/package-a: *new*
   {}
 /home/src/projects/project/packages/package-a/src: *new*
   {}
 /home/src/projects/project/packages/package-b/src: *new*
   {}
+
+Projects::
+/home/src/projects/project/packages/package-b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.es2021.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/subfolder/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before request
 
@@ -464,10 +497,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -484,7 +513,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -502,7 +532,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -520,7 +551,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -569,6 +601,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/index.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/subfolder/index.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -582,10 +638,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 4,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -639,10 +691,12 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -662,7 +716,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -718,11 +773,37 @@ FsWatchesRecursive::
   {}
 
 FsWatchesRecursive *deleted*::
+/home/src/projects/project/node_modules/package-a:
+  {}
 /home/src/projects/project/packages/package-a:
   {}
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/index.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project/packages/package-b/tsconfig.json *deleted*
+/home/src/projects/project/packages/package-a/src/subfolder/index.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project/packages/package-b/tsconfig.json *deleted*
+/home/src/projects/project/packages/package-b/src/index.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -748,7 +829,8 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2307,
             "category": "error"
           }
-        ]
+        ],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -766,7 +848,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -775,7 +858,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4
+        "request_seq": 4,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -815,6 +901,28 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/index.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/project/packages/package-a/src/subfolder/index.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -828,10 +936,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 6,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -887,10 +991,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2021' from '/home/src/projects/project/packages/package-b/__lib_node_modules_lookup_lib.es2021.d.ts__.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.es2021.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
@@ -916,7 +1022,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -964,6 +1071,8 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
+/home/src/projects/project/node_modules/package-a: *new*
+  {}
 /home/src/projects/project/packages/package-a: *new*
   {}
 /home/src/projects/project/packages/package-a/src:
@@ -973,6 +1082,30 @@ FsWatchesRecursive::
 
 Immedidate callback:: count: 1
 5: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/packages/package-b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.es2021.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json
+/home/src/projects/project/packages/package-a/src/index.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project/packages/package-b/tsconfig.json *new*
+/home/src/projects/project/packages/package-a/src/subfolder/index.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project/packages/package-b/tsconfig.json *new*
+/home/src/projects/project/packages/package-b/src/index.ts (Open)
+    version: SVC-1-2
+    containingProjects: 1
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -984,7 +1117,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -1002,7 +1136,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/home/src/projects/project/packages/package-b/src/index.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1011,7 +1146,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0

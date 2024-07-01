@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/unusedInvalidTypeArguments.ts] ////
 
 //// [typeReference.ts]
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
-
-
 type N = number;
 type U = number;
 export type Z = U<N>;
@@ -49,7 +46,6 @@ export class C extends A<B> {
 
 //// [typeReference.js]
 "use strict";
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [classReference.js]
 "use strict";

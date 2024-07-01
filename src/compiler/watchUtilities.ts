@@ -30,6 +30,7 @@ import {
     identity,
     insertSorted,
     isArray,
+    isBuilderProgram,
     isDeclarationFileName,
     isExcludedFile,
     isSupportedSourceFileName,
@@ -40,7 +41,6 @@ import {
     mutateMap,
     noop,
     normalizePath,
-    outFile,
     Path,
     PollingInterval,
     Program,
@@ -57,7 +57,7 @@ import {
     WatchDirectoryFlags,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
@@ -600,7 +600,7 @@ export function isIgnoredFileFromWildCardWatching({
 
     // We want to ignore emit file check if file is not going to be emitted next to source file
     // In that case we follow config file inclusion rules
-    if (outFile(options) || options.outDir) return false;
+    if (options.outFile || options.outDir) return false;
 
     // File if emitted next to input needs to be ignored
     if (isDeclarationFileName(fileOrDirectoryPath)) {
@@ -628,7 +628,7 @@ export function isIgnoredFileFromWildCardWatching({
         return realProgram ?
             !!realProgram.getSourceFileByPath(file) :
             builderProgram ?
-            builderProgram.getState().fileInfos.has(file) :
+            builderProgram.state.fileInfos.has(file) :
             !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 
@@ -650,10 +650,6 @@ export function isIgnoredFileFromWildCardWatching({
                 return false;
         }
     }
-}
-
-function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-    return !!(program as T).getState;
 }
 
 /** @internal */
