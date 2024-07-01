@@ -1,26 +1,16 @@
 // @ts-check
-import {
-    CancelToken,
-} from "@esfx/canceltoken";
+import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
-import {
-    EventEmitter,
-} from "events";
+import { EventEmitter } from "events";
 import fs from "fs";
-import {
-    glob,
-} from "glob";
-import {
-    task,
-} from "hereby";
+import { glob } from "glob";
+import { task } from "hereby";
 import path from "path";
 
-import {
-    localizationDirectories,
-} from "./scripts/build/localization.mjs";
+import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import {
     buildProject,
@@ -226,7 +216,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
             // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
             // that we still set `ts` to the module.exports object.
-            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? module : { exports: ts });\nif (typeof module !== "undefined" && module.exports) { ts = module.exports; }` };
+            options.footer = { js: `})({ get exports() { return ts; }, set exports(v) { ts = v; if (typeof module !== "undefined" && module.exports) { module.exports = v; } } })` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -559,6 +549,8 @@ export const lint = task({
             "--format",
             formatter,
             "--report-unused-disable-directives",
+            "--max-warnings",
+            "0",
         ];
 
         if (cmdLineOptions.fix) {
@@ -582,6 +574,13 @@ export const checkFormat = task({
     name: "check-format",
     description: "Checks that the codebase is formatted.",
     run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
+});
+
+export const knip = task({
+    name: "knip",
+    description: "Runs knip.",
+    dependencies: [generateDiagnostics],
+    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({

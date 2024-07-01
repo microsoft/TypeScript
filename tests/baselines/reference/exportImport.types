@@ -3,27 +3,39 @@
 === consumer.ts ===
 import e = require('./exporter');
 >e : typeof e
+>  : ^^^^^^^^
 
 export function w(): e.w { // Should be OK
 >w : () => e.w
+>  : ^^^^^^   
 >e : any
+>  : ^^^
 
     return new e.w();
 >new e.w() : e.w
+>          : ^^^
 >e.w : typeof e.w
+>    : ^^^^^^^^^^
 >e : typeof e
+>  : ^^^^^^^^
 >w : typeof e.w
+>  : ^^^^^^^^^^
 }
 === w1.ts ===
 export = Widget1
 >Widget1 : Widget1
+>        : ^^^^^^^
 
 class Widget1 { name = 'one'; }
 >Widget1 : Widget1
+>        : ^^^^^^^
 >name : string
+>     : ^^^^^^
 >'one' : "one"
+>      : ^^^^^
 
 === exporter.ts ===
 export import w = require('./w1');
 >w : typeof w
+>  : ^^^^^^^^
 

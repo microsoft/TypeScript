@@ -28,8 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -102,6 +101,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -133,6 +133,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /ambient.d.ts: *new*
@@ -194,8 +205,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /ambient.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /ambient.d.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /ambient.d.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -209,6 +219,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /ambient.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -1019,6 +1037,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 4,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -1812,6 +1838,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -1861,6 +1895,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -1900,6 +1942,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1941,6 +1991,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -1980,6 +2038,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "c"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2021,6 +2087,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 12,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2060,6 +2134,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "a"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 13,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2101,6 +2183,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 14,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2140,6 +2230,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "e"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 15,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2181,6 +2279,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 16,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2220,6 +2326,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "m"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 17,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2261,6 +2375,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 18,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2300,6 +2422,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2341,6 +2471,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 20,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2380,6 +2518,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "l"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 21,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2421,6 +2567,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 22,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2460,6 +2614,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 23,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2501,6 +2663,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 24,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2540,6 +2710,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "a"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 25,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2581,6 +2759,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 26,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2620,6 +2806,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "b"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 27,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2661,6 +2855,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 28,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2700,6 +2902,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "e"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 29,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2741,6 +2951,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 30,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2780,6 +2998,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 31,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2821,6 +3047,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 32,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2860,6 +3094,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 33,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2901,6 +3143,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 34,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -2940,6 +3190,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 35,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2981,6 +3239,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 36,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3020,6 +3286,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 37,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3061,6 +3335,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 38,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3100,6 +3382,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "x"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 39,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3141,6 +3431,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 40,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3180,6 +3478,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "o"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 41,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3221,6 +3527,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 42,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3260,6 +3574,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 43,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3301,6 +3623,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 44,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3340,6 +3670,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "c"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 45,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3381,6 +3719,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 46,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3420,6 +3766,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 47,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3461,6 +3815,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 48,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3500,6 +3862,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 49,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3541,6 +3911,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 50,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3580,6 +3958,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "a"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 51,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3621,6 +4007,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 52,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3660,6 +4054,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "b"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 53,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3701,6 +4103,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 54,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3740,6 +4150,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "e"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 55,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3781,6 +4199,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 56,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3820,6 +4246,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 57,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3861,6 +4295,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 58,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3900,6 +4342,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 59,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -3941,6 +4391,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 60,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -3980,6 +4438,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 61,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -4021,6 +4487,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 62,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -4060,6 +4534,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ";"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 63,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -4101,6 +4583,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 64,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -4140,6 +4630,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "}"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 65,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -4953,6 +5451,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /ambient.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 68,
+      "success": true
+    }
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 69,
@@ -4966,6 +5472,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 69,
+      "success": true
     }
 After Request
 Projects::
@@ -5016,6 +5530,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 70,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5055,6 +5577,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 71,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5096,6 +5626,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 72,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5135,6 +5673,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "x"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 73,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5176,6 +5722,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 74,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5215,6 +5769,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "o"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 75,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5256,6 +5818,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 76,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5295,6 +5865,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 77,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5336,6 +5914,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 78,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5375,6 +5961,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "c"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 79,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5416,6 +6010,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 80,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5455,6 +6057,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 81,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5496,6 +6106,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 82,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5535,6 +6153,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 83,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5576,6 +6202,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 84,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5615,6 +6249,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "a"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 85,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5656,6 +6298,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 86,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5695,6 +6345,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "b"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 87,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5736,6 +6394,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 88,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5775,6 +6441,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "e"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 89,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5816,6 +6490,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 90,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5855,6 +6537,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "t"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 91,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5896,6 +6586,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 92,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -5935,6 +6633,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": " "
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 93,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -5976,6 +6682,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 94,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -6016,6 +6730,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 95,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /ambient.d.ts (Open) *changed*
@@ -6055,6 +6777,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "0"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 96,
+      "success": true
     }
 After Request
 ScriptInfos::

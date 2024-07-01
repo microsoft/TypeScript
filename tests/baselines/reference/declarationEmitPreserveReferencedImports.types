@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitPreserveReferencedImports.ts] ////
+
+=== utils.ts ===
+
+export interface Evt { }
+
+
+=== decl.ts ===
+import {Evt} from './utils'
+>Evt : any
+>    : ^^^
+
+export const o = <T>(o: T) => () : T => null!
+>o : <T>(o: T) => () => T
+>  : ^ ^^ ^^ ^^^^^^^^^^^ 
+><T>(o: T) => () : T => null! : <T>(o: T) => () => T
+>                             : ^ ^^ ^^ ^^^^^^^^^^^ 
+>o : T
+>  : ^
+>() : T => null! : () => T
+>                : ^^^^^^ 
+>null! : never
+>      : ^^^^^
+
+=== main.ts ===
+import { o }  from './decl'
+>o : <T>(o: T) => () => T
+>  : ^ ^^ ^^ ^^^^^^^^^^^ 
+
+import { Evt }  from './utils'
+>Evt : any
+>    : ^^^
+
+export const f = { o: o({ v: null! as Evt}) };
+>f : { o: () => { v: Evt; }; }
+>  : ^^^^^^^^^^^^^^^^   ^^^^^^
+>{ o: o({ v: null! as Evt}) } : { o: () => { v: Evt; }; }
+>                             : ^^^^^^^^^^^^^^^^   ^^^^^^
+>o : () => { v: Evt; }
+>  : ^^^^^^^^^^^   ^^^
+>o({ v: null! as Evt}) : () => { v: Evt; }
+>                      : ^^^^^^^^^^^   ^^^
+>o : <T>(o: T) => () => T
+>  : ^ ^^ ^^ ^^^^^^^^^^^ 
+>{ v: null! as Evt} : { v: Evt; }
+>                   : ^^^^^   ^^^
+>v : Evt
+>  : ^^^
+>null! as Evt : Evt
+>             : ^^^
+>null! : never
+>      : ^^^^^
+

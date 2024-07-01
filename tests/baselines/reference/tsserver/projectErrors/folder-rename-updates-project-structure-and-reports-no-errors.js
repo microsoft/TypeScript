@@ -28,8 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/myproject/bar
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/myproject/bar/app.ts :: Config file name: /a/b/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined:: Result: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/tsconfig.json 2000 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -206,7 +205,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/myproject/bar/app.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -257,10 +263,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -276,7 +278,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -294,7 +297,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -312,7 +316,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -335,7 +340,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/myproject/tsconfig.json, Cance
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/myproject/foo2 :: WatchInfo: /a/b/projects/myproject 1 undefined Config: /a/b/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/myproject/foo/foo.ts 2:: WatchInfo: /a/b/projects/myproject/foo/foo.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/myproject/foo/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/myproject/foo/foo.ts 2:: WatchInfo: /a/b/projects/myproject/foo/foo.ts 500 undefined WatchType: Closed Script info
@@ -355,26 +359,6 @@ declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 
 //// [/a/b/projects/myproject/foo/foo.ts] deleted
 
-PolledWatches::
-/a/b/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects/myproject/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/b/projects/myproject/foo/foo.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/myproject:
-  {}
-
 Timeout callback:: count: 2
 10: /a/b/projects/myproject/tsconfig.json *new*
 11: *ensureProjectForOpenFiles* *new*
@@ -390,8 +374,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/b/projects/myproject/tsconfig.json *default*
-/a/b/projects/myproject/foo/foo.ts *deleted*
+/a/b/projects/myproject/foo/foo.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /a/b/projects/myproject/tsconfig.json *deleted*
 
@@ -451,6 +437,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/projects/myproject/foo/foo.ts:
+  {}
 /a/b/projects/myproject/foo2/foo.ts: *new*
   {}
 /a/b/projects/myproject/tsconfig.json:
@@ -471,6 +459,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/b/projects/myproject/tsconfig.json *default*
+/a/b/projects/myproject/foo/foo.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /a/b/projects/myproject/foo2/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -494,10 +487,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -513,7 +502,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Timeout callback:: count: 0
@@ -531,7 +521,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 After running Immedidate callback:: count: 1
@@ -549,7 +540,8 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
+        "diagnostics": [],
+        "duration": *
       }
     }
 Info seq  [hh:mm:ss:mss] event:

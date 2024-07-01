@@ -14,6 +14,7 @@
     "File '/node_modules/conditions/index.web.ts' does not exist.",
     "File '/node_modules/conditions/index.web.tsx' does not exist.",
     "File '/node_modules/conditions/index.web.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolved under condition 'default'.",
     "Exiting conditional exports.",
     "Resolving real path for '/node_modules/conditions/index.web.d.ts', result '/node_modules/conditions/index.web.d.ts'.",

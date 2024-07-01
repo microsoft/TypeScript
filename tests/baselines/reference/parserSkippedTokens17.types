@@ -3,6 +3,9 @@
 === parserSkippedTokens17.ts ===
 foo(a, \
 >foo(a, \ : any
+>         : ^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 

@@ -7,9 +7,13 @@ module x {
 }
 export import a = x.c;
 >a : any
+>  : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >c : any
+>  : ^^^
 
 export = x;
 >x : typeof x
+>  : ^^^^^^^^
 

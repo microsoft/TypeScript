@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/intersectionApparentTypeCaching.ts] ////
+
+=== intersectionApparentTypeCaching.ts ===
+// https://github.com/microsoft/TypeScript/issues/58175
+
+type TX<T extends any[] & object> = T["length"];
+>TX : TX<T>
+>   : ^^^^^
+
+type T0<U extends any[] & object> = U;
+>T0 : U
+>   : ^
+
+type T1 = T0<string[]>;
+>T1 : string[]
+>   : ^^^^^^^^
+
