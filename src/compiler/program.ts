@@ -869,7 +869,7 @@ export function getModeForFileReference(ref: FileReference | string, containingF
  * should be the options of the referenced project, not the referencing project.
  */
 export function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
-/** @internal */
+/** @internal @knipignore */
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode;
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions?: CompilerOptions): ResolutionMode {
