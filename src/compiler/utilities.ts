@@ -40,7 +40,7 @@ import {
     canHaveDecorators,
     canHaveLocals,
     canHaveModifiers,
-    type CanHaveModuleSpecifier,
+    CanHaveModuleSpecifier,
     CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
