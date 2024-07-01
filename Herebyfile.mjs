@@ -3,6 +3,7 @@ import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
+import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
 import { glob } from "glob";
@@ -32,10 +33,7 @@ import {
     rimraf,
 } from "./scripts/build/utils.mjs";
 
-/**
- * @import esbuild from "esbuild"
- * @typedef {ReturnType<typeof task>} Task
- */
+/** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
 const copyrightFilename = "./scripts/CopyrightNotice.txt";
@@ -168,21 +166,6 @@ async function runDtsBundler(entrypoint, output) {
     ]);
 }
 
-const getEsbuild = memoize(async () => {
-    // esbuild v0.22+ requires Node v17.4.0 for crypto.getRandomValues due to
-    // https://go.dev/cl/463975. Since we still support Node 14, bring back
-    // the old randomFillSync-based implementation if necessary.
-    const { createRequire } = (await import("module")).default;
-    const require = createRequire(import.meta.url);
-    const crypto = require("crypto");
-    if (!crypto.getRandomValues) {
-        // @ts-ignore
-        crypto.getRandomValues = buffer => crypto.randomFillSync(buffer);
-    }
-    const esbuild = await import("esbuild");
-    return esbuild.default;
-});
-
 /**
  * @param {string} entrypoint
  * @param {string} outfile
@@ -281,13 +264,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
     });
 
     return {
-        build: async () => {
-            const esbuild = await getEsbuild();
-            esbuild.build(await getOptions());
-        },
+        build: async () => esbuild.build(await getOptions()),
         watch: async () => {
-            const esbuild = await getEsbuild();
-
             /** @type {esbuild.BuildOptions} */
             const options = { ...await getOptions(), logLevel: "info" };
             if (taskOptions.onWatchRebuild) {
