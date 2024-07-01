@@ -6,6 +6,7 @@
 === node_modules/@types/node/fs.d.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     interface FSWatcher {}
 }
@@ -13,12 +14,16 @@ declare module "fs" {
 /// <reference types="node" />
 import { FSWatcher } from "fs";
 >FSWatcher : any
+>          : ^^^
 
 export function f() {
 >f : () => FSWatcher
+>  : ^^^^^^         
 
     return {} as FSWatcher;
 >{} as FSWatcher : FSWatcher
+>                : ^^^^^^^^^
 >{} : {}
+>   : ^^
 }
 

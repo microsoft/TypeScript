@@ -4,59 +4,77 @@
 // esm format file
 import * as cjs from "#cjs";
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.mjs ===
 // esm format file
 import * as cjs from "#cjs";
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.cjs ===
 // esm format file
 import * as cjs from "#cjs";
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
 >type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
 >cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
 >mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
 >type : typeof type
+>     : ^^^^^^^^^^^
 

@@ -6,15 +6,21 @@ declare module JSX {
 	interface IntrinsicElements {
 		div: any
 >div : any
+>    : ^^^
 	}
 }
 
 var CustomTag: "h1" = "h1";
 >CustomTag : "h1"
+>          : ^^^^
 >"h1" : "h1"
+>     : ^^^^
 
 <CustomTag> Hello World </CustomTag>  // This should be an error. we will try look up string literal type in JSX.IntrinsicElements
 ><CustomTag> Hello World </CustomTag> : JSX.Element
+>                                     : ^^^^^^^^^^^
 >CustomTag : "h1"
+>          : ^^^^
 >CustomTag : "h1"
+>          : ^^^^
 

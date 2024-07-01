@@ -3,4 +3,5 @@
 === templateStringTermination2.ts ===
 `\\`
 >`\\` : "\\"
+>     : ^^^^
 

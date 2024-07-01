@@ -3,8 +3,11 @@
 === importWithTypeArguments.ts ===
 import<T>
 >import<T> : any
+>          : ^^^
 
 const a = import<string, number>
 >a : any
+>  : ^^^
 >import<string, number> : any
+>                       : ^^^
 

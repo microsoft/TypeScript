@@ -31,9 +31,9 @@ export const y = 20;
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -56,57 +56,49 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;","-13729954175-export const y = 20;"],"root":[2,3],"options":{"module":2},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;","-13729954175-export const y = 20;"],"root":[2,3],"options":{"module":2},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./file1.ts": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;"
-      },
-      "./file2.ts": {
-        "version": "-13729954175-export const y = 20;",
-        "signature": "-13729954175-export const y = 20;"
-      }
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
     },
-    "root": [
-      [
-        2,
-        "./file1.ts"
-      ],
-      [
-        3,
-        "./file2.ts"
-      ]
+    "./file1.ts": {
+      "version": "-10726455937-export const x = 10;",
+      "signature": "-10726455937-export const x = 10;"
+    },
+    "./file2.ts": {
+      "version": "-13729954175-export const y = 20;",
+      "signature": "-13729954175-export const y = 20;"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./file1.ts"
     ],
-    "options": {
-      "module": 2
-    },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./file1.ts",
+    [
+      3,
       "./file2.ts"
     ]
+  ],
+  "options": {
+    "module": 2
   },
   "version": "FakeTSVersion",
-  "size": 685
+  "size": 617
 }
 
 
@@ -187,9 +179,9 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -203,61 +195,53 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;",{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n"}],"root":[2,3],"options":{"module":2},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;",{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n"}],"root":[2,3],"options":{"module":2},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./file1.ts": {
-        "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;"
-      },
-      "./file2.ts": {
-        "original": {
-          "version": "-12438487295-export const z = 10;",
-          "signature": "-7483702853-export declare const z = 10;\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./file1.ts": {
+      "version": "-10726455937-export const x = 10;",
+      "signature": "-10726455937-export const x = 10;"
+    },
+    "./file2.ts": {
+      "original": {
         "version": "-12438487295-export const z = 10;",
         "signature": "-7483702853-export declare const z = 10;\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./file1.ts"
-      ],
-      [
-        3,
-        "./file2.ts"
-      ]
+      },
+      "version": "-12438487295-export const z = 10;",
+      "signature": "-7483702853-export declare const z = 10;\n"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./file1.ts"
     ],
-    "options": {
-      "module": 2
-    },
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./file1.ts",
+    [
+      3,
       "./file2.ts"
     ]
+  ],
+  "options": {
+    "module": 2
   },
   "version": "FakeTSVersion",
-  "size": 754
+  "size": 686
 }
 
 

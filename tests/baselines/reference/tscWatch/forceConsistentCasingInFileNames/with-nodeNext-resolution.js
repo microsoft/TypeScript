@@ -49,7 +49,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/web/src/package.json' does not exist.
 File '/Users/name/projects/web/package.json' does not exist.
@@ -80,6 +80,7 @@ Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolved under condition 'types'.
@@ -100,7 +101,10 @@ Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/inde
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -111,7 +115,7 @@ node_modules/@types/yargs/index.d.ts
 src/bin.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

@@ -33,14 +33,14 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --p src/project -i -w
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.
 
 [7m1[0m import data from "./data.json"; let x: string = data;
 [7m [0m [91m                 ~~~~~~~~~~~~~[0m
 
-[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -52,66 +52,70 @@ var x = data_json_1.default;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./main.ts","start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]]},"version":"FakeTSVersion"}
+{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../a/lib/lib.d.ts",
-      "./data.d.json.ts",
-      "./main.ts"
-    ],
-    "fileInfos": {
-      "../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../a/lib/lib.d.ts",
+    "./data.d.json.ts",
+    "./main.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./data.d.json.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./data.d.json.ts": {
-        "version": "2718060498-declare var val: string; export default val;",
-        "signature": "2718060498-declare var val: string; export default val;"
-      },
-      "./main.ts": {
-        "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
-        "signature": "6961905452-import data from \"./data.json\"; let x: string = data;"
-      }
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
     },
-    "root": [
-      [
-        2,
-        "./data.d.json.ts"
-      ],
-      [
-        3,
-        "./main.ts"
-      ]
+    "./data.d.json.ts": {
+      "version": "2718060498-declare var val: string; export default val;",
+      "signature": "2718060498-declare var val: string; export default val;"
+    },
+    "./main.ts": {
+      "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
+      "signature": "6961905452-import data from \"./data.json\"; let x: string = data;"
+    }
+  },
+  "root": [
+    [
+      2,
+      "./data.d.json.ts"
     ],
-    "referencedMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../a/lib/lib.d.ts",
-      "./data.d.json.ts",
-      [
-        "./main.ts",
-        [
-          {
-            "file": "./main.ts",
-            "start": 17,
-            "length": 13,
-            "messageText": "Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.",
-            "category": 1,
-            "code": 6263
-          }
-        ]
-      ]
+    [
+      3,
+      "./main.ts"
+    ]
+  ],
+  "referencedMap": {
+    "./main.ts": [
+      "./data.d.json.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./main.ts",
+      [
+        {
+          "start": 17,
+          "length": 13,
+          "messageText": "Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.",
+          "category": 1,
+          "code": 6263
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 918
+  "size": 908
 }
 
 
@@ -175,17 +179,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.
 
 [7m1[0m import data from "./data.json"; let x: string = data;
 [7m [0m [91m                 ~~~~~~~~~~~~~[0m
 
-[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 

@@ -3,7 +3,9 @@
 === ambientClassOverloadForFunction.ts ===
 declare class foo{};
 >foo : foo
+>    : ^^^
 
 function foo() { return null; }
 >foo : typeof foo
+>    : ^^^^^^^^^^
 

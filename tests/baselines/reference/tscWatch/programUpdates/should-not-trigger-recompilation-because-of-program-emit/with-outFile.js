@@ -31,9 +31,9 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -92,7 +92,10 @@ Program files::
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
 
 No shapes updated in the builder::
 
@@ -120,12 +123,13 @@ Before running Timeout callback:: count: 2
 1: timerToInvalidateFailedLookupResolutions
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -195,7 +199,11 @@ Program files::
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file3.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+/user/username/projects/myproject/src/file3.ts
 
 No shapes updated in the builder::
 

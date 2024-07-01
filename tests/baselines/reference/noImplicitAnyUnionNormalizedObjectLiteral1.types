@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/noImplicitAnyUnionNormalizedObjectLiteral1.ts] ////
+
+=== noImplicitAnyUnionNormalizedObjectLiteral1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58150
+
+function doSthWithParams(params: unknown) {
+>doSthWithParams : (params: unknown) => { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>params : unknown
+>       : ^^^^^^^
+
+  if (typeof params !== "object") {
+>typeof params !== "object" : boolean
+>                           : ^^^^^^^
+>typeof params : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>params : unknown
+>       : ^^^^^^^
+>"object" : "object"
+>         : ^^^^^^^^
+
+    return {};
+>{} : {}
+>   : ^^
+  }
+
+  return {
+>{    c: "foo",    p: "bar",    s: "baz",  } : { c: string; p: string; s: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    c: "foo",
+>c : string
+>  : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    p: "bar",
+>p : string
+>  : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+    s: "baz",
+>s : string
+>  : ^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
+
+  };
+}
+
+const bar = {
+>bar : { c?: undefined; p: any; s: any; } | { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  s: null,  ...doSthWithParams({    p: "hello",    s: "world",  }),} : { c?: undefined; p: null; s: null; } | { c: string; p: string; s: string; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  p: null,
+>p : null
+>  : ^^^^
+
+  s: null,
+>s : null
+>  : ^^^^
+
+  ...doSthWithParams({
+>doSthWithParams({    p: "hello",    s: "world",  }) : { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams : (params: unknown) => { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    p: "hello",    s: "world",  } : { p: string; s: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p: "hello",
+>p : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    s: "world",
+>s : string
+>  : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
+
+  }),
+};
+

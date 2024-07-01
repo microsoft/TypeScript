@@ -3,20 +3,29 @@
 === parserStrictMode2.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 foo1();
 >foo1() : any
+>       : ^^^
 >foo1 : any
+>     : ^^^
 
 static();
 >static() : any
+>         : ^^^
 >static : any
+>       : ^^^
 

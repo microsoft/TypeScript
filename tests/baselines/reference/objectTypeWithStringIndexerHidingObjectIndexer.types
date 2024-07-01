@@ -1,10 +1,9 @@
 //// [tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts] ////
 
 === Performance Stats ===
-Assignability cache: 3,600 / 3,600 (nearest 100)
-Type Count: 12,600 / 12,600 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 29,000 / 29,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
 
 === objectTypeWithStringIndexerHidingObjectIndexer.ts ===
 // object types can define string indexers that are more specific than the default 'any' that would be returned
@@ -13,65 +12,94 @@ Symbol count: 29,000 / 29,000 (nearest 500)
 interface Object {
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 }
 var o = {};
 >o : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var r = o['']; // should be Object
 >r : any
+>  : ^^^
 >o[''] : any
+>      : ^^^
 >o : {}
+>  : ^^
 >'' : ""
+>   : ^^
 
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 var c: C;
 >c : C
+>  : ^
 
 var r2: string = c[''];
 >r2 : string
+>   : ^^^^^^
 >c[''] : string
+>      : ^^^^^^
 >c : C
+>  : ^
 >'' : ""
+>   : ^^
 
 interface I {
     bar: string;
 >bar : string
+>    : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 var i: I;
 >i : I
+>  : ^
 
 var r3: string = i[''];
 >r3 : string
+>   : ^^^^^^
 >i[''] : string
+>      : ^^^^^^
 >i : I
+>  : ^
 >'' : ""
+>   : ^^
 
 var o2: {
 >o2 : { [x: string]: string; baz: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     baz: string;
 >baz : string
+>    : ^^^^^^
 
     [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 var r4: string = o2[''];
 >r4 : string
+>   : ^^^^^^
 >o2[''] : string
+>       : ^^^^^^
 >o2 : { [x: string]: string; baz: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >'' : ""
+>   : ^^
 
 
 

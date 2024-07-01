@@ -3,23 +3,37 @@
 === for-of40.ts ===
 var map = new Map([["", true]]);
 >map : Map<string, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^
 >new Map([["", true]]) : Map<string, boolean>
+>                      : ^^^^^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >[["", true]] : [string, true][]
+>             : ^^^^^^^^^^^^^^^^
 >["", true] : [string, true]
+>           : ^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >true : true
+>     : ^^^^
 
 for (var [k = "", v = false] of map) {
 >k : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >v : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 >map : Map<string, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     k;
 >k : string
+>  : ^^^^^^
 
     v;
 >v : boolean
+>  : ^^^^^^^
 }

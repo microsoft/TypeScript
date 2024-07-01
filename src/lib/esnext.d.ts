@@ -5,4 +5,6 @@
 /// <reference lib="esnext.promise" />
 /// <reference lib="esnext.object" />
 /// <reference lib="esnext.collection" />
+/// <reference lib="esnext.array" />
 /// <reference lib="esnext.regexp" />
+/// <reference lib="esnext.string" />

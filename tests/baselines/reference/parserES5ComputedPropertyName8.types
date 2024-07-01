@@ -3,6 +3,9 @@
 === parserES5ComputedPropertyName8.ts ===
 var v: { [e]: number };
 >v : {}
+>  : ^^
 >[e] : number
+>    : ^^^^^^
 >e : any
+>  : ^^^
 
