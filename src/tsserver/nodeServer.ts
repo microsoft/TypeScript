@@ -197,18 +197,18 @@ export function initializeNodeSystem(): StartInput {
     const logger = createLogger();
 
     // enable deprecation logging
-    Debug.loggingHost = {
+    Debug.setLoggingHost({
         log(level, s) {
             switch (level) {
-                case ts.LogLevel.Error:
-                case ts.LogLevel.Warning:
+                case ts.Debug.LogLevel.Error:
+                case ts.Debug.LogLevel.Warning:
                     return logger.msg(s, ts.server.Msg.Err);
-                case ts.LogLevel.Info:
-                case ts.LogLevel.Verbose:
+                case ts.Debug.LogLevel.Info:
+                case ts.Debug.LogLevel.Verbose:
                     return logger.msg(s, ts.server.Msg.Info);
             }
         },
-    };
+    });
 
     const pending = createQueue<Buffer>();
     let canWrite = true;

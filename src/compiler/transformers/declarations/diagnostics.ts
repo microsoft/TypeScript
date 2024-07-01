@@ -669,7 +669,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
         if ((isPartOfTypeNode(node) || isTypeQueryNode(node.parent)) && (isEntityName(node) || isEntityNameExpression(node))) {
             return createEntityInTypeNodeError(node);
         }
-        Debug.type<WithIsolatedDeclarationDiagnostic>(node);
+        Debug.assertType<WithIsolatedDeclarationDiagnostic>(node);
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:

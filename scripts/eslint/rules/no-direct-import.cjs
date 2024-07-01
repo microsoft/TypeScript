@@ -45,6 +45,9 @@ module.exports = createRule({
 
             // These appear in place of public API imports.
             if (p.endsWith("../typescript/typescript.js")) return;
+            // Okay to direct import, for now.
+            // TODO(jakebailey): we should consider where this is safe to ignore
+            if (p.endsWith("/debug.js")) return;
 
             // The below is similar to https://github.com/microsoft/DefinitelyTyped-tools/blob/main/packages/eslint-plugin/src/rules/no-bad-reference.ts
 

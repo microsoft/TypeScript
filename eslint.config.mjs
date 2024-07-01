@@ -157,6 +157,7 @@ export default tseslint.config(
             "local/jsdoc-format": "error",
             "local/js-extensions": "error",
             "local/no-array-mutating-method-expressions": "error",
+            "local/prefer-direct-import": "error",
         },
     },
     {
@@ -220,6 +221,12 @@ export default tseslint.config(
         files: ["src/**/_namespaces/**"],
         rules: {
             "local/no-direct-import": "off",
+        },
+    },
+    {
+        files: ["src/harness/**", "src/testRunner/**", "src/tsserver/**", "src/typingsInstaller/**"],
+        rules: {
+            "local/prefer-direct-import": "off",
         },
     },
     {

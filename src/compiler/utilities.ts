@@ -2083,7 +2083,7 @@ export function isBlockScope(node: Node, parentNode: Node | undefined): boolean 
 
 /** @internal */
 export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters {
-    Debug.type<DeclarationWithTypeParameters>(node);
+    Debug.assertType<DeclarationWithTypeParameters>(node);
     switch (node.kind) {
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
@@ -2097,7 +2097,7 @@ export function isDeclarationWithTypeParameters(node: Node): node is Declaration
 
 /** @internal */
 export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren {
-    Debug.type<DeclarationWithTypeParameterChildren>(node);
+    Debug.assertType<DeclarationWithTypeParameterChildren>(node);
     switch (node.kind) {
         case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:
@@ -11798,7 +11798,7 @@ export function createNameResolver({
 
 /** @internal */
 export function isPrimitiveLiteralValue(node: Expression, includeBigInt = true): node is PrimitiveLiteral {
-    Debug.type<PrimitiveLiteral>(node);
+    Debug.assertType<PrimitiveLiteral>(node);
     switch (node.kind) {
         case SyntaxKind.TrueKeyword:
         case SyntaxKind.FalseKeyword:
@@ -11832,7 +11832,7 @@ export function unwrapParenthesizedExpression(o: Expression): Expression {
 
 /** @internal */
 export function hasInferredType(node: Node): node is HasInferredType {
-    Debug.type<HasInferredType>(node);
+    Debug.assertType<HasInferredType>(node);
     switch (node.kind) {
         case SyntaxKind.Parameter:
         case SyntaxKind.PropertySignature:

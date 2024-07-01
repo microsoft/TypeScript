@@ -812,7 +812,7 @@ function getAllModulePathsWorker(info: Info, importedFileName: string, host: Mod
     const cache = host.getModuleResolutionCache?.();
     const links = host.getSymlinkCache?.();
     if (cache && links && host.readFile && !pathContainsNodeModules(info.importingSourceFileName)) {
-        Debug.type<ModuleResolutionHost>(host);
+        Debug.assertType<ModuleResolutionHost>(host);
         // Cache resolutions for all `dependencies` of the `package.json` context of the input file.
         // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
         // should get (re)used.

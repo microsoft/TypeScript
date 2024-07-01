@@ -2,7 +2,8 @@
 
 export * from "../corePublic.js";
 export * from "../core.js";
-export * from "../debug.js";
+import * as Debug from "../debug.js";
+export { Debug };
 export * from "../semver.js";
 export * from "../performanceCore.js";
 export * from "../tracing.js";

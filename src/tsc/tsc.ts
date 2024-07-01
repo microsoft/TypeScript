@@ -3,11 +3,11 @@ import * as ts from "./_namespaces/ts.js";
 // This file actually uses arguments passed on commandline and executes it
 
 // enable deprecation logging
-ts.Debug.loggingHost = {
+ts.Debug.setLoggingHost({
     log(_level, s) {
         ts.sys.write(`${s || ""}${ts.sys.newLine}`);
     },
-};
+});
 
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();

@@ -1,5 +1,4 @@
 import {
-    AssertionLevel,
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
@@ -2005,10 +2004,10 @@ if (sys && sys.getEnvironmentVariable) {
     setCustomPollingValues(sys);
     Debug.setAssertionLevel(
         /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
-            ? AssertionLevel.Normal
-            : AssertionLevel.None,
+            ? Debug.AssertionLevel.Normal
+            : Debug.AssertionLevel.None,
     );
 }
 if (sys && sys.debugMode) {
-    Debug.isDebugging = true;
+    Debug.setIsDebugging(true);
 }
