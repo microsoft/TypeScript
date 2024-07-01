@@ -4,6 +4,7 @@ import {
     append,
     ApplyCodeActionCommandResult,
     arrayFrom,
+    arrayIsEqualTo,
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
@@ -143,6 +144,7 @@ import {
     ModuleImportResult,
     Msg,
     NormalizedPath,
+    nullTypingsInstaller,
     PackageJsonWatcher,
     ProjectOptions,
     ProjectService,
@@ -150,7 +152,6 @@ import {
     ServerHost,
     Session,
     toNormalizedPath,
-    TypingsCache,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server.js";
 import * as protocol from "./protocol.js";
@@ -306,6 +307,59 @@ const enum TypingWatcherType {
 
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 
+interface TypingsCacheEntry {
+    readonly typeAcquisition: TypeAcquisition;
+    readonly compilerOptions: CompilerOptions;
+    readonly unresolvedImports: SortedReadonlyArray<string> | undefined;
+}
+
+function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
+    if (arr1 === arr2) {
+        return true;
+    }
+    if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
+        return true;
+    }
+    const set = new Map<string, boolean>();
+    let unique = 0;
+
+    for (const v of arr1!) {
+        if (set.get(v) !== true) {
+            set.set(v, true);
+            unique++;
+        }
+    }
+    for (const v of arr2!) {
+        const isSet = set.get(v);
+        if (isSet === undefined) {
+            return false;
+        }
+        if (isSet === true) {
+            set.set(v, false);
+            unique--;
+        }
+    }
+    return unique === 0;
+}
+
+function typeAcquisitionChanged(opt1: TypeAcquisition, opt2: TypeAcquisition): boolean {
+    return opt1.enable !== opt2.enable ||
+        !setIsEqualTo(opt1.include, opt2.include) ||
+        !setIsEqualTo(opt1.exclude, opt2.exclude);
+}
+
+function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
+    // TODO: add more relevant properties
+    return getAllowJSCompilerOption(opt1) !== getAllowJSCompilerOption(opt2);
+}
+
+function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
+    if (imports1 === imports2) {
+        return false;
+    }
+    return !arrayIsEqualTo(imports1, imports2);
+}
+
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFilesMap = new Map<Path, ProjectRootFile>();
     private program: Program | undefined;
@@ -387,6 +441,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     typingFiles: SortedReadonlyArray<string> = emptyArray;
+
+    private typingsCache: TypingsCacheEntry | undefined;
 
     private typingWatchers: TypingWatchers | undefined;
 
@@ -499,6 +555,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     protected typeAcquisition: TypeAcquisition | undefined;
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
+    /** @internal*/ preferNonRecursiveWatch: boolean | undefined;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -559,6 +616,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.trace = s => host.trace!(s);
         }
         this.realpath = maybeBind(host, host.realpath);
+        this.preferNonRecursiveWatch = this.projectService.canUseWatchEvents || host.preferNonRecursiveWatch;
 
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(
@@ -578,19 +636,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     isKnownTypesPackageName(name: string): boolean {
-        return this.typingsCache.isKnownTypesPackageName(name);
+        return this.projectService.typingsInstaller.isKnownTypesPackageName(name);
     }
     installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-        return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
+        return this.projectService.typingsInstaller.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
     }
 
     /** @internal */
     getGlobalTypingsCacheLocation() {
         return this.getGlobalCache();
-    }
-
-    private get typingsCache(): TypingsCache {
-        return this.projectService.typingsCache;
     }
 
     /** @internal */
@@ -1059,7 +1113,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
-        this.projectService.typingsCache.onProjectClosed(this);
+        if (this.typingsCache) this.projectService.typingsInstaller.onProjectClosed(this);
+        this.typingsCache = undefined;
         this.closeWatchingTypingLocations();
         // if we have a program - release all files that are enlisted in program but arent root
         // The releasing of the roots happens later
@@ -1379,7 +1434,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
             }
 
-            this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
+            this.enqueueInstallTypingsForProject(hasAddedorRemovedFiles);
         }
         else {
             this.lastCachedUnresolvedImportsList = undefined;
@@ -1401,7 +1456,41 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+    enqueueInstallTypingsForProject(forceRefresh: boolean) {
+        const typeAcquisition = this.getTypeAcquisition();
+
+        if (!typeAcquisition || !typeAcquisition.enable || this.projectService.typingsInstaller === nullTypingsInstaller) {
+            return;
+        }
+
+        const entry = this.typingsCache;
+        if (
+            forceRefresh ||
+            !entry ||
+            typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
+            compilerOptionsChanged(this.getCompilationSettings(), entry.compilerOptions) ||
+            unresolvedImportsChanged(this.lastCachedUnresolvedImportsList, entry.unresolvedImports)
+        ) {
+            // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
+            // instead it acts as a placeholder to prevent issuing multiple requests
+            this.typingsCache = {
+                compilerOptions: this.getCompilationSettings(),
+                typeAcquisition,
+                unresolvedImports: this.lastCachedUnresolvedImportsList,
+            };
+            // something has been changed, issue a request to update typings
+            this.projectService.typingsInstaller.enqueueInstallTypingsRequest(this, typeAcquisition, this.lastCachedUnresolvedImportsList);
+        }
+    }
+
+    /** @internal */
+    updateTypingFiles(compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+        this.typingsCache = {
+            compilerOptions,
+            typeAcquisition,
+            unresolvedImports,
+        };
+        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : sort(newTypings);
         if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
@@ -1610,7 +1699,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                                 !sourceFile ||
                                 sourceFile.resolvedPath !== source ||
                                 !this.isValidGeneratedFileWatcher(
-                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.program!),
                                     watcher,
                                 )
                             ) {

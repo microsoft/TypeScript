@@ -428,7 +428,7 @@ export interface OutliningSpansRequestFull extends FileRequest {
 /**
  * Response to OutliningSpansRequest request.
  *
- * @internal
+ * @internal @knipignore
  */
 export interface OutliningSpansResponseFull extends Response {
     body?: ts.OutliningSpan[];
@@ -1257,7 +1257,7 @@ export interface RenameFullRequest extends FileLocationRequest {
     readonly arguments: RenameRequestArgs;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export interface RenameFullResponse extends Response {
     readonly body: readonly RenameLocation[];
 }
@@ -2757,7 +2757,7 @@ export interface CloseFileWatcherEventBody {
     readonly id: number;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export type AnyEvent =
     | RequestCompletedEvent
     | DiagnosticEvent

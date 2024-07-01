@@ -461,19 +461,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "semanticDiagnosticsPerFile": [
     [
       "../../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1682,23 +1682,23 @@ Shape signatures in builder refreshed for::
   "semanticDiagnosticsPerFile": [
     [
       "../../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1972,27 +1972,27 @@ Shape signatures in builder refreshed for::
   "semanticDiagnosticsPerFile": [
     [
       "../../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -2290,23 +2290,23 @@ Shape signatures in builder refreshed for::
   "semanticDiagnosticsPerFile": [
     [
       "../../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -2621,19 +2621,19 @@ Shape signatures in builder refreshed for::
   "semanticDiagnosticsPerFile": [
     [
       "../../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
