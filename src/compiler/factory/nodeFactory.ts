@@ -478,7 +478,7 @@ type NodeData<T extends Node> =
     & Readonly<Omit<T, keyof Identifier>>
     & Mutable<Pick<T, Extract<keyof Identifier, keyof T>>>
     & {
-        data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol">>>> | undefined;
+        data: Partial<Mutable<Omit<T, Extract<keyof T, `_${string}`> | Exclude<keyof Identifier, "localSymbol" | "jsDoc">>>> | undefined;
     };
 /** @internal @knipignore */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
@@ -1239,7 +1239,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             hasExtendedUnicodeEscape: false,
             isUnterminated: false,
             text,
-            // localSymbol: undefined!
+            localSymbol: undefined,
         };
         if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
@@ -1266,7 +1266,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // isUnterminated: false,
             text,
             // textSourceNode: undefined!,
-            // localSymbol: undefined!,
+            localSymbol: undefined,
         };
         if (hasExtendedUnicodeEscape) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
@@ -1641,9 +1641,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             default: defaultType,
             expression: undefined, // initialized by parser to report grammar errors
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1674,7 +1674,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionToken,
             type,
             initializer: asInitializer(initializer),
-            // localSymbol: undefined
+            localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
         if (isThisIdentifier(nodeData.name)) {
@@ -1691,7 +1692,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 (modifiersToFlags(nodeData.modifiers) & ModifierFlags.ParameterPropertyModifier ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None);
         }
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1754,10 +1754,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionToken,
             initializer: undefined, // initialized by parser to report grammar errors
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1801,6 +1801,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             exclamationToken: questionOrExclamationToken && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined,
             type,
             initializer: asInitializer(initializer),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
         const isAmbient = node.flags & NodeFlags.Ambient || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient;
@@ -1812,7 +1813,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (isComputedPropertyName(nodeData.name) || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Static && nodeData.initializer ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None) |
             TransformFlags.ContainsClassFields;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1856,9 +1856,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             nextContainer: undefined, // initialized by binder (LocalsContainer)
             typeArguments: undefined, // used in quick info
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1910,8 +1910,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             endFlowNode: undefined,
             returnFlowNode: undefined,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         if (!nodeData.body) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1985,10 +1985,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             endFlowNode: undefined,
             returnFlowNode: undefined,
             name: undefined,
-            // localSymbol: undefined
+            localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2033,8 +2033,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             // name: undefined,
             // questionToken: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
 
         node.transformFlags = propagateChildrenFlags(nodeData.modifiers) |
             propagateChildrenFlags(nodeData.parameters) |
@@ -2091,8 +2091,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         if (!nodeData.body) {
@@ -2160,9 +2160,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         if (!nodeData.body) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -2221,9 +2221,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             localSymbol: undefined,
             // name: undefined,
             // questionToken: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2258,9 +2258,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             localSymbol: undefined,
             // name: undefined,
             // questionToken: undefined
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2297,9 +2297,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // name: undefined,
             // questionToken: undefined,
             // typeParameters: undefined
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2403,10 +2403,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             typeArguments: undefined, // used in quick info
             localSymbol: undefined,
             // name: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2457,9 +2457,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             typeArguments: undefined, // used in quick info
             localSymbol: undefined,
             // name: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2584,10 +2584,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionToken,
             type,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -2986,10 +2986,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             properties: createNodeArray(properties),
             multiLine,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(node.properties);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3007,6 +3007,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionDotToken,
             name,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
@@ -3014,7 +3015,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 propagateIdentifierNameFlags(nodeData.name) :
                 propagateChildFlags(nodeData.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -3077,12 +3077,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionDotToken,
             argumentExpression,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.questionDotToken) |
             propagateChildFlags(nodeData.argumentExpression);
 
-        // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -3294,10 +3294,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createParenthesizedExpression(expression: Expression) {
         const node = createBaseNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
-        node.data = { expression };
+        node.data = {
+            expression,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags = propagateChildFlags(node.expression);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3336,9 +3338,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         const isAsync = modifiersToFlags(nodeData.modifiers) & ModifierFlags.Async;
@@ -3412,9 +3414,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             localSymbol: undefined,
             // name: undefined,
             // questionToken: undefined
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
 
         const isAsync = modifiersToFlags(nodeData.modifiers) & ModifierFlags.Async;
 
@@ -3579,6 +3581,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             operatorToken,
             right: parenthesizerRules().parenthesizeRightSideOfBinary(operatorKind, node.left, right),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(node.left) |
             propagateChildFlags(node.operatorToken) |
@@ -3609,7 +3612,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             node.transformFlags |= TransformFlags.ContainsPrivateIdentifierInExpression;
         }
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -3831,7 +3833,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             typeParameters: asNodeArray(typeParameters),
             heritageClauses: asNodeArray(heritageClauses),
             members: createNodeArray(members),
-            // localSymbol: undefined.
+            localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateNameFlags(nodeData.name) |
@@ -3841,7 +3844,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (nodeData.typeParameters ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4043,9 +4045,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         node.transformFlags |= propagateChildrenFlags(nodeData.statements);
         return node;
     }
@@ -4063,8 +4065,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             modifiers: asNodeArray(modifiers),
             declarationList: isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
@@ -4088,17 +4090,19 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createEmptyStatement() {
         const node = createBaseNode<EmptyStatement>(SyntaxKind.EmptyStatement);
-        // node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        node.data = { jsDoc: undefined }; // initialized by parser (JsDocContainer)
         return node;
     }
 
     // @api
     function createExpressionStatement(expression: Expression): ExpressionStatement {
         const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
-        const nodeData = node.data = { expression: parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression) };
+        const nodeData = node.data = {
+            expression: parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4117,12 +4121,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             expression,
             thenStatement: asEmbeddedStatement(thenStatement),
             elseStatement: asEmbeddedStatement(elseStatement),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.thenStatement) |
             propagateChildFlags(nodeData.elseStatement);
 
-        // // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4142,11 +4146,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             statement: asEmbeddedStatement(statement),
             expression,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.statement) |
             propagateChildFlags(nodeData.expression);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4165,11 +4169,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             expression,
             statement: asEmbeddedStatement(statement),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4192,8 +4196,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             statement: asEmbeddedStatement(statement),
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         node.transformFlags |= propagateChildFlags(nodeData.initializer) |
@@ -4223,9 +4227,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             statement: asEmbeddedStatement(statement),
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         node.transformFlags |= propagateChildFlags(nodeData.initializer) |
             propagateChildFlags(nodeData.expression) |
@@ -4254,8 +4258,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
 
         node.transformFlags |= propagateChildFlags(nodeData.awaitModifier) |
@@ -4281,11 +4285,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createContinueStatement(label?: string | Identifier): ContinueStatement {
         const node = createBaseNode<ContinueStatement>(SyntaxKind.ContinueStatement);
-        const nodeData = node.data = { label: asName(label) };
+        const nodeData = node.data = {
+            label: asName(label),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4300,11 +4306,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createBreakStatement(label?: string | Identifier): BreakStatement {
         const node = createBaseNode<BreakStatement>(SyntaxKind.BreakStatement);
-        const nodeData = node.data = { label: asName(label) };
+        const nodeData = node.data = {
+            label: asName(label),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4319,13 +4327,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createReturnStatement(expression?: Expression): ReturnStatement {
         const node = createBaseNode<ReturnStatement>(SyntaxKind.ReturnStatement);
-        const nodeData = node.data = { expression };
+        const nodeData = node.data = {
+            expression,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         // return in an ES2018 async generator must be awaited
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4343,11 +4353,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             expression,
             statement: asEmbeddedStatement(statement),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.statement);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4367,8 +4377,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             possiblyExhaustive: false, // initialized by binder
             expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
             caseBlock,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildFlags(nodeData.caseBlock);
@@ -4390,11 +4400,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const nodeData = node.data = {
             label: asName(label),
             statement: asEmbeddedStatement(statement),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.label) |
             propagateChildFlags(nodeData.statement);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4410,10 +4420,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createThrowStatement(expression: Expression) {
         const node = createBaseNode<ThrowStatement>(SyntaxKind.ThrowStatement);
-        const nodeData = node.data = { expression };
+        const nodeData = node.data = {
+            expression,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildFlags(nodeData.expression);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4432,12 +4444,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             tryBlock,
             catchClause,
             finallyBlock,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.tryBlock) |
             propagateChildFlags(nodeData.catchClause) |
             propagateChildFlags(nodeData.finallyBlock);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         // nodeData.flowNode = undefined; // initialized by binder (FlowContainer)
         return node;
     }
@@ -4466,12 +4478,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             type,
             initializer: asInitializer(initializer),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.initializer) |
             (nodeData.exclamationToken ?? nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4537,8 +4549,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // exclamationToken: undefined,
             localSymbol: undefined,
             // questionToken: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
 
         if (!nodeData.body || modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -4614,6 +4626,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             heritageClauses: asNodeArray(heritageClauses),
             members: createNodeArray(members),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
         if (modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
@@ -4632,7 +4645,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             }
         }
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4670,10 +4682,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             heritageClauses: asNodeArray(heritageClauses),
             members: createNodeArray(members),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4712,9 +4724,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4746,6 +4758,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             name: asName(name),
             members: createNodeArray(members),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateChildFlags(nodeData.name) |
@@ -4753,7 +4766,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             TransformFlags.ContainsTypeScript;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4787,8 +4799,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         if (modifiersToFlags(nodeData.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -4820,10 +4832,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createModuleBlock(statements: readonly Statement[]) {
         const node = createBaseNode<ModuleBlock>(SyntaxKind.ModuleBlock);
-        const nodeData = node.data = { statements: createNodeArray(statements) };
+        const nodeData = node.data = {
+            statements: createNodeArray(statements),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildrenFlags(nodeData.statements);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4863,11 +4877,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             name: asName(name),
             modifiers: undefined, // initialized by parser to report grammar errors
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateIdentifierNameFlags(nodeData.name) |
             TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4900,6 +4914,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isTypeOnly,
             moduleReference,
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateIdentifierNameFlags(nodeData.name) |
@@ -4911,7 +4926,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -4945,12 +4959,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             moduleSpecifier,
             attributes,
             assertClause: attributes,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.importClause) |
             propagateChildFlags(nodeData.moduleSpecifier);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5100,7 +5114,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseDeclaration<NamespaceImport>(SyntaxKind.NamespaceImport);
         node.data = {
             name,
-            // localSymbol: undefined
+            localSymbol: undefined,
         };
         node.transformFlags |= propagateChildFlags(node.name);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -5119,7 +5133,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseDeclaration<NamespaceExport>(SyntaxKind.NamespaceExport);
         node.data = {
             name,
-            // localSymbol: undefined
+            localSymbol: undefined,
         };
         node.transformFlags |= propagateChildFlags(node.name) |
             TransformFlags.ContainsES2020;
@@ -5189,11 +5203,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression),
             localSymbol: undefined,
             // name: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) | propagateChildFlags(nodeData.expression);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5227,13 +5241,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             assertClause: attributes,
             localSymbol: undefined,
             // name: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildrenFlags(nodeData.modifiers) |
             propagateChildFlags(nodeData.exportClause) |
             propagateChildFlags(nodeData.moduleSpecifier);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5289,12 +5303,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propertyName: asName(propertyName),
             name: asName(name),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.propertyName) |
             propagateChildFlags(nodeData.name);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -5310,8 +5324,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createMissingDeclaration(): MissingDeclaration {
         const node = createBaseDeclaration<MissingDeclaration>(SyntaxKind.MissingDeclaration);
-        node.data = {}; // Bag for others to add what they need, we don't know what that will be
-        // node.data.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        node.data = {
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         return node;
     }
 
@@ -5399,8 +5414,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             localSymbol: undefined,
             // name: undefined,
             // typeParameters: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         node.transformFlags = propagateChildrenFlags(nodeData.parameters) |
             (nodeData.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
 
@@ -5457,8 +5472,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
             locals: undefined, // initialized by binder (LocalsContainer)
             nextContainer: undefined, // initialized by binder (LocalsContainer)
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6187,11 +6202,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
             statements: createNodeArray(statements),
             // fallthroughFlowNode: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(nodeData.expression) |
             propagateChildrenFlags(nodeData.statements);
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6286,11 +6301,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionToken: undefined, // initialized by parser to report grammar errors
             exclamationToken: undefined, // initialized by parser to report grammar errors
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
 
         node.transformFlags |= propagateNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.initializer);
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6325,8 +6340,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             questionToken: undefined, // initialized by parser to report grammar errors
             exclamationToken: undefined, // initialized by parser to report grammar errors
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
 
         node.transformFlags |= propagateIdentifierNameFlags(nodeData.name) |
             propagateChildFlags(nodeData.objectAssignmentInitializer) |
@@ -6356,12 +6371,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSpreadAssignment(expression: Expression) {
         const node = createBaseDeclaration<SpreadAssignment>(SyntaxKind.SpreadAssignment);
-        node.data = { expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression) };
+        node.data = {
+            expression: parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression),
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
+        };
         node.transformFlags |= propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsObjectRestOrSpread;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6383,12 +6400,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             name: asName(name),
             initializer: initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer),
             localSymbol: undefined,
+            jsDoc: undefined, // initialized by parser (JsDocContainer)
         };
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.initializer) |
             TransformFlags.ContainsTypeScript;
 
-        // node.jsDoc= undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -6509,16 +6526,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.symbol = source.symbol;
 
         const sourceData = (source as any).data;
-        const nodeData = (node as any).data = {};
+        const nodeData: any = (node as any).data = {};
         for (const p in sourceData) {
-            if (hasProperty(nodeData, p) || !hasProperty(sourceData, p)) {
-                continue;
-            }
-            if (p === "emitNode") {
-                node.emitNode = undefined;
-                continue;
-            }
-            (node as any)[p] = sourceData[p];
+            if (p === "emitNode") continue;
+            const value = sourceData[p];
+            if (value === undefined) continue;
+            nodeData[p] = sourceData[p];
         }
         return node;
     }
@@ -6715,7 +6728,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneIdentifier(node: Identifier): Identifier {
         const clone = createBaseIdentifier(node.escapedText);
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.jsDoc = node.jsDoc;
+        if (node.jsDoc) {
+            clone.jsDoc = node.jsDoc;
+        }
         clone.flowNode = node.flowNode;
         clone.symbol = node.symbol;
         clone.transformFlags = node.transformFlags;
@@ -6772,7 +6787,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const clone = baseFactory.createBaseNode(node.kind) as Mutable<T & Identifier>;
 
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.jsDoc = (node as any).jsDoc;
+        // clone.jsDoc = (node as any).jsDoc;
         clone.flowNode = (node as any).flowNode;
         clone.symbol = (node as any).symbol;
 
@@ -6780,13 +6795,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const cloneData: any = (clone as any).data = {};
         if (nodeData) {
             for (const key in nodeData) {
-                if (hasProperty(cloneData, key) || !hasProperty(nodeData, key)) {
-                    continue;
-                }
-                (clone as any)[key] = nodeData[key];
-            }
-            if(cloneData.emitNode) {
-                cloneData.emitNode = undefined;
+                if (key === "emitNode") continue;
+                const value = nodeData[key];
+                if (value === undefined) continue;
+                cloneData[key] = nodeData[key];
             }
         }
         setOriginal(clone, node);
