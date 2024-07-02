@@ -302,9 +302,12 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
 ]);
 
 const enum TokenCategory {
-    None = 0,
+    IdentifierOrUnknown = 0,
 
-    /** Single-width tokens whose contents fit in the lower masked bits. */
+    /**
+     * Single-width tokens whose SyntaxKind value fits
+     * in the lower masked bits of the current value.
+     */
     SimpleToken = 1 << 8, // must come first
     Whitespace = 1 << 9,
     LineBreak = 1 << 10,
@@ -321,7 +324,7 @@ const enum TokenCategory {
 const tokenCategoryLookup: TokenCategory[] = [];
 const tokenCategoryLookupUncommon = new Map<CharacterCodes, TokenCategory>();
 for (let i = 0; i < CharacterCodes.maxAsciiCharacter; i++) {
-    tokenCategoryLookup.push(TokenCategory.None);
+    tokenCategoryLookup.push(TokenCategory.IdentifierOrUnknown);
 }
 
 for (
@@ -2027,9 +2030,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const tokenCategory = ch < tokenCategoryLookup.length ?
                 tokenCategoryLookup[ch] :
-                tokenCategoryLookupUncommon.get(ch) ?? TokenCategory.None;
+                tokenCategoryLookupUncommon.get(ch) ?? TokenCategory.IdentifierOrUnknown;
 
-            if (tokenCategory === TokenCategory.None) {
+            if (tokenCategory === TokenCategory.IdentifierOrUnknown) {
                 const identifierKind = scanIdentifier(ch, languageVersion);
                 if (identifierKind) {
                     return token = identifierKind;
