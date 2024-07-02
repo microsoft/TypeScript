@@ -2104,7 +2104,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = scanNumber();
             }
 
-            Debug.assert(tokenInfo & TokenInfo.RecognizedMisc);
+            if (!(tokenInfo & TokenInfo.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenInfo}`);
             switch (ch) {
                 case CharacterCodes.exclamation:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
