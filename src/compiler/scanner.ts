@@ -1991,28 +1991,41 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointUnchecked(pos);
 
+            if (ch === CharacterCodes.tab || ch === CharacterCodes.space) {
+                if (skipTrivia) {
+                    pos++;
+                    continue;
+                }
+                else {
+                    while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
+                        pos++;
+                    }
+                    return token = SyntaxKind.WhitespaceTrivia;
+                }
+            }
+
+            if (ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) {
+                tokenFlags |= TokenFlags.PrecedingLineBreak;
+                if (skipTrivia) {
+                    pos++;
+                    continue;
+                }
+                else {
+                    if (ch === CharacterCodes.carriageReturn && pos + 1 < end && charCodeUnchecked(pos + 1) === CharacterCodes.lineFeed) {
+                        // consume both CR and LF
+                        pos += 2;
+                    }
+                    else {
+                        pos++;
+                    }
+                    return token = SyntaxKind.NewLineTrivia;
+                }
+            }
+
             const tokenInfo = ch < charcodeToTokenInfoCommon.length ?
                 charcodeToTokenInfoCommon[ch] :
                 charcodeToTokenInfoUncommon.get(ch) ?? TokenInfo.None;
             if (tokenInfo !== TokenInfo.None) {
-                if (tokenInfo & TokenInfo.LineBreak) {
-                    tokenFlags |= TokenFlags.PrecedingLineBreak;
-                    if (skipTrivia) {
-                        pos++;
-                        continue;
-                    }
-                    else {
-                        if (ch === CharacterCodes.carriageReturn && pos + 1 < end && charCodeUnchecked(pos + 1) === CharacterCodes.lineFeed) {
-                            // consume both CR and LF
-                            pos += 2;
-                        }
-                        else {
-                            pos++;
-                        }
-                        return token = SyntaxKind.NewLineTrivia;
-                    }
-                }
-
                 if (tokenInfo & TokenInfo.Whitespace) {
                     if (skipTrivia) {
                         pos++;
