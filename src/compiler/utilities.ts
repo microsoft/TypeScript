@@ -9261,7 +9261,8 @@ function escapeRegExpCharacter(match: string) {
     return "\\" + match;
 }
 
-const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
+/** @internal */
+export const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
 const commonPackageFolders: readonly string[] = ["node_modules", "bower_components", "jspm_packages"];
 

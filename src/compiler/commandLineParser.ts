@@ -66,6 +66,7 @@ import {
     hasExtension,
     hasProperty,
     ImportsNotUsedAsValues,
+    indexOfAnyCharCode,
     isArray,
     isArrayLiteralExpression,
     isComputedNonLiteralName,
@@ -121,6 +122,7 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
+    wildcardCharCodes,
 } from "./_namespaces/ts.js";
 
 const compileOnSaveCommandLineOption: CommandLineOption = {
@@ -4010,18 +4012,16 @@ function toCanonicalKey(path: string, useCaseSensitiveFileNames: boolean): Canon
 function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: CanonicalKey; path: string; flags: WatchDirectoryFlags; } | undefined {
     const match = wildcardDirectoryPattern.exec(spec);
     if (match) {
-        // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
-        // less algorithmically complex (roughly O(3n) worst-case) than the regex we used to use,
+        // We check this with a few `indexOf` calls because 2 `indexOf`/`lastIndexOf` calls is
+        // less algorithmically complex (roughly O(2n) worst-case) than the regex we used to use,
         // \/[^/]*?[*?][^/]*\/ which was polynominal in v8, since arbitrary sequences of wildcard
         // characters could match any of the central patterns, resulting in bad backtracking.
-        const questionWildcardIndex = spec.indexOf("?");
-        const starWildcardIndex = spec.indexOf("*");
+        const wildcardIndex = indexOfAnyCharCode(spec, wildcardCharCodes);
         const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
         return {
             key: toCanonicalKey(match[0], useCaseSensitiveFileNames),
             path: match[0],
-            flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
-                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
+            flags: wildcardIndex !== -1 && wildcardIndex < lastDirectorySeperatorIndex
                 ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }
