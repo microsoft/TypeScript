@@ -306,8 +306,9 @@ const enum TokenInfo {
 
     /** Single-width tokens whose contents fit in the lower masked bits. */
     SimpleToken = 1 << 8,
-    SingleLine = 1 << 9,
-    LineBreak = 1 << 10,
+    Whitespace,
+    LineBreak,
+    Digit,
 
     SimpleTokenMask = SimpleToken - 1,
 }
@@ -325,28 +326,28 @@ for (
         [CharacterCodes.carriageReturn, TokenInfo.LineBreak],
 
         // Single Line Whitespace
-        [CharacterCodes.tab, TokenInfo.SingleLine],
-        [CharacterCodes.verticalTab, TokenInfo.SingleLine],
-        [CharacterCodes.formFeed, TokenInfo.SingleLine],
-        [CharacterCodes.space, TokenInfo.SingleLine],
-        [CharacterCodes.nonBreakingSpace, TokenInfo.SingleLine],
-        [CharacterCodes.ogham, TokenInfo.SingleLine],
-        [CharacterCodes.enQuad, TokenInfo.SingleLine],
-        [CharacterCodes.emQuad, TokenInfo.SingleLine],
-        [CharacterCodes.enSpace, TokenInfo.SingleLine],
-        [CharacterCodes.emSpace, TokenInfo.SingleLine],
-        [CharacterCodes.threePerEmSpace, TokenInfo.SingleLine],
-        [CharacterCodes.fourPerEmSpace, TokenInfo.SingleLine],
-        [CharacterCodes.sixPerEmSpace, TokenInfo.SingleLine],
-        [CharacterCodes.figureSpace, TokenInfo.SingleLine],
-        [CharacterCodes.punctuationSpace, TokenInfo.SingleLine],
-        [CharacterCodes.thinSpace, TokenInfo.SingleLine],
-        [CharacterCodes.hairSpace, TokenInfo.SingleLine],
-        [CharacterCodes.zeroWidthSpace, TokenInfo.SingleLine],
-        [CharacterCodes.narrowNoBreakSpace, TokenInfo.SingleLine],
-        [CharacterCodes.mathematicalSpace, TokenInfo.SingleLine],
-        [CharacterCodes.ideographicSpace, TokenInfo.SingleLine],
-        [CharacterCodes.byteOrderMark, TokenInfo.SingleLine],
+        [CharacterCodes.tab, TokenInfo.Whitespace],
+        [CharacterCodes.verticalTab, TokenInfo.Whitespace],
+        [CharacterCodes.formFeed, TokenInfo.Whitespace],
+        [CharacterCodes.space, TokenInfo.Whitespace],
+        [CharacterCodes.nonBreakingSpace, TokenInfo.Whitespace],
+        [CharacterCodes.ogham, TokenInfo.Whitespace],
+        [CharacterCodes.enQuad, TokenInfo.Whitespace],
+        [CharacterCodes.emQuad, TokenInfo.Whitespace],
+        [CharacterCodes.enSpace, TokenInfo.Whitespace],
+        [CharacterCodes.emSpace, TokenInfo.Whitespace],
+        [CharacterCodes.threePerEmSpace, TokenInfo.Whitespace],
+        [CharacterCodes.fourPerEmSpace, TokenInfo.Whitespace],
+        [CharacterCodes.sixPerEmSpace, TokenInfo.Whitespace],
+        [CharacterCodes.figureSpace, TokenInfo.Whitespace],
+        [CharacterCodes.punctuationSpace, TokenInfo.Whitespace],
+        [CharacterCodes.thinSpace, TokenInfo.Whitespace],
+        [CharacterCodes.hairSpace, TokenInfo.Whitespace],
+        [CharacterCodes.zeroWidthSpace, TokenInfo.Whitespace],
+        [CharacterCodes.narrowNoBreakSpace, TokenInfo.Whitespace],
+        [CharacterCodes.mathematicalSpace, TokenInfo.Whitespace],
+        [CharacterCodes.ideographicSpace, TokenInfo.Whitespace],
+        [CharacterCodes.byteOrderMark, TokenInfo.Whitespace],
 
         // Simple Single-Character Tokens
         [CharacterCodes.openParen, TokenInfo.SimpleToken | SyntaxKind.OpenParenToken],
@@ -360,6 +361,19 @@ for (
         [CharacterCodes.closeBrace, TokenInfo.SimpleToken | SyntaxKind.CloseBraceToken],
         [CharacterCodes.tilde, TokenInfo.SimpleToken | SyntaxKind.TildeToken],
         [CharacterCodes.at, TokenInfo.SimpleToken | SyntaxKind.AtToken],
+
+        // Digits
+        [CharacterCodes._0, TokenInfo.Digit],
+        [CharacterCodes._1, TokenInfo.Digit],
+        [CharacterCodes._2, TokenInfo.Digit],
+        [CharacterCodes._3, TokenInfo.Digit],
+        [CharacterCodes._4, TokenInfo.Digit],
+        [CharacterCodes._5, TokenInfo.Digit],
+        [CharacterCodes._6, TokenInfo.Digit],
+        [CharacterCodes._7, TokenInfo.Digit],
+        [CharacterCodes._8, TokenInfo.Digit],
+        [CharacterCodes._9, TokenInfo.Digit],
+
     ]
 ) {
     if (key < charcodeToTokenInfoCommon.length) {
@@ -1974,7 +1988,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                 }
 
-                if (tokenInfo & TokenInfo.SingleLine) {
+                if (tokenInfo & TokenInfo.Whitespace) {
                     if (skipTrivia) {
                         pos++;
                         continue;
@@ -1990,6 +2004,46 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 if (tokenInfo & TokenInfo.SimpleToken) {
                     pos++;
                     return token = tokenInfo & TokenInfo.SimpleTokenMask;
+                }
+
+                if (tokenInfo & TokenInfo.Digit) {
+                    if (ch === 0) {
+                        if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
+                            pos += 2;
+                            tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
+                            if (!tokenValue) {
+                                error(Diagnostics.Hexadecimal_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0x" + tokenValue;
+                            tokenFlags |= TokenFlags.HexSpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                        else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (!tokenValue) {
+                                error(Diagnostics.Binary_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0b" + tokenValue;
+                            tokenFlags |= TokenFlags.BinarySpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                        else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (!tokenValue) {
+                                error(Diagnostics.Octal_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0o" + tokenValue;
+                            tokenFlags |= TokenFlags.OctalSpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                    }
+
+                    return token = scanNumber();
                 }
             }
 
@@ -2150,51 +2204,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.SlashToken;
 
-                case CharacterCodes._0:
-                    if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
-                        pos += 2;
-                        tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
-                        if (!tokenValue) {
-                            error(Diagnostics.Hexadecimal_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0x" + tokenValue;
-                        tokenFlags |= TokenFlags.HexSpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
-                        pos += 2;
-                        tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
-                        if (!tokenValue) {
-                            error(Diagnostics.Binary_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0b" + tokenValue;
-                        tokenFlags |= TokenFlags.BinarySpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
-                        pos += 2;
-                        tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
-                        if (!tokenValue) {
-                            error(Diagnostics.Octal_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0o" + tokenValue;
-                        tokenFlags |= TokenFlags.OctalSpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                // falls through
-                case CharacterCodes._1:
-                case CharacterCodes._2:
-                case CharacterCodes._3:
-                case CharacterCodes._4:
-                case CharacterCodes._5:
-                case CharacterCodes._6:
-                case CharacterCodes._7:
-                case CharacterCodes._8:
-                case CharacterCodes._9:
-                    return token = scanNumber();
+                
                 case CharacterCodes.lessThan:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos, error);
