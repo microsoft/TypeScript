@@ -2025,421 +2025,422 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             const tokenInfo = ch < charcodeToTokenInfoCommon.length ?
                 charcodeToTokenInfoCommon[ch] :
                 charcodeToTokenInfoUncommon.get(ch) ?? TokenInfo.None;
-            if (tokenInfo !== TokenInfo.None) {
-                if (tokenInfo & TokenInfo.Whitespace) {
-                    if (skipTrivia) {
+
+            if (tokenInfo === TokenInfo.None) {
+                const identifierKind = scanIdentifier(ch, languageVersion);
+                if (identifierKind) {
+                    return token = identifierKind;
+                }
+                else if (isWhiteSpaceSingleLine(ch)) {
+                    pos += charSize(ch);
+                    continue;
+                }
+                else if (isLineBreak(ch)) {
+                    tokenFlags |= TokenFlags.PrecedingLineBreak;
+                    pos += charSize(ch);
+                    continue;
+                }
+                const size = charSize(ch);
+                error(Diagnostics.Invalid_character, pos, size);
+                pos += size;
+                return token = SyntaxKind.Unknown;
+            }
+
+            if (tokenInfo & TokenInfo.Whitespace) {
+                if (skipTrivia) {
+                    pos++;
+                    continue;
+                }
+                else {
+                    while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
                         pos++;
+                    }
+                    return token = SyntaxKind.WhitespaceTrivia;
+                }
+            }
+
+            if (tokenInfo & TokenInfo.SimpleToken) {
+                pos++;
+                return token = tokenInfo & TokenInfo.SimpleTokenMask;
+            }
+
+            if (tokenInfo & TokenInfo.Digit) {
+                if (ch === CharacterCodes._0) {
+                    if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
+                        pos += 2;
+                        tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
+                        if (!tokenValue) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0x" + tokenValue;
+                        tokenFlags |= TokenFlags.HexSpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
+                        pos += 2;
+                        tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
+                        if (!tokenValue) {
+                            error(Diagnostics.Binary_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0b" + tokenValue;
+                        tokenFlags |= TokenFlags.BinarySpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
+                        pos += 2;
+                        tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
+                        if (!tokenValue) {
+                            error(Diagnostics.Octal_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0o" + tokenValue;
+                        tokenFlags |= TokenFlags.OctalSpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                }
+
+                return token = scanNumber();
+            }
+
+            Debug.assert(tokenInfo & TokenInfo.RecognizedMisc);
+            switch (ch) {
+                case CharacterCodes.exclamation:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.ExclamationToken;
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.singleQuote:
+                    tokenValue = scanString();
+                    return token = SyntaxKind.StringLiteral;
+                case CharacterCodes.backtick:
+                    return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ false);
+                case CharacterCodes.percent:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.PercentEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.PercentToken;
+                case CharacterCodes.ampersand:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.ampersand) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.AmpersandAmpersandEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.AmpersandEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.AmpersandToken;
+                case CharacterCodes.asterisk:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.AsteriskAsteriskEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
+                    }
+                    pos++;
+                    if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                        // decoration at the start of a JSDoc comment line
+                        asteriskSeen = true;
                         continue;
                     }
-                    else {
-                        while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
+                    return token = SyntaxKind.AsteriskToken;
+                case CharacterCodes.plus:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.plus) {
+                        return pos += 2, token = SyntaxKind.PlusPlusToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.PlusEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.PlusToken;
+                case CharacterCodes.minus:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
+                        return pos += 2, token = SyntaxKind.MinusMinusToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.MinusEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.MinusToken;
+                case CharacterCodes.dot:
+                    if (isDigit(charCodeUnchecked(pos + 1))) {
+                        scanNumber();
+                        return token = SyntaxKind.NumericLiteral;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && charCodeUnchecked(pos + 2) === CharacterCodes.dot) {
+                        return pos += 3, token = SyntaxKind.DotDotDotToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.DotToken;
+                case CharacterCodes.slash:
+                    // Single-line comment
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
+                        pos += 2;
+
+                        while (pos < end) {
+                            if (isLineBreak(charCodeUnchecked(pos))) {
+                                break;
+                            }
                             pos++;
                         }
-                        return token = SyntaxKind.WhitespaceTrivia;
-                    }
-                }
 
-                if (tokenInfo & TokenInfo.SimpleToken) {
-                    pos++;
-                    return token = tokenInfo & TokenInfo.SimpleTokenMask;
-                }
+                        commentDirectives = appendIfCommentDirective(
+                            commentDirectives,
+                            text.slice(tokenStart, pos),
+                            commentDirectiveRegExSingleLine,
+                            tokenStart,
+                        );
 
-                if (tokenInfo & TokenInfo.Digit) {
-                    if (ch === CharacterCodes._0) {
-                        if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
-                            pos += 2;
-                            tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
-                            if (!tokenValue) {
-                                error(Diagnostics.Hexadecimal_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0x" + tokenValue;
-                            tokenFlags |= TokenFlags.HexSpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                        else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
-                            pos += 2;
-                            tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
-                            if (!tokenValue) {
-                                error(Diagnostics.Binary_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0b" + tokenValue;
-                            tokenFlags |= TokenFlags.BinarySpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                        else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
-                            pos += 2;
-                            tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
-                            if (!tokenValue) {
-                                error(Diagnostics.Octal_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0o" + tokenValue;
-                            tokenFlags |= TokenFlags.OctalSpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                    }
-
-                    return token = scanNumber();
-                }
-
-                Debug.assert(tokenInfo & TokenInfo.RecognizedMisc);
-                switch (ch) {
-                    case CharacterCodes.exclamation:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.ExclamationToken;
-                    case CharacterCodes.doubleQuote:
-                    case CharacterCodes.singleQuote:
-                        tokenValue = scanString();
-                        return token = SyntaxKind.StringLiteral;
-                    case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ false);
-                    case CharacterCodes.percent:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.PercentEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.PercentToken;
-                    case CharacterCodes.ampersand:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.ampersand) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.AmpersandAmpersandEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.AmpersandEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.AmpersandToken;
-                    case CharacterCodes.asterisk:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.AsteriskAsteriskEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
-                        }
-                        pos++;
-                        if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
-                            // decoration at the start of a JSDoc comment line
-                            asteriskSeen = true;
+                        if (skipTrivia) {
                             continue;
                         }
-                        return token = SyntaxKind.AsteriskToken;
-                    case CharacterCodes.plus:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.plus) {
-                            return pos += 2, token = SyntaxKind.PlusPlusToken;
+                        else {
+                            return token = SyntaxKind.SingleLineCommentTrivia;
                         }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.PlusEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.PlusToken;
-                    case CharacterCodes.minus:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
-                            return pos += 2, token = SyntaxKind.MinusMinusToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.MinusEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.MinusToken;
-                    case CharacterCodes.dot:
-                        if (isDigit(charCodeUnchecked(pos + 1))) {
-                            scanNumber();
-                            return token = SyntaxKind.NumericLiteral;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && charCodeUnchecked(pos + 2) === CharacterCodes.dot) {
-                            return pos += 3, token = SyntaxKind.DotDotDotToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.DotToken;
-                    case CharacterCodes.slash:
-                        // Single-line comment
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
-                            pos += 2;
+                    }
+                    // Multi-line comment
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
+                        pos += 2;
+                        const isJSDoc = charCodeUnchecked(pos) === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) !== CharacterCodes.slash;
 
-                            while (pos < end) {
-                                if (isLineBreak(charCodeUnchecked(pos))) {
-                                    break;
-                                }
-                                pos++;
+                        let commentClosed = false;
+                        let lastLineStart = tokenStart;
+                        while (pos < end) {
+                            const ch = charCodeUnchecked(pos);
+
+                            if (ch === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
+                                pos += 2;
+                                commentClosed = true;
+                                break;
                             }
 
-                            commentDirectives = appendIfCommentDirective(
-                                commentDirectives,
-                                text.slice(tokenStart, pos),
-                                commentDirectiveRegExSingleLine,
-                                tokenStart,
-                            );
+                            pos++;
 
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.SingleLineCommentTrivia;
+                            if (isLineBreak(ch)) {
+                                lastLineStart = pos;
+                                tokenFlags |= TokenFlags.PrecedingLineBreak;
                             }
                         }
-                        // Multi-line comment
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
-                            pos += 2;
-                            const isJSDoc = charCodeUnchecked(pos) === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) !== CharacterCodes.slash;
 
-                            let commentClosed = false;
-                            let lastLineStart = tokenStart;
-                            while (pos < end) {
-                                const ch = charCodeUnchecked(pos);
+                        if (isJSDoc && shouldParseJSDoc()) {
+                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                        }
 
-                                if (ch === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
-                                    pos += 2;
-                                    commentClosed = true;
-                                    break;
-                                }
+                        commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
 
-                                pos++;
+                        if (!commentClosed) {
+                            error(Diagnostics.Asterisk_Slash_expected);
+                        }
 
-                                if (isLineBreak(ch)) {
-                                    lastLineStart = pos;
-                                    tokenFlags |= TokenFlags.PrecedingLineBreak;
-                                }
-                            }
-
-                            if (isJSDoc && shouldParseJSDoc()) {
-                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                            }
-
-                            commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
-
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
                             if (!commentClosed) {
-                                error(Diagnostics.Asterisk_Slash_expected);
+                                tokenFlags |= TokenFlags.Unterminated;
                             }
+                            return token = SyntaxKind.MultiLineCommentTrivia;
+                        }
+                    }
 
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.SlashEqualsToken;
+                    }
+
+                    pos++;
+                    return token = SyntaxKind.SlashToken;
+
+                case CharacterCodes.lessThan:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
+                            return token = SyntaxKind.ConflictMarkerTrivia;
+                        }
+                    }
+
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.lessThan) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.LessThanLessThanToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.LessThanEqualsToken;
+                    }
+                    if (
+                        languageVariant === LanguageVariant.JSX &&
+                        charCodeUnchecked(pos + 1) === CharacterCodes.slash &&
+                        charCodeUnchecked(pos + 2) !== CharacterCodes.asterisk
+                    ) {
+                        return pos += 2, token = SyntaxKind.LessThanSlashToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.LessThanToken;
+                case CharacterCodes.equals:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
+                            return token = SyntaxKind.ConflictMarkerTrivia;
+                        }
+                    }
+
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.EqualsEqualsToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.greaterThan) {
+                        return pos += 2, token = SyntaxKind.EqualsGreaterThanToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.EqualsToken;
+                case CharacterCodes.greaterThan:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
+                            return token = SyntaxKind.ConflictMarkerTrivia;
+                        }
+                    }
+
+                    pos++;
+                    return token = SyntaxKind.GreaterThanToken;
+                case CharacterCodes.question:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && !isDigit(charCodeUnchecked(pos + 2))) {
+                        return pos += 2, token = SyntaxKind.QuestionDotToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.question) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.QuestionQuestionEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.QuestionQuestionToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.QuestionToken;
+                case CharacterCodes.caret:
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.CaretEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.CaretToken;
+                case CharacterCodes.bar:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
+                            return token = SyntaxKind.ConflictMarkerTrivia;
+                        }
+                    }
+
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.bar) {
+                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                            return pos += 3, token = SyntaxKind.BarBarEqualsToken;
+                        }
+                        return pos += 2, token = SyntaxKind.BarBarToken;
+                    }
+                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                        return pos += 2, token = SyntaxKind.BarEqualsToken;
+                    }
+                    pos++;
+                    return token = SyntaxKind.BarToken;
+                case CharacterCodes.backslash:
+                    const extendedCookedChar = peekExtendedUnicodeEscape();
+                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                        tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+
+                    const cookedChar = peekUnicodeEscape();
+                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                        pos += 6;
+                        tokenFlags |= TokenFlags.UnicodeEscape;
+                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
+                        return token = getIdentifierToken();
+                    }
+
+                    error(Diagnostics.Invalid_character);
+                    pos++;
+                    return token = SyntaxKind.Unknown;
+                case CharacterCodes.hash:
+                    const charAfterHash = codePointUnchecked(pos + 1);
+
+                    if (charAfterHash === CharacterCodes.exclamation) {
+                        if (pos === 0) {
+                            pos = scanShebangTrivia(text, pos);
                             if (skipTrivia) {
                                 continue;
                             }
                             else {
-                                if (!commentClosed) {
-                                    tokenFlags |= TokenFlags.Unterminated;
-                                }
-                                return token = SyntaxKind.MultiLineCommentTrivia;
+                                return token = SyntaxKind.ShebangTrivia;
                             }
                         }
+                        else if (pos !== 0) {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
+                    }
 
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.SlashEqualsToken;
-                        }
-
+                    if (charAfterHash === CharacterCodes.backslash) {
                         pos++;
-                        return token = SyntaxKind.SlashToken;
-
-                    case CharacterCodes.lessThan:
-                        if (isConflictMarkerTrivia(text, pos)) {
-                            pos = scanConflictMarkerTrivia(text, pos, error);
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.ConflictMarkerTrivia;
-                            }
-                        }
-
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.lessThan) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.LessThanLessThanToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.LessThanEqualsToken;
-                        }
-                        if (
-                            languageVariant === LanguageVariant.JSX &&
-                            charCodeUnchecked(pos + 1) === CharacterCodes.slash &&
-                            charCodeUnchecked(pos + 2) !== CharacterCodes.asterisk
-                        ) {
-                            return pos += 2, token = SyntaxKind.LessThanSlashToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.LessThanToken;
-                    case CharacterCodes.equals:
-                        if (isConflictMarkerTrivia(text, pos)) {
-                            pos = scanConflictMarkerTrivia(text, pos, error);
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.ConflictMarkerTrivia;
-                            }
-                        }
-
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.EqualsEqualsToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.greaterThan) {
-                            return pos += 2, token = SyntaxKind.EqualsGreaterThanToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.EqualsToken;
-                    case CharacterCodes.greaterThan:
-                        if (isConflictMarkerTrivia(text, pos)) {
-                            pos = scanConflictMarkerTrivia(text, pos, error);
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.ConflictMarkerTrivia;
-                            }
-                        }
-
-                        pos++;
-                        return token = SyntaxKind.GreaterThanToken;
-                    case CharacterCodes.question:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && !isDigit(charCodeUnchecked(pos + 2))) {
-                            return pos += 2, token = SyntaxKind.QuestionDotToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.question) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.QuestionQuestionEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.QuestionQuestionToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.QuestionToken;
-                    case CharacterCodes.caret:
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.CaretEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.CaretToken;
-                    case CharacterCodes.bar:
-                        if (isConflictMarkerTrivia(text, pos)) {
-                            pos = scanConflictMarkerTrivia(text, pos, error);
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.ConflictMarkerTrivia;
-                            }
-                        }
-
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.bar) {
-                            if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
-                                return pos += 3, token = SyntaxKind.BarBarEqualsToken;
-                            }
-                            return pos += 2, token = SyntaxKind.BarBarToken;
-                        }
-                        if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.BarEqualsToken;
-                        }
-                        pos++;
-                        return token = SyntaxKind.BarToken;
-                    case CharacterCodes.backslash:
                         const extendedCookedChar = peekExtendedUnicodeEscape();
                         if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                            tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                            return token = getIdentifierToken();
+                            tokenValue = "#" + scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
+                            return token = SyntaxKind.PrivateIdentifier;
                         }
 
                         const cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenFlags |= TokenFlags.UnicodeEscape;
-                            tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
-                            return token = getIdentifierToken();
+                            tokenValue = "#" + String.fromCharCode(cookedChar) + scanIdentifierParts();
+                            return token = SyntaxKind.PrivateIdentifier;
                         }
+                        pos--;
+                    }
 
-                        error(Diagnostics.Invalid_character);
+                    if (isIdentifierStart(charAfterHash, languageVersion)) {
                         pos++;
-                        return token = SyntaxKind.Unknown;
-                    case CharacterCodes.hash:
-                        const charAfterHash = codePointUnchecked(pos + 1);
-
-                        if (charAfterHash === CharacterCodes.exclamation) {
-                            if (pos === 0) {
-                                pos = scanShebangTrivia(text, pos);
-                                if (skipTrivia) {
-                                    continue;
-                                }
-                                else {
-                                    return token = SyntaxKind.ShebangTrivia;
-                                }
-                            }
-                            else if (pos !== 0) {
-                                error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
-                                pos++;
-                                return token = SyntaxKind.Unknown;
-                            }
-                        }
-
-                        if (charAfterHash === CharacterCodes.backslash) {
-                            pos++;
-                            const extendedCookedChar = peekExtendedUnicodeEscape();
-                            if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                                tokenValue = "#" + scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                                return token = SyntaxKind.PrivateIdentifier;
-                            }
-
-                            const cookedChar = peekUnicodeEscape();
-                            if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                                pos += 6;
-                                tokenFlags |= TokenFlags.UnicodeEscape;
-                                tokenValue = "#" + String.fromCharCode(cookedChar) + scanIdentifierParts();
-                                return token = SyntaxKind.PrivateIdentifier;
-                            }
-                            pos--;
-                        }
-
-                        if (isIdentifierStart(charAfterHash, languageVersion)) {
-                            pos++;
-                            // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
-                            // Notably absent from this block is the fact that calling a function named "scanIdentifier",
-                            // but identifiers don't include '#', and that function doesn't deal with it at all.
-                            // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
-                            // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
-                            scanIdentifier(charAfterHash, languageVersion);
-                        }
-                        else {
-                            tokenValue = "#";
-                            error(Diagnostics.Invalid_character, pos++, charSize(ch));
-                        }
-                        return token = SyntaxKind.PrivateIdentifier;
-                    case CharacterCodes.replacementCharacter:
-                        error(Diagnostics.File_appears_to_be_binary, 0, 0);
-                        pos = end;
-                        return token = SyntaxKind.NonTextFileMarkerTrivia;
-                }
+                        // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
+                        // Notably absent from this block is the fact that calling a function named "scanIdentifier",
+                        // but identifiers don't include '#', and that function doesn't deal with it at all.
+                        // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
+                        // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
+                        scanIdentifier(charAfterHash, languageVersion);
+                    }
+                    else {
+                        tokenValue = "#";
+                        error(Diagnostics.Invalid_character, pos++, charSize(ch));
+                    }
+                    return token = SyntaxKind.PrivateIdentifier;
+                case CharacterCodes.replacementCharacter:
+                    error(Diagnostics.File_appears_to_be_binary, 0, 0);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
             }
-
-            const identifierKind = scanIdentifier(ch, languageVersion);
-            if (identifierKind) {
-                return token = identifierKind;
-            }
-            else if (isWhiteSpaceSingleLine(ch)) {
-                pos += charSize(ch);
-                continue;
-            }
-            else if (isLineBreak(ch)) {
-                tokenFlags |= TokenFlags.PrecedingLineBreak;
-                pos += charSize(ch);
-                continue;
-            }
-            const size = charSize(ch);
-            error(Diagnostics.Invalid_character, pos, size);
-            pos += size;
-            return token = SyntaxKind.Unknown;
         }
     }
 
