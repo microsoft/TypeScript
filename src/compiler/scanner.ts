@@ -301,6 +301,58 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
+const enum TokenInfo {
+    /** Single-width tokens whose contents fit in the lower masked bits. */
+    SimpleToken = 1 << 8,
+    SingleLine  = 1 << 9,
+    LineBreak   = 1 << 10,
+
+    SimpleTokenMask = SimpleToken - 1,
+}
+
+const charcodeToTokenInfo = new Map([
+    // Line Break Whitespace
+    [CharacterCodes.lineFeed, TokenInfo.LineBreak],
+    [CharacterCodes.carriageReturn, TokenInfo.LineBreak],
+
+    // Single Line Whitespace
+    [CharacterCodes.tab, TokenInfo.SingleLine],
+    [CharacterCodes.verticalTab, TokenInfo.SingleLine],
+    [CharacterCodes.formFeed, TokenInfo.SingleLine],
+    [CharacterCodes.space, TokenInfo.SingleLine],
+    [CharacterCodes.nonBreakingSpace, TokenInfo.SingleLine],
+    [CharacterCodes.ogham, TokenInfo.SingleLine],
+    [CharacterCodes.enQuad, TokenInfo.SingleLine],
+    [CharacterCodes.emQuad, TokenInfo.SingleLine],
+    [CharacterCodes.enSpace, TokenInfo.SingleLine],
+    [CharacterCodes.emSpace, TokenInfo.SingleLine],
+    [CharacterCodes.threePerEmSpace, TokenInfo.SingleLine],
+    [CharacterCodes.fourPerEmSpace, TokenInfo.SingleLine],
+    [CharacterCodes.sixPerEmSpace, TokenInfo.SingleLine],
+    [CharacterCodes.figureSpace, TokenInfo.SingleLine],
+    [CharacterCodes.punctuationSpace, TokenInfo.SingleLine],
+    [CharacterCodes.thinSpace, TokenInfo.SingleLine],
+    [CharacterCodes.hairSpace, TokenInfo.SingleLine],
+    [CharacterCodes.zeroWidthSpace, TokenInfo.SingleLine],
+    [CharacterCodes.narrowNoBreakSpace, TokenInfo.SingleLine],
+    [CharacterCodes.mathematicalSpace, TokenInfo.SingleLine],
+    [CharacterCodes.ideographicSpace, TokenInfo.SingleLine],
+    [CharacterCodes.byteOrderMark, TokenInfo.SingleLine],
+
+    // Simple Single-Character Tokens
+    [CharacterCodes.openParen, TokenInfo.SimpleToken | SyntaxKind.OpenParenToken],
+    [CharacterCodes.closeParen, TokenInfo.SimpleToken | SyntaxKind.CloseParenToken],
+    [CharacterCodes.comma, TokenInfo.SimpleToken | SyntaxKind.CommaToken],
+    [CharacterCodes.colon, TokenInfo.SimpleToken | SyntaxKind.ColonToken],
+    [CharacterCodes.semicolon, TokenInfo.SimpleToken | SyntaxKind.SemicolonToken],
+    [CharacterCodes.openBracket, TokenInfo.SimpleToken | SyntaxKind.OpenBracketToken],
+    [CharacterCodes.closeBracket, TokenInfo.SimpleToken | SyntaxKind.CloseBracketToken],
+    [CharacterCodes.openBrace, TokenInfo.SimpleToken | SyntaxKind.OpenBraceToken],
+    [CharacterCodes.closeBrace, TokenInfo.SimpleToken | SyntaxKind.CloseBraceToken],
+    [CharacterCodes.tilde, TokenInfo.SimpleToken | SyntaxKind.TildeToken],
+    [CharacterCodes.at, TokenInfo.SimpleToken | SyntaxKind.AtToken],
+]);
+
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
     IdentifierStart ::
@@ -1882,22 +1934,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
 
             const ch = codePointUnchecked(pos);
-            if (pos === 0) {
-                // Special handling for shebang
-                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
-                    pos = scanShebangTrivia(text, pos);
-                    if (skipTrivia) {
-                        continue;
-                    }
-                    else {
-                        return token = SyntaxKind.ShebangTrivia;
-                    }
-                }
-            }
 
-            switch (ch) {
-                case CharacterCodes.lineFeed:
-                case CharacterCodes.carriageReturn:
+            const tokenInfo = charcodeToTokenInfo.get(ch);
+            if (tokenInfo !== undefined) {
+                if (tokenInfo & TokenInfo.LineBreak) {
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     if (skipTrivia) {
                         pos++;
@@ -1913,28 +1953,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                         return token = SyntaxKind.NewLineTrivia;
                     }
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                case CharacterCodes.nonBreakingSpace:
-                case CharacterCodes.ogham:
-                case CharacterCodes.enQuad:
-                case CharacterCodes.emQuad:
-                case CharacterCodes.enSpace:
-                case CharacterCodes.emSpace:
-                case CharacterCodes.threePerEmSpace:
-                case CharacterCodes.fourPerEmSpace:
-                case CharacterCodes.sixPerEmSpace:
-                case CharacterCodes.figureSpace:
-                case CharacterCodes.punctuationSpace:
-                case CharacterCodes.thinSpace:
-                case CharacterCodes.hairSpace:
-                case CharacterCodes.zeroWidthSpace:
-                case CharacterCodes.narrowNoBreakSpace:
-                case CharacterCodes.mathematicalSpace:
-                case CharacterCodes.ideographicSpace:
-                case CharacterCodes.byteOrderMark:
+                }
+
+                if (tokenInfo & TokenInfo.SingleLine) {
                     if (skipTrivia) {
                         pos++;
                         continue;
@@ -1945,6 +1966,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                         return token = SyntaxKind.WhitespaceTrivia;
                     }
+                }
+
+                if (tokenInfo & TokenInfo.SimpleToken) {
+                    pos++;
+                    return token = tokenInfo & TokenInfo.SimpleTokenMask;
+                }
+            }
+
+            switch (ch) {
                 case CharacterCodes.exclamation:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
@@ -1978,12 +2008,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     pos++;
                     return token = SyntaxKind.AmpersandToken;
-                case CharacterCodes.openParen:
-                    pos++;
-                    return token = SyntaxKind.OpenParenToken;
-                case CharacterCodes.closeParen:
-                    pos++;
-                    return token = SyntaxKind.CloseParenToken;
                 case CharacterCodes.asterisk:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
@@ -2010,9 +2034,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     pos++;
                     return token = SyntaxKind.PlusToken;
-                case CharacterCodes.comma:
-                    pos++;
-                    return token = SyntaxKind.CommaToken;
                 case CharacterCodes.minus:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
                         return pos += 2, token = SyntaxKind.MinusMinusToken;
@@ -2155,12 +2176,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 case CharacterCodes._8:
                 case CharacterCodes._9:
                     return token = scanNumber();
-                case CharacterCodes.colon:
-                    pos++;
-                    return token = SyntaxKind.ColonToken;
-                case CharacterCodes.semicolon:
-                    pos++;
-                    return token = SyntaxKind.SemicolonToken;
                 case CharacterCodes.lessThan:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos, error);
@@ -2237,21 +2252,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     pos++;
                     return token = SyntaxKind.QuestionToken;
-                case CharacterCodes.openBracket:
-                    pos++;
-                    return token = SyntaxKind.OpenBracketToken;
-                case CharacterCodes.closeBracket:
-                    pos++;
-                    return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.caret:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.CaretEqualsToken;
                     }
                     pos++;
                     return token = SyntaxKind.CaretToken;
-                case CharacterCodes.openBrace:
-                    pos++;
-                    return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.bar:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos, error);
@@ -2274,15 +2280,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     pos++;
                     return token = SyntaxKind.BarToken;
-                case CharacterCodes.closeBrace:
-                    pos++;
-                    return token = SyntaxKind.CloseBraceToken;
-                case CharacterCodes.tilde:
-                    pos++;
-                    return token = SyntaxKind.TildeToken;
-                case CharacterCodes.at:
-                    pos++;
-                    return token = SyntaxKind.AtToken;
                 case CharacterCodes.backslash:
                     const extendedCookedChar = peekExtendedUnicodeEscape();
                     if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
@@ -2302,13 +2299,25 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.Unknown;
                 case CharacterCodes.hash:
-                    if (pos !== 0 && text[pos + 1] === "!") {
-                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
-                        pos++;
-                        return token = SyntaxKind.Unknown;
+                    const charAfterHash = codePointUnchecked(pos + 1);
+
+                    if (charAfterHash === CharacterCodes.exclamation) {
+                        if (pos === 0) {
+                            pos = scanShebangTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ShebangTrivia;
+                            }
+                        }
+                        else if (pos !== 0) {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
                     if (charAfterHash === CharacterCodes.backslash) {
                         pos++;
                         const extendedCookedChar = peekExtendedUnicodeEscape();
