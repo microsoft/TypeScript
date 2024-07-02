@@ -9395,11 +9395,11 @@ export function getSubPatternFromSpec(
                 // like so: **/.*/.*
                 if (component.charCodeAt(0) === CharacterCodes.asterisk) {
                     componentPattern += "(?:[^./]" + singleAsteriskRegexFragment + ")?";
-                    component = component.substr(1);
+                    component = component.slice(1);
                 }
                 else if (component.charCodeAt(0) === CharacterCodes.question) {
                     componentPattern += "[^./]";
-                    component = component.substr(1);
+                    component = component.slice(1);
                 }
 
                 componentPattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
