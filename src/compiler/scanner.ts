@@ -305,10 +305,10 @@ const enum TokenInfo {
     None = 0,
 
     /** Single-width tokens whose contents fit in the lower masked bits. */
-    SimpleToken = 1 << 8,
-    Whitespace,
-    LineBreak,
-    Digit,
+    SimpleToken = 1 << 8, // must come first
+    Whitespace = 1 << 9,
+    LineBreak = 1 << 10,
+    Digit = 1 << 11,
 
     SimpleTokenMask = SimpleToken - 1,
 }
@@ -2007,7 +2007,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
 
                 if (tokenInfo & TokenInfo.Digit) {
-                    if (ch === 0) {
+                    if (ch === CharacterCodes._0) {
                         if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
                             tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
