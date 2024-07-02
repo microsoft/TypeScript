@@ -329,6 +329,8 @@ for (
         // Line Break Whitespace
         [CharacterCodes.lineFeed, TokenCategory.LineBreak],
         [CharacterCodes.carriageReturn, TokenCategory.LineBreak],
+        [CharacterCodes.lineSeparator, TokenCategory.LineBreak],
+        [CharacterCodes.paragraphSeparator, TokenCategory.LineBreak],
 
         // Single Line Whitespace
         [CharacterCodes.tab, TokenCategory.Whitespace],
@@ -2022,11 +2024,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             }
 
-            const tokenInfo = ch < tokenCategoryLookup.length ?
+            const tokenCategory = ch < tokenCategoryLookup.length ?
                 tokenCategoryLookup[ch] :
                 tokenCategoryLookupUncommon.get(ch) ?? TokenCategory.None;
 
-            if (tokenInfo === TokenCategory.None) {
+            if (tokenCategory === TokenCategory.None) {
                 const identifierKind = scanIdentifier(ch, languageVersion);
                 if (identifierKind) {
                     return token = identifierKind;
@@ -2046,7 +2048,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = SyntaxKind.Unknown;
             }
 
-            if (tokenInfo & TokenCategory.Whitespace) {
+            if (tokenCategory & TokenCategory.Whitespace) {
                 if (skipTrivia) {
                     pos++;
                     continue;
@@ -2059,12 +2061,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             }
 
-            if (tokenInfo & TokenCategory.SimpleToken) {
+            if (tokenCategory & TokenCategory.SimpleToken) {
                 pos++;
-                return token = tokenInfo & TokenCategory.SimpleTokenMask;
+                return token = tokenCategory & TokenCategory.SimpleTokenMask;
             }
 
-            if (tokenInfo & TokenCategory.Digit) {
+            if (tokenCategory & TokenCategory.Digit) {
                 if (ch === CharacterCodes._0) {
                     if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
                         pos += 2;
@@ -2104,7 +2106,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = scanNumber();
             }
 
-            if (!(tokenInfo & TokenCategory.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenInfo}`);
+            if (!(tokenCategory & TokenCategory.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenCategory}`);
             switch (ch) {
                 case CharacterCodes.exclamation:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
