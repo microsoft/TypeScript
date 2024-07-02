@@ -302,56 +302,73 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
 ]);
 
 const enum TokenInfo {
+    None = 0,
+
     /** Single-width tokens whose contents fit in the lower masked bits. */
     SimpleToken = 1 << 8,
-    SingleLine  = 1 << 9,
-    LineBreak   = 1 << 10,
+    SingleLine = 1 << 9,
+    LineBreak = 1 << 10,
 
     SimpleTokenMask = SimpleToken - 1,
 }
 
-const charcodeToTokenInfo = new Map([
-    // Line Break Whitespace
-    [CharacterCodes.lineFeed, TokenInfo.LineBreak],
-    [CharacterCodes.carriageReturn, TokenInfo.LineBreak],
+const charcodeToTokenInfoCommon: TokenInfo[] = [];
+const charcodeToTokenInfoUncommon = new Map<CharacterCodes, TokenInfo>();
+for (let i = 0; i < CharacterCodes.maxAsciiCharacter; i++) {
+    charcodeToTokenInfoCommon.push(0);
+}
 
-    // Single Line Whitespace
-    [CharacterCodes.tab, TokenInfo.SingleLine],
-    [CharacterCodes.verticalTab, TokenInfo.SingleLine],
-    [CharacterCodes.formFeed, TokenInfo.SingleLine],
-    [CharacterCodes.space, TokenInfo.SingleLine],
-    [CharacterCodes.nonBreakingSpace, TokenInfo.SingleLine],
-    [CharacterCodes.ogham, TokenInfo.SingleLine],
-    [CharacterCodes.enQuad, TokenInfo.SingleLine],
-    [CharacterCodes.emQuad, TokenInfo.SingleLine],
-    [CharacterCodes.enSpace, TokenInfo.SingleLine],
-    [CharacterCodes.emSpace, TokenInfo.SingleLine],
-    [CharacterCodes.threePerEmSpace, TokenInfo.SingleLine],
-    [CharacterCodes.fourPerEmSpace, TokenInfo.SingleLine],
-    [CharacterCodes.sixPerEmSpace, TokenInfo.SingleLine],
-    [CharacterCodes.figureSpace, TokenInfo.SingleLine],
-    [CharacterCodes.punctuationSpace, TokenInfo.SingleLine],
-    [CharacterCodes.thinSpace, TokenInfo.SingleLine],
-    [CharacterCodes.hairSpace, TokenInfo.SingleLine],
-    [CharacterCodes.zeroWidthSpace, TokenInfo.SingleLine],
-    [CharacterCodes.narrowNoBreakSpace, TokenInfo.SingleLine],
-    [CharacterCodes.mathematicalSpace, TokenInfo.SingleLine],
-    [CharacterCodes.ideographicSpace, TokenInfo.SingleLine],
-    [CharacterCodes.byteOrderMark, TokenInfo.SingleLine],
+for (
+    const [key, value] of [
+        // Line Break Whitespace
+        [CharacterCodes.lineFeed, TokenInfo.LineBreak],
+        [CharacterCodes.carriageReturn, TokenInfo.LineBreak],
 
-    // Simple Single-Character Tokens
-    [CharacterCodes.openParen, TokenInfo.SimpleToken | SyntaxKind.OpenParenToken],
-    [CharacterCodes.closeParen, TokenInfo.SimpleToken | SyntaxKind.CloseParenToken],
-    [CharacterCodes.comma, TokenInfo.SimpleToken | SyntaxKind.CommaToken],
-    [CharacterCodes.colon, TokenInfo.SimpleToken | SyntaxKind.ColonToken],
-    [CharacterCodes.semicolon, TokenInfo.SimpleToken | SyntaxKind.SemicolonToken],
-    [CharacterCodes.openBracket, TokenInfo.SimpleToken | SyntaxKind.OpenBracketToken],
-    [CharacterCodes.closeBracket, TokenInfo.SimpleToken | SyntaxKind.CloseBracketToken],
-    [CharacterCodes.openBrace, TokenInfo.SimpleToken | SyntaxKind.OpenBraceToken],
-    [CharacterCodes.closeBrace, TokenInfo.SimpleToken | SyntaxKind.CloseBraceToken],
-    [CharacterCodes.tilde, TokenInfo.SimpleToken | SyntaxKind.TildeToken],
-    [CharacterCodes.at, TokenInfo.SimpleToken | SyntaxKind.AtToken],
-]);
+        // Single Line Whitespace
+        [CharacterCodes.tab, TokenInfo.SingleLine],
+        [CharacterCodes.verticalTab, TokenInfo.SingleLine],
+        [CharacterCodes.formFeed, TokenInfo.SingleLine],
+        [CharacterCodes.space, TokenInfo.SingleLine],
+        [CharacterCodes.nonBreakingSpace, TokenInfo.SingleLine],
+        [CharacterCodes.ogham, TokenInfo.SingleLine],
+        [CharacterCodes.enQuad, TokenInfo.SingleLine],
+        [CharacterCodes.emQuad, TokenInfo.SingleLine],
+        [CharacterCodes.enSpace, TokenInfo.SingleLine],
+        [CharacterCodes.emSpace, TokenInfo.SingleLine],
+        [CharacterCodes.threePerEmSpace, TokenInfo.SingleLine],
+        [CharacterCodes.fourPerEmSpace, TokenInfo.SingleLine],
+        [CharacterCodes.sixPerEmSpace, TokenInfo.SingleLine],
+        [CharacterCodes.figureSpace, TokenInfo.SingleLine],
+        [CharacterCodes.punctuationSpace, TokenInfo.SingleLine],
+        [CharacterCodes.thinSpace, TokenInfo.SingleLine],
+        [CharacterCodes.hairSpace, TokenInfo.SingleLine],
+        [CharacterCodes.zeroWidthSpace, TokenInfo.SingleLine],
+        [CharacterCodes.narrowNoBreakSpace, TokenInfo.SingleLine],
+        [CharacterCodes.mathematicalSpace, TokenInfo.SingleLine],
+        [CharacterCodes.ideographicSpace, TokenInfo.SingleLine],
+        [CharacterCodes.byteOrderMark, TokenInfo.SingleLine],
+
+        // Simple Single-Character Tokens
+        [CharacterCodes.openParen, TokenInfo.SimpleToken | SyntaxKind.OpenParenToken],
+        [CharacterCodes.closeParen, TokenInfo.SimpleToken | SyntaxKind.CloseParenToken],
+        [CharacterCodes.comma, TokenInfo.SimpleToken | SyntaxKind.CommaToken],
+        [CharacterCodes.colon, TokenInfo.SimpleToken | SyntaxKind.ColonToken],
+        [CharacterCodes.semicolon, TokenInfo.SimpleToken | SyntaxKind.SemicolonToken],
+        [CharacterCodes.openBracket, TokenInfo.SimpleToken | SyntaxKind.OpenBracketToken],
+        [CharacterCodes.closeBracket, TokenInfo.SimpleToken | SyntaxKind.CloseBracketToken],
+        [CharacterCodes.openBrace, TokenInfo.SimpleToken | SyntaxKind.OpenBraceToken],
+        [CharacterCodes.closeBrace, TokenInfo.SimpleToken | SyntaxKind.CloseBraceToken],
+        [CharacterCodes.tilde, TokenInfo.SimpleToken | SyntaxKind.TildeToken],
+        [CharacterCodes.at, TokenInfo.SimpleToken | SyntaxKind.AtToken],
+    ]
+) {
+    if (key < charcodeToTokenInfoCommon.length) {
+        charcodeToTokenInfoCommon[key] = value;
+    }
+    else {
+        charcodeToTokenInfoUncommon.set(key, value);
+    }
+}
 
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
@@ -1935,8 +1952,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointUnchecked(pos);
 
-            const tokenInfo = charcodeToTokenInfo.get(ch);
-            if (tokenInfo !== undefined) {
+            const tokenInfo = ch < charcodeToTokenInfoCommon.length ?
+                charcodeToTokenInfoCommon[ch] :
+                charcodeToTokenInfoUncommon.get(ch) ?? TokenInfo.None;
+            if (tokenInfo !== TokenInfo.None) {
                 if (tokenInfo & TokenInfo.LineBreak) {
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     if (skipTrivia) {
