@@ -9334,6 +9334,7 @@ export function getRegularExpressionsForWildcards(specs: readonly string[] | und
     return flatMap(specs, spec => spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]));
 }
 
+const implicitGlobRegex = /[.*?]/;
 /**
  * An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
  * and does not contain any glob characters itself.
@@ -9341,7 +9342,7 @@ export function getRegularExpressionsForWildcards(specs: readonly string[] | und
  * @internal
  */
 export function isImplicitGlob(lastPathComponent: string): boolean {
-    return !/[.*?]/.test(lastPathComponent);
+    return !implicitGlobRegex.test(lastPathComponent);
 }
 
 /** @internal */
