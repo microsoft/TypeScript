@@ -301,7 +301,7 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
-const enum TokenInfo {
+const enum TokenCategory {
     None = 0,
 
     /** Single-width tokens whose contents fit in the lower masked bits. */
@@ -318,94 +318,94 @@ const enum TokenInfo {
     SimpleTokenMask = SimpleToken - 1,
 }
 
-const charcodeToTokenInfoCommon: TokenInfo[] = [];
-const charcodeToTokenInfoUncommon = new Map<CharacterCodes, TokenInfo>();
+const tokenCategoryLookup: TokenCategory[] = [];
+const tokenCategoryLookupUncommon = new Map<CharacterCodes, TokenCategory>();
 for (let i = 0; i < CharacterCodes.maxAsciiCharacter; i++) {
-    charcodeToTokenInfoCommon.push(0);
+    tokenCategoryLookup.push(TokenCategory.None);
 }
 
 for (
     const [key, value] of [
         // Line Break Whitespace
-        [CharacterCodes.lineFeed, TokenInfo.LineBreak],
-        [CharacterCodes.carriageReturn, TokenInfo.LineBreak],
+        [CharacterCodes.lineFeed, TokenCategory.LineBreak],
+        [CharacterCodes.carriageReturn, TokenCategory.LineBreak],
 
         // Single Line Whitespace
-        [CharacterCodes.tab, TokenInfo.Whitespace],
-        [CharacterCodes.verticalTab, TokenInfo.Whitespace],
-        [CharacterCodes.formFeed, TokenInfo.Whitespace],
-        [CharacterCodes.space, TokenInfo.Whitespace],
-        [CharacterCodes.nonBreakingSpace, TokenInfo.Whitespace],
-        [CharacterCodes.ogham, TokenInfo.Whitespace],
-        [CharacterCodes.enQuad, TokenInfo.Whitespace],
-        [CharacterCodes.emQuad, TokenInfo.Whitespace],
-        [CharacterCodes.enSpace, TokenInfo.Whitespace],
-        [CharacterCodes.emSpace, TokenInfo.Whitespace],
-        [CharacterCodes.threePerEmSpace, TokenInfo.Whitespace],
-        [CharacterCodes.fourPerEmSpace, TokenInfo.Whitespace],
-        [CharacterCodes.sixPerEmSpace, TokenInfo.Whitespace],
-        [CharacterCodes.figureSpace, TokenInfo.Whitespace],
-        [CharacterCodes.punctuationSpace, TokenInfo.Whitespace],
-        [CharacterCodes.thinSpace, TokenInfo.Whitespace],
-        [CharacterCodes.hairSpace, TokenInfo.Whitespace],
-        [CharacterCodes.zeroWidthSpace, TokenInfo.Whitespace],
-        [CharacterCodes.narrowNoBreakSpace, TokenInfo.Whitespace],
-        [CharacterCodes.mathematicalSpace, TokenInfo.Whitespace],
-        [CharacterCodes.ideographicSpace, TokenInfo.Whitespace],
-        [CharacterCodes.byteOrderMark, TokenInfo.Whitespace],
+        [CharacterCodes.tab, TokenCategory.Whitespace],
+        [CharacterCodes.verticalTab, TokenCategory.Whitespace],
+        [CharacterCodes.formFeed, TokenCategory.Whitespace],
+        [CharacterCodes.space, TokenCategory.Whitespace],
+        [CharacterCodes.nonBreakingSpace, TokenCategory.Whitespace],
+        [CharacterCodes.ogham, TokenCategory.Whitespace],
+        [CharacterCodes.enQuad, TokenCategory.Whitespace],
+        [CharacterCodes.emQuad, TokenCategory.Whitespace],
+        [CharacterCodes.enSpace, TokenCategory.Whitespace],
+        [CharacterCodes.emSpace, TokenCategory.Whitespace],
+        [CharacterCodes.threePerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.fourPerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.sixPerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.figureSpace, TokenCategory.Whitespace],
+        [CharacterCodes.punctuationSpace, TokenCategory.Whitespace],
+        [CharacterCodes.thinSpace, TokenCategory.Whitespace],
+        [CharacterCodes.hairSpace, TokenCategory.Whitespace],
+        [CharacterCodes.zeroWidthSpace, TokenCategory.Whitespace],
+        [CharacterCodes.narrowNoBreakSpace, TokenCategory.Whitespace],
+        [CharacterCodes.mathematicalSpace, TokenCategory.Whitespace],
+        [CharacterCodes.ideographicSpace, TokenCategory.Whitespace],
+        [CharacterCodes.byteOrderMark, TokenCategory.Whitespace],
 
         // Simple Single-Character Tokens
-        [CharacterCodes.openParen, TokenInfo.SimpleToken | SyntaxKind.OpenParenToken],
-        [CharacterCodes.closeParen, TokenInfo.SimpleToken | SyntaxKind.CloseParenToken],
-        [CharacterCodes.comma, TokenInfo.SimpleToken | SyntaxKind.CommaToken],
-        [CharacterCodes.colon, TokenInfo.SimpleToken | SyntaxKind.ColonToken],
-        [CharacterCodes.semicolon, TokenInfo.SimpleToken | SyntaxKind.SemicolonToken],
-        [CharacterCodes.openBracket, TokenInfo.SimpleToken | SyntaxKind.OpenBracketToken],
-        [CharacterCodes.closeBracket, TokenInfo.SimpleToken | SyntaxKind.CloseBracketToken],
-        [CharacterCodes.openBrace, TokenInfo.SimpleToken | SyntaxKind.OpenBraceToken],
-        [CharacterCodes.closeBrace, TokenInfo.SimpleToken | SyntaxKind.CloseBraceToken],
-        [CharacterCodes.tilde, TokenInfo.SimpleToken | SyntaxKind.TildeToken],
-        [CharacterCodes.at, TokenInfo.SimpleToken | SyntaxKind.AtToken],
+        [CharacterCodes.openParen, TokenCategory.SimpleToken | SyntaxKind.OpenParenToken],
+        [CharacterCodes.closeParen, TokenCategory.SimpleToken | SyntaxKind.CloseParenToken],
+        [CharacterCodes.comma, TokenCategory.SimpleToken | SyntaxKind.CommaToken],
+        [CharacterCodes.colon, TokenCategory.SimpleToken | SyntaxKind.ColonToken],
+        [CharacterCodes.semicolon, TokenCategory.SimpleToken | SyntaxKind.SemicolonToken],
+        [CharacterCodes.openBracket, TokenCategory.SimpleToken | SyntaxKind.OpenBracketToken],
+        [CharacterCodes.closeBracket, TokenCategory.SimpleToken | SyntaxKind.CloseBracketToken],
+        [CharacterCodes.openBrace, TokenCategory.SimpleToken | SyntaxKind.OpenBraceToken],
+        [CharacterCodes.closeBrace, TokenCategory.SimpleToken | SyntaxKind.CloseBraceToken],
+        [CharacterCodes.tilde, TokenCategory.SimpleToken | SyntaxKind.TildeToken],
+        [CharacterCodes.at, TokenCategory.SimpleToken | SyntaxKind.AtToken],
 
         // Digits
-        [CharacterCodes._0, TokenInfo.Digit],
-        [CharacterCodes._1, TokenInfo.Digit],
-        [CharacterCodes._2, TokenInfo.Digit],
-        [CharacterCodes._3, TokenInfo.Digit],
-        [CharacterCodes._4, TokenInfo.Digit],
-        [CharacterCodes._5, TokenInfo.Digit],
-        [CharacterCodes._6, TokenInfo.Digit],
-        [CharacterCodes._7, TokenInfo.Digit],
-        [CharacterCodes._8, TokenInfo.Digit],
-        [CharacterCodes._9, TokenInfo.Digit],
+        [CharacterCodes._0, TokenCategory.Digit],
+        [CharacterCodes._1, TokenCategory.Digit],
+        [CharacterCodes._2, TokenCategory.Digit],
+        [CharacterCodes._3, TokenCategory.Digit],
+        [CharacterCodes._4, TokenCategory.Digit],
+        [CharacterCodes._5, TokenCategory.Digit],
+        [CharacterCodes._6, TokenCategory.Digit],
+        [CharacterCodes._7, TokenCategory.Digit],
+        [CharacterCodes._8, TokenCategory.Digit],
+        [CharacterCodes._9, TokenCategory.Digit],
 
-        [CharacterCodes.exclamation, TokenInfo.RecognizedMisc],
-        [CharacterCodes.doubleQuote, TokenInfo.RecognizedMisc],
-        [CharacterCodes.singleQuote, TokenInfo.RecognizedMisc],
-        [CharacterCodes.backtick, TokenInfo.RecognizedMisc],
-        [CharacterCodes.percent, TokenInfo.RecognizedMisc],
-        [CharacterCodes.ampersand, TokenInfo.RecognizedMisc],
-        [CharacterCodes.asterisk, TokenInfo.RecognizedMisc],
-        [CharacterCodes.plus, TokenInfo.RecognizedMisc],
-        [CharacterCodes.minus, TokenInfo.RecognizedMisc],
-        [CharacterCodes.dot, TokenInfo.RecognizedMisc],
-        [CharacterCodes.slash, TokenInfo.RecognizedMisc],
-        [CharacterCodes.lessThan, TokenInfo.RecognizedMisc],
-        [CharacterCodes.equals, TokenInfo.RecognizedMisc],
-        [CharacterCodes.greaterThan, TokenInfo.RecognizedMisc],
-        [CharacterCodes.question, TokenInfo.RecognizedMisc],
-        [CharacterCodes.caret, TokenInfo.RecognizedMisc],
-        [CharacterCodes.bar, TokenInfo.RecognizedMisc],
-        [CharacterCodes.backslash, TokenInfo.RecognizedMisc],
-        [CharacterCodes.hash, TokenInfo.RecognizedMisc],
-        [CharacterCodes.replacementCharacter, TokenInfo.RecognizedMisc],
+        [CharacterCodes.exclamation, TokenCategory.RecognizedMisc],
+        [CharacterCodes.doubleQuote, TokenCategory.RecognizedMisc],
+        [CharacterCodes.singleQuote, TokenCategory.RecognizedMisc],
+        [CharacterCodes.backtick, TokenCategory.RecognizedMisc],
+        [CharacterCodes.percent, TokenCategory.RecognizedMisc],
+        [CharacterCodes.ampersand, TokenCategory.RecognizedMisc],
+        [CharacterCodes.asterisk, TokenCategory.RecognizedMisc],
+        [CharacterCodes.plus, TokenCategory.RecognizedMisc],
+        [CharacterCodes.minus, TokenCategory.RecognizedMisc],
+        [CharacterCodes.dot, TokenCategory.RecognizedMisc],
+        [CharacterCodes.slash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.lessThan, TokenCategory.RecognizedMisc],
+        [CharacterCodes.equals, TokenCategory.RecognizedMisc],
+        [CharacterCodes.greaterThan, TokenCategory.RecognizedMisc],
+        [CharacterCodes.question, TokenCategory.RecognizedMisc],
+        [CharacterCodes.caret, TokenCategory.RecognizedMisc],
+        [CharacterCodes.bar, TokenCategory.RecognizedMisc],
+        [CharacterCodes.backslash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.hash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.replacementCharacter, TokenCategory.RecognizedMisc],
     ]
 ) {
-    if (key < charcodeToTokenInfoCommon.length) {
-        charcodeToTokenInfoCommon[key] = value;
+    if (key < tokenCategoryLookup.length) {
+        tokenCategoryLookup[key] = value;
     }
     else {
-        charcodeToTokenInfoUncommon.set(key, value);
+        tokenCategoryLookupUncommon.set(key, value);
     }
 }
 
@@ -2022,11 +2022,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             }
 
-            const tokenInfo = ch < charcodeToTokenInfoCommon.length ?
-                charcodeToTokenInfoCommon[ch] :
-                charcodeToTokenInfoUncommon.get(ch) ?? TokenInfo.None;
+            const tokenInfo = ch < tokenCategoryLookup.length ?
+                tokenCategoryLookup[ch] :
+                tokenCategoryLookupUncommon.get(ch) ?? TokenCategory.None;
 
-            if (tokenInfo === TokenInfo.None) {
+            if (tokenInfo === TokenCategory.None) {
                 const identifierKind = scanIdentifier(ch, languageVersion);
                 if (identifierKind) {
                     return token = identifierKind;
@@ -2046,7 +2046,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = SyntaxKind.Unknown;
             }
 
-            if (tokenInfo & TokenInfo.Whitespace) {
+            if (tokenInfo & TokenCategory.Whitespace) {
                 if (skipTrivia) {
                     pos++;
                     continue;
@@ -2059,12 +2059,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             }
 
-            if (tokenInfo & TokenInfo.SimpleToken) {
+            if (tokenInfo & TokenCategory.SimpleToken) {
                 pos++;
-                return token = tokenInfo & TokenInfo.SimpleTokenMask;
+                return token = tokenInfo & TokenCategory.SimpleTokenMask;
             }
 
-            if (tokenInfo & TokenInfo.Digit) {
+            if (tokenInfo & TokenCategory.Digit) {
                 if (ch === CharacterCodes._0) {
                     if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
                         pos += 2;
@@ -2104,7 +2104,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = scanNumber();
             }
 
-            if (!(tokenInfo & TokenInfo.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenInfo}`);
+            if (!(tokenInfo & TokenCategory.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenInfo}`);
             switch (ch) {
                 case CharacterCodes.exclamation:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
