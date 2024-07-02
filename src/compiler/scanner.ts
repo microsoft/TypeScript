@@ -333,11 +333,12 @@ for (
         [CharacterCodes.paragraphSeparator, TokenCategory.LineBreak],
 
         // Single Line Whitespace
+        [CharacterCodes.space, TokenCategory.Whitespace],
         [CharacterCodes.tab, TokenCategory.Whitespace],
         [CharacterCodes.verticalTab, TokenCategory.Whitespace],
         [CharacterCodes.formFeed, TokenCategory.Whitespace],
-        [CharacterCodes.space, TokenCategory.Whitespace],
         [CharacterCodes.nonBreakingSpace, TokenCategory.Whitespace],
+        [CharacterCodes.nextLine, TokenCategory.Whitespace],
         [CharacterCodes.ogham, TokenCategory.Whitespace],
         [CharacterCodes.enQuad, TokenCategory.Whitespace],
         [CharacterCodes.emQuad, TokenCategory.Whitespace],
@@ -2033,15 +2034,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 if (identifierKind) {
                     return token = identifierKind;
                 }
-                else if (isWhiteSpaceSingleLine(ch)) {
-                    pos += charSize(ch);
-                    continue;
-                }
-                else if (isLineBreak(ch)) {
-                    tokenFlags |= TokenFlags.PrecedingLineBreak;
-                    pos += charSize(ch);
-                    continue;
-                }
                 const size = charSize(ch);
                 error(Diagnostics.Invalid_character, pos, size);
                 pos += size;
@@ -2059,6 +2051,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     return token = SyntaxKind.WhitespaceTrivia;
                 }
+            }
+
+            if (tokenCategory & TokenCategory.LineBreak) {
+                tokenFlags |= TokenFlags.PrecedingLineBreak;
+                pos += charSize(ch);
+                continue;
             }
 
             if (tokenCategory & TokenCategory.SimpleToken) {
