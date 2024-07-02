@@ -230,8 +230,14 @@ export function contains<T>(array: readonly T[] | undefined, value: T, equalityC
 
 /** @internal */
 export function indexOfAnyCharCode(text: string, charCodes: readonly number[], start?: number): number {
+    let bitMask = 0;
+    for (let i = 0; i < charCodes.length; i++) {
+        bitMask |= charCodes[i];
+    }
+
     for (let i = start ?? 0; i < text.length; i++) {
-        if (contains(charCodes, text.charCodeAt(i))) {
+        const current = text.charCodeAt(i);
+        if ((current & bitMask) === current && contains(charCodes, current)) {
             return i;
         }
     }
