@@ -289,8 +289,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/usage/usage.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -322,8 +321,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2305,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -341,8 +339,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/usage/usage.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
@@ -360,8 +357,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -379,8 +375,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -398,8 +393,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -408,7 +402,23 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/usage/usage.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/dependency/fns.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -440,8 +450,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -459,8 +468,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -478,8 +486,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/dependency/fns.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
@@ -497,8 +504,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/usage/usage.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -530,8 +536,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2305,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -549,8 +554,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/user/username/projects/myproject/usage/usage.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -559,7 +563,23 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/dependency/fns.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/usage/usage.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
