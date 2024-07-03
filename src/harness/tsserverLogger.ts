@@ -127,7 +127,10 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
-    s = s.replace(/"duration":\s*\d+(?:.\d+)?/g, `"duration": *`);
+    s = s.replace(/"syntaxDiag":\s*\d+(?:.\d+)?/g, `"syntaxDiag": *`);
+    s = s.replace(/"semanticDiag":\s*\d+(?:.\d+)?/g, `"semanticDiag": *`);
+    s = s.replace(/"suggestionDiag":\s*\d+(?:.\d+)?/g, `"suggestionDiag": *`);
+    s = s.replace(/"regionSemanticDiag":\s*\d+(?:.\d+)?/g, `"regionSemanticDiag": *`);
     s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
     s = sanitizeHarnessLSException(s);
     return s;

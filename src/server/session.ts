@@ -338,16 +338,21 @@ interface NextStep {
     delay(actionType: string, ms: number, action: () => void): void;
 }
 
+/** @internal */
+export type PerformanceData =
+    & Omit<protocol.PerformanceData, "diagnosticsDuration">
+    & { diagnosticsDuration?: Map<NormalizedPath, protocol.DiagnosticPerformanceData>; };
+
 /**
  * External capabilities used by multistep operation
  */
 interface MultistepOperationHost {
     getCurrentRequestId(): number;
-    getPerformanceData(): protocol.PerformanceData | undefined;
-    sendRequestCompletedEvent(requestId: number, performanceData: protocol.PerformanceData | undefined): void;
+    getPerformanceData(): PerformanceData | undefined;
+    sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void;
     getServerHost(): ServerHost;
     isCancellationRequested(): boolean;
-    executeWithRequestId(requestId: number, action: () => void, performanceData: protocol.PerformanceData | undefined): void;
+    executeWithRequestId(requestId: number, action: () => void, performanceData: PerformanceData | undefined): void;
     logError(error: Error, message: string): void;
 }
 
@@ -357,7 +362,7 @@ interface MultistepOperationHost {
  */
 class MultistepOperation implements NextStep {
     private requestId: number | undefined;
-    private performanceData: protocol.PerformanceData | undefined;
+    private performanceData: PerformanceData | undefined;
     private timerHandle: any;
     private immediateId: number | undefined;
 
@@ -980,7 +985,7 @@ export class Session<TMessage = string> implements EventSender {
     protected projectService: ProjectService;
     private changeSeq = 0;
 
-    private performanceData: protocol.PerformanceData | undefined;
+    private performanceData: PerformanceData | undefined;
 
     private currentRequestId!: number;
     private errorCheck: MultistepOperation;
@@ -1073,15 +1078,34 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private sendRequestCompletedEvent(requestId: number, performanceData: protocol.PerformanceData | undefined): void {
-        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData }, "requestCompleted");
+    private sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void {
+        this.event<protocol.RequestCompletedEventBody>(
+            {
+                request_seq: requestId,
+                performanceData: performanceData && toProtocolPerformanceData(performanceData),
+            },
+            "requestCompleted",
+        );
     }
 
-    private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
+    private addPerformanceData(key: Exclude<keyof PerformanceData, "diagnosticsDuration">, value: number) {
         if (!this.performanceData) {
             this.performanceData = {};
         }
         this.performanceData[key] = (this.performanceData[key] ?? 0) + value;
+    }
+
+    private addDiagnosticsPerformanceData(
+        file: NormalizedPath,
+        kind: protocol.DiagnosticEventKind,
+        duration: number,
+    ): void {
+        if (!this.performanceData) {
+            this.performanceData = {};
+        }
+        let fileDiagnosticDuration = this.performanceData.diagnosticsDuration?.get(file);
+        if (!fileDiagnosticDuration) (this.performanceData.diagnosticsDuration ??= new Map()).set(file, fileDiagnosticDuration = {});
+        fileDiagnosticDuration[kind] = duration;
     }
 
     private performanceEventHandler(event: PerformanceEvent) {
@@ -1228,7 +1252,7 @@ export class Session<TMessage = string> implements EventSender {
         cmdName: string,
         reqSeq: number,
         success: boolean,
-        performanceData: protocol.PerformanceData | undefined,
+        performanceData: PerformanceData | undefined,
         message?: string,
     ): void {
         const res: protocol.Response = {
@@ -1237,7 +1261,7 @@ export class Session<TMessage = string> implements EventSender {
             command: cmdName,
             request_seq: reqSeq,
             success,
-            performanceData,
+            performanceData: performanceData && toProtocolPerformanceData(performanceData),
         };
 
         if (success) {
@@ -1331,12 +1355,12 @@ export class Session<TMessage = string> implements EventSender {
                 file,
                 diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
                 spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
-                duration,
             };
             this.event<protocol.DiagnosticEventBody>(
                 body,
                 kind,
             );
+            this.addDiagnosticsPerformanceData(file, kind, duration);
         }
         catch (err) {
             this.logError(err, kind);
@@ -3737,8 +3761,8 @@ export class Session<TMessage = string> implements EventSender {
 
     public executeWithRequestId<T>(requestId: number, f: () => T): T;
     /** @internal */
-    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData: protocol.PerformanceData | undefined): T; // eslint-disable-line @typescript-eslint/unified-signatures
-    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData?: protocol.PerformanceData) {
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData: PerformanceData | undefined): T; // eslint-disable-line @typescript-eslint/unified-signatures
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData?: PerformanceData) {
         const currentPerformanceData = this.performanceData;
         try {
             this.performanceData = perfomanceData;
@@ -3878,6 +3902,12 @@ interface FileAndProject {
     readonly project: Project;
 }
 
+function toProtocolPerformanceData(performanceData: PerformanceData): protocol.PerformanceData {
+    const diagnosticsDuration = performanceData.diagnosticsDuration &&
+        arrayFrom(performanceData.diagnosticsDuration, ([file, data]) => ({ ...data, file }));
+    return { ...performanceData, diagnosticsDuration };
+}
+
 function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
     return {
         start: scriptInfo.positionToLineOffset(textSpan.start),
@@ -3928,7 +3958,7 @@ function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): proto
 export interface HandlerResponse {
     response?: {};
     responseRequired?: boolean;
-    /** @internal */ performanceData?: protocol.PerformanceData;
+    /** @internal */ performanceData?: PerformanceData;
 }
 
 /** @internal */
