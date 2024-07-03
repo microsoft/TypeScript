@@ -1997,19 +1997,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointUnchecked(pos);
 
-            if (ch === CharacterCodes.tab || ch === CharacterCodes.space) {
-                if (skipTrivia) {
-                    pos++;
-                    continue;
-                }
-                else {
-                    while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
-                        pos++;
-                    }
-                    return token = SyntaxKind.WhitespaceTrivia;
-                }
-            }
-
             if (ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) {
                 tokenFlags |= TokenFlags.PrecedingLineBreak;
                 if (skipTrivia) {
@@ -2044,14 +2031,23 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
 
             if (tokenCategory & TokenCategory.Whitespace) {
+                pos++;
+                // Tight loop here on consecutive whitespace to avoid a table lookup.
+                while (pos < end) {
+                    const nextCh = charCodeUnchecked(pos);
+                    // Check for the original character to hitting the slow path.
+                    if (nextCh === ch || isWhiteSpaceSingleLine(nextCh)) {
+                        pos++;
+                        continue;
+                    }
+
+                    break;
+                }
+
                 if (skipTrivia) {
-                    pos++;
                     continue;
                 }
                 else {
-                    while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
-                        pos++;
-                    }
                     return token = SyntaxKind.WhitespaceTrivia;
                 }
             }
