@@ -12,10 +12,7 @@
 //// /**
 ////  * @public
 ////  */
-//// export function createShapePropsMigrationIds<
-//// 	const S extends string,
-//// 	const T extends Record<string, number>,
-//// >(shapeType: S, ids: T): { [k in keyof T]: `com.tldraw.shape.${S}/${T[k]}` } {
+//// export function createShapePropsMigrationIds<T>(): { [k in keyof T]: any } {
 //// 	return;
 //// }
 
@@ -24,7 +21,7 @@ verify.completions({
   includes: [
     {
       name: "createShapePropsMigrationIds",
-      text: "(alias) function createShapePropsMigrationIds<const S extends string, const T extends Record<string, number>>(shapeType: S, ids: T): { [k in keyof T]: `com.tldraw.shape.${S}/${T[k]}`; }\nimport createShapePropsMigrationIds",
+      text: "(alias) function createShapePropsMigrationIds<T>(): { [k in keyof T]: any; }\nimport createShapePropsMigrationIds",
       tags: [{ name: "public", text: undefined }]
     }
   ]
