@@ -15,7 +15,7 @@ and limitations under the License.
 
 declare namespace ts {
     namespace server {
-        namespace protocol {
+        export namespace protocol {
             export import ApplicableRefactorInfo = ts.ApplicableRefactorInfo;
             export import ClassificationType = ts.ClassificationType;
             export import CompletionsTriggerCharacter = ts.CompletionsTriggerCharacter;
@@ -214,6 +214,22 @@ declare namespace ts {
                  * The time spent creating or updating the auto-import program, in milliseconds.
                  */
                 createAutoImportProviderProgramDurationMs?: number;
+                /**
+                 * The time spent computing diagnostics, in milliseconds.
+                 */
+                diagnosticsDuration?: FileDiagnosticPerformanceData[];
+            }
+            /**
+             * Time spent computing each kind of diagnostics, in milliseconds.
+             */
+            export type DiagnosticPerformanceData = {
+                [Kind in DiagnosticEventKind]?: number;
+            };
+            export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+                /**
+                 * The file for which the performance data is reported.
+                 */
+                file: string;
             }
             /**
              * Arguments for FileRequest messages.
@@ -1979,10 +1995,6 @@ declare namespace ts {
                  * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
                  */
                 spans?: TextSpan[];
-                /**
-                 * Time spent computing the diagnostics, in milliseconds.
-                 */
-                duration?: number;
             }
             export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
@@ -2500,7 +2512,7 @@ declare namespace ts {
                 Latest = "esnext",
             }
         }
-        namespace typingsInstaller {
+        export namespace typingsInstaller {
             interface Log {
                 isEnabled(): boolean;
                 writeLine(text: string): void;
@@ -2547,21 +2559,24 @@ declare namespace ts {
                 protected readonly latestDistTag = "latest";
             }
         }
-        type ActionSet = "action::set";
-        type ActionInvalidate = "action::invalidate";
-        type ActionPackageInstalled = "action::packageInstalled";
-        type EventTypesRegistry = "event::typesRegistry";
-        type EventBeginInstallTypes = "event::beginInstallTypes";
-        type EventEndInstallTypes = "event::endInstallTypes";
-        type EventInitializationFailed = "event::initializationFailed";
-        type ActionWatchTypingLocations = "action::watchTypingLocations";
-        interface TypingInstallerResponse {
+        type PerformanceData = Omit<protocol.PerformanceData, "diagnosticsDuration"> & {
+            diagnosticsDuration?: Map<NormalizedPath, protocol.DiagnosticPerformanceData>;
+        };
+        export type ActionSet = "action::set";
+        export type ActionInvalidate = "action::invalidate";
+        export type ActionPackageInstalled = "action::packageInstalled";
+        export type EventTypesRegistry = "event::typesRegistry";
+        export type EventBeginInstallTypes = "event::beginInstallTypes";
+        export type EventEndInstallTypes = "event::endInstallTypes";
+        export type EventInitializationFailed = "event::initializationFailed";
+        export type ActionWatchTypingLocations = "action::watchTypingLocations";
+        export interface TypingInstallerResponse {
             readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
         }
-        interface TypingInstallerRequestWithProjectName {
+        export interface TypingInstallerRequestWithProjectName {
             readonly projectName: string;
         }
-        interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
+        export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
             readonly fileNames: string[];
             readonly projectRootPath: Path;
             readonly compilerOptions: CompilerOptions;
@@ -2570,73 +2585,73 @@ declare namespace ts {
             readonly cachePath?: string;
             readonly kind: "discover";
         }
-        interface CloseProject extends TypingInstallerRequestWithProjectName {
+        export interface CloseProject extends TypingInstallerRequestWithProjectName {
             readonly kind: "closeProject";
         }
-        interface TypesRegistryRequest {
+        export interface TypesRegistryRequest {
             readonly kind: "typesRegistry";
         }
-        interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
+        export interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
             readonly kind: "installPackage";
             readonly fileName: Path;
             readonly packageName: string;
             readonly projectRootPath: Path;
             readonly id: number;
         }
-        interface PackageInstalledResponse extends ProjectResponse {
+        export interface PackageInstalledResponse extends ProjectResponse {
             readonly kind: ActionPackageInstalled;
             readonly id: number;
             readonly success: boolean;
             readonly message: string;
         }
-        interface InitializationFailedResponse extends TypingInstallerResponse {
+        export interface InitializationFailedResponse extends TypingInstallerResponse {
             readonly kind: EventInitializationFailed;
             readonly message: string;
             readonly stack?: string;
         }
-        interface ProjectResponse extends TypingInstallerResponse {
+        export interface ProjectResponse extends TypingInstallerResponse {
             readonly projectName: string;
         }
-        interface InvalidateCachedTypings extends ProjectResponse {
+        export interface InvalidateCachedTypings extends ProjectResponse {
             readonly kind: ActionInvalidate;
         }
-        interface InstallTypes extends ProjectResponse {
+        export interface InstallTypes extends ProjectResponse {
             readonly kind: EventBeginInstallTypes | EventEndInstallTypes;
             readonly eventId: number;
             readonly typingsInstallerVersion: string;
             readonly packagesToInstall: readonly string[];
         }
-        interface BeginInstallTypes extends InstallTypes {
+        export interface BeginInstallTypes extends InstallTypes {
             readonly kind: EventBeginInstallTypes;
         }
-        interface EndInstallTypes extends InstallTypes {
+        export interface EndInstallTypes extends InstallTypes {
             readonly kind: EventEndInstallTypes;
             readonly installSuccess: boolean;
         }
-        interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+        export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
             useCaseSensitiveFileNames: boolean;
             writeFile(path: string, content: string): void;
             createDirectory(path: string): void;
             getCurrentDirectory?(): string;
         }
-        interface SetTypings extends ProjectResponse {
+        export interface SetTypings extends ProjectResponse {
             readonly typeAcquisition: TypeAcquisition;
             readonly compilerOptions: CompilerOptions;
             readonly typings: string[];
             readonly unresolvedImports: SortedReadonlyArray<string>;
             readonly kind: ActionSet;
         }
-        interface WatchTypingLocations extends ProjectResponse {
+        export interface WatchTypingLocations extends ProjectResponse {
             /** if files is undefined, retain same set of watchers */
             readonly files: readonly string[] | undefined;
             readonly kind: ActionWatchTypingLocations;
         }
-        interface CompressedData {
+        export interface CompressedData {
             length: number;
             compressionKind: string;
             data: any;
         }
-        type ModuleImportResult = {
+        export type ModuleImportResult = {
             module: {};
             error: undefined;
         } | {
@@ -2647,8 +2662,8 @@ declare namespace ts {
             };
         };
         /** @deprecated Use {@link ModuleImportResult} instead. */
-        type RequireResult = ModuleImportResult;
-        interface ServerHost extends System {
+        export type RequireResult = ModuleImportResult;
+        export interface ServerHost extends System {
             watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
             watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
             preferNonRecursiveWatch?: boolean;
@@ -2660,11 +2675,11 @@ declare namespace ts {
             trace?(s: string): void;
             require?(initialPath: string, moduleName: string): ModuleImportResult;
         }
-        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+        export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
             projectName: string;
             projectRootPath: Path;
         }
-        interface ITypingsInstaller {
+        export interface ITypingsInstaller {
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
             enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
@@ -2672,22 +2687,22 @@ declare namespace ts {
             onProjectClosed(p: Project): void;
             readonly globalTypingsCacheLocation: string | undefined;
         }
-        function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
-        function toNormalizedPath(fileName: string): NormalizedPath;
-        function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
-        function asNormalizedPath(fileName: string): NormalizedPath;
-        function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
-        function isInferredProjectName(name: string): boolean;
-        function makeInferredProjectName(counter: number): string;
-        function createSortedArray<T>(): SortedArray<T>;
-        enum LogLevel {
+        export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
+        export function toNormalizedPath(fileName: string): NormalizedPath;
+        export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
+        export function asNormalizedPath(fileName: string): NormalizedPath;
+        export function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
+        export function isInferredProjectName(name: string): boolean;
+        export function makeInferredProjectName(counter: number): string;
+        export function createSortedArray<T>(): SortedArray<T>;
+        export enum LogLevel {
             terse = 0,
             normal = 1,
             requestTime = 2,
             verbose = 3,
         }
-        const emptyArray: SortedReadonlyArray<never>;
-        interface Logger {
+        export const emptyArray: SortedReadonlyArray<never>;
+        export interface Logger {
             close(): void;
             hasLevel(level: LogLevel): boolean;
             loggingEnabled(): boolean;
@@ -2698,27 +2713,27 @@ declare namespace ts {
             msg(s: string, type?: Msg): void;
             getLogFileName(): string | undefined;
         }
-        enum Msg {
+        export enum Msg {
             Err = "Err",
             Info = "Info",
             Perf = "Perf",
         }
-        namespace Errors {
+        export namespace Errors {
             function ThrowNoProject(): never;
             function ThrowProjectLanguageServiceDisabled(): never;
             function ThrowProjectDoesNotContainDocument(fileName: string, project: Project): never;
         }
-        type NormalizedPath = string & {
+        export type NormalizedPath = string & {
             __normalizedPathTag: any;
         };
-        interface NormalizedPathMap<T> {
+        export interface NormalizedPathMap<T> {
             get(path: NormalizedPath): T | undefined;
             set(path: NormalizedPath, value: T): void;
             contains(path: NormalizedPath): boolean;
             remove(path: NormalizedPath): void;
         }
-        function isDynamicFileName(fileName: NormalizedPath): boolean;
-        class ScriptInfo {
+        export function isDynamicFileName(fileName: NormalizedPath): boolean;
+        export class ScriptInfo {
             private readonly host;
             readonly fileName: NormalizedPath;
             readonly scriptKind: ScriptKind;
@@ -2764,16 +2779,16 @@ declare namespace ts {
             positionToLineOffset(position: number): protocol.Location;
             isJavaScript(): boolean;
         }
-        function allRootFilesAreJsOrDts(project: Project): boolean;
-        function allFilesAreJsOrDts(project: Project): boolean;
-        enum ProjectKind {
+        export function allRootFilesAreJsOrDts(project: Project): boolean;
+        export function allFilesAreJsOrDts(project: Project): boolean;
+        export enum ProjectKind {
             Inferred = 0,
             Configured = 1,
             External = 2,
             AutoImportProvider = 3,
             Auxiliary = 4,
         }
-        interface PluginCreateInfo {
+        export interface PluginCreateInfo {
             project: Project;
             languageService: LanguageService;
             languageServiceHost: LanguageServiceHost;
@@ -2781,19 +2796,19 @@ declare namespace ts {
             session?: Session<unknown>;
             config: any;
         }
-        interface PluginModule {
+        export interface PluginModule {
             create(createInfo: PluginCreateInfo): LanguageService;
             getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
             onConfigurationChanged?(config: any): void;
         }
-        interface PluginModuleWithName {
+        export interface PluginModuleWithName {
             name: string;
             module: PluginModule;
         }
-        type PluginModuleFactory = (mod: {
+        export type PluginModuleFactory = (mod: {
             typescript: typeof ts;
         }) => PluginModule;
-        abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
+        export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
             readonly projectKind: ProjectKind;
             readonly projectService: ProjectService;
             private documentRegistry;
@@ -2925,7 +2940,7 @@ declare namespace ts {
          * If a file is opened and no tsconfig (or jsconfig) is found,
          * the file and its imports/references are put into an InferredProject.
          */
-        class InferredProject extends Project {
+        export class InferredProject extends Project {
             private _isJsInferredProject;
             toggleJsInferredProject(isJsInferredProject: boolean): void;
             setCompilerOptions(options?: CompilerOptions): void;
@@ -2937,7 +2952,7 @@ declare namespace ts {
             close(): void;
             getTypeAcquisition(): TypeAcquisition;
         }
-        class AutoImportProviderProject extends Project {
+        export class AutoImportProviderProject extends Project {
             private hostProject;
             private static readonly maxDependencies;
             private rootFileNames;
@@ -2953,7 +2968,7 @@ declare namespace ts {
          * and if successful create a ConfiguredProject for it.
          * Otherwise it will create an InferredProject.
          */
-        class ConfiguredProject extends Project {
+        export class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
             private projectReferences;
             private compilerHost?;
@@ -2982,44 +2997,44 @@ declare namespace ts {
          * Project whose configuration is handled externally, such as in a '.csproj'.
          * These are created only if a host explicitly calls `openExternalProject`.
          */
-        class ExternalProject extends Project {
+        export class ExternalProject extends Project {
             externalProjectName: string;
             compileOnSaveEnabled: boolean;
             excludedFiles: readonly NormalizedPath[];
             updateGraph(): boolean;
             getExcludedFiles(): readonly ts.server.NormalizedPath[];
         }
-        function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
-        function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
-        function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
-        function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
-        function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
-        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
-        const maxProgramSizeForNonTsFiles: number;
-        const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
-        interface ProjectsUpdatedInBackgroundEvent {
+        export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
+        export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
+        export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
+        export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
+        export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
+        export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
+        export const maxProgramSizeForNonTsFiles: number;
+        export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+        export interface ProjectsUpdatedInBackgroundEvent {
             eventName: typeof ProjectsUpdatedInBackgroundEvent;
             data: {
                 openFiles: string[];
             };
         }
-        const ProjectLoadingStartEvent = "projectLoadingStart";
-        interface ProjectLoadingStartEvent {
+        export const ProjectLoadingStartEvent = "projectLoadingStart";
+        export interface ProjectLoadingStartEvent {
             eventName: typeof ProjectLoadingStartEvent;
             data: {
                 project: Project;
                 reason: string;
             };
         }
-        const ProjectLoadingFinishEvent = "projectLoadingFinish";
-        interface ProjectLoadingFinishEvent {
+        export const ProjectLoadingFinishEvent = "projectLoadingFinish";
+        export interface ProjectLoadingFinishEvent {
             eventName: typeof ProjectLoadingFinishEvent;
             data: {
                 project: Project;
             };
         }
-        const LargeFileReferencedEvent = "largeFileReferenced";
-        interface LargeFileReferencedEvent {
+        export const LargeFileReferencedEvent = "largeFileReferenced";
+        export interface LargeFileReferencedEvent {
             eventName: typeof LargeFileReferencedEvent;
             data: {
                 file: string;
@@ -3027,8 +3042,8 @@ declare namespace ts {
                 maxFileSize: number;
             };
         }
-        const ConfigFileDiagEvent = "configFileDiag";
-        interface ConfigFileDiagEvent {
+        export const ConfigFileDiagEvent = "configFileDiag";
+        export interface ConfigFileDiagEvent {
             eventName: typeof ConfigFileDiagEvent;
             data: {
                 triggerFile: string;
@@ -3036,46 +3051,46 @@ declare namespace ts {
                 diagnostics: readonly Diagnostic[];
             };
         }
-        const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
-        interface ProjectLanguageServiceStateEvent {
+        export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+        export interface ProjectLanguageServiceStateEvent {
             eventName: typeof ProjectLanguageServiceStateEvent;
             data: {
                 project: Project;
                 languageServiceEnabled: boolean;
             };
         }
-        const ProjectInfoTelemetryEvent = "projectInfo";
+        export const ProjectInfoTelemetryEvent = "projectInfo";
         /** This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler. */
-        interface ProjectInfoTelemetryEvent {
+        export interface ProjectInfoTelemetryEvent {
             readonly eventName: typeof ProjectInfoTelemetryEvent;
             readonly data: ProjectInfoTelemetryEventData;
         }
-        const OpenFileInfoTelemetryEvent = "openFileInfo";
+        export const OpenFileInfoTelemetryEvent = "openFileInfo";
         /**
          * Info that we may send about a file that was just opened.
          * Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
          * Currently this is only sent for '.js' files.
          */
-        interface OpenFileInfoTelemetryEvent {
+        export interface OpenFileInfoTelemetryEvent {
             readonly eventName: typeof OpenFileInfoTelemetryEvent;
             readonly data: OpenFileInfoTelemetryEventData;
         }
-        const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName;
-        interface CreateFileWatcherEvent {
+        export const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName;
+        export interface CreateFileWatcherEvent {
             readonly eventName: protocol.CreateFileWatcherEventName;
             readonly data: protocol.CreateFileWatcherEventBody;
         }
-        const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName;
-        interface CreateDirectoryWatcherEvent {
+        export const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName;
+        export interface CreateDirectoryWatcherEvent {
             readonly eventName: protocol.CreateDirectoryWatcherEventName;
             readonly data: protocol.CreateDirectoryWatcherEventBody;
         }
-        const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName;
-        interface CloseFileWatcherEvent {
+        export const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName;
+        export interface CloseFileWatcherEvent {
             readonly eventName: protocol.CloseFileWatcherEventName;
             readonly data: protocol.CloseFileWatcherEventBody;
         }
-        interface ProjectInfoTelemetryEventData {
+        export interface ProjectInfoTelemetryEventData {
             /** Cryptographically secure hash of project file location. */
             readonly projectId: string;
             /** Count of file extensions seen in the project. */
@@ -3097,15 +3112,15 @@ declare namespace ts {
             /** TypeScript version used by the server. */
             readonly version: string;
         }
-        interface OpenFileInfoTelemetryEventData {
+        export interface OpenFileInfoTelemetryEventData {
             readonly info: OpenFileInfo;
         }
-        interface ProjectInfoTypeAcquisitionData {
+        export interface ProjectInfoTypeAcquisitionData {
             readonly enable: boolean | undefined;
             readonly include: boolean;
             readonly exclude: boolean;
         }
-        interface FileStats {
+        export interface FileStats {
             readonly js: number;
             readonly jsSize?: number;
             readonly jsx: number;
@@ -3119,37 +3134,37 @@ declare namespace ts {
             readonly deferred: number;
             readonly deferredSize?: number;
         }
-        interface OpenFileInfo {
+        export interface OpenFileInfo {
             readonly checkJs: boolean;
         }
-        type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | CreateFileWatcherEvent | CreateDirectoryWatcherEvent | CloseFileWatcherEvent;
-        type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
-        interface SafeList {
+        export type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | CreateFileWatcherEvent | CreateDirectoryWatcherEvent | CloseFileWatcherEvent;
+        export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
+        export interface SafeList {
             [name: string]: {
                 match: RegExp;
                 exclude?: (string | number)[][];
                 types?: string[];
             };
         }
-        interface TypesMapFile {
+        export interface TypesMapFile {
             typesMap: SafeList;
             simpleMap: {
                 [libName: string]: string;
             };
         }
-        interface HostConfiguration {
+        export interface HostConfiguration {
             formatCodeOptions: FormatCodeSettings;
             preferences: protocol.UserPreferences;
             hostInfo: string;
             extraFileExtensions?: FileExtensionInfo[];
             watchOptions?: WatchOptions;
         }
-        interface OpenConfiguredProjectResult {
+        export interface OpenConfiguredProjectResult {
             configFileName?: NormalizedPath;
             configFileErrors?: readonly Diagnostic[];
         }
-        const nullTypingsInstaller: ITypingsInstaller;
-        interface ProjectServiceOptions {
+        export const nullTypingsInstaller: ITypingsInstaller;
+        export interface ProjectServiceOptions {
             host: ServerHost;
             logger: Logger;
             cancellationToken: HostCancellationToken;
@@ -3168,11 +3183,11 @@ declare namespace ts {
             session: Session<unknown> | undefined;
             jsDocParsingMode?: JSDocParsingMode;
         }
-        interface WatchOptionsAndErrors {
+        export interface WatchOptionsAndErrors {
             watchOptions: WatchOptions;
             errors: Diagnostic[] | undefined;
         }
-        class ProjectService {
+        export class ProjectService {
             private readonly nodeModulesWatchers;
             private readonly filenameToScriptInfoVersion;
             private readonly allJsFilesForOpenFileTelemetry;
@@ -3351,21 +3366,21 @@ declare namespace ts {
             private watchPackageJsonFile;
             private onPackageJsonChange;
         }
-        function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
-        interface ServerCancellationToken extends HostCancellationToken {
+        export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
+        export interface ServerCancellationToken extends HostCancellationToken {
             setRequest(requestId: number): void;
             resetRequest(requestId: number): void;
         }
-        const nullCancellationToken: ServerCancellationToken;
+        export const nullCancellationToken: ServerCancellationToken;
         /** @deprecated use ts.server.protocol.CommandTypes */
-        type CommandNames = protocol.CommandTypes;
+        export type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
-        const CommandNames: any;
-        type Event = <T extends object>(body: T, eventName: string) => void;
-        interface EventSender {
+        export const CommandNames: any;
+        export type Event = <T extends object>(body: T, eventName: string) => void;
+        export interface EventSender {
             event: Event;
         }
-        interface SessionOptions {
+        export interface SessionOptions {
             host: ServerHost;
             cancellationToken: ServerCancellationToken;
             useSingleInferredProject: boolean;
@@ -3396,7 +3411,7 @@ declare namespace ts {
             allowLocalPluginLoads?: boolean;
             typesMapLocation?: string;
         }
-        class Session<TMessage = string> implements EventSender {
+        export class Session<TMessage = string> implements EventSender {
             private readonly gcTimer;
             protected projectService: ProjectService;
             private changeSeq;
@@ -3416,6 +3431,7 @@ declare namespace ts {
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;
+            private addDiagnosticsPerformanceData;
             private performanceEventHandler;
             private defaultEventHandler;
             private projectsUpdatedInBackgroundEvent;
@@ -3566,7 +3582,7 @@ declare namespace ts {
             private getHostFormatOptions;
             private getHostPreferences;
         }
-        interface HandlerResponse {
+        export interface HandlerResponse {
             response?: {};
             responseRequired?: boolean;
         }
