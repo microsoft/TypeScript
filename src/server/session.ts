@@ -338,7 +338,8 @@ interface NextStep {
     delay(actionType: string, ms: number, action: () => void): void;
 }
 
-type PerformanceData =
+/** @internal */
+export type PerformanceData =
     & Omit<protocol.PerformanceData, "diagnosticsDuration">
     & { diagnosticsDuration?: Map<NormalizedPath, protocol.DiagnosticPerformanceData>; };
 
