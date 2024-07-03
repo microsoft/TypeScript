@@ -1103,14 +1103,8 @@ export class Session<TMessage = string> implements EventSender {
         if (!this.performanceData) {
             this.performanceData = {};
         }
-        if (!this.performanceData.diagnosticsDuration) {
-            this.performanceData.diagnosticsDuration = new Map();
-        }
-        const diagnosticsDuration = this.performanceData.diagnosticsDuration;
-        if (!diagnosticsDuration.get(file)) {
-            diagnosticsDuration.set(file, {});
-        }
-        const fileDiagnosticDuration = diagnosticsDuration.get(file)!;
+        let fileDiagnosticDuration = this.performanceData.diagnosticsDuration?.get(file);
+        if (!fileDiagnosticDuration) (this.performanceData.diagnosticsDuration ??= new Map()).set(file, fileDiagnosticDuration = {});
         fileDiagnosticDuration[kind] = duration;
     }
 
