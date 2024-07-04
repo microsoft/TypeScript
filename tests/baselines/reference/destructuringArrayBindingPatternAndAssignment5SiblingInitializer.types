@@ -7,28 +7,28 @@ function f1() {
 >   : ^^^^^^^^^^
 
     const [a1, b1 = a1] = [1];
->a1 : number
->   : ^^^^^^
->b1 : number
->   : ^^^^^^
->a1 : number
->   : ^^^^^^
+>a1 : any
+>   : ^^^
+>b1 : any
+>   : ^^^
+>a1 : any
+>   : ^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1
 >  : ^
 
     const [a2, b2 = 1 + a2] = [1];
->a2 : number
->   : ^^^^^^
->b2 : number
->   : ^^^^^^
->1 + a2 : number
->       : ^^^^^^
+>a2 : any
+>   : ^^^
+>b2 : any
+>   : ^^^
+>1 + a2 : any
+>       : ^^^
 >1 : 1
 >  : ^
->a2 : number
->   : ^^^^^^
+>a2 : any
+>   : ^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1
@@ -41,26 +41,26 @@ function f2() {
 >   : ^^^^^^^^^^
 
     const [a1, b1 = a1] = ['hi'];
->a1 : string
->   : ^^^^^^
->b1 : string
->   : ^^^^^^
->a1 : string
->   : ^^^^^^
+>a1 : any
+>   : ^^^
+>b1 : any
+>   : ^^^
+>a1 : any
+>   : ^^^
 >['hi'] : [string]
 >       : ^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 
     const [a2, b2 = a2 + '!'] = ['hi'];
->a2 : string
->   : ^^^^^^
+>a2 : any
+>   : ^^^
 >b2 : string
 >   : ^^^^^^
 >a2 + '!' : string
 >         : ^^^^^^
->a2 : string
->   : ^^^^^^
+>a2 : any
+>   : ^^^
 >'!' : "!"
 >    : ^^^
 >['hi'] : [string]
@@ -75,12 +75,12 @@ function f3() {
 >   : ^^^^^^^^^^
 
     const [a1, b1 = a1] = ['hi', 1];
->a1 : string
->   : ^^^^^^
->b1 : string | number
->   : ^^^^^^^^^^^^^^^
->a1 : string
->   : ^^^^^^
+>a1 : any
+>   : ^^^
+>b1 : any
+>   : ^^^
+>a1 : any
+>   : ^^^
 >['hi', 1] : [string, number]
 >          : ^^^^^^^^^^^^^^^^
 >'hi' : "hi"
@@ -89,14 +89,14 @@ function f3() {
 >  : ^
 
     const [a2, b2 = a2 + '!'] = ['hi', 1];
->a2 : string
->   : ^^^^^^
+>a2 : any
+>   : ^^^
 >b2 : string | number
 >   : ^^^^^^^^^^^^^^^
 >a2 + '!' : string
 >         : ^^^^^^
->a2 : string
->   : ^^^^^^
+>a2 : any
+>   : ^^^
 >'!' : "!"
 >    : ^^^
 >['hi', 1] : [string, number]
@@ -118,8 +118,8 @@ function f4() {
 >   : ^^^^^^^^^^
 
     const [ a, b = a ] = yadda ?? [];
->a : number
->  : ^^^^^^
+>a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 >a : number
