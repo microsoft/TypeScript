@@ -38,10 +38,14 @@ function b() {
         const resp = session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
             arguments: {
-                file: file2.path, startLine: 5, startOffset: 0, endLine: 7, endOffset: 1,
+                file: file2.path,
+                startLine: 5,
+                startOffset: 0,
+                endLine: 7,
+                endOffset: 1,
                 refactor: "Move to a new file",
-                action: "Move to a new file"
-             },
+                action: "Move to a new file",
+            },
         });
 
         const refactorEditInfo = resp.response as ts.server.protocol.RefactorEditInfo;
