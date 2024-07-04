@@ -10195,6 +10195,7 @@ export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
         || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
 }
 
+/** @internal */
 export function isShorthandPropertyNameUseSite(useSite: Node) {
     return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
 }
