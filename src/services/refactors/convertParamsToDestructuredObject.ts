@@ -368,7 +368,7 @@ function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undef
 
 function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | true | undefined {
     // returns a callOrNewExpression if the reference needs to be updated during the refactor
-    // returns 'true' if the reference does not need to be updated, but should not block the refactor
+    // returns 'true' if the reference will not be updated by the refactor, but should not block the refactor
     // returns 'undefined' if the reference should block the refactor
     if (isDeclaration(entry.node.parent)) {
         return entry.node;
@@ -387,7 +387,7 @@ function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | true | u
 
 function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | true | undefined {
     // returns a callOrNewExpression if the reference needs to be updated during the refactor
-    // returns 'true' if the reference does not need to be updated, but should not block the refactor
+    // returns 'true' if the reference will not be updated by the refactor, but should not block the refactor
     // returns 'undefined' if the reference should block the refactor
     if (entry.node.parent) {
         const functionReference = entry.node;
