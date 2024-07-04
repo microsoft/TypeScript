@@ -6693,7 +6693,7 @@ export const enum AccessFlags {
     NoIndexSignatures = 1 << 1,
     Writing = 1 << 2,
     CacheSymbol = 1 << 3,
-    NoTupleBoundsCheck = 1 << 4,
+    AllowMissing = 1 << 4,
     ExpressionPosition = 1 << 5,
     ReportDeprecated = 1 << 6,
     SuppressNoImplicitAnyError = 1 << 7,

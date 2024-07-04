@@ -11211,6 +11211,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
         }
 
+        const accessFlags = AccessFlags.ExpressionPosition | (noTupleBoundsCheck || hasDefaultValue(declaration) ? AccessFlags.AllowMissing : 0);
         let type: Type | undefined;
         if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
             if (declaration.dotDotDotToken) {
@@ -11231,7 +11232,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                 const name = declaration.propertyName || declaration.name as Identifier;
                 const indexType = getLiteralTypeFromPropertyName(name);
-                const declaredType = getIndexedAccessType(parentType, indexType, AccessFlags.ExpressionPosition, name);
+                const declaredType = getIndexedAccessType(parentType, indexType, accessFlags, name);
                 type = getFlowTypeOfDestructuring(declaration, declaredType);
             }
         }
@@ -11252,7 +11253,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (isArrayLikeType(parentType)) {
                 const indexType = getNumberLiteralType(index);
-                const accessFlags = AccessFlags.ExpressionPosition | (noTupleBoundsCheck || hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0);
                 const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, accessFlags, declaration.name) || errorType;
                 type = getFlowTypeOfDestructuring(declaration, declaredType);
             }
@@ -18565,7 +18565,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (everyType(objectType, isTupleType) && isNumericLiteralName(propName)) {
                 const index = +propName;
-                if (accessNode && everyType(objectType, t => !((t as TupleTypeReference).target.combinedFlags & ElementFlags.Variable)) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
+                if (accessNode && everyType(objectType, t => !((t as TupleTypeReference).target.combinedFlags & ElementFlags.Variable)) && !(accessFlags & AccessFlags.AllowMissing)) {
                     const indexNode = getIndexNodeForAccessExpression(accessNode);
                     if (isTupleType(objectType)) {
                         if (index < 0) {
@@ -18699,6 +18699,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return undefined;
             }
+        }
+        if (accessFlags & AccessFlags.AllowMissing && isObjectLiteralType(objectType)) {
+            return undefinedType;
         }
         if (isJSLiteralType(objectType)) {
             return anyType;
@@ -32316,9 +32319,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return node.isSpread ? getIndexedAccessType(node.type, numberType) : node.type;
     }
 
-    function hasDefaultValue(node: BindingElement | Expression): boolean {
-        return (node.kind === SyntaxKind.BindingElement && !!(node as BindingElement).initializer) ||
-            (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken);
+    function hasDefaultValue(node: BindingElement | ObjectLiteralElementLike | Expression): boolean {
+        return node.kind === SyntaxKind.BindingElement && !!(node as BindingElement).initializer ||
+            node.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((node as PropertyAssignment).initializer) ||
+            node.kind === SyntaxKind.ShorthandPropertyAssignment && !!(node as ShorthandPropertyAssignment).objectAssignmentInitializer ||
+            node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken;
     }
 
     function isSpreadIntoCallOrNew(node: ArrayLiteralExpression) {
@@ -32583,14 +32588,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop.links.nameType = nameType;
                 }
 
-                if (inDestructuringPattern) {
+                if (inDestructuringPattern && hasDefaultValue(memberDecl)) {
                     // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                     // for the property, make the property optional.
-                    const isOptional = (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue(memberDecl.initializer)) ||
-                        (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && memberDecl.objectAssignmentInitializer);
-                    if (isOptional) {
-                        prop.flags |= SymbolFlags.Optional;
-                    }
+                    prop.flags |= SymbolFlags.Optional;
                 }
                 else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     // If object literal is contextually typed by the implied type of a binding pattern, and if the
@@ -32687,35 +32688,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             propertiesArray.push(member);
         }
         popContextualType();
-
-        // If object literal is contextually typed by the implied type of a binding pattern, augment the result
-        // type with those properties for which the binding pattern specifies a default value.
-        // If the object literal is spread into another object literal, skip this step and let the top-level object
-        // literal handle it instead. Note that this might require full traversal to the root pattern's parent
-        // as it's the guaranteed to be the common ancestor of the pattern node and the current object node.
-        // It's not possible to check if the immediate parent node is a spread assignment
-        // since the type flows in non-obvious ways through conditional expressions, IIFEs and more.
-        if (contextualTypeHasPattern) {
-            const rootPatternParent = findAncestor(contextualType.pattern!.parent, n =>
-                n.kind === SyntaxKind.VariableDeclaration ||
-                n.kind === SyntaxKind.BinaryExpression ||
-                n.kind === SyntaxKind.Parameter);
-            const spreadOrOutsideRootObject = findAncestor(node, n =>
-                n === rootPatternParent ||
-                n.kind === SyntaxKind.SpreadAssignment)!;
-
-            if (spreadOrOutsideRootObject.kind !== SyntaxKind.SpreadAssignment) {
-                for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
-                        if (!(prop.flags & SymbolFlags.Optional)) {
-                            error(prop.valueDeclaration || tryCast(prop, isTransientSymbol)?.links.bindingElement, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
-                        }
-                        propertiesTable.set(prop.escapedName, prop);
-                        propertiesArray.push(prop);
-                    }
-                }
-            }
-        }
 
         if (isErrorType(spread)) {
             return errorType;
@@ -39114,7 +39086,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkPropertyAccessibility(property, /*isSuper*/ false, /*writing*/ true, objectLiteralType, prop);
                 }
             }
-            const elementType = getIndexedAccessType(objectLiteralType, exprType, AccessFlags.ExpressionPosition, name);
+            const elementType = getIndexedAccessType(objectLiteralType, exprType, AccessFlags.ExpressionPosition | (hasDefaultValue(property) ? AccessFlags.AllowMissing : 0), name);
             const type = getFlowTypeOfDestructuring(property, elementType);
             return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
         }
@@ -39173,7 +39145,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isArrayLikeType(sourceType)) {
                     // We create a synthetic expression so that getIndexedAccessType doesn't get confused
                     // when the element is a SyntaxKind.ElementAccessExpression.
-                    const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0);
+                    const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(element) ? AccessFlags.AllowMissing : 0);
                     const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, accessFlags, createSyntheticExpression(element, indexType)) || errorType;
                     const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
                     const type = getFlowTypeOfDestructuring(element, assignedType);
@@ -40140,16 +40112,56 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkSatisfiesExpressionWorker(initializer, typeNode, checkMode);
             }
         }
-        const type = getQuickTypeOfExpression(initializer) ||
-            (contextualType ?
-                checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal)
-                : checkExpressionCached(initializer, checkMode));
-        return isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
-                isTupleType(type) && !(type.target.combinedFlags & ElementFlags.Variable) && getTypeReferenceArity(type) < declaration.name.elements.length ?
-            padTupleType(type, declaration.name) : type;
+        const type = getQuickTypeOfExpression(initializer) || (contextualType ?
+            checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal) :
+            checkExpressionCached(initializer, checkMode));
+        if (isParameter(declaration)) {
+            if (declaration.name.kind === SyntaxKind.ObjectBindingPattern && isObjectLiteralType(type)) {
+                return padObjectLiteralType(type as ObjectType, declaration.name);
+            }
+            if (declaration.name.kind === SyntaxKind.ArrayBindingPattern && isTupleType(type)) {
+                return padTupleType(type, declaration.name);
+            }
+        }
+        return type;
+    }
+
+    function padObjectLiteralType(type: ObjectType, pattern: ObjectBindingPattern): Type {
+        let missingElements: BindingElement[] | undefined;
+        for (const e of pattern.elements) {
+            if (e.initializer) {
+                const name = getPropertyNameFromBindingElement(e);
+                if (name && !getPropertyOfType(type, name)) {
+                    missingElements = append(missingElements, e);
+                }
+            }
+        }
+        if (!missingElements) {
+            return type;
+        }
+        const members = createSymbolTable();
+        for (const prop of getPropertiesOfObjectType(type)) {
+            members.set(prop.escapedName, prop);
+        }
+        for (const e of missingElements) {
+            const symbol = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, getPropertyNameFromBindingElement(e)!);
+            symbol.links.type = getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false);
+            members.set(symbol.escapedName, symbol);
+        }
+        const result = createAnonymousType(type.symbol, members, emptyArray, emptyArray, getIndexInfosOfType(type));
+        result.objectFlags = type.objectFlags;
+        return result;
+    }
+
+    function getPropertyNameFromBindingElement(e: BindingElement) {
+        const exprType = getLiteralTypeFromPropertyName(e.propertyName || e.name as Identifier);
+        return isTypeUsableAsPropertyName(exprType) ? getPropertyNameFromType(exprType) : undefined;
     }
 
     function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
+        if (type.target.combinedFlags & ElementFlags.Variable || getTypeReferenceArity(type) >= pattern.elements.length) {
+            return type;
+        }
         const patternElements = pattern.elements;
         const elementTypes = getElementTypes(type).slice();
         const elementFlags = type.target.elementFlags.slice();
