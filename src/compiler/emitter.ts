@@ -5188,7 +5188,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
             | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
-        return getLiteralText(node, currentSourceFile, flags);
+        return getLiteralText(node, getSourceFileOfNode(node), flags);
     }
 
     /**
