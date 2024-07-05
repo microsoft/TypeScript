@@ -9816,6 +9816,7 @@ export interface DiagnosticCollection {
 // SyntaxKind.SyntaxList
 export interface SyntaxList extends Node {
     kind: SyntaxKind.SyntaxList;
+    /** @internal */ _children: readonly Node[];
 }
 
 // dprint-ignore
