@@ -29297,6 +29297,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
             if (hasMatchingArgument(callExpression, reference)) {
+                // Ordinarily we don't need to to this in control flow analysis because the Binder breaks this down.
+                // However, we may encounter the need to narrow this down here when analyzing aliased conditional expressions.
+                if (inlineLevel !== 0 && isOptionalChain(callExpression)) {
+                    type = narrowTypeByOptionality(type, callExpression.expression, assumeTrue);
+                }
                 const signature = assumeTrue || !isCallChain(callExpression) ? getEffectsSignature(callExpression) : undefined;
                 const predicate = signature && getTypePredicateOfSignature(signature);
                 if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
@@ -29393,7 +29398,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function narrowTypeByOptionality(type: Type, expr: Expression, assumePresent: boolean): Type {
-            if (isMatchingReference(reference, expr)) {
+            if (isMatchingReference(reference, expr) || optionalChainContainsReference(expr, reference)) {
                 return getAdjustedTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
             }
             const access = getDiscriminantPropertyAccess(expr, type);
