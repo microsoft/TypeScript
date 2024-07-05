@@ -8980,7 +8980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result) {
                         if (result.pos !== -1 || result.end !== -1) {
                             if (result === nodes) {
-                                result = factory.createNodeArray([...nodes], nodes.hasTrailingComma);
+                                result = factory.createNodeArray(nodes.slice(), nodes.hasTrailingComma);
                             }
                             setTextRangePosEnd(result, -1, -1);
                         }
