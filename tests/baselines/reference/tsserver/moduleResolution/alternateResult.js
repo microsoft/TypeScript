@@ -394,8 +394,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -491,7 +493,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -561,10 +570,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -710,7 +715,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -759,10 +774,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 3,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1053,7 +1064,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -1102,10 +1123,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 4,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1376,7 +1393,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 4
+        "request_seq": 4,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -1427,10 +1454,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 5,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -1709,7 +1732,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -1760,10 +1793,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 6,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2021,7 +2050,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -2080,10 +2119,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 7,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2157,10 +2192,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2345,7 +2383,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7
+        "request_seq": 7,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -2406,10 +2454,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 8,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2478,12 +2522,16 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2688,7 +2736,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 8
+        "request_seq": 8,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -2746,10 +2804,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 9,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -2869,10 +2923,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -3091,7 +3148,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 9
+        "request_seq": 9,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -3151,10 +3218,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 10,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -3246,8 +3309,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
+	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -3448,7 +3513,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 10
+        "request_seq": 10,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -3523,10 +3598,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 11,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -3817,7 +3888,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 11
+        "request_seq": 11,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -3894,10 +3975,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 12,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4168,7 +4245,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 12
+        "request_seq": 12,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -4247,10 +4334,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 13,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4529,7 +4612,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 13
+        "request_seq": 13,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -4607,10 +4700,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 14,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -4868,7 +4957,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 14
+        "request_seq": 14,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/index.mts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0

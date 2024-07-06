@@ -121,8 +121,24 @@ export declare function foo(): void;
   "size": 728
 }
 
+//// [/user/username/projects/myproject/app/bld/program/bar.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/user/username/projects/myproject/app/bld/program/bar.d.ts]
+export {};
+
+
+//// [/user/username/projects/myproject/app/bld/program/index.js]
+foo;
+
+
+//// [/user/username/projects/myproject/app/bld/program/index.d.ts]
+
+
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-9677035610-import {foo} from \"shared\";",{"version":"193491849-foo","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"affectedFilesPendingEmit":[3,4],"emitSignatures":[3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n",{"version":"-9677035610-import {foo} from \"shared\";","signature":"-3531856636-export {};\n"},{"version":"193491849-foo","signature":"5381-","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -152,16 +168,21 @@ export declare function foo(): void;
       "signature": "-5677608893-export declare function foo(): void;\n"
     },
     "../../src/program/bar.ts": {
+      "original": {
+        "version": "-9677035610-import {foo} from \"shared\";",
+        "signature": "-3531856636-export {};\n"
+      },
       "version": "-9677035610-import {foo} from \"shared\";",
-      "signature": "-9677035610-import {foo} from \"shared\";"
+      "signature": "-3531856636-export {};\n"
     },
     "../../src/program/index.ts": {
       "original": {
         "version": "193491849-foo",
+        "signature": "5381-",
         "affectsGlobalScope": true
       },
       "version": "193491849-foo",
-      "signature": "193491849-foo",
+      "signature": "5381-",
       "affectsGlobalScope": true
     }
   },
@@ -198,22 +219,9 @@ export declare function foo(): void;
       ]
     ]
   ],
-  "affectedFilesPendingEmit": [
-    [
-      "../../src/program/bar.ts",
-      "Js | Dts"
-    ],
-    [
-      "../../src/program/index.ts",
-      "Js | Dts"
-    ]
-  ],
-  "emitSignatures": [
-    "../../src/program/bar.ts",
-    "../../src/program/index.ts"
-  ],
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1021
+  "size": 1074
 }
 
 
@@ -396,7 +404,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/app/src/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

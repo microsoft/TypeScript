@@ -62,7 +62,6 @@ import {
     parseConfigHostFromCompilerHostLike,
     ParsedCommandLine,
     Path,
-    perfLogger,
     PollingInterval,
     ProgramUpdateLevel,
     ProjectReference,
@@ -170,6 +169,7 @@ export interface WatchHost {
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     /** If provided, will be used to reset existing delayed compilation */
     clearTimeout?(timeoutId: any): void;
+    preferNonRecursiveWatch?: boolean;
 }
 export interface ProgramHost<T extends BuilderProgram> {
     /**
@@ -499,6 +499,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.toPath = toPath;
     compilerHost.getCompilationSettings = () => compilerOptions!;
     compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
+    compilerHost.preferNonRecursiveWatch = host.preferNonRecursiveWatch;
     compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
     compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
     compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
@@ -891,19 +892,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function updateProgram() {
         switch (updateLevel) {
             case ProgramUpdateLevel.RootNamesAndUpdate:
-                perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
             case ProgramUpdateLevel.Full:
-                perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
             default:
-                perfLogger?.logStartUpdateProgram("SynchronizeProgram");
                 synchronizeProgram();
                 break;
         }
-        perfLogger?.logStopUpdateProgram("Done");
         return getCurrentBuilderProgram();
     }
 

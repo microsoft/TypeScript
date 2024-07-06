@@ -25,11 +25,9 @@ CleanBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
-  ],
+  "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -54,10 +52,8 @@ IncrementalBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
-  ],
+  "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }

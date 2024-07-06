@@ -225,12 +225,15 @@ export const theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 50
 }
 
 
@@ -351,7 +354,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg1/package.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -403,8 +406,26 @@ File '/package.json' does not exist.
 
 
 
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = 42;
+
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 64
+}
+
 
 
 Program root files: [
@@ -457,7 +478,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because buildinfo file 'packages/pkg1/build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -500,9 +521,22 @@ File '/package.json' does not exist.
 
 
 
-//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+export const theNum = 42;
+
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 50
+}
+
 
 
 Program root files: [
@@ -555,7 +589,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg1/package.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -607,8 +641,26 @@ File '/package.json' does not exist.
 
 
 
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = 42;
+
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 64
+}
+
 
 
 Program root files: [
@@ -809,7 +861,7 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because buildinfo file 'packages/pkg1/build/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -852,15 +904,19 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = 42;
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"version":"FakeTSVersion"}
 
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 50
+}
 
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [

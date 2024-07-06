@@ -1,6 +1,6 @@
 import {
     append,
-    arraysEqual,
+    arrayIsEqualTo,
     binarySearch,
     CharacterCodes,
     CommentDirective,
@@ -418,12 +418,12 @@ export function stringToToken(s: string): SyntaxKind | undefined {
 
 const regExpFlagCharCodes = makeReverseMap(charCodeToRegExpFlag);
 
-/** @internal */
+/** @internal @knipignore */
 export function regularExpressionFlagToCharacterCode(f: RegularExpressionFlags): CharacterCodes | undefined {
     return regExpFlagCharCodes[f];
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function characterCodeToRegularExpressionFlag(ch: CharacterCodes): RegularExpressionFlags | undefined {
     return charCodeToRegExpFlag.get(ch);
 }
@@ -475,7 +475,7 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
             line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
         }
         else {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arrayIsEqualTo(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
         }
     }
 
@@ -602,8 +602,7 @@ function isWordCharacter(ch: number): boolean {
     return isASCIILetter(ch) || isDigit(ch) || ch === CharacterCodes._;
 }
 
-/** @internal */
-export function isOctalDigit(ch: number): boolean {
+function isOctalDigit(ch: number): boolean {
     return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
 }
 
@@ -788,15 +787,13 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
 
 const shebangTriviaRegex = /^#!.*/;
 
-/** @internal */
-export function isShebangTrivia(text: string, pos: number) {
+function isShebangTrivia(text: string, pos: number) {
     // Shebangs check must only be done at the start of the file
     Debug.assert(pos === 0);
     return shebangTriviaRegex.test(text);
 }
 
-/** @internal */
-export function scanShebangTrivia(text: string, pos: number) {
+function scanShebangTrivia(text: string, pos: number) {
     const shebang = shebangTriviaRegex.exec(text)![0];
     pos = pos + shebang.length;
     return pos;

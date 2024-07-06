@@ -183,12 +183,16 @@ export declare const z = 10;
 
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../main.ts","../src/secondary.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../main.ts",
+    "../src/secondary.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 71
 }
 
 
@@ -299,7 +303,7 @@ After running Timeout callback:: count: 0
 Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'outDir/main.js' is older than input '../configs/first/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'outDir/tsconfig.tsbuildinfo' is older than input '../configs/first/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/myproject/tsconfig.json'...
 
@@ -332,8 +336,6 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/projects/myproject/tsconfig.json'...
-
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -344,6 +346,8 @@ root2/other/sometype2/index.d.ts
   Imported via "other/sometype2" from file 'src/secondary.ts'
 src/secondary.ts
   Matched by include pattern '${configDir}/src' in 'tsconfig.json'
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/projects/myproject/tsconfig.json'...
+
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 

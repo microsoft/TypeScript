@@ -152,12 +152,15 @@ var container;
 
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../../exec/index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/exec.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../../exec/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 58
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.js]
@@ -370,7 +373,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/container/compositeE
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -815,7 +825,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

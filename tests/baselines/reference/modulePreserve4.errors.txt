@@ -127,9 +127,6 @@
     import g1 from "./g"; // { default: 0 }
     const g2 = require("./g"); // { default: 0 }
     
-==== /main4.cjs (0 errors) ====
-    exports.x = require("./g");
-    
 ==== /dummy.ts (0 errors) ====
     export {}; // Silly test harness
     

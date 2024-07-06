@@ -201,7 +201,6 @@ import {
     isVoidExpression,
     isWriteAccess,
     JSDocPropertyLikeTag,
-    JSDocTag,
     length,
     map,
     mapDefined,
@@ -242,7 +241,6 @@ import {
     skipAlias,
     some,
     SourceFile,
-    Statement,
     StringLiteral,
     StringLiteralLike,
     stripQuotes,
@@ -324,8 +322,7 @@ export interface SpanEntry {
     readonly fileName: string;
     readonly textSpan: TextSpan;
 }
-/** @internal */
-export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
+function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
         node: (node as NamedDeclaration).name || node,
@@ -377,7 +374,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 const declOrStatement = findAncestor(validImport, node =>
                     isDeclaration(node) ||
                     isStatement(node) ||
-                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
+                    isJSDocTag(node))!;
                 return isDeclaration(declOrStatement) ?
                     getContextNode(declOrStatement) :
                     declOrStatement;
@@ -886,8 +883,7 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
     return createTextSpanFromBounds(start, end);
 }
 
-/** @internal */
-export function getTextSpanOfEntry(entry: Entry) {
+function getTextSpanOfEntry(entry: Entry) {
     return entry.kind === EntryKind.Span ? entry.textSpan :
         getTextSpan(entry.node, entry.node.getSourceFile());
 }

@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/importTag17.ts] ////
+
+=== /node_modules/@types/foo/index.d.mts ===
+export declare const Import: "module";
+>Import : Symbol(Import, Decl(index.d.mts, 0, 20))
+
+=== /node_modules/@types/foo/index.d.cts ===
+export declare const Require: "script";
+>Require : Symbol(Require, Decl(index.d.cts, 0, 20))
+
+=== /a.js ===
+/** @import { Import } from 'foo' with { 'resolution-mode': 'import' } */
+/** @import { Require } from 'foo' with { 'resolution-mode': 'require' } */
+
+/**
+ * @returns { Import }
+ */
+export function f1() {
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+    return 1;
+}
+
+/**
+ * @returns { Require }
+ */
+export function f2() {
+>f2 : Symbol(f2, Decl(a.js, 8, 1))
+
+    return 1;
+}
+

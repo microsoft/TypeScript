@@ -383,7 +383,7 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs]
 "use strict";
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
