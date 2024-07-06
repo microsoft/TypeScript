@@ -1356,11 +1356,45 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
         AsyncIterator: new Map(Object.entries({
             es2015: emptyArray,
         })),
+        ArrayBuffer: new Map(Object.entries({
+            es2024: [
+                "maxByteLength",
+                "resizable",
+                "resize",
+                "detached",
+                "transfer",
+                "transferToFixedLength",
+            ],
+        })),
         Atomics: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "add",
+                "and",
+                "compareExchange",
+                "exchange",
+                "isLockFree",
+                "load",
+                "or",
+                "store",
+                "sub",
+                "wait",
+                "notify",
+                "xor",
+            ],
+            es2024: [
+                "waitAsync",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "byteLength",
+                "slice",
+            ],
+            es2024: [
+                "growable",
+                "maxByteLength",
+                "grow",
+            ],
         })),
         AsyncIterable: new Map(Object.entries({
             es2018: emptyArray,
@@ -1382,6 +1416,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             ],
             es2018: [
                 "dotAll",
+            ],
+            es2024: [
+                "unicodeSets",
             ],
         })),
         Reflect: new Map(Object.entries({
@@ -1429,6 +1466,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2022: [
                 "hasOwn",
             ],
+            es2024: [
+                "groupBy",
+            ],
         })),
         NumberConstructor: new Map(Object.entries({
             es2015: [
@@ -1468,11 +1508,27 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
                 "values",
             ],
         })),
+        MapConstructor: new Map(Object.entries({
+            es2024: [
+                "groupBy",
+            ],
+        })),
         Set: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
                 "values",
+            ],
+        })),
+        SetConstructor: new Map(Object.entries({
+            esnext: [
+                "union",
+                "intersection",
+                "difference",
+                "symmetricDifference",
+                "isSubsetOf",
+                "isSupersetOf",
+                "isDisjointFrom",
             ],
         })),
         PromiseConstructor: new Map(Object.entries({
@@ -1487,6 +1543,9 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             ],
             es2021: [
                 "any",
+            ],
+            es2024: [
+                "withResolvers",
             ],
         })),
         Symbol: new Map(Object.entries({
@@ -1553,7 +1612,7 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2022: [
                 "at",
             ],
-            esnext: [
+            es2024: [
                 "isWellFormed",
                 "toWellFormed",
             ],
@@ -1598,6 +1657,11 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
         SymbolConstructor: new Map(Object.entries({
             es2020: [
                 "matchAll",
+            ],
+            esnext: [
+                "metadata",
+                "dispose",
+                "asyncDispose",
             ],
         })),
         DataView: new Map(Object.entries({
