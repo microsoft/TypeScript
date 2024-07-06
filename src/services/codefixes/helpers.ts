@@ -905,8 +905,8 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 // it can't refer to reserved internal symbol names and such
                 return visitEachChild(node, visit, /*context*/ undefined);
             }
-            const name = firstIdentifier.symbol && getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
-            const qualifier = name && name !== firstIdentifier.text
+            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+            const qualifier = name !== firstIdentifier.text
                 ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
                 : node.qualifier;
 
