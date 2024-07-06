@@ -899,8 +899,14 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
         if (isLiteralImportTypeNode(node) && node.qualifier) {
             // Symbol for the left-most thing after the dot
             const firstIdentifier = getFirstIdentifier(node.qualifier);
-            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
-            const qualifier = name !== firstIdentifier.text
+            if (!firstIdentifier.symbol) {
+                // if symbol is missing then this doesn't come from a synthesized import type node
+                // it has to be an import type node authored by the user and thus it has to be valid
+                // it can't refer to reserved internal symbol names and such
+                return visitEachChild(node, visit, /*context*/ undefined);
+            }
+            const name = firstIdentifier.symbol && getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+            const qualifier = name && name !== firstIdentifier.text
                 ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
                 : node.qualifier;
 
