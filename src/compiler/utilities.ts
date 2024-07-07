@@ -1318,6 +1318,10 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
 /** @internal */
 export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
     new Map(Object.entries({
