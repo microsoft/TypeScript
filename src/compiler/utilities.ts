@@ -3951,7 +3951,7 @@ export function isBindableStaticElementAccessExpression(node: Node, excludeThisK
 
 /** @internal */
 export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
-    return isEntityNameExpression(node) || isBindableStaticAccessExpression(node, excludeThisKeyword);
+    return isEntityNameExpression(node) || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
 }
 
 /** @internal */

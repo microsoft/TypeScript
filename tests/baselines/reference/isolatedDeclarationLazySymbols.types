@@ -37,11 +37,11 @@ const o = {
     }
 } as const
 
-foo[o["prop.inner"]] ="A";
->foo[o["prop.inner"]] ="A" : "A"
->                          : ^^^
->foo[o["prop.inner"]] : any
->                     : ^^^
+foo[o["prop.inner"]] = "A";
+>foo[o["prop.inner"]] = "A" : "A"
+>                           : ^^^
+>foo[o["prop.inner"]] : string
+>                     : ^^^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >o["prop.inner"] : "a"
@@ -77,7 +77,7 @@ export class Foo {
 >Foo : Foo
 >    : ^^^
 
-    [o["prop.inner"]] ="A"
+    [o["prop.inner"]] = "A"
 >[o["prop.inner"]] : string
 >                  : ^^^^^^
 >o["prop.inner"] : "a"
@@ -111,10 +111,10 @@ export class Foo {
 export let oo = {
 >oo : { a: string; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->{    [o['prop.inner']]:"A",    [o.prop.inner]: "B",} : { a: string; b: string; }
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [o['prop.inner']]: "A",    [o.prop.inner]: "B",} : { a: string; b: string; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    [o['prop.inner']]:"A",
+    [o['prop.inner']]: "A",
 >[o['prop.inner']] : string
 >                  : ^^^^^^
 >o['prop.inner'] : "a"

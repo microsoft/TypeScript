@@ -13216,17 +13216,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Indicates whether a declaration name is definitely late-bindable.
      * A declaration name is only late-bindable if:
-     * - It is a `ComputedPropertyName`.
-     * - Its expression is an `Identifier` or either a `PropertyAccessExpression` an
-     * `ElementAccessExpression` consisting only of these same three types of nodes.
-     * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
+     * - It is a `ComputedPropertyName` or a `ElementAccessExpression` and
+     * - Its (argument) expression is a bindable name expression and
+     * - The type of its (argument) expression is a string or numeric literal type, or a `unique symbol` type.
      */
     function isLateBindableName(node: DeclarationName): node is LateBoundName {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr)
+        return isBindableStaticNameExpression(expr)
             && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
     }
 
