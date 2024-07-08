@@ -50,3 +50,12 @@ export function unsetNodeChildren(node: Node, origSourceFile: SourceFileLike) {
     }
     sourceFileToNodeChildren.get(origSourceFile)?.delete(node);
 }
+
+/** @internal */
+export function transferSourceFileChildren(sourceFile: SourceFileLike, targetSourceFile: SourceFileLike) {
+    const map = sourceFileToNodeChildren.get(sourceFile);
+    if (map !== undefined) {
+        sourceFileToNodeChildren.delete(sourceFile);
+        sourceFileToNodeChildren.set(targetSourceFile, map);
+    }
+}

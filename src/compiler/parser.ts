@@ -369,6 +369,7 @@ import {
     tokenIsIdentifierOrKeywordOrGreaterThan,
     tokenToString,
     tracing,
+    transferSourceFileChildren,
     TransformFlags,
     TryStatement,
     TupleTypeNode,
@@ -9969,6 +9970,7 @@ namespace IncrementalParser {
             aggressiveChecks,
         );
         result.impliedNodeFormat = sourceFile.impliedNodeFormat;
+        transferSourceFileChildren(sourceFile, result);
         return result;
     }
 
