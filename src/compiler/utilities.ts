@@ -560,6 +560,7 @@ import {
     TypeElement,
     TypeFlags,
     TypeLiteralNode,
+    TypeMapper,
     TypeNode,
     TypeNodeSyntaxKind,
     TypeParameter,
@@ -8209,11 +8210,91 @@ function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
     }
 }
 
-function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
-    // Note: if modifying this, be sure to update SignatureObject in src/services/services.ts
-    this.flags = flags;
-    if (Debug.isDebugging) {
-        this.checker = checker;
+class SignatureDataImpl {
+}
+/** @internal */
+export class SignatureImpl {
+    flags: SignatureFlags;
+    checker!: TypeChecker;
+    declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
+    typeParameters?: readonly TypeParameter[]; // Type parameters (undefined if non-generic)
+    parameters: readonly Symbol[]; // Parameters
+    thisParameter?: Symbol; // symbol of this-type parameter
+    resolvedReturnType?: Type; // Lazily set by `getReturnTypeOfSignature`.
+    resolvedTypePredicate?: TypePredicate;
+    minArgumentCount: number; // Number of non-optional parameters
+    resolvedMinArgumentCount?: number; // Number of non-optional parameters (excluding trailing `void`)
+    target?: Signature; // Instantiation target
+    mapper?: TypeMapper; // Instantiation mapper
+    compositeSignatures?: Signature[]; // Underlying signatures of a union/intersection signature
+    compositeKind?: TypeFlags; // TypeFlags.Union if the underlying signatures are from union members, otherwise TypeFlags.Intersection
+
+    constructor(checker: TypeChecker, flags: SignatureFlags) {
+        // Note: if modifying this, be sure to update SignatureObject in src/services/services.ts
+        this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
+        this.declaration = undefined;
+        this.typeParameters = undefined;
+        this.parameters = undefined!;
+        this.thisParameter = undefined;
+        this.resolvedReturnType = undefined;
+        this.resolvedTypePredicate = undefined;
+        this.minArgumentCount = undefined!;
+        this.resolvedMinArgumentCount = undefined;
+        this.target = undefined;
+        this.mapper = undefined;
+        this.compositeSignatures = undefined;
+        this.compositeKind = undefined;
+        this._data = undefined;
+    }
+    // get data(): any { return this; }
+    _data: any;
+    get data() {
+        return this._data ??= new SignatureDataImpl();
+    }
+    get erasedSignatureCache() {
+        return this.data.erasedSignatureCache;
+    }
+    set erasedSignatureCache(value: any) {
+        this.data.erasedSignatureCache = value;
+    }
+    get canonicalSignatureCache() {
+        return this.data.canonicalSignatureCache;
+    }
+    set canonicalSignatureCache(value: any) {
+        this.data.canonicalSignatureCache = value;
+    }
+    get baseSignatureCache() {
+        return this.data.baseSignatureCache;
+    }
+    set baseSignatureCache(value: any) {
+        this.data.baseSignatureCache = value;
+    }
+    get optionalCallSignatureCache() {
+        return this.data.optionalCallSignatureCache;
+    }
+    set optionalCallSignatureCache(value: any) {
+        this.data.optionalCallSignatureCache = value;
+    }
+    get isolatedSignatureType() {
+        return this.data.isolatedSignatureType;
+    }
+    set isolatedSignatureType(value: any) {
+        this.data.isolatedSignatureType = value;
+    }
+    get instantiations() {
+        return this.data.instantiations;
+    }
+    set instantiations(value: any) {
+        this.data.instantiations = value;
+    }
+    get implementationSignatureCache() {
+        return this.data.implementationSignatureCache;
+    }
+    set implementationSignatureCache(value: any) {
+        this.data.implementationSignatureCache = value;
     }
 }
 
@@ -8272,7 +8353,7 @@ export const objectAllocator: ObjectAllocator = {
     getSourceFileConstructor: () => Node as any,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => Type as any,
-    getSignatureConstructor: () => Signature as any,
+    getSignatureConstructor: () => SignatureImpl as any,
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };
 

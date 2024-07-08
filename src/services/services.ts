@@ -291,6 +291,7 @@ import {
     SignatureHelp,
     SignatureHelpItems,
     SignatureHelpItemsOptions,
+    SignatureImpl,
     SignatureKind,
     singleElementArray,
     skipTypeChecking,
@@ -337,7 +338,6 @@ import {
     TypeFlags,
     TypeNode,
     TypeParameter,
-    TypePredicate,
     TypeReference,
     typeToDisplayParts,
     UnionOrIntersectionType,
@@ -927,37 +927,19 @@ class TypeObject implements Type {
     }
 }
 
-class SignatureObject implements Signature {
-    flags: SignatureFlags;
-    checker: TypeChecker;
-    declaration!: SignatureDeclaration;
-    typeParameters?: TypeParameter[];
-    parameters!: Symbol[];
-    thisParameter!: Symbol;
-    resolvedReturnType!: Type;
-    resolvedTypePredicate: TypePredicate | undefined;
-    minTypeArgumentCount!: number;
-    minArgumentCount!: number;
-
-    // Undefined is used to indicate the value has not been computed. If, after computing, the
-    // symbol has no doc comment, then the empty array will be returned.
-    documentationComment?: SymbolDisplayPart[];
-    jsDocTags?: JSDocTagInfo[]; // same
-
+class SignatureObject extends SignatureImpl implements Signature {
     constructor(checker: TypeChecker, flags: SignatureFlags) {
-        // Note: if modifying this, be sure to update Signature in src/compiler/types.ts
-        this.flags = flags;
+        super(checker, flags);
         this.checker = checker;
     }
-
     getDeclaration(): SignatureDeclaration {
-        return this.declaration;
+        return this.declaration as SignatureDeclaration;
     }
     getTypeParameters(): TypeParameter[] | undefined {
-        return this.typeParameters;
+        return this.typeParameters as TypeParameter[];
     }
     getParameters(): Symbol[] {
-        return this.parameters;
+        return this.parameters as Symbol[];
     }
     getReturnType(): Type {
         return this.checker.getReturnTypeOfSignature(this);
@@ -974,11 +956,11 @@ class SignatureObject implements Signature {
     }
 
     getDocumentationComment(): SymbolDisplayPart[] {
-        return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+        return this.data.documentationComment || (this.data.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
     }
 
     getJsDocTags(): JSDocTagInfo[] {
-        return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
+        return this.data.jsDocTags || (this.data.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
     }
 }
 
