@@ -10,5 +10,5 @@ export * from "../../harness/_namespaces/ts.js";
 import * as server from "./ts.server.js";
 export { server };
 
-import * as ts from "./ts";
+import * as ts from "./ts.js";
 ts.setTypeScriptNamespace("testRunner", ts);

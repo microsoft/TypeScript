@@ -1,6 +1,4 @@
-import type {
-    CompilerOptions,
-} from "./types";
+import type { CompilerOptions } from "./types.js";
 
 /** @internal */
 export type Entrypoint = "tsc" | "typescript" | "tsserver" | "testRunner";
