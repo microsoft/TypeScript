@@ -3,7 +3,7 @@
 === typeParameterExplicitlyExtendsAny.ts ===
 function fee<T>() {
 >fee : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     var t: T;
 >t : T
@@ -19,16 +19,16 @@ function fee<T>() {
 
     t.toString; // ok
 >t.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >t : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function fee2<T extends any>() {
 >fee2 : <T extends unknown>() => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var t: T;
 >t : T
@@ -44,16 +44,16 @@ function fee2<T extends any>() {
 
     t.toString; // ok
 >t.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >t : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function f<T extends any>(x: T) {
 >f : <T extends unknown>(x: T) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -111,7 +111,7 @@ class MyClass {
 
     public static displayTree1<T extends Tree<any>>(tree: T) {
 >displayTree1 : <T extends unknown>(tree: T) => void
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
 >tree : T
 >     : ^
 

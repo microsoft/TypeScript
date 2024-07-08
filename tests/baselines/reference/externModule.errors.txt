@@ -42,7 +42,7 @@ externModule.ts(37,3): error TS2552: Cannot find name 'XDate'. Did you mean 'Dat
     	    constructor(year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number);
     	    constructor(value: number);
     	    constructor();
-    	    ~~~~~~~~~~~~~~
+    	    ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
     	    
     	    static parse(string: string): number;

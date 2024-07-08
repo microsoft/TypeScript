@@ -18,7 +18,7 @@ type FindConditions<T> = {
 
 function foo<Entity>() {
 >foo : <Entity>() => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^      ^^^^^^^^^^^
 
     var x: FindConditions<any>;
 >x : FindConditions<any>

@@ -7,7 +7,7 @@ class TestFile {
 
     foo(message: string): () => string {
 >foo : (message: string) => () => string
->    : ^^^^^^^^^^      ^^^^^            
+>    : ^       ^^      ^^^^^            
 >message : string
 >        : ^^^^^^
 

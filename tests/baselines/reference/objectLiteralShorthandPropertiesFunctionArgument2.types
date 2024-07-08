@@ -25,7 +25,7 @@ var person = { name, id };
 
 function foo(p: { a: string; id: number }) { }
 >foo : (p: { a: string; id: number; }) => void
->    : ^^^^                          ^^^^^^^^^
+>    : ^ ^^                          ^^^^^^^^^
 >p : { a: string; id: number; }
 >  : ^^^^^      ^^^^^^      ^^^
 >a : string
@@ -37,7 +37,7 @@ foo(person);  // error
 >foo(person) : void
 >            : ^^^^
 >foo : (p: { a: string; id: number; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                          ^^^^^^^^^
 >person : { name: string; id: number; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -85,7 +85,7 @@ function f5() {
 
 function f6<T>(x: T) {
 >f6 : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -129,7 +129,7 @@ var b: { x: number; z?: number };
 // returns typeof a
 function f9() {
 >f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^      ^^^^^^      ^^^
 
     if (true) {
 >true : true
@@ -137,19 +137,19 @@ function f9() {
 
         return a;
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
     } else {
         return b;
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
     }
 }
 
 // returns typeof b
 function f10() {
 >f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^      ^^^^^^      ^^^
 
     if (true) {
 >true : true
@@ -157,19 +157,19 @@ function f10() {
 
         return b;
 >b : { x: number; z?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
 
     } else {
         return a;
 >a : { x: number; y?: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^      ^^^
     }
 }
 
 // returns number => void
 function f11() {
 >f11 : () => ((x: number) => void) | ((x: Object) => void)
->    : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (true) {
 >true : true
@@ -177,14 +177,14 @@ function f11() {
 
         return (x: number) => { }
 >(x: number) => { } : (x: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     } else {
         return (x: Object) => { }
 >(x: Object) => { } : (x: Object) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : Object
 >  : ^^^^^^
     }
@@ -193,7 +193,7 @@ function f11() {
 // returns Object => void
 function f12() {
 >f12 : () => ((x: Object) => void) | ((x: number) => void)
->    : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (true) {
 >true : true
@@ -201,14 +201,14 @@ function f12() {
 
         return (x: Object) => { }
 >(x: Object) => { } : (x: Object) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : Object
 >  : ^^^^^^
 
     } else {
         return (x: number) => { }        
 >(x: number) => { } : (x: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
     }

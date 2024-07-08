@@ -4,17 +4,17 @@
 // these should be errors for implicit any parameter
 var lambda = (l1) => { };       // Error at "l1"
 >lambda : (l1: any) => void
->       : ^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^^^^^
 >(l1) => { } : (l1: any) => void
->            : ^^^^^^^^^^^^^^^^^
+>            : ^  ^^^^^^^^^^^^^^
 >l1 : any
 >   : ^^^
 
 var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
 >lambd2 : (ll1: any, ll2: string) => void
->       : ^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>       : ^   ^^^^^^^   ^^      ^^^^^^^^^
 >(ll1, ll2: string) => { } : (ll1: any, ll2: string) => void
->                          : ^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                          : ^   ^^^^^^^   ^^      ^^^^^^^^^
 >ll1 : any
 >    : ^^^
 >ll2 : string
@@ -22,11 +22,11 @@ var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
 
 var lamda3 = function myLambda3(myParam) { }
 >lamda3 : (myParam: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^       ^^^^^^^^^^^^^^
 >function myLambda3(myParam) { } : (myParam: any) => void
->                                : ^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^       ^^^^^^^^^^^^^^
 >myLambda3 : (myParam: any) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^       ^^^^^^^^^^^^^^
 >myParam : any
 >        : ^^^
 

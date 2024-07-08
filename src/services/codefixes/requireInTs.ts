@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     cast,
     Debug,
     Diagnostics,
@@ -21,12 +26,7 @@ import {
     textChanges,
     tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "requireInTs";
 const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];

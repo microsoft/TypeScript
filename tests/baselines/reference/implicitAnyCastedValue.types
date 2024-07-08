@@ -154,7 +154,7 @@ function undefinedBar() {
 
 function multipleRets1(x) {    // this should not be an error
 >multipleRets1 : (x: any) => any
->              : ^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -175,7 +175,7 @@ function multipleRets1(x) {    // this should not be an error
 
 function multipleRets2(x) {    // this should not be an error
 >multipleRets2 : (x: any) => any
->              : ^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

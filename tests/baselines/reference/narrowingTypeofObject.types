@@ -5,7 +5,7 @@ interface F { (): string }
 
 function test(x: number & { _foo: string }) {
 >test : (x: number & { _foo: string; }) => void
->     : ^^^^                          ^^^^^^^^^
+>     : ^ ^^                          ^^^^^^^^^
 >x : number & { _foo: string; }
 >  : ^^^^^^^^^^^^^^^^^      ^^^
 >_foo : string
@@ -17,7 +17,7 @@ function test(x: number & { _foo: string }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number & { _foo: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^      ^^^
 >'object' : "object"
 >         : ^^^^^^^^
 
@@ -29,7 +29,7 @@ function test(x: number & { _foo: string }) {
 
 function f1(x: F & { foo: number }) {
 >f1 : (x: F & { foo: number; }) => void
->   : ^^^^                    ^^^^^^^^^
+>   : ^ ^^                    ^^^^^^^^^
 >x : F & { foo: number; }
 >  : ^^^^^^^^^^^      ^^^
 >foo : number
@@ -41,12 +41,12 @@ function f1(x: F & { foo: number }) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : F & { foo: number; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^
 >"object" : "object"
 >         : ^^^^^^^^
 
         x;
 >x : F & { foo: number; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^
     }
 }

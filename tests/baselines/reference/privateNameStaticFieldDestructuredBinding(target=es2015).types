@@ -228,7 +228,7 @@ class A {
     }
     static test(_a: typeof A) {
 >test : (_a: typeof A) => void
->     : ^^^^^        ^^^^^^^^^
+>     : ^  ^^        ^^^^^^^^^
 >_a : typeof A
 >   : ^^^^^^^^
 >A : typeof A

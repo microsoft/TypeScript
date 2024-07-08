@@ -16,11 +16,11 @@ interface Number {
 interface String {
     foo(): string;
 >foo : { (): string; (): string; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 
     foo(): string;
 >foo : { (): string; (): string; }
->    : ^^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^^^^      ^^^^^^      ^^^
 }
 
 interface Array<T> {
@@ -47,13 +47,13 @@ class C {
 
     bar(x) { }
 >bar : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
     bar(x) { }
 >bar : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -98,7 +98,7 @@ var a: {
 
     bar: () => {};
 >bar : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 }
 
 var b = {

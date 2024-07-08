@@ -33,23 +33,23 @@ export const timestamp = x.now();
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.now() : { [x.timestampSymbol]: true; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x.now : () => { [x.timestampSymbol]: true; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.now : () => typeof x.Timestamp
+>      : ^^^^^^       ^^^^^^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
->now : () => { [x.timestampSymbol]: true; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>now : () => typeof x.Timestamp
+>    : ^^^^^^       ^^^^^^^^^^^
 
 === c.ts ===
 import { now } from "./a";
->now : () => { [timestampSymbol]: true; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>now : () => typeof import("a").Timestamp
+>    : ^^^^^^              ^^^  ^^^^^^^^^
 
 export const timestamp = now();
 >timestamp : { [timestampSymbol]: true; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >now() : { [timestampSymbol]: true; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->now : () => { [timestampSymbol]: true; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>now : () => typeof import("a").Timestamp
+>    : ^^^^^^              ^^^  ^^^^^^^^^
 

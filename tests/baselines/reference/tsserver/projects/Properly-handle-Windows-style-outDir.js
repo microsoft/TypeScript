@@ -24,8 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: C:/a
-Info seq  [hh:mm:ss:mss] For info: C:/a/f1.ts :: Config file name: C:/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: C:/a/f1.ts ProjectRootPath: undefined:: Result: C:/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project C:/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/tsconfig.json 2000 undefined Project: C:/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -181,7 +180,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: C:/a/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: C:/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

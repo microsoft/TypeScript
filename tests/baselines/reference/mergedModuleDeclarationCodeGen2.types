@@ -21,7 +21,7 @@ module my.data {
 
     function data(my) {
 >data : (my: any) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^^^^^^
 >my : any
 
         foo.buz();

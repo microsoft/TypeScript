@@ -23,9 +23,9 @@ declare global {
 }
 const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >Compa : (x: { x: number; }) => JSX.Element
->      : ^^^^              ^^^^^^^^^^^^^^^^
+>      : ^ ^^              ^^^^^^^^^^^^^^^^
 >(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
->                                        : ^^^^              ^^^^^^^^^^^^^^^^
+>                                        : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : { x: number; }
 >  : ^^^^^      ^^^
 >x : number
@@ -39,7 +39,7 @@ const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >"" : ""
 >   : ^^
 >x : { x: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >div : any
 >    : ^^^
 
@@ -83,7 +83,7 @@ const x = { video: () => null }
 ><Comp\u0061 x={12} /> : JSX.Element
 >                      : ^^^^^^^^^^^
 >Comp\u0061 : (x: { x: number; }) => JSX.Element
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >12 : 12
@@ -127,7 +127,7 @@ const x = { video: () => null }
 ><Comp\u{0061} x={12} /> : JSX.Element
 >                        : ^^^^^^^^^^^
 >Comp\u{0061} : (x: { x: number; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >12 : 12

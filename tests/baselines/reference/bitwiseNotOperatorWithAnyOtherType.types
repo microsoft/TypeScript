@@ -127,7 +127,7 @@ var ResultIsNumber4 = ~obj;
 >~obj : number
 >     : ^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsNumber5 = ~obj1;
 >ResultIsNumber5 : number
@@ -221,7 +221,7 @@ var ResultIsNumber13 = ~foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber14 = ~A.foo();
 >ResultIsNumber14 : number

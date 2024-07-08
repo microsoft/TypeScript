@@ -16,7 +16,7 @@ class C<T, U> {
 
 function getClass<T>(c: T) {
 >getClass : <T>(c: T) => typeof C
->         : ^ ^^^^^ ^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^^^^^^
 >c : T
 >  : ^
 
@@ -31,7 +31,7 @@ class MyClass extends getClass(2) <string, number> {
 >getClass(2) : C<string, number>
 >            : ^^^^^^^^^^^^^^^^^
 >getClass : <T>(c: T) => typeof C
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 }

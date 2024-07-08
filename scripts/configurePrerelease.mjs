@@ -1,5 +1,4 @@
 import assert from "assert";
-import { execFileSync } from "child_process";
 import {
     readFileSync,
     writeFileSync,
@@ -18,7 +17,6 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
     name: string;
     version: string;
     keywords: string[];
-    gitHead?: string;
 }} PackageJson
  */
 
@@ -59,12 +57,11 @@ function main() {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    packageJsonValue.gitHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 /**
  * @param {string} tsFilePath
  * @param {string} tsFileContents
@@ -101,7 +98,7 @@ function parsePackageJsonVersion(versionString) {
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match[1], patch: match[2] };
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 /**
  * e.g. 0-dev.20170707

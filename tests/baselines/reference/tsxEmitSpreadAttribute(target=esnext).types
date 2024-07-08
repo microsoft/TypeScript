@@ -6,7 +6,7 @@ declare const React: any;
 
 export function T1(a: any) {
 >T1 : (a: any) => any
->   : ^^^^   ^^^^^^^^
+>   : ^ ^^   ^^^^^^^^
 >a : any
 
     return <div className={"T1"} { ...a }>T1</div>;
@@ -24,7 +24,7 @@ export function T1(a: any) {
 
 export function T2(a: any, b: any) {
 >T2 : (a: any, b: any) => any
->   : ^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
@@ -44,7 +44,7 @@ export function T2(a: any, b: any) {
 
 export function T3(a: any, b: any) {
 >T3 : (a: any, b: any) => any
->   : ^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
@@ -64,7 +64,7 @@ export function T3(a: any, b: any) {
 
 export function T4(a: any, b: any) {
 >T4 : (a: any, b: any) => any
->   : ^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
@@ -85,7 +85,7 @@ export function T4(a: any, b: any) {
 
 export function T5(a: any, b: any, c: any, d: any) {
 >T5 : (a: any, b: any, c: any, d: any) => any
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -112,7 +112,7 @@ export function T5(a: any, b: any, c: any, d: any) {
 
 export function T6(a: any, b: any, c: any, d: any) {
 >T6 : (a: any, b: any, c: any, d: any) => any
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -138,7 +138,7 @@ export function T6(a: any, b: any, c: any, d: any) {
 
 export function T7(a: any, b: any, c: any, d: any) {
 >T7 : (a: any, b: any, c: any, d: any) => any
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -166,7 +166,7 @@ export function T7(a: any, b: any, c: any, d: any) {
 
 export function T8(a: any, b: any, c: any, d: any) {
 >T8 : (a: any, b: any, c: any, d: any) => any
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -194,7 +194,7 @@ declare const __proto__: string;
 
 export function T9(a: any, b: any, c: any, d: any) {
 >T9 : (a: any, b: any, c: any, d: any) => any
->   : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -220,7 +220,7 @@ export function T9(a: any, b: any, c: any, d: any) {
 
 export function T10(a: any, b: any, c: any, d: any) {
 >T10 : (a: any, b: any, c: any, d: any) => any
->    : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -246,7 +246,7 @@ export function T10(a: any, b: any, c: any, d: any) {
 
 export function T11(a: any, b: any, c: any, d: any) {
 >T11 : (a: any, b: any, c: any, d: any) => any
->    : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^^^^
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any

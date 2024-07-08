@@ -113,7 +113,7 @@ Other.Cls = class {
      */
     method(p) {}
 >method : (p: Host.UserMetrics.Action) => void
->       : ^^^^                       ^^^^^^^^^
+>       : ^ ^^                       ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 
@@ -124,12 +124,12 @@ Other.Cls = class {
         this.method(Host.UserMetrics.Action.WindowDocked);
 >this.method(Host.UserMetrics.Action.WindowDocked) : void
 >                                                  : ^^^^
->this.method : (p: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>this.method : (p: Host.UserMetrics.Action) => void
+>            : ^ ^^                       ^^^^^^^^^
 >this : this
 >     : ^^^^
->method : (p: number) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>method : (p: Host.UserMetrics.Action) => void
+>       : ^ ^^                       ^^^^^^^^^
 >Host.UserMetrics.Action.WindowDocked : number
 >                                     : ^^^^^^
 >Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }

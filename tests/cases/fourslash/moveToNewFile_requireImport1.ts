@@ -18,7 +18,7 @@ verify.moveToNewFile({
         "/b.js": "",
 
         "/f.js":
-`var a = require("./a");
+`const a = require("./a");
 
 function f() {
     a;

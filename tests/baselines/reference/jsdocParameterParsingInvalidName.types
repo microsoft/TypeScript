@@ -10,7 +10,7 @@ class c {
      */
     method(foo) {
 >method : (foo: any) => void
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^
 >foo : any
     }
 }

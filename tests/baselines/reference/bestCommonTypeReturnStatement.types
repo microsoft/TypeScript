@@ -4,13 +4,13 @@
 interface IPromise<T> {
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 >then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
->     : ^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^                    ^^^^^             
+>     : ^               ^^                        ^^             ^^^                    ^^^^^             
 >successCallback : (promiseValue: T) => any
->                : ^^^^^^^^^^^^^^^ ^^^^^   
+>                : ^            ^^ ^^^^^   
 >promiseValue : T
 >             : ^
 >errorCallback : (reason: any) => any
->              : ^^^^^^^^^   ^^^^^   
+>              : ^      ^^   ^^^^^   
 >reason : any
 }
 
@@ -24,13 +24,13 @@ function f() {
 >b() : IPromise<void>
 >    : ^^^^^^^^^^^^^^
 >b : () => IPromise<void>
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^              
 
     return d();
 >d() : IPromise<any>
 >    : ^^^^^^^^^^^^^
 >d : () => IPromise<any>
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^             
 }
 
 

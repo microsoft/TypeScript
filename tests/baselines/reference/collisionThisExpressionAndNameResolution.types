@@ -3,11 +3,11 @@
 === collisionThisExpressionAndNameResolution.ts ===
 var console : {
 >console : { log(message: any): any; }
->        : ^^^^^^^^^^^^^^^   ^^^^^^^^^
+>        : ^^^^^^       ^^   ^^^^^^^^^
 
     log(message: any);
 >log : (message: any) => any
->    : ^^^^^^^^^^   ^^^^^^^^
+>    : ^       ^^   ^^^^^^^^
 >message : any
 }
 class Foo {
@@ -26,22 +26,22 @@ class Foo {
 
         function inner() {
 >inner : () => (x: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^ ^^^^^^^^^^^^^
 
             console.log(_this); // Error as this doesnt not resolve to user defined _this
 >console.log(_this) : any
 >console.log : (message: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^       ^^   ^^^^^^^^
 >console : { log(message: any): any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^   ^^^^^^^^^
 >log : (message: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^   ^^^^^^^^
 >_this : number
 >      : ^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture into function inner
 >x => this : (x: any) => any
->          : ^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^
 >x : any
 >this : any
         }

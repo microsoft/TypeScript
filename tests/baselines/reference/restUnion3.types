@@ -33,7 +33,7 @@ var rest5: { n: number, s: string };
 
 var {...rest5 } = unionWithIntersection;
 >rest5 : { n: number; s: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^
 >unionWithIntersection : never
 >                      : ^^^^^
 

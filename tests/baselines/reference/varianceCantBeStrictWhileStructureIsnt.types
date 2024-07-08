@@ -5,7 +5,7 @@
 interface Foo<T> {
     member: (cb: T) => void;
 >member : (cb: T) => void
->       : ^^^^^ ^^^^^    
+>       : ^  ^^ ^^^^^    
 >cb : T
 >   : ^
 }
@@ -13,7 +13,7 @@ interface Foo<T> {
 interface Bar<T> {
     member: (cb: T) => void;
 >member : (cb: T) => void
->       : ^^^^^ ^^^^^    
+>       : ^  ^^ ^^^^^    
 >cb : T
 >   : ^
 }

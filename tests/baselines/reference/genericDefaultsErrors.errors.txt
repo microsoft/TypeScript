@@ -22,11 +22,10 @@ genericDefaultsErrors.ts(32,15): error TS2707: Generic type 'i09<T, U, V>' requi
 genericDefaultsErrors.ts(33,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
 genericDefaultsErrors.ts(36,15): error TS2707: Generic type 'i09<T, U, V>' requires between 2 and 3 type arguments.
 genericDefaultsErrors.ts(38,20): error TS2304: Cannot find name 'T'.
-genericDefaultsErrors.ts(38,20): error TS4033: Property 'x' of exported interface has or is using private name 'T'.
 genericDefaultsErrors.ts(42,29): error TS2716: Type parameter 'T' has a circular default.
 
 
-==== genericDefaultsErrors.ts (22 errors) ====
+==== genericDefaultsErrors.ts (21 errors) ====
     declare const x: any;
     
     declare function f03<T extends string = number>(): void; // error
@@ -111,8 +110,6 @@ genericDefaultsErrors.ts(42,29): error TS2716: Type parameter 'T' has a circular
     interface i10 { x: T; } // error
                        ~
 !!! error TS2304: Cannot find name 'T'.
-                       ~
-!!! error TS4033: Property 'x' of exported interface has or is using private name 'T'.
     interface i10<T = number> {}
     
     // https://github.com/Microsoft/TypeScript/issues/16221
