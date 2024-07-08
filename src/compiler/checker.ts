@@ -5338,9 +5338,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags = ObjectFlags.None, debugIntrinsicName?: string): IntrinsicType {
         checkIntrinsicName(intrinsicName, debugIntrinsicName);
-        const type = createType(kind) as IntrinsicType;
-        type.intrinsicName = intrinsicName;
-        type.debugIntrinsicName = debugIntrinsicName;
+        const type = createType(kind) as TypeWithData<IntrinsicType>;
+        type.data.intrinsicName = intrinsicName;
+        type.data.debugIntrinsicName = debugIntrinsicName;
         type.objectFlags = objectFlags | ObjectFlags.CouldContainTypeVariablesComputed | ObjectFlags.IsGenericTypeComputed | ObjectFlags.IsUnknownLikeUnionComputed | ObjectFlags.IsNeverIntersectionComputed;
         return type;
     }
@@ -5352,15 +5352,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         seenIntrinsicNames.add(key);
     }
-
+    type TypeWithData<T> = T & { data: Omit<T, "flags" | "objectFlags" | "symbol" | "id" | "checker">; };
     function createObjectType(objectFlags: ObjectFlags, symbol?: Symbol): ObjectType {
-        const type = createTypeWithSymbol(TypeFlags.Object, symbol!) as ObjectType;
+        const type = createTypeWithSymbol(TypeFlags.Object, symbol!) as TypeWithData<ObjectType>;
         type.objectFlags = objectFlags;
-        type.members = undefined;
-        type.properties = undefined;
-        type.callSignatures = undefined;
-        type.constructSignatures = undefined;
-        type.indexInfos = undefined;
+        type.data.members = undefined;
+        type.data.properties = undefined;
+        type.data.callSignatures = undefined;
+        type.data.constructSignatures = undefined;
+        type.data.indexInfos = undefined;
         return type;
     }
 
@@ -5405,14 +5405,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
-        const resolved = type as ResolvedType;
-        resolved.members = members;
-        resolved.properties = emptyArray;
-        resolved.callSignatures = callSignatures;
-        resolved.constructSignatures = constructSignatures;
-        resolved.indexInfos = indexInfos;
+        const resolved = type as TypeWithData<ResolvedType>;
+        resolved.data.members = members;
+        resolved.data.properties = emptyArray;
+        resolved.data.callSignatures = callSignatures;
+        resolved.data.constructSignatures = constructSignatures;
+        resolved.data.indexInfos = indexInfos;
         // This can loop back to getPropertyOfType() which would crash if `callSignatures` & `constructSignatures` are not initialized.
-        if (members !== emptySymbols) resolved.properties = getNamedMembers(members);
+        if (members !== emptySymbols) resolved.data.properties = getNamedMembers(members);
         return resolved;
     }
 
@@ -13022,13 +13022,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.declaredType;
     }
 
-    function createComputedEnumType(symbol: Symbol) {
-        const regularType = createTypeWithSymbol(TypeFlags.Enum, symbol) as EnumType;
-        const freshType = createTypeWithSymbol(TypeFlags.Enum, symbol) as EnumType;
-        regularType.regularType = regularType;
-        regularType.freshType = freshType;
-        freshType.regularType = regularType;
-        freshType.freshType = freshType;
+    function createComputedEnumType(symbol: Symbol): EnumType {
+        const regularType = createTypeWithSymbol(TypeFlags.Enum, symbol) as TypeWithData<EnumType>;
+        const freshType = createTypeWithSymbol(TypeFlags.Enum, symbol) as TypeWithData<EnumType>;
+        regularType.data.regularType = regularType;
+        regularType.data.freshType = freshType;
+        freshType.data.regularType = regularType;
+        freshType.data.freshType = freshType;
         return regularType;
     }
 
@@ -16261,22 +16261,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference {
         const id = getTypeListId(typeArguments);
-        let type = target.instantiations.get(id);
+        let type = target.instantiations.get(id) as TypeWithData<TypeReference>;
         if (!type) {
-            type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
+            type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeWithData<TypeReference>;
             target.instantiations.set(id, type);
             type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0;
-            type.target = target;
-            type.resolvedTypeArguments = typeArguments;
+            type.data.target = target;
+            type.data.resolvedTypeArguments = typeArguments;
         }
         return type;
     }
 
     function cloneTypeReference(source: TypeReference): TypeReference {
-        const type = createTypeWithSymbol(source.flags, source.symbol) as TypeReference;
+        const type = createTypeWithSymbol(source.flags, source.symbol) as TypeWithData<TypeReference>;
         type.objectFlags = source.objectFlags;
-        type.target = source.target;
-        type.resolvedTypeArguments = source.resolvedTypeArguments;
+        type.data.target = source.target;
+        type.data.resolvedTypeArguments = source.resolvedTypeArguments;
         return type;
     }
 
@@ -16286,12 +16286,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const localAliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
             aliasTypeArguments = mapper ? instantiateTypes(localAliasTypeArguments, mapper) : localAliasTypeArguments;
         }
-        const type = createObjectType(ObjectFlags.Reference, target.symbol) as DeferredTypeReference;
-        type.target = target;
-        type.node = node;
-        type.mapper = mapper;
-        type.aliasSymbol = aliasSymbol;
-        type.aliasTypeArguments = aliasTypeArguments;
+        const type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeWithData<DeferredTypeReference>;
+        type.data.target = target;
+        type.data.node = node;
+        type.data.mapper = mapper;
+        type.data.aliasSymbol = aliasSymbol;
+        type.data.aliasTypeArguments = aliasTypeArguments;
         return type;
     }
 
@@ -17209,28 +17209,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             lengthSymbol.links.type = getUnionType(literalTypes);
         }
         properties.push(lengthSymbol);
-        const type = createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference) as TupleType & InterfaceTypeWithDeclaredMembers;
-        type.typeParameters = typeParameters;
-        type.outerTypeParameters = undefined;
-        type.localTypeParameters = typeParameters;
-        type.instantiations = new Map<string, TypeReference>();
-        type.instantiations.set(getTypeListId(type.typeParameters), type as GenericType);
-        type.target = type as GenericType;
-        type.resolvedTypeArguments = type.typeParameters;
-        type.thisType = createTypeParameter();
-        type.thisType.isThisType = true;
-        type.thisType.constraint = type;
-        type.declaredProperties = properties;
-        type.declaredCallSignatures = emptyArray;
-        type.declaredConstructSignatures = emptyArray;
-        type.declaredIndexInfos = emptyArray;
-        type.elementFlags = elementFlags;
-        type.minLength = minLength;
-        type.fixedLength = fixedLength;
-        type.hasRestElement = !!(combinedFlags & ElementFlags.Variable);
-        type.combinedFlags = combinedFlags;
-        type.readonly = readonly;
-        type.labeledElementDeclarations = namedMemberDeclarations;
+        const type = createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference) as TypeWithData<TupleType & InterfaceTypeWithDeclaredMembers>;
+        type.data.typeParameters = typeParameters;
+        type.data.outerTypeParameters = undefined;
+        type.data.localTypeParameters = typeParameters;
+        type.data.instantiations = new Map<string, TypeReference>();
+        type.data.instantiations.set(getTypeListId(type.typeParameters), type as GenericType);
+        type.data.target = type as GenericType;
+        type.data.resolvedTypeArguments = type.typeParameters;
+        type.data.thisType = createTypeParameter();
+        type.data.thisType.isThisType = true;
+        type.data.thisType.constraint = type;
+        type.data.declaredProperties = properties;
+        type.data.declaredCallSignatures = emptyArray;
+        type.data.declaredConstructSignatures = emptyArray;
+        type.data.declaredIndexInfos = emptyArray;
+        type.data.elementFlags = elementFlags;
+        type.data.minLength = minLength;
+        type.data.fixedLength = fixedLength;
+        type.data.hasRestElement = !!(combinedFlags & ElementFlags.Variable);
+        type.data.combinedFlags = combinedFlags;
+        type.data.readonly = readonly;
+        type.data.labeledElementDeclarations = namedMemberDeclarations;
         return type;
     }
 
@@ -17942,12 +17942,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function createIntersectionType(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
-        const result = createType(TypeFlags.Intersection) as IntersectionType;
+    function createIntersectionType(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): IntersectionType {
+        const result = createType(TypeFlags.Intersection) as TypeWithData<IntersectionType>;
         result.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-        result.types = types;
-        result.aliasSymbol = aliasSymbol;
-        result.aliasTypeArguments = aliasTypeArguments;
+        result.data.types = types;
+        result.data.aliasSymbol = aliasSymbol;
+        result.data.aliasTypeArguments = aliasTypeArguments;
         return result;
     }
 
@@ -18160,16 +18160,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function createIndexType(type: InstantiableType | UnionOrIntersectionType, indexFlags: IndexFlags) {
-        const result = createType(TypeFlags.Index) as IndexType;
-        result.type = type;
-        result.indexFlags = indexFlags;
+    function createIndexType(type: InstantiableType | UnionOrIntersectionType, indexFlags: IndexFlags): IndexType {
+        const result = createType(TypeFlags.Index) as TypeWithData<IndexType>;
+        result.data.type = type;
+        result.data.indexFlags = indexFlags;
         return result;
     }
 
-    function createOriginIndexType(type: InstantiableType | UnionOrIntersectionType) {
-        const result = createOriginType(TypeFlags.Index) as IndexType;
-        result.type = type;
+    function createOriginIndexType(type: InstantiableType | UnionOrIntersectionType): IndexType {
+        const result = createOriginType(TypeFlags.Index) as TypeWithData<IndexType>;
+        result.data.type = type;
         return result;
     }
 
@@ -18430,10 +18430,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             undefined;
     }
 
-    function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]) {
-        const type = createType(TypeFlags.TemplateLiteral) as TemplateLiteralType;
-        type.texts = texts;
-        type.types = types;
+    function createTemplateLiteralType(texts: readonly string[], types: readonly Type[]): TemplateLiteralType {
+        const type = createType(TypeFlags.TemplateLiteral) as TypeWithData<TemplateLiteralType>;
+        type.data.texts = texts;
+        type.data.types = types;
         return type;
     }
 
@@ -18486,19 +18486,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function createStringMappingType(symbol: Symbol, type: Type) {
-        const result = createTypeWithSymbol(TypeFlags.StringMapping, symbol) as StringMappingType;
-        result.type = type;
+    function createStringMappingType(symbol: Symbol, type: Type): StringMappingType {
+        const result = createTypeWithSymbol(TypeFlags.StringMapping, symbol) as TypeWithData<StringMappingType>;
+        result.data.type = type;
         return result;
     }
 
-    function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
-        const type = createType(TypeFlags.IndexedAccess) as IndexedAccessType;
+    function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): IndexedAccessType {
+        const type = createType(TypeFlags.IndexedAccess) as TypeWithData<IndexedAccessType>;
         type.objectType = objectType;
-        type.indexType = indexType;
-        type.accessFlags = accessFlags;
-        type.aliasSymbol = aliasSymbol;
-        type.aliasTypeArguments = aliasTypeArguments;
+        type.data.indexType = indexType;
+        type.data.accessFlags = accessFlags;
+        type.data.aliasSymbol = aliasSymbol;
+        type.data.aliasTypeArguments = aliasTypeArguments;
         return type;
     }
 
@@ -19585,10 +19585,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return info.isReadonly !== readonly ? createIndexInfo(info.keyType, info.type, readonly, info.declaration) : info;
     }
 
-    function createLiteralType(flags: TypeFlags, value: string | number | PseudoBigInt, symbol?: Symbol, regularType?: LiteralType) {
-        const type = createTypeWithSymbol(flags, symbol!) as LiteralType;
-        type.value = value;
-        type.regularType = regularType || type;
+    function createLiteralType(flags: TypeFlags, value: string | number | PseudoBigInt, symbol?: Symbol, regularType?: LiteralType): LiteralType {
+        const type = createTypeWithSymbol(flags, symbol!) as TypeWithData<LiteralType>;
+        type.data.value = value;
+        type.data.regularType = regularType || type;
         return type;
     }
 
@@ -19652,9 +19652,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function createUniqueESSymbolType(symbol: Symbol) {
-        const type = createTypeWithSymbol(TypeFlags.UniqueESSymbol, symbol) as UniqueESSymbolType;
-        type.escapedName = `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
+    function createUniqueESSymbolType(symbol: Symbol): UniqueESSymbolType {
+        const type = createTypeWithSymbol(TypeFlags.UniqueESSymbol, symbol) as TypeWithData<UniqueESSymbolType>;
+        type.data.escapedName = `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
         return type;
     }
 
@@ -25698,10 +25698,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For all other object types we infer a new object type where the reverse mapping has been
         // applied to the type of each property.
-        const reversed = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as ReverseMappedType;
-        reversed.source = source;
-        reversed.mappedType = target;
-        reversed.constraintType = constraint;
+        const reversed = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as TypeWithData<ReverseMappedType>;
+        reversed.data.source = source;
+        reversed.data.mappedType = target;
+        reversed.data.constraintType = constraint;
         return reversed;
     }
 
@@ -27824,8 +27824,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // array types are ultimately converted into manifest array types (using getFinalArrayType)
     // and never escape the getFlowTypeOfReference function.
     function createEvolvingArrayType(elementType: Type): EvolvingArrayType {
-        const result = createObjectType(ObjectFlags.EvolvingArray) as EvolvingArrayType;
-        result.elementType = elementType;
+        const result = createObjectType(ObjectFlags.EvolvingArray) as TypeWithData<EvolvingArrayType>;
+        result.data.elementType = elementType;
         return result;
     }
 

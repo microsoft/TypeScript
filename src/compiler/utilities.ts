@@ -8201,11 +8201,759 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     (this as any).links = undefined; // used by TransientSymbol
 }
 
-function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
-    // Note: if modifying this, be sure to update TypeObject in src/services/services.ts
-    this.flags = flags;
-    if (Debug.isDebugging || tracing) {
-        this.checker = checker;
+class TypeDataImpl {
+}
+
+// export const allTypes: TypeImpl[] = [];
+/** @internal */
+export class TypeImpl {
+    checker!: TypeChecker;
+    flags: TypeFlags;
+    symbol: Symbol;
+    data: any;
+    id: number;
+    objectFlags: number;
+    constructor(checker: TypeChecker, flags: TypeFlags) {
+        this.id = 0;
+        if (Debug.isDebugging || tracing) {
+            this.checker = checker;
+        }
+        this.flags = flags;
+        this.objectFlags = 0;
+        this.symbol = undefined!;
+        this.data = new TypeDataImpl();
+        // allTypes.push(this);
+    }
+
+    get pattern() {
+        return this.data.pattern;
+    }
+    set pattern(value: any) {
+        this.data.pattern = value;
+    }
+
+    get aliasSymbol() {
+        return this.data.aliasSymbol;
+    }
+    set aliasSymbol(value: any) {
+        this.data.aliasSymbol = value;
+    }
+
+    get aliasTypeArguments() {
+        return this.data.aliasTypeArguments;
+    }
+    set aliasTypeArguments(value: any) {
+        this.data.aliasTypeArguments = value;
+    }
+
+    get permissiveInstantiation() {
+        return this.data.permissiveInstantiation;
+    }
+    set permissiveInstantiation(value: any) {
+        this.data.permissiveInstantiation = value;
+    }
+
+    get restrictiveInstantiation() {
+        return this.data.restrictiveInstantiation;
+    }
+    set restrictiveInstantiation(value: any) {
+        this.data.restrictiveInstantiation = value;
+    }
+
+    get immediateBaseConstraint() {
+        return this.data.immediateBaseConstraint;
+    }
+    set immediateBaseConstraint(value: any) {
+        this.data.immediateBaseConstraint = value;
+    }
+
+    get widened() {
+        return this.data.widened;
+    }
+    set widened(value: any) {
+        this.data.widened = value;
+    }
+
+    get intrinsicName() {
+        return this.data.intrinsicName;
+    }
+    set intrinsicName(value: any) {
+        this.data.intrinsicName = value;
+    }
+
+    get debugIntrinsicName() {
+        return this.data.debugIntrinsicName;
+    }
+    set debugIntrinsicName(value: any) {
+        this.data.debugIntrinsicName = value;
+    }
+
+    // get objectFlags() { return this.data.objectFlags; }
+    // set objectFlags(value: any) { this.data.objectFlags = value }
+
+    get freshType() {
+        return this.data.freshType;
+    }
+    set freshType(value: any) {
+        this.data.freshType = value;
+    }
+
+    get regularType() {
+        return this.data.regularType;
+    }
+    set regularType(value: any) {
+        this.data.regularType = value;
+    }
+
+    get value() {
+        return this.data.value;
+    }
+    set value(value: any) {
+        this.data.value = value;
+    }
+
+    get escapedName() {
+        return this.data.escapedName;
+    }
+    set escapedName(value: any) {
+        this.data.escapedName = value;
+    }
+
+    get members() {
+        return this.data.members;
+    }
+    set members(value: any) {
+        this.data.members = value;
+    }
+
+    get properties() {
+        return this.data.properties;
+    }
+    set properties(value: any) {
+        this.data.properties = value;
+    }
+
+    get callSignatures() {
+        return this.data.callSignatures;
+    }
+    set callSignatures(value: any) {
+        this.data.callSignatures = value;
+    }
+
+    get constructSignatures() {
+        return this.data.constructSignatures;
+    }
+    set constructSignatures(value: any) {
+        this.data.constructSignatures = value;
+    }
+
+    get indexInfos() {
+        return this.data.indexInfos;
+    }
+    set indexInfos(value: any) {
+        this.data.indexInfos = value;
+    }
+
+    get objectTypeWithoutAbstractConstructSignatures() {
+        return this.data.objectTypeWithoutAbstractConstructSignatures;
+    }
+    set objectTypeWithoutAbstractConstructSignatures(value: any) {
+        this.data.objectTypeWithoutAbstractConstructSignatures = value;
+    }
+
+    get typeParameters() {
+        return this.data.typeParameters;
+    }
+    set typeParameters(value: any) {
+        this.data.typeParameters = value;
+    }
+
+    get outerTypeParameters() {
+        return this.data.outerTypeParameters;
+    }
+    set outerTypeParameters(value: any) {
+        this.data.outerTypeParameters = value;
+    }
+
+    get localTypeParameters() {
+        return this.data.localTypeParameters;
+    }
+    set localTypeParameters(value: any) {
+        this.data.localTypeParameters = value;
+    }
+
+    get thisType() {
+        return this.data.thisType;
+    }
+    set thisType(value: any) {
+        this.data.thisType = value;
+    }
+
+    get resolvedBaseConstructorType() {
+        return this.data.resolvedBaseConstructorType;
+    }
+    set resolvedBaseConstructorType(value: any) {
+        this.data.resolvedBaseConstructorType = value;
+    }
+
+    get resolvedBaseTypes() {
+        return this.data.resolvedBaseTypes;
+    }
+    set resolvedBaseTypes(value: any) {
+        this.data.resolvedBaseTypes = value;
+    }
+
+    get baseTypesResolved() {
+        return this.data.baseTypesResolved;
+    }
+    set baseTypesResolved(value: any) {
+        this.data.baseTypesResolved = value;
+    }
+
+    get declaredProperties() {
+        return this.data.declaredProperties;
+    }
+    set declaredProperties(value: any) {
+        this.data.declaredProperties = value;
+    }
+
+    get declaredCallSignatures() {
+        return this.data.declaredCallSignatures;
+    }
+    set declaredCallSignatures(value: any) {
+        this.data.declaredCallSignatures = value;
+    }
+
+    get declaredConstructSignatures() {
+        return this.data.declaredConstructSignatures;
+    }
+    set declaredConstructSignatures(value: any) {
+        this.data.declaredConstructSignatures = value;
+    }
+
+    get declaredIndexInfos() {
+        return this.data.declaredIndexInfos;
+    }
+    set declaredIndexInfos(value: any) {
+        this.data.declaredIndexInfos = value;
+    }
+
+    get instantiations() {
+        return this.data.instantiations;
+    }
+    set instantiations(value: any) {
+        this.data.instantiations = value;
+    }
+
+    get variances() {
+        return this.data.variances;
+    }
+    set variances(value: any) {
+        this.data.variances = value;
+    }
+
+    get target() {
+        return this.data.target;
+    }
+    set target(value: any) {
+        this.data.target = value;
+    }
+
+    get node() {
+        return this.data.node;
+    }
+    set node(value: any) {
+        this.data.node = value;
+    }
+
+    get mapper() {
+        return this.data.mapper;
+    }
+    set mapper(value: any) {
+        this.data.mapper = value;
+    }
+
+    get resolvedTypeArguments() {
+        return this.data.resolvedTypeArguments;
+    }
+    set resolvedTypeArguments(value: any) {
+        this.data.resolvedTypeArguments = value;
+    }
+
+    get literalType() {
+        return this.data.literalType;
+    }
+    set literalType(value: any) {
+        this.data.literalType = value;
+    }
+
+    get cachedEquivalentBaseType() {
+        return this.data.cachedEquivalentBaseType;
+    }
+    set cachedEquivalentBaseType(value: any) {
+        this.data.cachedEquivalentBaseType = value;
+    }
+
+    get elementFlags() {
+        return this.data.elementFlags;
+    }
+    set elementFlags(value: any) {
+        this.data.elementFlags = value;
+    }
+
+    get minLength() {
+        return this.data.minLength;
+    }
+    set minLength(value: any) {
+        this.data.minLength = value;
+    }
+
+    get fixedLength() {
+        return this.data.fixedLength;
+    }
+    set fixedLength(value: any) {
+        this.data.fixedLength = value;
+    }
+
+    get hasRestElement() {
+        return this.data.hasRestElement;
+    }
+    set hasRestElement(value: any) {
+        this.data.hasRestElement = value;
+    }
+
+    get combinedFlags() {
+        return this.data.combinedFlags;
+    }
+    set combinedFlags(value: any) {
+        this.data.combinedFlags = value;
+    }
+
+    get readonly() {
+        return this.data.readonly;
+    }
+    set readonly(value: any) {
+        this.data.readonly = value;
+    }
+
+    get labeledElementDeclarations() {
+        return this.data.labeledElementDeclarations;
+    }
+    set labeledElementDeclarations(value: any) {
+        this.data.labeledElementDeclarations = value;
+    }
+
+    get declaration() {
+        return this.data.declaration;
+    }
+    set declaration(value: any) {
+        this.data.declaration = value;
+    }
+
+    get typeParameter() {
+        return this.data.typeParameter;
+    }
+    set typeParameter(value: any) {
+        this.data.typeParameter = value;
+    }
+
+    get constraintType() {
+        return this.data.constraintType;
+    }
+    set constraintType(value: any) {
+        this.data.constraintType = value;
+    }
+
+    get nameType() {
+        return this.data.nameType;
+    }
+    set nameType(value: any) {
+        this.data.nameType = value;
+    }
+
+    get templateType() {
+        return this.data.templateType;
+    }
+    set templateType(value: any) {
+        this.data.templateType = value;
+    }
+
+    get modifiersType() {
+        return this.data.modifiersType;
+    }
+    set modifiersType(value: any) {
+        this.data.modifiersType = value;
+    }
+
+    get resolvedApparentType() {
+        return this.data.resolvedApparentType;
+    }
+    set resolvedApparentType(value: any) {
+        this.data.resolvedApparentType = value;
+    }
+
+    get containsError() {
+        return this.data.containsError;
+    }
+    set containsError(value: any) {
+        this.data.containsError = value;
+    }
+
+    get elementType() {
+        return this.data.elementType;
+    }
+    set elementType(value: any) {
+        this.data.elementType = value;
+    }
+
+    get finalArrayType() {
+        return this.data.finalArrayType;
+    }
+    set finalArrayType(value: any) {
+        this.data.finalArrayType = value;
+    }
+
+    get source() {
+        return this.data.source;
+    }
+    set source(value: any) {
+        this.data.source = value;
+    }
+
+    get mappedType() {
+        return this.data.mappedType;
+    }
+    set mappedType(value: any) {
+        this.data.mappedType = value;
+    }
+
+    get types() {
+        return this.data.types;
+    }
+    set types(value: any) {
+        this.data.types = value;
+    }
+
+    get propertyCache() {
+        return this.data.propertyCache;
+    }
+    set propertyCache(value: any) {
+        this.data.propertyCache = value;
+    }
+
+    get propertyCacheWithoutObjectFunctionPropertyAugment() {
+        return this.data.propertyCacheWithoutObjectFunctionPropertyAugment;
+    }
+    set propertyCacheWithoutObjectFunctionPropertyAugment(value: any) {
+        this.data.propertyCacheWithoutObjectFunctionPropertyAugment = value;
+    }
+
+    get resolvedProperties() {
+        return this.data.resolvedProperties;
+    }
+    set resolvedProperties(value: any) {
+        this.data.resolvedProperties = value;
+    }
+
+    get resolvedIndexType() {
+        return this.data.resolvedIndexType;
+    }
+    set resolvedIndexType(value: any) {
+        this.data.resolvedIndexType = value;
+    }
+
+    get resolvedStringIndexType() {
+        return this.data.resolvedStringIndexType;
+    }
+    set resolvedStringIndexType(value: any) {
+        this.data.resolvedStringIndexType = value;
+    }
+
+    get resolvedBaseConstraint() {
+        return this.data.resolvedBaseConstraint;
+    }
+    set resolvedBaseConstraint(value: any) {
+        this.data.resolvedBaseConstraint = value;
+    }
+
+    get iterationTypesOfGeneratorReturnType() {
+        return this.data.iterationTypesOfGeneratorReturnType;
+    }
+    set iterationTypesOfGeneratorReturnType(value: any) {
+        this.data.iterationTypesOfGeneratorReturnType = value;
+    }
+
+    get iterationTypesOfAsyncGeneratorReturnType() {
+        return this.data.iterationTypesOfAsyncGeneratorReturnType;
+    }
+    set iterationTypesOfAsyncGeneratorReturnType(value: any) {
+        this.data.iterationTypesOfAsyncGeneratorReturnType = value;
+    }
+
+    get iterationTypesOfIterable() {
+        return this.data.iterationTypesOfIterable;
+    }
+    set iterationTypesOfIterable(value: any) {
+        this.data.iterationTypesOfIterable = value;
+    }
+
+    get iterationTypesOfIterator() {
+        return this.data.iterationTypesOfIterator;
+    }
+    set iterationTypesOfIterator(value: any) {
+        this.data.iterationTypesOfIterator = value;
+    }
+
+    get iterationTypesOfAsyncIterable() {
+        return this.data.iterationTypesOfAsyncIterable;
+    }
+    set iterationTypesOfAsyncIterable(value: any) {
+        this.data.iterationTypesOfAsyncIterable = value;
+    }
+
+    get iterationTypesOfAsyncIterator() {
+        return this.data.iterationTypesOfAsyncIterator;
+    }
+    set iterationTypesOfAsyncIterator(value: any) {
+        this.data.iterationTypesOfAsyncIterator = value;
+    }
+
+    get iterationTypesOfIteratorResult() {
+        return this.data.iterationTypesOfIteratorResult;
+    }
+    set iterationTypesOfIteratorResult(value: any) {
+        this.data.iterationTypesOfIteratorResult = value;
+    }
+
+    get resolvedReducedType() {
+        return this.data.resolvedReducedType;
+    }
+    set resolvedReducedType(value: any) {
+        this.data.resolvedReducedType = value;
+    }
+
+    get origin() {
+        return this.data.origin;
+    }
+    set origin(value: any) {
+        this.data.origin = value;
+    }
+
+    get keyPropertyName() {
+        return this.data.keyPropertyName;
+    }
+    set keyPropertyName(value: any) {
+        this.data.keyPropertyName = value;
+    }
+
+    get constituentMap() {
+        return this.data.constituentMap;
+    }
+    set constituentMap(value: any) {
+        this.data.constituentMap = value;
+    }
+
+    get arrayFallbackSignatures() {
+        return this.data.arrayFallbackSignatures;
+    }
+    set arrayFallbackSignatures(value: any) {
+        this.data.arrayFallbackSignatures = value;
+    }
+
+    get promiseTypeOfPromiseConstructor() {
+        return this.data.promiseTypeOfPromiseConstructor;
+    }
+    set promiseTypeOfPromiseConstructor(value: any) {
+        this.data.promiseTypeOfPromiseConstructor = value;
+    }
+
+    get promisedTypeOfPromise() {
+        return this.data.promisedTypeOfPromise;
+    }
+    set promisedTypeOfPromise(value: any) {
+        this.data.promisedTypeOfPromise = value;
+    }
+
+    get awaitedTypeOfType() {
+        return this.data.awaitedTypeOfType;
+    }
+    set awaitedTypeOfType(value: any) {
+        this.data.awaitedTypeOfType = value;
+    }
+
+    get uniqueLiteralFilledInstantiation() {
+        return this.data.uniqueLiteralFilledInstantiation;
+    }
+    set uniqueLiteralFilledInstantiation(value: any) {
+        this.data.uniqueLiteralFilledInstantiation = value;
+    }
+
+    get syntheticType() {
+        return this.data.syntheticType;
+    }
+    set syntheticType(value: any) {
+        this.data.syntheticType = value;
+    }
+
+    get defaultOnlyType() {
+        return this.data.defaultOnlyType;
+    }
+    set defaultOnlyType(value: any) {
+        this.data.defaultOnlyType = value;
+    }
+
+    get constraint() {
+        return this.data.constraint;
+    }
+    set constraint(value: any) {
+        this.data.constraint = value;
+    }
+
+    get default() {
+        return this.data.default;
+    }
+    set default(value: any) {
+        this.data.default = value;
+    }
+
+    get isThisType() {
+        return this.data.isThisType;
+    }
+    set isThisType(value: any) {
+        this.data.isThisType = value;
+    }
+
+    get resolvedDefaultType() {
+        return this.data.resolvedDefaultType;
+    }
+    set resolvedDefaultType(value: any) {
+        this.data.resolvedDefaultType = value;
+    }
+
+    get objectType() {
+        return this.data.objectType;
+    }
+    set objectType(value: any) {
+        this.data.objectType = value;
+    }
+
+    get indexType() {
+        return this.data.indexType;
+    }
+    set indexType(value: any) {
+        this.data.indexType = value;
+    }
+
+    get accessFlags() {
+        return this.data.accessFlags;
+    }
+    set accessFlags(value: any) {
+        this.data.accessFlags = value;
+    }
+
+    get simplifiedForReading() {
+        return this.data.simplifiedForReading;
+    }
+    set simplifiedForReading(value: any) {
+        this.data.simplifiedForReading = value;
+    }
+
+    get simplifiedForWriting() {
+        return this.data.simplifiedForWriting;
+    }
+    set simplifiedForWriting(value: any) {
+        this.data.simplifiedForWriting = value;
+    }
+
+    get type() {
+        return this.data.type;
+    }
+    set type(value: any) {
+        this.data.type = value;
+    }
+
+    get indexFlags() {
+        return this.data.indexFlags;
+    }
+    set indexFlags(value: any) {
+        this.data.indexFlags = value;
+    }
+
+    get root() {
+        return this.data.root;
+    }
+    set root(value: any) {
+        this.data.root = value;
+    }
+
+    get checkType() {
+        return this.data.checkType;
+    }
+    set checkType(value: any) {
+        this.data.checkType = value;
+    }
+
+    get extendsType() {
+        return this.data.extendsType;
+    }
+    set extendsType(value: any) {
+        this.data.extendsType = value;
+    }
+
+    get resolvedTrueType() {
+        return this.data.resolvedTrueType;
+    }
+    set resolvedTrueType(value: any) {
+        this.data.resolvedTrueType = value;
+    }
+
+    get resolvedFalseType() {
+        return this.data.resolvedFalseType;
+    }
+    set resolvedFalseType(value: any) {
+        this.data.resolvedFalseType = value;
+    }
+
+    get resolvedInferredTrueType() {
+        return this.data.resolvedInferredTrueType;
+    }
+    set resolvedInferredTrueType(value: any) {
+        this.data.resolvedInferredTrueType = value;
+    }
+
+    get resolvedDefaultConstraint() {
+        return this.data.resolvedDefaultConstraint;
+    }
+    set resolvedDefaultConstraint(value: any) {
+        this.data.resolvedDefaultConstraint = value;
+    }
+
+    get resolvedConstraintOfDistributive() {
+        return this.data.resolvedConstraintOfDistributive;
+    }
+    set resolvedConstraintOfDistributive(value: any) {
+        this.data.resolvedConstraintOfDistributive = value;
+    }
+
+    get combinedMapper() {
+        return this.data.combinedMapper;
+    }
+    set combinedMapper(value: any) {
+        this.data.combinedMapper = value;
+    }
+
+    get texts() {
+        return this.data.texts;
+    }
+    set texts(value: any) {
+        this.data.texts = value;
+    }
+
+    get baseType() {
+        return this.data.baseType;
+    }
+    set baseType(value: any) {
+        this.data.baseType = value;
     }
 }
 
@@ -8271,7 +9019,7 @@ export const objectAllocator: ObjectAllocator = {
     getPrivateIdentifierConstructor: () => Node as any,
     getSourceFileConstructor: () => Node as any,
     getSymbolConstructor: () => Symbol as any,
-    getTypeConstructor: () => Type as any,
+    getTypeConstructor: () => TypeImpl as any,
     getSignatureConstructor: () => Signature as any,
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };

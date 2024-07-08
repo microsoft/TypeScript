@@ -335,6 +335,7 @@ import {
     Type,
     TypeChecker,
     TypeFlags,
+    TypeImpl,
     TypeNode,
     TypeParameter,
     TypePredicate,
@@ -829,15 +830,9 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Private
     }
 }
 
-class TypeObject implements Type {
-    checker: TypeChecker;
-    flags: TypeFlags;
-    objectFlags?: ObjectFlags;
-    id!: number;
-    symbol!: Symbol;
+class TypeObject extends TypeImpl implements Type {
     constructor(checker: TypeChecker, flags: TypeFlags) {
-        // Note: if modifying this, be sure to update Type in src/compiler/types.ts
-        this.flags = flags;
+        super(checker, flags);
         this.checker = checker;
     }
     getFlags(): TypeFlags {
