@@ -47,8 +47,8 @@ interface Type<t> {
     pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe<t, fn>>;
 }
 /** Type<(In: string) => number> */
-export declare const out: Type<(In: string) => ReturnType<(s: string) => number>>;
+export declare const out: Type<(In: string) => number>;
 export type inferPipe2<t, pipe> = pipe extends (In: t) => unknown ? (In: t) => ReturnType<pipe> extends infer n extends number ? n : ReturnType<pipe> extends infer s extends string ? s : ReturnType<pipe> extends infer b extends boolean ? b : never : never;
 /** Type<(In: string) => number> */
-export declare const out2: Type<(In: string) => ReturnType<(s: string) => number> extends infer n extends number ? n : ReturnType<(s: string) => number> extends infer s extends string ? s : ReturnType<(s: string) => number> extends infer b extends boolean ? b : never>;
+export declare const out2: Type<(In: string) => number>;
 export {};
