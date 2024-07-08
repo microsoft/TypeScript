@@ -476,7 +476,7 @@ export const enum NodeFactoryFlags {
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
-/** @internal */
+/** @internal @knipignore */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
     nodeFactoryPatchers.push(fn);
 }
@@ -7295,10 +7295,8 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
- *
- * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }

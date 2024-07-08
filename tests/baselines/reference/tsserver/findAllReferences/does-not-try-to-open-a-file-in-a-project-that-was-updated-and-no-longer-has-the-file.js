@@ -284,7 +284,10 @@ Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -514,7 +517,10 @@ Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json,/packa
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -726,7 +732,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 5,
         "symbolDisplayString": "(property) Bar.prop: number"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

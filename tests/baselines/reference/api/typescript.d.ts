@@ -214,6 +214,22 @@ declare namespace ts {
                  * The time spent creating or updating the auto-import program, in milliseconds.
                  */
                 createAutoImportProviderProgramDurationMs?: number;
+                /**
+                 * The time spent computing diagnostics, in milliseconds.
+                 */
+                diagnosticsDuration?: FileDiagnosticPerformanceData[];
+            }
+            /**
+             * Time spent computing each kind of diagnostics, in milliseconds.
+             */
+            export type DiagnosticPerformanceData = {
+                [Kind in DiagnosticEventKind]?: number;
+            };
+            export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+                /**
+                 * The file for which the performance data is reported.
+                 */
+                file: string;
             }
             /**
              * Arguments for FileRequest messages.
@@ -1902,6 +1918,7 @@ declare namespace ts {
             }
             export interface RequestCompletedEventBody {
                 request_seq: number;
+                performanceData?: PerformanceData;
             }
             /**
              * Item of diagnostic information found in a DiagnosticEvent message.
@@ -1978,10 +1995,6 @@ declare namespace ts {
                  * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
                  */
                 spans?: TextSpan[];
-                /**
-                 * Time spent computing the diagnostics, in milliseconds.
-                 */
-                duration?: number;
             }
             export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
@@ -2628,6 +2641,7 @@ declare namespace ts {
         interface ServerHost extends System {
             watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
             watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+            preferNonRecursiveWatch?: boolean;
             setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
             clearTimeout(timeoutId: any): void;
             setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
@@ -2635,6 +2649,18 @@ declare namespace ts {
             gc?(): void;
             trace?(s: string): void;
             require?(initialPath: string, moduleName: string): ModuleImportResult;
+        }
+        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+            projectName: string;
+            projectRootPath: Path;
+        }
+        interface ITypingsInstaller {
+            isKnownTypesPackageName(name: string): boolean;
+            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
+            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
+            attach(projectService: ProjectService): void;
+            onProjectClosed(p: Project): void;
+            readonly globalTypingsCacheLocation: string | undefined;
         }
         function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
         function toNormalizedPath(fileName: string): NormalizedPath;
@@ -2723,19 +2749,6 @@ declare namespace ts {
             positionToLineOffset(position: number): protocol.Location;
             isJavaScript(): boolean;
         }
-        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
-            projectName: string;
-            projectRootPath: Path;
-        }
-        interface ITypingsInstaller {
-            isKnownTypesPackageName(name: string): boolean;
-            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
-            attach(projectService: ProjectService): void;
-            onProjectClosed(p: Project): void;
-            readonly globalTypingsCacheLocation: string | undefined;
-        }
-        const nullTypingsInstaller: ITypingsInstaller;
         function allRootFilesAreJsOrDts(project: Project): boolean;
         function allFilesAreJsOrDts(project: Project): boolean;
         enum ProjectKind {
@@ -3078,6 +3091,7 @@ declare namespace ts {
             configFileName?: NormalizedPath;
             configFileErrors?: readonly Diagnostic[];
         }
+        const nullTypingsInstaller: ITypingsInstaller;
         interface ProjectServiceOptions {
             host: ServerHost;
             logger: Logger;
@@ -9272,6 +9286,7 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
+        preferNonRecursiveWatch?: boolean;
     }
     interface ProgramHost<T extends BuilderProgram> {
         /**

@@ -310,6 +310,7 @@ function verifyProgramStructureAndResolutionCache(
         getCompilationSettings: () => options,
         fileIsOpen: ts.returnFalse,
         getCurrentProgram: () => program,
+        preferNonRecursiveWatch: sys.preferNonRecursiveWatch,
 
         watchDirectoryOfFailedLookupLocation: ts.returnNoopFileWatcher,
         watchAffectingFileLocation: ts.returnNoopFileWatcher,

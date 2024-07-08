@@ -1302,7 +1302,7 @@ export type HasExpressionInitializer =
     | PropertyAssignment
     | EnumMember;
 
-/** @internal */
+/** @internal @knipignore */
 export type HasIllegalExpressionInitializer = PropertySignature;
 
 // NOTE: Changing the following list requires changes to:
@@ -2308,7 +2308,7 @@ export interface TypeOperatorNode extends TypeNode {
     readonly type: TypeNode;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export interface UniqueTypeOperatorNode extends TypeOperatorNode {
     readonly operator: SyntaxKind.UniqueKeyword;
 }
@@ -2660,7 +2660,7 @@ export type ObjectBindingOrAssignmentElement =
     | SpreadAssignment // AssignmentRestProperty
 ;
 
-/** @internal */
+/** @internal @knipignore */
 export type ObjectAssignmentElement = Exclude<ObjectBindingOrAssignmentElement, BindingElement>;
 
 export type ArrayBindingOrAssignmentElement =
@@ -2691,7 +2691,7 @@ export type BindingOrAssignmentElementTarget =
     | ElementAccessExpression
     | OmittedExpression;
 
-/** @internal */
+/** @internal @knipignore */
 export type AssignmentElementTarget = Exclude<BindingOrAssignmentElementTarget, BindingPattern>;
 
 export type ObjectBindingOrAssignmentPattern =
@@ -4733,7 +4733,7 @@ export interface Program extends ScriptReferenceHost {
 
     /** @internal */ getCommonSourceDirectory(): string;
 
-    /** @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
+    /** @internal */ getCachedSemanticDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] | undefined;
 
     /** @internal */ getClassifiableNames(): Set<__String>;
 
@@ -5491,12 +5491,6 @@ export const enum SymbolAccessibility {
     NotAccessible,
     CannotBeNamed,
     NotResolved,
-}
-
-/** @internal */
-export const enum SyntheticSymbolKind {
-    UnionOrIntersection,
-    Spread,
 }
 
 export const enum TypePredicateKind {
@@ -7995,12 +7989,6 @@ export interface CompilerHost extends ModuleResolutionHost {
 export type SourceOfProjectReferenceRedirect = string | true;
 
 /** @internal */
-export interface ResolvedProjectReferenceCallbacks {
-    getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-    forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
-}
-
-/** @internal */
 export const enum TransformFlags {
     None = 0,
 
@@ -8216,9 +8204,6 @@ export interface UnscopedEmitHelper extends EmitHelperBase {
 }
 
 export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
-
-/** @internal */
-export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 

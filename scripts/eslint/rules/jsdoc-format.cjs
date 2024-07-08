@@ -1,5 +1,8 @@
 const { createRule } = require("./utils.cjs");
 
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
+
 module.exports = createRule({
     name: "jsdoc-format",
     meta: {
@@ -25,17 +28,17 @@ module.exports = createRule({
         const atInternal = "@internal";
         const jsdocStart = "/**";
 
-        /** @type {Map<import("@typescript-eslint/utils").TSESTree.Node, boolean>} */
+        /** @type {Map<TSESTree.Node, boolean>} */
         const isExportedCache = new Map();
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        /** @type {(node: TSESTree.Node) => boolean} */
         function isExported(node) {
             const exported = isExportedCache.get(node);
             if (exported !== undefined) {
                 return exported;
             }
 
-            /** @type {import("@typescript-eslint/utils").TSESTree.Node | undefined} */
+            /** @type {TSESTree.Node | undefined} */
             let current = node;
             while (current) {
                 // https://github.com/typescript-eslint/typescript-eslint/blob/e44a1a280f08f9fd0d29f74e5c3e73b7b64a9606/packages/eslint-plugin/src/util/collectUnusedVariables.ts#L440
@@ -55,7 +58,7 @@ module.exports = createRule({
             return text.startsWith(jsdocStart);
         }
 
-        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
+        /** @type {(c: TSESTree.Comment, indexInComment: number) => TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
             return {
                 start: context.sourceCode.getLocFromIndex(c.range[0] + indexInComment),
@@ -63,7 +66,7 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
+        /** @type {(c: TSESTree.Comment) => TSESTree.SourceLocation} */
         const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,
@@ -74,7 +77,7 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => void} */
+        /** @type {(node: TSESTree.Node) => void} */
         const checkDeclaration = node => {
             const blockComments = sourceCode.getCommentsBefore(node).filter(c => c.type === "Block");
             if (blockComments.length === 0) {

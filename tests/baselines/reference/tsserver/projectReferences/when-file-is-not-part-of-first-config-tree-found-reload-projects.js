@@ -470,7 +470,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-dem
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -836,7 +843,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/app/Component-dem
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json,/home/src/projects/project/demos/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "reloadProjects",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

@@ -208,7 +208,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/b/b.ts ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -424,7 +431,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 31,
         "symbolDisplayString": "(alias) new A(): A\nimport A"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
