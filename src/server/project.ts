@@ -1394,6 +1394,24 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    onReleaseOldSourceFile(
+        oldSourceFile: SourceFile,
+        _oldOptions: CompilerOptions,
+        hasSourceFileByPath: boolean,
+        newSourceFileByResolvedPath: SourceFile | undefined,
+    ) {
+        if (
+            !newSourceFileByResolvedPath ||
+            (oldSourceFile.resolvedPath === oldSourceFile.path && newSourceFileByResolvedPath.resolvedPath !== oldSourceFile.path)
+        ) {
+            // new program does not contain this file - detach it from the project
+            // - remove resolutions only if the new program doesnt contain source file by the path
+            //   (not resolvedPath since path is used for resolution)
+            this.detachScriptInfoFromProject(oldSourceFile.fileName, hasSourceFileByPath);
+        }
+    }
+
+    /** @internal */
     updateFromProjectInProgress = false;
 
     /** @internal */
@@ -1639,22 +1657,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         let hasNewProgram = false;
         if (this.program && (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))) {
             hasNewProgram = true;
-            if (oldProgram) {
-                for (const f of oldProgram.getSourceFiles()) {
-                    const newFile = this.program.getSourceFileByPath(f.resolvedPath);
-                    if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
-                        // new program does not contain this file - detach it from the project
-                        // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
-                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path), /*syncDirWatcherRemove*/ true);
-                    }
-                }
-
-                oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
-                    if (!this.program!.getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                        this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName, /*noRemoveResolution*/ undefined, /*syncDirWatcherRemove*/ true);
-                    }
-                });
-            }
 
             // Update roots
             this.rootFilesMap.forEach((value, path) => {
@@ -1791,12 +1793,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.sendPerformanceEvent(kind, durationMs);
     }
 
-    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean, syncDirWatcherRemove?: boolean) {
+    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
         const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
         if (scriptInfoToDetach) {
             scriptInfoToDetach.detachFromProject(this);
             if (!noRemoveResolution) {
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path, syncDirWatcherRemove);
+                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
             }
         }
     }
