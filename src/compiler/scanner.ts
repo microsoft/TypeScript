@@ -203,6 +203,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     true: SyntaxKind.TrueKeyword,
     try: SyntaxKind.TryKeyword,
     type: SyntaxKind.TypeKeyword,
+    defer: SyntaxKind.DeferKeyword,
     typeof: SyntaxKind.TypeOfKeyword,
     undefined: SyntaxKind.UndefinedKeyword,
     unique: SyntaxKind.UniqueKeyword,

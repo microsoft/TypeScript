@@ -8451,5 +8451,17 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
+    },
+    "Default imports aren't allowed for deferred imports.": {
+        "category": "Error",
+        "code": 18058
+    },
+    "Named imports aren't allowed for deferred imports.": {
+        "category": "Error",
+        "code": 18059
+    },
+    "Deferred imports are only supported when the '--module' flag is set to 'esnext'.": {
+        "category": "Error",
+        "code": 18060
     }
 }

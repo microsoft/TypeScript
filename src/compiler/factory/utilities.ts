@@ -75,6 +75,7 @@ import {
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
+    ImportPhase,
     InternalEmitFlags,
     isAssignmentExpression,
     isAssignmentOperator,
@@ -730,7 +731,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
 
                     const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
                         /*modifiers*/ undefined,
-                        nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
+                        nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings, ImportPhase.Evaluation),
                         nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                         /*attributes*/ undefined,
                     );

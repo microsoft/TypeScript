@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -88,52 +88,9 @@
+@@ -89,52 +89,9 @@
                  "pos": 69,
                  "end": 69,
                  "hasTrailingComma": false,
@@ -55,7 +55,7 @@
          "length": 2,
          "pos": 0,
          "end": 70,
-@@ -214,6 +171,6 @@
+@@ -216,6 +173,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

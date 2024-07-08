@@ -32,7 +32,8 @@
                     "end": 19,
                     "transformFlags": 0,
                     "escapedText": "foo"
-                }
+                },
+                "phase": 0
             },
             "moduleSpecifier": {
                 "kind": "StringLiteral",

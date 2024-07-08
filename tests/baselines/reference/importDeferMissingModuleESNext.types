@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/importDefer/importDeferMissingModuleESNext.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import defer * as aNs from "a";
+>aNs : any
+>    : ^^^
+
+aNs.foo();
+>aNs.foo() : any
+>          : ^^^
+>aNs.foo : any
+>        : ^^^
+>aNs : any
+>    : ^^^
+>foo : any
+>    : ^^^
+

@@ -1552,6 +1552,7 @@ const visitEachChildTable: VisitEachChildTable = {
             node.isTypeOnly,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodeVisitor(node.namedBindings, visitor, isNamedImportBindings),
+            node.phase,
         );
     },
 

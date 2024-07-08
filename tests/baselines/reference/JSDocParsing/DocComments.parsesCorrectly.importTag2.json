@@ -54,7 +54,8 @@
                         "hasTrailingComma": false,
                         "transformFlags": 0
                     }
-                }
+                },
+                "phase": 0
             },
             "moduleSpecifier": {
                 "kind": "StringLiteral",

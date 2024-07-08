@@ -39,7 +39,8 @@
                         "transformFlags": 0,
                         "escapedText": "types"
                     }
-                }
+                },
+                "phase": 0
             },
             "moduleSpecifier": {
                 "kind": "StringLiteral",

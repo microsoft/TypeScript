@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/importDefer/importDeferNamespace.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import defer * as aNs from "a";
+>aNs : typeof aNs
+>    : ^^^^^^^^^^
+
+aNs.foo();
+>aNs.foo() : void
+>          : ^^^^
+>aNs.foo : () => void
+>        : ^^^^^^^^^^
+>aNs : typeof aNs
+>    : ^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+

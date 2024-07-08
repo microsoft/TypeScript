@@ -77,6 +77,7 @@ import {
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
     ImportKind,
+    ImportPhase,
     ImportSpecifier,
     insertImports,
     InternalSymbolName,
@@ -625,6 +626,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                         declaration.importClause!.isTypeOnly,
                         declaration.importClause!.name,
                         /*namedBindings*/ undefined,
+                        declaration.importClause!.phase,
                     ),
                 );
             }
@@ -725,6 +727,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                                     (d.importClause.namedBindings as NamedImports).elements.filter(e => verbatimImports.has(e)),
                                 )
                                 : undefined,
+                            d.importClause.phase,
                         ),
                         d.moduleSpecifier,
                         d.attributes,
@@ -2083,6 +2086,7 @@ function getNewImports(
                     shouldUseTypeOnly(namespaceLikeImport, preferences),
                     /*name*/ undefined,
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
+                    ImportPhase.Evaluation,
                 ),
                 quotedModuleSpecifier,
                 /*attributes*/ undefined,

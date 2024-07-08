@@ -126,6 +126,7 @@ import {
     IfStatement,
     ImportClause,
     ImportDeclaration,
+    ImportPhase,
     ImportSpecifier,
     ImportTypeNode,
     indexOfNode,
@@ -2488,7 +2489,7 @@ export function makeImport(defaultImport: Identifier | undefined, namedImports: 
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,
         defaultImport || namedImports
-            ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
+            ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined, ImportPhase.Evaluation)
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
         /*attributes*/ undefined,

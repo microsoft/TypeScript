@@ -20,6 +20,7 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportKind,
+    ImportPhase,
     ImportSpecifier,
     isExportSpecifier,
     isImportDeclaration,
@@ -290,5 +291,5 @@ function createImport(node: ImportDeclaration, defaultImportName: Identifier | u
 }
 
 function createImportClause(defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined) {
-    return factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined);
+    return factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined, ImportPhase.Evaluation);
 }
