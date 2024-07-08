@@ -920,17 +920,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -1202,15 +1192,7 @@ Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/b/ba/file
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/b'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was not resolved.
@@ -1482,17 +1464,7 @@ Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/file
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/c/ca/caa'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was not resolved.
@@ -1771,18 +1743,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/d/da/daa/daaa'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was not resolved.
@@ -2071,18 +2032,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/e/ea/eaa/eaaa'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was not resolved.
@@ -2329,25 +2279,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -2635,24 +2567,7 @@ Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/b/ba/file
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/b'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/b/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -2944,28 +2859,7 @@ Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/file
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/c/ca/caa'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3268,33 +3162,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/d/da/daa/daaa'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3611,33 +3479,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/e/ea/eaa/eaaa'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3947,17 +3789,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/f/fa/faa'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was not resolved.
@@ -4268,31 +4100,7 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/f/fa/faa'.
 ======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.

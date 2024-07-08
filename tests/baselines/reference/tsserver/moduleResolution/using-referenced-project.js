@@ -708,9 +708,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)

@@ -962,14 +962,14 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
 [96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 

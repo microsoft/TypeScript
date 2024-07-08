@@ -842,7 +842,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
-        return this.resolutionCache.getModuleResolutionCache();
+        return this.resolutionCache.moduleResolutionCache;
     }
 
     /** @internal */

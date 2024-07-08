@@ -1143,10 +1143,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/cRandomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Classic'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/pkg0.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
@@ -1711,17 +1708,7 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.b.json'.
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/cRandomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -1764,17 +1751,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.b.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.b.json' (Configured)
@@ -2329,17 +2306,7 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.a.json'.
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/cRandomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'.
@@ -2384,17 +2351,7 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.a.json'.
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.b.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -2431,17 +2388,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.a.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.a.json' (Configured)

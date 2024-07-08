@@ -933,17 +933,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -1267,15 +1257,7 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/worksp
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/b'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was not resolved.
@@ -1598,17 +1580,7 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/worksp
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/c/ca/caa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was not resolved.
@@ -1937,18 +1909,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/d/da/daa/daaa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was not resolved.
@@ -2286,18 +2247,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/e/ea/eaa/eaaa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was not resolved.
@@ -2592,25 +2542,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according 
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -2941,24 +2873,7 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/worksp
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/b'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/b/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3288,28 +3203,7 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/worksp
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/c/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/c/ca/caa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3645,33 +3539,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/d/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/d/da/daa/daaa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -4016,33 +3884,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/e/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/e/ea/eaa/eaaa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -4375,17 +4217,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project/f/fa/faa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was not resolved.
@@ -4718,31 +4550,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/y/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/x/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/fa/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/f/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.js' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project/f/fa/faa'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.

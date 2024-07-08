@@ -102,6 +102,41 @@ function verifyDocumentRegistry(service: ts.server.ProjectService) {
     service.forEachProject(collectStats);
     verifyDocumentRegistryStats(service.documentRegistry, stats);
 }
+
+/**
+ * Verifies that failed lookups, affecting locations and alternate result are present in actual resolution
+ * Not checking otherway round because actual resolution can have more failed lookups and affecting locations
+ */
+function verifyResolutionWithFailedLookupLocationsProperties(
+    expectedResolutionWithFailedLookupLocations: ts.ResolutionWithFailedLookupLocations,
+    actualResolutionWithFailedLookupLocations: ts.ResolutionWithFailedLookupLocations | undefined,
+    projectName: string,
+    cacheType: string,
+) {
+    expectedResolutionWithFailedLookupLocations?.failedLookupLocations?.forEach(l =>
+        ts.Debug.assert(
+            ts.contains(actualResolutionWithFailedLookupLocations!.failedLookupLocations, l),
+            `${projectName}:: ${cacheType}:: Expected failed lookup location ${l} not found in actual resolution`,
+        )
+    );
+
+    expectedResolutionWithFailedLookupLocations?.affectingLocations?.forEach(l =>
+        ts.Debug.assert(
+            ts.contains(actualResolutionWithFailedLookupLocations!.affectingLocations, l),
+            `${projectName}:: ${cacheType}:: Expected affecting location ${l} not found in actual resolution`,
+        )
+    );
+    ts.Debug.assert(
+        expectedResolutionWithFailedLookupLocations?.alternateResult === actualResolutionWithFailedLookupLocations!.alternateResult,
+        `${projectName}:: ${cacheType}:: Expected alternateResult not matching with actual resolution`,
+    );
+    // Check global cache resolution as well
+    ts.Debug.assert(
+        JSON.stringify(expectedResolutionWithFailedLookupLocations?.globalCacheResolution) === JSON.stringify(actualResolutionWithFailedLookupLocations!.globalCacheResolution),
+        `${projectName}:: ${cacheType}:: Expected globalCacheResolution not matching with actual resolution`,
+    );
+}
+
 interface ResolutionInfo {
     cacheType: string;
     fileName: string;
@@ -121,6 +156,9 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
         | undefined,
     getResolvedFileName: (resolution: T) => string | undefined,
     indent: string,
+    actualProgram: ts.Program | undefined,
+    projectName: string | undefined,
+    actualProgramResolution: ((name: string, mode: ts.ResolutionMode) => T | undefined) | undefined,
 ) {
     let addedCacheType = false;
     forEach?.((resolved, key, mode) => {
@@ -129,6 +167,14 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             baseline.push(`${indent}${cacheType}:`);
         }
         baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`);
+        if (actualProgram && actualProgramResolution) {
+            verifyResolutionWithFailedLookupLocationsProperties(
+                resolved,
+                actualProgramResolution(key, mode),
+                projectName!,
+                cacheType,
+            );
+        }
     }, file);
 }
 
@@ -144,6 +190,9 @@ function getLibResolutionCacheDetails(
     baseline: string[],
     cache: Map<string, ts.LibResolution> | undefined,
     indent: string,
+    actualProgram: ts.Program | undefined,
+    projectName: string | undefined,
+    actualLibResolution: (libFileName: string) => ts.LibResolution | undefined,
 ) {
     let addedCacheType = false;
     cache?.forEach((resolved, libFileName) => {
@@ -152,14 +201,28 @@ function getLibResolutionCacheDetails(
             baseline.push(`${indent}Libs:`);
         }
         baseline.push(`${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${getResolvedModuleFileName(resolved.resolution)}`);
+        if (actualProgram) {
+            verifyResolutionWithFailedLookupLocationsProperties(
+                resolved.resolution,
+                actualLibResolution(libFileName)?.resolution,
+                projectName!,
+                "Libs",
+            );
+        }
     });
 }
 
-function getProgramStructure(program: ts.Program | undefined) {
+function getProgramStructure(
+    program: ts.Program | undefined,
+    actualProgram?: ts.Program,
+    projectName?: string,
+    userResolvedModuleNames?: true,
+) {
     const baseline: string[] = [];
     program?.getSourceFiles().slice().sort((f1, f2) => ts.comparePathsCaseSensitive(f1.path, f2.path)).forEach(f => {
         baseline.push(`  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`);
         baseline.push(f.text.split(/\r?\n/).map(l => l ? "    " + l : "").join("\n"));
+        const actualSourceFile = actualProgram?.getSourceFileByPath(f.path)!;
         getResolutionCacheDetails(
             baseline,
             "Modules",
@@ -167,6 +230,11 @@ function getProgramStructure(program: ts.Program | undefined) {
             program.forEachResolvedModule,
             getResolvedModuleFileName,
             "    ",
+            actualProgram,
+            projectName,
+            !userResolvedModuleNames ?
+                ((key, mode) => actualProgram!.getResolvedModule(actualSourceFile, key, mode)) :
+                undefined,
         );
         getResolutionCacheDetails(
             baseline,
@@ -175,6 +243,9 @@ function getProgramStructure(program: ts.Program | undefined) {
             program.forEachResolvedTypeReferenceDirective,
             getResolvedTypeRefFileName,
             "    ",
+            actualProgram,
+            projectName,
+            (key, mode) => actualProgram!.getResolvedTypeReferenceDirective(actualSourceFile, key, mode),
         );
     });
     getResolutionCacheDetails(
@@ -184,18 +255,29 @@ function getProgramStructure(program: ts.Program | undefined) {
         program?.getAutomaticTypeDirectiveResolutions().forEach,
         getResolvedTypeRefFileName,
         "  ",
+        actualProgram,
+        projectName,
+        (key, mode) => actualProgram!.getAutomaticTypeDirectiveResolutions()?.get(key, mode),
     );
     getLibResolutionCacheDetails(
         baseline,
         program?.resolvedLibReferences,
         "    ",
+        actualProgram,
+        projectName,
+        libFileName => actualProgram!.resolvedLibReferences?.get(libFileName),
     );
     return baseline.join("\n");
 }
 
-export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string): void {
+export function verifyProgramStructure(
+    expectedProgram: ts.Program,
+    actualProgram: ts.Program,
+    projectName: string,
+    userResolvedModuleNames?: true,
+): void {
     const actual = getProgramStructure(actualProgram);
-    const expected = getProgramStructure(expectedProgram);
+    const expected = getProgramStructure(expectedProgram, actualProgram, projectName, userResolvedModuleNames);
     ts.Debug.assert(actual === expected, `Program verification:: ${projectName}`);
 }
 
@@ -210,7 +292,7 @@ export function verifyResolutionCache(
     const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution);
     expected.startCachingPerDirectoryResolution();
 
-    type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    type ExpectedResolution = ts.ResolvedModuleWithFailedLookupLocations & ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
 
     const expectedToResolution = new Map<ExpectedResolution, ts.ResolutionWithFailedLookupLocations>();
     const resolutionToExpected = new Map<ts.ResolutionWithFailedLookupLocations, ExpectedResolution>();
@@ -228,6 +310,8 @@ export function verifyResolutionCache(
             resolutions,
             getResolvedModuleFileName,
             expected.resolvedModuleNames,
+            expected.moduleResolutionCache,
+            () => actualProgram.getRedirectReferenceForResolution(actualProgram.getSourceFileByPath(path)!),
             (name, mode) => actualProgram.getResolvedModule(actualProgram.getSourceFileByPath(path)!, name, mode),
         )
     );
@@ -238,6 +322,11 @@ export function verifyResolutionCache(
             resolutions,
             getResolvedTypeRefFileName,
             expected.resolvedTypeReferenceDirectives,
+            expected.typeReferenceDirectiveResolutionCache,
+            () =>
+                path !== inferredTypesPath ?
+                    actualProgram.getRedirectReferenceForResolution(actualProgram.getSourceFileByPath(path)!) :
+                    undefined,
             (name, mode) =>
                 path !== inferredTypesPath ?
                     actualProgram.getResolvedTypeReferenceDirective(actualProgram.getSourceFileByPath(path)!, name, mode) :
@@ -245,17 +334,24 @@ export function verifyResolutionCache(
         )
     );
     actual.resolvedLibraries.forEach((resolved, libFileName) => {
+        const libResolvedFrom = ts.getInferredLibraryNameResolveFrom(actualProgram.getCompilerOptions(), currentDirectory, libFileName);
         const expectedResolution = collectResolution(
             "Libs",
-            resolutionHostCacheHost.toPath(
-                ts.getInferredLibraryNameResolveFrom(actualProgram.getCompilerOptions(), currentDirectory, libFileName),
-            ),
+            resolutionHostCacheHost.toPath(libResolvedFrom),
             resolved,
             getResolvedModuleFileName(resolved),
             ts.getLibraryNameFromLibFileName(libFileName),
             /*mode*/ undefined,
         );
         expected.resolvedLibraries.set(libFileName, expectedResolution);
+        ts.setPerDirectoryAndNonRelativeNameCacheResult(
+            expected.libraryResolutionCache,
+            ts.getLibraryNameFromLibFileName(libFileName),
+            undefined,
+            ts.getDirectoryPath(libResolvedFrom),
+            undefined,
+            expectedResolution,
+        );
     });
     // Check for resolutions in program but not in cache to empty resolutions
     if (!userResolvedModuleNames) {
@@ -291,7 +387,7 @@ export function verifyResolutionCache(
         )
     );
 
-    expected.finishCachingPerDirectoryResolution(actualProgram, /*oldProgram*/ undefined);
+    expected.finishCachingPerDirectoryResolution(actualProgram, /*oldProgram*/ undefined, /*skipCacheCompact*/ true);
 
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
@@ -337,11 +433,14 @@ export function verifyResolutionCache(
         `${projectName}:: Expected ResolutionsResolvedWithoutGlobalCache count ${expected.countResolutionsResolvedWithoutGlobalCache()} but got ${actual.countResolutionsResolvedWithoutGlobalCache()}`,
     );
 
+    // Verify that caches are same:
+    forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCache(cache, actual[cacheType], cacheType));
+
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
     actual.resolvedModuleNames.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
-    expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram);
+    expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram, /*skipCacheCompact*/ true);
 
     resolutionToExpected.forEach(
         expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`),
@@ -353,6 +452,10 @@ export function verifyResolutionCache(
     ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
     ts.Debug.assert(expected.countResolutionsResolvedWithGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithGlobalCache should be cleared`);
     ts.Debug.assert(expected.countResolutionsResolvedWithoutGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithoutGlobalCache should be cleared`);
+    forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ false));
+
+    expected.compactCaches(/*newProgram*/ undefined);
+    forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ true));
 
     function verifyResolutionIsInCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -362,7 +465,7 @@ export function verifyResolutionCache(
         mode: ts.ResolutionMode,
         fileName: string,
     ) {
-        if (resolution as unknown !== ts.emptyResolution) {
+        if (resolution !== ts.emptyResolution) {
             // Resolutions should match
             ts.Debug.assert(
                 cache?.get(name, mode) === resolution,
@@ -384,6 +487,8 @@ export function verifyResolutionCache(
         cache: ts.ModeAwareCache<T> | undefined,
         getResolvedFileName: (resolution: T) => string | undefined,
         storeExpected: Map<ts.Path, ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations>>,
+        moduleOrTypeRefCache: ts.ModuleOrTypeReferenceResolutionCache<T>,
+        getRedirectReferenceForResolution: () => ts.ResolvedProjectReference | undefined,
         getProgramResolutions: (name: string, mode: ts.ResolutionMode) => T | undefined,
     ) {
         ts.Debug.assert(
@@ -396,6 +501,14 @@ export function verifyResolutionCache(
             const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode);
             if (!expectedCache) storeExpected.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
+            ts.setPerDirectoryAndNonRelativeNameCacheResult(
+                moduleOrTypeRefCache,
+                name,
+                mode,
+                ts.getDirectoryPath(fileName),
+                getRedirectReferenceForResolution(),
+                expected as unknown as T,
+            );
             // Resolution in cache should be same as that is in program
             ts.Debug.assert(
                 resolved === getProgramResolutions(name, mode),
@@ -526,43 +639,231 @@ export function verifyResolutionCache(
             ts.Debug.assert(expected === actual, `${projectName}:: ${caption}`);
         }, "dirPathToSymlinkPackageRefCount");
     }
+
+    type ModuleOrTypeRefOrLibraryCacheType = "moduleResolutionCache" | "typeReferenceDirectiveResolutionCache" | "libraryResolutionCache";
+    function forEachModuleOrTypeRefOrLibCache(
+        action: (cache: ts.ResolutionCache[ModuleOrTypeRefOrLibraryCacheType], cacheType: ModuleOrTypeRefOrLibraryCacheType) => void,
+    ) {
+        action(expected.moduleResolutionCache, "moduleResolutionCache");
+        action(expected.typeReferenceDirectiveResolutionCache, "typeReferenceDirectiveResolutionCache");
+        action(expected.libraryResolutionCache, "libraryResolutionCache");
+    }
+
+    function verifyModuleOrTypeResolutionCache(
+        expectedModuleOrTypeRefCache: ts.ModuleOrTypeReferenceResolutionCache<ts.ResolutionWithFailedLookupLocations>,
+        actualModuleOrTypeRefCache: ts.ModuleOrTypeReferenceResolutionCache<ts.ResolutionWithFailedLookupLocations>,
+        cacheType: string,
+    ) {
+        verfiyCacheWithRedirects(
+            expectedModuleOrTypeRefCache.directoryToModuleNameMap,
+            actualModuleOrTypeRefCache.directoryToModuleNameMap,
+            verifyDirectoryToModuleNameMap,
+            `${cacheType}:: directoryToModuleNameMap`,
+        );
+        verfiyCacheWithRedirects(
+            expectedModuleOrTypeRefCache.moduleNameToDirectoryMap,
+            actualModuleOrTypeRefCache.moduleNameToDirectoryMap,
+            verifyModuleNameToDirectoryMap,
+            `${cacheType}:: moduleNameToDirectoryMap`,
+        );
+    }
+
+    function verifyDirectoryToModuleNameMap(
+        expectedDirectoryToModuleNameMap: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined,
+        actualDirectoryToModuleNameMap: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined,
+        caption: string,
+    ) {
+        verifyModeAwareCache(
+            expectedDirectoryToModuleNameMap,
+            actualDirectoryToModuleNameMap,
+            verfiyResolution,
+            caption,
+        );
+    }
+
+    function verifyModuleNameToDirectoryMap(
+        expectedModuleNameToDirectoryMap: ts.PerNonRelativeNameCache<ts.ResolutionWithFailedLookupLocations> | undefined,
+        actualModuleNameToDirectoryMap: ts.PerNonRelativeNameCache<ts.ResolutionWithFailedLookupLocations> | undefined,
+        caption: string,
+    ) {
+        verifyMap(
+            expectedModuleNameToDirectoryMap?.directoryPathMap,
+            actualModuleNameToDirectoryMap?.directoryPathMap,
+            verfiyResolution,
+            caption,
+        );
+    }
+
+    function verfiyResolution(
+        expectedResolution: ts.ResolutionWithFailedLookupLocations | undefined,
+        actualResolution: ts.ResolutionWithFailedLookupLocations | undefined,
+        caption: string,
+    ) {
+        ts.Debug.assert(
+            expectedResolution ?
+                // Resolution should match
+                expectedToResolution.get(expectedResolution as ExpectedResolution) === actualResolution :
+                // Otherwise in actual cache present because of incremental storage and should be referenced somewhere
+                resolutionToExpected.get(actualResolution!) !== undefined,
+            `${projectName}:: ${caption} Expected resolution need to match in actual`,
+        );
+    }
+
+    function verfiyCacheWithRedirects<K extends string, V>(
+        expectedCacheWithRedirects: ts.CacheWithRedirects<K, V>,
+        actualCacheWithRedirects: ts.CacheWithRedirects<K, V>,
+        verifyValue: (expectedCacheWithRedirectsValue: V | undefined, actualCacheWithRedirectsValue: V | undefined, caption: string) => void,
+        cacheType: string,
+    ) {
+        const expectedOwnOptions = expectedCacheWithRedirects.getOwnOptions();
+        const actualOwnOptions = actualCacheWithRedirects.getOwnOptions();
+        ts.Debug.assert(
+            (expectedOwnOptions && ts.computeRedirectsCacheKey(expectedOwnOptions)) === (actualOwnOptions && ts.computeRedirectsCacheKey(actualOwnOptions)),
+            `${projectName}:: ${cacheType}:: ownOptions affecting cache should match`,
+        );
+        verifyMap(
+            expectedCacheWithRedirects.getOwnMap(),
+            actualCacheWithRedirects.getOwnMap(),
+            verifyValue,
+            `${cacheType}:: ownMap`,
+        );
+        expectedCacheWithRedirects.redirectsKeyToMap.forEach(
+            (expectedCacheWithRedirectsValue, key) =>
+                verifyMap(
+                    expectedCacheWithRedirectsValue,
+                    actualCacheWithRedirects.redirectsKeyToMap.get(key),
+                    verifyValue,
+                    `${cacheType}:: redirectsKeyToMap:: ${key}`,
+                ),
+        );
+        actualCacheWithRedirects.redirectsKeyToMap.forEach(
+            (actualCacheWithRedirectsValue, key) => {
+                const expectedCacheWithRedirectsValue = expectedCacheWithRedirects.redirectsKeyToMap.get(key);
+                if (expectedCacheWithRedirectsValue) {
+                    verifyMap(
+                        expectedCacheWithRedirectsValue,
+                        actualCacheWithRedirectsValue,
+                        verifyValue,
+                        `${cacheType}:: redirectsKeyToMap:: ${key}`,
+                    );
+                }
+                else if (actualCacheWithRedirectsValue.size) {
+                    // When changes affect module resolution, we update the compilerOptions which sets the redirectsKeyToMap with ownMap
+                    // This will not happen for initial program/resolution cache creation so expected may not have the value in redirectsKeyToMap
+                    ts.Debug.assert(
+                        ts.computeRedirectsCacheKey(actualCacheWithRedirects.getOwnOptions()!) === key,
+                        `${cacheType}:: redirectsKeyToMap:: ${key} not present in expectedCacheWithRedirects: should be ownKey`,
+                    );
+
+                    ts.Debug.assert(
+                        actualCacheWithRedirects.getOwnMap() === actualCacheWithRedirectsValue,
+                        `${cacheType}:: redirectsKeyToMap:: ${key} not present in expectedCacheWithRedirects: should be ownMap`,
+                    );
+                }
+            },
+        );
+    }
+
+    function verifyModuleOrTypeResolutionCacheIsEmpty(
+        moduleOrTypeRefCache: ts.ModuleOrTypeReferenceResolutionCache<ts.ResolutionWithFailedLookupLocations>,
+        cacheType: string,
+        compacted: boolean,
+    ) {
+        verifyCacheWithRedirectsIsEmpty(
+            moduleOrTypeRefCache.directoryToModuleNameMap,
+            `${cacheType}:: directoryToModuleNameMap`,
+            compacted,
+        );
+        verifyCacheWithRedirectsIsEmpty(
+            moduleOrTypeRefCache.moduleNameToDirectoryMap,
+            `${cacheType}:: moduleNameToDirectoryMap`,
+            compacted,
+        );
+    }
+
+    function verifyCacheWithRedirectsIsEmpty<K, V>(
+        cacheWithRedirects: ts.CacheWithRedirects<K, V>,
+        cacheType: string,
+        compacted: boolean,
+    ) {
+        ts.Debug.assert(
+            cacheWithRedirects.getOwnMap().size === 0,
+            `${projectName}:: ${cacheType}:: ${compacted}:: ownMap should be empty`,
+        );
+        cacheWithRedirects.redirectsKeyToMap.forEach((actualMap, actualKey) => {
+            ts.Debug.assert(
+                compacted ? actualMap === cacheWithRedirects.getOwnMap() : actualMap.size === 0,
+                `${projectName}:: ${cacheType}:: ${compacted}:: redirectsKeyToMap:: ${actualKey} expected to be empty`,
+            );
+            if (compacted) {
+                ts.Debug.assert(
+                    ts.computeRedirectsCacheKey(cacheWithRedirects.getOwnOptions()!) === actualKey,
+                    `${projectName}:: ${cacheType}:: ${compacted}:: redirectsKeyToMap:: ${actualKey} expected to be same as ownKey`,
+                );
+            }
+        });
+    }
 }
 
 function verifyMap<Key extends string, Expected, Actual>(
-    expected: Map<Key, Expected> | undefined,
-    actual: Map<Key, Actual> | undefined,
-    verifyValue: (expected: Expected | undefined, actual: Actual | undefined, key: string) => void,
+    expectedMap: Map<Key, Expected> | undefined,
+    actualMap: Map<Key, Actual> | undefined,
+    verifyValue: (expectedValue: Expected | undefined, actualValue: Actual | undefined, key: string) => void,
     caption: string,
 ) {
-    expected?.forEach((expected, path) => verifyValue(expected, actual?.get(path), `${caption}:: ${path}`));
-    actual?.forEach((actual, path) => verifyValue(expected?.get(path), actual, `${caption}:: ${path}`));
+    expectedMap?.forEach((expectedValue, path) => verifyValue(expectedValue, actualMap?.get(path), `${caption}:: ${path}`));
+    actualMap?.forEach((actualValue, path) => verifyValue(expectedMap?.get(path), actualValue, `${caption}:: ${path}`));
 }
 
 function verifySet(
-    expected: Set<string> | undefined,
-    actual: Set<string> | undefined,
+    expectedSet: Set<string> | undefined,
+    actualSet: Set<string> | undefined,
     caption: string,
 ) {
-    expected?.forEach(expected =>
+    expectedSet?.forEach(expectedValue =>
         ts.Debug.assert(
-            actual?.has(expected),
-            `${caption}:: ${expected} should be present in actual`,
+            actualSet?.has(expectedValue),
+            `${caption}:: ${expectedValue} should be present in actual`,
         )
     );
-    actual?.forEach(actual =>
+    actualSet?.forEach(actualValue =>
         ts.Debug.assert(
-            expected?.has(actual),
-            `${caption}:: ${actual} should be present in expected`,
+            expectedSet?.has(actualValue),
+            `${caption}:: ${actualValue} should be present in expected`,
         )
     );
 }
 
 function verifyArray(
-    expected: readonly string[] | undefined,
-    actual: readonly string[] | undefined,
+    expectedArray: readonly string[] | undefined,
+    actualArray: readonly string[] | undefined,
     caption: string,
 ) {
-    return verifySet(expected && new Set(expected), actual && new Set(actual), caption);
+    return verifySet(expectedArray && new Set(expectedArray), actualArray && new Set(actualArray), caption);
+}
+
+function verifyModeAwareCache<T>(
+    expectedModeAwareCache: ts.ModeAwareCache<T> | undefined,
+    actualModeAwareCache: ts.ModeAwareCache<T> | undefined,
+    verifyValue: (expectedModeAwareCacheValue: T | undefined, actualModeAwareCacheValue: T | undefined, caption: string) => void,
+    caption: string,
+) {
+    expectedModeAwareCache?.forEach(
+        (expectedModeAwareCacheValue, key, mode) =>
+            verifyValue(
+                expectedModeAwareCacheValue,
+                actualModeAwareCache?.get(key, mode),
+                `${caption}:: ${key}:: ${mode}`,
+            ),
+    );
+    actualModeAwareCache?.forEach(
+        (actualModeAwareCacheValue, key, mode) =>
+            verifyValue(
+                expectedModeAwareCache?.get(key, mode),
+                actualModeAwareCacheValue,
+                `${caption}:: ${key}:: ${mode}`,
+            ),
+    );
 }
 
 function verifyProgram(service: ts.server.ProjectService, project: ts.server.Project) {
