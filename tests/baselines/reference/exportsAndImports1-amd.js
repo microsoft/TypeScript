@@ -37,7 +37,8 @@ export { v, f, C, I, E, D, M, N, T, a };
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
+    exports.a = exports.M = exports.E = exports.C = exports.v = void 0;
+    exports.f = f;
     var v = 1;
     exports.v = v;
     function f() { }

@@ -37,13 +37,13 @@ interface VerifyTscEditDiscrepanciesInput {
 
 function testTscCompile(input: TestTscCompile) {}
 >testTscCompile : (input: TestTscCompile) => void
->               : ^^^^^^^^              ^^^^^^^^^
+>               : ^     ^^              ^^^^^^^^^
 >input : TestTscCompile
 >      : ^^^^^^^^^^^^^^
 
 function verifyTscEditDiscrepancies({
 >verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^^^^^^
+>                           : ^                                  ^^                               ^^^^^^^^^
 
   index,
 >index : number
@@ -72,7 +72,7 @@ function verifyTscEditDiscrepancies({
 >testTscCompile({    subScenario: caption,    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,  }) : void
 >                                                                                                                   : ^^^^
 >testTscCompile : (input: TestTscCompile) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^              ^^^^^^^^^
 >{    subScenario: caption,    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,  } : { subScenario: string; commandLineArgs: readonly string[]; }
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

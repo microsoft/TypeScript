@@ -7,7 +7,7 @@ type Movable = {
 
     move(distance: number): void;
 >move : (distance: number) => void
->     : ^^^^^^^^^^^      ^^^^^    
+>     : ^        ^^      ^^^^^    
 >distance : number
 >         : ^^^^^^
 
@@ -15,11 +15,11 @@ type Movable = {
 
 const car = {
 >car : { start(): void; move(d: number): void; stop(): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    start() { },    move(d) {        // d should be number    },    stop() { }} satisfies Movable & Record<string, unknown> : { start(): void; move(d: number): void; stop(): void; }
->                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start(): void; move(d: number): void; stop(): void; }
->                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     start() { },
 >start : () => void
@@ -27,7 +27,7 @@ const car = {
 
     move(d) {
 >move : (d: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^
 >d : number
 >  : ^^^^^^
 

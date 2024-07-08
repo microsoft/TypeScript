@@ -4,7 +4,7 @@
 interface I {
 	f: (a: { a: number }) => void
 >f : (a: { a: number; }) => void
->  : ^^^^              ^^^^^    
+>  : ^ ^^              ^^^^^    
 >a : { a: number; }
 >  : ^^^^^      ^^^
 >a : number
@@ -18,7 +18,7 @@ class X<T extends { a: string }> implements I {
 
 	f(a: T): void { }
 >f : (a: T) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >a : T
 >  : ^
 }
@@ -36,5 +36,5 @@ var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 >i : I
 >  : ^
 >x : X<{ a: string; }>
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^
 

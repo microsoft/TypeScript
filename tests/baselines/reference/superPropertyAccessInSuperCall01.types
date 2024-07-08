@@ -31,10 +31,10 @@ class B extends A {
 >super.blah() : string
 >             : ^^^^^^
 >super.blah : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >super : A
 >      : ^
 >blah : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 	}
 }

@@ -12,7 +12,7 @@ export const a = (await import("inner")).x();
 >(await import("inner")).x() : import("node_modules/inner/other").Thing
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")).x : () => import("node_modules/inner/other").Thing
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 >(await import("inner")) : typeof import("node_modules/inner/index")
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await import("inner") : typeof import("node_modules/inner/index")
@@ -22,13 +22,13 @@ export const a = (await import("inner")).x();
 >"inner" : "inner"
 >        : ^^^^^^^
 >x : () => import("node_modules/inner/other").Thing
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
 === node_modules/inner/index.d.ts ===
 // esm format file
 export { x } from "./other.js";
 >x : () => import("node_modules/inner/other").Thing
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
 === node_modules/inner/other.d.ts ===
 // esm format file

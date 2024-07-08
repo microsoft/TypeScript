@@ -7,7 +7,7 @@ class C {
 
     foo(public x) {
 >foo : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
     }

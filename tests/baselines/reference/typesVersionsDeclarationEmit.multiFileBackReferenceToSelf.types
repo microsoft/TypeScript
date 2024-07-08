@@ -7,7 +7,7 @@ import { fa } from "ext";
 
 import { fb } from "ext/other";
 >fb : () => import("node_modules/ext/other").B
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 export const va = fa();
 >va : any
@@ -23,7 +23,7 @@ export const vb = fb();
 >fb() : import("node_modules/ext/other").B
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fb : () => import("node_modules/ext/other").B
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
 
 === node_modules/ext/other.d.ts ===
 export interface B {}

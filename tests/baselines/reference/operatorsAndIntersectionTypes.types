@@ -13,7 +13,7 @@ type SerialNo = number & { $SerialNo };  // Tagged number type
 
 function createGuid() {
 >createGuid : () => Guid
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 
     return "21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid;
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid : Guid
@@ -24,7 +24,7 @@ function createGuid() {
 
 function createSerialNo() {
 >createSerialNo : () => SerialNo
->               : ^^^^^^^^^^^^^^
+>               : ^^^^^^        
 
     return 12345 as SerialNo;
 >12345 as SerialNo : SerialNo
@@ -47,7 +47,7 @@ let guid = createGuid();
 >createGuid() : Guid
 >             : ^^^^
 >createGuid : () => Guid
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 
 map1[guid] = 123;  // Can with tagged string
 >map1[guid] = 123 : 123
@@ -75,7 +75,7 @@ let serialNo = createSerialNo();
 >createSerialNo() : SerialNo
 >                 : ^^^^^^^^
 >createSerialNo : () => SerialNo
->               : ^^^^^^^^^^^^^^
+>               : ^^^^^^        
 
 map2[serialNo] = "hello";  // Can index with tagged number
 >map2[serialNo] = "hello" : "hello"
@@ -109,11 +109,11 @@ const s2 = guid.toLowerCase();
 >guid.toLowerCase() : string
 >                   : ^^^^^^
 >guid.toLowerCase : () => string
->                 : ^^^^^^^^^^^^
+>                 : ^^^^^^      
 >guid : Guid
 >     : ^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 const s3 = guid + guid;
 >s3 : string
@@ -141,11 +141,11 @@ const s5 = serialNo.toPrecision(0);
 >serialNo.toPrecision(0) : string
 >                        : ^^^^^^
 >serialNo.toPrecision : (precision?: number) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^^      ^^^^^      
 >serialNo : SerialNo
 >         : ^^^^^^^^
 >toPrecision : (precision?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

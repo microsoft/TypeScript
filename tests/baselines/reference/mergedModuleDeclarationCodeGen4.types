@@ -36,7 +36,7 @@ module superContain {
 
                 export function bar(contain, my, buz, data) {
 >bar : (contain: any, my: any, buz: any, data: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^  ^^^^^^^   ^^^^^^^    ^^^^^^^^^^^^^^
 >contain : any
 >my : any
 >buz : any

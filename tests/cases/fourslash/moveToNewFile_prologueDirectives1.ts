@@ -11,11 +11,14 @@ verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
 `"use strict";
+
+import { b } from "./b";
+
 b();`,
 
         "/b.ts":
 `"use strict";
-function b() {
+export function b() {
     return this;
 }
 `,

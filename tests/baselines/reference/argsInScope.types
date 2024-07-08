@@ -7,7 +7,7 @@ class C {
 
     P(ii:number, j:number, k:number) {
 >P : (ii: number, j: number, k: number) => void
->  : ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^
+>  : ^  ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
 >ii : number
 >   : ^^^^^^
 >j : number
@@ -52,11 +52,11 @@ c.P(1,2,3);
 >c.P(1,2,3) : void
 >           : ^^^^
 >c.P : (ii: number, j: number, k: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
 >c : C
 >  : ^
 >P : (ii: number, j: number, k: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^  ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

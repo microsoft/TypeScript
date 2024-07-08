@@ -30,7 +30,7 @@ class B extends A {
 	 */
 	m(foo = {}) {
 >m : (foo?: object) => void
->  : ^^^^^^^      ^^^^^^^^^
+>  : ^   ^^^      ^^^^^^^^^
 >foo : any
 >{} : {}
 >   : ^^

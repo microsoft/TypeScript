@@ -24,7 +24,7 @@ export module Foo {
 >Bar() : C
 >      : ^
 >Bar : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 		return new C();
 >new C() : C
@@ -43,13 +43,13 @@ export module Foo {
 >Baz() : C
 >      : ^
 >Baz : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 		return Bar();
 >Bar() : C
 >      : ^
 >Bar : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 	}
 
 	function Gar() {
@@ -62,7 +62,7 @@ export module Foo {
 >Baz() : C
 >      : ^
 >Baz : () => C
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 		return;
 	}

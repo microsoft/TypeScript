@@ -3,7 +3,7 @@
 === inferenceFromParameterlessLambda.ts ===
 function foo<T>(o: Take<T>, i: Make<T>) { }
 >foo : <T>(o: Take<T>, i: Make<T>) => void
->    : ^ ^^^^^       ^^^^^       ^^^^^^^^^
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^^^^^
 >o : Take<T>
 >  : ^^^^^^^
 >i : Make<T>
@@ -22,9 +22,9 @@ foo(n => n.length, () => 'hi');
 >foo(n => n.length, () => 'hi') : void
 >                               : ^^^^
 >foo : <T>(o: Take<T>, i: Make<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^^^^^
 >n => n.length : (n: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.length : number

@@ -89,7 +89,7 @@ var r1a5 = a ** e;
 >a : any
 >  : ^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1a6 = a ** f;
 >r1a6 : number
@@ -149,7 +149,7 @@ var r1b5 = b ** e;
 >b : boolean
 >  : ^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1b6 = b ** f;
 >r1b6 : number
@@ -209,7 +209,7 @@ var r1c5 = c ** e;
 >c : number
 >  : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1c6 = c ** f;
 >r1c6 : number
@@ -269,7 +269,7 @@ var r1d5 = d ** e;
 >d : string
 >  : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1d6 = d ** f;
 >r1d6 : number
@@ -287,7 +287,7 @@ var r1e1 = e ** a;
 >e ** a : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >a : any
 >  : ^^^
 
@@ -297,7 +297,7 @@ var r1e2 = e ** b;
 >e ** b : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -307,7 +307,7 @@ var r1e3 = e ** c;
 >e ** c : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >c : number
 >  : ^^^^^^
 
@@ -317,7 +317,7 @@ var r1e4 = e ** d;
 >e ** d : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >d : string
 >  : ^^^^^^
 
@@ -327,9 +327,9 @@ var r1e5 = e ** e;
 >e ** e : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1e6 = e ** f;
 >r1e6 : number
@@ -337,7 +337,7 @@ var r1e6 = e ** f;
 >e ** f : number
 >       : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >f : Number
 >  : ^^^^^^
 
@@ -389,7 +389,7 @@ var r1f5 = f ** e;
 >f : Number
 >  : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1f6 = f ** f;
 >r1f6 : number
@@ -469,7 +469,7 @@ var r1g5 = E.a ** e;
 >a : E.a
 >  : ^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 var r1g6 = E.a ** f;
 >r1g6 : number
@@ -547,7 +547,7 @@ var r1h5 = e ** E.b;
 >e ** E.b : number
 >         : ^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >E.b : E.b
 >    : ^^^
 >E : typeof E

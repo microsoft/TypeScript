@@ -747,3 +747,33 @@ function inferWithRest(x: string | null, ...f: ["a", "b"]) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 265, 23))
 }
 
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+>foobar : Symbol(foobar, Decl(inferTypePredicates.ts, 270, 13))
+
+  | { type: "foo"; foo: number }
+>type : Symbol(type, Decl(inferTypePredicates.ts, 271, 5))
+>foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
+
+  | { type: "bar"; bar: string };
+>type : Symbol(type, Decl(inferTypePredicates.ts, 272, 5))
+>bar : Symbol(bar, Decl(inferTypePredicates.ts, 272, 18))
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+>foobarPred : Symbol(foobarPred, Decl(inferTypePredicates.ts, 274, 5))
+>fb : Symbol(fb, Decl(inferTypePredicates.ts, 274, 20))
+>foobar : Symbol(foobar, Decl(inferTypePredicates.ts, 270, 13))
+>fb.type : Symbol(type, Decl(inferTypePredicates.ts, 271, 5), Decl(inferTypePredicates.ts, 272, 5))
+>fb : Symbol(fb, Decl(inferTypePredicates.ts, 274, 20))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 271, 5), Decl(inferTypePredicates.ts, 272, 5))
+
+if (foobarPred(foobar)) {
+>foobarPred : Symbol(foobarPred, Decl(inferTypePredicates.ts, 274, 5))
+>foobar : Symbol(foobar, Decl(inferTypePredicates.ts, 270, 13))
+
+  foobar.foo;
+>foobar.foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
+>foobar : Symbol(foobar, Decl(inferTypePredicates.ts, 270, 13))
+>foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
+}
+

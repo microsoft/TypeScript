@@ -3,6 +3,6 @@
 === asyncFunctionDeclaration2_es5.ts ===
 function f(await) {
 >f : (await: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^
 >await : any
 }

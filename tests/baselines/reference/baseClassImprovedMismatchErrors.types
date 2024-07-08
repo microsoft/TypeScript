@@ -29,8 +29,8 @@ class Derived extends Base {
 >  : ^^^^^^^^^^^^^^^^
 
     fn() {
->fn : () => string | number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>fn : () => number | string
+>   : ^^^^^^               
 
         return 10 as number | string;
 >10 as number | string : string | number
@@ -48,8 +48,8 @@ class DerivedInterface implements Base {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fn() {
->fn : () => string | number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>fn : () => number | string
+>   : ^^^^^^               
 
         return 10 as number | string;
 >10 as number | string : string | number

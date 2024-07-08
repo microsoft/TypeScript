@@ -3,7 +3,7 @@
 === recursiveGenericSignatureInstantiation.ts ===
 function f6<T>(x: T) {
 >f6 : <T>(x: T) => never
->   : ^ ^^^^^ ^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -11,7 +11,7 @@ function f6<T>(x: T) {
 >f6(x) : never
 >      : ^^^^^
 >f6 : <T>(x: T) => never
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 }
