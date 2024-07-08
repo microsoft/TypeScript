@@ -71,6 +71,7 @@ function pasteEdits(
         newText = actualPastedText ? newText.slice(0, pos) + actualPastedText[0] + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
     }
 
+    let returnImportEdits = true;
     Debug.checkDefined(host.runWithTemporaryFileUpdate).call(host, targetFile.fileName, newText, (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => {
         const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom?.range) {
@@ -114,7 +115,15 @@ function pasteEdits(
             });
         }
         importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
+        returnImportEdits = importAdder.hasFixes();
     });
+
+    /**
+     * If there are no import fixes, getPasteEdits should return without making any changes to the file.
+     */
+    if (!returnImportEdits) {
+        return;
+    }
     pasteLocations.forEach((paste, i) => {
         changes.replaceRangeWithText(
             targetFile,
