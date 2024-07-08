@@ -26,19 +26,17 @@ export function getNodeChildren(node: Node, sourceFile: SourceFileLike): readonl
 /** @internal */
 export function setNodeChildren(node: Node, sourceFile: SourceFileLike, children: readonly Node[]): readonly Node[] {
     if (node.kind === SyntaxKind.SyntaxList) {
-        // Store the children directly on the syntax list node.
-        // This makes orphaned syntax lists easier to clean up,
-        // and avoids the need to track all of them in a WeakMap.
-        (node as SyntaxList)._children = children;
+        // SyntaxList children are always eagerly created in the process of
+        // creating their parent's `children` list. We shouldn't need to set them here.
+        Debug.fail("Should not need to re-set the children of a SyntaxList.");
     }
-    else {
-        let map = sourceFileToNodeChildren.get(sourceFile);
-        if (map === undefined) {
-            map = new WeakMap();
-            sourceFileToNodeChildren.set(sourceFile, map);
-        }
-        map.set(node, children);
+
+    let map = sourceFileToNodeChildren.get(sourceFile);
+    if (map === undefined) {
+        map = new WeakMap();
+        sourceFileToNodeChildren.set(sourceFile, map);
     }
+    map.set(node, children);
     return children;
 }
 
