@@ -1187,7 +1187,7 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
 
     if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
         // JsxText cannot actually contain comments, even though the scanner will think it sees comments
-        return skipTrivia((sourceFile ??= getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
     if (includeJsDoc && hasJSDocNodes(node)) {
@@ -1207,7 +1207,7 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     }
 
     return skipTrivia(
-        (sourceFile ??= getSourceFileOfNode(node)).text,
+        (sourceFile ?? getSourceFileOfNode(node)).text,
         node.pos,
         /*stopAfterLineBreak*/ false,
         /*stopAtComments*/ false,
