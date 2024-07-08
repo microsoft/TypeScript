@@ -1,12 +1,11 @@
 ===================================================================
 --- default
 +++ ParseForTypeInfo
-@@ -88,52 +88,9 @@
-                 "pos": 69,
-                 "end": 69,
-                 "hasTrailingComma": false,
-                 "transformFlags": 0
--            },
+@@ -62,51 +62,8 @@
+             "pos": 30,
+             "end": 70,
+             "modifierFlagsCache": 0,
+             "transformFlags": 1,
 -            "jsDoc": [
 -                {
 -                    "kind": "JSDoc",
@@ -49,12 +48,11 @@
 -                        "transformFlags": 0
 -                    }
 -                }
--            ]
-+            }
-         },
-         "length": 2,
-         "pos": 0,
-         "end": 70,
+-            ],
+             "modifiers": {
+                 "0": {
+                     "kind": "ExportKeyword",
+                     "pos": 30,
 @@ -214,6 +171,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],

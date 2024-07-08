@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -8,9 +8,8 @@
+@@ -8,44 +8,10 @@
          "0": {
              "kind": "FunctionDeclaration",
              "pos": 0,
@@ -9,14 +9,6 @@
 -            "flags": "Deprecated",
              "modifierFlagsCache": 0,
              "transformFlags": 4194304,
-             "name": {
-                 "kind": "Identifier",
-@@ -39,42 +38,9 @@
-                     "hasTrailingComma": false,
-                     "transformFlags": 0
-                 },
-                 "multiLine": false
--            },
 -            "jsDoc": [
 -                {
 -                    "kind": "JSDoc",
@@ -49,13 +41,12 @@
 -                        "transformFlags": 0
 -                    }
 -                }
--            ]
-+            }
-         },
-         "1": {
-             "kind": "ExpressionStatement",
-             "pos": 46,
-@@ -106,9 +72,8 @@
+-            ],
+             "name": {
+                 "kind": "Identifier",
+                 "pos": 28,
+                 "end": 41,
+@@ -106,45 +72,10 @@
          "2": {
              "kind": "FunctionDeclaration",
              "pos": 61,
@@ -63,14 +54,6 @@
 -            "flags": "Deprecated",
              "modifierFlagsCache": 0,
              "transformFlags": 4194304,
-             "name": {
-                 "kind": "Identifier",
-@@ -137,43 +102,9 @@
-                     "hasTrailingComma": false,
-                     "transformFlags": 0
-                 },
-                 "multiLine": false
--            },
 -            "jsDoc": [
 -                {
 -                    "kind": "JSDoc",
@@ -104,12 +87,11 @@
 -                        "transformFlags": 0
 -                    }
 -                }
--            ]
-+            }
-         },
-         "3": {
-             "kind": "ExpressionStatement",
-             "pos": 135,
+-            ],
+             "name": {
+                 "kind": "Identifier",
+                 "pos": 116,
+                 "end": 130,
 @@ -230,6 +161,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],

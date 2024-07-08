@@ -15,7 +15,6 @@ import {
     canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
-    CheckJsDirective,
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
@@ -61,17 +60,14 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
-    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
     EndOfFileToken,
-    EntityName,
     equateValues,
     ExportDeclaration,
     Extension,
     extensionFromPath,
-    FileReference,
     FileTextChanges,
     filter,
     find,
@@ -197,7 +193,6 @@ import {
     isTextWhiteSpaceLike,
     isThisTypeParameter,
     isTransientSymbol,
-    JSDoc,
     JsDoc,
     JSDocContainer,
     JSDocParsingMode,
@@ -211,7 +206,6 @@ import {
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
-    LanguageVariant,
     lastOrUndefined,
     length,
     LineAndCharacter,
@@ -233,6 +227,7 @@ import {
     Node,
     NodeArray,
     NodeFlags,
+    NodeImpl,
     noop,
     normalizePath,
     normalizeSpans,
@@ -257,8 +252,6 @@ import {
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
-    PragmaMap,
-    PrivateIdentifier,
     Program,
     PropertyName,
     PropertySignature,
@@ -301,8 +294,6 @@ import {
     SourceFileLike,
     SourceMapSource,
     startsWith,
-    Statement,
-    StringLiteral,
     StringLiteralLike,
     StringLiteralType,
     Symbol,
@@ -328,14 +319,11 @@ import {
     timestamp,
     TodoComment,
     TodoCommentDescriptor,
-    Token,
     toPath,
     tracing,
-    TransformFlags,
     Type,
     TypeChecker,
     TypeFlags,
-    TypeNode,
     TypeParameter,
     TypePredicate,
     TypeReference,
@@ -359,44 +347,40 @@ import * as classifier2020 from "./classifier2020.js";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject<TKind> | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
-    const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
-        kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-        kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-        new TokenObject(kind, pos, end);
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): Node {
+    const node = new NodeObject<TKind>(kind, pos, end);
     node.parent = parent;
     node.flags = parent.flags & NodeFlags.ContextFlags;
     return node;
 }
 
-class NodeObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
-    public jsDoc?: JSDoc[];
-    public original?: Node;
-    public id?: number;
-    public emitNode?: EmitNode;
+class NodeObject<TKind extends SyntaxKind> extends NodeImpl implements Node {
+    override kind!: TKind;
+
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
 
     constructor(kind: TKind, pos: number, end: number) {
-        // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
+        super(kind, pos, end);
     }
 
+    override get text(): string {
+        if (this.kind === SyntaxKind.Identifier || this.kind === SyntaxKind.PrivateIdentifier) {
+            return idText(this as any as Identifier);
+        }
+        return super.text;
+    }
+    override set text(value) {
+        super.text = value;
+    }
     private assertHasRealPosition(message?: string) {
         // eslint-disable-next-line local/debug-assert
         Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
@@ -458,37 +442,273 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     }
 
     public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
-        this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+            return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        }
+        else {
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        }
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
-        if (!children.length) {
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
+            if (!children.length) {
+                return undefined;
+            }
+
+            const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
+            return child.kind < SyntaxKind.FirstNode ?
+                child :
+                child.getFirstToken(sourceFile);
+        }
+        else {
             return undefined;
         }
-
-        const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
-        return child.kind < SyntaxKind.FirstNode ?
-            child :
-            child.getFirstToken(sourceFile);
     }
 
     public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
+        if (isNodeKind(this.kind)) {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
 
-        const child = lastOrUndefined(children);
-        if (!child) {
+            const child = lastOrUndefined(children);
+            if (!child) {
+                return undefined;
+            }
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+        }
+        else {
             return undefined;
         }
-
-        return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
     }
 
     public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
+        if (isNodeKind(this.kind)) {
+            return forEachChild(this, cbNode, cbNodeArray);
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    private get namedDeclarations(): Map<string, Declaration[]> | undefined {
+        return this.data.namedDeclarations;
+    }
+    private set namedDeclarations(value: Map<string, Declaration[]> | undefined) {
+        this.data.namedDeclarations = value;
+    }
+
+    public get scriptSnapshot(): IScriptSnapshot {
+        return this.data.scriptSnapshot;
+    }
+    public set scriptSnapshot(value: IScriptSnapshot) {
+        this.data.scriptSnapshot = value;
+    }
+
+    public get nameTable(): Map<__String, number> | undefined {
+        return this.data.nameTable;
+    }
+    public set nameTable(value: Map<__String, number> | undefined) {
+        this.data.nameTable = value;
+    }
+
+    public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        return updateSourceFile(this as SourceFile, newText, textChangeRange);
+    }
+
+    public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        return getLineAndCharacterOfPosition(this, position);
+    }
+
+    public getLineStarts(): readonly number[] {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        return getLineStarts(this);
+    }
+
+    public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
+    }
+
+    public getLineEndOfPosition(pos: number): number {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        const { line } = this.getLineAndCharacterOfPosition(pos);
+        const lineStarts = this.getLineStarts();
+
+        let lastCharPos: number | undefined;
+        if (line + 1 >= lineStarts.length) {
+            lastCharPos = this.getEnd();
+        }
+        if (!lastCharPos) {
+            lastCharPos = lineStarts[line + 1] - 1;
+        }
+
+        const fullText = this.getFullText();
+        // if the new line is "\r\n", we should return the last non-new-line-character position
+        return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
+    }
+
+    public getNamedDeclarations(): Map<string, Declaration[]> {
+        Debug.assertEqual(this.kind, SyntaxKind.SourceFile);
+        if (!this.namedDeclarations) {
+            this.namedDeclarations = this.computeNamedDeclarations();
+        }
+
+        return this.namedDeclarations;
+    }
+
+    private computeNamedDeclarations(): Map<string, Declaration[]> {
+        const result = createMultiMap<string, Declaration>();
+
+        this.forEachChild(visit);
+
+        return result;
+
+        function addDeclaration(declaration: Declaration) {
+            const name = getDeclarationName(declaration);
+            if (name) {
+                result.add(name, declaration);
+            }
+        }
+
+        function getDeclarations(name: string) {
+            let declarations = result.get(name);
+            if (!declarations) {
+                result.set(name, declarations = []);
+            }
+            return declarations;
+        }
+
+        function getDeclarationName(declaration: Declaration) {
+            const name = getNonAssignedNameOfDeclaration(declaration);
+            return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
+                : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
+        }
+
+        function visit(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    const functionDeclaration = node as FunctionLikeDeclaration;
+                    const declarationName = getDeclarationName(functionDeclaration);
+
+                    if (declarationName) {
+                        const declarations = getDeclarations(declarationName);
+                        const lastDeclaration = lastOrUndefined(declarations);
+
+                        // Check whether this declaration belongs to an "overload group".
+                        if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
+                            // Overwrite the last declaration if it was an overload
+                            // and this one is an implementation.
+                            if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
+                                declarations[declarations.length - 1] = functionDeclaration;
+                            }
+                        }
+                        else {
+                            declarations.push(functionDeclaration);
+                        }
+                    }
+                    forEachChild(node, visit);
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.TypeLiteral:
+                    addDeclaration(node as Declaration);
+                    forEachChild(node, visit);
+                    break;
+
+                case SyntaxKind.Parameter:
+                    // Only consider parameter properties
+                    if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                        break;
+                    }
+                // falls through
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.BindingElement: {
+                    const decl = node as VariableDeclaration;
+                    if (isBindingPattern(decl.name)) {
+                        forEachChild(decl.name, visit);
+                        break;
+                    }
+                    if (decl.initializer) {
+                        visit(decl.initializer);
+                    }
+                }
+                // falls through
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    addDeclaration(node as Declaration);
+                    break;
+
+                case SyntaxKind.ExportDeclaration:
+                    // Handle named exports case e.g.:
+                    //    export {a, b as B} from "mod";
+                    const exportDeclaration = node as ExportDeclaration;
+                    if (exportDeclaration.exportClause) {
+                        if (isNamedExports(exportDeclaration.exportClause)) {
+                            forEach(exportDeclaration.exportClause.elements, visit);
+                        }
+                        else {
+                            visit(exportDeclaration.exportClause.name);
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ImportDeclaration:
+                    const importClause = (node as ImportDeclaration).importClause;
+                    if (importClause) {
+                        // Handle default import case e.g.:
+                        //    import d from "mod";
+                        if (importClause.name) {
+                            addDeclaration(importClause.name);
+                        }
+
+                        // Handle named bindings in imports e.g.:
+                        //    import * as NS from "mod";
+                        //    import {a, b as B} from "mod";
+                        if (importClause.namedBindings) {
+                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                addDeclaration(importClause.namedBindings);
+                            }
+                            else {
+                                forEach(importClause.namedBindings.elements, visit);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.BinaryExpression:
+                    if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
+                        addDeclaration(node as BinaryExpression);
+                    }
+                // falls through
+
+                default:
+                    forEachChild(node, visit);
+            }
+        }
     }
 }
 
@@ -560,95 +780,6 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     addSyntheticNodes(children, pos, nodes.end, parent);
     setNodeChildren(list, children);
     return list;
-}
-
-class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache!: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol;
-    public jsDocComments?: JSDoc[];
-    public id?: number;
-    public emitNode?: EmitNode | undefined;
-
-    constructor(kind: TKind, pos: number, end: number) {
-        // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.emitNode = undefined;
-    }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(): number {
-        return this.getChildren().length;
-    }
-
-    public getChildAt(index: number): Node {
-        return this.getChildren()[index];
-    }
-
-    public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
-    }
-
-    public getFirstToken(): Node | undefined {
-        return undefined;
-    }
-
-    public getLastToken(): Node | undefined {
-        return undefined;
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
 }
 
 class SymbolObject implements Symbol {
@@ -782,50 +913,6 @@ class SymbolObject implements Symbol {
             }
         }
         return this.getJsDocTags(checker);
-    }
-}
-
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKind> implements Token<TKind> {
-    constructor(kind: TKind, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-}
-
-class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
-    public escapedText!: __String;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare _declarationBrand: any;
-    declare _jsdocContainerBrand: any;
-    declare _flowContainerBrand: any;
-    typeArguments!: NodeArray<TypeNode>;
-    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
-
-class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.PrivateIdentifier> implements PrivateIdentifier {
-    public escapedText!: __String;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
     }
 }
 
@@ -1051,250 +1138,6 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
     });
 }
 
-class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
-    declare _declarationBrand: any;
-    declare _localsContainerBrand: any;
-    public fileName!: string;
-    public path!: Path;
-    public resolvedPath!: Path;
-    public originalFileName!: string;
-    public text!: string;
-    public scriptSnapshot!: IScriptSnapshot;
-    public lineMap!: readonly number[];
-
-    public statements!: NodeArray<Statement>;
-    public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
-
-    public amdDependencies!: { name: string; path: string; }[];
-    public moduleName!: string;
-    public referencedFiles!: FileReference[];
-    public typeReferenceDirectives!: FileReference[];
-    public libReferenceDirectives!: FileReference[];
-
-    public syntacticDiagnostics!: DiagnosticWithLocation[];
-    public parseDiagnostics!: DiagnosticWithLocation[];
-    public bindDiagnostics!: DiagnosticWithLocation[];
-    public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
-
-    public isDeclarationFile!: boolean;
-    public isDefaultLib!: boolean;
-    public hasNoDefaultLib!: boolean;
-    public externalModuleIndicator!: Node; // The first node that causes this file to be an external module
-    public commonJsModuleIndicator!: Node; // The first node that causes this file to be a CommonJS module
-    public nodeCount!: number;
-    public identifierCount!: number;
-    public symbolCount!: number;
-    public version!: string;
-    public scriptKind!: ScriptKind;
-    public languageVersion!: ScriptTarget;
-    public languageVariant!: LanguageVariant;
-    public identifiers!: Map<string, string>;
-    public nameTable: Map<__String, number> | undefined;
-    public imports!: readonly StringLiteralLike[];
-    public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: Map<string, Declaration[]> | undefined;
-    public ambientModuleNames!: string[];
-    public checkJsDirective: CheckJsDirective | undefined;
-    public errorExpectations: TextRange[] | undefined;
-    public possiblyContainDynamicImport?: boolean;
-    public pragmas!: PragmaMap;
-    public localJsxFactory: EntityName | undefined;
-    public localJsxNamespace: __String | undefined;
-
-    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
-        return updateSourceFile(this, newText, textChangeRange);
-    }
-
-    public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
-        return getLineAndCharacterOfPosition(this, position);
-    }
-
-    public getLineStarts(): readonly number[] {
-        return getLineStarts(this);
-    }
-
-    public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
-        return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
-    }
-
-    public getLineEndOfPosition(pos: number): number {
-        const { line } = this.getLineAndCharacterOfPosition(pos);
-        const lineStarts = this.getLineStarts();
-
-        let lastCharPos: number | undefined;
-        if (line + 1 >= lineStarts.length) {
-            lastCharPos = this.getEnd();
-        }
-        if (!lastCharPos) {
-            lastCharPos = lineStarts[line + 1] - 1;
-        }
-
-        const fullText = this.getFullText();
-        // if the new line is "\r\n", we should return the last non-new-line-character position
-        return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
-    }
-
-    public getNamedDeclarations(): Map<string, Declaration[]> {
-        if (!this.namedDeclarations) {
-            this.namedDeclarations = this.computeNamedDeclarations();
-        }
-
-        return this.namedDeclarations;
-    }
-
-    private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<string, Declaration>();
-
-        this.forEachChild(visit);
-
-        return result;
-
-        function addDeclaration(declaration: Declaration) {
-            const name = getDeclarationName(declaration);
-            if (name) {
-                result.add(name, declaration);
-            }
-        }
-
-        function getDeclarations(name: string) {
-            let declarations = result.get(name);
-            if (!declarations) {
-                result.set(name, declarations = []);
-            }
-            return declarations;
-        }
-
-        function getDeclarationName(declaration: Declaration) {
-            const name = getNonAssignedNameOfDeclaration(declaration);
-            return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
-                : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
-        }
-
-        function visit(node: Node): void {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    const functionDeclaration = node as FunctionLikeDeclaration;
-                    const declarationName = getDeclarationName(functionDeclaration);
-
-                    if (declarationName) {
-                        const declarations = getDeclarations(declarationName);
-                        const lastDeclaration = lastOrUndefined(declarations);
-
-                        // Check whether this declaration belongs to an "overload group".
-                        if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
-                            // Overwrite the last declaration if it was an overload
-                            // and this one is an implementation.
-                            if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
-                                declarations[declarations.length - 1] = functionDeclaration;
-                            }
-                        }
-                        else {
-                            declarations.push(functionDeclaration);
-                        }
-                    }
-                    forEachChild(node, visit);
-                    break;
-
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.ExportSpecifier:
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.ImportClause:
-                case SyntaxKind.NamespaceImport:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.TypeLiteral:
-                    addDeclaration(node as Declaration);
-                    forEachChild(node, visit);
-                    break;
-
-                case SyntaxKind.Parameter:
-                    // Only consider parameter properties
-                    if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
-                        break;
-                    }
-                // falls through
-
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.BindingElement: {
-                    const decl = node as VariableDeclaration;
-                    if (isBindingPattern(decl.name)) {
-                        forEachChild(decl.name, visit);
-                        break;
-                    }
-                    if (decl.initializer) {
-                        visit(decl.initializer);
-                    }
-                }
-                // falls through
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                    addDeclaration(node as Declaration);
-                    break;
-
-                case SyntaxKind.ExportDeclaration:
-                    // Handle named exports case e.g.:
-                    //    export {a, b as B} from "mod";
-                    const exportDeclaration = node as ExportDeclaration;
-                    if (exportDeclaration.exportClause) {
-                        if (isNamedExports(exportDeclaration.exportClause)) {
-                            forEach(exportDeclaration.exportClause.elements, visit);
-                        }
-                        else {
-                            visit(exportDeclaration.exportClause.name);
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ImportDeclaration:
-                    const importClause = (node as ImportDeclaration).importClause;
-                    if (importClause) {
-                        // Handle default import case e.g.:
-                        //    import d from "mod";
-                        if (importClause.name) {
-                            addDeclaration(importClause.name);
-                        }
-
-                        // Handle named bindings in imports e.g.:
-                        //    import * as NS from "mod";
-                        //    import {a, b as B} from "mod";
-                        if (importClause.namedBindings) {
-                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                addDeclaration(importClause.namedBindings);
-                            }
-                            else {
-                                forEach(importClause.namedBindings.elements, visit);
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.BinaryExpression:
-                    if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
-                        addDeclaration(node as BinaryExpression);
-                    }
-                // falls through
-
-                default:
-                    forEachChild(node, visit);
-            }
-        }
-    }
-}
-
 class SourceMapSourceObject implements SourceMapSource {
     fileName: string;
     text: string;
@@ -1316,11 +1159,11 @@ class SourceMapSourceObject implements SourceMapSource {
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
         getNodeConstructor: () => NodeObject,
-        getTokenConstructor: () => TokenObject,
+        getTokenConstructor: () => NodeObject,
 
-        getIdentifierConstructor: () => IdentifierObject,
-        getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
-        getSourceFileConstructor: () => SourceFileObject,
+        getIdentifierConstructor: () => NodeObject,
+        getPrivateIdentifierConstructor: () => NodeObject,
+        getSourceFileConstructor: () => NodeObject,
         getSymbolConstructor: () => SymbolObject,
         getTypeConstructor: () => TypeObject,
         getSignatureConstructor: () => SignatureObject,
