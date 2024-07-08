@@ -629,25 +629,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' f
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Entering conditional exports.
-Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
-Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './import.js'.
-Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/node_modules/pkg0/import.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/import.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/import.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/import.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/import.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
@@ -831,23 +813,8 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' f
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
-Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Looking up in 'node_modules' folder, initial location '/home/src/workspaces/project'.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Entering conditional exports.
-Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
-Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './import.js'.
-Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/node_modules/pkg2/import.js' has a '.js' extension - stripping it.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
-Info seq  [hh:mm:ss:mss] Exiting conditional exports.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg2/import.d.ts', result '/home/src/workspaces/project/node_modules/pkg2/import.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts'. ========
+Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'pkg2' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'pkg2' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.

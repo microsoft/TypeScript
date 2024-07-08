@@ -542,7 +542,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         host.resolveLibrary.bind(host);
     compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
-        (() => resolutionCache.getModuleResolutionCache());
+        (() => resolutionCache.moduleResolutionCache);
     const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
         !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions

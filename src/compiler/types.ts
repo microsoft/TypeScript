@@ -4915,6 +4915,7 @@ export interface Program extends ScriptReferenceHost {
     getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectReferenceForResolution(file: SourceFile): ResolvedProjectReference | undefined;
     /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getCompilerOptionsForFile(file: SourceFile): CompilerOptions;
@@ -8049,6 +8050,12 @@ export const enum Extension {
     Dcts = ".d.cts",
 }
 
+/** @internal */
+export interface GlobalCacheResolutionResult {
+    resolution: ResolvedModuleWithFailedLookupLocations;
+    primary: ResolvedModuleWithFailedLookupLocations["resolvedModule"];
+}
+
 export interface ResolvedModuleWithFailedLookupLocations {
     readonly resolvedModule: ResolvedModuleFull | undefined;
     /** @internal */
@@ -8064,7 +8071,7 @@ export interface ResolvedModuleWithFailedLookupLocations {
      */
     alternateResult?: string;
     /** @internal */
-    globalCacheResolution?: ResolvedModuleWithFailedLookupLocations | false;
+    globalCacheResolution?: GlobalCacheResolutionResult | false;
 }
 
 export interface ResolvedTypeReferenceDirective {
