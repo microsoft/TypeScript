@@ -453,19 +453,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "semanticDiagnosticsPerFile": [
     [
       "../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1360,23 +1360,23 @@ File '/package.json' does not exist according to earlier cached lookups.
   "semanticDiagnosticsPerFile": [
     [
       "../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1654,27 +1654,27 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
   "semanticDiagnosticsPerFile": [
     [
       "../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1992,23 +1992,23 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
   "semanticDiagnosticsPerFile": [
     [
       "../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo2/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -2289,19 +2289,19 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
   "semanticDiagnosticsPerFile": [
     [
       "../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/foo/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./node_modules/@types/bar/index.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.mts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",

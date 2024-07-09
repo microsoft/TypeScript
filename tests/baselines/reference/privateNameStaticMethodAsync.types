@@ -55,7 +55,7 @@ const C = class {
 >this.#baz().next() : IteratorResult<number, void>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz().next : (...args: [] | [unknown]) => IteratorResult<number, void>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^^ 
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz() : Generator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz : () => Generator<number, void, unknown>
@@ -63,7 +63,7 @@ const C = class {
 >this : typeof C
 >     : ^^^^^^^^
 >next : (...args: [] | [unknown]) => IteratorResult<number, void>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^^ 
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -81,7 +81,7 @@ const C = class {
 >this.#qux().next() : Promise<IteratorResult<number, void>>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux().next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^  ^^^^  
+>                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux() : AsyncGenerator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux : () => AsyncGenerator<number, void, unknown>
@@ -89,7 +89,7 @@ const C = class {
 >this : typeof C
 >     : ^^^^^^^^
 >next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^  ^^^^  
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
