@@ -542,38 +542,6 @@ interface StringConstructor {
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
-interface Int8Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Uint8Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Uint8ClampedArray {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Int16Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Uint16Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Int32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Uint32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Float32Array {
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
-}
-
-interface Float64Array {
+interface TypedArray<T extends number | bigint> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

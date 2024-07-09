@@ -14,90 +14,32 @@ interface ReadonlyArray<T> {
     at(index: number): T | undefined;
 }
 
-interface Int8Array {
+interface TypedArray<T extends number | bigint> {
     /**
      * Returns the item located at the specified index.
      * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
      */
-    at(index: number): number | undefined;
+    at(index: number): T | undefined;
 }
 
-interface Uint8Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Int8Array extends TypedArray<number> {}
 
-interface Uint8ClampedArray {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Uint8Array extends TypedArray<number> {}
 
-interface Int16Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Uint8ClampedArray extends TypedArray<number> {}
 
-interface Uint16Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Int16Array extends TypedArray<number> {}
 
-interface Int32Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Uint16Array extends TypedArray<number> {}
 
-interface Uint32Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Int32Array extends TypedArray<number> {}
 
-interface Float32Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Uint32Array extends TypedArray<number> {}
 
-interface Float64Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): number | undefined;
-}
+interface Float32Array extends TypedArray<number> {}
 
-interface BigInt64Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): bigint | undefined;
-}
+interface Float64Array extends TypedArray<number> {}
 
-interface BigUint64Array {
-    /**
-     * Returns the item located at the specified index.
-     * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-     */
-    at(index: number): bigint | undefined;
-}
+interface BigInt64Array extends TypedArray<bigint> {}
+
+interface BigUint64Array extends TypedArray<bigint> {}

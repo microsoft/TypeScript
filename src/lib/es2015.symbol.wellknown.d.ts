@@ -258,39 +258,39 @@ interface DataView {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface Int8Array {
+interface Int8Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Int8Array";
 }
 
-interface Uint8Array {
+interface Uint8Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Uint8Array";
 }
 
-interface Uint8ClampedArray {
+interface Uint8ClampedArray extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
-interface Int16Array {
+interface Int16Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Int16Array";
 }
 
-interface Uint16Array {
+interface Uint16Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
-interface Int32Array {
+interface Int32Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Int32Array";
 }
 
-interface Uint32Array {
+interface Uint32Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
-interface Float32Array {
+interface Float32Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Float32Array";
 }
 
-interface Float64Array {
+interface Float64Array extends TypedArray<number> {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
 
