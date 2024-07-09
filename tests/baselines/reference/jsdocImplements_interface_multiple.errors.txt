@@ -1,0 +1,37 @@
+/a.js(17,7): error TS2420: Class 'BadSquare' incorrectly implements interface 'Drawable'.
+  Property 'draw' is missing in type 'BadSquare' but required in type 'Drawable'.
+
+
+==== /defs.d.ts (0 errors) ====
+    interface Drawable {
+        draw(): number;
+    }
+    interface Sizable {
+        size(): number;
+    }
+==== /a.js (1 errors) ====
+    /** 
+     * @implements {Drawable} 
+     * @implements Sizable 
+     **/
+    class Square {
+        draw() {
+            return 0;
+        }
+        size() {
+            return 0;
+        }
+    }
+    /**
+     * @implements Drawable
+     * @implements {Sizable}
+     **/
+    class BadSquare {
+          ~~~~~~~~~
+!!! error TS2420: Class 'BadSquare' incorrectly implements interface 'Drawable'.
+!!! error TS2420:   Property 'draw' is missing in type 'BadSquare' but required in type 'Drawable'.
+!!! related TS2728 /defs.d.ts:2:5: 'draw' is declared here.
+        size() {
+            return 0;
+        }
+    }

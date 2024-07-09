@@ -1,0 +1,7 @@
+VariableDeclaration2_es6.ts(1,7): error TS1155: 'const' declarations must be initialized.
+
+
+==== VariableDeclaration2_es6.ts (1 errors) ====
+    const a
+          ~
+!!! error TS1155: 'const' declarations must be initialized.

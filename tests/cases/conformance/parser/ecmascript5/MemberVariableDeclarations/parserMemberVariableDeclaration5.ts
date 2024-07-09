@@ -1,0 +1,3 @@
+class C {
+  declare Foo;
+}

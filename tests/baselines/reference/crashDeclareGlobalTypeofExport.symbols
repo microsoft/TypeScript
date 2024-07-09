@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/crashDeclareGlobalTypeofExport.ts] ////
+
+=== bar.d.ts ===
+import * as foo from './foo'
+>foo : Symbol(foo, Decl(bar.d.ts, 0, 6))
+
+export as namespace foo
+>foo : Symbol(foo, Decl(bar.d.ts, 0, 28))
+
+export = foo;
+>foo : Symbol(foo, Decl(bar.d.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(bar.d.ts, 2, 13))
+
+    const foo: typeof foo;
+>foo : Symbol(foo, Decl(bar.d.ts, 5, 9))
+>foo : Symbol(foo, Decl(bar.d.ts, 5, 9))
+}
+
+=== foo.d.ts ===
+interface Root {
+>Root : Symbol(Root, Decl(foo.d.ts, 0, 0))
+
+    /**
+     * A .default property for ES6 default import compatibility
+     */
+    default: Root;
+>default : Symbol(Root.default, Decl(foo.d.ts, 0, 16))
+>Root : Symbol(Root, Decl(foo.d.ts, 0, 0))
+}
+
+declare const root: Root;
+>root : Symbol(root, Decl(foo.d.ts, 7, 13))
+>Root : Symbol(Root, Decl(foo.d.ts, 0, 0))
+
+export = root;
+>root : Symbol(root, Decl(foo.d.ts, 7, 13))
+

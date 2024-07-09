@@ -1,0 +1,9 @@
+parserComputedPropertyName16.ts(2,3): error TS1164: Computed property names are not allowed in enums.
+
+
+==== parserComputedPropertyName16.ts (1 errors) ====
+    enum E {
+      [e] = 1
+      ~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+    }

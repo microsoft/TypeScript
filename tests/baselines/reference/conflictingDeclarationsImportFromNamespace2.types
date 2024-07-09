@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/conflictingDeclarationsImportFromNamespace2.ts] ////
+
+=== node_modules/@types/lodash/object.d.ts ===
+import _ = require("./index");
+>_ : _.LoDashStatic
+>  : ^^^^^^^^^^^^^^
+
+declare module "./index" {
+>"./index" : LoDashStatic
+>          : ^^^^^^^^^^^^
+
+    interface LoDashStatic {
+      pick: <T extends object, U extends keyof T>(
+>pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
+
+        object: T,
+>object : T
+>       : ^
+
+        ...props: Array<U>
+>props : U[]
+>      : ^^^
+
+      ) => Pick<T, U>;
+    }
+}
+
+=== node_modules/@types/lodash/pick.d.ts ===
+import { pick } from "./index";
+>pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
+
+export = pick;
+>pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
+
+=== node_modules/@types/lodash/index.d.ts ===
+/// <reference path="./object.d.ts" />
+export = _;
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export as namespace _;
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const _: _.LoDashStatic;
+>_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_ : any
+>  : ^^^
+
+declare namespace _ {
+    interface LoDashStatic {}
+}
+
+=== index.ts ===
+import * as pick from 'lodash/pick';
+>pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^      ^^ ^^^^^     ^^        ^^^^^          
+
+export const pick = () => pick();
+>pick : () => any
+>     : ^^^^^^^^^
+>() => pick() : () => any
+>             : ^^^^^^^^^
+>pick() : any
+>       : ^^^
+>pick : () => any
+>     : ^^^^^^^^^
+

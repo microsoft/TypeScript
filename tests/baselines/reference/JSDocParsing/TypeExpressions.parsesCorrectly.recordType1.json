@@ -1,0 +1,15 @@
+{
+    "kind": "TypeLiteral",
+    "pos": 1,
+    "end": 3,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "members": {
+        "length": 0,
+        "pos": 2,
+        "end": 2,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

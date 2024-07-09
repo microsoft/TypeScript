@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/constWithNonNull.ts] ////
+
+=== constWithNonNull.ts ===
+// Fixes #21848
+
+declare const x: number | undefined;
+>x : Symbol(x, Decl(constWithNonNull.ts, 2, 13))
+
+x!++;
+>x : Symbol(x, Decl(constWithNonNull.ts, 2, 13))
+

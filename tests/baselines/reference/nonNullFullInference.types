@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/nonNullFullInference.ts] ////
+
+=== nonNullFullInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/19577
+
+function testNonNullInference(numbers: number[]) {
+>testNonNullInference : (numbers: number[]) => number
+>                     : ^       ^^        ^^^^^^^^^^^
+>numbers : number[]
+>        : ^^^^^^^^
+
+    let last;
+>last : any
+
+    for (const n of numbers) {
+>n : number
+>  : ^^^^^^
+>numbers : number[]
+>        : ^^^^^^^^
+
+        if (n % 2) {
+>n % 2 : number
+>      : ^^^^^^
+>n : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+            return n;
+>n : number
+>  : ^^^^^^
+        }
+
+        last = n;
+>last = n : number
+>         : ^^^^^^
+>last : any
+>n : number
+>  : ^^^^^^
+    }
+
+    last;
+>last : number
+>     : ^^^^^^
+
+    last!;
+>last! : number
+>      : ^^^^^^
+>last : number
+>     : ^^^^^^
+}
+
+function testNonNullInferenceWithArrays(numbers: number[]) {
+>testNonNullInferenceWithArrays : (numbers: number[]) => number[]
+>                               : ^       ^^        ^^^^^^^^^^^^^
+>numbers : number[]
+>        : ^^^^^^^^
+
+    let result;
+>result : any
+
+    const arr = [];
+>arr : any[]
+>    : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    for (const n of numbers) {
+>n : number
+>  : ^^^^^^
+>numbers : number[]
+>        : ^^^^^^^^
+
+        if (n % 2) {
+>n % 2 : number
+>      : ^^^^^^
+>n : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+            return [n];
+>[n] : number[]
+>    : ^^^^^^^^
+>n : number
+>  : ^^^^^^
+        }
+
+        arr.push(n);
+>arr.push(n) : number
+>            : ^^^^^^
+>arr.push : (...items: any[]) => number
+>         : ^^^^     ^^^^^^^^^^^^      
+>arr : any[]
+>    : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>n : number
+>  : ^^^^^^
+
+        result = arr;
+>result = arr : number[]
+>             : ^^^^^^^^
+>result : any
+>arr : number[]
+>    : ^^^^^^^^
+    }
+
+    result;
+>result : number[]
+>       : ^^^^^^^^
+
+    result!;
+>result! : number[]
+>        : ^^^^^^^^
+>result : number[]
+>       : ^^^^^^^^
+}

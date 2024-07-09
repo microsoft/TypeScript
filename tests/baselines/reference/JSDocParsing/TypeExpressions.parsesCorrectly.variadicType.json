@@ -1,0 +1,15 @@
+{
+    "kind": "JSDocVariadicType",
+    "pos": 1,
+    "end": 10,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "type": {
+        "kind": "NumberKeyword",
+        "pos": 4,
+        "end": 10,
+        "flags": "JSDoc",
+        "transformFlags": 1
+    }
+}

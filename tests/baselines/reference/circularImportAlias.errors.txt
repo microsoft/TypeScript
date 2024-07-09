@@ -1,0 +1,26 @@
+circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
+
+
+==== circularImportAlias.ts (1 errors) ====
+    // expected no error
+    
+    module B {
+        export import a = A;
+        export class D extends a.C {
+                                 ~
+!!! error TS2449: Class 'C' used before its declaration.
+!!! related TS2728 circularImportAlias.ts:11:18: 'C' is declared here.
+            id: number;
+        }
+    }
+    
+    module A {
+        export class C { name: string }
+        export import b = B;
+    }
+    
+    var c: { name: string };
+    var c = new B.a.C();
+    
+    
+    

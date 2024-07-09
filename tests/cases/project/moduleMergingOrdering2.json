@@ -1,0 +1,8 @@
+{
+    "scenario": "module merging ordering 2",
+    "projectRoot": "tests/cases/projects/moduleMergeOrder",
+    "inputFiles": [
+        "b.ts",
+        "a.ts"
+    ]
+}

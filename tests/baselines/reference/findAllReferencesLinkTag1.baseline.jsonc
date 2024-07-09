@@ -1,0 +1,733 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// class C {
+//     <|[|{| isWriteAccess: true, isDefinition: true |}m|]/*FIND ALL REFS*/() { }|>
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link [|m|]}
+//      * @see {[|m|]}
+//      * {@link C.[|m|]}
+//      * @see {C.[|m|]}
+//      * {@link C#[|m|]}
+//      * @see {C#[|m|]}
+//      * {@link C.prototype.[|m|]}
+//      * @see {C.prototype.[|m|]}
+//      */
+//     p() { }
+//     /**
+// --- (line: 17) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // class C {
+  //     <|[|m|]/*FIND ALL REFS*/() { }|>
+  //     n = 1
+  //     static s() { }
+  //     /**
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.m(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "m",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// class C {
+//     m() { }
+//     <|[|{| isWriteAccess: true, isDefinition: true |}n|]/*FIND ALL REFS*/ = 1|>
+//     static s() { }
+//     /**
+//      * {@link m}
+// --- (line: 7) skipped ---
+
+// --- (line: 13) skipped ---
+//      */
+//     p() { }
+//     /**
+//      * {@link [|n|]}
+//      * @see {[|n|]}
+//      * {@link C.[|n|]}
+//      * @see {C.[|n|]}
+//      * {@link C#[|n|]}
+//      * @see {C#[|n|]}
+//      * {@link C.prototype.[|n|]}
+//      * @see {C.prototype.[|n|]}
+//      */
+//     q() { }
+//     /**
+// --- (line: 28) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // class C {
+  //     m() { }
+  //     <|[|n|]/*FIND ALL REFS*/ = 1|>
+  //     static s() { }
+  //     /**
+  //      * {@link m}
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.n: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "n",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// class C {
+//     m() { }
+//     n = 1
+//     <|static [|{| isWriteAccess: true, isDefinition: true |}s|]/*FIND ALL REFS*/() { }|>
+//     /**
+//      * {@link m}
+//      * @see {m}
+// --- (line: 8) skipped ---
+
+// --- (line: 24) skipped ---
+//      */
+//     q() { }
+//     /**
+//      * {@link [|s|]}
+//      * @see {[|s|]}
+//      * {@link C.[|s|]}
+//      * @see {C.[|s|]}
+//      */
+//     r() { }
+// }
+// --- (line: 35) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // class C {
+  //     m() { }
+  //     n = 1
+  //     <|static [|s|]/*FIND ALL REFS*/() { }|>
+  //     /**
+  //      * {@link m}
+  //      * @see {m}
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.s(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "s",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// --- (line: 33) skipped ---
+// }
+// 
+// interface I {
+//     <|[|{| isDefinition: true |}a|]/*FIND ALL REFS*/()|>
+//     b: 1
+//     /**
+//      * {@link [|a|]}
+//      * @see {[|a|]}
+//      * {@link I.[|a|]}
+//      * @see {I.[|a|]}
+//      * {@link I#[|a|]}
+//      * @see {I#[|a|]}
+//      */
+//     c()
+//     /**
+// --- (line: 49) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // --- (line: 33) skipped ---
+  // }
+  // 
+  // interface I {
+  //     <|[|a|]/*FIND ALL REFS*/()|>
+  //     b: 1
+  //     /**
+  //      * {@link a}
+  // --- (line: 41) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) I.a(): any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "a",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// --- (line: 34) skipped ---
+// 
+// interface I {
+//     a()
+//     <|[|{| isDefinition: true |}b|]/*FIND ALL REFS*/: 1|>
+//     /**
+//      * {@link a}
+//      * @see {a}
+// --- (line: 42) skipped ---
+
+// --- (line: 45) skipped ---
+//      */
+//     c()
+//     /**
+//      * {@link [|b|]}
+//      * @see {[|b|]}
+//      * {@link I.[|b|]}
+//      * @see {I.[|b|]}
+//      */
+//     d()
+// }
+// --- (line: 56) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // --- (line: 34) skipped ---
+  // 
+  // interface I {
+  //     a()
+  //     <|[|b|]/*FIND ALL REFS*/: 1|>
+  //     /**
+  //      * {@link a}
+  //      * @see {a}
+  // --- (line: 42) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) I.b: 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "b",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// --- (line: 54) skipped ---
+// }
+// 
+// function nestor() {
+//     /** {@link [|r2|]} */
+//     function ref() { }
+//     /** @see {[|r2|]} */
+//     function d3() { }
+//     <|function [|{| isWriteAccess: true, isDefinition: true |}r2|]/*FIND ALL REFS*/() { }|>
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // --- (line: 58) skipped ---
+  //     function ref() { }
+  //     /** @see {r2} */
+  //     function d3() { }
+  //     <|function [|r2|]/*FIND ALL REFS*/() { }|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "local function",
+    "name": "(local function) r2(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local function",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "r2",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// <|class [|{| isWriteAccess: true, isDefinition: true |}C|]/*FIND ALL REFS*/ {
+//     m() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link [|C|].m}
+//      * @see {[|C|].m}
+//      * {@link [|C|]#m}
+//      * @see {[|C|]#m}
+//      * {@link [|C|].prototype.m}
+//      * @see {[|C|].prototype.m}
+//      */
+//     p() { }
+//     /**
+//      * {@link n}
+//      * @see {n}
+//      * {@link [|C|].n}
+//      * @see {[|C|].n}
+//      * {@link [|C|]#n}
+//      * @see {[|C|]#n}
+//      * {@link [|C|].prototype.n}
+//      * @see {[|C|].prototype.n}
+//      */
+//     q() { }
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link [|C|].s}
+//      * @see {[|C|].s}
+//      */
+//     r() { }
+// }|>
+// 
+// interface I {
+//     a()
+// --- (line: 38) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // <|class [|C|]/*FIND ALL REFS*/ {
+  //     m() { }
+  //     n = 1
+  //     static s() { }
+  //     /**
+  //      * {@link m}
+  //      * @see {m}
+  //      * {@link C.m}
+  //      * @see {C.m}
+  //      * {@link C#m}
+  //      * @see {C#m}
+  //      * {@link C.prototype.m}
+  //      * @see {C.prototype.m}
+  //      */
+  //     p() { }
+  //     /**
+  //      * {@link n}
+  //      * @see {n}
+  //      * {@link C.n}
+  //      * @see {C.n}
+  //      * {@link C#n}
+  //      * @see {C#n}
+  //      * {@link C.prototype.n}
+  //      * @see {C.prototype.n}
+  //      */
+  //     q() { }
+  //     /**
+  //      * {@link s}
+  //      * @see {s}
+  //      * {@link C.s}
+  //      * @see {C.s}
+  //      */
+  //     r() { }
+  // }|>
+  // 
+  // interface I {
+  //     a()
+  // --- (line: 38) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// --- (line: 32) skipped ---
+//     r() { }
+// }
+// 
+// <|interface [|{| isWriteAccess: true, isDefinition: true |}I|]/*FIND ALL REFS*/ {
+//     a()
+//     b: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+//      * {@link [|I|].a}
+//      * @see {[|I|].a}
+//      * {@link [|I|]#a}
+//      * @see {[|I|]#a}
+//      */
+//     c()
+//     /**
+//      * {@link b}
+//      * @see {b}
+//      * {@link [|I|].b}
+//      * @see {[|I|].b}
+//      */
+//     d()
+// }|>
+// 
+// function nestor() {
+//     /** {@link r2} */
+// --- (line: 59) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+  // --- (line: 32) skipped ---
+  //     r() { }
+  // }
+  // 
+  // <|interface [|I|]/*FIND ALL REFS*/ {
+  //     a()
+  //     b: 1
+  //     /**
+  //      * {@link a}
+  //      * @see {a}
+  //      * {@link I.a}
+  //      * @see {I.a}
+  //      * {@link I#a}
+  //      * @see {I#a}
+  //      */
+  //     c()
+  //     /**
+  //      * {@link b}
+  //      * @see {b}
+  //      * {@link I.b}
+  //      * @see {I.b}
+  //      */
+  //     d()
+  // }|>
+  // 
+  // function nestor() {
+  //     /** {@link r2} */
+  // --- (line: 59) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface I",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,43 @@
+initializerReferencingConstructorParameters.ts(4,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(5,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+initializerReferencingConstructorParameters.ts(11,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+
+
+==== initializerReferencingConstructorParameters.ts (5 errors) ====
+    // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+    
+    class C {
+        a = x; // error
+            ~
+!!! error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+        b: typeof x; // error
+                  ~
+!!! error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+        constructor(x) { }
+    }
+    
+    class D {
+        a = x; // error
+            ~
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+        b: typeof x; // error
+                  ~
+!!! error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+        constructor(public x) { }
+    }
+    
+    class E {
+        a = this.x; // ok
+        b: typeof this.x; // ok
+        constructor(public x) { }
+    }
+    
+    class F<T> {
+        a = this.x; // ok
+        b = x; // error
+            ~
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+        constructor(public x: T) { }
+    }

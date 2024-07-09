@@ -1,0 +1,123 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+// /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] {
+//     First,
+//     Second
+// }|>
+// let first = [|E|].First;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // /*FIND ALL REFS*/<|enum [|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = E.First;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+// <|enum /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}E|] {
+//     First,
+//     Second
+// }|>
+// let first = [|E|].First;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // <|enum /*FIND ALL REFS*/[|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = E.First;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+// <|enum [|{| isWriteAccess: true |}E|] {
+//     First,
+//     Second
+// }|>
+// let first = /*FIND ALL REFS*/[|E|].First;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
+  // <|enum [|E|] {
+  //     First,
+  //     Second
+  // }|>
+  // let first = /*FIND ALL REFS*/E.First;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]

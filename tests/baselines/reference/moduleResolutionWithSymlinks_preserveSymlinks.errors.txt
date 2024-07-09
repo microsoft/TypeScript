@@ -1,0 +1,25 @@
+/app/app.ts(9,1): error TS2322: Type 'import("/app/node_modules/linked2/index").C' is not assignable to type 'import("/app/node_modules/linked/index").C'.
+  Types have separate declarations of a private property 'x'.
+
+
+==== /app/app.ts (1 errors) ====
+    // We shouldn't resolve symlinks for references either. See the trace.
+    /// <reference types="linked" />
+    
+    import { C as C1 } from "linked";
+    import { C as C2 } from "linked2";
+    
+    let x = new C1();
+    // Should fail. We no longer resolve any symlinks.
+    x = new C2();
+    ~
+!!! error TS2322: Type 'import("/app/node_modules/linked2/index").C' is not assignable to type 'import("/app/node_modules/linked/index").C'.
+!!! error TS2322:   Types have separate declarations of a private property 'x'.
+    
+==== /linked/index.d.ts (0 errors) ====
+    export { real } from "real";
+    export class C { private x; }
+    
+==== /app/node_modules/real/index.d.ts (0 errors) ====
+    export const real: string;
+    

@@ -1,0 +1,3 @@
+interface I {
+  "G":any;
+}

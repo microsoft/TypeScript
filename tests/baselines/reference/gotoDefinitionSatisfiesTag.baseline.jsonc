@@ -1,0 +1,22 @@
+// === getDefinitionAtPosition ===
+// === /a.js ===
+// /**
+//  * <|@typedef {Object} [|T|]
+//  * @property {number} a
+//  |>*/
+// 
+// /** @satisfies {/*GOTO DEF POS*/T} comment */
+// const foo = { a: 1 };
+
+  // === Details ===
+  [
+   {
+    "kind": "type",
+    "name": "T",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

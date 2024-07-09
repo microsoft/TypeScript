@@ -1,0 +1,117 @@
+inOperatorWithInvalidOperands.ts(15,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(16,11): error TS2322: Type 'void' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(17,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(19,11): error TS18050: The value 'null' cannot be used here.
+inOperatorWithInvalidOperands.ts(20,11): error TS18050: The value 'undefined' cannot be used here.
+inOperatorWithInvalidOperands.ts(22,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(23,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(24,12): error TS2322: Type 'string | Foo' is not assignable to type 'string | number | symbol'.
+  Type 'Foo' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(25,12): error TS2322: Type 'Foo' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(35,16): error TS2322: Type 'number' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(36,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(37,16): error TS2322: Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(38,16): error TS2322: Type 'void' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(39,16): error TS2322: Type 'string | number' is not assignable to type 'object'.
+  Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(40,16): error TS2322: Type 'number' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(41,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(42,16): error TS2322: Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(43,16): error TS18050: The value 'null' cannot be used here.
+inOperatorWithInvalidOperands.ts(44,17): error TS18050: The value 'undefined' cannot be used here.
+inOperatorWithInvalidOperands.ts(47,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(47,17): error TS2322: Type 'string' is not assignable to type 'object'.
+
+
+==== inOperatorWithInvalidOperands.ts (21 errors) ====
+    class Foo {}
+    enum E { a }
+    
+    var x: any;
+    
+    // invalid left operands
+    // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
+    var a1: boolean;
+    var a2: void;
+    var a3: {};
+    var a4: E;
+    var a5: Foo | string;
+    var a6: Foo;
+    
+    var ra1 = a1 in x;
+              ~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+    var ra2 = a2 in x;
+              ~~
+!!! error TS2322: Type 'void' is not assignable to type 'string | number | symbol'.
+    var ra3 = a3 in x;
+              ~~
+!!! error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+    var ra4 = a4 in x;
+    var ra5 = null in x;
+              ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    var ra6 = undefined in x;
+              ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    var ra7 = E.a in x;
+    var ra8 = false in x;
+              ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+    var ra9 = {} in x;
+              ~~
+!!! error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+    var ra10 = a5 in x;
+               ~~
+!!! error TS2322: Type 'string | Foo' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'Foo' is not assignable to type 'string | number | symbol'.
+    var ra11 = a6 in x;
+               ~~
+!!! error TS2322: Type 'Foo' is not assignable to type 'string | number | symbol'.
+    
+    // invalid right operands
+    // the right operand is required to be of type Any, an object type, or a type parameter type
+    var b1: number;
+    var b2: boolean;
+    var b3: string;
+    var b4: void;
+    var b5: string | number;
+    
+    var rb1 = x in b1;
+                   ~~
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
+    var rb2 = x in b2;
+                   ~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'object'.
+    var rb3 = x in b3;
+                   ~~
+!!! error TS2322: Type 'string' is not assignable to type 'object'.
+    var rb4 = x in b4;
+                   ~~
+!!! error TS2322: Type 'void' is not assignable to type 'object'.
+    var rb5 = x in b5;
+                   ~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'object'.
+!!! error TS2322:   Type 'string' is not assignable to type 'object'.
+    var rb6 = x in 0;
+                   ~
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
+    var rb7 = x in false;
+                   ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'object'.
+    var rb8 = x in '';
+                   ~~
+!!! error TS2322: Type 'string' is not assignable to type 'object'.
+    var rb9 = x in null;
+                   ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    var rb10 = x in undefined;
+                    ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    
+    // both operands are invalid
+    var rc1 = {} in '';
+              ~~
+!!! error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+                    ~~
+!!! error TS2322: Type 'string' is not assignable to type 'object'.

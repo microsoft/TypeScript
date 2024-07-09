@@ -1,0 +1,182 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 13) skipped ---
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// <|declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;|>
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <Main/*GOTO DEF*/Button />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <MainButton wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 13) skipped ---
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// <|declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;|>
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <Main/*GOTO DEF*/Button children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <MainButton wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 13) skipped ---
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// <|declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;|>
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <Main/*GOTO DEF*/Button onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <MainButton wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 13) skipped ---
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// <|declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;|>
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <Main/*GOTO DEF*/Button onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <MainButton wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 14) skipped ---
+//     goTo: string;
+// }
+// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+// <|declare function [|MainButton|](linkProps: LinkProps): JSX.Element;|>
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <Main/*GOTO DEF*/Button goTo="goTo" />;
+// let opt = <MainButton wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 13) skipped ---
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// <|declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;|>
+// declare function MainButton(linkProps: LinkProps): JSX.Element;
+// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <MainButton />;
+// let opt = <MainButton children="chidlren" />;
+// let opt = <MainButton onClick={()=>{}} />;
+// let opt = <MainButton onClick={()=>{}} ignore-prop />;
+// let opt = <MainButton goTo="goTo" />;
+// let opt = <Main/*GOTO DEF*/Button wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "MainButton",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,0 +1,3 @@
+interface { }
+interface interface{ }
+interface & { }

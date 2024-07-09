@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/thisInFunctionCallJs.ts] ////
+
+=== /a.js ===
+class Test {
+>Test : Symbol(Test, Decl(a.js, 0, 0))
+
+    constructor() {
+        /** @type {number[]} */
+        this.data = [1, 2, 3];
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+    }
+
+    finderRaw() {
+>finderRaw : Symbol(Test.finderRaw, Decl(a.js, 4, 5))
+
+        this.data.find(function (d) {
+>this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>d : Symbol(d, Decl(a.js, 7, 33))
+
+            return d === this.data.length
+>d : Symbol(d, Decl(a.js, 7, 33))
+
+        })
+    }
+
+    forEacherRaw() {
+>forEacherRaw : Symbol(Test.forEacherRaw, Decl(a.js, 10, 5))
+
+        this.data.forEach(function (d) {
+>this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>d : Symbol(d, Decl(a.js, 13, 36))
+
+            console.log(d === this.data.length)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>d : Symbol(d, Decl(a.js, 13, 36))
+
+        })
+    }
+
+    forEacher() {
+>forEacher : Symbol(Test.forEacher, Decl(a.js, 16, 5))
+
+        this.data.forEach(
+>this.data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+
+        /** @this {Test} */
+        function (d) {
+>d : Symbol(d, Decl(a.js, 21, 18))
+
+            console.log(d === this.data.length)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>d : Symbol(d, Decl(a.js, 21, 18))
+>this.data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(this)
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        }, this)
+>this : Symbol(Test, Decl(a.js, 0, 0))
+    }
+
+    finder() {
+>finder : Symbol(Test.finder, Decl(a.js, 24, 5))
+
+        this.data.find(
+>this.data.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(Test, Decl(a.js, 0, 0))
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+        /** @this {Test} */
+        function (d) {
+>d : Symbol(d, Decl(a.js, 29, 18))
+
+            return d === this.data.length
+>d : Symbol(d, Decl(a.js, 29, 18))
+>this.data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(Test.data, Decl(a.js, 1, 19))
+>this : Symbol(this)
+>data : Symbol(Test.data, Decl(a.js, 1, 19))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+        }, this)
+>this : Symbol(Test, Decl(a.js, 0, 0))
+    }
+}
+

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/node/nodeModulesImportResolutionIntoExport.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as type from "#type";
+>type : Symbol(type, Decl(index.ts, 1, 6))
+
+type;
+>type : Symbol(type, Decl(index.ts, 1, 6))
+
+=== index.mts ===
+// esm format file
+import * as type from "#type";
+>type : Symbol(type, Decl(index.mts, 1, 6))
+
+type;
+>type : Symbol(type, Decl(index.mts, 1, 6))
+
+=== index.cts ===
+// esm format file
+import * as type from "#type";
+>type : Symbol(type, Decl(index.cts, 1, 6))
+
+type;
+>type : Symbol(type, Decl(index.cts, 1, 6))
+

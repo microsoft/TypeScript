@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts] ////
+
+=== templateStringInPropertyName1.ts ===
+var x = {
+>x : Symbol(x, Decl(templateStringInPropertyName1.ts, 0, 3))
+
+    `a`: 321
+}

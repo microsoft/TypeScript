@@ -1,0 +1,3 @@
+{
+  "compilerOptions": { "outFile": "test.js" }
+}

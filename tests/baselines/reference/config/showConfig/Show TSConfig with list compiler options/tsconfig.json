@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "types": [
+            "jquery",
+            "mocha"
+        ]
+    }
+}

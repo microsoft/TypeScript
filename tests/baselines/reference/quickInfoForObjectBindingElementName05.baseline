@@ -1,0 +1,94 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForObjectBindingElementName05.ts ===
+// interface A {
+//     /**
+//      * A description of a
+//      */
+//     a: number;
+// }
+// interface B {
+//     a: string;
+// }
+// 
+// function f({ a }: A | B) {
+//     a;
+//     ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: string | number
+// | A description of a
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForObjectBindingElementName05.ts",
+      "position": 137,
+      "name": ""
+    },
+    "item": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 136,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A description of a",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

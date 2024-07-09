@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
+/// <reference path="react16.d.ts" />
+
+declare module "react" {
+>"react" : typeof import("react")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    interface Attributes {
+        [key: `do-${string}`]: Function;
+>key : `do-${string}`
+>    : ^^^^^^^^^^^^^^
+
+        "ns:thing"?: string;
+>"ns:thing" : string
+>           : ^^^^^^
+    }
+}
+
+export const tag = <div ns:thing="a"/>
+>tag : JSX.Element
+>    : ^^^^^^^^^^^
+><div ns:thing="a"/> : JSX.Element
+>                    : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+>ns:thing : string
+>         : ^^^^^^
+>ns : error
+>thing : error
+

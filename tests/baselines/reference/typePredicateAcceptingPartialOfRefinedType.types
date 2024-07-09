@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/typePredicateAcceptingPartialOfRefinedType.ts] ////
+
+=== typePredicateAcceptingPartialOfRefinedType.ts ===
+// repro #51953
+
+interface Test {
+  testy?: string;
+>testy : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+}
+
+interface Options {
+  test: Test['testy'];
+>test : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+declare function includesAllRequiredOptions(options: Partial<Options>): options is Options;
+>includesAllRequiredOptions : (options: Partial<Options>) => options is Options
+>                           : ^       ^^                ^^^^^                  
+>options : Partial<Options>
+>        : ^^^^^^^^^^^^^^^^
+

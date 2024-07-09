@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
+=== regexpExecAndMatchTypeUsages.ts ===
+export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+>foo : Symbol(foo, Decl(regexpExecAndMatchTypeUsages.ts, 0, 0))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>RegExpMatchArray : Symbol(RegExpMatchArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --))
+
+    matchResult[0].length;
+>matchResult[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    matchResult[999].length;
+>matchResult[999].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    matchResult.index + 0;
+>matchResult.index : Symbol(RegExpMatchArray.index, Decl(lib.es5.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>index : Symbol(RegExpMatchArray.index, Decl(lib.es5.d.ts, --, --))
+
+    matchResult.input.length;
+>matchResult.input.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>matchResult.input : Symbol(RegExpMatchArray.input, Decl(lib.es5.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>input : Symbol(RegExpMatchArray.input, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    matchResult.groups["someVariable"].length;
+>matchResult.groups["someVariable"].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>matchResult.groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    matchResult.groups = undefined;
+>matchResult.groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    execResult[0].length;
+>execResult[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>0 : Symbol(RegExpExecArray[0], Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    execResult[999].length;
+>execResult[999].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    execResult.index + 0;
+>execResult.index : Symbol(RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>index : Symbol(RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+
+    execResult.input.length;
+>execResult.input.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>execResult.input : Symbol(RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>input : Symbol(RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    execResult.groups["someVariable"].length;
+>execResult.groups["someVariable"].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>execResult.groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    execResult.groups = undefined;
+>execResult.groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        matchResult = execResult;
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+    }
+    else {
+        execResult = matchResult
+>execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+    }
+}
+

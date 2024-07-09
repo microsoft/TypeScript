@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag14.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} T1
+ * @property {number} a
+ */
+
+/**
+ * @satisfies T1
+ */
+const t1 = { a: 1 };
+>t1 : { a: number; }
+>   : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const t2 = /** @satisfies T1 */ ({ a: 1 });
+>t2 : { a: number; }
+>   : ^^^^^^^^^^^^^^
+>({ a: 1 }) : { a: number; }
+>           : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+

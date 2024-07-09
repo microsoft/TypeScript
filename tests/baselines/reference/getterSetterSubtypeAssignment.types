@@ -1,0 +1,567 @@
+//// [tests/cases/compiler/getterSetterSubtypeAssignment.ts] ////
+
+=== getterSetterSubtypeAssignment.ts ===
+class NumberOrUndefined {
+>NumberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+
+    _x: number | undefined;
+>_x : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+
+    get x(): number { return this._x ?? 0; }
+>x : number
+>  : ^^^^^^
+>this._x ?? 0 : number
+>             : ^^^^^^
+>this._x : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    set x(value: number | undefined) { this._x = value; }
+>x : number
+>  : ^^^^^^
+>value : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>this._x = value : number | undefined
+>                : ^^^^^^^^^^^^^^^^^^
+>this._x : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>value : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+    additionAssignment() {
+>additionAssignment : () => void
+>                   : ^^^^^^^^^^
+
+        this.x += 1;
+>this.x += 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : () => void
+>                      : ^^^^^^^^^^
+
+        this.x -= 1;
+>this.x -= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : () => void
+>                         : ^^^^^^^^^^
+
+        this.x *= 1;
+>this.x *= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    divisionAssignment() {
+>divisionAssignment : () => void
+>                   : ^^^^^^^^^^
+
+        this.x /= 1;
+>this.x /= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+const numberOrUndefined = new NumberOrUndefined();
+>numberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+>new NumberOrUndefined() : NumberOrUndefined
+>                        : ^^^^^^^^^^^^^^^^^
+>NumberOrUndefined : typeof NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+numberOrUndefined.x += 1;
+>numberOrUndefined.x += 1 : number
+>                         : ^^^^^^
+>numberOrUndefined.x : number
+>                    : ^^^^^^
+>numberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrUndefined.x -= 1;
+>numberOrUndefined.x -= 1 : number
+>                         : ^^^^^^
+>numberOrUndefined.x : number
+>                    : ^^^^^^
+>numberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrUndefined.x *= 1;
+>numberOrUndefined.x *= 1 : number
+>                         : ^^^^^^
+>numberOrUndefined.x : number
+>                    : ^^^^^^
+>numberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrUndefined.x /= 1;
+>numberOrUndefined.x /= 1 : number
+>                         : ^^^^^^
+>numberOrUndefined.x : number
+>                    : ^^^^^^
+>numberOrUndefined : NumberOrUndefined
+>                  : ^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+class NumberOrString {
+>NumberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+
+    _x: number | string = 0;
+>_x : string | number
+>   : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    get x(): number { return typeof this._x === 'number' ? this._x : Number(this._x); }
+>x : number
+>  : ^^^^^^
+>typeof this._x === 'number' ? this._x : Number(this._x) : number
+>                                                        : ^^^^^^
+>typeof this._x === 'number' : boolean
+>                            : ^^^^^^^
+>typeof this._x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this._x : string | number
+>        : ^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : string | number
+>   : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+>this._x : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>_x : number
+>   : ^^^^^^
+>Number(this._x) : number
+>                : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>this._x : string
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>_x : string
+>   : ^^^^^^
+
+    set x(value: number | string) { this._x = value; }
+>x : number
+>  : ^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>this._x = value : string | number
+>                : ^^^^^^^^^^^^^^^
+>this._x : string | number
+>        : ^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : string | number
+>   : ^^^^^^^^^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+
+    additionAssignmentNumber() {
+>additionAssignmentNumber : () => void
+>                         : ^^^^^^^^^^
+
+        this.x += 1;
+>this.x += 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+    additionAssignmentString() {
+>additionAssignmentString : () => void
+>                         : ^^^^^^^^^^
+
+        this.x += '1';
+>this.x += '1' : string
+>              : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>'1' : "1"
+>    : ^^^
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : () => void
+>                      : ^^^^^^^^^^
+
+        this.x -= 1;
+>this.x -= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : () => void
+>                         : ^^^^^^^^^^
+
+        this.x *= 1;
+>this.x *= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    divisionAssignment() {
+>divisionAssignment : () => void
+>                   : ^^^^^^^^^^
+
+        this.x /= 1;
+>this.x /= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+const numberOrString = new NumberOrString();
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>new NumberOrString() : NumberOrString
+>                     : ^^^^^^^^^^^^^^
+>NumberOrString : typeof NumberOrString
+>               : ^^^^^^^^^^^^^^^^^^^^^
+
+numberOrString.x += 1;
+>numberOrString.x += 1 : number
+>                      : ^^^^^^
+>numberOrString.x : number
+>                 : ^^^^^^
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrString.x += '1';
+>numberOrString.x += '1' : string
+>                        : ^^^^^^
+>numberOrString.x : number
+>                 : ^^^^^^
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>'1' : "1"
+>    : ^^^
+
+numberOrString.x -= 1;
+>numberOrString.x -= 1 : number
+>                      : ^^^^^^
+>numberOrString.x : number
+>                 : ^^^^^^
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrString.x *= 1;
+>numberOrString.x *= 1 : number
+>                      : ^^^^^^
+>numberOrString.x : number
+>                 : ^^^^^^
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrString.x /= 1;
+>numberOrString.x /= 1 : number
+>                      : ^^^^^^
+>numberOrString.x : number
+>                 : ^^^^^^
+>numberOrString : NumberOrString
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+type Foo = { bar: number; };
+>Foo : Foo
+>    : ^^^
+>bar : number
+>    : ^^^^^^
+
+class NumberOrObject {
+>NumberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+
+    _x: number | Foo = 0;
+>_x : number | Foo
+>   : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    get x(): number { return typeof this._x === 'number' ? this._x : this._x.bar; }
+>x : number
+>  : ^^^^^^
+>typeof this._x === 'number' ? this._x : this._x.bar : number
+>                                                    : ^^^^^^
+>typeof this._x === 'number' : boolean
+>                            : ^^^^^^^
+>typeof this._x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this._x : number | Foo
+>        : ^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : number | Foo
+>   : ^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+>this._x : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>_x : number
+>   : ^^^^^^
+>this._x.bar : number
+>            : ^^^^^^
+>this._x : Foo
+>        : ^^^
+>this : this
+>     : ^^^^
+>_x : Foo
+>   : ^^^
+>bar : number
+>    : ^^^^^^
+
+    set x(value: number | Foo) { this._x = value; }
+>x : number
+>  : ^^^^^^
+>value : number | Foo
+>      : ^^^^^^^^^^^^
+>this._x = value : number | Foo
+>                : ^^^^^^^^^^^^
+>this._x : number | Foo
+>        : ^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_x : number | Foo
+>   : ^^^^^^^^^^^^
+>value : number | Foo
+>      : ^^^^^^^^^^^^
+
+    additionAssignment() {
+>additionAssignment : () => void
+>                   : ^^^^^^^^^^
+
+        this.x += 1;
+>this.x += 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    subtractionAssignment() {
+>subtractionAssignment : () => void
+>                      : ^^^^^^^^^^
+
+        this.x -= 1;
+>this.x -= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    multiplicationAssignment() {
+>multiplicationAssignment : () => void
+>                         : ^^^^^^^^^^
+
+        this.x *= 1;
+>this.x *= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+
+    divisionAssignment() {
+>divisionAssignment : () => void
+>                   : ^^^^^^^^^^
+
+        this.x /= 1;
+>this.x /= 1 : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+const numberOrObject = new NumberOrObject();
+>numberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+>new NumberOrObject() : NumberOrObject
+>                     : ^^^^^^^^^^^^^^
+>NumberOrObject : typeof NumberOrObject
+>               : ^^^^^^^^^^^^^^^^^^^^^
+
+numberOrObject.x += 1;
+>numberOrObject.x += 1 : number
+>                      : ^^^^^^
+>numberOrObject.x : number
+>                 : ^^^^^^
+>numberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrObject.x -= 1;
+>numberOrObject.x -= 1 : number
+>                      : ^^^^^^
+>numberOrObject.x : number
+>                 : ^^^^^^
+>numberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrObject.x *= 1;
+>numberOrObject.x *= 1 : number
+>                      : ^^^^^^
+>numberOrObject.x : number
+>                 : ^^^^^^
+>numberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+numberOrObject.x /= 1;
+>numberOrObject.x /= 1 : number
+>                      : ^^^^^^
+>numberOrObject.x : number
+>                 : ^^^^^^
+>numberOrObject : NumberOrObject
+>               : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+

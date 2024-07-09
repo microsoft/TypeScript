@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts] ////
+
+=== reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
+type Tuple<T> = readonly [T, ...T[]];
+>Tuple : Tuple<T>
+>      : ^^^^^^^^
+
+declare function bindAll<
+>bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }) => void
+>        : ^       ^^^^^^^^^           ^^      ^^^^^^^^^                                 ^^      ^^       ^^        ^^                                                                                                                                           ^^^^^    
+
+  TTarget extends EventTarget,
+  TTypes extends Tuple<keyof TTarget & `on${any}`>
+>(
+  target: TTarget,
+>target : TTarget
+>       : ^^^^^^^
+
+  bindings: {
+>bindings : { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^                                                                                 ^^^^^^
+
+    [K in keyof TTypes]: {
+      type: TTypes[K];
+>type : TTypes[K]
+>     : ^^^^^^^^^
+
+      listener: (
+>listener : (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void
+>         : ^  ^^                                                                   ^^^^^    
+
+        ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]
+>ev : Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^   ^^^^^
+>args : any[]
+>     : ^^^^^
+
+      ) => void;
+    };
+  }
+): void;
+
+bindAll({} as HTMLButtonElement, [
+>bindAll({} as HTMLButtonElement, [  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },]) : void
+>                                                                                                                                                     : ^^^^
+>bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }) => void
+>        : ^       ^^^^^^^^^           ^^      ^^^^^^^^^                                 ^^      ^^       ^^        ^^                                                                                                                                           ^^^^^    
+>{} as HTMLButtonElement : HTMLButtonElement
+>                        : ^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: MouseEvent) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }]
+>                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  {
+>{    type: "onclick",    listener: (event) => {},  } : { type: "onclick"; listener: (event: MouseEvent) => void; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: "onclick",
+>type : "onclick"
+>     : ^^^^^^^^^
+>"onclick" : "onclick"
+>          : ^^^^^^^^^
+
+    listener: (event) => {},
+>listener : (event: MouseEvent) => void
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^
+>(event) => {} : (event: MouseEvent) => void
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^
+>event : MouseEvent
+>      : ^^^^^^^^^^
+
+  },
+  {
+>{    type: "onkeydown",    listener: (event) => {},  } : { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: "onkeydown",
+>type : "onkeydown"
+>     : ^^^^^^^^^^^
+>"onkeydown" : "onkeydown"
+>            : ^^^^^^^^^^^
+
+    listener: (event) => {},
+>listener : (event: KeyboardEvent) => void
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>(event) => {} : (event: KeyboardEvent) => void
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>event : KeyboardEvent
+>      : ^^^^^^^^^^^^^
+
+  },
+]);
+

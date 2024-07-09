@@ -1,0 +1,89 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc6.js ===
+// class B extends UNRESOLVED_VALUE_DEFINITELY_DOES_NOT_EXIST {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.value(): any
+// | @inheritdoc 
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoInheritDoc6.js",
+      "position": 107,
+      "name": ""
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "static",
+      "textSpan": {
+        "start": 107,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "value",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "inheritdoc"
+        }
+      ]
+    }
+  }
+]

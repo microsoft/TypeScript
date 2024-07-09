@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsFileCompilationEmitBlockedCorrectly.ts] ////
+
+=== a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== b.ts ===
+// this should be emitted
+class d {
+>d : Symbol(d, Decl(b.ts, 0, 0))
+}
+
+=== a.js ===
+function foo() {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+}
+

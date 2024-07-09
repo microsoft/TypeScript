@@ -1,0 +1,8 @@
+parserInterfaceDeclaration6.ts(1,8): error TS1030: 'export' modifier already seen.
+
+
+==== parserInterfaceDeclaration6.ts (1 errors) ====
+    export export interface I {
+           ~~~~~~
+!!! error TS1030: 'export' modifier already seen.
+    }

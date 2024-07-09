@@ -1,0 +1,30 @@
+{
+    "kind": "JSDoc",
+    "pos": 0,
+    "end": 45,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocThrowsTag",
+            "pos": 8,
+            "end": 43,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 18,
+                "transformFlags": 0,
+                "escapedText": "exception"
+            },
+            "comment": "free-form description"
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 43,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

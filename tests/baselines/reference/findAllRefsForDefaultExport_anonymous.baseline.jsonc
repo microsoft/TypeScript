@@ -1,0 +1,79 @@
+// === findAllReferences ===
+// === /a.ts ===
+// <|export /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}default|] 1;|>
+
+// === /b.ts ===
+// <|import [|{| defId: 1, isWriteAccess: true |}a|] from "./a";|>
+
+  // === Definitions ===
+  // === /a.ts ===
+  // [|{| defId: 0 |}export /*FIND ALL REFS*/default 1;|]
+
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}a|] from "./a";|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) default: 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import a",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

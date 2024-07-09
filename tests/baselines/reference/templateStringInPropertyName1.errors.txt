@@ -1,0 +1,23 @@
+templateStringInPropertyName1.ts(1,9): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+templateStringInPropertyName1.ts(2,5): error TS1136: Property assignment expected.
+templateStringInPropertyName1.ts(2,8): error TS1005: ',' expected.
+templateStringInPropertyName1.ts(2,10): error TS1134: Variable declaration expected.
+templateStringInPropertyName1.ts(3,1): error TS1128: Declaration or statement expected.
+
+
+==== templateStringInPropertyName1.ts (5 errors) ====
+    var x = {
+            ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+        `a`: 321
+        ~~~
+!!! error TS1136: Property assignment expected.
+           ~
+!!! error TS1005: ',' expected.
+             ~~~
+!!! error TS1134: Variable declaration expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

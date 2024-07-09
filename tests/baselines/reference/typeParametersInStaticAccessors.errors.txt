@@ -1,0 +1,13 @@
+typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
+typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
+
+
+==== typeParametersInStaticAccessors.ts (2 errors) ====
+    class foo<T> {
+        static get Foo(): () => T { return null; }
+                                ~
+!!! error TS2302: Static members cannot reference class type parameters.
+        static set Bar(v: { v: T }) { }
+                               ~
+!!! error TS2302: Static members cannot reference class type parameters.
+    } 

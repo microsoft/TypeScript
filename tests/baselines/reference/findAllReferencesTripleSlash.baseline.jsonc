@@ -1,0 +1,61 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
+// /// <reference types="globals" />
+
+// === /c.js ===
+// require([|"./b"|]);
+// require("globals");
+
+  // === Definitions ===
+  // === /a.ts ===
+  // /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
+  // /// <reference types="globals" />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "string",
+    "name": "b.ts",
+    "displayParts": [
+     {
+      "text": "\"b.ts\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// /// <reference path="b.ts" />
+// /// <reference types="[|globals|]/*FIND ALL REFS*/" />
+
+// === /c.js ===
+// require("./b");
+// require([|"globals"|]);
+
+  // === Definitions ===
+  // === /a.ts ===
+  // /// <reference path="b.ts" />
+  // /// <reference types="[|globals|]/*FIND ALL REFS*/" />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "string",
+    "name": "globals",
+    "displayParts": [
+     {
+      "text": "\"globals\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

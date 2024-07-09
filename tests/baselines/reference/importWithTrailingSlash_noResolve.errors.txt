@@ -1,0 +1,8 @@
+/a.ts(1,17): error TS2307: Cannot find module './foo/' or its corresponding type declarations.
+
+
+==== /a.ts (1 errors) ====
+    import foo from "./foo/";
+                    ~~~~~~~~
+!!! error TS2307: Cannot find module './foo/' or its corresponding type declarations.
+    

@@ -1,0 +1,10 @@
+file2.ts(1,1): error TS2588: Cannot assign to 'x' because it is a constant.
+
+
+==== file1.ts (0 errors) ====
+    const x = 0
+    
+==== file2.ts (1 errors) ====
+    x++;
+    ~
+!!! error TS2588: Cannot assign to 'x' because it is a constant.

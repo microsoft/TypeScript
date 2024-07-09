@@ -1,0 +1,365 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(<|private /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}privateParam|]: number|>,
+//         public publicParam: string,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = [|{| defId: 1 |}privateParam|];
+//         this.[|{| defId: 0, isWriteAccess: true |}privateParam|] += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// --- (line: 11) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file1.ts ===
+  // class Foo {
+  //     constructor(<|<|private /*FIND ALL REFS*/[|{| contextId: 0, defId: 0 |}[|{| contextId: 1, defId: 1 |}privateParam|]|]: number|>|>,
+  //         public publicParam: string,
+  //         protected protectedParam: boolean) {
+  // 
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.privateParam: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "privateParam",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) privateParam: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "privateParam",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         <|public /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}publicParam|]: string|>,
+//         protected protectedParam: boolean) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = [|{| defId: 1 |}publicParam|];
+//         this.[|{| defId: 0, isWriteAccess: true |}publicParam|] += " Hello!";
+// 
+//         let localProtected = protectedParam;
+//         this.protectedParam = false;
+//     }
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file1.ts ===
+  // class Foo {
+  //     constructor(private privateParam: number,
+  //         <|<|public /*FIND ALL REFS*/[|{| contextId: 0, defId: 0 |}[|{| contextId: 1, defId: 1 |}publicParam|]|]: string|>|>,
+  //         protected protectedParam: boolean) {
+  // 
+  //         let localPrivate = privateParam;
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.publicParam: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "publicParam",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) publicParam: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "publicParam",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file1.ts ===
+// class Foo {
+//     constructor(private privateParam: number,
+//         public publicParam: string,
+//         <|protected /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}protectedParam|]: boolean|>) {
+// 
+//         let localPrivate = privateParam;
+//         this.privateParam += 10;
+// 
+//         let localPublic = publicParam;
+//         this.publicParam += " Hello!";
+// 
+//         let localProtected = [|{| defId: 1 |}protectedParam|];
+//         this.[|{| defId: 0, isWriteAccess: true |}protectedParam|] = false;
+//     }
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file1.ts ===
+  // class Foo {
+  //     constructor(private privateParam: number,
+  //         public publicParam: string,
+  //         <|<|protected /*FIND ALL REFS*/[|{| contextId: 0, defId: 0 |}[|{| contextId: 1, defId: 1 |}protectedParam|]|]: boolean|>|>) {
+  // 
+  //         let localPrivate = privateParam;
+  //         this.privateParam += 10;
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.protectedParam: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "protectedParam",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) protectedParam: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "protectedParam",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

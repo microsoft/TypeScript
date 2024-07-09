@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
+// type Options = "/*FIND ALL REFS*/[|{| isInString: true |}option 1|]" | "option 2";
+// let myOption: Options = "[|{| isInString: true |}option 1|]";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
+  // type Options = "/*FIND ALL REFS*/[|option 1|]" | "option 2";
+  // let myOption: Options = "option 1";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "option 1",
+    "displayParts": [
+     {
+      "text": "\"option 1\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
+// type Options = "[|{| isInString: true |}option 1|]" | "option 2";
+// let myOption: Options = "/*FIND ALL REFS*/[|{| isInString: true |}option 1|]";
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts ===
+  // type Options = "option 1" | "option 2";
+  // let myOption: Options = "/*FIND ALL REFS*/[|option 1|]";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "option 1",
+    "displayParts": [
+     {
+      "text": "\"option 1\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

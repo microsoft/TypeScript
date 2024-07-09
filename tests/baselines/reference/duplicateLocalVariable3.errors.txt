@@ -1,0 +1,19 @@
+duplicateLocalVariable3.ts(11,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'string'.
+
+
+==== duplicateLocalVariable3.ts (1 errors) ====
+    var x = 1;
+    var x = 2; 
+    
+    function f() {
+        var y = 1;
+        var y = 2;
+    }
+    
+    function f2() {
+        var z = 3;
+        var z = "";
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'string'.
+!!! related TS6203 duplicateLocalVariable3.ts:10:9: 'z' was also declared here.
+    }

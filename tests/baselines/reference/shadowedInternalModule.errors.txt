@@ -1,0 +1,80 @@
+shadowedInternalModule.ts(13,20): error TS2437: Module 'A' is hidden by a local declaration with the same name.
+shadowedInternalModule.ts(30,5): error TS2440: Import declaration conflicts with local declaration of 'Y'.
+shadowedInternalModule.ts(47,10): error TS2438: Import name cannot be 'any'.
+shadowedInternalModule.ts(62,3): error TS2440: Import declaration conflicts with local declaration of 'Q'.
+
+
+==== shadowedInternalModule.ts (4 errors) ====
+    // all errors imported modules conflict with local variables
+    
+    module A {
+        export var Point = { x: 0, y: 0 }
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    } 
+    
+    module B {
+        var A = { x: 0, y: 0 };
+        import Point = A;
+                       ~
+!!! error TS2437: Module 'A' is hidden by a local declaration with the same name.
+    }
+    
+    module X {
+        export module Y {
+            export interface Point{
+                x: number;
+                y: number
+            }
+        }
+    
+        export class Y {
+            name: string;
+        }
+    }
+    
+    module Z {
+        import Y = X.Y;
+        ~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'Y'.
+    
+        var Y = 12;
+    }
+    
+    //
+    
+    module a {
+      export type A = number;
+    }
+    
+    module b {
+      export import A = a.A;
+      export module A {}
+    }
+    
+    module c {
+      import any = b.A;
+             ~~~
+!!! error TS2438: Import name cannot be 'any'.
+    }
+    
+    //
+    
+    module q {
+      export const Q = {};
+    }
+    
+    module r {
+      export import Q = q.Q;
+      export type Q = number;
+    }
+    
+    module s {
+      import Q = r.Q;
+      ~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'Q'.
+      const Q = 0;
+    }
+    

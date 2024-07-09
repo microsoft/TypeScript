@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/namespaceNotMergedWithFunctionDefaultExport.ts] ////
+
+=== replace-in-file/types/index.d.ts ===
+declare module 'replace-in-file' {
+>'replace-in-file' : Symbol("replace-in-file", Decl(index.d.ts, 0, 0))
+
+  export function replaceInFile(config: unknown): Promise<unknown[]>;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34))
+>config : Symbol(config, Decl(index.d.ts, 1, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+  export default replaceInFile;
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 2, 31))
+
+  namespace replaceInFile {
+>replaceInFile : Symbol(replaceInFile, Decl(index.d.ts, 0, 34), Decl(index.d.ts, 2, 31))
+
+    export function sync(config: unknown): unknown[];
+>sync : Symbol(sync, Decl(index.d.ts, 4, 27))
+>config : Symbol(config, Decl(index.d.ts, 5, 25))
+  }
+}

@@ -1,0 +1,53 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsImportEquals.ts ===
+// import j = N./*FIND ALL REFS*/[|q|];
+// namespace N { <|export const [|{| isWriteAccess: true |}q|] = 0;|> }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsImportEquals.ts ===
+  // import j = N./*FIND ALL REFS*/q;
+  // namespace N { <|export const [|q|] = 0;|> }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const N.q: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "q",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

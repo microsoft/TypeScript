@@ -1,0 +1,142 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue10.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue10.ts ===
+function foo(cond1: boolean, cond2: boolean) {
+>foo : (cond1: boolean, cond2: boolean) => void
+>    : ^     ^^       ^^     ^^       ^^^^^^^^^
+>cond1 : boolean
+>      : ^^^^^^^
+>cond2 : boolean
+>      : ^^^^^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case cond1 || cond2:
+>cond1 || cond2 : boolean
+>               : ^^^^^^^
+>cond1 : boolean
+>      : ^^^^^^^
+>cond2 : boolean
+>      : ^^^^^^^
+
+            cond1; // boolean
+>cond1 : boolean
+>      : ^^^^^^^
+
+            //  ^?
+            cond2; // boolean
+>cond2 : boolean
+>      : ^^^^^^^
+
+            //  ^?
+            break;
+
+        case cond2:
+>cond2 : boolean
+>      : ^^^^^^^
+
+            cond1; // false
+>cond1 : false
+>      : ^^^^^
+
+            //  ^?
+            cond2;; // never
+>cond2 : never
+>      : ^^^^^
+
+            //  ^?
+            break;
+
+        default:
+            cond1; // false
+>cond1 : false
+>      : ^^^^^
+
+            //  ^?
+            cond2; // false
+>cond2 : false
+>      : ^^^^^
+
+            //  ^?
+            break;
+    }
+
+    cond1; // boolean
+>cond1 : boolean
+>      : ^^^^^^^
+
+    //  ^?
+    cond2; // boolean
+>cond2 : boolean
+>      : ^^^^^^^
+
+    //  ^?
+}
+
+function blah(cond1: boolean, cond2: boolean) {
+>blah : (cond1: boolean, cond2: boolean) => void
+>     : ^     ^^       ^^     ^^       ^^^^^^^^^
+>cond1 : boolean
+>      : ^^^^^^^
+>cond2 : boolean
+>      : ^^^^^^^
+
+    if (cond1 || cond2) {
+>cond1 || cond2 : boolean
+>               : ^^^^^^^
+>cond1 : boolean
+>      : ^^^^^^^
+>cond2 : boolean
+>      : ^^^^^^^
+
+        cond1; // boolean
+>cond1 : boolean
+>      : ^^^^^^^
+
+        //  ^?
+        cond2; // boolean
+>cond2 : boolean
+>      : ^^^^^^^
+
+        //  ^?
+    } else if (cond2) {
+>cond2 : false
+>      : ^^^^^
+
+        cond1; // false
+>cond1 : false
+>      : ^^^^^
+
+        //  ^?
+        cond2; // never
+>cond2 : never
+>      : ^^^^^
+
+        //  ^?
+    } else {
+        cond1; // false
+>cond1 : false
+>      : ^^^^^
+
+        //  ^?
+        cond2; // false
+>cond2 : false
+>      : ^^^^^
+
+        //  ^?
+    }
+
+    cond1; // boolean
+>cond1 : boolean
+>      : ^^^^^^^
+
+    //  ^?
+    cond2; // boolean
+>cond2 : boolean
+>      : ^^^^^^^
+
+    //  ^?
+}
+

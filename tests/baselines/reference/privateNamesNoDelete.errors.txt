@@ -1,0 +1,16 @@
+privateNamesNoDelete.ts(4,16): error TS2790: The operand of a 'delete' operator must be optional.
+privateNamesNoDelete.ts(4,16): error TS18011: The operand of a 'delete' operator cannot be a private identifier.
+
+
+==== privateNamesNoDelete.ts (2 errors) ====
+    class A {
+        #v = 1;
+        constructor() {
+            delete this.#v; // Error: The operand of a delete operator cannot be a private name.
+                   ~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+                   ~~~~~~~
+!!! error TS18011: The operand of a 'delete' operator cannot be a private identifier.
+        }
+    }
+    

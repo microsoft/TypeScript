@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/conditionalTypeAnyUnion.ts] ////
+
+=== conditionalTypeAnyUnion.ts ===
+// repro from #52568
+
+type Spec = any extends object ? any : string;
+>Spec : Symbol(Spec, Decl(conditionalTypeAnyUnion.ts, 0, 0))
+
+type WithSpec<T extends number> = T
+>WithSpec : Symbol(WithSpec, Decl(conditionalTypeAnyUnion.ts, 2, 46))
+>T : Symbol(T, Decl(conditionalTypeAnyUnion.ts, 4, 14))
+>T : Symbol(T, Decl(conditionalTypeAnyUnion.ts, 4, 14))
+
+type R = WithSpec<Spec> // should not error
+>R : Symbol(R, Decl(conditionalTypeAnyUnion.ts, 4, 35))
+>WithSpec : Symbol(WithSpec, Decl(conditionalTypeAnyUnion.ts, 2, 46))
+>Spec : Symbol(Spec, Decl(conditionalTypeAnyUnion.ts, 0, 0))
+

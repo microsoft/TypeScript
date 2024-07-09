@@ -1,0 +1,13 @@
+parserConstructorDeclaration8.ts(3,3): error TS2390: Constructor implementation is missing.
+parserConstructorDeclaration8.ts(3,21): error TS1005: '(' expected.
+
+
+==== parserConstructorDeclaration8.ts (2 errors) ====
+    class C {
+      // Not a constructor
+      public constructor;
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS2390: Constructor implementation is missing.
+                        ~
+!!! error TS1005: '(' expected.
+    }

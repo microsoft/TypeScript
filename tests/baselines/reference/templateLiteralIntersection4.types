@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/templateLiteralIntersection4.ts] ////
+
+=== templateLiteralIntersection4.ts ===
+type StateHook<S> = () => [S, unknown];
+>StateHook : StateHook<S>
+>          : ^^^^^^^^^^^^
+
+type StoreUtils<Store extends { [K: string]: any }> = Omit<{
+>StoreUtils : StoreUtils<Store>
+>           : ^^^^^^^^^^^^^^^^^
+>K : string
+>  : ^^^^^^
+
+    [K in keyof Store as `use${Capitalize<string & K>}`]: StateHook<Store[K]>
+}, 'useStore'> & {
+  Provider: unknown,
+>Provider : unknown
+>         : ^^^^^^^
+
+  useStore: StateHook<Store>
+>useStore : StateHook<Store>
+>         : ^^^^^^^^^^^^^^^^
+
+};
+
+declare function createStore<Store extends { [K: string]: any }>(store: Store): StoreUtils<Store>;
+>createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
+>            : ^     ^^^^^^^^^                     ^^     ^^     ^^^^^                 
+>K : string
+>  : ^^^^^^
+>store : Store
+>      : ^^^^^
+
+const { Provider, useUsername, useAge, useStore } = createStore({
+>Provider : unknown
+>         : ^^^^^^^
+>useUsername : StateHook<string>
+>            : ^^^^^^^^^^^^^^^^^
+>useAge : StateHook<number>
+>       : ^^^^^^^^^^^^^^^^^
+>useStore : StateHook<{ username: string; age: number; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createStore({  username: "Aral",  age: 31}) : StoreUtils<{ username: string; age: number; }>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
+>            : ^     ^^^^^^^^^                     ^^     ^^     ^^^^^                 
+>{  username: "Aral",  age: 31} : { username: string; age: number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  username: "Aral",
+>username : string
+>         : ^^^^^^
+>"Aral" : "Aral"
+>       : ^^^^^^
+
+  age: 31
+>age : number
+>    : ^^^^^^
+>31 : 31
+>   : ^^
+
+});
+

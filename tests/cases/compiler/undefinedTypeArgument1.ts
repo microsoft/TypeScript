@@ -1,0 +1,1 @@
+var cats = new Array<WAWA>();

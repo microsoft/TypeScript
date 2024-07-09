@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "rbuckton.tsserver-live-reload",
+        "dprint.dprint"
+    ],
+
+    "unwantedRecommendations": [
+        "ms-vscode.vscode-typescript-tslint-plugin"
+    ]
+}

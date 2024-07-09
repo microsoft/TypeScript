@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/indexSignatureWithoutTypeAnnotation1.ts] ////
+
+=== indexSignatureWithoutTypeAnnotation1.ts ===
+class C {
+>C : Symbol(C, Decl(indexSignatureWithoutTypeAnnotation1.ts, 0, 0))
+
+  [a: number];
+>a : Symbol(a, Decl(indexSignatureWithoutTypeAnnotation1.ts, 1, 3))
+}

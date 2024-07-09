@@ -1,0 +1,477 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     <|get /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|]() { return 0; }|>
+// 
+//     set y(a: number) {}
+// }
+// <|const { [|{| isWriteAccess: true |}x|], y } = new Test();|>
+// x; y;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     <|get /*FIND ALL REFS*/[|x|]() { return 0; }|>
+  // 
+  //     set y(a: number) {}
+  // }
+  // const { x, y } = new Test();
+  // x; y;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     <|get [|{| defId: 0, isWriteAccess: true |}x|]() { return 0; }|>
+// 
+//     set y(a: number) {}
+// }
+// <|const { /*FIND ALL REFS*/[|{| defId: 1, isWriteAccess: true, isDefinition: true |}x|], y } = new Test();|>
+// [|{| defId: 1 |}x|]; y;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     <|get [|{| defId: 0 |}x|]() { return 0; }|>
+  // 
+  //     set y(a: number) {}
+  // }
+  // <|const { /*FIND ALL REFS*/[|{| defId: 1 |}x|], y } = new Test();|>
+  // x; y;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     get x() { return 0; }
+// 
+//     set y(a: number) {}
+// }
+// <|const { [|{| isWriteAccess: true |}x|], y } = new Test();|>
+// /*FIND ALL REFS*/[|x|]; y;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     get x() { return 0; }
+  // 
+  //     set y(a: number) {}
+  // }
+  // <|const { [|x|], y } = new Test();|>
+  // /*FIND ALL REFS*/x; y;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     get x() { return 0; }
+// 
+//     <|set /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}y|](a: number) {}|>
+// }
+// <|const { x, [|{| isWriteAccess: true |}y|] } = new Test();|>
+// x; y;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     get x() { return 0; }
+  // 
+  //     <|set /*FIND ALL REFS*/[|y|](a: number) {}|>
+  // }
+  // const { x, y } = new Test();
+  // x; y;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.y: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "y",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     get x() { return 0; }
+// 
+//     <|set [|{| defId: 0, isWriteAccess: true |}y|](a: number) {}|>
+// }
+// <|const { x, /*FIND ALL REFS*/[|{| defId: 1, isWriteAccess: true, isDefinition: true |}y|] } = new Test();|>
+// x; [|{| defId: 1 |}y|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     get x() { return 0; }
+  // 
+  //     <|set [|{| defId: 0 |}y|](a: number) {}|>
+  // }
+  // <|const { x, /*FIND ALL REFS*/[|{| defId: 1 |}y|] } = new Test();|>
+  // x; y;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.y: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "y",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const y: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "y",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+// class Test {
+//     get x() { return 0; }
+// 
+//     set y(a: number) {}
+// }
+// <|const { x, [|{| isWriteAccess: true |}y|] } = new Test();|>
+// x; /*FIND ALL REFS*/[|y|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGetter.ts ===
+  // class Test {
+  //     get x() { return 0; }
+  // 
+  //     set y(a: number) {}
+  // }
+  // <|const { x, [|y|] } = new Test();|>
+  // x; /*FIND ALL REFS*/y;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const y: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "y",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

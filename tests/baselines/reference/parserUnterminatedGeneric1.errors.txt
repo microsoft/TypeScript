@@ -1,0 +1,14 @@
+parserUnterminatedGeneric1.ts(2,23): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+parserUnterminatedGeneric1.ts(2,45): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+parserUnterminatedGeneric1.ts(2,54): error TS1005: '>' expected.
+
+
+==== parserUnterminatedGeneric1.ts (3 errors) ====
+     interface IQService {
+            all(promises: IPromise < any > []): IPromise<
+                          ~~~~~~~~
+!!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+                                                ~~~~~~~~
+!!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+                                                         
+!!! error TS1005: '>' expected.

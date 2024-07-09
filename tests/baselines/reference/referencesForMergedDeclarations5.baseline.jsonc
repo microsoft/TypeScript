@@ -1,0 +1,269 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+// <|interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|] { }|>
+// module Foo { export interface Bar { } }
+// function Foo() { }
+// 
+// <|export = [|Foo|];|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+  // interface /*FIND ALL REFS*/Foo { }
+  // module Foo { export interface Bar { } }
+  // <|function [|Foo|]() { }|>
+  // 
+  // export = Foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "interface Foo\nnamespace Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+// interface Foo { }
+// <|module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|] { export interface Bar { } }|>
+// function Foo() { }
+// 
+// <|export = [|Foo|];|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+  // interface Foo { }
+  // module /*FIND ALL REFS*/Foo { export interface Bar { } }
+  // <|function [|Foo|]() { }|>
+  // 
+  // export = Foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+// interface Foo { }
+// module Foo { export interface Bar { } }
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|]() { }|>
+// 
+// <|export = [|Foo|];|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+  // interface Foo { }
+  // module Foo { export interface Bar { } }
+  // <|function /*FIND ALL REFS*/[|Foo|]() { }|>
+  // 
+  // export = Foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo\nfunction Foo(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+// <|interface [|{| isWriteAccess: true |}Foo|] { }|>
+// <|module [|{| isWriteAccess: true |}Foo|] { export interface Bar { } }|>
+// <|function [|{| isWriteAccess: true |}Foo|]() { }|>
+// 
+// <|export = /*FIND ALL REFS*/[|Foo|];|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations5.ts ===
+  // interface Foo { }
+  // module Foo { export interface Bar { } }
+  // <|function [|Foo|]() { }|>
+  // 
+  // export = /*FIND ALL REFS*/Foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "interface Foo\nnamespace Foo\nfunction Foo(): void",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,9 @@
+accessorDeclarationEmitVisibilityErrors.ts(2,18): error TS2304: Cannot find name 'DoesNotExist'.
+
+
+==== accessorDeclarationEmitVisibilityErrors.ts (1 errors) ====
+    export class Q {
+        set bet(arg: DoesNotExist) {}
+                     ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DoesNotExist'.
+    }

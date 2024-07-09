@@ -1,0 +1,9 @@
+YieldExpression9_es6.ts(2,9): error TS2304: Cannot find name 'foo'.
+
+
+==== YieldExpression9_es6.ts (1 errors) ====
+    var v = function*() {
+      yield(foo);
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+    }

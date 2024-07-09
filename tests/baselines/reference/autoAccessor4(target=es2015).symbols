@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor4.ts] ////
+
+=== autoAccessor4.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessor4.ts, 0, 0))
+
+    accessor 0: any;
+>0 : Symbol(C1[0], Decl(autoAccessor4.ts, 0, 10))
+
+    accessor 1 = 1;
+>1 : Symbol(C1[1], Decl(autoAccessor4.ts, 1, 20))
+
+    static accessor 2: any;
+>2 : Symbol(C1[2], Decl(autoAccessor4.ts, 2, 19))
+
+    static accessor 3 = 2;
+>3 : Symbol(C1[3], Decl(autoAccessor4.ts, 3, 27))
+}
+

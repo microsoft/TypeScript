@@ -1,0 +1,73 @@
+name: 'Feature request'
+description: 'Suggest an idea'
+body:
+  - type: markdown
+    attributes:
+      value: |
+        💡 Did you know? TypeScript has over 2,000 open suggestions!
+
+        🔎 Please [search thoroughly in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging new feature requests as most common ideas already have a proposal in progress.
+
+        The "Common Feature Requests" section of the FAQ lists many popular requests: https://github.com/Microsoft/TypeScript/wiki/FAQ#common-feature-requests
+
+        Please fill in each section completely. Thank you!
+  - type: textarea
+    id: search_terms
+    attributes:
+      label: '🔍 Search Terms'
+      description: |
+        What search terms did you use when trying to find an existing suggestion?
+
+        List them here so people in the future can find this one more easily.
+      placeholder: |
+        List of keywords you searched for before creating this issue. Write them down here so that others can find this suggestion more easily and help provide feedback.
+
+        e.g. "isArray readonly", "regex string types", "json const assertion import"
+    validations:
+      required: true
+  - type: checkboxes
+    id: viability_checklist
+    attributes:
+      label: '✅ Viability Checklist'
+      description: |
+        Suggestions that don't meet all these criteria are very, very unlikely to be accepted. We always recommend reviewing the TypeScript design goals before investing time writing a proposal for ideas outside the scope of the project.
+
+        My suggestion meets the following guidelines.
+      options:
+        - label: This wouldn't be a breaking change in existing TypeScript/JavaScript code
+          required: true
+        - label: This wouldn't change the runtime behavior of existing JavaScript code
+          required: true
+        - label: This could be implemented without emitting different JS based on the types of the expressions
+          required: true
+        - label: This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, new syntax sugar for JS, etc.)
+          required: true
+        - label: "This isn't a request to add a new utility type: https://github.com/microsoft/TypeScript/wiki/No-New-Utility-Types"
+          required: true
+        - label: 'This feature would agree with the rest of our Design Goals: https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals'
+          required: true
+  - type: textarea
+    id: suggestion_summary
+    attributes:
+      label: '⭐ Suggestion'
+      description: "A summary of what you'd like to see added or changed"
+    validations:
+      required: true
+  - type: textarea
+    id: motivating_example
+    attributes:
+      label: '📃 Motivating Example'
+      description: |
+        If you were announcing this feature in a blog post, what's a short explanation that shows a developer why this feature improves the language?
+    validations:
+      required: true
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: '💻 Use Cases'
+      value: |
+        1. What do you want to use this for?
+        2. What shortcomings exist with current approaches?
+        3. What workarounds are you using in the meantime?
+    validations:
+      required: true

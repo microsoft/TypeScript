@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/debugger.ts] ////
+
+=== debugger.ts ===
+debugger;
+
+function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    debugger;
+
+}

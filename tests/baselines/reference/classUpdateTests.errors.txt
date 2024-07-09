@@ -1,0 +1,168 @@
+classUpdateTests.ts(34,2): error TS2377: Constructors for derived classes must contain a 'super' call.
+classUpdateTests.ts(43,18): error TS2335: 'super' can only be referenced in a derived class.
+classUpdateTests.ts(63,7): error TS2415: Class 'L' incorrectly extends base class 'G'.
+  Property 'p1' is private in type 'L' but not in type 'G'.
+classUpdateTests.ts(69,7): error TS2415: Class 'M' incorrectly extends base class 'G'.
+  Property 'p1' is private in type 'M' but not in type 'G'.
+classUpdateTests.ts(93,3): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(95,1): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(99,3): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(105,3): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(105,10): error TS1434: Unexpected keyword or identifier.
+classUpdateTests.ts(105,14): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+classUpdateTests.ts(107,1): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(111,3): error TS1128: Declaration or statement expected.
+classUpdateTests.ts(111,11): error TS1434: Unexpected keyword or identifier.
+classUpdateTests.ts(111,15): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
+
+
+==== classUpdateTests.ts (16 errors) ====
+    //
+    // test codegen for instance properties
+    //
+    class A {
+    	public p1 = 0;
+    	private p2 = 0;
+    	p3;
+    }
+    
+    class B {
+    	public p1 = 0;
+    	private p2 = 0;
+    	p3;
+    
+    	constructor() {}
+    }
+    
+    class C {
+    	constructor(public p1=0, private p2=0, p3=0) {}
+    }
+    
+    //
+    // test requirements for super calls
+    //
+    class D { // NO ERROR
+    	
+    }
+    
+    class E extends D { // NO ERROR
+    	public p1 = 0;
+    }
+    
+    class F extends E {
+    	constructor() {} // ERROR - super call required
+    	~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    }
+    
+    class G extends D {
+    	public p1 = 0;
+    	constructor() { super(); } // NO ERROR
+    }
+    
+    class H {
+    	constructor() { super(); } // ERROR - no super call allowed
+    	                ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+    }
+    
+    class I extends Object {
+    	constructor() { super(); } // ERROR - no super call allowed
+    }
+    
+    class J extends G {
+    	constructor(public p1:number) {
+    		super(); // NO ERROR
+    	}
+    }
+    
+    class K extends G {
+    	constructor(public p1:number) { // ERROR
+    		var i = 0;
+    		super();
+    	}
+    }
+    
+    class L extends G {
+          ~
+!!! error TS2415: Class 'L' incorrectly extends base class 'G'.
+!!! error TS2415:   Property 'p1' is private in type 'L' but not in type 'G'.
+    	constructor(private p1:number) {
+    		super(); // NO ERROR
+    	}
+    }
+    
+    class M extends G {
+          ~
+!!! error TS2415: Class 'M' incorrectly extends base class 'G'.
+!!! error TS2415:   Property 'p1' is private in type 'M' but not in type 'G'.
+    	constructor(private p1:number) { // ERROR
+    		var i = 0;
+    		super();
+    	}
+    }
+    
+    //
+    // test this reference in field initializers
+    //
+    class N {
+    	public p1 = 0;
+    	public p2 = this.p1;
+    
+    	constructor() {
+    		this.p2 = 0;
+    	}
+    }
+    
+    //
+    // test error on property declarations within class constructors
+    //
+    class O {
+    	constructor() {
+    		public p1 = 0; // ERROR
+    		~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    	}
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class P {
+    	constructor() {
+    		private p1 = 0; // ERROR
+    		~~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    	}
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class Q {
+    	constructor() {
+    		public this.p1 = 0; // ERROR
+    		~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    		       ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+    		           ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    	}
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class R {
+    	constructor() {
+    		private this.p1 = 0; // ERROR
+    		~~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    		        ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+    		            ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    	}
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

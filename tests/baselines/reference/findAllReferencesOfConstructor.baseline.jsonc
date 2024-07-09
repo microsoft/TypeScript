@@ -1,0 +1,576 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// export class C {
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}constructor|](n: number);|>
+//     <|[|{| defId: 0, isDefinition: true |}constructor|]();|>
+//     <|[|{| defId: 0, isDefinition: true |}constructor|](n?: number){}|>
+//     static f() {
+//         this.f();
+//         new [|{| defId: 0 |}this|]();
+//     }
+// }
+// new [|{| defId: 0 |}C|]();
+// const D = C;
+// new D();
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|{| defId: 0 |}C|]();
+// class d extends a.C { constructor() { [|{| defId: 0 |}super|](); }
+
+// === /tests/cases/fourslash/b.ts ===
+// import { C } from "./a";
+// new [|{| defId: 1 |}C|]();
+
+// === /tests/cases/fourslash/c.ts ===
+// import { C } from "./a";
+// class D extends C {
+//     constructor() {
+//         [|{| defId: 2 |}super|]();
+//         super.method();
+//     }
+//     method() { super(); }
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export class [|{| defId: 0 |}C|] {
+  //     /*FIND ALL REFS*/constructor(n: number);
+  //     constructor();
+  //     constructor(n?: number){}
+  //     static f() {
+  //         this.f();
+  //         new this();
+  //     }
+  // }|>
+  // new C();
+  // const D = C;
+  // new D();
+
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { [|{| defId: 1 |}C|] } from "./a";|>
+  // new C();
+
+  // === /tests/cases/fourslash/c.ts ===
+  // <|import { [|{| defId: 2 |}C|] } from "./a";|>
+  // class D extends C {
+  //     constructor() {
+  //         super();
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// export class C {
+//     <|[|{| defId: 0, isDefinition: true |}constructor|](n: number);|>
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}constructor|]();|>
+//     <|[|{| defId: 0, isDefinition: true |}constructor|](n?: number){}|>
+//     static f() {
+//         this.f();
+//         new [|{| defId: 0 |}this|]();
+//     }
+// }
+// new [|{| defId: 0 |}C|]();
+// const D = C;
+// new D();
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|{| defId: 0 |}C|]();
+// class d extends a.C { constructor() { [|{| defId: 0 |}super|](); }
+
+// === /tests/cases/fourslash/b.ts ===
+// import { C } from "./a";
+// new [|{| defId: 1 |}C|]();
+
+// === /tests/cases/fourslash/c.ts ===
+// import { C } from "./a";
+// class D extends C {
+//     constructor() {
+//         [|{| defId: 2 |}super|]();
+//         super.method();
+//     }
+//     method() { super(); }
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export class [|{| defId: 0 |}C|] {
+  //     constructor(n: number);
+  //     /*FIND ALL REFS*/constructor();
+  //     constructor(n?: number){}
+  //     static f() {
+  //         this.f();
+  //         new this();
+  //     }
+  // }|>
+  // new C();
+  // const D = C;
+  // new D();
+
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { [|{| defId: 1 |}C|] } from "./a";|>
+  // new C();
+
+  // === /tests/cases/fourslash/c.ts ===
+  // <|import { [|{| defId: 2 |}C|] } from "./a";|>
+  // class D extends C {
+  //     constructor() {
+  //         super();
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// export class C {
+//     <|[|{| defId: 0, isDefinition: true |}constructor|](n: number);|>
+//     <|[|{| defId: 0, isDefinition: true |}constructor|]();|>
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}constructor|](n?: number){}|>
+//     static f() {
+//         this.f();
+//         new [|{| defId: 0 |}this|]();
+//     }
+// }
+// new [|{| defId: 0 |}C|]();
+// const D = C;
+// new D();
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|{| defId: 0 |}C|]();
+// class d extends a.C { constructor() { [|{| defId: 0 |}super|](); }
+
+// === /tests/cases/fourslash/b.ts ===
+// import { C } from "./a";
+// new [|{| defId: 1 |}C|]();
+
+// === /tests/cases/fourslash/c.ts ===
+// import { C } from "./a";
+// class D extends C {
+//     constructor() {
+//         [|{| defId: 2 |}super|]();
+//         super.method();
+//     }
+//     method() { super(); }
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export class [|{| defId: 0 |}C|] {
+  //     constructor(n: number);
+  //     constructor();
+  //     /*FIND ALL REFS*/constructor(n?: number){}
+  //     static f() {
+  //         this.f();
+  //         new this();
+  //     }
+  // }|>
+  // new C();
+  // const D = C;
+  // new D();
+
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { [|{| defId: 1 |}C|] } from "./a";|>
+  // new C();
+
+  // === /tests/cases/fourslash/c.ts ===
+  // <|import { [|{| defId: 2 |}C|] } from "./a";|>
+  // class D extends C {
+  //     constructor() {
+  //         super();
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class C\nimport C",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

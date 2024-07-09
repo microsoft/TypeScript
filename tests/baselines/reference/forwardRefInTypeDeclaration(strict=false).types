@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/forwardRefInTypeDeclaration.ts] ////
+
+=== forwardRefInTypeDeclaration.ts ===
+// forward ref ignored in a typeof
+declare let s: typeof s1;
+>s : "x"
+>  : ^^^
+>s1 : "x"
+>   : ^^^
+
+const s1 = "x";
+>s1 : "x"
+>   : ^^^
+>"x" : "x"
+>    : ^^^
+
+// ignored anywhere in an interface (#35947)
+interface Foo2 { [s2]: number; }
+>[s2] : number
+>     : ^^^^^^
+>s2 : "x"
+>   : ^^^
+
+const s2 = "x";
+>s2 : "x"
+>   : ^^^
+>"x" : "x"
+>    : ^^^
+
+// or in a type definition
+type Foo3 = { [s3]: number; }
+>Foo3 : Foo3
+>     : ^^^^
+>[s3] : number
+>     : ^^^^^^
+>s3 : "x"
+>   : ^^^
+
+const s3 = "x";
+>s3 : "x"
+>   : ^^^
+>"x" : "x"
+>    : ^^^
+
+// or in a type literal
+declare const foo4: { [s4]: number; }
+>foo4 : { x: number; }
+>     : ^^^^^      ^^^
+>[s4] : number
+>     : ^^^^^^
+>s4 : "x"
+>   : ^^^
+
+const s4 = "x";
+>s4 : "x"
+>   : ^^^
+>"x" : "x"
+>    : ^^^
+
+// or in a declared class
+declare class Foo5 { [s5]: number; }
+>Foo5 : Foo5
+>     : ^^^^
+>[s5] : number
+>     : ^^^^^^
+>s5 : "x"
+>   : ^^^
+
+const s5 = "x";
+>s5 : "x"
+>   : ^^^
+>"x" : "x"
+>    : ^^^
+
+// or with qualified names
+interface Foo6 { [Cls1.a]: number; [Cls2.b]: number; [obj1.c]: number; [obj2.d]: number }
+>[Cls1.a] : number
+>         : ^^^^^^
+>Cls1.a : "a"
+>       : ^^^
+>Cls1 : typeof Cls1
+>     : ^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>[Cls2.b] : number
+>         : ^^^^^^
+>Cls2.b : "b"
+>       : ^^^
+>Cls2 : typeof Cls2
+>     : ^^^^^^^^^^^
+>b : "b"
+>  : ^^^
+>[obj1.c] : number
+>         : ^^^^^^
+>obj1.c : "c"
+>       : ^^^
+>obj1 : { c: "c"; }
+>     : ^^^^^   ^^^
+>c : "c"
+>  : ^^^
+>[obj2.d] : number
+>         : ^^^^^^
+>obj2.d : "d"
+>       : ^^^
+>obj2 : { readonly d: "d"; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>d : "d"
+>  : ^^^
+
+declare class Cls1 { static a: "a"; }
+>Cls1 : Cls1
+>     : ^^^^
+>a : "a"
+>  : ^^^
+
+class Cls2 { static b = "b" as const; }
+>Cls2 : Cls2
+>     : ^^^^
+>b : "b"
+>  : ^^^
+>"b" as const : "b"
+>             : ^^^
+>"b" : "b"
+>    : ^^^
+
+declare const obj1: { c: 'c' }
+>obj1 : { c: "c"; }
+>     : ^^^^^   ^^^
+>c : "c"
+>  : ^^^
+
+const obj2 = { d: 'd' } as const
+>obj2 : { readonly d: "d"; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>{ d: 'd' } as const : { readonly d: "d"; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
+>{ d: 'd' } : { readonly d: "d"; }
+>           : ^^^^^^^^^^^^^^^^^^^^
+>d : "d"
+>  : ^^^
+>'d' : "d"
+>    : ^^^
+

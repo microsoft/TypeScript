@@ -1,0 +1,7 @@
+symbolType20.ts(1,11): error TS2427: Interface name cannot be 'symbol'.
+
+
+==== symbolType20.ts (1 errors) ====
+    interface symbol { }
+              ~~~~~~
+!!! error TS2427: Interface name cannot be 'symbol'.

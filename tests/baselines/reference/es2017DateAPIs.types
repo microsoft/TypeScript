@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es2017/es2017DateAPIs.ts] ////
+
+=== es2017DateAPIs.ts ===
+Date.UTC(2017);
+>Date.UTC(2017) : number
+>               : ^^^^^^
+>Date.UTC : { (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; (year: number, monthIndex?: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; }
+>         : ^^^    ^^      ^^          ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^      ^^^    ^^      ^^          ^^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^      ^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>UTC : { (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; (year: number, monthIndex?: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; }
+>    : ^^^    ^^      ^^          ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^      ^^^    ^^      ^^          ^^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^      ^^^
+>2017 : 2017
+>     : ^^^^
+

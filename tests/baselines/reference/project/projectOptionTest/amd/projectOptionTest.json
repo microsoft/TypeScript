@@ -1,0 +1,17 @@
+{
+    "scenario": "Verify project option",
+    "projectRoot": "tests/cases/projects/projectOption",
+    "baselineCheck": true,
+    "declaration": true,
+    "project": "Test",
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "Test/a.ts"
+    ],
+    "emittedFiles": [
+        "Test/a.js",
+        "Test/a.d.ts"
+    ]
+}

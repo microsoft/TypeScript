@@ -1,0 +1,1 @@
+var f = () => {this.window;}

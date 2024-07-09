@@ -1,0 +1,7 @@
+{
+    "scenario": "nested reference tags",
+    "projectRoot": "tests/cases/projects/reference-1",
+    "inputFiles": [
+        "main.ts"
+    ]
+}

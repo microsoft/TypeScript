@@ -1,0 +1,3 @@
+//// // TODOnomatch
+
+verify.todoCommentsInCurrentFile(["TODO"]);

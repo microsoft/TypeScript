@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/expandoFunctionNullishProperty.ts] ////
+
+=== expandoFunctionNullishProperty.ts ===
+// mentioned in https://github.com/microsoft/TypeScript/issues/54220
+
+interface TestNull {
+  (): void;
+  readonly prop: null;
+>prop : null
+>     : ^^^^
+}
+
+export function testNull(): TestNull {
+>testNull : () => TestNull
+>         : ^^^^^^        
+
+  function inner() {}
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  inner.prop = null;
+>inner.prop = null : null
+>                  : ^^^^
+>inner.prop : null
+>           : ^^^^
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : null
+>     : ^^^^
+
+  return inner;
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface TestNull2 {
+  (): void;
+  prop: string | null;
+>prop : string | null
+>     : ^^^^^^^^^^^^^
+}
+
+export function testNull2(): TestNull2 {
+>testNull2 : () => TestNull2
+>          : ^^^^^^         
+
+  function inner() {}
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  inner.prop = null;
+>inner.prop = null : null
+>                  : ^^^^
+>inner.prop : null
+>           : ^^^^
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : null
+>     : ^^^^
+
+  return inner;
+>inner : { (): void; prop: null; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+interface TestUndefined {
+  (): void;
+  readonly prop: undefined;
+>prop : undefined
+>     : ^^^^^^^^^
+}
+
+export function testUndefined(): TestUndefined {
+>testUndefined : () => TestUndefined
+>              : ^^^^^^             
+
+  function inner() {}
+>inner : { (): void; prop: undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  inner.prop = undefined;
+>inner.prop = undefined : undefined
+>                       : ^^^^^^^^^
+>inner.prop : undefined
+>           : ^^^^^^^^^
+>inner : { (): void; prop: undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : undefined
+>     : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  return inner;
+>inner : { (): void; prop: undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

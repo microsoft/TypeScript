@@ -1,0 +1,6 @@
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+
+
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+==== index.ts (0 errors) ====
+    

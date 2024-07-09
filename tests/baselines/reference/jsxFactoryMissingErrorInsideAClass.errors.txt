@@ -1,0 +1,12 @@
+test.tsx(3,17): error TS2304: Cannot find name 'factory'.
+
+
+==== test.tsx (1 errors) ====
+    export class C {
+        factory() {
+            return <div></div>;
+                    ~~~
+!!! error TS2304: Cannot find name 'factory'.
+        }
+    }
+    

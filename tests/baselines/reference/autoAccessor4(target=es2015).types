@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor4.ts] ////
+
+=== autoAccessor4.ts ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor 0: any;
+>0 : any
+
+    accessor 1 = 1;
+>1 : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    static accessor 2: any;
+>2 : any
+
+    static accessor 3 = 2;
+>3 : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+

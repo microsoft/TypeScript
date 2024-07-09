@@ -1,0 +1,16 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// [||]export class Foo {}
+
+// === /tests/cases/fourslash/b.ts ===
+// import n = require([|'./a/*GOTO DEF*/'|]);
+// var x = new n.Foo();
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./a",
+    "unverified": false
+   }
+  ]

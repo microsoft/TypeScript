@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/requireOfJsonFileWithoutEsModuleInterop.ts] ////
+
+=== file1.ts ===
+import * as test from "./test.json"
+>test : Symbol(test, Decl(file1.ts, 0, 6))
+
+=== test.json ===
+{
+    "a": true,
+>"a" : Symbol("a", Decl(test.json, 0, 1))
+
+    "b": "hello"
+>"b" : Symbol("b", Decl(test.json, 1, 14))
+}

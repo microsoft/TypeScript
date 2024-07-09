@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsClassesExpressions.ts] ////
+
+=== isolatedDeclarationErrorsClassesExpressions.ts ===
+export const cls = class {
+>cls : Symbol(cls, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 0, 12))
+
+    foo: string = "";
+>foo : Symbol(cls.foo, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 0, 26))
+}
+
+
+function id<T extends new (...a: any[]) => any>(cls: T) {
+>id : Symbol(id, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 2, 1))
+>T : Symbol(T, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 5, 12))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 5, 27))
+>cls : Symbol(cls, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 5, 48))
+>T : Symbol(T, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 5, 12))
+
+    return cls;
+>cls : Symbol(cls, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 5, 48))
+}
+
+
+export class Base {
+>Base : Symbol(Base, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 7, 1))
+
+}
+
+export class Mix extends id(Base) {
+>Mix : Symbol(Mix, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 12, 1))
+>id : Symbol(id, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 2, 1))
+>Base : Symbol(Base, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 7, 1))
+
+}
+
+export const classes = [class {}, class{}] as const
+>classes : Symbol(classes, Decl(isolatedDeclarationErrorsClassesExpressions.ts, 18, 12))
+>const : Symbol(const)
+

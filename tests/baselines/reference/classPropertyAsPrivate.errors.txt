@@ -1,0 +1,50 @@
+classPropertyAsPrivate.ts(15,3): error TS2341: Property 'x' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(16,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(17,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(18,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(20,3): error TS2341: Property 'a' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(21,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(22,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+
+
+==== classPropertyAsPrivate.ts (8 errors) ====
+    class C {
+        private x: string;
+        private get y() { return null; }
+        private set y(x) { }
+        private foo() { }
+    
+        private static a: string;
+        private static get b() { return null; }
+        private static set b(x) { }
+        private static foo() { }
+    }
+    
+    var c: C;
+    // all errors
+    c.x;
+      ~
+!!! error TS2341: Property 'x' is private and only accessible within class 'C'.
+    c.y;
+      ~
+!!! error TS2341: Property 'y' is private and only accessible within class 'C'.
+    c.y = 1;
+      ~
+!!! error TS2341: Property 'y' is private and only accessible within class 'C'.
+    c.foo();
+      ~~~
+!!! error TS2341: Property 'foo' is private and only accessible within class 'C'.
+    
+    C.a;
+      ~
+!!! error TS2341: Property 'a' is private and only accessible within class 'C'.
+    C.b();
+      ~
+!!! error TS2341: Property 'b' is private and only accessible within class 'C'.
+    C.b = 1;
+      ~
+!!! error TS2341: Property 'b' is private and only accessible within class 'C'.
+    C.foo();
+      ~~~
+!!! error TS2341: Property 'foo' is private and only accessible within class 'C'.

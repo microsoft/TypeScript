@@ -1,0 +1,79 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink4.ts ===
+// type A = 1 | 2;
+// 
+// switch (0 as A) {
+// 	/** {@link A} */
+//             ^
+// | ----------------------------------------------------------------------
+// | type A = 1 | 2
+// | ----------------------------------------------------------------------
+// 	case 1:
+// 	case 2:
+//     break;
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink4.ts",
+      "position": 47,
+      "name": ""
+    },
+    "item": {
+      "kind": "type",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "2",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

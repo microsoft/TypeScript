@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts] ////
+
+=== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts ===
+function f10(): undefined {
+>f10 : Symbol(f10, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 0, 0))
+
+    // Ok, return type allows implicit return of undefined
+}
+
+function f11(): undefined | number {
+>f11 : Symbol(f11, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 2, 1))
+
+    // Error, return type isn't just undefined
+}
+
+function f12(): number {
+>f12 : Symbol(f12, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 6, 1))
+
+    // Error, return type doesn't include undefined
+}
+
+const f20: () => undefined = () => {
+>f20 : Symbol(f20, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 12, 5))
+
+    // Ok, contextual type for implicit return is undefined
+}
+
+const f21: () => undefined | number = () => {
+>f21 : Symbol(f21, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 16, 5))
+
+    // Error, regular void function because contextual type for implicit return isn't just undefined
+}
+
+const f22: () => number = () => {
+>f22 : Symbol(f22, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 20, 5))
+
+    // Error, regular void function because contextual type for implicit return isn't just undefined
+}
+
+async function f30(): Promise<undefined> {
+>f30 : Symbol(f30, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 22, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // Ok, return type allows implicit return of undefined
+}
+
+async function f31(): Promise<undefined | number> {
+>f31 : Symbol(f31, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 26, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // Error, return type isn't just undefined
+}
+
+async function f32(): Promise<number> {
+>f32 : Symbol(f32, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 30, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // Error, return type doesn't include undefined
+}
+
+// Examples from #36288
+
+declare function f(a: () => undefined): void;
+>f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
+>a : Symbol(a, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 38, 19))
+
+f(() => { });
+>f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
+
+f((): undefined => { });
+>f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
+
+const g1: () => undefined = () => { };
+>g1 : Symbol(g1, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 44, 5))
+
+const g2 = (): undefined => { };
+>g2 : Symbol(g2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 46, 5))
+
+function h1() {
+>h1 : Symbol(h1, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 46, 32))
+}
+
+f(h1);  // Error
+>f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
+>h1 : Symbol(h1, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 46, 32))
+
+function h2(): undefined {
+>h2 : Symbol(h2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 51, 6))
+}
+
+f(h2);
+>f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
+>h2 : Symbol(h2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 51, 6))
+

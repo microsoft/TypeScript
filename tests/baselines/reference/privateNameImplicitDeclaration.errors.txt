@@ -1,0 +1,14 @@
+privateNameImplicitDeclaration.js(4,14): error TS2339: Property '#x' does not exist on type 'C'.
+
+
+==== privateNameImplicitDeclaration.js (1 errors) ====
+    class C {
+        constructor() {
+            /** @type {string} */
+            this.#x;
+                 ~~
+!!! error TS2339: Property '#x' does not exist on type 'C'.
+        }
+    }
+    
+    

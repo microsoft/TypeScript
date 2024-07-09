@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithoutExtension3.ts] ////
+
+=== /src/foo.tsx ===
+export function foo() {
+>foo : () => string
+>    : ^^^^^^^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+}
+
+=== /src/bar.mts ===
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error, suggest adding ".jsx"
+>foo : any
+>    : ^^^
+

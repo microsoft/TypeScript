@@ -1,0 +1,18 @@
+inOperator.ts(7,15): error TS2322: Type 'number' is not assignable to type 'object'.
+
+
+==== inOperator.ts (1 errors) ====
+    var a=[];
+    
+    for (var x in a) {}
+    
+    if (3 in a) {}
+    
+    var b = '' in 0;
+                  ~
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
+    
+    var c: any;
+    var y: number;
+    if (y in c) { }
+    

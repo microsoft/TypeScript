@@ -1,0 +1,202 @@
+// === findAllReferences ===
+// === /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts ===
+// <|declare var [|{| defId: 1, isWriteAccess: true |}debug|]: [|{| defId: 1 |}debug|].Debug & { debug: [|{| defId: 1 |}debug|].Debug; default: [|{| defId: 1 |}debug|].Debug };|>
+// <|[|{| defId: 0 |}<|export|] = [|{| contextId: 2, defId: 1 |}debug|];|>|>
+// export as namespace debug;
+// <|declare namespace [|{| defId: 1, isWriteAccess: true |}debug|] {
+//     interface Debug {
+//        coerce: (val: any) => any;
+//     }
+// }|>
+
+// === /packages/playwright-core/src/index.ts ===
+// <|export const debug: typeof import('[|{| defId: 1 |}../bundles/utils/node_modules//*FIND ALL REFS*/@types/debug|]') = require('./utilsBundleImpl').debug;|>
+
+  // === Definitions ===
+  // === /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts ===
+  // [|{| defId: 0 |}<|declare var [|{| defId: 1 |}debug|]: debug.Debug & { debug: debug.Debug; default: debug.Debug };|>
+  // export = debug;
+  // export as namespace debug;
+  // declare namespace debug {
+  //     interface Debug {
+  //        coerce: (val: any) => any;
+  //     }
+  // }|]
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "namespace debug\nvar debug: debug.Debug & {\n    debug: debug.Debug;\n    default: debug.Debug;\n}",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "localName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Debug",
+      "kind": "interfaceName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "&",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Debug",
+      "kind": "text"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "    ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "debug",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Debug",
+      "kind": "text"
+     },
+     {
+      "text": ";",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

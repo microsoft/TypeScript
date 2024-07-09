@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/yieldInForInInDownlevelGenerator.ts] ////
+
+=== yieldInForInInDownlevelGenerator.ts ===
+// https://github.com/microsoft/TypeScript/issues/49808
+function* gen() {
+>gen : Symbol(gen, Decl(yieldInForInInDownlevelGenerator.ts, 0, 0))
+
+  var obj: any = { foo: 1, bar: 2 };
+>obj : Symbol(obj, Decl(yieldInForInInDownlevelGenerator.ts, 2, 5))
+>foo : Symbol(foo, Decl(yieldInForInInDownlevelGenerator.ts, 2, 18))
+>bar : Symbol(bar, Decl(yieldInForInInDownlevelGenerator.ts, 2, 26))
+
+  for (var key in obj) {
+>key : Symbol(key, Decl(yieldInForInInDownlevelGenerator.ts, 3, 10))
+>obj : Symbol(obj, Decl(yieldInForInInDownlevelGenerator.ts, 2, 5))
+
+      yield key;
+>key : Symbol(key, Decl(yieldInForInInDownlevelGenerator.ts, 3, 10))
+
+      delete obj.bar;
+>obj : Symbol(obj, Decl(yieldInForInInDownlevelGenerator.ts, 2, 5))
+  }
+}

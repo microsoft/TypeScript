@@ -1,0 +1,120 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}globalClass|] {
+//     public f() { }
+// }|>
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var c = [|globalClass|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // /*FIND ALL REFS*/<|class [|globalClass|] {
+  //     public f() { }
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class globalClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}globalClass|] {
+//     public f() { }
+// }|>
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var c = [|globalClass|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|class /*FIND ALL REFS*/[|globalClass|] {
+  //     public f() { }
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class globalClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+// <|class [|{| isWriteAccess: true |}globalClass|] {
+//     public f() { }
+// }|>
+
+// === /tests/cases/fourslash/referencesForGlobals_2.ts ===
+// var c = /*FIND ALL REFS*/[|globalClass|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
+  // <|class [|globalClass|] {
+  //     public f() { }
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class globalClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "types": ["node"]
+    },
+
+    "references": [],
+
+    "include": ["**/*"]
+}

@@ -1,0 +1,97 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @template /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]
+//  * @return {[|T|]}
+//  */
+// function f() {}
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @template /*FIND ALL REFS*/[|T|]
+  //  * @return {T}
+  //  */
+  // function f() {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @template [|{| isWriteAccess: true |}T|]
+//  * @return {/*FIND ALL REFS*/[|T|]}
+//  */
+// function f() {}
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @template [|T|]
+  //  * @return {/*FIND ALL REFS*/T}
+  //  */
+  // function f() {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     }
+    ]
+   }
+  ]

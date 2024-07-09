@@ -1,0 +1,2389 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocInheritage.ts ===
+// interface A {
+//     /**
+//      * @description A.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description A.foo2
+//      */
+//     foo2: (para1: string) => number;
+// }
+// 
+// interface B {
+//     /**
+//      * @description B.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description B.foo2
+//      */
+//     foo2: (para2: string) => number;
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // method for function signature
+// class C implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) C.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+//     foo2(q: string) { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) C.foo2(q: string): number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // property for function signature
+// class D implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (q: string) => { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo2: (q: string) => number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// }
+// 
+// new C().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) C.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+// new C().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (method) C.foo2(q: string): number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// new D().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+// new D().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo2: (q: string) => number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// 
+// class Base1 {
+//     /**
+//      * @description Base1.foo1 
+//      */
+//     foo1: number = 1;
+// 
+//     /**
+//      * 
+//      * @param q Base1.foo2 parameter
+//      * @returns Base1.foo2 return
+//      */
+//      foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived1 extends Base1 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived1.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived1.foo2(para1: string): number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived2 extends Base1 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo2: (para1: string) => number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// class Base2 {
+//     /**
+//      * @description Base2.foo1 
+//      */
+//     foo1: number = 1;
+//     /**
+//      * 
+//      * @param q Base2.foo2 parameter
+//      * @returns Base2.foo2 return
+//      */
+//     foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived3 extends Base2 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived3.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived3.foo2(para1: string): number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived4 extends Base2 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo2: (para1: string) => number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// new Drived1().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived1.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived1().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived1.foo2(para1: string): number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived2().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived2().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo2: (para1: string) => number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived3().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived3.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived3().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived3.foo2(para1: string): number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived4().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived4().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo2: (para1: string) => number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 429,
+      "name": "1"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 429,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 451,
+      "name": "2"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 451,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "q",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo2",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 598,
+      "name": "3"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 598,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 620,
+      "name": "4"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 620,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "q",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo2",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 666,
+      "name": "5"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 666,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 680,
+      "name": "6"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 680,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "q",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo2",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 694,
+      "name": "7"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 694,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 708,
+      "name": "8"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 708,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "q",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "A.foo2",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1069,
+      "name": "9"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1069,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived1",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base1.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1091,
+      "name": "10"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1091,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived1",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base1.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base1.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1263,
+      "name": "11"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1263,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived2",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base1.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1285,
+      "name": "12"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1285,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived2",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base1.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base1.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1681,
+      "name": "13"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1681,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived3",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base2.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1703,
+      "name": "14"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1703,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived3",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base2.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base2.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1875,
+      "name": "15"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1875,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived4",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base2.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1897,
+      "name": "16"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1897,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived4",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base2.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base2.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1955,
+      "name": "17"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1955,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived1",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base1.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1975,
+      "name": "18"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1975,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived1",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base1.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base1.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 1995,
+      "name": "19"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1995,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived2",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base1.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 2015,
+      "name": "20"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2015,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived2",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base1.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base1.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 2035,
+      "name": "21"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2035,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived3",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base2.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 2055,
+      "name": "22"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2055,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived3",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base2.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base2.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 2075,
+      "name": "23"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2075,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived4",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo1",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "description",
+          "text": [
+            {
+              "text": "Base2.foo1",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocInheritage.ts",
+      "position": 2095,
+      "name": "24"
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2095,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Drived4",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo2",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "para1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "q",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Base2.foo2 parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "Base2.foo2 return",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

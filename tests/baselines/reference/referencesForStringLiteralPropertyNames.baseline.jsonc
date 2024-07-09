@@ -1,0 +1,76 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts ===
+// class Foo {
+//     <|public "/*FIND ALL REFS*/[|{| isDefinition: true |}ss|]": any;|>
+// }
+// 
+// var x: Foo;
+// x.[|ss|];
+// x["[|ss|]"];
+// x = { <|"[|{| isWriteAccess: true |}ss|]": 0|> };
+// x = { <|[|{| isWriteAccess: true |}ss|]: 0|> };
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts ===
+  // class Foo {
+  //     <|public "/*FIND ALL REFS*/[|ss|]": any;|>
+  // }
+  // 
+  // var x: Foo;
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo[\"ss\"]: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"ss\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

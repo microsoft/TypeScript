@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/commentEmitOnParenthesizedAssertionInReturnStatement.ts] ////
+
+=== commentEmitOnParenthesizedAssertionInReturnStatement.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+  client = {
+>client : { getThing: () => Promise<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    getThing: () => Promise.resolve('')  } : { getThing: () => Promise<string>; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    getThing: () => Promise.resolve('')
+>getThing : () => Promise<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.resolve('') : () => Promise<string>
+>                          : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve('') : Promise<string>
+>                    : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>'' : ""
+>   : ^^
+  }
+
+  foo(): Promise<void> {
+>foo : () => Promise<void>
+>    : ^^^^^^             
+
+    return (
+>(      /* TODO: Avoid using type assertions, please refactor. */ this.client        .getThing() as unknown as Promise<void>    ) : Promise<void>
+>                                                                                                                                 : ^^^^^^^^^^^^^
+
+      /* TODO: Avoid using type assertions, please refactor. */ this.client
+>this.client        .getThing() as unknown as Promise<void> : Promise<void>
+>                                                           : ^^^^^^^^^^^^^
+>this.client        .getThing() as unknown : unknown
+>                                          : ^^^^^^^
+>this.client        .getThing() : Promise<string>
+>                               : ^^^^^^^^^^^^^^^
+>this.client        .getThing : () => Promise<string>
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>this.client : { getThing: () => Promise<string>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>client : { getThing: () => Promise<string>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        .getThing() as unknown as Promise<void>
+>getThing : () => Promise<string>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+    );
+  }
+}
+

@@ -1,0 +1,13 @@
+test1.ts(2,23): error TS1147: Import declarations in a namespace cannot reference a module.
+
+
+==== test1.ts (1 errors) ====
+    export module myModule {
+     import foo = require("test2");
+                          ~~~~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+     //console.log(foo.$);
+    }
+    
+    
+    

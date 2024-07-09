@@ -1,0 +1,7 @@
+scannerImportDeclaration1.ts(1,21): error TS2503: Cannot find namespace 'TypeScriptServices'.
+
+
+==== scannerImportDeclaration1.ts (1 errors) ====
+    import TypeScript = TypeScriptServices.TypeScript;
+                        ~~~~~~~~~~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'TypeScriptServices'.

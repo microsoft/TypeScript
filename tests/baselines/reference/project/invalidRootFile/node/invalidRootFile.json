@@ -1,0 +1,15 @@
+{
+    "scenario": "InvalidRootFile",
+    "projectRoot": "tests/cases/projects/InvalidRootFile",
+    "inputFiles": [
+        "a",
+        "a.t",
+        "a.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts"
+    ],
+    "emittedFiles": []
+}

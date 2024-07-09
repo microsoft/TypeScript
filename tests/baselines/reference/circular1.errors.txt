@@ -1,0 +1,11 @@
+/b.ts(1,15): error TS2303: Circular definition of import alias 'A'.
+
+
+==== /a.ts (0 errors) ====
+    export type { A } from './b';
+    
+==== /b.ts (1 errors) ====
+    export type { A } from './a';
+                  ~
+!!! error TS2303: Circular definition of import alias 'A'.
+    

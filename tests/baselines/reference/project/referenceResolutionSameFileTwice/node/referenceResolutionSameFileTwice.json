@@ -1,0 +1,20 @@
+{
+    "scenario": "referenceResolutionSameFileTwice",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/",
+    "inputFiles": [
+        "test.ts",
+        "../ReferenceResolution/test.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "test.ts"
+    ],
+    "emittedFiles": [
+        "test.js",
+        "test.d.ts"
+    ]
+}

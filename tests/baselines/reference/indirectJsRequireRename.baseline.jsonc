@@ -1,0 +1,93 @@
+// === findAllReferences ===
+// === /lib/classes/Error.js ===
+// <|module.exports.[|{| isWriteAccess: true |}logWarning|] = message => { };|>
+
+// === /bin/serverless.js ===
+// require('../lib/classes/Error').[|log/*FIND ALL REFS*/Warning|](`CLI triage crashed with: ${error.stack}`);
+
+// === /lib/plugins/aws/package/compile/events/httpApi/index.js ===
+// <|const { [|{| isWriteAccess: true |}logWarning|] } = require('../../../../../../classes/Error');|>
+
+  // === Definitions ===
+  // === /lib/classes/Error.js ===
+  // <|module.exports.[|logWarning|]|> = message => { };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) logWarning: (message: any) => void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "logWarning",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "message",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

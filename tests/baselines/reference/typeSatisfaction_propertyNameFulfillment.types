@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyNameFulfillment.ts] ////
+
+=== typeSatisfaction_propertyNameFulfillment.ts ===
+type Keys = 'a' | 'b' | 'c' | 'd';
+>Keys : Keys
+>     : ^^^^
+
+const p = {
+>p : { a: number; b: string; x: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: 0,    b: "hello",    x: 8 // Should error, 'x' isn't in 'Keys'} satisfies Record<Keys, unknown> : { a: number; b: string; x: number; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: 0,    b: "hello",    x: 8 // Should error, 'x' isn't in 'Keys'} : { a: number; b: string; x: number; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: 0,
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+    b: "hello",
+>b : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    x: 8 // Should error, 'x' isn't in 'Keys'
+>x : number
+>  : ^^^^^^
+>8 : 8
+>  : ^
+
+} satisfies Record<Keys, unknown>;
+
+// Should be OK -- retain info that a is number and b is string
+let a = p.a.toFixed();
+>a : string
+>  : ^^^^^^
+>p.a.toFixed() : string
+>              : ^^^^^^
+>p.a.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
+>p.a : number
+>    : ^^^^^^
+>p : { a: number; b: string; x: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+
+let b = p.b.substring(1);
+>b : string
+>  : ^^^^^^
+>p.b.substring(1) : string
+>                 : ^^^^^^
+>p.b.substring : (start: number, end?: number) => string
+>              : ^     ^^      ^^   ^^^      ^^^^^      
+>p.b : string
+>    : ^^^^^^
+>p : { a: number; b: string; x: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string
+>  : ^^^^^^
+>substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
+>1 : 1
+>  : ^
+
+// Should error even though 'd' is in 'Keys'
+let d = p.d;
+>d : any
+>  : ^^^
+>p.d : any
+>    : ^^^
+>p : { a: number; b: string; x: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d : any
+>  : ^^^
+

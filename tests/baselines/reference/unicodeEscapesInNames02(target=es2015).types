@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/unicodeEscapesInNames02.ts] ////
+
+=== extendedEscapesForAstralsInVarsAndClasses.ts ===
+// U+102A7 CARIAN LETTER A2
+var 𐊧: string;
+>𐊧 : string
+>   : ^^^^^^
+
+var \u{102A7}: string;
+>\u{102A7} : string
+>          : ^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    𐊧 = "hello";
+>𐊧 = "hello" : "hello"
+>             : ^^^^^^^
+>𐊧 : string
+>   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+}
+else {
+    \u{102A7} = "hallo";
+>\u{102A7} = "hallo" : "hallo"
+>                    : ^^^^^^^
+>\u{102A7} : string
+>          : ^^^^^^
+>"hallo" : "hallo"
+>        : ^^^^^^^
+}
+
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+    \u{102A7}: string;
+>\u{102A7} : string
+>          : ^^^^^^
+
+    constructor() {
+        this.\u{102A7} = " world";
+>this.\u{102A7} = " world" : " world"
+>                          : ^^^^^^^^
+>this.\u{102A7} : string
+>               : ^^^^^^
+>this : this
+>     : ^^^^
+>\u{102A7} : string
+>          : ^^^^^^
+>" world" : " world"
+>         : ^^^^^^^^
+    }
+    methodA() {
+>methodA : () => string
+>        : ^^^^^^^^^^^^
+
+        return this.𐊧;
+>this.𐊧 : string
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>𐊧 : string
+>   : ^^^^^^
+    }
+}
+
+export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
+>_𐊧 : string
+>    : ^^^^^^
+>new Foo().\u{102A7} + new Foo().methodA() : string
+>                                          : ^^^^^^
+>new Foo().\u{102A7} : string
+>                    : ^^^^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>\u{102A7} : string
+>          : ^^^^^^
+>new Foo().methodA() : string
+>                    : ^^^^^^
+>new Foo().methodA : () => string
+>                  : ^^^^^^^^^^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>methodA : () => string
+>        : ^^^^^^^^^^^^
+
+_\u{102A7} += "!";
+>_\u{102A7} += "!" : string
+>                  : ^^^^^^
+>_\u{102A7} : string
+>           : ^^^^^^
+>"!" : "!"
+>    : ^^^
+
+=== astralAsSurrogatePair.ts ===
+import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
+>_𐊧 : string
+>    : ^^^^^^
+> : string
+> : ^^^^^^
+>uD800 : any
+>      : ^^^
+>uDEA7 : any
+>      : ^^^
+

@@ -1,0 +1,7 @@
+===================================================================
+JsFile: sourceMap-SingleSpace1.js
+mapUrl: sourceMap-SingleSpace1.js.map
+sourceRoot: 
+sources: sourceMap-SingleSpace1.ts
+===================================================================
+>>>//# sourceMappingURL=sourceMap-SingleSpace1.js.map

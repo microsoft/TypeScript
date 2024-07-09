@@ -1,0 +1,65 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/index.js ===
+// /**
+//  * @typedef {{
+//  *   /*HIGHLIGHTS*/<|[|{| kind: "reference" |}foo|]: string;|>
+//  *   bar: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   <|[|{| kind: "writtenReference" |}foo|]: ""|>,
+//   bar: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/index.js ===
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   /*HIGHLIGHTS*/<|[|{| kind: "reference" |}bar|]: number;|>
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   <|[|{| kind: "writtenReference" |}bar|]: 42|>,
+// };
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/index.js ===
+// /**
+//  * @typedef {{
+//  *   <|[|{| kind: "reference" |}foo|]: string;|>
+//  *   bar: number;
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   /*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}foo|]: ""|>,
+//   bar: 42,
+// };
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/index.js ===
+// /**
+//  * @typedef {{
+//  *   foo: string;
+//  *   <|[|{| kind: "reference" |}bar|]: number;|>
+//  * }} Foo
+//  */
+// 
+// /** @type {Foo} */
+// const x = {
+//   foo: "",
+//   /*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}bar|]: 42|>,
+// };

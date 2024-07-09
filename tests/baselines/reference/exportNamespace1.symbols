@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace1.ts] ////
+
+=== a.ts ===
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== b.ts ===
+export type { A } from './a';
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+=== c.ts ===
+
+export * from './b';
+
+=== d.ts ===
+import { A } from './c';
+>A : Symbol(A, Decl(d.ts, 0, 8))
+
+new A(); // Error
+>A : Symbol(A, Decl(d.ts, 0, 8))
+

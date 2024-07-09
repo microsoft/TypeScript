@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/avoidCycleWithVoidExpressionReturnedFromArrow.ts] ////
+
+=== avoidCycleWithVoidExpressionReturnedFromArrow.ts ===
+type HowlErrorCallback = (soundId: number, error: unknown) => void;
+>HowlErrorCallback : HowlErrorCallback
+>                  : ^^^^^^^^^^^^^^^^^
+>soundId : number
+>        : ^^^^^^
+>error : unknown
+>      : ^^^^^^^
+
+interface HowlOptions {
+  onplayerror?: HowlErrorCallback | undefined;
+>onplayerror : HowlErrorCallback | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+class Howl {
+>Howl : Howl
+>     : ^^^^
+
+  constructor(public readonly options: HowlOptions) {}
+>options : HowlOptions
+>        : ^^^^^^^^^^^
+
+  once(name: "unlock", fn: () => void) {
+>once : (name: "unlock", fn: () => void) => void
+>     : ^    ^^        ^^  ^^          ^^^^^^^^^
+>name : "unlock"
+>     : ^^^^^^^^
+>fn : () => void
+>   : ^^^^^^    
+
+    console.log(name, fn);
+>console.log(name, fn) : void
+>                      : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>name : "unlock"
+>     : ^^^^^^^^
+>fn : () => void
+>   : ^^^^^^    
+  }
+}
+
+const instance = new Howl({
+>instance : Howl
+>         : ^^^^
+>new Howl({  onplayerror: () => void instance.once("unlock", () => {}),}) : Howl
+>                                                                         : ^^^^
+>Howl : typeof Howl
+>     : ^^^^^^^^^^^
+>{  onplayerror: () => void instance.once("unlock", () => {}),} : { onplayerror: () => undefined; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onplayerror: () => void instance.once("unlock", () => {}),
+>onplayerror : () => undefined
+>            : ^^^^^^^^^^^^^^^
+>() => void instance.once("unlock", () => {}) : () => undefined
+>                                             : ^^^^^^^^^^^^^^^
+>void instance.once("unlock", () => {}) : undefined
+>                                       : ^^^^^^^^^
+>instance.once("unlock", () => {}) : void
+>                                  : ^^^^
+>instance.once : (name: "unlock", fn: () => void) => void
+>              : ^    ^^        ^^  ^^          ^^^^^^^^^
+>instance : Howl
+>         : ^^^^
+>once : (name: "unlock", fn: () => void) => void
+>     : ^    ^^        ^^  ^^          ^^^^^^^^^
+>"unlock" : "unlock"
+>         : ^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+});
+

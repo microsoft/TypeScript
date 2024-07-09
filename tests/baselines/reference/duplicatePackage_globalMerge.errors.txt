@@ -1,0 +1,31 @@
+/node_modules/@types/react/index.d.ts(1,9): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+/src/index.ts(1,24): error TS2306: File '/node_modules/@types/react/index.d.ts' is not a module.
+/tests/index.ts(1,24): error TS2306: File '/tests/node_modules/@types/react/index.d.ts' is not a module.
+
+
+==== /src/bug25410.ts (0 errors) ====
+    import { x } from './index'
+    import { y } from '../tests/index'
+    
+==== /src/index.ts (1 errors) ====
+    import * as React from 'react';
+                           ~~~~~~~
+!!! error TS2306: File '/node_modules/@types/react/index.d.ts' is not a module.
+    export var x = 1
+==== /tests/index.ts (1 errors) ====
+    import * as React from 'react';
+                           ~~~~~~~
+!!! error TS2306: File '/tests/node_modules/@types/react/index.d.ts' is not a module.
+    export var y = 2
+    
+==== /tests/node_modules/@types/react/package.json (0 errors) ====
+    { "name": "@types/react", "version": "16.4.6" }
+==== /tests/node_modules/@types/react/index.d.ts (0 errors) ====
+    
+==== /node_modules/@types/react/package.json (0 errors) ====
+    { "name": "@types/react", "version": "16.4.6" }
+==== /node_modules/@types/react/index.d.ts (1 errors) ====
+    declare global { }
+            ~~~~~~
+!!! error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+    

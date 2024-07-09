@@ -1,0 +1,7 @@
+{
+    "scenario": "CircularReferencing",
+    "projectRoot": "tests/cases/projects/CircularReferencing",
+    "inputFiles": [
+        "consume.ts"
+    ]
+}

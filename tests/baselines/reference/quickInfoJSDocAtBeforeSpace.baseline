@@ -1,0 +1,217 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts ===
+// /**
+//  * @return Don't @ me
+//  */
+// function f() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | @return Don't @ me
+// | ----------------------------------------------------------------------
+// /**
+//  * @return One final @
+//  */
+// function g() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | function g(): void
+// | @return One final @
+// | ----------------------------------------------------------------------
+// /**
+//  * @return An @
+//  * But another line
+//  */
+// function h() { }
+//          ^
+// | ----------------------------------------------------------------------
+// | function h(): void
+// | @return An @
+// | But another line
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts",
+      "position": 39,
+      "name": "f"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 39,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "return",
+          "text": [
+            {
+              "text": "Don't @ me",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts",
+      "position": 87,
+      "name": "g"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 87,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "return",
+          "text": [
+            {
+              "text": "One final @",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts",
+      "position": 148,
+      "name": "h"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 148,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "return",
+          "text": [
+            {
+              "text": "An @\nBut another line",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

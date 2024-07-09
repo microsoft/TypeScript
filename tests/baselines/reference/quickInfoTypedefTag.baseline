@@ -1,0 +1,251 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/a.js ===
+// /**
+//  * The typedef tag should not appear in the quickinfo.
+//  * @typedef {{ foo: 'foo' }} Foo
+//  */
+// function f() { }
+// f()
+// ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | ----------------------------------------------------------------------
+// /**
+//  * A removed comment
+//  * @tag Usage shows that non-param tags in comments explain the typedef instead of using it
+//  * @typedef {{ nope: any }} Nope not here
+//  * @tag comment 2
+//  */
+// function g() { }
+// g()
+// ^
+// | ----------------------------------------------------------------------
+// | function g(): void
+// | ----------------------------------------------------------------------
+// /**
+//  * The whole thing is kept
+//  * @param {Local} keep
+//  * @typedef {{ local: any }} Local kept too
+//  * @returns {void} also kept
+//  */
+// function h(keep) { }
+// h({ nope: 1 })
+// ^
+// | ----------------------------------------------------------------------
+// | function h(keep: Local): void
+// | The whole thing is kept
+// | @param keep
+// | @typedef Local kept too
+// | @returns also kept
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 114,
+      "name": "1"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 113,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 316,
+      "name": "2"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 315,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 472,
+      "name": "3"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 471,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "h",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "keep",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Local",
+          "kind": "aliasName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "The whole thing is kept",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "keep",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "typedef",
+          "text": [
+            {
+              "text": "Local",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "kept too",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "also kept",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,25 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/Foo.js ===
+// /** @type {function (this: string, string): string} */
+// var f = function (s) { return /*FIND ALL REFS*/[|this|] + s; }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/Foo.js ===
+  // /** @type {function (this: string, string): string} */
+  // var f = function (s) { return /*FIND ALL REFS*/[|this|] + s; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "text"
+     }
+    ]
+   }
+  ]

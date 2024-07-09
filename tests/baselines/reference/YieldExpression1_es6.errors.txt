@@ -1,0 +1,7 @@
+YieldExpression1_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
+
+
+==== YieldExpression1_es6.ts (1 errors) ====
+    yield;
+    ~~~~~
+!!! error TS2304: Cannot find name 'yield'.

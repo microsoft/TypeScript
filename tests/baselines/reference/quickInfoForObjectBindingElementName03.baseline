@@ -1,0 +1,75 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForObjectBindingElementName03.ts ===
+// interface Options {
+//     /**
+//      * A description of foo
+//      */
+//     foo: string;
+// }
+// 
+// function f({ foo }: Options) {
+//     foo;
+//     ^^^
+// | ----------------------------------------------------------------------
+// | (parameter) foo: string
+// | A description of foo
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForObjectBindingElementName03.ts",
+      "position": 122,
+      "name": "1"
+    },
+    "item": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 119,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A description of foo",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

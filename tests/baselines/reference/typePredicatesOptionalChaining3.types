@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/typePredicatesOptionalChaining3.ts] ////
+
+=== typePredicatesOptionalChaining3.ts ===
+interface Animal {
+  breed?: Breed;
+>breed : Breed | undefined
+>      : ^^^^^^^^^^^^^^^^^
+}
+interface Breed {
+  size?: string;
+>size : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+declare function isNil(value: unknown): value is undefined | null;
+>isNil : (value: unknown) => value is undefined | null
+>      : ^     ^^       ^^^^^                         
+>value : unknown
+>      : ^^^^^^^
+
+function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
+>getBreedSizeWithoutFunction : (animal: Animal) => string | undefined
+>                            : ^      ^^      ^^^^^                  
+>animal : Animal
+>       : ^^^^^^
+
+  if (animal?.breed?.size != null) {
+>animal?.breed?.size != null : boolean
+>                            : ^^^^^^^
+>animal?.breed?.size : string | undefined
+>                    : ^^^^^^^^^^^^^^^^^^
+>animal?.breed : Breed | undefined
+>              : ^^^^^^^^^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+>breed : Breed | undefined
+>      : ^^^^^^^^^^^^^^^^^
+>size : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    return animal.breed.size;
+>animal.breed.size : string
+>                  : ^^^^^^
+>animal.breed : Breed
+>             : ^^^^^
+>animal : Animal
+>       : ^^^^^^
+>breed : Breed
+>      : ^^^^^
+>size : string
+>     : ^^^^^^
+
+  } else {
+    return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+  }
+}
+
+function getBreedSizeWithFunction(animal: Animal): string | undefined {
+>getBreedSizeWithFunction : (animal: Animal) => string | undefined
+>                         : ^      ^^      ^^^^^                  
+>animal : Animal
+>       : ^^^^^^
+
+  if (!isNil(animal?.breed?.size)) {
+>!isNil(animal?.breed?.size) : boolean
+>                            : ^^^^^^^
+>isNil(animal?.breed?.size) : boolean
+>                           : ^^^^^^^
+>isNil : (value: unknown) => value is undefined | null
+>      : ^     ^^       ^^^^^                         
+>animal?.breed?.size : string | undefined
+>                    : ^^^^^^^^^^^^^^^^^^
+>animal?.breed : Breed | undefined
+>              : ^^^^^^^^^^^^^^^^^
+>animal : Animal
+>       : ^^^^^^
+>breed : Breed | undefined
+>      : ^^^^^^^^^^^^^^^^^
+>size : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    return animal.breed.size;
+>animal.breed.size : string
+>                  : ^^^^^^
+>animal.breed : Breed
+>             : ^^^^^
+>animal : Animal
+>       : ^^^^^^
+>breed : Breed
+>      : ^^^^^
+>size : string
+>     : ^^^^^^
+
+  } else {
+    return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+  }
+}
+

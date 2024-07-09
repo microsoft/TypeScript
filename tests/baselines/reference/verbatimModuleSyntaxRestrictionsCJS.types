@@ -1,0 +1,138 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxRestrictionsCJS.ts] ////
+
+=== /decl.d.ts ===
+declare function esmy(): void;
+>esmy : () => void
+>     : ^^^^^^    
+
+export default esmy;
+>esmy : () => void
+>     : ^^^^^^    
+
+export declare function funciton(): void;
+>funciton : () => void
+>         : ^^^^^^    
+
+=== /ambient.d.ts ===
+declare module "ambient" {
+>"ambient" : typeof import("ambient")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const _default: number;
+>_default : number
+>         : ^^^^^^
+
+    export default _default;
+>_default : number
+>         : ^^^^^^
+}
+
+=== /main.ts ===
+import esmy from "./decl"; // error
+>esmy : () => void
+>     : ^^^^^^    
+
+import * as esmy2 from "./decl"; // error
+>esmy2 : typeof esmy2
+>      : ^^^^^^^^^^^^
+
+import { funciton } from "./decl"; // error
+>funciton : () => void
+>         : ^^^^^^    
+
+import type { funciton as funciton2 } from "./decl"; // ok I guess?
+>funciton : () => void
+>         : ^^^^^^    
+>funciton2 : any
+>          : ^^^
+
+import("./decl"); // error
+>import("./decl") : Promise<typeof import("/decl")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./decl" : "./decl"
+>         : ^^^^^^^^
+
+type T = typeof import("./decl"); // ok
+>T : typeof import("/decl")
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+export {}; // error
+export const x = 1; // error
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export interface I {} // ok
+export type { T }; // ok
+>T : typeof import("/decl")
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+export namespace JustTypes {
+    export type T = number;
+>T : number
+>  : ^^^^^^
+}
+export namespace Values { // error
+>Values : typeof Values
+>       : ^^^^^^^^^^^^^
+
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+export default interface Default {} // sketchy, but ok
+
+=== /main2.ts ===
+export interface I {}
+export = { x: 1 };
+>{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+=== /main3.ts ===
+namespace ns {
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    export interface I {}
+}
+export = ns;
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+=== /main4.ts ===
+
+export default 1; // error
+
+=== /main5.ts ===
+export default class C {} // error
+>C : C
+>  : ^
+
+=== /main6.ts ===
+interface I {}
+export default I; // error
+>I : I
+>  : ^
+
+=== /main7.ts ===
+import type esmy from "./decl";
+>esmy : any
+>     : ^^^
+
+export default esmy; // error
+>esmy : () => void
+>     : ^^^^^^    
+

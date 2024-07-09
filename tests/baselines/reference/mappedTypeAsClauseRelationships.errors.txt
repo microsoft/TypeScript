@@ -1,0 +1,47 @@
+mappedTypeAsClauseRelationships.ts(12,9): error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
+mappedTypeAsClauseRelationships.ts(22,9): error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
+mappedTypeAsClauseRelationships.ts(23,9): error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.
+mappedTypeAsClauseRelationships.ts(24,9): error TS2322: Type 'T' is not assignable to type 'ModifyExclOpt<T>'.
+
+
+==== mappedTypeAsClauseRelationships.ts (4 errors) ====
+    // From original issue #45212:
+    type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+    type H<T> = T[keyof Methods<T>]; // Ok
+    
+    // `Filter<T>` only filters out some keys of `T`.
+    type Filter<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+    // `Modify<T>` might modify some keys of `T`.
+    type Modify<T> = { [P in keyof T as P extends string? `bool${P}`: P]: T[P] };
+    
+    function fun<T>(val: T) {
+        let x: Filter<T> = val; // Ok
+        let y: Modify<T> = val; // Error
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:10:14: This type parameter might need an `extends Modify<T>` constraint.
+    }
+    
+    type FilterInclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]+?: T[P] };
+    type ModifyInclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]+?: T[P] };
+    type FilterExclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]-?: T[P] };
+    type ModifyExclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]-?: T[P] };
+    
+    function fun2<T>(val: T) {
+        let x: FilterInclOpt<T> = val; // Ok
+        let y: ModifyInclOpt<T> = val; // Ok
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyInclOpt<T>` constraint.
+        let z: FilterExclOpt<T> = val; // Error
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends FilterExclOpt<T>` constraint.
+        let w: ModifyExclOpt<T> = val; // Error
+            ~
+!!! error TS2322: Type 'T' is not assignable to type 'ModifyExclOpt<T>'.
+!!! related TS2208 mappedTypeAsClauseRelationships.ts:20:15: This type parameter might need an `extends ModifyExclOpt<T>` constraint.
+    }
+    
+    
+    

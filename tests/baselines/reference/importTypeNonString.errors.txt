@@ -1,0 +1,8 @@
+importTypeNonString.ts(1,24): error TS1141: String literal expected.
+
+
+==== importTypeNonString.ts (1 errors) ====
+    export const x: import({x: 12}) = undefined as any;
+                           ~~~~~~~
+!!! error TS1141: String literal expected.
+    

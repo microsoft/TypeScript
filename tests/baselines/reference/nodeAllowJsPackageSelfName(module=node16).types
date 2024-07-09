@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/node/allowJs/nodeAllowJsPackageSelfName.ts] ////
+
+=== index.js ===
+// esm format file
+import * as self from "package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+=== index.mjs ===
+// esm format file
+import * as self from "package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+=== index.cjs ===
+// esm format file
+import * as self from "package";
+>self : typeof self
+>     : ^^^^^^^^^^^
+
+self;
+>self : typeof self
+>     : ^^^^^^^^^^^
+

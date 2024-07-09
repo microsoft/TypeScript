@@ -1,0 +1,31 @@
+index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
+
+
+==== b.ts (0 errors) ====
+    export const zzz = 123;
+    export default zzz;
+    
+==== a.ts (0 errors) ====
+    export default interface zzz {
+        x: string;
+    }
+    
+    import zzz from "./b";
+    
+    const x: zzz = { x: "" };
+    zzz;
+    
+    export { zzz as default };
+    
+==== index.ts (1 errors) ====
+    import zzz from "./a";
+    
+    const x: zzz = { x: "" };
+    zzz;
+    
+    import originalZZZ from "./b";
+    originalZZZ;
+    
+    const y: originalZZZ = x;
+             ~~~~~~~~~~~
+!!! error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?

@@ -1,0 +1,20 @@
+nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2353: Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+
+
+==== nestedRecursiveArraysOrObjectsError01.ts (1 errors) ====
+    type Style = StyleBase | StyleArray;
+    interface StyleArray extends Array<Style> {}
+    interface StyleBase {
+        foo: string;
+    }
+    
+    const blah: Style = [
+        [[{
+            foo: 'asdf',
+            jj: 1 // intentional error
+            ~~
+!!! error TS2353: Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+        }]]
+    ];
+    
+    

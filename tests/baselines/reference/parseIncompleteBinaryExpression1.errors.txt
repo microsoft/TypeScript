@@ -1,0 +1,10 @@
+parseIncompleteBinaryExpression1.ts(1,9): error TS1109: Expression expected.
+parseIncompleteBinaryExpression1.ts(1,12): error TS2304: Cannot find name 'b'.
+
+
+==== parseIncompleteBinaryExpression1.ts (2 errors) ====
+    var v = || b;
+            ~~
+!!! error TS1109: Expression expected.
+               ~
+!!! error TS2304: Cannot find name 'b'.

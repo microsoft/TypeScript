@@ -1,0 +1,378 @@
+//// [tests/cases/conformance/es2023/intlNumberFormatES2023.ts] ////
+
+=== intlNumberFormatES2023.ts ===
+// New / updated resolved options in ES2023, including type change for useGrouping
+const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, useGrouping } =  new Intl.NumberFormat('en-GB').resolvedOptions();
+>roundingPriority : "auto" | "morePrecision" | "lessPrecision"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingMode : "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingIncrement : 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>trailingZeroDisplay : "auto" | "stripIfInteger"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Empty options
+new Intl.NumberFormat('en-GB', {});
+>new Intl.NumberFormat('en-GB', {}) : Intl.NumberFormat
+>                                   : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{} : {}
+>   : ^^
+
+// Rounding
+new Intl.NumberFormat('en-GB', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' });
+>new Intl.NumberFormat('en-GB', { roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' }) : Intl.NumberFormat
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{ roundingPriority: 'lessPrecision', roundingIncrement: 100, roundingMode: 'trunc' } : { roundingPriority: "lessPrecision"; roundingIncrement: 100; roundingMode: "trunc"; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>roundingPriority : "lessPrecision"
+>                 : ^^^^^^^^^^^^^^^
+>'lessPrecision' : "lessPrecision"
+>                : ^^^^^^^^^^^^^^^
+>roundingIncrement : 100
+>                  : ^^^
+>100 : 100
+>    : ^^^
+>roundingMode : "trunc"
+>             : ^^^^^^^
+>'trunc' : "trunc"
+>        : ^^^^^^^
+
+// Changes to signDisplay
+const { signDisplay } = new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions();
+>signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }) : Intl.NumberFormat
+>                                                            : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{ signDisplay: 'negative' } : { signDisplay: "negative"; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>signDisplay : "negative"
+>            : ^^^^^^^^^^
+>'negative' : "negative"
+>           : ^^^^^^^^^^
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Changes to useGrouping
+new Intl.NumberFormat('en-GB', { useGrouping: true });
+>new Intl.NumberFormat('en-GB', { useGrouping: true }) : Intl.NumberFormat
+>                                                      : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{ useGrouping: true } : { useGrouping: true; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : true
+>            : ^^^^
+>true : true
+>     : ^^^^
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'true' });
+>new Intl.NumberFormat('en-GB', { useGrouping: 'true' }) : Intl.NumberFormat
+>                                                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{ useGrouping: 'true' } : { useGrouping: "true"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : "true"
+>            : ^^^^^^
+>'true' : "true"
+>       : ^^^^^^
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'always' });
+>new Intl.NumberFormat('en-GB', { useGrouping: 'always' }) : Intl.NumberFormat
+>                                                          : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>{ useGrouping: 'always' } : { useGrouping: "always"; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useGrouping : "always"
+>            : ^^^^^^^^
+>'always' : "always"
+>         : ^^^^^^^^
+
+// formatRange
+new Intl.NumberFormat('en-GB').formatRange(10, 100);
+>new Intl.NumberFormat('en-GB').formatRange(10, 100) : string
+>                                                    : ^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>                                           : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>            : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>10 : 10
+>   : ^^
+>100 : 100
+>    : ^^^
+
+new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
+>new Intl.NumberFormat('en-GB').formatRange(10n, 1000n) : string
+>                                                       : ^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>                                           : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>            : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>10n : 10n
+>    : ^^^
+>1000n : 1000n
+>      : ^^^^^
+
+new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
+>new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0] : Intl.NumberRangeFormatPart
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000) : Intl.NumberRangeFormatPart[]
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>10 : 10
+>   : ^^
+>1000 : 1000
+>     : ^^^^
+>0 : 0
+>  : ^
+
+new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
+>new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0] : Intl.NumberRangeFormatPart
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n) : Intl.NumberRangeFormatPart[]
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>10n : 10n
+>    : ^^^
+>1000n : 1000n
+>      : ^^^^^
+>0 : 0
+>  : ^
+
+// Arbitrary-precision string arguments
+new Intl.NumberFormat('en-GB').format('-12.3E-4');
+>new Intl.NumberFormat('en-GB').format('-12.3E-4') : string
+>                                                  : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>'-12.3E-4' : "-12.3E-4"
+>           : ^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8');
+>new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8') : string
+>                                                             : ^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>                                           : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRange : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => string
+>            : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>'123.4' : "123.4"
+>        : ^^^^^^^
+>'567.8' : "567.8"
+>        : ^^^^^^^
+
+new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
+>new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8') : Intl.NumberRangeFormatPart[]
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>'123E-4' : "123E-4"
+>         : ^^^^^^^^
+>'567E8' : "567E8"
+>        : ^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('Infinity');
+>new Intl.NumberFormat('en-GB').format('Infinity') : string
+>                                                  : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>'Infinity' : "Infinity"
+>           : ^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('-Infinity');
+>new Intl.NumberFormat('en-GB').format('-Infinity') : string
+>                                                   : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>'-Infinity' : "-Infinity"
+>            : ^^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('+Infinity');
+>new Intl.NumberFormat('en-GB').format('+Infinity') : string
+>                                                   : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | Intl.StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^      ^^^     ^^               ^^^      ^^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>'+Infinity' : "+Infinity"
+>            : ^^^^^^^^^^^
+

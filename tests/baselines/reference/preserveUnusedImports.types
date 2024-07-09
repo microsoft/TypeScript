@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/preserveUnusedImports.ts] ////
+
+=== a.ts ===
+export type A = {};
+>A : A
+>  : ^
+
+=== b.ts ===
+export class B {}
+>B : B
+>  : ^
+
+=== c.ts ===
+import { A } from './a';
+>A : any
+>  : ^^^
+
+import { B } from './b';
+>B : typeof B
+>  : ^^^^^^^^
+
+let b: B;
+>b : B
+>  : ^
+

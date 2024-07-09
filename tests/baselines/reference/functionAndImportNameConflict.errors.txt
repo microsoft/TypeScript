@@ -1,0 +1,13 @@
+f2.ts(1,9): error TS2440: Import declaration conflicts with local declaration of 'f'.
+
+
+==== f1.ts (0 errors) ====
+    export function f() {
+    }
+    
+==== f2.ts (1 errors) ====
+    import {f} from './f1';
+            ~
+!!! error TS2440: Import declaration conflicts with local declaration of 'f'.
+    export function f() {
+    }

@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsFileCompilationSyntaxError.ts] ////
+
+=== a.js ===
+/**
+  * @type {number}
+  * @type {string}
+  */
+var v;
+>v : Symbol(v, Decl(a.js, 4, 3))
+

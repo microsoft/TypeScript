@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag8.ts] ////
+
+=== /a.js ===
+/** @typedef {Object.<string, boolean>} Facts */
+
+// Should be able to detect a failure here
+const x = /** @satisfies {Facts} */ ({
+>x : { m: true; s: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>({    m: true,    s: "false"}) : { m: true; s: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^
+>{    m: true,    s: "false"} : { m: true; s: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    m: true,
+>m : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+
+    s: "false"
+>s : string
+>  : ^^^^^^
+>"false" : "false"
+>        : ^^^^^^^
+
+})
+

@@ -1,0 +1,17 @@
+b.json(2,5): error TS1327: String literal with double quotes expected.
+
+
+==== file1.ts (0 errors) ====
+    import b1 = require('./b.json');
+    let x = b1;
+    import b2 = require('./b.json');
+    if (x) {
+        x = b2;
+    }
+    
+==== b.json (1 errors) ====
+    {
+        [a]: 10
+        ~~~
+!!! error TS1327: String literal with double quotes expected.
+    }

@@ -1,0 +1,12 @@
+chainer.ts(1,24): error TS1141: String literal expected.
+
+
+==== a.d.ts (0 errors) ====
+    export type LookAt = "./b";
+==== b.d.ts (0 errors) ====
+    export type Value = "yes";
+==== chainer.ts (1 errors) ====
+    export const x: import(import("./a").LookAt).Value = "yes";
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1141: String literal expected.
+    

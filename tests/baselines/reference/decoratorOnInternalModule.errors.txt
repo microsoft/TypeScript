@@ -1,0 +1,12 @@
+decoratorOnInternalModule.ts(3,1): error TS1206: Decorators are not valid here.
+
+
+==== decoratorOnInternalModule.ts (1 errors) ====
+    declare function dec<T>(target: T): T;
+    
+    @dec
+    ~
+!!! error TS1206: Decorators are not valid here.
+    module M {
+        
+    }

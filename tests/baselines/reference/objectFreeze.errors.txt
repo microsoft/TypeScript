@@ -1,0 +1,25 @@
+objectFreeze.ts(9,1): error TS2322: Type 'string' is not assignable to type 'number'.
+objectFreeze.ts(9,1): error TS2542: Index signature in type 'readonly number[]' only permits reading.
+objectFreeze.ts(12,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
+
+
+==== objectFreeze.ts (3 errors) ====
+    const f = Object.freeze(function foo(a: number, b: string) { return false; });
+    f(1, "") === false;
+    
+    class C { constructor(a: number) { } }
+    const c = Object.freeze(C);
+    new c(1);
+    
+    const a = Object.freeze([1, 2, 3]);
+    a[0] = a[2].toString();
+    ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    ~~~~
+!!! error TS2542: Index signature in type 'readonly number[]' only permits reading.
+    
+    const o = Object.freeze({ a: 1, b: "string", c: true });
+    o.b = o.a.toString();
+      ~
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
+    

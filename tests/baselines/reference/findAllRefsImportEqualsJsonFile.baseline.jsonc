@@ -1,0 +1,287 @@
+// === findAllReferences ===
+// === /a.ts ===
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}j|] = require("./j.json");|>
+// [|j|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|import /*FIND ALL REFS*/[|j|] = require("./j.json");|>
+  // j;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j = require(\"./j.json\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./j.json\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|import [|{| isWriteAccess: true |}j|] = require("./j.json");|>
+// /*FIND ALL REFS*/[|j|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|import [|j|] = require("./j.json");|>
+  // /*FIND ALL REFS*/j;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j = require(\"./j.json\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./j.json\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|import j = require("/*FIND ALL REFS*/[|./j.json|]");|>
+// j;
+
+// === /b.js ===
+// <|const j = require("[|./j.json|]");|>
+// j;
+
+// === /j.json ===
+// [|{ "x": 0 }|]
+
+  // === Definitions ===
+  // === /j.json ===
+  // [|{ "x": 0 }|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/j\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/j\"",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|import j = require("[|./j.json|]");|>
+// j;
+
+// === /b.js ===
+// <|const j = require("/*FIND ALL REFS*/[|./j.json|]");|>
+// j;
+
+// === /j.json ===
+// [|{ "x": 0 }|]
+
+  // === Definitions ===
+  // === /j.json ===
+  // [|{ "x": 0 }|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/j\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/j\"",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.js ===
+// <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}j|] = require("./j.json");|>
+// [|j|];
+
+  // === Definitions ===
+  // === /b.js ===
+  // <|const /*FIND ALL REFS*/[|j|] = require("./j.json");|>
+  // j;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.js ===
+// <|const [|{| isWriteAccess: true |}j|] = require("./j.json");|>
+// /*FIND ALL REFS*/[|j|];
+
+  // === Definitions ===
+  // === /b.js ===
+  // <|const [|j|] = require("./j.json");|>
+  // /*FIND ALL REFS*/j;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import j",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /j.json ===
+// /*FIND ALL REFS*/{ "x": 0 }

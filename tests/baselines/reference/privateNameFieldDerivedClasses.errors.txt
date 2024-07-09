@@ -1,0 +1,19 @@
+privateNameFieldDerivedClasses.ts(9,23): error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+
+
+==== privateNameFieldDerivedClasses.ts (1 errors) ====
+    class Base {
+        #prop: number = 123;
+        static method(x: Derived) {
+            console.log(x.#prop);
+        }
+    }
+    class Derived extends Base {
+        static method(x: Derived) {
+            console.log(x.#prop);
+                          ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'Base' because it has a private identifier.
+        }
+    }
+    
+    

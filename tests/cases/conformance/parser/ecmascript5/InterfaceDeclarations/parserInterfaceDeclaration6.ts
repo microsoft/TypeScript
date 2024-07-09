@@ -1,0 +1,2 @@
+export export interface I {
+}

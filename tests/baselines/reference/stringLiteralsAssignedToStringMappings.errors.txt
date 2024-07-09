@@ -1,0 +1,28 @@
+stringLiteralsAssignedToStringMappings.ts(7,1): error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<string>>'.
+stringLiteralsAssignedToStringMappings.ts(15,1): error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<`${number}`>>'.
+stringLiteralsAssignedToStringMappings.ts(16,1): error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<`${number}`>>'.
+
+
+==== stringLiteralsAssignedToStringMappings.ts (3 errors) ====
+    declare var x: Uppercase<Lowercase<string>>;
+    
+    // good
+    x = "A";
+    
+    // bad
+    x = "a";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<string>>'.
+    
+    declare var y: Uppercase<Lowercase<`${number}`>>;
+    
+    // good
+    y = "1";
+    
+    // bad
+    y = "a";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<`${number}`>>'.
+    y = "A";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'Uppercase<Lowercase<`${number}`>>'.

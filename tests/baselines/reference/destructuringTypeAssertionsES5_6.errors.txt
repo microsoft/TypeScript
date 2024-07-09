@@ -1,0 +1,7 @@
+destructuringTypeAssertionsES5_6.ts(1,22): error TS2304: Cannot find name 'Foo'.
+
+
+==== destructuringTypeAssertionsES5_6.ts (1 errors) ====
+    var { x } = <any>new Foo;
+                         ~~~
+!!! error TS2304: Cannot find name 'Foo'.

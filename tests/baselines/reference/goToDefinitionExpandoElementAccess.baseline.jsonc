@@ -1,0 +1,29 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionExpandoElementAccess.ts ===
+// function f() {}
+// <|f[[|{| defId: 0 |}"x"|]]|> = 0;
+// <|f[/*GOTO DEF*/[|{| textSpan: true, defId: 1 |}"x"|]]|> = 1;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "\"x\"",
+    "containerName": "f",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "property",
+    "name": "\"x\"",
+    "containerName": "f",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

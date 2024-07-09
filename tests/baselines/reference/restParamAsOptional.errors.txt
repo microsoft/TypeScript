@@ -1,0 +1,11 @@
+restParamAsOptional.ts(1,16): error TS1047: A rest parameter cannot be optional.
+restParamAsOptional.ts(2,16): error TS1048: A rest parameter cannot have an initializer.
+
+
+==== restParamAsOptional.ts (2 errors) ====
+    function f(...x?) { }
+                   ~
+!!! error TS1047: A rest parameter cannot be optional.
+    function f2(...x = []) { }
+                   ~
+!!! error TS1048: A rest parameter cannot have an initializer.

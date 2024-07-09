@@ -1,0 +1,466 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             show() { }
+//         }
+//         <|[|{| isWriteAccess: true, isDefinition: true |}m|]/*FIND ALL REFS*/() { }|>
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.[|m|]}
+//      * {@linkplain Consider#[|m|]}
+//      * {@linkcode Consider#This#show}
+//      * {@linkplain Consider.This.show}
+//      * {@linkcode NPR.Consider#This#show}
+// --- (line: 14) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         <|[|m|]/*FIND ALL REFS*/() { }|>
+  //     }
+  //     /**
+  //      * {@linkcode Consider.prototype.m}
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) NPR.Consider.m(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "m",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         This = class {
+//             <|[|{| isWriteAccess: true, isDefinition: true |}show|]/*FIND ALL REFS*/() { }|>
+//         }
+//         m() { }
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#This#[|show|]}
+//      * {@linkplain Consider.This.[|show|]}
+//      * {@linkcode NPR.Consider#This#[|show|]}
+//      * {@linkplain NPR.Consider.This#[|show|]}
+//      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.This.[|show|]}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#This#[|show|] hello hello}
+//  * {@linkplain NPR.Consider.This#[|show|]}
+//  * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.This.[|show|]}
+//  */
+// export function outerref() { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         This = class {
+  //             <|[|show|]/*FIND ALL REFS*/() { }|>
+  //         }
+  //         m() { }
+  //     }
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) (Anonymous class).show(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(Anonymous class)",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "show",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     export class Consider {
+//         <|[|{| isWriteAccess: true, isDefinition: true |}This|]/*FIND ALL REFS*/ = class {
+//             show() { }
+//         }|>
+//         m() { }
+//     }
+//     /**
+//      * {@linkcode Consider.prototype.m}
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#[|This|]#show}
+//      * {@linkplain Consider.[|This|].show}
+//      * {@linkcode NPR.Consider#[|This|]#show}
+//      * {@linkplain NPR.Consider.[|This|]#show}
+//      * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//      * {@linkcode NPR.Consider.[|This|].show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.Consider#[|This|]#show hello hello}
+//  * {@linkplain NPR.Consider.[|This|]#show}
+//  * {@linkcode NPR.Consider#[|This|].show} # doesn't parse trailing .
+//  * {@linkcode NPR.Consider.[|This|].show}
+//  */
+// export function outerref() { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+  // namespace NPR {
+  //     export class Consider {
+  //         <|[|This|]/*FIND ALL REFS*/ = class {
+  //             show() { }
+  //         }|>
+  //         m() { }
+  //     }
+  //     /**
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) NPR.Consider.This: typeof (Anonymous class)",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "This",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(Anonymous class)",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+// namespace NPR {
+//     <|export class [|{| isWriteAccess: true, isDefinition: true |}Consider|]/*FIND ALL REFS*/ {
+//         This = class {
+//             show() { }
+//         }
+//         m() { }
+//     }|>
+//     /**
+//      * {@linkcode [|Consider|].prototype.m}
+//      * {@linkplain [|Consider|]#m}
+//      * {@linkcode [|Consider|]#This#show}
+//      * {@linkplain [|Consider|].This.show}
+//      * {@linkcode NPR.[|Consider|]#This#show}
+//      * {@linkplain NPR.[|Consider|].This#show}
+//      * {@linkcode NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//      * {@linkcode NPR.[|Consider|].This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * {@linkplain NPR.[|Consider|]#This#show hello hello}
+//  * {@linkplain NPR.[|Consider|].This#show}
+//  * {@linkcode NPR.[|Consider|]#This.show} # doesn't parse trailing .
+//  * {@linkcode NPR.[|Consider|].This.show}
+//  */
+// export function outerref() { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+  // namespace NPR {
+  //     <|export class [|Consider|]/*FIND ALL REFS*/ {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         m() { }
+  //     }|>
+  //     /**
+  //      * {@linkcode Consider.prototype.m}
+  //      * {@linkplain Consider#m}
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class NPR.Consider",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Consider",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+// <|namespace [|{| isWriteAccess: true, isDefinition: true |}NPR|]/*FIND ALL REFS*/ {
+//     export class Consider {
+//         This = class {
+//             show() { }
+// --- (line: 5) skipped ---
+
+// --- (line: 9) skipped ---
+//      * {@linkplain Consider#m}
+//      * {@linkcode Consider#This#show}
+//      * {@linkplain Consider.This.show}
+//      * {@linkcode [|NPR|].Consider#This#show}
+//      * {@linkplain [|NPR|].Consider.This#show}
+//      * {@linkcode [|NPR|].Consider#This.show} # doesn't parse trailing .
+//      * {@linkcode [|NPR|].Consider.This.show}
+//      */
+//     export function ref() { }
+// }|>
+// /**
+//  * {@linkplain [|NPR|].Consider#This#show hello hello}
+//  * {@linkplain [|NPR|].Consider.This#show}
+//  * {@linkcode [|NPR|].Consider#This.show} # doesn't parse trailing .
+//  * {@linkcode [|NPR|].Consider.This.show}
+//  */
+// export function outerref() { }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesLinkTag3.ts ===
+  // <|namespace [|NPR|]/*FIND ALL REFS*/ {
+  //     export class Consider {
+  //         This = class {
+  //             show() { }
+  //         }
+  //         m() { }
+  //     }
+  //     /**
+  //      * {@linkcode Consider.prototype.m}
+  //      * {@linkplain Consider#m}
+  //      * {@linkcode Consider#This#show}
+  //      * {@linkplain Consider.This.show}
+  //      * {@linkcode NPR.Consider#This#show}
+  //      * {@linkplain NPR.Consider.This#show}
+  //      * {@linkcode NPR.Consider#This.show} # doesn't parse trailing .
+  //      * {@linkcode NPR.Consider.This.show}
+  //      */
+  //     export function ref() { }
+  // }|>
+  // /**
+  //  * {@linkplain NPR.Consider#This#show hello hello}
+  //  * {@linkplain NPR.Consider.This#show}
+  // --- (line: 23) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace NPR",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NPR",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]

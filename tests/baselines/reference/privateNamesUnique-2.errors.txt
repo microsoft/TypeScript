@@ -1,0 +1,26 @@
+a.ts(4,15): error TS18013: Property '#x' is not accessible outside class 'Foo' because it has a private identifier.
+
+
+==== a.ts (1 errors) ====
+    export class Foo {
+        #x;
+        copy(other: import("./b").Foo) {
+            other.#x; // error
+                  ~~
+!!! error TS18013: Property '#x' is not accessible outside class 'Foo' because it has a private identifier.
+        }
+    }
+        
+==== b.ts (0 errors) ====
+    export class Foo {
+        #x;
+    }
+    
+==== main.ts (0 errors) ====
+    import { Foo as A } from "./a";
+    import { Foo as B } from "./b";
+    
+    const a = new A();
+    const b = new B();
+    a.copy(b); // error
+    

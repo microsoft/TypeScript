@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/es6/templates/templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts] ////
+
+=== templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts ===
+`${function (x: number) { x = "bad"; } }`;
+>x : Symbol(x, Decl(templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 0, 13))
+>x : Symbol(x, Decl(templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts, 0, 13))
+

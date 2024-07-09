@@ -1,0 +1,249 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}blah|]"() { return 0; }|>
+// }
+// 
+// var x: Foo;
+// x.[|blah|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+  // class Foo {
+  //     /*FIND ALL REFS*/<|"[|blah|]"() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x.blah;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo[\"blah\"](): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"blah\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     <|"/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}blah|]"() { return 0; }|>
+// }
+// 
+// var x: Foo;
+// x.[|blah|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+  // class Foo {
+  //     <|"/*FIND ALL REFS*/[|blah|]"() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x.blah;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo[\"blah\"](): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"blah\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+// class Foo {
+//     <|"[|{| isWriteAccess: true |}blah|]"() { return 0; }|>
+// }
+// 
+// var x: Foo;
+// x./*FIND ALL REFS*/[|blah|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
+  // class Foo {
+  //     <|"[|blah|]"() { return 0; }|>
+  // }
+  // 
+  // var x: Foo;
+  // x./*FIND ALL REFS*/blah;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo[\"blah\"](): number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"blah\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

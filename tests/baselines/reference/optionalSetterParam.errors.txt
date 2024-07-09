@@ -1,0 +1,11 @@
+optionalSetterParam.ts(3,25): error TS1051: A 'set' accessor cannot have an optional parameter.
+
+
+==== optionalSetterParam.ts (1 errors) ====
+    class foo {
+    
+        public set bar(param?:any) { }
+                            ~
+!!! error TS1051: A 'set' accessor cannot have an optional parameter.
+    }
+    

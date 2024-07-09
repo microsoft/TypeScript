@@ -1,0 +1,8 @@
+reactNamespaceMissingDeclaration.tsx(2,2): error TS2304: Cannot find name 'myReactLib'.
+
+
+==== reactNamespaceMissingDeclaration.tsx (1 errors) ====
+    // Error myReactLib not declared
+    <foo data/>
+     ~~~
+!!! error TS2304: Cannot find name 'myReactLib'.

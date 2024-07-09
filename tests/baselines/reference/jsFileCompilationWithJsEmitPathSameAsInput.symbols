@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationWithJsEmitPathSameAsInput.ts] ////
+
+=== a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== a.js ===
+function foo() {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+}
+

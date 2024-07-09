@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/checkJsFiles4.ts] ////
+
+=== a.js ===
+// @ts-check
+var x = "string";
+>x : Symbol(x, Decl(a.js, 1, 3))
+
+x = 0;
+>x : Symbol(x, Decl(a.js, 1, 3))
+

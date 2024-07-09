@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/declarationEmitAmdModuleNameDirective.ts] ////
+
+=== foo.ts ===
+/// <amd-module name="name_of_foo"/>
+export const foo = 1;
+>foo : Symbol(foo, Decl(foo.ts, 1, 12))
+
+=== bar.ts ===
+/// <amd-dependency name="name_of_foo" path="./foo" />
+import {foo} from './foo';
+>foo : Symbol(foo, Decl(bar.ts, 1, 8))
+
+void foo;
+>foo : Symbol(foo, Decl(bar.ts, 1, 8))
+

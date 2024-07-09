@@ -1,0 +1,47 @@
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(11,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(12,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(18,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(19,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(25,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentLHSCanBeAssigned.ts(26,7): error TS18050: The value 'undefined' cannot be used here.
+
+
+==== compoundArithmeticAssignmentLHSCanBeAssigned.ts (6 errors) ====
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: number;
+    var c: E;
+    
+    var x1: any;
+    x1 *= a;
+    x1 *= b;
+    x1 *= c;
+    x1 *= null;
+          ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    x1 *= undefined;
+          ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    
+    var x2: number;
+    x2 *= a;
+    x2 *= b;
+    x2 *= c;
+    x2 *= null;
+          ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    x2 *= undefined;
+          ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+    
+    var x3: E;
+    x3 *= a;
+    x3 *= b;
+    x3 *= c;
+    x3 *= null;
+          ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+    x3 *= undefined;
+          ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.

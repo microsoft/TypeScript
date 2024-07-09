@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/contextuallyTypeGeneratorReturnTypeFromUnion.ts] ////
+
+=== contextuallyTypeGeneratorReturnTypeFromUnion.ts ===
+// repro #51187
+
+type Action = () => (Generator<string, string, string[]> | string)
+>Action : Action
+>       : ^^^^^^
+
+const test1: Action = function* () {
+>test1 : Action
+>      : ^^^^^^
+>function* () {    const next = yield ''    return next[0]} : () => Generator<string, string, string[]>
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const next = yield ''
+>next : string[]
+>     : ^^^^^^^^
+>yield '' : string[]
+>         : ^^^^^^^^
+>'' : ""
+>   : ^^
+
+    return next[0]
+>next[0] : string
+>        : ^^^^^^
+>next : string[]
+>     : ^^^^^^^^
+>0 : 0
+>  : ^
+}
+
+type Action2 = () => (AsyncGenerator<string, string, string[]> | string)
+>Action2 : Action2
+>        : ^^^^^^^
+
+const test2: Action2 = async function* () {
+>test2 : Action2
+>      : ^^^^^^^
+>async function* () {    const next = yield await Promise.resolve('')    return next[0]} : () => AsyncGenerator<string, string, string[]>
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const next = yield await Promise.resolve('')
+>next : string[]
+>     : ^^^^^^^^
+>yield await Promise.resolve('') : string[]
+>                                : ^^^^^^^^
+>await Promise.resolve('') : string
+>                          : ^^^^^^
+>Promise.resolve('') : Promise<string>
+>                    : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>'' : ""
+>   : ^^
+
+    return next[0]
+>next[0] : string
+>        : ^^^^^^
+>next : string[]
+>     : ^^^^^^^^
+>0 : 0
+>  : ^
+}
+

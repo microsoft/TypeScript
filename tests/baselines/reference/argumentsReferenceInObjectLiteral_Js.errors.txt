@@ -1,0 +1,32 @@
+/a.js(16,9): error TS18004: No value exists in scope for the shorthand property 'arguments'. Either declare one or provide an initializer.
+
+
+==== /a.js (1 errors) ====
+    const a = () => {
+        return {
+            arguments: [],
+        };
+    };
+    
+    const b = () => {
+        const c = {
+            arguments: [],
+        }
+        return c;
+    };
+    
+    const c = () => {
+        return {
+            arguments,
+            ~~~~~~~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'arguments'. Either declare one or provide an initializer.
+        };
+    }
+    
+    const d = () => {
+        const arguments = undefined;
+        return {
+            arguments,
+        };
+    }
+    

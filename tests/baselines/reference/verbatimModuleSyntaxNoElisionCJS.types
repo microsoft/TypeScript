@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxNoElisionCJS.ts] ////
+
+=== /a.ts ===
+interface I {}
+export = I;
+>I : I
+>  : ^
+
+=== /b.ts ===
+import I = require("./a");
+>I : any
+>  : ^^^
+
+=== /c.ts ===
+interface I {}
+namespace I {
+>I : typeof I
+>  : ^^^^^^^^
+
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+export = I;
+>I : I
+>  : ^
+
+=== /d.ts ===
+import I = require("./c");
+>I : typeof I
+>  : ^^^^^^^^
+
+import type J = require("./c");
+>J : typeof I
+>  : ^^^^^^^^
+
+export = J;
+>J : I
+>  : ^
+
+=== /e.d.ts ===
+interface I {}
+export = I;
+>I : I
+>  : ^
+
+=== /f.ts ===
+import type I = require("./e");
+>I : {}
+>  : ^^
+
+const I = {};
+>I : {}
+>  : ^^
+>{} : {}
+>   : ^^
+
+export = I;
+>I : I
+>  : ^
+
+=== /z.ts ===
+
+// test harness is weird if the last file includs a require >:(

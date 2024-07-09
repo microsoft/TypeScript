@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/modulePrologueSystem.ts] ////
+
+=== modulePrologueSystem.ts ===
+"use strict";
+
+export class Foo {}
+>Foo : Symbol(Foo, Decl(modulePrologueSystem.ts, 0, 13))
+

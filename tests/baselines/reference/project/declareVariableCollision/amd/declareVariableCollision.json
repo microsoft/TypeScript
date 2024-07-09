@@ -1,0 +1,18 @@
+{
+    "scenario": "declare Variable Collision",
+    "projectRoot": "tests/cases/projects/declareVariableCollision",
+    "inputFiles": [
+        "decl.d.ts",
+        "in1.d.ts",
+        "in2.d.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "decl.d.ts",
+        "in1.d.ts",
+        "in2.d.ts"
+    ],
+    "emittedFiles": []
+}

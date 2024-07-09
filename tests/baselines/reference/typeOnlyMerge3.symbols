@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/externalModules/typeOnlyMerge3.ts] ////
+
+=== a.ts ===
+function A() {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+export type { A };
+>A : Symbol(A, Decl(a.ts, 1, 13))
+
+=== b.ts ===
+import { A } from "./a";
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 24))
+
+namespace A {
+>A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 24))
+
+  export const displayName = "A";
+>displayName : Symbol(displayName, Decl(b.ts, 2, 14))
+}
+export { A };
+>A : Symbol(A, Decl(b.ts, 4, 8))
+
+=== c.ts ===
+import { A } from "./b";
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+A;
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+A.displayName;
+>A.displayName : Symbol(A.displayName, Decl(b.ts, 2, 14))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+>displayName : Symbol(A.displayName, Decl(b.ts, 2, 14))
+
+A();
+>A : Symbol(A, Decl(c.ts, 0, 8))
+

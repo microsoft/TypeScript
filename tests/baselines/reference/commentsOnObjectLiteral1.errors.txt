@@ -1,0 +1,13 @@
+commentsOnObjectLiteral1.ts(1,14): error TS2304: Cannot find name 'makeClass'.
+
+
+==== commentsOnObjectLiteral1.ts (1 errors) ====
+    var Person = makeClass( 
+                 ~~~~~~~~~
+!!! error TS2304: Cannot find name 'makeClass'.
+       /** 
+         @scope Person 
+       */ 
+       {
+       } 
+    );

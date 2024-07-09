@@ -1,0 +1,17 @@
+parserComputedPropertyName27.ts(3,6): error TS2304: Cannot find name 'e'.
+parserComputedPropertyName27.ts(4,6): error TS2304: Cannot find name 'e2'.
+parserComputedPropertyName27.ts(4,9): error TS1005: ';' expected.
+
+
+==== parserComputedPropertyName27.ts (3 errors) ====
+    class C {
+        // No ASI
+        [e]: number = 0
+         ~
+!!! error TS2304: Cannot find name 'e'.
+        [e2]: number
+         ~~
+!!! error TS2304: Cannot find name 'e2'.
+            ~
+!!! error TS1005: ';' expected.
+    }

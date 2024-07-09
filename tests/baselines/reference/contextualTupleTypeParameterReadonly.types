@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/contextualTupleTypeParameterReadonly.ts] ////
+
+=== contextualTupleTypeParameterReadonly.ts ===
+declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
+>each : <T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
+>     : ^ ^^^^^^^^^                  ^^     ^^                ^^^^^                                 
+>cases : readonly T[]
+>      : ^^^^^^^^^^^^
+>fn : (...args: T) => any
+>   : ^^^^    ^^ ^^^^^   
+>args : T
+>     : ^
+
+const cases = [
+>cases : readonly [readonly [1, "1"], readonly [2, "2"]]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[    [1, '1'],    [2, '2'],] as const : readonly [readonly [1, "1"], readonly [2, "2"]]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[    [1, '1'],    [2, '2'],] : readonly [readonly [1, "1"], readonly [2, "2"]]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [1, '1'],
+>[1, '1'] : readonly [1, "1"]
+>         : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>'1' : "1"
+>    : ^^^
+
+    [2, '2'],
+>[2, '2'] : readonly [2, "2"]
+>         : ^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>'2' : "2"
+>    : ^^^
+
+] as const;
+
+const eacher = each(cases);
+>eacher : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
+>       : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>each(cases) : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
+>            : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>each : <T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
+>     : ^ ^^^^^^^^^                  ^^     ^^                ^^^^^                                 
+>cases : readonly [readonly [1, "1"], readonly [2, "2"]]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+eacher((a, b) => {
+>eacher((a, b) => {    a;    b;}) : void
+>                                 : ^^^^
+>eacher : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
+>       : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>(a, b) => {    a;    b;} : (a: 1 | 2, b: "1" | "2") => void
+>                         : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>a : 1 | 2
+>  : ^^^^^
+>b : "1" | "2"
+>  : ^^^^^^^^^
+
+    a;
+>a : 1 | 2
+>  : ^^^^^
+
+    b;
+>b : "1" | "2"
+>  : ^^^^^^^^^
+
+});
+
+// TODO: https://github.com/microsoft/TypeScript/issues/53255
+eacher((...args) => {
+>eacher((...args) => {    const [a, b] = args;    a;    b;}) : void
+>                                                            : ^^^^
+>eacher : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
+>       : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>(...args) => {    const [a, b] = args;    a;    b;} : (...args: readonly [1, "1"] | readonly [2, "2"]) => void
+>                                                    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : readonly [1, "1"] | readonly [2, "2"]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const [a, b] = args;
+>a : 1 | 2
+>  : ^^^^^
+>b : "1" | "2"
+>  : ^^^^^^^^^
+>args : readonly [1, "1"] | readonly [2, "2"]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a;
+>a : 1 | 2
+>  : ^^^^^
+
+    b;
+>b : "1" | "2"
+>  : ^^^^^^^^^
+
+});
+

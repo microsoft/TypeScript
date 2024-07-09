@@ -1,0 +1,125 @@
+//// [tests/cases/conformance/jsdoc/templateInsideCallback.ts] ////
+
+=== templateInsideCallback.js ===
+/**
+ * @typedef Oops
+ * @template T
+ * @property {T} a
+ * @property {T} b
+ */
+/**
+ * @callback Call
+ * @template T
+ * @param {T} x
+ * @returns {T}
+ */
+/**
+ * @template T
+ * @type {Call<T>}
+ */
+const identity = x => x;
+>identity : any
+>         : ^^^
+>x => x : <T>(x: any) => any
+>       : ^ ^^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>x : any
+>  : ^^^
+
+/**
+ * @typedef Nested
+ * @property {Object} oh
+ * @property {number} oh.no
+ * @template T
+ * @property {string} oh.noooooo
+ */
+
+
+/**
+ * @overload
+ * @template T
+ * @template U
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ */
+/**
+ * @overload
+ * @template T
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
+/**
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
+function flatMap(array, iterable = identity) {
+>flatMap : { <U>(): any; (): any; }
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^
+>array : unknown[]
+>      : ^^^^^^^^^
+>iterable : (x: unknown) => unknown
+>         : ^ ^^       ^^^^^       
+>identity : any
+>         : ^^^
+
+  /** @type {unknown[]} */
+  const result = [];
+>result : unknown[]
+>       : ^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  for (let i = 0; i < array.length; i += 1) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < array.length : boolean
+>                 : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>array.length : number
+>             : ^^^^^^
+>array : unknown[]
+>      : ^^^^^^^^^
+>length : number
+>       : ^^^^^^
+>i += 1 : number
+>       : ^^^^^^
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    result.push(.../** @type {unknown[]} */(iterable(array[i])));
+>result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
+>                                                             : ^^^^^^
+>result.push : (...items: unknown[]) => number
+>            : ^^^^     ^^^^^^^^^^^^^^^^      
+>result : unknown[]
+>       : ^^^^^^^^^
+>push : (...items: unknown[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^      
+>.../** @type {unknown[]} */(iterable(array[i])) : unknown
+>                                                : ^^^^^^^
+>(iterable(array[i])) : unknown[]
+>                     : ^^^^^^^^^
+>iterable(array[i]) : unknown
+>                   : ^^^^^^^
+>iterable : (x: unknown) => unknown
+>         : ^ ^^       ^^^^^       
+>array[i] : unknown
+>         : ^^^^^^^
+>array : unknown[]
+>      : ^^^^^^^^^
+>i : number
+>  : ^^^^^^
+  }
+  return result;
+>result : unknown[]
+>       : ^^^^^^^^^
+}
+

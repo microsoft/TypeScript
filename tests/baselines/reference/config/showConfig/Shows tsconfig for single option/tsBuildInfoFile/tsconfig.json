@@ -1,0 +1,5 @@
+{
+    "compilerOptions": {
+        "tsBuildInfoFile": "./someString"
+    }
+}

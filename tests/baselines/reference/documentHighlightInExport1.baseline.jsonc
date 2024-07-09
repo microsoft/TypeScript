@@ -1,0 +1,32 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInExport1.ts ===
+// <|class /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}C|] {}|>
+// <|<|export { [|{| contextId: 1, kind: "reference" |}C|] as [|{| contextId: 2, kind: "writtenReference" |}D|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInExport1.ts ===
+// class C {}
+// /*HIGHLIGHTS*/export { C as D };
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInExport1.ts ===
+// <|class [|{| kind: "writtenReference" |}C|] {}|>
+// <|<|export { /*HIGHLIGHTS*/[|{| contextId: 1, kind: "reference" |}C|] as [|{| contextId: 2, kind: "writtenReference" |}D|] };|>|>
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInExport1.ts ===
+// class C {}
+// export { C /*HIGHLIGHTS*/as D };
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInExport1.ts ===
+// class C {}
+// <|export { C as /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}D|] };|>

@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/extendedUnicodePlaneIdentifiersJSDoc.ts] ////
+
+=== file.js ===
+/**
+ * Adds
+ * @param {number} 𝑚
+ * @param {number} 𝑀
+ */
+function foo(𝑚, 𝑀) {
+>foo : (𝑚: number, 𝑀: number) => void
+>    : ^  ^^      ^^  ^^      ^^^^^^^^^
+>𝑚 : number
+>   : ^^^^^^
+>𝑀 : number
+>   : ^^^^^^
+
+    console.log(𝑀 + 𝑚);
+>console.log(𝑀 + 𝑚) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>𝑀 + 𝑚 : number
+>        : ^^^^^^
+>𝑀 : number
+>   : ^^^^^^
+>𝑚 : number
+>   : ^^^^^^
+}

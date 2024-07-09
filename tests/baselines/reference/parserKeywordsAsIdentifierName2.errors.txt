@@ -1,0 +1,11 @@
+parserKeywordsAsIdentifierName2.ts(2,1): error TS2304: Cannot find name 'a'.
+parserKeywordsAsIdentifierName2.ts(2,12): error TS1010: '*/' expected.
+
+
+==== parserKeywordsAsIdentifierName2.ts (2 errors) ====
+    // 'public' should be marked unusable, should complain on trailing /*
+    a.public /*
+    ~
+!!! error TS2304: Cannot find name 'a'.
+               
+!!! error TS1010: '*/' expected.

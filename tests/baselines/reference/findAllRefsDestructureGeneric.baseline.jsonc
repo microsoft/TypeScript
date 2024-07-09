@@ -1,0 +1,195 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGeneric.ts ===
+// interface I<T> {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}x|]: boolean;|>
+// }
+// declare const i: I<number>;
+// <|const { [|{| isWriteAccess: true |}x|] } = i;|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGeneric.ts ===
+  // interface I<T> {
+  //     /*FIND ALL REFS*/<|[|x|]: boolean;|>
+  // }
+  // declare const i: I<number>;
+  // const { x } = i;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) I<T>.x: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsDestructureGeneric.ts ===
+// interface I<T> {
+//     <|[|{| defId: 0 |}x|]: boolean;|>
+// }
+// declare const i: I<number>;
+// <|const { /*FIND ALL REFS*/[|{| defId: 1, isWriteAccess: true, isDefinition: true |}x|] } = i;|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDestructureGeneric.ts ===
+  // interface I<T> {
+  //     <|[|{| defId: 0 |}x|]: boolean;|>
+  // }
+  // declare const i: I<number>;
+  // <|const { /*FIND ALL REFS*/[|{| defId: 1 |}x|] } = i;|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) I<T>.x: boolean",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: boolean",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

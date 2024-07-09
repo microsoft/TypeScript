@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts] ////
+
+=== assignmentRestElementWithErrorSourceType.ts ===
+var tuple: [string, number];
+>tuple : Symbol(tuple, Decl(assignmentRestElementWithErrorSourceType.ts, 0, 3))
+
+[...c] = tupel; // intentionally misspelled

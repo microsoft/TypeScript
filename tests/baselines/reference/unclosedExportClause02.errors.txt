@@ -1,0 +1,32 @@
+t2.ts(1,13): error TS1005: '}' expected.
+t3.ts(1,10): error TS1005: '}' expected.
+t4.ts(1,17): error TS1005: ',' expected.
+t5.ts(1,18): error TS1005: '}' expected.
+
+
+==== t1.ts (0 errors) ====
+    export var x = "x";
+    
+==== t2.ts (1 errors) ====
+    export { x, from
+                ~~~~
+!!! error TS1005: '}' expected.
+        "./t1";
+    
+==== t3.ts (1 errors) ====
+    export { from
+             ~~~~
+!!! error TS1005: '}' expected.
+        "./t1";
+    
+==== t4.ts (1 errors) ====
+    export { x as a from
+                    ~~~~
+!!! error TS1005: ',' expected.
+        "./t1";
+    
+==== t5.ts (1 errors) ====
+    export { x as a, from
+                     ~~~~
+!!! error TS1005: '}' expected.
+        "./t1";

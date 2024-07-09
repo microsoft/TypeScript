@@ -1,0 +1,33 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic2.ts ===
+// --- (line: 36) skipped ---
+//         declare var foo;
+// 
+//         export class C2 {
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}public|] pub1;
+//             private priv1;
+//             protected prot1;
+// 
+//             protected constructor([|{| kind: "none" |}public|] public, protected protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// --- (line: 48) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic2.ts ===
+// --- (line: 36) skipped ---
+//         declare var foo;
+// 
+//         export class C2 {
+//             [|{| kind: "none" |}public|] pub1;
+//             private priv1;
+//             protected prot1;
+// 
+//             protected constructor(/*HIGHLIGHTS*/[|{| kind: "none" |}public|] public, protected protected, private private) {
+//                 public = private = protected;
+//             }
+//         }
+// --- (line: 48) skipped ---

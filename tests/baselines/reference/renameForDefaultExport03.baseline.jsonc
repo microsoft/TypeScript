@@ -1,0 +1,112 @@
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport03.ts ===
+// <|function /*RENAME*/[|fRENAME|]() {
+//     return 100;
+// }|>
+// 
+// <|export default [|fRENAME|];|>
+// 
+// var x: typeof [|fRENAME|];
+// 
+// var y = [|fRENAME|]();
+// 
+// /**
+//  *  Commenting [|fRENAME|]
+//  */
+// <|namespace [|fRENAME|] {
+//     var local = 100;
+// }|>
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport03.ts ===
+// <|function [|fRENAME|]() {
+//     return 100;
+// }|>
+// 
+// <|export default /*RENAME*/[|fRENAME|];|>
+// 
+// var x: typeof [|fRENAME|];
+// 
+// var y = [|fRENAME|]();
+// 
+// /**
+//  *  Commenting [|fRENAME|]
+//  */
+// <|namespace [|fRENAME|] {
+//     var local = 100;
+// }|>
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport03.ts ===
+// <|function [|fRENAME|]() {
+//     return 100;
+// }|>
+// 
+// <|export default [|fRENAME|];|>
+// 
+// var x: typeof /*RENAME*/[|fRENAME|];
+// 
+// var y = [|fRENAME|]();
+// 
+// /**
+//  *  Commenting [|fRENAME|]
+//  */
+// <|namespace [|fRENAME|] {
+//     var local = 100;
+// }|>
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport03.ts ===
+// <|function [|fRENAME|]() {
+//     return 100;
+// }|>
+// 
+// <|export default [|fRENAME|];|>
+// 
+// var x: typeof [|fRENAME|];
+// 
+// var y = /*RENAME*/[|fRENAME|]();
+// 
+// /**
+//  *  Commenting [|fRENAME|]
+//  */
+// <|namespace [|fRENAME|] {
+//     var local = 100;
+// }|>
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport03.ts ===
+// <|function [|fRENAME|]() {
+//     return 100;
+// }|>
+// 
+// <|export default [|fRENAME|];|>
+// 
+// var x: typeof [|fRENAME|];
+// 
+// var y = [|fRENAME|]();
+// 
+// /**
+//  *  Commenting [|fRENAME|]
+//  */
+// <|namespace /*RENAME*/[|fRENAME|] {
+//     var local = 100;
+// }|>

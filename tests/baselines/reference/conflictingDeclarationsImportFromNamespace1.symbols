@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/conflictingDeclarationsImportFromNamespace1.ts] ////
+
+=== node_modules/@types/lodash/object.d.ts ===
+import _ = require("./index");
+>_ : Symbol(_, Decl(object.d.ts, 0, 0))
+
+declare module "./index" {
+>"./index" : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+
+    interface LoDashStatic {
+>LoDashStatic : Symbol(LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
+
+      pick<T extends object, U extends keyof T>(
+>pick : Symbol(LoDashStatic.pick, Decl(object.d.ts, 2, 28))
+>T : Symbol(T, Decl(object.d.ts, 3, 11))
+>U : Symbol(U, Decl(object.d.ts, 3, 28))
+>T : Symbol(T, Decl(object.d.ts, 3, 11))
+
+        object: T,
+>object : Symbol(object, Decl(object.d.ts, 3, 48))
+>T : Symbol(T, Decl(object.d.ts, 3, 11))
+
+        ...props: Array<U>
+>props : Symbol(props, Decl(object.d.ts, 4, 18))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(object.d.ts, 3, 28))
+
+      ): Pick<T, U>;
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(object.d.ts, 3, 11))
+>U : Symbol(U, Decl(object.d.ts, 3, 28))
+    }
+}
+
+=== node_modules/@types/lodash/pick.d.ts ===
+import { pick } from "./index";
+>pick : Symbol(pick, Decl(pick.d.ts, 0, 8))
+
+export = pick;
+>pick : Symbol(pick, Decl(pick.d.ts, 0, 8))
+
+=== node_modules/@types/lodash/index.d.ts ===
+/// <reference path="./object.d.ts" />
+export = _;
+>_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+
+export as namespace _;
+>_ : Symbol(_, Decl(index.d.ts, 1, 11))
+
+declare const _: _.LoDashStatic;
+>_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+>_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+>LoDashStatic : Symbol(_.LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
+
+declare namespace _ {
+>_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
+
+    interface LoDashStatic {}
+>LoDashStatic : Symbol(LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
+}
+
+=== index.ts ===
+import * as pick from 'lodash/pick';
+>pick : Symbol(pick, Decl(index.ts, 0, 6), Decl(index.ts, 1, 12))
+
+export const pick = () => pick();
+>pick : Symbol(pick, Decl(index.ts, 1, 12))
+>pick : Symbol(pick, Decl(index.ts, 0, 6), Decl(index.ts, 1, 12))
+

@@ -1,0 +1,14 @@
+{
+    "scenario": "Verify exclude property without using relative path",
+    "projectRoot": "tests/cases/projects/projectOption/SpecifyExcludeWithOutUsingRelativePathWithAllowJS",
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "a.ts"
+    ],
+    "emittedFiles": [
+        "OutDir/a.js"
+    ]
+}

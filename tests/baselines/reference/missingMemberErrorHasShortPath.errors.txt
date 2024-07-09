@@ -1,0 +1,12 @@
+C:/foo/bar/Baz/src/sample.ts(1,10): error TS2724: '"./utils.js"' has no exported member named 'exit'. Did you mean 'exist'?
+
+
+==== C:/foo/bar/Baz/src/utils.ts (0 errors) ====
+    export function exist() {}
+==== C:/foo/bar/Baz/src/sample.ts (1 errors) ====
+    import { exit } from "./utils.js";
+             ~~~~
+!!! error TS2724: '"./utils.js"' has no exported member named 'exit'. Did you mean 'exist'?
+!!! related TS2728 C:/foo/bar/Baz/src/utils.ts:1:17: 'exist' is declared here.
+    
+    exit()

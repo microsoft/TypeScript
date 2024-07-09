@@ -1,0 +1,261 @@
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     /*FIND ALL REFS*/<|export type [|{| isWriteAccess: true, isDefinition: true |}T|] = number;|>
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+  // === Definitions ===
+  // === /defA.ts ===
+  // declare module "a" {
+  //     /*FIND ALL REFS*/<|export type [|T|] = number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     <|export type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|] = number;|>
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+  // === Definitions ===
+  // === /defA.ts ===
+  // declare module "a" {
+  //     <|export type /*FIND ALL REFS*/[|T|] = number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     <|export type [|{| isWriteAccess: true |}T|] = number;|>
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a./*FIND ALL REFS*/[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a.[|T|];
+// }
+
+  // === Definitions ===
+  // === /defA.ts ===
+  // declare module "a" {
+  //     <|export type [|T|] = number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /defA.ts ===
+// declare module "a" {
+//     <|export type [|{| isWriteAccess: true |}T|] = number;|>
+// }
+
+// === /defB.ts ===
+// declare module "b" {
+//     export import a = require("a");
+//     export const x: a.[|T|];
+// }
+
+// === /defC.ts ===
+// declare module "c" {
+//     import b = require("b");
+//     const x: b.a./*FIND ALL REFS*/[|T|];
+// }
+
+  // === Definitions ===
+  // === /defA.ts ===
+  // declare module "a" {
+  //     <|export type [|T|] = number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

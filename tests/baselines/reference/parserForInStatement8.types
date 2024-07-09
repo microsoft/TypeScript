@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement8.ts] ////
+
+=== parserForInStatement8.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] in { '': 0 }) console.log(x)
+>x : any
+>  : ^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>{ '': 0 } : { '': number; }
+>          : ^^^^^^^^^^^^^^^
+>'' : number
+>   : ^^^^^^
+>0 : 0
+>  : ^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : any
+>  : ^^^
+
+for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
+>x : any
+>  : ^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>{ '': 0 } : { '': number; }
+>          : ^^^^^^^^^^^^^^^
+>'' : number
+>   : ^^^^^^
+>0 : 0
+>  : ^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : any
+>  : ^^^
+

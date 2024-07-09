@@ -1,0 +1,9 @@
+jsxAttributeMissingInitializer.tsx(1,21): error TS1145: '{' or JSX element expected.
+
+
+==== jsxAttributeMissingInitializer.tsx (1 errors) ====
+    const x = <div foo= ></div>;
+                        ~
+!!! error TS1145: '{' or JSX element expected.
+    const y = 0;
+    

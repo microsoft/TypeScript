@@ -1,0 +1,7 @@
+parserRegularExpression2.ts(1,1): error TS2304: Cannot find name 'href'.
+
+
+==== parserRegularExpression2.ts (1 errors) ====
+    href.match(/:\/\/(.[^/]+)/)[1];
+    ~~~~
+!!! error TS2304: Cannot find name 'href'.

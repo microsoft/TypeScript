@@ -1,0 +1,54 @@
+// === findAllReferences ===
+// === /X.js ===
+// module.exports = { <|[|{| isWriteAccess: true |}x|]: 1|> };
+
+// === /Y.js ===
+// <|const { /*FIND ALL REFS*/[|x|]: { y } } = require("./X");|>
+
+  // === Definitions ===
+  // === /X.js ===
+  // module.exports = { <|[|x|]: 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

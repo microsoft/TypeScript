@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/multipleInferenceContexts.ts] ////
+
+=== multipleInferenceContexts.ts ===
+type ConstructorOptions<Data> =
+>ConstructorOptions : Symbol(ConstructorOptions, Decl(multipleInferenceContexts.ts, 0, 0))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 0, 24))
+
+    & ComponentOptionsProperties<Data>
+>ComponentOptionsProperties : Symbol(ComponentOptionsProperties, Decl(multipleInferenceContexts.ts, 2, 31))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 0, 24))
+
+    & ThisType<Instance<Data>>;
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>Instance : Symbol(Instance, Decl(multipleInferenceContexts.ts, 7, 1))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 0, 24))
+
+interface ComponentOptionsProperties<Data> {
+>ComponentOptionsProperties : Symbol(ComponentOptionsProperties, Decl(multipleInferenceContexts.ts, 2, 31))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 4, 37))
+
+    data: Data;
+>data : Symbol(ComponentOptionsProperties.data, Decl(multipleInferenceContexts.ts, 4, 44))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 4, 37))
+
+    render(): unknown;
+>render : Symbol(ComponentOptionsProperties.render, Decl(multipleInferenceContexts.ts, 5, 15))
+}
+
+interface Instance<Data> {
+>Instance : Symbol(Instance, Decl(multipleInferenceContexts.ts, 7, 1))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 9, 19))
+
+    get<K extends keyof Data>(name: K): unknown;
+>get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
+>K : Symbol(K, Decl(multipleInferenceContexts.ts, 10, 8))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 9, 19))
+>name : Symbol(name, Decl(multipleInferenceContexts.ts, 10, 30))
+>K : Symbol(K, Decl(multipleInferenceContexts.ts, 10, 8))
+}
+
+declare var Moon: {
+>Moon : Symbol(Moon, Decl(multipleInferenceContexts.ts, 13, 11))
+
+    <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 14, 5))
+>options : Symbol(options, Decl(multipleInferenceContexts.ts, 14, 11))
+>ConstructorOptions : Symbol(ConstructorOptions, Decl(multipleInferenceContexts.ts, 0, 0))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 14, 5))
+>Instance : Symbol(Instance, Decl(multipleInferenceContexts.ts, 7, 1))
+>Data : Symbol(Data, Decl(multipleInferenceContexts.ts, 14, 5))
+
+};
+
+const r2 = Moon({
+>r2 : Symbol(r2, Decl(multipleInferenceContexts.ts, 17, 5))
+>Moon : Symbol(Moon, Decl(multipleInferenceContexts.ts, 13, 11))
+
+    data: { msg: "" },
+>data : Symbol(data, Decl(multipleInferenceContexts.ts, 17, 17))
+>msg : Symbol(msg, Decl(multipleInferenceContexts.ts, 18, 11))
+
+    render() {
+>render : Symbol(render, Decl(multipleInferenceContexts.ts, 18, 22))
+
+        const h = (x: unknown) => x;
+>h : Symbol(h, Decl(multipleInferenceContexts.ts, 20, 13))
+>x : Symbol(x, Decl(multipleInferenceContexts.ts, 20, 19))
+>x : Symbol(x, Decl(multipleInferenceContexts.ts, 20, 19))
+
+        return h(this.get("msg"));
+>h : Symbol(h, Decl(multipleInferenceContexts.ts, 20, 13))
+>this.get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
+>this : Symbol(Instance, Decl(multipleInferenceContexts.ts, 7, 1))
+>get : Symbol(Instance.get, Decl(multipleInferenceContexts.ts, 9, 26))
+
+    },
+});
+

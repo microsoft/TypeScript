@@ -1,0 +1,16 @@
+{
+    "scenario": "Visibility of type used across modules - 2",
+    "projectRoot": "tests/cases/projects/InvalidReferences",
+    "inputFiles": [
+        "main.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "main.ts"
+    ],
+    "emittedFiles": [
+        "main.js"
+    ]
+}

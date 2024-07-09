@@ -1,0 +1,38 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/[|undefined|];
+// 
+// void [|undefined|];
+
+// === /b.ts ===
+// [|undefined|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // /*FIND ALL REFS*/[|undefined|];
+  // 
+  // void undefined;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var undefined",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
+      "kind": "propertyName"
+     }
+    ]
+   }
+  ]

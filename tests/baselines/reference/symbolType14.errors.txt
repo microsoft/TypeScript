@@ -1,0 +1,7 @@
+symbolType14.ts(1,1): error TS2350: Only a void function can be called with the 'new' keyword.
+
+
+==== symbolType14.ts (1 errors) ====
+    new Symbol();
+    ~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.

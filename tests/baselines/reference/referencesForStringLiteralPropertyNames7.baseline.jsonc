@@ -1,0 +1,113 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.js ===
+// var x = { <|"/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}someProperty|]": 0|> }
+// <|x["[|{| isWriteAccess: true |}someProperty|]"] = 3;|>
+// <|x.[|{| isWriteAccess: true |}someProperty|] = 5;|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.js ===
+  // var x = { <|"/*FIND ALL REFS*/[|someProperty|]": 0|> }
+  // x["someProperty"] = 3;
+  // x.someProperty = 5;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) \"someProperty\": number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"someProperty\"",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/foo.js ===
+// var x = { <|"[|{| isWriteAccess: true, isDefinition: true |}someProperty|]": 0|> }
+// <|x["/*FIND ALL REFS*/[|{| isWriteAccess: true |}someProperty|]"] = 3;|>
+// <|x.[|{| isWriteAccess: true |}someProperty|] = 5;|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/foo.js ===
+  // var x = { <|"[|someProperty|]": 0|> }
+  // x["/*FIND ALL REFS*/someProperty"] = 3;
+  // x.someProperty = 5;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) \"someProperty\": number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"someProperty\"",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

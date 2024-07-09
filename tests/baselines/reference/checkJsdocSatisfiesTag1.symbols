@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag1.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} T1
+ * @property {number} a
+ */
+
+/**
+ * @typedef {Object} T2
+ * @property {"a" | "b"} a
+ */
+
+/**
+ * @typedef {(x: string) => string} T3
+ */
+
+/**
+ * @typedef {Object} T4
+ * @property {string} a
+ */
+
+const t1 = /** @satisfies {T1} */ ({ a: 1 });
+>t1 : Symbol(t1, Decl(a.js, 19, 5))
+>a : Symbol(a, Decl(a.js, 19, 36))
+
+const t2 = /** @satisfies {T1} */ ({ a: 1, b: 1 });
+>t2 : Symbol(t2, Decl(a.js, 20, 5))
+>a : Symbol(a, Decl(a.js, 20, 36))
+>b : Symbol(b, Decl(a.js, 20, 42))
+
+const t3 = /** @satisfies {T1} */ ({});
+>t3 : Symbol(t3, Decl(a.js, 21, 5))
+
+/** @type {T2} */
+const t4 = /** @satisfies {T2} */ ({ a: "a" });
+>t4 : Symbol(t4, Decl(a.js, 24, 5))
+>a : Symbol(a, Decl(a.js, 24, 36))
+
+/** @type {(m: string) => string} */
+const t5 = /** @satisfies {T3} */((m) => m.substring(0));
+>t5 : Symbol(t5, Decl(a.js, 27, 5))
+>m : Symbol(m, Decl(a.js, 27, 35))
+>m.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(a.js, 27, 35))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+
+const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
+>t6 : Symbol(t6, Decl(a.js, 28, 5))
+
+const t7 = /** @satisfies {T4} */ ({ a: 'test' });
+>t7 : Symbol(t7, Decl(a.js, 29, 5))
+>a : Symbol(a, Decl(a.js, 29, 36))
+
+const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
+>t8 : Symbol(t8, Decl(a.js, 30, 5))
+>a : Symbol(a, Decl(a.js, 30, 36))
+>b : Symbol(b, Decl(a.js, 30, 47))
+

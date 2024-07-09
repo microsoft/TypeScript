@@ -1,0 +1,10 @@
+duplicateLabel1.ts(2,1): error TS1114: Duplicate label 'target'.
+
+
+==== duplicateLabel1.ts (1 errors) ====
+    target:
+    target:
+    ~~~~~~
+!!! error TS1114: Duplicate label 'target'.
+    while (true) {
+    }

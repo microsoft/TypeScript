@@ -1,0 +1,7 @@
+templateStringUnterminated4_ES6.ts(1,6): error TS1160: Unterminated template literal.
+
+
+==== templateStringUnterminated4_ES6.ts (1 errors) ====
+    `\\\`
+         
+!!! error TS1160: Unterminated template literal.

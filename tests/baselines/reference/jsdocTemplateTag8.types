@@ -1,0 +1,167 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag8.ts] ////
+
+=== a.js ===
+/**
+ * @template out T
+ * @typedef {Object} Covariant
+ * @property {T} x
+ */
+
+/**
+ * @type {Covariant<unknown>}
+ */
+let super_covariant = { x: 1 };
+>super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+>{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+/**
+ * @type {Covariant<string>}
+ */
+let sub_covariant = { x: '' };
+>sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+>{ x: '' } : { x: string; }
+>          : ^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>'' : ""
+>   : ^^
+
+super_covariant = sub_covariant;
+>super_covariant = sub_covariant : Covariant<string>
+>                                : ^^^^^^^^^^^^^^^^^
+>super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+>sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+
+sub_covariant   = super_covariant; // Error
+>sub_covariant   = super_covariant : Covariant<unknown>
+>                                  : ^^^^^^^^^^^^^^^^^^
+>sub_covariant : Covariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+>super_covariant : Covariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+
+/**
+ * @template in T
+ * @typedef {Object} Contravariant
+ * @property {(x: T) => void} f
+ */
+
+/**
+ * @type {Contravariant<unknown>}
+ */
+let super_contravariant = { f: (x) => {} };
+>super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>{ f: (x) => {} } : { f: (x: unknown) => void; }
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>f : (x: unknown) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^
+>(x) => {} : (x: unknown) => void
+>          : ^ ^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+/**
+ * @type {Contravariant<string>}
+ */
+let sub_contravariant = { f: (x) => {} };
+>sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+>{ f: (x) => {} } : { f: (x: string) => void; }
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>f : (x: string) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
+>(x) => {} : (x: string) => void
+>          : ^ ^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+
+super_contravariant = sub_contravariant;  // Error
+>super_contravariant = sub_contravariant : Contravariant<string>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^
+>super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+
+sub_contravariant = super_contravariant;
+>sub_contravariant = super_contravariant : Contravariant<unknown>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^
+>sub_contravariant : Contravariant<string>
+>                  : ^^^^^^^^^^^^^^^^^^^^^
+>super_contravariant : Contravariant<unknown>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+/**
+ * @template in out T
+ * @typedef {Object} Invariant
+ * @property {(x: T) => T} f
+ */
+
+/**
+ * @type {Invariant<unknown>}
+ */
+let super_invariant = { f: (x) => {} };
+>super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+>{ f: (x) => {} } : { f: (x: unknown) => void; }
+>                 : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
+>f : (x: unknown) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^
+>(x) => {} : (x: unknown) => void
+>          : ^ ^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+/**
+ * @type {Invariant<string>}
+ */
+let sub_invariant = { f: (x) => { return "" } };
+>sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+>{ f: (x) => { return "" } } : { f: (x: string) => string; }
+>                            : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>f : (x: string) => string
+>  : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => { return "" } : (x: string) => string
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+super_invariant = sub_invariant;  // Error
+>super_invariant = sub_invariant : Invariant<string>
+>                                : ^^^^^^^^^^^^^^^^^
+>super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+>sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+
+sub_invariant = super_invariant;  // Error
+>sub_invariant = super_invariant : Invariant<unknown>
+>                                : ^^^^^^^^^^^^^^^^^^
+>sub_invariant : Invariant<string>
+>              : ^^^^^^^^^^^^^^^^^
+>super_invariant : Invariant<unknown>
+>                : ^^^^^^^^^^^^^^^^^^
+
+/**
+ * @template in T
+ * @param {T} x
+ */
+function f(x) {}
+>f : <in T>(x: T) => void
+>  : ^^^^ ^^ ^^ ^^^^^^^^^
+>x : T
+>  : ^
+

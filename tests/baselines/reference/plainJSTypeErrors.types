@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/salsa/plainJSTypeErrors.ts] ////
+
+=== plainJSTypeErrors.js ===
+// should error
+if ({} === {}) {}
+>{} === {} : boolean
+>          : ^^^^^^^
+>{} : {}
+>   : ^^
+>{} : {}
+>   : ^^
+
+// should not error
+if ({} == {}) {}
+>{} == {} : boolean
+>         : ^^^^^^^
+>{} : {}
+>   : ^^
+>{} : {}
+>   : ^^
+

@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/node/nodeModulesExportsBlocksTypesVersions.ts] ////
+
+=== /node_modules/exports-and-types-versions/types/foo.d.ts ===
+
+export {};
+
+=== /node_modules/just-types-versions/types/foo.d.ts ===
+
+export {};
+
+=== /main.cts ===
+
+import {} from "exports-and-types-versions/foo";
+import {} from "exports-and-types-versions/nope";
+import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
+import {} from "just-types-versions/foo";
+
+=== /main.mts ===
+
+import {} from "exports-and-types-versions/foo";
+import {} from "exports-and-types-versions/nope";
+import {} from "exports-and-types-versions/yep";
+import {} from "exports-and-types-versions/versioned-yep";
+import {} from "exports-and-types-versions/versioned-nah";
+import {} from "just-types-versions/foo";
+

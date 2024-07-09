@@ -1,0 +1,20 @@
+d.ts(2,5): error TS1361: 'a' cannot be used as a value because it was imported using 'import type'.
+
+
+==== a.ts (0 errors) ====
+    export class A {}
+    
+==== b.ts (0 errors) ====
+    export * as a from './a';
+    
+==== c.ts (0 errors) ====
+    import type { a } from './b';
+    export { a };
+    
+==== d.ts (1 errors) ====
+    import { a } from './c';
+    new a.A(); // Error
+        ~
+!!! error TS1361: 'a' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 c.ts:1:15: 'a' was imported here.
+    

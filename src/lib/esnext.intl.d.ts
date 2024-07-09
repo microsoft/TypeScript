@@ -1,0 +1,3 @@
+declare namespace Intl {
+    // Empty
+}

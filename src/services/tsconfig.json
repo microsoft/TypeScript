@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+    },
+    "references": [
+        { "path": "../compiler" },
+        { "path": "../jsTyping" }
+    ],
+    "include": ["**/*"]
+}

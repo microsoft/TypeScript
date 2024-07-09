@@ -1,0 +1,7 @@
+TupleType4.ts(1,9): error TS1005: ']' expected.
+
+
+==== TupleType4.ts (1 errors) ====
+    var v: [
+            
+!!! error TS1005: ']' expected.

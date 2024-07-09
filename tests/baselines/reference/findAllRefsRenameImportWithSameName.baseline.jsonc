@@ -1,0 +1,431 @@
+// === findAllReferences ===
+// === /a.ts ===
+// <|export const /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}x|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { [|{| contextId: 1, defId: 0 |}x|] as [|{| contextId: 2, defId: 1, isWriteAccess: true |}x|] } from "./a";|>|>
+// [|{| defId: 1 |}x|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export const /*FIND ALL REFS*/[|{| defId: 0 |}x|] = 0;|>
+
+  // === /b.ts ===
+  // <|import { x as [|{| defId: 1 |}x|] } from "./a";|>
+  // x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|export const [|{| defId: 0, isWriteAccess: true |}x|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { /*FIND ALL REFS*/[|{| contextId: 1, defId: 0 |}x|] as [|{| contextId: 2, defId: 1, isWriteAccess: true |}x|] } from "./a";|>|>
+// [|{| defId: 1 |}x|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export const [|{| defId: 0 |}x|] = 0;|>
+
+  // === /b.ts ===
+  // <|import { /*FIND ALL REFS*/x as [|{| defId: 1 |}x|] } from "./a";|>
+  // x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// <|import { x as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] } from "./a";|>
+// [|x|];
+
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import { x as /*FIND ALL REFS*/[|x|] } from "./a";|>
+  // x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// <|import { x as [|{| isWriteAccess: true |}x|] } from "./a";|>
+// /*FIND ALL REFS*/[|x|];
+
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import { x as [|x|] } from "./a";|>
+  // /*FIND ALL REFS*/x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export const /*RENAME*/[|xRENAME|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { [|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";|>|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export const [|xRENAME|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { /*RENAME*/[|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";|>|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import { x as /*RENAME*/[|xRENAME|] } from "./a";|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import { x as [|xRENAME|] } from "./a";|>
+// /*RENAME*/[|xRENAME|];

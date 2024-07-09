@@ -1,0 +1,7 @@
+typePredicateOnVariableDeclaration01.ts(1,8): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+
+
+==== typePredicateOnVariableDeclaration01.ts (1 errors) ====
+    var x: this is string;
+           ~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.

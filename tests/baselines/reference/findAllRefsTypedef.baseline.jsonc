@@ -1,0 +1,146 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * /*FIND ALL REFS*/@prop p {number}
+//  */
+// 
+// /** @type {I} */
+// let x;
+// x.p;
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * <|@prop /*FIND ALL REFS*/[|{| isDefinition: true |}p|] {number}
+//  |>*/
+// 
+// /** @type {I} */
+// let x;
+// x.[|p|];
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @typedef I {Object}
+  //  * <|@prop /*FIND ALL REFS*/[|p|] {number}
+  //  |>*/
+  // 
+  // /** @type {I} */
+  // let x;
+  // x.p;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) p: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "p",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * <|@prop [|p|] {number}
+//  |>*/
+// 
+// /** @type {I} */
+// let x;
+// x./*FIND ALL REFS*/[|p|];
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @typedef I {Object}
+  //  * <|@prop [|p|] {number}
+  //  |>*/
+  // 
+  // /** @type {I} */
+  // let x;
+  // x./*FIND ALL REFS*/p;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) p: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "p",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

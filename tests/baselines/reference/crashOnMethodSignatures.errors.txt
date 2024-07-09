@@ -1,0 +1,10 @@
+crashOnMethodSignatures.ts(2,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== crashOnMethodSignatures.ts (1 errors) ====
+    class A {
+        a(completed: () => any): void;
+        ~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    

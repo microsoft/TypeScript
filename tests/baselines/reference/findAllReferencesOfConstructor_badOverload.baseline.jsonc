@@ -1,0 +1,77 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+// class C {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|](n: number);|>
+//     <|[|{| isDefinition: true |}constructor|](){}|>
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+  // <|class [|C|] {
+  //     /*FIND ALL REFS*/constructor(n: number);
+  //     constructor(){}
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+// class C {
+//     <|[|{| isDefinition: true |}constructor|](n: number);|>
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|](){}|>
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+  // <|class [|C|] {
+  //     constructor(n: number);
+  //     /*FIND ALL REFS*/constructor(){}
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

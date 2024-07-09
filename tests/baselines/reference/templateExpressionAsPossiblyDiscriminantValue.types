@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/templateExpressionAsPossiblyDiscriminantValue.ts] ////
+
+=== templateExpressionAsPossiblyDiscriminantValue.ts ===
+// repro mentioned in https://github.com/microsoft/TypeScript/issues/53888
+
+type BiomePlainLinkProps = {
+>BiomePlainLinkProps : BiomePlainLinkProps
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+  href: string;
+>href : string
+>     : ^^^^^^
+
+  onClick?: (event: string) => void;
+>onClick : ((event: string) => void) | undefined
+>        : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
+>event : string
+>      : ^^^^^^
+}
+
+type BiomeButtonProps = {
+>BiomeButtonProps : BiomeButtonProps
+>                 : ^^^^^^^^^^^^^^^^
+
+  href?: never;
+>href : undefined
+>     : ^^^^^^^^^
+
+  onClick?: (event: number) => void;
+>onClick : ((event: number) => void) | undefined
+>        : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
+>event : number
+>      : ^^^^^^
+}
+
+export type ClickableDiscriminatedUnion =
+>ClickableDiscriminatedUnion : ClickableDiscriminatedUnion
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  | BiomePlainLinkProps
+  | BiomeButtonProps;
+
+const p3: ClickableDiscriminatedUnion = {
+>p3 : ClickableDiscriminatedUnion
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  href: `2${undefined}332132`,  onClick: (ev) => console.log('@@@@', ev),} : { href: string; onClick: (ev: string) => void; }
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+  href: `2${undefined}332132`,
+>href : string
+>     : ^^^^^^
+>`2${undefined}332132` : string
+>                      : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  onClick: (ev) => console.log('@@@@', ev),
+>onClick : (ev: string) => void
+>        : ^  ^^^^^^^^^^^^^^^^^
+>(ev) => console.log('@@@@', ev) : (ev: string) => void
+>                                : ^  ^^^^^^^^^^^^^^^^^
+>ev : string
+>   : ^^^^^^
+>console.log('@@@@', ev) : void
+>                        : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>'@@@@' : "@@@@"
+>       : ^^^^^^
+>ev : string
+>   : ^^^^^^
+}
+

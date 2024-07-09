@@ -1,0 +1,33 @@
+// === findAllReferences ===
+// === /b.ts ===
+// /// <reference types="[|foo|]" />
+// <|import { x } from "/*FIND ALL REFS*/[|foo|]";|>
+// <|declare module "[|{| isWriteAccess: true |}foo|]" {}|>
+
+  // === Definitions ===
+  // === /node_modules/foo/index.d.ts ===
+  // [|export const x = 0;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/node_modules/foo/index\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/node_modules/foo/index\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

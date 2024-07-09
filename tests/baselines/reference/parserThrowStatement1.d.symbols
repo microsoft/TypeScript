@@ -1,0 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserThrowStatement1.d.ts] ////
+
+=== parserThrowStatement1.d.ts ===
+
+throw e;

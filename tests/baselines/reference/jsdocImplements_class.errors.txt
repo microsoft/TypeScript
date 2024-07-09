@@ -1,0 +1,68 @@
+/a.js(13,5): error TS2416: Property 'method' in type 'B2' is not assignable to the same property in base type 'A'.
+  Type '() => string' is not assignable to type '() => number'.
+    Type 'string' is not assignable to type 'number'.
+/a.js(17,7): error TS2720: Class 'B3' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+  Property 'method' is missing in type 'B3' but required in type 'A'.
+
+
+==== /a.js (2 errors) ====
+    class A {
+        /** @return {number} */
+        method() { throw new Error(); }
+    }
+    /** @implements {A} */
+    class B  {
+        method() { return 0 }
+    }
+    
+    /** @implements A */
+    class B2  {
+        /** @return {string} */
+        method() { return "" }
+        ~~~~~~
+!!! error TS2416: Property 'method' in type 'B2' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => number'.
+!!! error TS2416:     Type 'string' is not assignable to type 'number'.
+    }
+    
+    /** @implements {A} */
+    class B3  {
+          ~~
+!!! error TS2720: Class 'B3' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720:   Property 'method' is missing in type 'B3' but required in type 'A'.
+!!! related TS2728 /a.js:3:5: 'method' is declared here.
+    }
+    
+    
+    var Ns = {};
+    /** @implements {A} */
+    Ns.C1 = class {
+        method() { return 11; }
+    }
+    /** @implements {A} */
+    var C2 = class {
+        method() { return 12; }
+    }
+    var o = {
+        /** @implements {A} */
+        C3: class {
+            method() { return 13; }
+        }
+    }
+    class CC {
+        /** @implements {A} */
+        C4 = class {
+            method() {
+                return 14;
+            }
+        }
+    }
+    
+    var C5;
+    /** @implements {A} */
+    Ns.C5 = C5 || class {
+        method() {
+            return 15;
+        }
+    }
+    

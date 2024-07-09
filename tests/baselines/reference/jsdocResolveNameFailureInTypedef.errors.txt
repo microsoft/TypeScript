@@ -1,0 +1,15 @@
+/a.js(7,14): error TS2304: Cannot find name 'CantResolveThis'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @param {Ty} x
+     */
+    function f(x) {}
+    
+    /**
+     * @typedef {CantResolveThis} Ty
+                 ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CantResolveThis'.
+     */
+    

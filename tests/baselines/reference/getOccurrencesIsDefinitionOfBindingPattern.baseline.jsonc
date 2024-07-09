@@ -1,0 +1,191 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+// <|const { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}x|], y } = { <|[|{| defId: 1, isWriteAccess: true |}x|]: 1|>, y: 2 };|>
+// const z = [|{| defId: 0 |}x|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+  // <|const { /*FIND ALL REFS*/[|{| defId: 0 |}x|], y } = { <|[|{| defId: 1 |}x|]: 1|>, y: 2 };|>
+  // const z = x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+// <|const { [|{| isWriteAccess: true |}x|], y } = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}x|]: 1|>, y: 2 };|>
+// const z = x;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+  // const { x, y } = { /*FIND ALL REFS*/<|[|x|]: 1|>, y: 2 };
+  // const z = x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+// <|const { [|{| isWriteAccess: true |}x|], y } = { x: 1, y: 2 };|>
+// const z = /*FIND ALL REFS*/[|x|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts ===
+  // <|const { [|x|], y } = { x: 1, y: 2 };|>
+  // const z = /*FIND ALL REFS*/x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/inKeywordAndIntersection.ts] ////
+
+=== inKeywordAndIntersection.ts ===
+class A { a = 0 }
+>A : A
+>  : ^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+class B { b = 0 }
+>B : B
+>  : ^
+>b : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+function f10(obj: A & { x: string } | B) {
+>f10 : (obj: (A & { x: string; }) | B) => void
+>    : ^   ^^^                  ^    ^^^^^^^^^
+>obj : B | (A & { x: string; })
+>    : ^^^^^^^^^^^^^^      ^^^^
+>x : string
+>  : ^^^^^^
+
+    if (obj instanceof Object) {
+>obj instanceof Object : boolean
+>                      : ^^^^^^^
+>obj : B | (A & { x: string; })
+>    : ^^^^^^^^^^^^^^      ^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+        obj;  // A & { x: string } | B
+>obj : B | (A & { x: string; })
+>    : ^^^^^^^^^^^^^^      ^^^^
+    }
+    else {
+        obj;  // Error
+>obj : never
+>    : ^^^^^
+    }
+}
+
+// Repro from #50844
+
+interface InstanceOne {
+    one(): void
+>one : () => void
+>    : ^^^^^^    
+}
+
+interface InstanceTwo {
+    two(): void
+>two : () => void
+>    : ^^^^^^    
+}
+
+const instance = {} as InstanceOne | InstanceTwo
+>instance : InstanceOne | InstanceTwo
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} as InstanceOne | InstanceTwo : InstanceOne | InstanceTwo
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+const ClassOne = {} as { new(): InstanceOne } & { foo: true };
+>ClassOne : (new () => InstanceOne) & { foo: true; }
+>         : ^^^^^^^^^^^           ^^^^^^^^^^^    ^^^
+>{} as { new(): InstanceOne } & { foo: true } : (new () => InstanceOne) & { foo: true; }
+>                                             : ^^^^^^^^^^^           ^^^^^^^^^^^    ^^^
+>{} : {}
+>   : ^^
+>foo : true
+>    : ^^^^
+>true : true
+>     : ^^^^
+
+if (instance instanceof ClassOne) {
+>instance instanceof ClassOne : boolean
+>                             : ^^^^^^^
+>instance : InstanceOne | InstanceTwo
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassOne : (new () => InstanceOne) & { foo: true; }
+>         : ^^^^^^^^^^^           ^^^^^^^^^^^    ^^^
+
+    instance.one();
+>instance.one() : void
+>               : ^^^^
+>instance.one : () => void
+>             : ^^^^^^    
+>instance : InstanceOne
+>         : ^^^^^^^^^^^
+>one : () => void
+>    : ^^^^^^    
+}
+

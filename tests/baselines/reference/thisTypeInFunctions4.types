@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts] ////
+
+=== thisTypeInFunctions4.ts ===
+type WrongObject = {value: number};
+>WrongObject : WrongObject
+>            : ^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+type CorrectObject = {name: string};
+>CorrectObject : CorrectObject
+>              : ^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+
+declare function isCorrect(obj: any): obj is CorrectObject
+>isCorrect : (obj: any) => obj is CorrectObject
+>          : ^   ^^   ^^^^^                    
+>obj : any
+
+declare function callsCallback(cb: (name: string)=>void)
+>callsCallback : (cb: (name: string) => void) => any
+>              : ^  ^^                      ^^^^^^^^
+>cb : (name: string) => void
+>   : ^    ^^      ^^^^^    
+>name : string
+>     : ^^^^^^
+
+function problemFunction(this: CorrectObject | WrongObject): void {
+>problemFunction : (this: CorrectObject | WrongObject) => void
+>                : ^    ^^                           ^^^^^    
+>this : WrongObject | CorrectObject
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    //check type
+    if (!isCorrect(this)) return;
+>!isCorrect(this) : boolean
+>                 : ^^^^^^^
+>isCorrect(this) : boolean
+>                : ^^^^^^^
+>isCorrect : (obj: any) => obj is CorrectObject
+>          : ^   ^^   ^^^^^                    
+>this : WrongObject | CorrectObject
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    callsCallback((name)=>{
+>callsCallback((name)=>{        this.name = name; //should not error        type T = typeof this;    }) : any
+>callsCallback : (cb: (name: string) => void) => any
+>              : ^  ^^                      ^^^^^^^^
+>(name)=>{        this.name = name; //should not error        type T = typeof this;    } : (name: string) => void
+>                                                                                        : ^    ^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+
+        this.name = name; //should not error
+>this.name = name : string
+>                 : ^^^^^^
+>this.name : string
+>          : ^^^^^^
+>this : CorrectObject
+>     : ^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        type T = typeof this;
+>T : CorrectObject
+>  : ^^^^^^^^^^^^^
+>this : CorrectObject
+>     : ^^^^^^^^^^^^^
+
+    });
+}

@@ -1,0 +1,14 @@
+parserComputedPropertyName26.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+parserComputedPropertyName26.ts(4,6): error TS2304: Cannot find name 'e2'.
+
+
+==== parserComputedPropertyName26.ts (2 errors) ====
+    enum E {
+        // No ASI
+        [e] = 0
+        ~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+        [e2] = 1
+         ~~
+!!! error TS2304: Cannot find name 'e2'.
+    }

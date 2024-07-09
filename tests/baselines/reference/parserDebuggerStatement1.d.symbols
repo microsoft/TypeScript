@@ -1,0 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserDebuggerStatement1.d.ts] ////
+
+=== parserDebuggerStatement1.d.ts ===
+
+debugger;

@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/keepImportsInDts4.ts] ////
+
+=== folder/test.ts ===
+
+export {};
+=== main.ts ===
+
+import "./folder/test"
+

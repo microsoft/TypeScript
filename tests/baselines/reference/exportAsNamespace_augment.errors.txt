@@ -1,0 +1,38 @@
+/a.d.ts(3,14): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+/b.ts(6,22): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+/b.ts(12,18): error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+
+
+==== /a.d.ts (1 errors) ====
+    export as namespace a;
+    export const x = 0;
+    export const conflict = 0;
+                 ~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+!!! related TS6203 /b.ts:6:22: 'conflict' was also declared here.
+!!! related TS6204 /b.ts:12:18: and here.
+    
+==== /b.ts (2 errors) ====
+    import * as a2 from "./a";
+    
+    declare global {
+        namespace a {
+            export const y = 0;
+            export const conflict = 0;
+                         ~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+!!! related TS6203 /a.d.ts:3:14: 'conflict' was also declared here.
+        }
+    }
+    
+    declare module "./a" {
+        export const z = 0;
+        export const conflict = 0;
+                     ~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'conflict'.
+!!! related TS6203 /a.d.ts:3:14: 'conflict' was also declared here.
+    }
+    
+    a.x + a.y + a.z + a.conflict;
+    a2.x + a2.y + a2.z + a2.conflict;
+    

@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/missingSemicolonInModuleSpecifier.ts] ////
+
+=== a.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(a.ts, 0, 12))
+
+=== b.ts ===
+import {x} from "./a"
+>x : Symbol(x, Decl(b.ts, 0, 8))
+
+(function() { return 1; }())

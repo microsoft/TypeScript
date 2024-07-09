@@ -1,0 +1,15 @@
+{
+    "scenario": "Emit decorator metadata when commonJS and isolatedModules are on",
+    "projectRoot": "tests/cases/projects/decoratorMetadata/emitDecoratorMetadataSystemJSIsolatedModuleNoResolve",
+    "baselineCheck": true,
+    "runTest": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
+        "main.ts"
+    ],
+    "emittedFiles": [
+        "main.js"
+    ]
+}

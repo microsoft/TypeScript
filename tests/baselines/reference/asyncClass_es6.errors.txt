@@ -1,0 +1,8 @@
+asyncClass_es6.ts(1,1): error TS1042: 'async' modifier cannot be used here.
+
+
+==== asyncClass_es6.ts (1 errors) ====
+    async class C {  
+    ~~~~~
+!!! error TS1042: 'async' modifier cannot be used here.
+    }

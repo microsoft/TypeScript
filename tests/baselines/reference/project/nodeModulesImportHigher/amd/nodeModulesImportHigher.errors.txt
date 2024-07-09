@@ -1,0 +1,50 @@
+importHigher/root.ts(6,1): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== importHigher/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { 
+        "allowJs": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "maxNodeModuleJsDepth": 2
+      }
+    }
+    
+==== entry.js (0 errors) ====
+    var m3 = require("m3");
+    
+    module.exports = {
+    	"a": 42,
+    	"b": "hello, world",
+    	"person": m3.person
+    };
+    
+==== index.js (0 errors) ====
+    var m2 = require('m2');
+    
+    /**
+     * @param {string} p1 The first param
+     */
+    exports.f1 = function(p1) {
+    	return 42;
+    };
+    
+    exports.f2 = m2;
+    
+==== index.js (0 errors) ====
+    exports.person = {
+        "name": "John Doe",
+        "age": 42
+    }
+    
+==== importHigher/root.ts (1 errors) ====
+    import * as m1 from "m1";
+    import * as m2 from "m2";
+    
+    m1.f1("test");
+    m1.f2.a = 10;
+    m1.f2.person.age = "10"; // Error: Should be number (if direct import of m2 made the m3 module visible). 
+    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    

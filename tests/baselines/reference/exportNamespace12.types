@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace12.ts] ////
+
+=== main.ts ===
+import { c } from './types'
+>c : 10
+>  : ^^
+
+import * as types from './types'
+>types : typeof types
+>      : ^^^^^^^^^^^^
+
+console.log(c) // Fails as expected, import is still allowed though.
+>console.log(c) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>c : 10
+>  : ^^
+
+console.log(types.c) // Expected an error here.
+>console.log(types.c) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>types.c : any
+>        : ^^^
+>types : typeof types
+>      : ^^^^^^^^^^^^
+>c : any
+>  : ^^^
+
+=== types.ts ===
+
+export type * from './values'
+
+=== values.ts ===
+export const c = 10
+>c : 10
+>  : ^^
+>10 : 10
+>   : ^^
+

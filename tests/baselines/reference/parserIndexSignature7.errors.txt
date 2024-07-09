@@ -1,0 +1,9 @@
+parserIndexSignature7.ts(2,3): error TS1021: An index signature must have a type annotation.
+
+
+==== parserIndexSignature7.ts (1 errors) ====
+    interface I {
+      [a:string]
+      ~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+    }

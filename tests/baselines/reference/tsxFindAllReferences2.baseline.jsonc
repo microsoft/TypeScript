@@ -1,0 +1,73 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}name|]?: string;|>
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <div <|[|{| isWriteAccess: true |}name|]="hello"|> />;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // declare module JSX {
+  //     interface Element { }
+  //     interface IntrinsicElements {
+  //         div: {
+  //             /*FIND ALL REFS*/<|[|name|]?: string;|>
+  //             isOpen?: boolean;
+  //         };
+  //         span: { n: string; };
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) name?: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "name",
+      "kind": "propertyName"
+     },
+     {
+      "text": "?",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

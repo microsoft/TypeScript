@@ -1,0 +1,9 @@
+// === documentHighlights ===
+// filesToSearch:
+//   C:\a\b\c.ts
+
+// === C:/a/b/c.ts ===
+// <|var [|{| kind: "writtenReference" |}x|] = 1;|>
+
+// === C:\a\b\c.ts ===
+// var /*HIGHLIGHTS*/x = 1;

@@ -1,0 +1,35 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield3.ts ===
+// class C {
+//     notAGenerator() {
+//       /*GOTO DEF*/yield 0;
+//     }
+// 
+//     foo*() {
+// --- (line: 7) skipped ---
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield3.ts ===
+// class C {
+//     notAGenerator() {
+//       yield 0;
+//     }
+// 
+//     foo<|*[||]() {
+//       /*GOTO DEF*/yield 0;
+//     }|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "(Missing)",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

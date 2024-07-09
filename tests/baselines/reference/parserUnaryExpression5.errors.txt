@@ -1,0 +1,10 @@
+parserUnaryExpression5.ts(1,4): error TS1109: Expression expected.
+parserUnaryExpression5.ts(1,11): error TS2304: Cannot find name 'foo'.
+
+
+==== parserUnaryExpression5.ts (2 errors) ====
+    ++ delete foo.bar
+       ~~~~~~
+!!! error TS1109: Expression expected.
+              ~~~
+!!! error TS2304: Cannot find name 'foo'.

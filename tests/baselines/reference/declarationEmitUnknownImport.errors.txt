@@ -1,0 +1,14 @@
+declarationEmitUnknownImport.ts(1,1): error TS2303: Circular definition of import alias 'Foo'.
+declarationEmitUnknownImport.ts(1,14): error TS2304: Cannot find name 'SomeNonExistingName'.
+declarationEmitUnknownImport.ts(1,14): error TS2503: Cannot find namespace 'SomeNonExistingName'.
+
+
+==== declarationEmitUnknownImport.ts (3 errors) ====
+    import Foo = SomeNonExistingName
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'Foo'.
+                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SomeNonExistingName'.
+                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'SomeNonExistingName'.
+    export {Foo}

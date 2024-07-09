@@ -1,0 +1,185 @@
+//// [tests/cases/compiler/mixedTypeEnumComparison.ts] ////
+
+=== mixedTypeEnumComparison.ts ===
+const enum E {
+>E : E
+>  : ^
+
+    S1 = "foo",
+>S1 : E.S1
+>   : ^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    S2 = "bar",
+>S2 : E.S2
+>   : ^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+    N1 = 1000,
+>N1 : E.N1
+>   : ^^^^
+>1000 : 1000
+>     : ^^^^
+
+    N2 = 25,
+>N2 : E.N2
+>   : ^^^^
+>25 : 25
+>   : ^^
+}
+
+declare var someNumber: number
+>someNumber : number
+>           : ^^^^^^
+
+if (someNumber > E.N2) {
+>someNumber > E.N2 : boolean
+>                  : ^^^^^^^
+>someNumber : number
+>           : ^^^^^^
+>E.N2 : E.N2
+>     : ^^^^
+>E : typeof E
+>  : ^^^^^^^^
+>N2 : E.N2
+>   : ^^^^
+
+    someNumber = E.N2;
+>someNumber = E.N2 : E.N2
+>                  : ^^^^
+>someNumber : number
+>           : ^^^^^^
+>E.N2 : E.N2
+>     : ^^^^
+>E : typeof E
+>  : ^^^^^^^^
+>N2 : E.N2
+>   : ^^^^
+}
+
+declare const unionOfEnum: E.N1 | E.N2;
+>unionOfEnum : E.N1 | E.N2
+>            : ^^^^^^^^^^^
+>E : any
+>  : ^^^
+>E : any
+>  : ^^^
+
+if (someNumber > unionOfEnum) {
+>someNumber > unionOfEnum : boolean
+>                         : ^^^^^^^
+>someNumber : number
+>           : ^^^^^^
+>unionOfEnum : E.N1 | E.N2
+>            : ^^^^^^^^^^^
+
+    someNumber = E.N2;
+>someNumber = E.N2 : E.N2
+>                  : ^^^^
+>someNumber : number
+>           : ^^^^^^
+>E.N2 : E.N2
+>     : ^^^^
+>E : typeof E
+>  : ^^^^^^^^
+>N2 : E.N2
+>   : ^^^^
+}
+
+declare var someString: string
+>someString : string
+>           : ^^^^^^
+
+if (someString > E.S1) {
+>someString > E.S1 : boolean
+>                  : ^^^^^^^
+>someString : string
+>           : ^^^^^^
+>E.S1 : E.S1
+>     : ^^^^
+>E : typeof E
+>  : ^^^^^^^^
+>S1 : E.S1
+>   : ^^^^
+
+    someString = E.S2;
+>someString = E.S2 : E.S2
+>                  : ^^^^
+>someString : string
+>           : ^^^^^^
+>E.S2 : E.S2
+>     : ^^^^
+>E : typeof E
+>  : ^^^^^^^^
+>S2 : E.S2
+>   : ^^^^
+}
+
+
+declare function someValue(): number;
+>someValue : () => number
+>          : ^^^^^^      
+
+enum E2 {
+>E2 : E2
+>   : ^^
+
+    S1 = "foo",
+>S1 : E2.S1
+>   : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    N1 = 1000,
+>N1 : E2.N1
+>   : ^^^^^
+>1000 : 1000
+>     : ^^^^
+
+    C1 = someValue(),
+>C1 : E2.C1
+>   : ^^^^^
+>someValue() : number
+>            : ^^^^^^
+>someValue : () => number
+>          : ^^^^^^      
+}
+
+someString > E2.S1;
+>someString > E2.S1 : boolean
+>                   : ^^^^^^^
+>someString : string
+>           : ^^^^^^
+>E2.S1 : E2.S1
+>      : ^^^^^
+>E2 : typeof E2
+>   : ^^^^^^^^^
+>S1 : E2.S1
+>   : ^^^^^
+
+someNumber > E2.N1;
+>someNumber > E2.N1 : boolean
+>                   : ^^^^^^^
+>someNumber : number
+>           : ^^^^^^
+>E2.N1 : E2.N1
+>      : ^^^^^
+>E2 : typeof E2
+>   : ^^^^^^^^^
+>N1 : E2.N1
+>   : ^^^^^
+
+someNumber > E2.C1;
+>someNumber > E2.C1 : boolean
+>                   : ^^^^^^^
+>someNumber : number
+>           : ^^^^^^
+>E2.C1 : E2.C1
+>      : ^^^^^
+>E2 : typeof E2
+>   : ^^^^^^^^^
+>C1 : E2.C1
+>   : ^^^^^
+

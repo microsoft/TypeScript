@@ -1,0 +1,9 @@
+parse2.ts(3,1): error TS1135: Argument expression expected.
+
+
+==== parse2.ts (1 errors) ====
+    function foo() {
+     foo(
+    }
+    ~
+!!! error TS1135: Argument expression expected.

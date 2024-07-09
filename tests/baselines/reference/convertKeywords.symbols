@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/convertKeywords.ts] ////
+
+=== convertKeywords.ts ===
+var abstract;
+>abstract : Symbol(abstract, Decl(convertKeywords.ts, 0, 3))
+
+
+

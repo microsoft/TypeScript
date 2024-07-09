@@ -1,0 +1,279 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties5.ts ===
+// interface interface1 extends interface1 {
+//    /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}doStuff|](): void;|>
+//    propName: string;
+// }
+// interface interface2 extends interface1 {
+//    <|[|{| defId: 1 |}doStuff|](): void;|>
+//    propName: string;
+// }
+// 
+// var v: interface1;
+// v.propName;
+// v.[|{| defId: 0 |}doStuff|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties5.ts ===
+  // interface interface1 extends interface1 {
+  //    /*FIND ALL REFS*/<|[|{| defId: 0 |}doStuff|](): void;|>
+  //    propName: string;
+  // }
+  // interface interface2 extends interface1 {
+  //    <|[|{| defId: 1 |}doStuff|](): void;|>
+  //    propName: string;
+  // }
+  // 
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface1.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface2.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface2",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties5.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}propName|]: string;|>
+// }
+// interface interface2 extends interface1 {
+//    doStuff(): void;
+//    <|[|{| defId: 1 |}propName|]: string;|>
+// }
+// 
+// var v: interface1;
+// v.[|{| defId: 0 |}propName|];
+// v.doStuff();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties5.ts ===
+  // interface interface1 extends interface1 {
+  //    doStuff(): void;
+  //    /*FIND ALL REFS*/<|[|{| defId: 0 |}propName|]: string;|>
+  // }
+  // interface interface2 extends interface1 {
+  //    doStuff(): void;
+  //    <|[|{| defId: 1 |}propName|]: string;|>
+  // }
+  // 
+  // var v: interface1;
+  // v.propName;
+  // v.doStuff();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) interface1.propName: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "propName",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) interface2.propName: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface2",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "propName",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty10.ts ===
+interface Foo { bar: any; }
+>bar : any
+>    : ^^^
+
+const bar: { [id: string]: number } = {};
+>bar : { [id: string]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>{} : {}
+>   : ^^
+
+(foo: Foo) => {
+>(foo: Foo) => {	bar[id]++;	const id = foo.bar;} : (foo: Foo) => void
+>                                                : ^   ^^   ^^^^^^^^^
+>foo : Foo
+>    : ^^^
+
+	bar[id]++;
+>bar[id]++ : number
+>          : ^^^^^^
+>bar[id] : number
+>        : ^^^^^^
+>bar : { [id: string]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>id : any
+>   : ^^^
+
+	const id = foo.bar;
+>id : any
+>   : ^^^
+>foo.bar : any
+>        : ^^^
+>foo : Foo
+>    : ^^^
+>bar : any
+>    : ^^^
+}
+

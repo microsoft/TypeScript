@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag6.ts] ////
+
+=== test.js ===
+/** @type {number} */
+function f() {
+>f : Symbol(f, Decl(test.js, 0, 0))
+
+    return 1
+}
+
+/** @type {{ prop: string }} */
+var g = function (prop) {
+>g : Symbol(g, Decl(test.js, 6, 3))
+>prop : Symbol(prop, Decl(test.js, 6, 18))
+}
+
+/** @type {(a: number) => number} */
+function add1(a, b) { return a + b; }
+>add1 : Symbol(add1, Decl(test.js, 7, 1))
+>a : Symbol(a, Decl(test.js, 10, 14))
+>b : Symbol(b, Decl(test.js, 10, 16))
+>a : Symbol(a, Decl(test.js, 10, 14))
+>b : Symbol(b, Decl(test.js, 10, 16))
+
+/** @type {(a: number, b: number) => number} */
+function add2(a, b) { return a + b; }
+>add2 : Symbol(add2, Decl(test.js, 10, 37))
+>a : Symbol(a, Decl(test.js, 13, 14))
+>b : Symbol(b, Decl(test.js, 13, 16))
+>a : Symbol(a, Decl(test.js, 13, 14))
+>b : Symbol(b, Decl(test.js, 13, 16))
+
+// TODO: Should be an error since signature doesn't match.
+/** @type {(a: number, b: number, c: number) => number} */
+function add3(a, b) { return a + b; }
+>add3 : Symbol(add3, Decl(test.js, 13, 37))
+>a : Symbol(a, Decl(test.js, 17, 14))
+>b : Symbol(b, Decl(test.js, 17, 16))
+>a : Symbol(a, Decl(test.js, 17, 14))
+>b : Symbol(b, Decl(test.js, 17, 16))
+
+// Confirm initializers are compatible.
+// They can't have more parameters than the type/context.
+
+/** @type {() => void} */
+function funcWithMoreParameters(more) {} // error
+>funcWithMoreParameters : Symbol(funcWithMoreParameters, Decl(test.js, 17, 37))
+>more : Symbol(more, Decl(test.js, 23, 32))
+
+/** @type {() => void} */
+const variableWithMoreParameters = function (more) {}; // error
+>variableWithMoreParameters : Symbol(variableWithMoreParameters, Decl(test.js, 26, 5))
+>more : Symbol(more, Decl(test.js, 26, 45))
+
+/** @type {() => void} */
+const arrowWithMoreParameters = (more) => {}; // error
+>arrowWithMoreParameters : Symbol(arrowWithMoreParameters, Decl(test.js, 29, 5))
+>more : Symbol(more, Decl(test.js, 29, 33))
+
+({
+  /** @type {() => void} */
+  methodWithMoreParameters(more) {}, // error
+>methodWithMoreParameters : Symbol(methodWithMoreParameters, Decl(test.js, 31, 2))
+>more : Symbol(more, Decl(test.js, 33, 27))
+
+});
+

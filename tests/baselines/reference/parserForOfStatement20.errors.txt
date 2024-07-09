@@ -1,0 +1,7 @@
+parserForOfStatement20.ts(1,10): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+
+
+==== parserForOfStatement20.ts (1 errors) ====
+    for (var of = 0 in of) { }
+             ~~
+!!! error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.

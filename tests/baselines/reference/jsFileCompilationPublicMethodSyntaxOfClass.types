@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationPublicMethodSyntaxOfClass.ts] ////
+
+=== a.js ===
+class C {
+>C : C
+>  : ^
+
+    public foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+    }
+}

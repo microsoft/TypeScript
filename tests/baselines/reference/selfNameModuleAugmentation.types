@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/moduleResolution/selfNameModuleAugmentation.ts] ////
+
+=== /node_modules/acorn-walk/dist/walk.d.ts ===
+export {};
+declare module 'acorn-walk' {
+>'acorn-walk' : typeof import("/node_modules/acorn-walk/dist/walk")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  export function simple(node: any, visitors: any, base?: any, state?: any): any;
+>simple : (node: any, visitors: any, base?: any, state?: any) => any
+>       : ^    ^^   ^^        ^^   ^^    ^^^   ^^     ^^^   ^^^^^   
+>node : any
+>visitors : any
+>base : any
+>state : any
+}
+
+=== /node_modules/acorn-walk/dist/walk.mjs ===
+
+export {};
+
+=== /index.ts ===
+import { simple } from 'acorn-walk';
+>simple : (node: any, visitors: any, base?: any, state?: any) => any
+>       : ^    ^^   ^^        ^^   ^^    ^^^   ^^     ^^^   ^^^^^   
+

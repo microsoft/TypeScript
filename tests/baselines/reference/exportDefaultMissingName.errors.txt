@@ -1,0 +1,7 @@
+exportDefaultMissingName.ts(1,16): error TS2304: Cannot find name 'xyzzy'.
+
+
+==== exportDefaultMissingName.ts (1 errors) ====
+    export default xyzzy;
+                   ~~~~~
+!!! error TS2304: Cannot find name 'xyzzy'.

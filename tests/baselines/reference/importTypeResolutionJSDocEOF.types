@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/importTypeResolutionJSDocEOF.ts] ////
+
+=== interfaces.d.ts ===
+export interface Bar {
+    prop: string
+>prop : string
+>     : ^^^^^^
+}
+
+=== usage.js ===
+/** @type {Bar} */
+export let bar;
+>bar : import("interfaces").Bar
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+/** @typedef {import('./interfaces').Bar} Bar */

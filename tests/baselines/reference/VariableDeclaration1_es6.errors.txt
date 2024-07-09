@@ -1,0 +1,7 @@
+VariableDeclaration1_es6.ts(1,6): error TS1123: Variable declaration list cannot be empty.
+
+
+==== VariableDeclaration1_es6.ts (1 errors) ====
+    const
+         
+!!! error TS1123: Variable declaration list cannot be empty.

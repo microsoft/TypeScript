@@ -1,0 +1,17 @@
+implicitAnyFunctionOverloadWithImplicitAnyReturnType.ts(3,5): error TS7010: 'funcOfIFace', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== implicitAnyFunctionOverloadWithImplicitAnyReturnType.ts (1 errors) ====
+    // this should be an error
+    interface IFace {
+        funcOfIFace();  // error at "f"
+        ~~~~~~~~~~~~~~
+!!! error TS7010: 'funcOfIFace', which lacks return-type annotation, implicitly has an 'any' return type.
+    }
+    
+    // this should not be an error
+    interface IFace1{
+        f1(): any;
+    }
+    
+    

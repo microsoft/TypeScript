@@ -1,0 +1,29 @@
+/index.ts(11,7): error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
+
+
+==== /test.js (0 errors) ====
+    class Abcde {
+      /** @type {string} */
+      x;
+    }
+    
+    module.exports = {
+      Abcde
+    };
+    
+==== /index.ts (1 errors) ====
+    import { Abcde } from "./test";
+    
+    declare module "./test" {
+      interface Abcde { b: string }
+    }
+    
+    new Abcde().x;
+    
+    // Bug: the type meaning from /test.js does not
+    // propagate through the object literal export.
+    const x: Abcde = { b: "" };
+          ~
+!!! error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
+!!! related TS2728 /test.js:3:3: 'x' is declared here.
+    

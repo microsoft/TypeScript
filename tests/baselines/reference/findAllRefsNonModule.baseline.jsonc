@@ -1,0 +1,95 @@
+// === findAllReferences ===
+// === /import.ts ===
+// import [|"./script/*FIND ALL REFS*/"|];
+
+// === /require.js ===
+// require([|"./script"|]);
+// console.log("./script");
+
+// === /tripleSlash.ts ===
+// /// <reference path="[|script.ts|]" />
+
+  // === Definitions ===
+  // === /import.ts ===
+  // import "[|./script|]/*FIND ALL REFS*/";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /import.ts ===
+// import [|"./script"|];
+
+// === /require.js ===
+// require([|"./script/*FIND ALL REFS*/"|]);
+// console.log("./script");
+
+// === /tripleSlash.ts ===
+// /// <reference path="[|script.ts|]" />
+
+  // === Definitions ===
+  // === /require.js ===
+  // require("[|./script|]/*FIND ALL REFS*/");
+  // console.log("./script");
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /require.js ===
+// <|require("[|{| isInString: true |}./script|]");|>
+// console.log("[|{| isInString: true |}./script|]/*FIND ALL REFS*/");
+
+// === /stringLiteral.ts ===
+// console.log("[|{| isInString: true |}./script|]");
+
+  // === Definitions ===
+  // === /require.js ===
+  // require("./script");
+  // console.log("[|./script|]/*FIND ALL REFS*/");
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "./script",
+    "displayParts": [
+     {
+      "text": "\"./script\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

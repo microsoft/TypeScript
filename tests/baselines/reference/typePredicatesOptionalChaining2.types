@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/typePredicatesOptionalChaining2.ts] ////
+
+=== typePredicatesOptionalChaining2.ts ===
+type Person = { name: string; }
+>Person : Person
+>       : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+const getName1 = (person?: Person): string => {
+>getName1 : (person?: Person) => string
+>         : ^      ^^^      ^^^^^      
+>(person?: Person): string => {  return typeof person?.name === 'string' ? person?.name : '';} : (person?: Person) => string
+>                                                                                              : ^      ^^^      ^^^^^      
+>person : Person | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  return typeof person?.name === 'string' ? person?.name : '';
+>typeof person?.name === 'string' ? person?.name : '' : string
+>                                                     : ^^^^^^
+>typeof person?.name === 'string' : boolean
+>                                 : ^^^^^^^
+>typeof person?.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>person?.name : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>person : Person | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+>person?.name : string
+>             : ^^^^^^
+>person : Person
+>       : ^^^^^^
+>name : string
+>     : ^^^^^^
+>'' : ""
+>   : ^^
+
+};
+
+const isString = (value: any): value is string => {
+>isString : (value: any) => value is string
+>         : ^     ^^   ^^^^^               
+>(value: any): value is string => {  return typeof value === 'string';} : (value: any) => value is string
+>                                                                       : ^     ^^   ^^^^^               
+>value : any
+
+  return typeof value === 'string';
+>typeof value === 'string' : boolean
+>                          : ^^^^^^^
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : any
+>'string' : "string"
+>         : ^^^^^^^^
+
+};
+
+const getName2 = (person?: Person): string => {
+>getName2 : (person?: Person) => string
+>         : ^      ^^^      ^^^^^      
+>(person?: Person): string => {  return isString(person?.name) ? person?.name : '';} : (person?: Person) => string
+>                                                                                    : ^      ^^^      ^^^^^      
+>person : Person | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  return isString(person?.name) ? person?.name : '';
+>isString(person?.name) ? person?.name : '' : string
+>                                           : ^^^^^^
+>isString(person?.name) : boolean
+>                       : ^^^^^^^
+>isString : (value: any) => value is string
+>         : ^     ^^   ^^^^^               
+>person?.name : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>person : Person | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>person?.name : string
+>             : ^^^^^^
+>person : Person
+>       : ^^^^^^
+>name : string
+>     : ^^^^^^
+>'' : ""
+>   : ^^
+
+};
+

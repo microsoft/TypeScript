@@ -1,0 +1,22 @@
+privateNameHashCharName.ts(1,1): error TS1127: Invalid character.
+privateNameHashCharName.ts(4,5): error TS1127: Invalid character.
+privateNameHashCharName.ts(7,14): error TS1127: Invalid character.
+
+
+==== privateNameHashCharName.ts (3 errors) ====
+    #
+    ~
+!!! error TS1127: Invalid character.
+    
+    class C {
+        #
+        ~
+!!! error TS1127: Invalid character.
+    
+        m() {
+            this.#
+                 ~
+!!! error TS1127: Invalid character.
+        }
+    }
+    

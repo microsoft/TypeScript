@@ -1,0 +1,99 @@
+//// [tests/cases/conformance/types/literal/stringMappingReduction.ts] ////
+
+=== stringMappingReduction.ts ===
+type T00 = "prop" | `p${Lowercase<string>}p`;  // `p${Lowercase<string>}p`
+>T00 : `p${Lowercase<string>}p`
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+type T01 = "prop" | Lowercase<string>;  // Lowercase<string>
+>T01 : Lowercase<string>
+>    : ^^^^^^^^^^^^^^^^^
+
+type T02 = "PROP" | Lowercase<string>;  // "PROP" | Lowercase<string>
+>T02 : T02
+>    : ^^^
+
+type T10 = "prop" & `p${Lowercase<string>}p`;  // "prop"
+>T10 : "prop"
+>    : ^^^^^^
+
+type T11 = "prop" & Lowercase<string>;  // "prop"
+>T11 : "prop"
+>    : ^^^^^^
+
+type T12 = "PROP" & Lowercase<string>;  // never
+>T12 : never
+>    : ^^^^^
+
+type T20 = "prop" | Capitalize<string>;  // "prop" | Capitalize<string>
+>T20 : T20
+>    : ^^^
+
+type T21 = "Prop" | Capitalize<string>;  // Capitalize<string>
+>T21 : Capitalize<string>
+>    : ^^^^^^^^^^^^^^^^^^
+
+type T22 = "PROP" | Capitalize<string>;  // Capitalize<string>
+>T22 : Capitalize<string>
+>    : ^^^^^^^^^^^^^^^^^^
+
+type T30 = "prop" & Capitalize<string>;  // never
+>T30 : never
+>    : ^^^^^
+
+type T31 = "Prop" & Capitalize<string>;  // "Prop"
+>T31 : "Prop"
+>    : ^^^^^^
+
+type T32 = "PROP" & Capitalize<string>;  // "PROP"
+>T32 : "PROP"
+>    : ^^^^^^
+
+// Repro from #57117
+
+type EMap = { event: {} }
+>EMap : EMap
+>     : ^^^^
+>event : {}
+>      : ^^
+
+type Keys = keyof EMap
+>Keys : "event"
+>     : ^^^^^^^
+
+type EPlusFallback<C> = C extends Keys ? EMap[C] : "unrecognised event";
+>EPlusFallback : EPlusFallback<C>
+>              : ^^^^^^^^^^^^^^^^
+
+type VirtualEvent<T extends string> = { bivarianceHack(event: EPlusFallback<Lowercase<T>>): any; }['bivarianceHack'];
+>VirtualEvent : (event: EPlusFallback<Lowercase<T>>) => any
+>             : ^     ^^                           ^^^^^   
+>bivarianceHack : (event: EPlusFallback<Lowercase<T>>) => any
+>               : ^     ^^                           ^^^^^   
+>event : EPlusFallback<Lowercase<T>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const _virtualOn: (eventQrl: VirtualEvent<Keys>) => void;
+>_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
+>           : ^        ^^                  ^^^^^    
+>eventQrl : (event: {}) => any
+>         : ^     ^^^^^^^^^   
+
+export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
+>virtualOn : <T extends string>(eventQrl: VirtualEvent<T>) => void
+>          : ^ ^^^^^^^^^      ^^        ^^               ^^^^^^^^^
+><T extends string>(eventQrl: VirtualEvent<T>) => {    _virtualOn(eventQrl);} : <T extends string>(eventQrl: VirtualEvent<T>) => void
+>                                                                             : ^ ^^^^^^^^^      ^^        ^^               ^^^^^^^^^
+>eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+
+    _virtualOn(eventQrl);
+>_virtualOn(eventQrl) : void
+>                     : ^^^^
+>_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
+>           : ^        ^^                  ^^^^^    
+>eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+
+};
+

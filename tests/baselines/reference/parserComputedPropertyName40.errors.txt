@@ -1,0 +1,9 @@
+parserComputedPropertyName40.ts(2,6): error TS2304: Cannot find name 'a'.
+
+
+==== parserComputedPropertyName40.ts (1 errors) ====
+    class C {
+        [a ? "" : ""]() {}
+         ~
+!!! error TS2304: Cannot find name 'a'.
+    }

@@ -1,0 +1,14 @@
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(2,27): error TS2304: Cannot find name 'T2'.
+declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(3,33): error TS2304: Cannot find name 'T2'.
+
+
+==== declarationEmitLambdaWithMissingTypeParameterNoCrash.ts (2 errors) ====
+    export interface Foo {
+        preFetch: <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+                              ~~
+!!! error TS2304: Cannot find name 'T2'.
+        preFetcher: new <T1 extends T2> (c: T1) => void; // Type T2 is not defined
+                                    ~~
+!!! error TS2304: Cannot find name 'T2'.
+    }
+    

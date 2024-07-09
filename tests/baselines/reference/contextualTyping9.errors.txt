@@ -1,0 +1,7 @@
+contextualTyping9.ts(1,42): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+
+
+==== contextualTyping9.ts (1 errors) ====
+    var foo:{id:number;}[] = [{id:1}, {id:2, name:"foo"}];
+                                             ~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.

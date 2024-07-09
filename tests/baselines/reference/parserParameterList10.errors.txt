@@ -1,0 +1,12 @@
+parserParameterList10.ts(2,8): error TS2370: A rest parameter must be of an array type.
+parserParameterList10.ts(2,11): error TS1048: A rest parameter cannot have an initializer.
+
+
+==== parserParameterList10.ts (2 errors) ====
+    class C {
+       foo(...bar = 0) { }
+           ~~~~~~~~~~
+!!! error TS2370: A rest parameter must be of an array type.
+              ~~~
+!!! error TS1048: A rest parameter cannot have an initializer.
+    }

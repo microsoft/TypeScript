@@ -1,0 +1,42 @@
+super_inside-object-literal-getters-and-setters.ts(5,20): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+super_inside-object-literal-getters-and-setters.ts(8,13): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+super_inside-object-literal-getters-and-setters.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+super_inside-object-literal-getters-and-setters.ts(21,24): error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+
+
+==== super_inside-object-literal-getters-and-setters.ts (4 errors) ====
+    module ObjectLiteral {
+        var ThisInObjectLiteral = {
+            _foo: '1',
+            get foo(): string {
+                return super._foo;
+                       ~~~~~
+!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+            },
+            set foo(value: string) {
+                super._foo = value;
+                ~~~~~
+!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+            },
+            test: function () {
+                return super._foo;
+                       ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+            }
+        }
+    }
+    
+    class F { public test(): string { return ""; } }
+    class SuperObjectTest extends F {
+        public testing() {
+            var test = {
+                get F() {
+                    return super.test();
+                           ~~~~~
+!!! error TS2659: 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
+                }
+            };
+        }
+    }
+    
+    

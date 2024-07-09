@@ -1,0 +1,44 @@
+/a.js(16,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+
+
+==== /a.js (1 errors) ====
+    class A {
+    	/**
+    	 * @param {object} [foo={}]
+    	 */
+    	m(foo = {}) {
+    		const key = "bar";
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.foo = foo;
+    
+    		/**
+    		 * @type object
+    		 */
+    		const arguments = this.arguments;
+    		      ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.bar = arguments.bar;
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.baz = arguments[key];
+    
+    		/**
+    		 * @type object
+    		 */
+    		this.options = arguments;
+    	}
+    
+    	get arguments() {
+    		return { bar: {} };
+    	}
+    }
+    

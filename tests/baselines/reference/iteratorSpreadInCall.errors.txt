@@ -1,0 +1,21 @@
+iteratorSpreadInCall.ts(15,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+
+
+==== iteratorSpreadInCall.ts (1 errors) ====
+    function foo(s: symbol) { }
+    class SymbolIterator {
+        next() {
+            return {
+                value: Symbol(),
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    foo(...new SymbolIterator);
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.

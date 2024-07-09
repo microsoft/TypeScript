@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/discriminateWithDivergentAccessors1.ts] ////
+
+=== discriminateWithDivergentAccessors1.ts ===
+type WeirdoBox<T> =
+>WeirdoBox : WeirdoBox<T>
+>          : ^^^^^^^^^^^^
+
+  | { get done(): false; set done(v: T | null) }
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>done : false
+>     : ^^^^^
+>v : T | null
+>  : ^^^^^^^^
+
+  | { get done(): true; set done(v: T | null); value: T };
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>done : true
+>     : ^^^^
+>v : T | null
+>  : ^^^^^^^^
+>value : T
+>      : ^
+
+declare const weirdoBox: WeirdoBox<number>;
+>weirdoBox : WeirdoBox<number>
+>          : ^^^^^^^^^^^^^^^^^
+
+if (weirdoBox.done) {
+>weirdoBox.done : boolean
+>               : ^^^^^^^
+>weirdoBox : WeirdoBox<number>
+>          : ^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+
+  weirdoBox.value;
+>weirdoBox.value : number
+>                : ^^^^^^
+>weirdoBox : { get done(): true; set done(v: T | null); value: number; }
+>          : ^^^^^^^^^^^^^^    ^^^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+type WeirdoBox2<T> =
+>WeirdoBox2 : WeirdoBox2<T>
+>           : ^^^^^^^^^^^^^
+
+  | { get done(): false; set done(v: T | null) }
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>done : false
+>     : ^^^^^
+>v : T | null
+>  : ^^^^^^^^
+
+  | { get done(): true; set done(v: T | null); value: T }
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>done : true
+>     : ^^^^
+>v : T | null
+>  : ^^^^^^^^
+>value : T
+>      : ^
+
+  | { get done(): true; set done(v: T | null | undefined); value: number };
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>done : true
+>     : ^^^^
+>v : T | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+declare const weirdoBox2: WeirdoBox2<string>;
+>weirdoBox2 : WeirdoBox2<string>
+>           : ^^^^^^^^^^^^^^^^^^
+
+if (weirdoBox2.done) {
+>weirdoBox2.done : boolean
+>                : ^^^^^^^
+>weirdoBox2 : WeirdoBox2<string>
+>           : ^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+
+  weirdoBox2.value;
+>weirdoBox2.value : string | number
+>                 : ^^^^^^^^^^^^^^^
+>weirdoBox2 : { get done(): true; set done(v: T | null); value: string; } | { get done(): true; set done(v: T | null | undefined); value: number; }
+>           : ^^^^^^^^^^^^^^    ^^^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^ ^^                    ^^^^^^^^^^      ^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+}
+

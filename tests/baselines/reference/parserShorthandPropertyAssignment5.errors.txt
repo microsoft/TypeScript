@@ -1,0 +1,8 @@
+parserShorthandPropertyAssignment5.ts(2,18): error TS1162: An object member cannot be declared optional.
+
+
+==== parserShorthandPropertyAssignment5.ts (1 errors) ====
+    var greet = "hello";
+    var obj = { greet? }; 
+                     ~
+!!! error TS1162: An object member cannot be declared optional.

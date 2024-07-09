@@ -1,0 +1,15 @@
+symbolProperty32.ts(7,5): error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
+
+
+==== symbolProperty32.ts (1 errors) ====
+    class C1 {
+        [Symbol.toStringTag]() {
+            return { x: "" };
+        }
+    }
+    class C2 extends C1 {
+        [s: symbol]: () => { x: number };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
+!!! related TS2728 symbolProperty32.ts:2:5: '[Symbol.toStringTag]' is declared here.
+    }

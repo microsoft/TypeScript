@@ -1,0 +1,15 @@
+generatorTypeCheck39.ts(7,13): error TS1163: A 'yield' expression is only allowed in a generator body.
+
+
+==== generatorTypeCheck39.ts (1 errors) ====
+    function decorator(x: any) {
+        return y => { };
+    }
+    function* g() {
+        @decorator(yield 0)
+        class C {
+            x = yield 0;
+                ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+        }
+    }

@@ -1,0 +1,222 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForInheritedProperties2.ts ===
+// interface interface1 {
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}doStuff|](): void;|>
+// }
+// 
+// interface interface2 {
+//     <|[|{| defId: 1 |}doStuff|](): void;|>
+// }
+// 
+// interface interface2 extends interface1 {
+// }
+// 
+// class class1 implements interface2 {
+//     <|[|{| defId: 2, isWriteAccess: true |}doStuff|]() {
+// 
+//     }|>
+// }
+// 
+// class class2 extends class1 {
+// 
+// }
+// 
+// var v: class2;
+// v.[|{| defId: 2 |}doStuff|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties2.ts ===
+  // interface interface1 {
+  //     /*FIND ALL REFS*/<|[|{| defId: 0 |}doStuff|](): void;|>
+  // }
+  // 
+  // interface interface2 {
+  //     <|[|{| defId: 1 |}doStuff|](): void;|>
+  // }
+  // 
+  // interface interface2 extends interface1 {
+  // }
+  // 
+  // class class1 implements interface2 {
+  //     <|[|{| defId: 2 |}doStuff|]() {
+  // 
+  //     }|>
+  // }
+  // 
+  // class class2 extends class1 {
+  // --- (line: 19) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface1.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface2.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface2",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) class1.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor7.ts] ////
+
+=== autoAccessor7.ts ===
+abstract class C1 {
+>C1 : C1
+>   : ^^
+
+    abstract accessor a: any;
+>a : any
+}
+
+class C2 extends C1 {
+>C2 : C2
+>   : ^^
+>C1 : C1
+>   : ^^
+
+    accessor a = 1;
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+class C3 extends C1 {
+>C3 : C3
+>   : ^^
+>C1 : C1
+>   : ^^
+
+    get a() { return 1; }
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+

@@ -1,0 +1,1611 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts ===
+// enum E {
+//      ^
+// | ----------------------------------------------------------------------
+// | enum E
+// | ----------------------------------------------------------------------
+//     "e1",
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E["e1"] = 0
+// | ----------------------------------------------------------------------
+//     'e2' = 10,
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E['e2'] = 10
+// | ----------------------------------------------------------------------
+//     "e3"
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E["e3"] = 11
+// | ----------------------------------------------------------------------
+// }
+// var eInstance: E;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance: E
+// | ----------------------------------------------------------------------
+//                ^
+// | ----------------------------------------------------------------------
+// | enum E
+// | ----------------------------------------------------------------------
+// eInstance = E["e1"];
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance: E
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | enum E
+// | ----------------------------------------------------------------------
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E["e1"] = 0
+// | ----------------------------------------------------------------------
+// eInstance = E["e2"];
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance: E
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | enum E
+// | ----------------------------------------------------------------------
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E['e2'] = 10
+// | ----------------------------------------------------------------------
+// eInstance = E['e3'];
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance: E
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | enum E
+// | ----------------------------------------------------------------------
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) E["e3"] = 11
+// | ----------------------------------------------------------------------
+// const enum constE {
+//            ^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum constE
+// | ----------------------------------------------------------------------
+//     "e1",
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE["e1"] = 0
+// | ----------------------------------------------------------------------
+//     'e2' = 10,
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE['e2'] = 10
+// | ----------------------------------------------------------------------
+//     "e3"
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE["e3"] = 11
+// | ----------------------------------------------------------------------
+// }
+// var eInstance1: constE;
+//     ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance1: constE
+// | ----------------------------------------------------------------------
+//                 ^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum constE
+// | ----------------------------------------------------------------------
+// eInstance1 = constE["e1"];
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance1: constE
+// | ----------------------------------------------------------------------
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum constE
+// | ----------------------------------------------------------------------
+//                     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE["e1"] = 0
+// | ----------------------------------------------------------------------
+// eInstance1 = constE["e2"];
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance1: constE
+// | ----------------------------------------------------------------------
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum constE
+// | ----------------------------------------------------------------------
+//                     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE['e2'] = 10
+// | ----------------------------------------------------------------------
+// eInstance1 = constE['e3'];
+// ^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var eInstance1: constE
+// | ----------------------------------------------------------------------
+//              ^^^^^^
+// | ----------------------------------------------------------------------
+// | const enum constE
+// | ----------------------------------------------------------------------
+//                     ^^^^
+// | ----------------------------------------------------------------------
+// | (enum member) constE["e3"] = 11
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 5,
+      "name": "1"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 5,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 13,
+      "name": "2"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 13,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e1\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 23,
+      "name": "3"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 23,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "'e2'",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 38,
+      "name": "4"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 38,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e3\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "11",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 49,
+      "name": "5"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 49,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 60,
+      "name": "6"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 60,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 63,
+      "name": "7"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 63,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 75,
+      "name": "8"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 75,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 77,
+      "name": "9"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 77,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e1\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 84,
+      "name": "10"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 84,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 96,
+      "name": "11"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 96,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 98,
+      "name": "12"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 98,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "'e2'",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 105,
+      "name": "13"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 105,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 117,
+      "name": "14"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 117,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 119,
+      "name": "15"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 119,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e3\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "11",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 137,
+      "name": "16"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 137,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 150,
+      "name": "17"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 150,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e1\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 160,
+      "name": "18"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 160,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "'e2'",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 175,
+      "name": "19"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 175,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e3\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "11",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 186,
+      "name": "20"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 186,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 198,
+      "name": "21"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 198,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 206,
+      "name": "22"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 206,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 219,
+      "name": "23"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 219,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 226,
+      "name": "24"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 226,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e1\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 233,
+      "name": "25"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 233,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 246,
+      "name": "26"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 246,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 253,
+      "name": "27"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 253,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "'e2'",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 260,
+      "name": "28"
+    },
+    "item": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 260,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "eInstance1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 273,
+      "name": "29"
+    },
+    "item": {
+      "kind": "enum",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 273,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "enum",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum3.ts",
+      "position": 280,
+      "name": "30"
+    },
+    "item": {
+      "kind": "enum member",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 280,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "constE",
+          "kind": "enumName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"e3\"",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "11",
+          "kind": "numericLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

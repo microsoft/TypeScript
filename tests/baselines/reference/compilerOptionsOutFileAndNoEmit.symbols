@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/compilerOptionsOutFileAndNoEmit.ts] ////
+
+=== a.ts ===
+class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+

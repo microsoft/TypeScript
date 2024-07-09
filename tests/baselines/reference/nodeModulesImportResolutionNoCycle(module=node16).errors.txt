@@ -1,0 +1,33 @@
+index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+
+
+==== index.ts (1 errors) ====
+    // esm format file
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    type;
+==== index.mts (1 errors) ====
+    // esm format file
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    type;
+==== index.cts (1 errors) ====
+    // esm format file
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
+    type;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "package",
+        "imports": {
+            "#type": "package"
+        }
+    }

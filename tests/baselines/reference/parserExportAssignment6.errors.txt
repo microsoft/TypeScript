@@ -1,0 +1,9 @@
+parserExportAssignment6.ts(2,14): error TS2304: Cannot find name 'A'.
+
+
+==== parserExportAssignment6.ts (1 errors) ====
+    declare module "M" {
+        export = A;
+                 ~
+!!! error TS2304: Cannot find name 'A'.
+    }

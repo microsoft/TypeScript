@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/es6/templates/templateStringInArrowFunction.ts] ////
+
+=== templateStringInArrowFunction.ts ===
+var x = x => `abc${ x }def`;
+>x : Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 3))
+>x : Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 7))
+>x : Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 7))
+

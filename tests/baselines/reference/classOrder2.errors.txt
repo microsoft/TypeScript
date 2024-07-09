@@ -1,0 +1,25 @@
+classOrder2.ts(1,17): error TS2449: Class 'B' used before its declaration.
+
+
+==== classOrder2.ts (1 errors) ====
+    class A extends B {
+                    ~
+!!! error TS2449: Class 'B' used before its declaration.
+!!! related TS2728 classOrder2.ts:7:7: 'B' is declared here.
+    
+      foo() { this.bar(); }
+    
+    }
+    
+    class B {
+    
+      bar() { }
+    
+    }
+    
+    
+    var a = new A();
+    
+    a.foo();
+    
+    

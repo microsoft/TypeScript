@@ -1,0 +1,193 @@
+//// [tests/cases/compiler/deferredConditionalTypes.ts] ////
+
+=== deferredConditionalTypes.ts ===
+type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 0, 7))
+>x : Symbol(x, Decl(deferredConditionalTypes.ts, 0, 13))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 0, 7))
+>x : Symbol(x, Decl(deferredConditionalTypes.ts, 0, 30))
+
+type T0<T> = A<T> extends 0 ? 1 : 0;  // Deferred
+>T0 : Symbol(T0, Decl(deferredConditionalTypes.ts, 0, 46))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 2, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 2, 8))
+
+type T1<T> = [A<T>] extends [0] ? 1 : 0;  // Deferred
+>T1 : Symbol(T1, Decl(deferredConditionalTypes.ts, 2, 36))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 3, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 3, 8))
+
+type T2<T> = [A<T>, A<T>] extends [0, 0] ? 1 : 0;  // Deferred
+>T2 : Symbol(T2, Decl(deferredConditionalTypes.ts, 3, 40))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 4, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 4, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 4, 8))
+
+type T3<T> = [A<T>, A<T>, A<T>] extends [0, 0, 0] ? 1 : 0;  // Deferred
+>T3 : Symbol(T3, Decl(deferredConditionalTypes.ts, 4, 49))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 5, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 5, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 5, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 5, 8))
+
+type T4<T> = [A<T>] extends [0, 0] ? 1 : 0;  // 0
+>T4 : Symbol(T4, Decl(deferredConditionalTypes.ts, 5, 58))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 7, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 7, 8))
+
+type T5<T> = [A<T>, A<T>] extends [0] ? 1 : 0;  // 0
+>T5 : Symbol(T5, Decl(deferredConditionalTypes.ts, 7, 43))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 8, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 8, 8))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 8, 8))
+
+type T6<T> = { y: A<T> } extends { y: 0 } ? 1 : 0;  // 0, but should be deferred
+>T6 : Symbol(T6, Decl(deferredConditionalTypes.ts, 8, 46))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 10, 8))
+>y : Symbol(y, Decl(deferredConditionalTypes.ts, 10, 14))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 10, 8))
+>y : Symbol(y, Decl(deferredConditionalTypes.ts, 10, 34))
+
+// Repro from #52068
+
+type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? false : true;
+>Or : Symbol(Or, Decl(deferredConditionalTypes.ts, 10, 50))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 14, 8))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 14, 26))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 14, 8))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 14, 26))
+
+type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? true : false;
+>And : Symbol(And, Decl(deferredConditionalTypes.ts, 14, 93))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 15, 9))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 15, 27))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 15, 9))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 15, 27))
+
+type Not<T extends boolean> = T extends true ? false : true;
+>Not : Symbol(Not, Decl(deferredConditionalTypes.ts, 15, 92))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 16, 9))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 16, 9))
+
+type Extends<A, B> = A extends B ? true : false;
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 16, 60))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 17, 13))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 17, 15))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 17, 13))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 17, 15))
+
+type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
+>IsNumberLiteral : Symbol(IsNumberLiteral, Decl(deferredConditionalTypes.ts, 17, 48))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 19, 21))
+>And : Symbol(And, Decl(deferredConditionalTypes.ts, 14, 93))
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 16, 60))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 19, 21))
+>Not : Symbol(Not, Decl(deferredConditionalTypes.ts, 15, 92))
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 16, 60))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 19, 21))
+
+type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+>IsLiteral : Symbol(IsLiteral, Decl(deferredConditionalTypes.ts, 19, 75))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 21, 15))
+>Or : Symbol(Or, Decl(deferredConditionalTypes.ts, 10, 50))
+>IsNumberLiteral : Symbol(IsNumberLiteral, Decl(deferredConditionalTypes.ts, 17, 48))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 21, 15))
+
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+>Values : Symbol(Values, Decl(deferredConditionalTypes.ts, 21, 50))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 25, 12))
+
+  O extends any[] 
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 25, 12))
+
+    ? O[number]
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 25, 12))
+
+    : O[keyof O]
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 25, 12))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 25, 12))
+
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 28, 16))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 30, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 30, 14))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 30, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 30, 14))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 30, 14))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 30, 12))
+
+type FilterByStringValue<O extends object> = {
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(deferredConditionalTypes.ts, 30, 57))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 32, 25))
+
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 33, 3))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 32, 25))
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 28, 16))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 32, 25))
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 33, 3))
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 33, 3))
+}
+
+type FilteredValuesMatchNever<O extends object>
+>FilteredValuesMatchNever : Symbol(FilteredValuesMatchNever, Decl(deferredConditionalTypes.ts, 34, 1))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 36, 30))
+
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 28, 16))
+>Values : Symbol(Values, Decl(deferredConditionalTypes.ts, 21, 50))
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(deferredConditionalTypes.ts, 30, 57))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 36, 30))
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
+>FilteredRes1 : Symbol(FilteredRes1, Decl(deferredConditionalTypes.ts, 37, 51))
+>FilteredValuesMatchNever : Symbol(FilteredValuesMatchNever, Decl(deferredConditionalTypes.ts, 34, 1))
+
+// repro from #46761
+
+type Bit = 0 | 1;
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+
+type AndBit<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>AndBit : Symbol(AndBit, Decl(deferredConditionalTypes.ts, 43, 17))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 45, 12))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 45, 26))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 45, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 45, 26))
+
+type TestBit<A extends Bit, B extends Bit> = AndBit<
+>TestBit : Symbol(TestBit, Decl(deferredConditionalTypes.ts, 45, 74))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 47, 13))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 47, 27))
+>Bit : Symbol(Bit, Decl(deferredConditionalTypes.ts, 39, 48))
+>AndBit : Symbol(AndBit, Decl(deferredConditionalTypes.ts, 43, 17))
+
+  A extends 1 ? 0 : 1,
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 47, 13))
+
+  B extends 1 ? 0 : 1
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 47, 27))
+
+>;
+
+type TestBitRes = TestBit<1, 1>; 
+>TestBitRes : Symbol(TestBitRes, Decl(deferredConditionalTypes.ts, 50, 2))
+>TestBit : Symbol(TestBit, Decl(deferredConditionalTypes.ts, 45, 74))
+

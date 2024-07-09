@@ -1,0 +1,10 @@
+taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(4,31): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
+    function foo(...rest: any[]) {
+    }
+    
+    foo `${function (x: number) { x = "bad"; } }`;
+                                  ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

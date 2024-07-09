@@ -1,0 +1,335 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+// class C {
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ }|>
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+// class D extends C {
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // class C {
+  //     /*FIND ALL REFS*/<|[|#foo|](){ }|>
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+// class C {
+//     <|[|{| isWriteAccess: true |}#foo|](){ }|>
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }
+// class D extends C {
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // class C {
+  //     <|[|#foo|](){ }|>
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+  // class D extends C {
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+// --- (line: 10) skipped ---
+//     }
+// }
+// class E {
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ }|>
+//     constructor() {
+//         this.[|#foo|]();
+//     }
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // --- (line: 10) skipped ---
+  //     }
+  // }
+  // class E {
+  //     /*FIND ALL REFS*/<|[|#foo|](){ }|>
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) E.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+// --- (line: 10) skipped ---
+//     }
+// }
+// class E {
+//     <|[|{| isWriteAccess: true |}#foo|](){ }|>
+//     constructor() {
+//         this./*FIND ALL REFS*/[|#foo|]();
+//     }
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameMethods.ts ===
+  // --- (line: 10) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|[|#foo|](){ }|>
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) E.#foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

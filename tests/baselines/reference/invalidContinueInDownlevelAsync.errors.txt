@@ -1,0 +1,14 @@
+invalidContinueInDownlevelAsync.ts(3,9): error TS1107: Jump target cannot cross function boundary.
+
+
+==== invalidContinueInDownlevelAsync.ts (1 errors) ====
+    async function func() {
+        if (true) {
+            continue;
+            ~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+        }
+        else {
+            await 1;
+        }
+    }

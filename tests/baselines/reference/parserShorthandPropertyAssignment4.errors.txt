@@ -1,0 +1,7 @@
+parserShorthandPropertyAssignment4.ts(1,13): error TS1005: ':' expected.
+
+
+==== parserShorthandPropertyAssignment4.ts (1 errors) ====
+    var v = { 0 };
+                ~
+!!! error TS1005: ':' expected.

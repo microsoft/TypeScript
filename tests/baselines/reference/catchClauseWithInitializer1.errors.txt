@@ -1,0 +1,10 @@
+catchClauseWithInitializer1.ts(3,12): error TS1197: Catch clause variable cannot have an initializer.
+
+
+==== catchClauseWithInitializer1.ts (1 errors) ====
+    try {
+    }
+    catch (e = 1) {
+               ~
+!!! error TS1197: Catch clause variable cannot have an initializer.
+    }

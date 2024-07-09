@@ -1,0 +1,8 @@
+parserFunctionDeclaration4.ts(2,10): error TS2389: Function implementation name must be 'foo'.
+
+
+==== parserFunctionDeclaration4.ts (1 errors) ====
+    function foo();
+    function bar() { }
+             ~~~
+!!! error TS2389: Function implementation name must be 'foo'.

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/missingReturnStatement.ts] ////
+
+=== missingReturnStatement.ts ===
+module Test {
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+    export class Bug {
+>Bug : Bug
+>    : ^^^
+
+        public foo():string {
+>foo : () => string
+>    : ^^^^^^      
+        }
+    }    
+}
+

@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        { "path": "../compiler" }
+    ],
+    "include": ["**/*"]
+}

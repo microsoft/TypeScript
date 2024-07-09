@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "outFile": "test.js",
+    "allowJs": true
+  }
+}

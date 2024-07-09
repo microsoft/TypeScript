@@ -1,0 +1,10 @@
+b.ts(1,12): error TS6133: 'T' is declared but its value is never read.
+
+
+==== a.ts (0 errors) ====
+    class C<T> { }
+    
+==== b.ts (1 errors) ====
+    interface C<T> { }
+               ~~~
+!!! error TS6133: 'T' is declared but its value is never read.

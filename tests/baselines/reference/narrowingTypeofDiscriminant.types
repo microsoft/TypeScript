@@ -1,0 +1,186 @@
+//// [tests/cases/compiler/narrowingTypeofDiscriminant.ts] ////
+
+=== narrowingTypeofDiscriminant.ts ===
+function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
+>f1 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; }) => void
+>   : ^   ^^                                                         ^^^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
+>kind : "a"
+>     : ^^^
+>data : string
+>     : ^^^^^^
+>kind : 1
+>     : ^
+>data : number
+>     : ^^^^^^
+
+    if (typeof obj.kind === "string") {
+>typeof obj.kind === "string" : boolean
+>                             : ^^^^^^^
+>typeof obj.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj.kind : "a" | 1
+>         : ^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
+>kind : "a" | 1
+>     : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        obj;  // { kind: 'a', data: string }
+>obj : { kind: "a"; data: string; }
+>    : ^^^^^^^^   ^^^^^^^^      ^^^
+    }
+    else {
+        obj;  // { kind: 1, data: number }
+>obj : { kind: 1; data: number; }
+>    : ^^^^^^^^ ^^^^^^^^      ^^^
+    }
+}
+
+function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undefined) {
+>f2 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined) => void
+>   : ^   ^^                                                                     ^^^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
+>kind : "a"
+>     : ^^^
+>data : string
+>     : ^^^^^^
+>kind : 1
+>     : ^
+>data : number
+>     : ^^^^^^
+
+    if (typeof obj?.kind === "string") {
+>typeof obj?.kind === "string" : boolean
+>                              : ^^^^^^^
+>typeof obj?.kind : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj?.kind : "a" | 1 | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
+>kind : "a" | 1 | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        obj;  // { kind: 'a', data: string }
+>obj : { kind: "a"; data: string; }
+>    : ^^^^^^^^   ^^^^^^^^      ^^^
+    }
+    else {
+        obj;  // { kind: 1, data: number } | undefined
+>obj : { kind: 1; data: number; } | undefined
+>    : ^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
+    }
+}
+
+// Repro from #51700
+
+type WrappedStringOr<T> = { value?: string } | { value?: T };
+>WrappedStringOr : WrappedStringOr<T>
+>                : ^^^^^^^^^^^^^^^^^^
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>value : T | undefined
+>      : ^^^^^^^^^^^^^
+
+function numberOk(wrapped: WrappedStringOr<number> | null) {
+>numberOk : (wrapped: WrappedStringOr<number> | null) => string | null
+>         : ^       ^^                              ^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<number> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof wrapped?.value !== 'string') {
+>typeof wrapped?.value !== 'string' : boolean
+>                                   : ^^^^^^^
+>typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped?.value : string | number | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<number> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | number | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : string
+>              : ^^^^^^
+>wrapped : WrappedStringOr<number>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+}
+
+function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
+>booleanBad : (wrapped: WrappedStringOr<boolean> | null) => string | null
+>           : ^       ^^                               ^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<boolean> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof wrapped?.value !== 'string') {
+>typeof wrapped?.value !== 'string' : boolean
+>                                   : ^^^^^^^
+>typeof wrapped?.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped?.value : string | boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<boolean> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : string
+>              : ^^^^^^
+>wrapped : { value?: string; }
+>        : ^^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+}
+
+function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
+>booleanFixed : (wrapped: WrappedStringOr<boolean> | null) => string | null
+>             : ^       ^^                               ^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<boolean> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof (wrapped?.value) !== 'string') {
+>typeof (wrapped?.value) !== 'string' : boolean
+>                                     : ^^^^^^^
+>typeof (wrapped?.value) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(wrapped?.value) : string | boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped?.value : string | boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : WrappedStringOr<boolean> | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string | boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : string
+>              : ^^^^^^
+>wrapped : { value?: string; }
+>        : ^^^^^^^^^^      ^^^
+>value : string
+>      : ^^^^^^
+}
+

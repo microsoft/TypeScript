@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/asyncFunctionReturnType.2.ts] ////
+
+=== asyncFunctionReturnType.2.ts ===
+// https://github.com/microsoft/TypeScript/issues/47291
+class X {
+>X : Symbol(X, Decl(asyncFunctionReturnType.2.ts, 0, 0))
+
+    f = async (): Promise<this> => this;
+>f : Symbol(X.f, Decl(asyncFunctionReturnType.2.ts, 1, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>this : Symbol(X, Decl(asyncFunctionReturnType.2.ts, 0, 0))
+}

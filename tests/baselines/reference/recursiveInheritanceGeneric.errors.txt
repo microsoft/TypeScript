@@ -1,0 +1,9 @@
+recursiveInheritanceGeneric.ts(1,11): error TS2310: Type 'I5<T>' recursively references itself as a base type.
+
+
+==== recursiveInheritanceGeneric.ts (1 errors) ====
+    interface I5<T> extends I5<T> { 
+              ~~
+!!! error TS2310: Type 'I5<T>' recursively references itself as a base type.
+        foo():void;
+    }  

@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts] ////
+
+=== typeSatisfaction_contextualTyping2.ts ===
+let obj: { f(s: string): void } & Record<string, unknown> = {
+>obj : { f(s: string): void; } & Record<string, unknown>
+>    : ^^^^ ^^      ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (s: string) => void
+>  : ^ ^^      ^^^^^    
+>s : string
+>  : ^^^^^^
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: any): void; g(s: string): void; }
+>                                                                                                                          : ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
+>                                                               : ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+
+    f(s) { }, // "incorrect" implicit any on 's'
+>f : (s: any) => void
+>  : ^ ^^^^^^^^^^^^^^
+>s : any
+>  : ^^^
+
+    g(s) { }
+>g : (s: string) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+} satisfies { g(s: string): void } & Record<string, unknown>;
+>g : (s: string) => void
+>  : ^ ^^      ^^^^^    
+>s : string
+>  : ^^^^^^
+
+// This needs to not crash (outer node is not expression)
+({ f(x) { } }) satisfies { f(s: string): void };
+>({ f(x) { } }) satisfies { f(s: string): void } : { f(x: string): void; }
+>                                                : ^^^^ ^^^^^^^^^^^^^^^^^^
+>({ f(x) { } }) : { f(x: string): void; }
+>               : ^^^^ ^^^^^^^^^^^^^^^^^^
+>{ f(x) { } } : { f(x: string): void; }
+>             : ^^^^ ^^^^^^^^^^^^^^^^^^
+>f : (x: string) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>f : (s: string) => void
+>  : ^ ^^      ^^^^^    
+>s : string
+>  : ^^^^^^
+

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/nodeResolution4.ts] ////
+
+=== b.ts ===
+import y = require("./a");
+>y : Symbol(y, Decl(b.ts, 0, 0))
+
+=== ref.ts ===
+var x = 1;
+>x : Symbol(x, Decl(ref.ts, 0, 3))
+
+=== a.ts ===
+/// <reference path="ref.ts"/>
+export var y;
+>y : Symbol(y, Decl(a.ts, 1, 10))
+

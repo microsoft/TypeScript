@@ -1,0 +1,7 @@
+parserVariableDeclaration5.ts(1,6): error TS1009: Trailing comma not allowed.
+
+
+==== parserVariableDeclaration5.ts (1 errors) ====
+    var a,
+         ~
+!!! error TS1009: Trailing comma not allowed.

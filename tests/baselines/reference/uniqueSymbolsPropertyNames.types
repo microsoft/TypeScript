@@ -1,0 +1,343 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsPropertyNames.ts] ////
+
+=== uniqueSymbolsPropertyNames.ts ===
+interface OpTypes {
+  readonly equal: unique symbol;
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+}
+
+namespace OpNamespace {
+>OpNamespace : typeof OpNamespace
+>            : ^^^^^^^^^^^^^^^^^^
+
+  export declare const equal: unique symbol;
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+}
+
+const uniqueSymbol0 = Symbol.for("");
+>uniqueSymbol0 : unique symbol
+>              : ^^^^^^^^^^^^^
+>Symbol.for("") : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
+>"" : ""
+>   : ^^
+
+const uniqueSymbol1 = Symbol.for("");
+>uniqueSymbol1 : unique symbol
+>              : ^^^^^^^^^^^^^
+>Symbol.for("") : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
+>"" : ""
+>   : ^^
+
+
+function getUniqueSymbol0(): typeof uniqueSymbol0 {
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
+>uniqueSymbol0 : unique symbol
+>              : ^^^^^^^^^^^^^
+
+  return uniqueSymbol0;
+>uniqueSymbol0 : unique symbol
+>              : ^^^^^^^^^^^^^
+}
+
+function getUniqueSymbol1(): typeof uniqueSymbol1 {
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
+>uniqueSymbol1 : unique symbol
+>              : ^^^^^^^^^^^^^
+
+    return uniqueSymbol1;
+>uniqueSymbol1 : unique symbol
+>              : ^^^^^^^^^^^^^
+  }
+
+const Op: OpTypes = {
+>Op : OpTypes
+>   : ^^^^^^^
+>{  equal: Symbol.for("equal"),} as OpTypes : OpTypes
+>                                           : ^^^^^^^
+>{  equal: Symbol.for("equal"),} : { equal: symbol; }
+>                                : ^^^^^^^^^^^^^^^^^^
+
+  equal: Symbol.for("equal"),
+>equal : symbol
+>      : ^^^^^^
+>Symbol.for("equal") : symbol
+>                    : ^^^^^^
+>Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
+>"equal" : "equal"
+>        : ^^^^^^^
+
+} as OpTypes;
+
+const t0 = {
+>t0 : { equal: string; }
+>   : ^^^^^^^^^^^^^^^^^^
+>{  equal: "first",  equal: "second",  ["equal"]: "last",} : { equal: string; }
+>                                                          : ^^^^^^^^^^^^^^^^^^
+
+  equal: "first",
+>equal : string
+>      : ^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  equal: "second",
+>equal : string
+>      : ^^^^^^
+>"second" : "second"
+>         : ^^^^^^^^
+
+  ["equal"]: "last",
+>["equal"] : string
+>          : ^^^^^^
+>"equal" : "equal"
+>        : ^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+
+};
+
+const t1 = {
+>t1 : { [Op.equal]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>{  [Op.equal]: "first",  [Op.equal]: "last",} : { [Op.equal]: string; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  [Op.equal]: "first",
+>[Op.equal] : string
+>           : ^^^^^^
+>Op.equal : unique symbol
+>         : ^^^^^^^^^^^^^
+>Op : OpTypes
+>   : ^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  [Op.equal]: "last",
+>[Op.equal] : string
+>           : ^^^^^^
+>Op.equal : unique symbol
+>         : ^^^^^^^^^^^^^
+>Op : OpTypes
+>   : ^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+
+};
+
+const t2 = {
+>t2 : { [OpNamespace.equal]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  [OpNamespace.equal]: "first",  [OpNamespace.equal]: "last",} : { [OpNamespace.equal]: string; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [OpNamespace.equal]: "first",
+>[OpNamespace.equal] : string
+>                    : ^^^^^^
+>OpNamespace.equal : unique symbol
+>                  : ^^^^^^^^^^^^^
+>OpNamespace : typeof OpNamespace
+>            : ^^^^^^^^^^^^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  [OpNamespace.equal]: "last",
+>[OpNamespace.equal] : string
+>                    : ^^^^^^
+>OpNamespace.equal : unique symbol
+>                  : ^^^^^^^^^^^^^
+>OpNamespace : typeof OpNamespace
+>            : ^^^^^^^^^^^^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+
+};
+
+const t3 = {
+>t3 : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+>                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [getUniqueSymbol0()]: "first",
+>[getUniqueSymbol0()] : string
+>                     : ^^^^^^
+>getUniqueSymbol0() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
+>"first" : "first"
+>        : ^^^^^^^
+
+  [getUniqueSymbol0()]: "last",
+>[getUniqueSymbol0()] : string
+>                     : ^^^^^^
+>getUniqueSymbol0() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
+>"last" : "last"
+>       : ^^^^^^
+
+  [getUniqueSymbol1()]: "first",
+>[getUniqueSymbol1()] : string
+>                     : ^^^^^^
+>getUniqueSymbol1() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
+>"first" : "first"
+>        : ^^^^^^^
+
+  [getUniqueSymbol1()]: "last",
+>[getUniqueSymbol1()] : string
+>                     : ^^^^^^
+>getUniqueSymbol1() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
+>"last" : "last"
+>       : ^^^^^^
+
+};
+
+class Cls1 {
+>Cls1 : Cls1
+>     : ^^^^
+
+  [uniqueSymbol0] = "first";
+>[uniqueSymbol0] : string
+>                : ^^^^^^
+>uniqueSymbol0 : unique symbol
+>              : ^^^^^^^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  [uniqueSymbol0] = "last";
+>[uniqueSymbol0] : string
+>                : ^^^^^^
+>uniqueSymbol0 : unique symbol
+>              : ^^^^^^^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+
+  [uniqueSymbol1] = "first";
+>[uniqueSymbol1] : string
+>                : ^^^^^^
+>uniqueSymbol1 : unique symbol
+>              : ^^^^^^^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  [uniqueSymbol1] = "last";
+>[uniqueSymbol1] : string
+>                : ^^^^^^
+>uniqueSymbol1 : unique symbol
+>              : ^^^^^^^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+}
+
+class Cls2 {
+>Cls2 : Cls2
+>     : ^^^^
+
+  [OpNamespace.equal] = "first";
+>[OpNamespace.equal] : string
+>                    : ^^^^^^
+>OpNamespace.equal : unique symbol
+>                  : ^^^^^^^^^^^^^
+>OpNamespace : typeof OpNamespace
+>            : ^^^^^^^^^^^^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+  [OpNamespace.equal] = "last";
+>[OpNamespace.equal] : string
+>                    : ^^^^^^
+>OpNamespace.equal : unique symbol
+>                  : ^^^^^^^^^^^^^
+>OpNamespace : typeof OpNamespace
+>            : ^^^^^^^^^^^^^^^^^^
+>equal : unique symbol
+>      : ^^^^^^^^^^^^^
+>"last" : "last"
+>       : ^^^^^^
+}
+
+class Cls3 {
+>Cls3 : Cls3
+>     : ^^^^
+
+  [getUniqueSymbol0()] = "first";
+>[getUniqueSymbol0()] : string
+>                     : ^^^^^^
+>getUniqueSymbol0() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
+>"first" : "first"
+>        : ^^^^^^^
+
+  [getUniqueSymbol0()] = "last";
+>[getUniqueSymbol0()] : string
+>                     : ^^^^^^
+>getUniqueSymbol0() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
+>"last" : "last"
+>       : ^^^^^^
+
+  [getUniqueSymbol1()] = "first";
+>[getUniqueSymbol1()] : string
+>                     : ^^^^^^
+>getUniqueSymbol1() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
+>"first" : "first"
+>        : ^^^^^^^
+
+  [getUniqueSymbol1()] = "last";
+>[getUniqueSymbol1()] : string
+>                     : ^^^^^^
+>getUniqueSymbol1() : unique symbol
+>                   : ^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
+>"last" : "last"
+>       : ^^^^^^
+}

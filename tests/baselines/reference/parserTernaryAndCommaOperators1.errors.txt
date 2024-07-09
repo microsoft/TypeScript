@@ -1,0 +1,17 @@
+parserTernaryAndCommaOperators1.ts(1,1): error TS2304: Cannot find name 'b'.
+parserTernaryAndCommaOperators1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
+parserTernaryAndCommaOperators1.ts(1,16): error TS2304: Cannot find name 'c'.
+parserTernaryAndCommaOperators1.ts(1,21): error TS2304: Cannot find name 'd'.
+
+
+==== parserTernaryAndCommaOperators1.ts (4 errors) ====
+    b.src ? 1 : 2, c && d;
+    ~
+!!! error TS2304: Cannot find name 'b'.
+    ~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                   ~
+!!! error TS2304: Cannot find name 'c'.
+                        ~
+!!! error TS2304: Cannot find name 'd'.
+    

@@ -1,0 +1,54 @@
+maxDepthExceeded/root.ts(3,1): error TS2322: Type 'string' is not assignable to type 'number'.
+maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a read-only property.
+
+
+==== maxDepthExceeded/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { 
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 1, // Note: Module m1 is already included as a root file
+        "outDir": "built"
+      },
+      "include": ["**/*", "node_modules/**/*"],
+      "exclude": ["node_modules/m2/**/*"]
+    }
+    
+==== index.js (0 errors) ====
+    var m2 = require('m2');
+    var rel = require('./relative');
+    
+    /**
+     * @param {string} p1 The first param
+     */
+    exports.f1 = function(p1) {
+    	return 42;
+    };
+    
+    exports.f2 = m2;
+    
+    exports.rel = rel.relativeProp;
+    
+==== maxDepthExceeded/root.ts (2 errors) ====
+    import * as m1 from "m1";
+    m1.f1("test");
+    m1.f2.a = "10"; // Error: Should be number
+    ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    m1.rel = 42; // Error: Should be boolean
+       ~~~
+!!! error TS2540: Cannot assign to 'rel' because it is a read-only property.
+    
+    m1.f2.person.age = "10"; // OK if stopped at 2 modules: person will be "any".
+    
+==== entry.js (0 errors) ====
+    var m3 = require("m3");
+    
+    module.exports = {
+    	"a": 42,
+    	"b": "hello, world",
+    	"person": m3.person
+    };
+    
+==== relative.js (0 errors) ====
+    exports.relativeProp = true;
+    

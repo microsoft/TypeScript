@@ -1,0 +1,71 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts ===
+// enum E {
+//     /** {@link /*FIND ALL REFS*/[|B|]} */
+//     A,
+//     [|{| isWriteAccess: true |}B|]
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesFromLinkTagReference4.ts ===
+  // enum E {
+  //     /** {@link /*FIND ALL REFS*/B} */
+  //     A,
+  //     [|B|]
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.B = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "B",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]

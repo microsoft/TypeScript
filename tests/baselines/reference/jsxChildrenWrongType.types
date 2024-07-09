@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/jsxChildrenWrongType.tsx] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 1,000
+
+=== other.tsx ===
+/// <reference path="react18/react18.d.ts" />
+/// <reference path="react18/global.d.ts" />
+
+
+interface PropsType {
+    children: [string, number?] | Iterable<boolean>;
+>children : [string, number?] | Iterable<boolean>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+declare class Foo extends React.Component<PropsType, {}> {}
+>Foo : Foo
+>    : ^^^
+>React.Component : React.Component<PropsType, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof React
+>      : ^^^^^^^^^^^^
+>Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+
+const b = (
+>b : JSX.Element
+>  : ^^^^^^^^^^^
+>(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : JSX.Element
+>                                                               : ^^^^^^^^^^^
+
+    <Foo>
+><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : JSX.Element
+>                                                         : ^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+        {<div/> as unknown}
+><div/> as unknown : unknown
+>                  : ^^^^^^^
+><div/> : JSX.Element
+>       : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+
+        {"aa"}
+>"aa" : "aa"
+>     : ^^^^
+
+    </Foo>
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+);

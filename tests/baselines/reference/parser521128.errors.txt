@@ -1,0 +1,10 @@
+parser521128.ts(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parser521128.ts(1,15): error TS1005: ';' expected.
+
+
+==== parser521128.ts (2 errors) ====
+    module.module { }
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                  ~
+!!! error TS1005: ';' expected.

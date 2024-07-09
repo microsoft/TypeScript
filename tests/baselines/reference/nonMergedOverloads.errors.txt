@@ -1,0 +1,17 @@
+nonMergedOverloads.ts(1,5): error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+nonMergedOverloads.ts(3,17): error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+nonMergedOverloads.ts(4,17): error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+
+
+==== nonMergedOverloads.ts (3 errors) ====
+    var f = 10;
+        ~
+!!! error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+    
+    export function f();
+                    ~
+!!! error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+    export function f() {
+                    ~
+!!! error TS2395: Individual declarations in merged declaration 'f' must be all exported or all local.
+    }

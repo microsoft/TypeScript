@@ -1,0 +1,6 @@
+{
+    "compilerOptions": {
+        "isolatedModules": true,
+        "preserveConstEnums": true
+    }
+}
