@@ -40126,7 +40126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getQuickTypeOfExpression(initializer) || (contextualType ?
             checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal) :
             checkExpressionCached(initializer, checkMode));
-        if (isParameter(declaration)) {
+        if (isParameter(isBindingElement(declaration) ? walkUpBindingElementsAndPatterns(declaration) : declaration)) {
             if (declaration.name.kind === SyntaxKind.ObjectBindingPattern && isObjectLiteralType(type)) {
                 return padObjectLiteralType(type as ObjectType, declaration.name);
             }
