@@ -8,7 +8,7 @@ verify.codeFix({
     description: ts.Diagnostics.Add_missing_properties.message,
     newFileContent:
 `const x: Iterable<number> = {
-    [Symbol.iterator]: function(): Iterator<number> {
+    [Symbol.iterator]: function(): Iterator<number, any, undefined> {
         throw new Error("Function not implemented.");
     }
 }`,
