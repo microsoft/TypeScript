@@ -315,8 +315,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/user/username/projects/myproject/b.vue",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -340,8 +339,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/user/username/projects/myproject/b.vue",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -374,8 +372,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -386,7 +383,15 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 3,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/b.vue"
+            }
+          ]
         }
       }
     }

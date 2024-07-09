@@ -370,6 +370,7 @@ import {
     tokenIsIdentifierOrKeywordOrGreaterThan,
     tokenToString,
     tracing,
+    transferSourceFileChildren,
     TransformFlags,
     TryStatement,
     TupleTypeNode,
@@ -425,6 +426,7 @@ let SourceFileConstructor: new (kind: SyntaxKind.SourceFile, pos: number, end: n
  * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
  *
  * @internal
+ * @knipignore
  */
 export const parseBaseNodeFactory: BaseNodeFactory = {
     createBaseSourceFileNode: kind => new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, -1, -1),
@@ -9973,6 +9975,7 @@ namespace IncrementalParser {
             aggressiveChecks,
         );
         result.impliedNodeFormat = sourceFile.impliedNodeFormat;
+        transferSourceFileChildren(sourceFile, result);
         return result;
     }
 
@@ -10025,9 +10028,9 @@ namespace IncrementalParser {
         }
     }
 
-    function moveElementEntirelyPastChangeRange(element: Node, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
-    function moveElementEntirelyPastChangeRange(element: NodeArray<Node>, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
-    function moveElementEntirelyPastChangeRange(element: Node | NodeArray<Node>, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+    function moveElementEntirelyPastChangeRange(element: Node, origSourceFile: SourceFile, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: NodeArray<Node>, origSourceFile: SourceFile, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: Node | NodeArray<Node>, origSourceFile: SourceFile, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
         if (isArray) {
             visitArray(element as NodeArray<Node>);
         }
@@ -10044,7 +10047,7 @@ namespace IncrementalParser {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            unsetNodeChildren(node);
+            unsetNodeChildren(node, origSourceFile);
 
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
@@ -10191,7 +10194,7 @@ namespace IncrementalParser {
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
                 // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(child, sourceFile, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
@@ -10201,7 +10204,7 @@ namespace IncrementalParser {
             const fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 markAsIntersectingIncrementalChange(child);
-                unsetNodeChildren(child);
+                unsetNodeChildren(child, sourceFile);
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10224,7 +10227,7 @@ namespace IncrementalParser {
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
-                moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(array, sourceFile, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 

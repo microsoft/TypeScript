@@ -38,5 +38,4 @@ interface Testing {
             test4: Test4;
         }const c = 10;`
     },
-    fixId: "providePostPasteEdits"
 });

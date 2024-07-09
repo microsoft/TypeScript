@@ -716,8 +716,7 @@ function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl
     return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
 }
 
-/** @internal */
-export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
+function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
     return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
 }
 

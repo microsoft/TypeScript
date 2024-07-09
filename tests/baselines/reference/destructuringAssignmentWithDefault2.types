@@ -174,11 +174,11 @@ let value;
 >r.next() : IteratorResult<number, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : Iterator<number, any, undefined>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ({ done: done = false, value } = r.next());
 >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
@@ -200,9 +200,9 @@ let value;
 >r.next() : IteratorResult<number, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : Iterator<number, any, undefined>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

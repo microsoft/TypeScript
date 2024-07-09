@@ -214,6 +214,22 @@ declare namespace ts {
                  * The time spent creating or updating the auto-import program, in milliseconds.
                  */
                 createAutoImportProviderProgramDurationMs?: number;
+                /**
+                 * The time spent computing diagnostics, in milliseconds.
+                 */
+                diagnosticsDuration?: FileDiagnosticPerformanceData[];
+            }
+            /**
+             * Time spent computing each kind of diagnostics, in milliseconds.
+             */
+            export type DiagnosticPerformanceData = {
+                [Kind in DiagnosticEventKind]?: number;
+            };
+            export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+                /**
+                 * The file for which the performance data is reported.
+                 */
+                file: string;
             }
             /**
              * Arguments for FileRequest messages.
@@ -1979,10 +1995,6 @@ declare namespace ts {
                  * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
                  */
                 spans?: TextSpan[];
-                /**
-                 * Time spent computing the diagnostics, in milliseconds.
-                 */
-                duration?: number;
             }
             export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
@@ -2651,6 +2663,7 @@ declare namespace ts {
         interface ServerHost extends System {
             watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
             watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+            preferNonRecursiveWatch?: boolean;
             setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
             clearTimeout(timeoutId: any): void;
             setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
@@ -3415,6 +3428,7 @@ declare namespace ts {
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;
+            private addDiagnosticsPerformanceData;
             private performanceEventHandler;
             private defaultEventHandler;
             private projectsUpdatedInBackgroundEvent;
@@ -9601,6 +9615,7 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
+        preferNonRecursiveWatch?: boolean;
     }
     interface ProgramHost<T extends BuilderProgram> {
         /**

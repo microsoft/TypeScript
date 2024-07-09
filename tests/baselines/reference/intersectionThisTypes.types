@@ -154,24 +154,24 @@ function test(label: Label) {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend({ id: 67 }).extend({ tag: "hello" }) : Label & { id: number; } & { tag: string; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->label.extend({ id: 67 }).extend : <T>(props: T) => (Label & { id: number; }) & T
->                                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^
+>label.extend({ id: 67 }).extend : <T>(props: T) => Label & { id: number; } & T
+>                                : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend({ id: 67 }) : Label & { id: number; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend : <T>(props: T) => Label & T
->             : ^ ^^     ^^^^^^^^^^^^^   ^
+>             : ^ ^^     ^^^^^^^^^^^^^^^^^
 >label : Label
 >      : ^^^^^
 >extend : <T>(props: T) => Label & T
->       : ^ ^^     ^^^^^^^^^^^^^   ^
+>       : ^ ^^     ^^^^^^^^^^^^^^^^^
 >{ id: 67 } : { id: number; }
 >           : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
 >67 : 67
 >   : ^^
->extend : <T>(props: T) => (Label & { id: number; }) & T
->       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^
+>extend : <T>(props: T) => Label & { id: number; } & T
+>       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ tag: "hello" } : { tag: string; }
 >                 : ^^^^^^^^^^^^^^^^
 >tag : string

@@ -172,7 +172,7 @@ After running Timeout callback:: count: 0
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix Syntax error
+Change:: Fix syntax errors
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
@@ -288,7 +288,24 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Semantic Error
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: semantic errors
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
@@ -297,10 +314,10 @@ const a: string = 10;
 
 
 Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
+4: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
+4: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -412,10 +429,10 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Timeout callback:: count: 1
-4: timerToUpdateProgram *new*
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
+5: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -423,7 +440,7 @@ After running Timeout callback:: count: 0
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix Semantic Error
+Change:: Fix semantic errors
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
@@ -432,10 +449,10 @@ const a: string = "hello";
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -541,10 +558,260 @@ Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Timeout callback:: count: 1
-6: timerToUpdateProgram *new*
+7: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-6: timerToUpdateProgram
+7: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: dts errors
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+export const a = class { private p = 10; };
+
+
+
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 915
+}
+
+//// [/user/username/projects/dev-build.js]
+define("shared/types/db", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("src/main", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = void 0;
+    exports.a = /** @class */ (function () {
+        function class_1() {
+            this.p = 10;
+        }
+        return class_1;
+    }());
+});
+define("src/other", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    console.log("hi");
+});
+
+
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "incremental": true,
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
+
+Change:: Fix dts errors
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts]
+import { A } from "../shared/types/db";
+export const a = class { p = 10; };
+
+
+
+Timeout callback:: count: 1
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/dev-build.tsbuildinfo]
+{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./noemitonerror/shared/types/db.ts",
+    "./noemitonerror/src/main.ts",
+    "./noemitonerror/src/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
+    "./noemitonerror/src/main.ts": "-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n",
+    "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
+  },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./noemitonerror/shared/types/db.ts",
+        "./noemitonerror/src/main.ts",
+        "./noemitonerror/src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "noEmitOnError": true,
+    "outFile": "./dev-build.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 907
+}
+
+//// [/user/username/projects/dev-build.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/noEmitOnError/shared/types/db.ts",
+  "/user/username/projects/noEmitOnError/src/main.ts",
+  "/user/username/projects/noEmitOnError/src/other.ts"
+]
+Program options: {
+  "outFile": "/user/username/projects/dev-build.js",
+  "module": 2,
+  "incremental": true,
+  "noEmitOnError": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/noEmitOnError/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: No change
+
+Input::
+//// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+Timeout callback:: count: 1
+11: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+11: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
