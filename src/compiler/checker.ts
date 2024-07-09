@@ -6113,12 +6113,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             const originalType = type;
             if (addUndefined) {
-                type = getOptionalType(type);
+                type = getOptionalType(type, !isParameter(host));
             }
             const clone = tryReuseExistingNonParameterTypeNode(context, typeNode, type, host);
             if (clone) {
                 // explicitly add `| undefined` if it's missing from the input type nodes and the type contains `undefined` (and not the missing type)
-                if (someType(type, t => !!(t.flags & TypeFlags.Undefined) && t !== missingType) && !someType(getTypeFromTypeNode(context, typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
+                if (addUndefined && someType(type, t => !!(t.flags & TypeFlags.Undefined) && t !== missingType) && !someType(getTypeFromTypeNode(context, typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
                     return factory.createUnionTypeNode([clone, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                 }
                 return clone;
@@ -8267,7 +8267,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                     // try to reuse the existing annotation
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
+                    // explicitly add `| undefined` to optional mapped properties whose type contains `undefined` (and not `missing`)
+                    const addUndef = addUndefined || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsUndefinedType(type) && (type as UnionType).types[0] !== missingType);
+                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndef);
                     if (result) {
                         context.flags = oldFlags;
                         return result;
