@@ -369,7 +369,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
         const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
         if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
-            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
+            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleDeclarationSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
         }
 
         const moduleSourceFile = find(symbol.declarations, isSourceFile);
