@@ -8836,7 +8836,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName && !isLateBindableName(node.name)) {
-                    if (!(context.flags & NodeBuilderFlags.AllowUnresolvedNames && hasDynamicName(node) && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
+                    if (!hasDynamicName(node)) {
+                        return visitEachChild(node, visitExistingNodeTreeSymbols);
+                    }
+                    if (!(context.flags & NodeBuilderFlags.AllowUnresolvedNames && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
                         return undefined;
                     }
                 }
