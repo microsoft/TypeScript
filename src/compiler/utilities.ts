@@ -5897,6 +5897,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
     function add(diagnostic: Diagnostic): void {
         let diagnostics: SortedArray<Diagnostic> | undefined;
         if (diagnostic.file) {
+            console.log(`>>> Adding diagnostic: ${diagnostic.code} ${diagnostic.messageText}`);
             diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
             if (!diagnostics) {
                 diagnostics = [] as Diagnostic[] as SortedArray<DiagnosticWithLocation>; // See GH#19873
