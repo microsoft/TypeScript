@@ -246,24 +246,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/target.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 4,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 4,
-                  "offset": 1
-                },
-                "newText": "console.log(k);"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }
