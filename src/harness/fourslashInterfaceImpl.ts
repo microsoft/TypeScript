@@ -1240,6 +1240,8 @@ export namespace Completion {
         interfaceEntry("ArrayBufferView"),
         varEntry("DataView"),
         interfaceEntry("DataViewConstructor"),
+        interfaceEntry("TypedArray"),
+        interfaceEntry("TypedArrayConstructor"),
         varEntry("Int8Array"),
         interfaceEntry("Int8ArrayConstructor"),
         varEntry("Uint8Array"),
