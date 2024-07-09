@@ -8253,7 +8253,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * @param symbol - The symbol is used both to find an existing annotation if declaration is not provided, and to determine if `unique symbol` should be printed
          */
         function serializeTypeForDeclaration(context: NodeBuilderContext, declaration: Declaration | undefined, type: Type, symbol: Symbol) {
-            const addUndefined = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
+            const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
             const enclosingDeclaration = context.enclosingDeclaration;
             const oldFlags = context.flags;
             if (declaration && hasInferredType(declaration) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
@@ -8268,8 +8268,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // try to reuse the existing annotation
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
                     // explicitly add `| undefined` to optional mapped properties whose type contains `undefined` (and not `missing`)
-                    const addUndef = addUndefined || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsUndefinedType(type) && (type as UnionType).types[0] !== missingType);
-                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndef);
+                    const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsUndefinedType(type) && (type as UnionType).types[0] !== missingType);
+                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
                         context.flags = oldFlags;
                         return result;
@@ -8286,7 +8286,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const decl = declaration ?? symbol.valueDeclaration ?? symbol.declarations?.[0];
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
-            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
+            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefinedForParameter);
             context.flags = oldFlags;
             return result;
         }
