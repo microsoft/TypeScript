@@ -6118,7 +6118,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const clone = tryReuseExistingNonParameterTypeNode(context, typeNode, type, host);
             if (clone) {
                 // explicitly add `| undefined` if it's missing from the input type nodes and the type contains `undefined` (and not the missing type)
-                if (addUndefined && someType(type, t => !!(t.flags & TypeFlags.Undefined) && t !== missingType) && !someType(getTypeFromTypeNode(context, typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
+                if (addUndefined && containsUndefinedType(type) && (type as UnionType).types[0] !== missingType && !someType(getTypeFromTypeNode(context, typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
                     return factory.createUnionTypeNode([clone, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                 }
                 return clone;
