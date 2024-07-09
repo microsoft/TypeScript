@@ -308,6 +308,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
     function reportInferenceFallback(node: Node) {
         if (!isolatedDeclarations || isSourceFileJS(currentSourceFile)) return;
+        if (getSourceFileOfNode(node) !== currentSourceFile) return; // Nested error on a declaration in another file - ignore, will be reemitted if file is in the output file set
         if (isVariableDeclaration(node) && resolver.isExpandoFunctionDeclaration(node)) {
             reportExpandoFunctionErrors(node);
         }
