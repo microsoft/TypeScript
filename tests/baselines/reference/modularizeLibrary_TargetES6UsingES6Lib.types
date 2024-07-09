@@ -61,11 +61,11 @@ m.keys();
 >m.keys() : IterableIterator<string>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >m.keys : () => IterableIterator<string>
->       : ^^^^^^                 ^^^^^^ 
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : Map<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^
 >keys : () => IterableIterator<string>
->     : ^^^^^^                 ^^^^^^ 
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Using ES6 function
 function Baz() { }
