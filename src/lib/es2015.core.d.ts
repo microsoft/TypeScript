@@ -542,6 +542,6 @@ interface StringConstructor {
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
-interface TypedArray<T extends number | bigint> {
+interface TypedArray<T extends number | bigint, A extends TypedArray<T, A>> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

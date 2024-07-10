@@ -1852,7 +1852,7 @@ interface DataViewConstructor {
 }
 declare var DataView: DataViewConstructor;
 
-interface TypedArray<T extends number | bigint> {
+interface TypedArray<T extends number | bigint, A extends TypedArray<T, A>> {
     /**
      * The size in bytes of each element in the array.
      */
@@ -1892,7 +1892,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(predicate: (value: T, index: number, array: this) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: T, index: number, array: A | this) => unknown, thisArg?: any): boolean;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -1902,7 +1902,7 @@ interface TypedArray<T extends number | bigint> {
      * @param end index to stop filling the array at. If end is negative, it is treated as
      * length+end.
      */
-    fill(value: T, start?: number, end?: number): this;
+    fill(value: T, start?: number, end?: number): A | this;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -1911,7 +1911,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: T, index: number, array: this) => any, thisArg?: any): this;
+    filter(predicate: (value: T, index: number, array: A | this) => any, thisArg?: any): A | this;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1922,7 +1922,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: T, index: number, obj: this) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: A | this) => boolean, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -1933,7 +1933,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: this) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: A | this) => boolean, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -1942,7 +1942,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    forEach(callbackfn: (value: T, index: number, array: this) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, index: number, array: A | this) => void, thisArg?: any): void;
 
     /**
      * Returns the index of the first occurrence of a value in an array.
@@ -1980,7 +1980,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: T, index: number, array: this) => T, thisArg?: any): this;
+    map(callbackfn: (value: T, index: number, array: A | this) => T, thisArg?: any): A | this;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -1992,8 +1992,8 @@ interface TypedArray<T extends number | bigint> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue: T): T;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: A | this) => T): T;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: A | this) => T, initialValue: T): T;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2005,7 +2005,7 @@ interface TypedArray<T extends number | bigint> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: A | this) => U, initialValue: U): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2017,8 +2017,8 @@ interface TypedArray<T extends number | bigint> {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue: T): T;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: A | this) => T): T;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: A | this) => T, initialValue: T): T;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2030,12 +2030,12 @@ interface TypedArray<T extends number | bigint> {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: A | this) => U, initialValue: U): U;
 
     /**
      * Reverses the elements in an Array.
      */
-    reverse(): this;
+    reverse(): A | this;
 
     /**
      * Sets a value or an array of values.
@@ -2049,7 +2049,7 @@ interface TypedArray<T extends number | bigint> {
      * @param start The beginning of the specified portion of the array.
      * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
      */
-    slice(start?: number, end?: number): this;
+    slice(start?: number, end?: number): A | this;
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
@@ -2059,7 +2059,7 @@ interface TypedArray<T extends number | bigint> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(predicate: (value: T, index: number, array: this) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: T, index: number, array: A | this) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2078,7 +2078,7 @@ interface TypedArray<T extends number | bigint> {
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
-    subarray(begin?: number, end?: number): this;
+    subarray(begin?: number, end?: number): A | this;
 
     /**
      * Converts a number to a string by using the current locale.
@@ -2091,11 +2091,11 @@ interface TypedArray<T extends number | bigint> {
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): this;
+    valueOf(): A | this;
 
     [index: number]: T;
 }
-interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T>> {
+interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T, A>> {
     readonly prototype: A;
     new (length: number): A;
     new (array: ArrayLike<number> | ArrayBufferLike): A;
@@ -2131,7 +2131,7 @@ interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<
  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
  * number of bytes could not be allocated an exception is raised.
  */
-interface Int8Array extends TypedArray<number> {}
+interface Int8Array extends TypedArray<number, Int8Array> {}
 interface Int8ArrayConstructor extends TypedArrayConstructor<number, Int8Array> {}
 declare var Int8Array: Int8ArrayConstructor;
 
@@ -2139,7 +2139,7 @@ declare var Int8Array: Int8ArrayConstructor;
  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint8Array extends TypedArray<number> {}
+interface Uint8Array extends TypedArray<number, Uint8Array> {}
 
 interface Uint8ArrayConstructor extends TypedArrayConstructor<number, Uint8Array> {}
 declare var Uint8Array: Uint8ArrayConstructor;
@@ -2148,7 +2148,7 @@ declare var Uint8Array: Uint8ArrayConstructor;
  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
  * If the requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint8ClampedArray extends TypedArray<number> {}
+interface Uint8ClampedArray extends TypedArray<number, Uint8ClampedArray> {}
 
 interface Uint8ClampedArrayConstructor extends TypedArrayConstructor<number, Uint8ClampedArray> {}
 declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
@@ -2157,7 +2157,7 @@ declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Int16Array extends TypedArray<number> {}
+interface Int16Array extends TypedArray<number, Int16Array> {}
 
 interface Int16ArrayConstructor extends TypedArrayConstructor<number, Int16Array> {}
 declare var Int16Array: Int16ArrayConstructor;
@@ -2166,7 +2166,7 @@ declare var Int16Array: Int16ArrayConstructor;
  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint16Array extends TypedArray<number> {}
+interface Uint16Array extends TypedArray<number, Uint16Array> {}
 
 interface Uint16ArrayConstructor extends TypedArrayConstructor<number, Uint16Array> {}
 declare var Uint16Array: Uint16ArrayConstructor;
@@ -2174,7 +2174,7 @@ declare var Uint16Array: Uint16ArrayConstructor;
  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Int32Array extends TypedArray<number> {}
+interface Int32Array extends TypedArray<number, Int32Array> {}
 
 interface Int32ArrayConstructor extends TypedArrayConstructor<number, Int32Array> {}
 declare var Int32Array: Int32ArrayConstructor;
@@ -2183,7 +2183,7 @@ declare var Int32Array: Int32ArrayConstructor;
  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated an exception is raised.
  */
-interface Uint32Array extends TypedArray<number> {}
+interface Uint32Array extends TypedArray<number, Uint32Array> {}
 
 interface Uint32ArrayConstructor extends TypedArrayConstructor<number, Uint32Array> {}
 declare var Uint32Array: Uint32ArrayConstructor;
@@ -2192,7 +2192,7 @@ declare var Uint32Array: Uint32ArrayConstructor;
  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
  * of bytes could not be allocated an exception is raised.
  */
-interface Float32Array extends TypedArray<number> {}
+interface Float32Array extends TypedArray<number, Float32Array> {}
 
 interface Float32ArrayConstructor extends TypedArrayConstructor<number, Float32Array> {}
 declare var Float32Array: Float32ArrayConstructor;
@@ -2201,7 +2201,7 @@ declare var Float32Array: Float32ArrayConstructor;
  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
  * number of bytes could not be allocated an exception is raised.
  */
-interface Float64Array extends TypedArray<number> {}
+interface Float64Array extends TypedArray<number, Float64Array> {}
 
 interface Float64ArrayConstructor extends TypedArrayConstructor<number, Float64Array> {}
 declare var Float64Array: Float64ArrayConstructor;

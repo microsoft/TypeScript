@@ -128,7 +128,7 @@ declare var BigInt: BigIntConstructor;
  * A typed array of 64-bit signed integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated, an exception is raised.
  */
-interface BigInt64Array extends TypedArray<bigint> {
+interface BigInt64Array extends TypedArray<bigint, BigInt64Array> {
     /** Converts the array to a string by using the current locale. */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 
@@ -143,7 +143,7 @@ declare var BigInt64Array: BigInt64ArrayConstructor;
  * A typed array of 64-bit unsigned integer values. The contents are initialized to 0. If the
  * requested number of bytes could not be allocated, an exception is raised.
  */
-interface BigUint64Array extends TypedArray<bigint> {
+interface BigUint64Array extends TypedArray<bigint, BigUint64Array> {
     /** Converts the array to a string by using the current locale. */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 

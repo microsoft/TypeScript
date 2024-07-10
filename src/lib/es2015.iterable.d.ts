@@ -220,7 +220,7 @@ interface String {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
-interface TypedArray<T extends number | bigint> {
+interface TypedArray<T extends number | bigint, A extends TypedArray<T, A>> {
     [Symbol.iterator](): IterableIterator<T>;
     /**
      * Returns an array of key, value pairs for every entry in the array
@@ -236,7 +236,7 @@ interface TypedArray<T extends number | bigint> {
     values(): IterableIterator<T>;
 }
 
-interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T>> {
+interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T, A>> {
     new (elements: Iterable<T>): A;
 
     /**
@@ -248,38 +248,38 @@ interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<
     from(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => T, thisArg?: any): A;
 }
 
-interface Int8Array extends TypedArray<number> {}
+interface Int8Array extends TypedArray<number, Int8Array> {}
 
 interface Int8ArrayConstructor extends TypedArrayConstructor<number, Int8Array> {}
 
-interface Uint8Array extends TypedArray<number> {}
+interface Uint8Array extends TypedArray<number, Uint8Array> {}
 
 interface Uint8ArrayConstructor extends TypedArrayConstructor<number, Uint8Array> {}
 
-interface Uint8ClampedArray extends TypedArray<number> {}
+interface Uint8ClampedArray extends TypedArray<number, Uint8ClampedArray> {}
 
 interface Uint8ClampedArrayConstructor extends TypedArrayConstructor<number, Uint8ClampedArray> {}
 
-interface Int16Array extends TypedArray<number> {}
+interface Int16Array extends TypedArray<number, Int16Array> {}
 
 interface Int16ArrayConstructor extends TypedArrayConstructor<number, Int16Array> {}
 
-interface Uint16Array extends TypedArray<number> {}
+interface Uint16Array extends TypedArray<number, Uint16Array> {}
 
 interface Uint16ArrayConstructor extends TypedArrayConstructor<number, Uint16Array> {}
 
-interface Int32Array extends TypedArray<number> {}
+interface Int32Array extends TypedArray<number, Int32Array> {}
 
 interface Int32ArrayConstructor extends TypedArrayConstructor<number, Int32Array> {}
 
-interface Uint32Array extends TypedArray<number> {}
+interface Uint32Array extends TypedArray<number, Uint32Array> {}
 
 interface Uint32ArrayConstructor extends TypedArrayConstructor<number, Uint32Array> {}
 
-interface Float32Array extends TypedArray<number> {}
+interface Float32Array extends TypedArray<number, Float32Array> {}
 
 interface Float32ArrayConstructor extends TypedArrayConstructor<number, Float32Array> {}
 
-interface Float64Array extends TypedArray<number> {}
+interface Float64Array extends TypedArray<number, Float64Array> {}
 
 interface Float64ArrayConstructor extends TypedArrayConstructor<number, Float64Array> {}

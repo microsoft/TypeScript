@@ -1,4 +1,4 @@
-interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T>> {
+interface TypedArrayConstructor<T extends number | bigint, A extends TypedArray<T, A>> {
     new (): A;
 }
 
