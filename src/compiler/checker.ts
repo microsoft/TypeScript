@@ -21428,7 +21428,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!((type.flags & TypeFlags.Union ? (type as UnionType).types[0] : type).flags & TypeFlags.Undefined);
     }
 
-
     function containsNonMissingUndefinedType(type: Type) {
         const candidate = type.flags & TypeFlags.Union ? (type as UnionType).types[0] : type;
         return !!(candidate.flags & TypeFlags.Undefined) && candidate !== missingType;
