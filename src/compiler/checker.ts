@@ -898,6 +898,7 @@ import {
     NodeWithTypeArguments,
     NonNullChain,
     NonNullExpression,
+    NoSubstitutionTemplateLiteral,
     not,
     noTruncationMaximumTruncationLength,
     NumberLiteralType,
@@ -1114,7 +1115,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    NoSubstitutionTemplateLiteral,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -44231,7 +44231,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
         }
 
-        let alwaysTruthy: boolean | undefined = undefined;
+        let alwaysTruthy: boolean | undefined;
         switch (node.kind) {
             case SyntaxKind.NumericLiteral:
                 // Allow `while(0)` or `while(1)`
@@ -44258,10 +44258,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (alwaysTruthy !== undefined) {
-            error(node,
+            error(
+                node,
                 alwaysTruthy ?
                     Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else :
-                    Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else);
+                    Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else,
+            );
         }
 
         return type;
