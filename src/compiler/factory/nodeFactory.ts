@@ -388,7 +388,6 @@ import {
     setEmitFlags,
     setIdentifierAutoGenerate,
     setIdentifierTypeArguments,
-    setNodeChildren,
     setParent,
     setTextRange,
     ShorthandPropertyAssignment,
@@ -476,7 +475,7 @@ export const enum NodeFactoryFlags {
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
-/** @internal */
+/** @internal @knipignore */
 export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
     nodeFactoryPatchers.push(fn);
 }
@@ -6212,7 +6211,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSyntaxList(children: readonly Node[]) {
         const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
-        setNodeChildren(node, children);
+        node._children = children;
         return node;
     }
 
@@ -7295,10 +7294,8 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
- *
- * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }

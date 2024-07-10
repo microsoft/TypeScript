@@ -25,7 +25,6 @@ export enum UpToDateStatusType {
     OutOfDateOptions,
     OutOfDateRoots,
     UpstreamOutOfDate,
-    UpstreamBlocked,
     ComputingUpstream,
     TsVersionOutputOfDate,
     UpToDateWithInputFileText,
@@ -48,7 +47,6 @@ export type UpToDateStatus =
     | Status.OutOfDateBuildInfo
     | Status.OutOfDateRoots
     | Status.UpstreamOutOfDate
-    | Status.UpstreamBlocked
     | Status.ComputingUpstream
     | Status.TsVersionOutOfDate
     | Status.ContainerOnly
@@ -135,15 +133,6 @@ export namespace Status {
     export interface UpstreamOutOfDate {
         type: UpToDateStatusType.UpstreamOutOfDate;
         upstreamProjectName: string;
-    }
-
-    /**
-     * This project depends an upstream project with build errors
-     */
-    export interface UpstreamBlocked {
-        type: UpToDateStatusType.UpstreamBlocked;
-        upstreamProjectName: string;
-        upstreamProjectBlocked: boolean;
     }
 
     /**

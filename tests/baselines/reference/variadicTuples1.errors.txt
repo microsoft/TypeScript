@@ -5,9 +5,9 @@ variadicTuples1.ts(62,5): error TS2345: Argument of type '[]' is not assignable 
 variadicTuples1.ts(131,9): error TS2344: Type 'V' does not satisfy the constraint 'unknown[]'.
   The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'unknown[]'.
 variadicTuples1.ts(149,5): error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...T]'.
-  Target requires 2 element(s) but source may have fewer.
+  Source provides no match for variadic element at position 1 in target.
 variadicTuples1.ts(151,5): error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...U]'.
-  Target requires 2 element(s) but source may have fewer.
+  Source provides no match for variadic element at position 1 in target.
 variadicTuples1.ts(152,5): error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'T' is not assignable to type 'U'.
@@ -22,7 +22,7 @@ variadicTuples1.ts(170,5): error TS2322: Type 'T' is not assignable to type '[..
 variadicTuples1.ts(171,5): error TS4104: The type 'readonly [...T]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
 variadicTuples1.ts(181,5): error TS2322: Type 'T' is not assignable to type '[...U]'.
   Type 'string[]' is not assignable to type '[...U]'.
-    Target requires 1 element(s) but source may have fewer.
+    Source provides no match for variadic element at position 0 in target.
 variadicTuples1.ts(182,5): error TS2322: Type '[...T]' is not assignable to type '[...U]'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
@@ -211,12 +211,12 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
         y = x;  // Error
         ~
 !!! error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...T]'.
-!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+!!! error TS2322:   Source provides no match for variadic element at position 1 in target.
         y = z;
         z = x;  // Error
         ~
 !!! error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...U]'.
-!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+!!! error TS2322:   Source provides no match for variadic element at position 1 in target.
         z = y;  // Error
         ~
 !!! error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
@@ -268,7 +268,7 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
         ~~
 !!! error TS2322: Type 'T' is not assignable to type '[...U]'.
 !!! error TS2322:   Type 'string[]' is not assignable to type '[...U]'.
-!!! error TS2322:     Target requires 1 element(s) but source may have fewer.
+!!! error TS2322:     Source provides no match for variadic element at position 0 in target.
         t2 = t1;  // Error
         ~~
 !!! error TS2322: Type '[...T]' is not assignable to type '[...U]'.

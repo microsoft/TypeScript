@@ -26,20 +26,6 @@ CleanBuild:
     "noEmitOnError": true,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/a.ts",
-      [
-        {
-          "start": 6,
-          "length": 1,
-          "code": 2322,
-          "category": 1,
-          "messageText": "Type '10' is not assignable to type '20'."
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -66,20 +52,6 @@ IncrementalBuild:
     "noEmitOnError": true,
     "outFile": "./outFile.js"
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./project/a.ts",
-      [
-        {
-          "start": 6,
-          "length": 1,
-          "code": 2322,
-          "category": 1,
-          "messageText": "Type '10' is not assignable to type '20'."
-        }
-      ]
-    ]
-  ],
   "outSignature": [
     "-2781996726-declare const x = 10;\ndeclare const y = 10;\n"
   ],

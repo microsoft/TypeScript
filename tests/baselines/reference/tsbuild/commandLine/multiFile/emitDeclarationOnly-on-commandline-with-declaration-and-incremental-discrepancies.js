@@ -147,32 +147,6 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../../../lib/lib.d.ts",
-      "not cached"
-    ],
-    [
-      "./e.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/a.d.ts",
-      "not cached"
-    ],
-    [
-      "./f.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/b.d.ts",
-      "not cached"
-    ],
-    [
-      "./g.ts",
-      "not cached"
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -223,32 +197,6 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../../../lib/lib.d.ts",
-      "not cached"
-    ],
-    [
-      "./e.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/a.d.ts",
-      "not cached"
-    ],
-    [
-      "./f.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/b.d.ts",
-      "not cached"
-    ],
-    [
-      "./g.ts",
-      "not cached"
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 6:: local change
@@ -304,32 +252,6 @@ CleanBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../../../lib/lib.d.ts",
-      "not cached"
-    ],
-    [
-      "./e.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/a.d.ts",
-      "not cached"
-    ],
-    [
-      "./f.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/b.d.ts",
-      "not cached"
-    ],
-    [
-      "./g.ts",
-      "not cached"
-    ]
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -380,31 +302,5 @@ IncrementalBuild:
       "../../project1/src/b.d.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "../../../lib/lib.d.ts",
-      "not cached"
-    ],
-    [
-      "./e.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/a.d.ts",
-      "not cached"
-    ],
-    [
-      "./f.ts",
-      "not cached"
-    ],
-    [
-      "../../project1/src/b.d.ts",
-      "not cached"
-    ],
-    [
-      "./g.ts",
-      "not cached"
-    ]
-  ],
   "version": "FakeTSVersion"
 }

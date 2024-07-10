@@ -1,5 +1,5 @@
 import {
-    arraysEqual,
+    arrayIsEqualTo,
     ArrowFunction,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -222,7 +222,7 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
 }
 
 function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
-    return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
+    return arrayIsEqualTo(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
 }
 
 function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {

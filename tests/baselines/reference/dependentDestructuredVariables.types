@@ -800,11 +800,11 @@ const { value, done } = it.next();
 >it.next() : IteratorResult<number, any>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >it.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >it : Iterator<number, any, undefined>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^  ^^^ 
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (!done) {
 >!done : boolean
@@ -1086,7 +1086,7 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >args.firstArr.concat(args.secondArr) : any[]
 >                                     : ^^^^^
 >args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
+>                     : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
 >args.firstArr : any[]
 >              : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
@@ -1094,7 +1094,7 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >firstArr : any[]
 >         : ^^^^^
 >concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
 >args.secondArr : any[]
 >               : ^^^^^
 >args : { firstArr: any[]; secondArr: any[]; }
