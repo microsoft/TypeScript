@@ -1,0 +1,24 @@
+nullishCoalescingOperator7.ts(6,19): error TS2869: This expression is always truthy. Did you mean to test something else?
+nullishCoalescingOperator7.ts(7,19): error TS2869: This expression is always truthy. Did you mean to test something else?
+nullishCoalescingOperator7.ts(10,23): error TS2869: This expression is always truthy. Did you mean to test something else?
+
+
+==== nullishCoalescingOperator7.ts (3 errors) ====
+    declare const a: string | undefined;
+    declare const b: string | undefined;
+    declare const c: string | undefined;
+    
+    const foo1 = a ? 1 : 2;
+    const foo2 = a ?? 'foo' ? 1 : 2;
+                      ~~~~~
+!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+    const foo3 = a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz');
+                      ~~~~~
+!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+    
+    function f () {
+        const foo4 = a ?? 'foo' ? b ?? 'bar' : c ?? 'baz';
+                          ~~~~~
+!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+    }
+    

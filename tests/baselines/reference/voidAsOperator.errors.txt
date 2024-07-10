@@ -1,0 +1,15 @@
+voidAsOperator.ts(1,6): error TS2870: This expression is always falsy. Did you mean to test something else?
+
+
+==== voidAsOperator.ts (1 errors) ====
+    if (!void 0 !== true) {
+         ~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+     
+    }
+    
+    //CHECK#2
+    if (!null !== true) {
+     
+    }
+    

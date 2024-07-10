@@ -1114,6 +1114,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    NoSubstitutionTemplateLiteral,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -39450,7 +39451,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return state;
             }
 
-            checkGrammarNullishCoalesceWithLogicalExpression(node);
+            checkNullishCoalesceOperands(node);
 
             const operator = node.operatorToken.kind;
             if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -39549,7 +39550,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkGrammarNullishCoalesceWithLogicalExpression(node: BinaryExpression) {
+    function checkNullishCoalesceOperands(node: BinaryExpression) {
         const { left, operatorToken, right } = node;
         if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
             if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
@@ -39558,7 +39559,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
                 grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
             }
+
+            const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
+            if (hasStaticNullishness(leftTarget)) {
+                error(leftTarget, Diagnostics.Using_on_this_expression_appears_unintentional_because_it_always_evaluates_to_the_same_nullishness);
+            }
         }
+    }
+
+    // Returns true if we know that, syntactically, a node will always (or never)
+    // evaluate to undefined or null
+    function hasStaticNullishness(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.YieldExpression:
+                return false;
+            case SyntaxKind.BinaryExpression:
+                // List of operators that can produce null/undefined:
+                // = ??= ?? || ||= && &&=
+                switch ((node as BinaryExpression).operatorToken.kind) {
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.QuestionQuestionToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
+                    case SyntaxKind.BarBarToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                        return false;
+                }
+        }
+        return true;
     }
 
     // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some
@@ -44190,12 +44225,47 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTruthinessOfType(type: Type, node: Node) {
+        node = skipParentheses(node);
+
         if (type.flags & TypeFlags.Void) {
             error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
         }
+
+        let alwaysTruthy: boolean | undefined = undefined;
+        switch (node.kind) {
+            case SyntaxKind.NumericLiteral:
+                // Allow `while(0)` or `while(1)`
+                if ((node as NumericLiteral).text === "0" || (node as NumericLiteral).text === "1") break;
+            // falls through
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.BigIntLiteral:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RegularExpressionLiteral:
+                alwaysTruthy = true;
+                break;
+            case SyntaxKind.VoidExpression:
+                alwaysTruthy = false;
+                break;
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.StringLiteral:
+                alwaysTruthy = !!(node as StringLiteral | NoSubstitutionTemplateLiteral).text;
+                break;
+        }
+
+        if (alwaysTruthy !== undefined) {
+            error(node,
+                alwaysTruthy ?
+                    Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else :
+                    Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else);
+        }
+
         return type;
     }
-
     function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
         return checkTruthinessOfType(checkExpression(node, checkMode), node);
     }

@@ -1,0 +1,98 @@
+-incompasig-110.ts(9,20): error TS2349: This expression is not callable.
+  Each member of the union type '{ (cb: (x: number) => number): number[]; <U>(cb: (x: number) => U): U[]; } | { (cb: (x: string) => string): string[]; <U>(cb: (x: string) => U): U[]; }' has signatures, but none of those signatures are compatible with each other.
+-incompasig-110.ts(9,22): error TS7006: Parameter 'x' implicitly has an 'any' type.
+-incompasig-111.ts(9,20): error TS2349: This expression is not callable.
+  Each member of the union type '{ (cb: (a: number, x: number) => number): number[]; <U>(cb: (a: U, x: number) => U, init: U): U[]; } | { (cb: (a: bigint, x: bigint) => bigint): bigint[]; <U>(cb: (a: U, x: bigint) => U, init: U): U[]; }' has signatures, but none of those signatures are compatible with each other.
+-incompasig-111.ts(9,33): error TS7006: Parameter 'x' implicitly has an 'any' type.
+-incompasig-200.ts(7,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+  Type 'string' is not assignable to type 'never'.
+-incompasig-200.ts(9,8): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+  Type 'string' is not assignable to type 'never'.
+-incompasig-200.ts(11,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+  Type 'string' is not assignable to type 'never'.
+-incompasig-200.ts(13,14): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(start: number, deleteCount: number, ...items: string[]): string[] | number[]', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 3, '(start: number, deleteCount: number, ...items: number[]): string[] | number[]', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'number'.
+      Type 'string' is not assignable to type 'number'.
+
+
+==== -incompasig-200.ts (4 errors) ====
+    namespace ns4 {
+    
+    declare var y: Array<string>|Array<number>;
+    
+    declare const a: number|string;
+    
+    y.indexOf(a);
+              ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+!!! error TS2345:   Type 'string' is not assignable to type 'never'.
+    
+    y.push(a);
+           ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+!!! error TS2345:   Type 'string' is not assignable to type 'never'.
+    
+    y.unshift(a);
+              ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+!!! error TS2345:   Type 'string' is not assignable to type 'never'.
+    
+    y.splice(1,1,a);
+                 ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(start: number, deleteCount: number, ...items: string[]): string[] | number[]', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 3, '(start: number, deleteCount: number, ...items: number[]): string[] | number[]', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+    
+    }
+    
+    
+    /**********************/
+==== -incompasig-110.ts (2 errors) ====
+    namespace ns0 {
+    
+    interface Test110<T> {
+        f(cb:(x:T)=>T):T[];
+        f<U>(cb:(x:T)=>U):U[];
+    }
+    
+    declare const arr: Test110<number> | Test110<string>;
+    const result = arr.f(x => x);
+                       ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type '{ (cb: (x: number) => number): number[]; <U>(cb: (x: number) => U): U[]; } | { (cb: (x: string) => string): string[]; <U>(cb: (x: string) => U): U[]; }' has signatures, but none of those signatures are compatible with each other.
+                         ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    }
+    
+    
+    /**********************/
+==== -incompasig-111.ts (2 errors) ====
+    namespace ns1 {
+    
+    interface Test111<T> {
+        f(cb:(a:T, x:T)=>T):T[];
+        f<U>(cb:(a:U, x:T)=>U,init:U):U[];
+    }
+    
+    declare const arr: Test111<number> | Test111<bigint>;
+    const result = arr.f((a:bigint, x) => a * BigInt(x), 1n);
+                       ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Each member of the union type '{ (cb: (a: number, x: number) => number): number[]; <U>(cb: (a: U, x: number) => U, init: U): U[]; } | { (cb: (a: bigint, x: bigint) => bigint): bigint[]; <U>(cb: (a: U, x: bigint) => U, init: U): U[]; }' has signatures, but none of those signatures are compatible with each other.
+                                    ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    }
+    
+    
+    
+    

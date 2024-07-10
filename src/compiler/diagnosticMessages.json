@@ -3911,6 +3911,18 @@
         "category": "Error",
         "code": 2868
     },
+    "This expression is always truthy. Did you mean to test something else?": {
+        "category": "Error",
+        "code": 2869
+    },
+    "This expression is always falsy. Did you mean to test something else?": {
+        "category": "Error",
+        "code": 2870
+    },
+    "Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.": {
+        "category": "Error",
+        "code": 2871
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

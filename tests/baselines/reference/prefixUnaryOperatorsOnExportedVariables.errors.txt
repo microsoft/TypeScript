@@ -1,0 +1,35 @@
+prefixUnaryOperatorsOnExportedVariables.ts(19,5): error TS2870: This expression is always falsy. Did you mean to test something else?
+
+
+==== prefixUnaryOperatorsOnExportedVariables.ts (1 errors) ====
+    export var x = false;
+    export var y = 1;
+    if (!x) {
+        
+    }
+    
+    if (+x) {
+        
+    }
+    
+    if (-x) {
+        
+    }
+    
+    if (~x) {
+        
+    }
+    
+    if (void x) {
+        ~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+        
+    }
+    
+    if (typeof x) {
+        
+    }
+    
+    if (++y) {
+        
+    }
