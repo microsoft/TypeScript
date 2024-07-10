@@ -127,8 +127,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Config: /home/src/workspaces/project/packages/dep/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Config: /home/src/workspaces/project/packages/dep/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src/main.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src/sub/folder/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules 1 undefined Project: /home/src/workspaces/project/packages/app/tsconfig.json WatchType: Failed Lookup Locations
@@ -353,6 +353,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/packages/dep: *new*
   {}
+/home/src/workspaces/project/packages/dep/src: *new*
   {}
 /home/src/workspaces/project/packages/node_modules: *new*
   {}
@@ -504,6 +505,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/packages/dep:
   {}
+/home/src/workspaces/project/packages/dep/src:
   {}
 /home/src/workspaces/project/packages/node_modules:
   {}
@@ -961,6 +963,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/packages/dep:
   {}
+/home/src/workspaces/project/packages/dep/src:
   {}
 /home/src/workspaces/project/packages/node_modules:
   {}

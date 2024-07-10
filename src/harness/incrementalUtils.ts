@@ -546,11 +546,13 @@ export function verifyResolutionCache(
                 affectingLocations: resolved.affectingLocations,
                 alternateResult: resolved.alternateResult,
                 globalCacheResolution: resolved.globalCacheResolution,
+                rootDirInfo: resolved.rootDirInfo,
             };
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchResolution(expectedResolution, fileName, () => ({ resolvedFileName }));
+        // We are passing redirectedReference as undefined because we want to use existing rootDirInfo
+        expected.watchResolution(expectedResolution, fileName, () => ({ resolvedFileName }), /*redirectedReference*/ undefined);
         return expectedResolution;
     }
 
