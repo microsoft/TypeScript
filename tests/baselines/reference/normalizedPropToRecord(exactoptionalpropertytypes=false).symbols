@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/normalizedPropToRecord.ts] ////
+
+=== normalizedPropToRecord.ts ===
+type Foo = {
+>Foo : Symbol(Foo, Decl(normalizedPropToRecord.ts, 0, 0))
+
+    stuff: Record<string, number>;
+>stuff : Symbol(stuff, Decl(normalizedPropToRecord.ts, 0, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+};
+function getFoo() {
+>getFoo : Symbol(getFoo, Decl(normalizedPropToRecord.ts, 2, 2))
+
+    if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        return { stuff: { a: 42 } };
+>stuff : Symbol(stuff, Decl(normalizedPropToRecord.ts, 5, 16))
+>a : Symbol(a, Decl(normalizedPropToRecord.ts, 5, 25))
+
+    } else {
+        return { stuff: { b: 99 } };
+>stuff : Symbol(stuff, Decl(normalizedPropToRecord.ts, 7, 16))
+>b : Symbol(b, Decl(normalizedPropToRecord.ts, 7, 25))
+    }
+}
+
+// Actually fine, but claimed not to be
+const p: Foo = getFoo();
+>p : Symbol(p, Decl(normalizedPropToRecord.ts, 12, 5))
+>Foo : Symbol(Foo, Decl(normalizedPropToRecord.ts, 0, 0))
+>getFoo : Symbol(getFoo, Decl(normalizedPropToRecord.ts, 2, 2))
+

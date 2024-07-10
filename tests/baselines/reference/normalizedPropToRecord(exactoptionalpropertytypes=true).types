@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/normalizedPropToRecord.ts] ////
+
+=== normalizedPropToRecord.ts ===
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    stuff: Record<string, number>;
+>stuff : Record<string, number>
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+};
+function getFoo() {
+>getFoo : () => { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random() > 0.5) {
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+        return { stuff: { a: 42 } };
+>{ stuff: { a: 42 } } : { stuff: { a: number; }; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stuff : { a: number; }
+>      : ^^^^^^^^^^^^^^
+>{ a: 42 } : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+    } else {
+        return { stuff: { b: 99 } };
+>{ stuff: { b: 99 } } : { stuff: { b: number; }; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stuff : { b: number; }
+>      : ^^^^^^^^^^^^^^
+>{ b: 99 } : { b: number; }
+>          : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>99 : 99
+>   : ^^
+    }
+}
+
+// Actually fine, but claimed not to be
+const p: Foo = getFoo();
+>p : Foo
+>  : ^^^
+>getFoo() : { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFoo : () => { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
