@@ -115,11 +115,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./b.d.ts",

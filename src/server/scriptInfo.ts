@@ -382,8 +382,6 @@ export class ScriptInfo {
 
     /**
      * Set to real path if path is different from info.path
-     *
-     * @internal
      */
     private realpath: Path | undefined;
 

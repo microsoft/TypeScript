@@ -1,0 +1,179 @@
+//// [tests/cases/compiler/intersectionsAndOptionalProperties2.ts] ////
+
+=== intersectionsAndOptionalProperties2.ts ===
+// https://github.com/microsoft/TypeScript/issues/58174
+
+type A_Primitive = {
+>A_Primitive : A_Primitive
+>            : ^^^^^^^^^^^
+
+  disabled?: boolean;
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+};
+
+type B_Primitive = {
+>B_Primitive : B_Primitive
+>            : ^^^^^^^^^^^
+
+  disabled?: boolean | undefined;
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+};
+
+type C_Primitive = {
+>C_Primitive : C_Primitive
+>            : ^^^^^^^^^^^
+
+  disabled?: boolean;
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare const ab_primitive: A_Primitive & B_Primitive;
+>ab_primitive : A_Primitive & B_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const ac_primitive: A_Primitive & C_Primitive;
+>ac_primitive : A_Primitive & C_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const ab_disabled_read = ab_primitive.disabled;
+>ab_disabled_read : boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^
+>ab_primitive.disabled : boolean | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^
+>ab_primitive : A_Primitive & B_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+const ac_disabled_read = ac_primitive.disabled;
+>ac_disabled_read : boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^
+>ac_primitive.disabled : boolean | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^
+>ac_primitive : A_Primitive & C_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+ab_primitive.disabled = undefined;
+>ab_primitive.disabled = undefined : undefined
+>                                  : ^^^^^^^^^
+>ab_primitive.disabled : boolean | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^
+>ab_primitive : A_Primitive & B_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+ac_primitive.disabled = undefined;
+>ac_primitive.disabled = undefined : undefined
+>                                  : ^^^^^^^^^
+>ac_primitive.disabled : boolean | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^
+>ac_primitive : A_Primitive & C_Primitive
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>disabled : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+  prop: boolean;
+>prop : boolean
+>     : ^^^^^^^
+
+};
+
+type A_Obj = {
+>A_Obj : A_Obj
+>      : ^^^^^
+
+  prop?: Foo;
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+
+};
+
+type B_Obj = {
+>B_Obj : B_Obj
+>      : ^^^^^
+
+  prop?: Foo | undefined;
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+
+};
+
+type C_Obj = {
+>C_Obj : C_Obj
+>      : ^^^^^
+
+  prop?: Foo;
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+
+};
+
+declare const ab_obj: A_Obj & B_Obj;
+>ab_obj : A_Obj & B_Obj
+>       : ^^^^^^^^^^^^^
+
+declare const ac_obj: A_Obj & C_Obj;
+>ac_obj : A_Obj & C_Obj
+>       : ^^^^^^^^^^^^^
+
+const ab_prop_read = ab_obj.prop;
+>ab_prop_read : Foo | undefined
+>             : ^^^^^^^^^^^^^^^
+>ab_obj.prop : Foo | undefined
+>            : ^^^^^^^^^^^^^^^
+>ab_obj : A_Obj & B_Obj
+>       : ^^^^^^^^^^^^^
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+
+const ac_prop_read = ac_obj.prop;
+>ac_prop_read : Foo | undefined
+>             : ^^^^^^^^^^^^^^^
+>ac_obj.prop : Foo | undefined
+>            : ^^^^^^^^^^^^^^^
+>ac_obj : A_Obj & C_Obj
+>       : ^^^^^^^^^^^^^
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+
+ab_obj.prop = undefined;
+>ab_obj.prop = undefined : undefined
+>                        : ^^^^^^^^^
+>ab_obj.prop : Foo | undefined
+>            : ^^^^^^^^^^^^^^^
+>ab_obj : A_Obj & B_Obj
+>       : ^^^^^^^^^^^^^
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+ac_obj.prop = undefined;
+>ac_obj.prop = undefined : undefined
+>                        : ^^^^^^^^^
+>ac_obj.prop : Foo | undefined
+>            : ^^^^^^^^^^^^^^^
+>ac_obj : A_Obj & C_Obj
+>       : ^^^^^^^^^^^^^
+>prop : Foo | undefined
+>     : ^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
