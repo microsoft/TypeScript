@@ -65,6 +65,8 @@ export interface Scanner {
     hasPrecedingLineBreak(): boolean;
     /** @internal */
     hasPrecedingJSDocComment(): boolean;
+    /** @internal */
+    hasPrecedingJSDocLeadingAsterisks(): boolean;
     isIdentifier(): boolean;
     isReservedWord(): boolean;
     isUnterminated(): boolean;
@@ -1059,6 +1061,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
         hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
         hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
+        hasPrecedingJSDocLeadingAsterisks: () => (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) !== 0,
         isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
         isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
         isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
@@ -1874,7 +1877,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scan(): SyntaxKind {
         fullStartPos = pos;
         tokenFlags = TokenFlags.None;
-        let asteriskSeen = false;
         while (true) {
             tokenStart = pos;
             if (pos >= end) {
@@ -1995,9 +1997,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                     }
                     pos++;
-                    if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                    if (
+                        skipJsDocLeadingAsterisks &&
+                        (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) === 0 &&
+                        (tokenFlags & TokenFlags.PrecedingLineBreak)
+                    ) {
                         // decoration at the start of a JSDoc comment line
-                        asteriskSeen = true;
+                        tokenFlags |= TokenFlags.PrecedingJSDocLeadingAsterisks;
                         continue;
                     }
                     return token = SyntaxKind.AsteriskToken;
