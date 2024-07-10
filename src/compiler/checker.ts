@@ -470,6 +470,7 @@ import {
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
     isBinaryExpression,
+    isBinaryLogicalOperator,
     isBindableObjectDefinePropertyCall,
     isBindableStaticElementAccessExpression,
     isBindableStaticNameExpression,
@@ -914,6 +915,7 @@ import {
     OptionalTypeNode,
     or,
     orderedRemoveItemAt,
+    OuterExpression,
     OuterExpressionKinds,
     ParameterDeclaration,
     parameterIsThisKeyword,
@@ -929,6 +931,7 @@ import {
     PatternAmbientModule,
     PlusToken,
     PostfixUnaryExpression,
+    PredicateSemantics,
     PrefixUnaryExpression,
     PrivateIdentifier,
     Program,
@@ -1115,9 +1118,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    PredicateSemantics,
-    OuterExpression,
-    isBinaryLogicalOperator,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -44243,13 +44243,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkTruthinessOfType(type: Type, node: Node) {
         if (type.flags & TypeFlags.Void) {
             error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
-        } else {
+        }
+        else {
             const semantics = getSyntacticTruthySemantics(node);
             if (semantics !== PredicateSemantics.Sometimes) {
-                error(node,
+                error(
+                    node,
                     semantics === PredicateSemantics.Always ?
-                        Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else : 
-                        Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else)
+                        Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else :
+                        Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else,
+                );
             }
         }
 
