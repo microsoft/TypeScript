@@ -1,11 +1,15 @@
+conditionalOperatorConditoinIsAnyType.ts(28,1): error TS2870: This expression is always falsy. Did you mean to test something else?
 conditionalOperatorConditoinIsAnyType.ts(29,1): error TS2869: This expression is always truthy. Did you mean to test something else?
 conditionalOperatorConditoinIsAnyType.ts(30,1): error TS2869: This expression is always truthy. Did you mean to test something else?
+conditionalOperatorConditoinIsAnyType.ts(31,1): error TS2870: This expression is always falsy. Did you mean to test something else?
+conditionalOperatorConditoinIsAnyType.ts(51,23): error TS2870: This expression is always falsy. Did you mean to test something else?
 conditionalOperatorConditoinIsAnyType.ts(52,23): error TS2869: This expression is always truthy. Did you mean to test something else?
 conditionalOperatorConditoinIsAnyType.ts(53,23): error TS2869: This expression is always truthy. Did you mean to test something else?
+conditionalOperatorConditoinIsAnyType.ts(55,32): error TS2870: This expression is always falsy. Did you mean to test something else?
 conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression is always truthy. Did you mean to test something else?
 
 
-==== conditionalOperatorConditoinIsAnyType.ts (5 errors) ====
+==== conditionalOperatorConditoinIsAnyType.ts (9 errors) ====
     //Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
     var condAny: any;
     var x: any;
@@ -34,6 +38,8 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
     null ? exprAny1 : exprAny2;
     null ? exprBoolean1 : exprBoolean2;
     undefined ? exprNumber1 : exprNumber2;
+    ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     [null, undefined] ? exprString1 : exprString2;
     ~~~~~~~~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
@@ -41,6 +47,8 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
     ~~~~~~~~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
     undefined ? exprString1 : exprBoolean1; // union
+    ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     
     //Cond is an any type expression
     x.doSomeThing() ? exprAny1 : exprAny2;
@@ -61,6 +69,8 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
     var resultIsAny2 = null ? exprAny1 : exprAny2;
     var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
     var resultIsNumber2 = undefined ? exprNumber1 : exprNumber2;
+                          ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
                           ~~~~~~~~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
@@ -69,6 +79,8 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
     var resultIsStringOrBoolean2 = null ? exprString1 : exprBoolean1; // union
     var resultIsStringOrBoolean3 = undefined ? exprString1 : exprBoolean1; // union
+                                   ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; // union
                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?

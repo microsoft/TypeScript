@@ -1,3 +1,6 @@
+ifDoWhileStatements.ts(48,5): error TS2870: This expression is always falsy. Did you mean to test something else?
+ifDoWhileStatements.ts(49,8): error TS2870: This expression is always falsy. Did you mean to test something else?
+ifDoWhileStatements.ts(50,13): error TS2870: This expression is always falsy. Did you mean to test something else?
 ifDoWhileStatements.ts(56,5): error TS2869: This expression is always truthy. Did you mean to test something else?
 ifDoWhileStatements.ts(57,8): error TS2869: This expression is always truthy. Did you mean to test something else?
 ifDoWhileStatements.ts(58,13): error TS2869: This expression is always truthy. Did you mean to test something else?
@@ -24,7 +27,7 @@ ifDoWhileStatements.ts(85,8): error TS2869: This expression is always truthy. Di
 ifDoWhileStatements.ts(86,13): error TS2869: This expression is always truthy. Did you mean to test something else?
 
 
-==== ifDoWhileStatements.ts (24 errors) ====
+==== ifDoWhileStatements.ts (27 errors) ====
     interface I {
         id: number;
     }
@@ -73,8 +76,14 @@ ifDoWhileStatements.ts(86,13): error TS2869: This expression is always truthy. D
     do { }while(null)
     
     if (undefined) { }
+        ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     while (undefined) { }
+           ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     do { }while(undefined)
+                ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     
     if (0.0) { }
     while (0.0) { }

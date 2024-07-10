@@ -1,0 +1,29 @@
+predicateSemantics.ts(7,16): error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+predicateSemantics.ts(10,16): error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+
+
+==== predicateSemantics.ts (2 errors) ====
+    declare let cond: any;
+    
+    // OK: One or other operand is possibly nullish
+    const test1 = (cond ? undefined : 32) ?? "possibly reached";
+    
+    // Not OK: Both operands nullish
+    const test2 = (cond ? undefined : null) ?? "always reached";
+                   ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+    
+    // Not OK: Both operands non-nullish
+    const test3 = (cond ? 132 : 17) ?? "unreachable";
+                   ~~~~~~~~~~~~~~~
+!!! error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+    
+    // Parens
+    const test4 = (cond ? (undefined) : (17)) ?? 42;
+    
+    // Should be OK (special case)
+    if (!!true) {
+    
+    }
+    
+    

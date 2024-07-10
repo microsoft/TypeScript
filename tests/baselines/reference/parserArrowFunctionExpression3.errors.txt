@@ -1,5 +1,5 @@
 parserArrowFunctionExpression3.ts(1,1): error TS2304: Cannot find name 'a'.
-parserArrowFunctionExpression3.ts(1,6): error TS2869: This expression is always truthy. Did you mean to test something else?
+parserArrowFunctionExpression3.ts(1,5): error TS2869: This expression is always truthy. Did you mean to test something else?
 parserArrowFunctionExpression3.ts(1,16): error TS1005: ')' expected.
 parserArrowFunctionExpression3.ts(1,19): error TS2304: Cannot find name 'a'.
 parserArrowFunctionExpression3.ts(1,20): error TS1005: ';' expected.
@@ -9,7 +9,7 @@ parserArrowFunctionExpression3.ts(1,20): error TS1005: ';' expected.
     a = (() => { } || a)
     ~
 !!! error TS2304: Cannot find name 'a'.
-         ~~~~~~~~~
+        ~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
                    ~~
 !!! error TS1005: ')' expected.

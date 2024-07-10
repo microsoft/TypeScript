@@ -7187,7 +7187,7 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
-function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+export function isBinaryLogicalOperator(token: SyntaxKind): boolean {
     return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
 }
 

@@ -1,3 +1,11 @@
+generatedContextualTyping.ts(219,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(220,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(221,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(222,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(223,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(224,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(225,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(226,12): error TS2870: This expression is always falsy. Did you mean to test something else?
 generatedContextualTyping.ts(259,26): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(260,35): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(261,29): error TS2869: This expression is always truthy. Did you mean to test something else?
@@ -6,6 +14,14 @@ generatedContextualTyping.ts(263,20): error TS2869: This expression is always tr
 generatedContextualTyping.ts(264,25): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(265,36): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(266,28): error TS2869: This expression is always truthy. Did you mean to test something else?
+generatedContextualTyping.ts(267,26): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(268,26): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(269,29): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(270,29): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(271,20): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(272,25): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(273,36): error TS2870: This expression is always falsy. Did you mean to test something else?
+generatedContextualTyping.ts(274,28): error TS2870: This expression is always falsy. Did you mean to test something else?
 generatedContextualTyping.ts(275,26): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(276,35): error TS2869: This expression is always truthy. Did you mean to test something else?
 generatedContextualTyping.ts(277,29): error TS2869: This expression is always truthy. Did you mean to test something else?
@@ -16,7 +32,7 @@ generatedContextualTyping.ts(281,36): error TS2869: This expression is always tr
 generatedContextualTyping.ts(282,28): error TS2869: This expression is always truthy. Did you mean to test something else?
 
 
-==== generatedContextualTyping.ts (16 errors) ====
+==== generatedContextualTyping.ts (32 errors) ====
     class Base { private p; }
     class Derived1 extends Base { private m; }
     class Derived2 extends Base { private n; }
@@ -236,13 +252,29 @@ generatedContextualTyping.ts(282,28): error TS2869: This expression is always tr
     var x214 = <{n: Base[]; } >{ n: [d1, d2] };
     var x216 = <Genric<Base>>{ func: n => { return [d1, d2]; } };
     var x217 = (<() => Base[]>undefined) || function() { return [d1, d2] };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x218 = (<() => Base[]>undefined) || function named() { return [d1, d2] };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x219 = (<{ (): Base[]; }>undefined) || function() { return [d1, d2] };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x220 = (<{ (): Base[]; }>undefined) || function named() { return [d1, d2] };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x221 = (<Base[]>undefined) || [d1, d2];
+               ~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x222 = (<Array<Base>>undefined) || [d1, d2];
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x224 = (<{n: Base[]; } >undefined) || { n: [d1, d2] };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x225: () => Base[]; x225 = () => [d1, d2];
     var x226: () => Base[]; x226 = function() { return [d1, d2] };
     var x227: () => Base[]; x227 = function named() { return [d1, d2] };
@@ -300,13 +332,29 @@ generatedContextualTyping.ts(282,28): error TS2869: This expression is always tr
                                ~~~~~~~~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
     var x269: () => Base[] = undefined || function() { return [d1, d2] };
+                             ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x270: () => Base[] = undefined || function named() { return [d1, d2] };
+                             ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x271: { (): Base[]; } = undefined || function() { return [d1, d2] };
+                                ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x272: { (): Base[]; } = undefined || function named() { return [d1, d2] };
+                                ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x273: Base[] = undefined || [d1, d2];
+                       ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x274: Array<Base> = undefined || [d1, d2];
+                            ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x275: { [n: number]: Base; } = undefined || [d1, d2];
+                                       ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x276: {n: Base[]; }  = undefined || { n: [d1, d2] };
+                               ~~~~~~~~~
+!!! error TS2870: This expression is always falsy. Did you mean to test something else?
     var x277: () => Base[] = function() { return [d1, d2] } || function() { return [d1, d2] };
                              ~~~~~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?

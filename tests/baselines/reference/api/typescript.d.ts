@@ -8754,6 +8754,7 @@ declare namespace ts {
      * ```
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+    function isBinaryLogicalOperator(token: SyntaxKind): boolean;
     /**
      * Create an external source map source file reference
      */

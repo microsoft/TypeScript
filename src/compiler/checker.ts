@@ -1115,6 +1115,9 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    PredicateSemantics,
+    OuterExpression,
+    isBinaryLogicalOperator,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -39484,7 +39487,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
                         checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                     }
-                    checkTruthinessOfType(leftType, node.left);
+                    if (isBinaryLogicalOperator(operator)) {
+                        checkTruthinessOfType(leftType, node.left);
+                    }
                 }
             }
         }
@@ -39561,24 +39566,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
-            if (hasStaticNullishness(leftTarget)) {
+            if (getSyntacticNullishnessSemantics(leftTarget) !== PredicateSemantics.Sometimes) {
                 error(leftTarget, Diagnostics.Using_on_this_expression_appears_unintentional_because_it_always_evaluates_to_the_same_nullishness);
             }
         }
     }
 
-    // Returns true if we know that, syntactically, a node will always (or never)
-    // evaluate to undefined or null
-    function hasStaticNullishness(node: Node) {
+    function getSyntacticNullishnessSemantics(node: Node): PredicateSemantics {
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.CallExpression:
             case SyntaxKind.ElementAccessExpression:
-            case SyntaxKind.Identifier:
             case SyntaxKind.NewExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.YieldExpression:
-                return false;
+                return PredicateSemantics.Sometimes;
             case SyntaxKind.BinaryExpression:
                 // List of operators that can produce null/undefined:
                 // = ??= ?? || ||= && &&=
@@ -39590,10 +39592,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.BarBarEqualsToken:
                     case SyntaxKind.AmpersandAmpersandToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
-                        return false;
+                        return PredicateSemantics.Sometimes;
                 }
+                return PredicateSemantics.Never;
+            case SyntaxKind.NullKeyword:
+                return PredicateSemantics.Always;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.ParenthesizedExpression:
+                return getSyntacticNullishnessSemantics((node as OuterExpression).expression);
+            case SyntaxKind.ConditionalExpression:
+                return getSyntacticNullishnessSemantics((node as ConditionalExpression).whenTrue) | getSyntacticNullishnessSemantics((node as ConditionalExpression).whenFalse);
+            case SyntaxKind.Identifier:
+                if ((node as Identifier).escapedText === "undefined") {
+                    return PredicateSemantics.Always;
+                }
+                return PredicateSemantics.Sometimes;
         }
-        return true;
+        return PredicateSemantics.Never;
     }
 
     // Note that this and `checkBinaryExpression` above should behave mostly the same, except this elides some
@@ -39604,7 +39620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
         }
         let leftType: Type;
-        if (isLogicalOrCoalescingBinaryOperator(operator)) {
+        if (isBinaryLogicalOperator(operator)) {
             leftType = checkTruthinessExpression(left, checkMode);
         }
         else {
@@ -44225,18 +44241,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTruthinessOfType(type: Type, node: Node) {
-        node = skipParentheses(node);
-
         if (type.flags & TypeFlags.Void) {
             error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
+        } else {
+            const semantics = getSyntacticTruthySemantics(node);
+            if (semantics !== PredicateSemantics.Sometimes) {
+                error(node,
+                    semantics === PredicateSemantics.Always ?
+                        Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else : 
+                        Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else)
+            }
         }
 
-        let alwaysTruthy: boolean | undefined;
+        return type;
+    }
+
+    function getSyntacticTruthySemantics(node: Node): PredicateSemantics {
         switch (node.kind) {
             case SyntaxKind.NumericLiteral:
                 // Allow `while(0)` or `while(1)`
-                if ((node as NumericLiteral).text === "0" || (node as NumericLiteral).text === "1") break;
-            // falls through
+                if ((node as NumericLiteral).text === "0" || (node as NumericLiteral).text === "1") {
+                    return PredicateSemantics.Sometimes;
+                }
+                return PredicateSemantics.Always;
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BigIntLiteral:
@@ -44246,28 +44273,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.ObjectLiteralExpression:
             case SyntaxKind.RegularExpressionLiteral:
-                alwaysTruthy = true;
-                break;
+                return PredicateSemantics.Always;
             case SyntaxKind.VoidExpression:
-                alwaysTruthy = false;
-                break;
+                return PredicateSemantics.Never;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral:
-                alwaysTruthy = !!(node as StringLiteral | NoSubstitutionTemplateLiteral).text;
-                break;
+                return !!(node as StringLiteral | NoSubstitutionTemplateLiteral).text ? PredicateSemantics.Always : PredicateSemantics.Never;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.ParenthesizedExpression:
+                return getSyntacticTruthySemantics((node as OuterExpression).expression);
+            case SyntaxKind.ConditionalExpression:
+                return getSyntacticTruthySemantics((node as ConditionalExpression).whenTrue) | getSyntacticTruthySemantics((node as ConditionalExpression).whenFalse);
+            case SyntaxKind.Identifier:
+                if ((node as Identifier).escapedText === "undefined") {
+                    return PredicateSemantics.Never;
+                }
+                return PredicateSemantics.Sometimes;
         }
-
-        if (alwaysTruthy !== undefined) {
-            error(
-                node,
-                alwaysTruthy ?
-                    Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else :
-                    Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else,
-            );
-        }
-
-        return type;
+        return PredicateSemantics.Sometimes;
     }
+
     function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
         return checkTruthinessOfType(checkExpression(node, checkMode), node);
     }

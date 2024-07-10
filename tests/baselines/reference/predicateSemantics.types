@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/predicateSemantics.ts] ////
+
+=== predicateSemantics.ts ===
+declare let cond: any;
+>cond : any
+>     : ^^^
+
+// OK: One or other operand is possibly nullish
+const test1 = (cond ? undefined : 32) ?? "possibly reached";
+>test1 : 32 | "possibly reached"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? undefined : 32) ?? "possibly reached" : 32 | "possibly reached"
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? undefined : 32) : 32
+>                        : ^^
+>cond ? undefined : 32 : 32
+>                      : ^^
+>cond : any
+>     : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>32 : 32
+>   : ^^
+>"possibly reached" : "possibly reached"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+// Not OK: Both operands nullish
+const test2 = (cond ? undefined : null) ?? "always reached";
+>test2 : "always reached"
+>      : ^^^^^^^^^^^^^^^^
+>(cond ? undefined : null) ?? "always reached" : "always reached"
+>                                              : ^^^^^^^^^^^^^^^^
+>(cond ? undefined : null) : null
+>                          : ^^^^
+>cond ? undefined : null : null
+>                        : ^^^^
+>cond : any
+>     : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>"always reached" : "always reached"
+>                 : ^^^^^^^^^^^^^^^^
+
+// Not OK: Both operands non-nullish
+const test3 = (cond ? 132 : 17) ?? "unreachable";
+>test3 : 132 | 17 | "unreachable"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? 132 : 17) ?? "unreachable" : 132 | 17 | "unreachable"
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? 132 : 17) : 132 | 17
+>                  : ^^^^^^^^
+>cond ? 132 : 17 : 132 | 17
+>                : ^^^^^^^^
+>cond : any
+>     : ^^^
+>132 : 132
+>    : ^^^
+>17 : 17
+>   : ^^
+>"unreachable" : "unreachable"
+>              : ^^^^^^^^^^^^^
+
+// Parens
+const test4 = (cond ? (undefined) : (17)) ?? 42;
+>test4 : 17 | 42
+>      : ^^^^^^^
+>(cond ? (undefined) : (17)) ?? 42 : 17 | 42
+>                                  : ^^^^^^^
+>(cond ? (undefined) : (17)) : 17
+>                            : ^^
+>cond ? (undefined) : (17) : 17
+>                          : ^^
+>cond : any
+>     : ^^^
+>(undefined) : undefined
+>            : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>(17) : 17
+>     : ^^
+>17 : 17
+>   : ^^
+>42 : 42
+>   : ^^
+
+// Should be OK (special case)
+if (!!true) {
+>!!true : boolean
+>       : ^^^^^^^
+>!true : boolean
+>      : ^^^^^^^
+>true : true
+>     : ^^^^
+
+}
+
+

@@ -1,4 +1,4 @@
-symbolType11.ts(7,2): error TS2869: This expression is always truthy. Did you mean to test something else?
+symbolType11.ts(7,1): error TS2869: This expression is always truthy. Did you mean to test something else?
 
 
 ==== symbolType11.ts (1 errors) ====
@@ -9,5 +9,5 @@ symbolType11.ts(7,2): error TS2869: This expression is always truthy. Did you me
     s || s;
     s || 1;
     ({}) || s;
-     ~~
+    ~~~~
 !!! error TS2869: This expression is always truthy. Did you mean to test something else?
