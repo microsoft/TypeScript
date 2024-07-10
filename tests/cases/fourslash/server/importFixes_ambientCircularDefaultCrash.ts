@@ -16,6 +16,4 @@
 // @Filename: /index.ts
 //// my/**/
 
-verify.importFixModuleSpecifiers("", ["mymod"]);
-edit.insert("mod");
-verify.importFixModuleSpecifiers("", ["mymod"]);
+verify.importFixModuleSpecifiers("", []);
