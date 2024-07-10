@@ -4212,7 +4212,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
