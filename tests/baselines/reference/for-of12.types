@@ -11,7 +11,7 @@ for (v of [0, ""].values()) { }
 >[0, ""].values() : IterableIterator<string | number>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, ""].values : () => IterableIterator<string | number>
->               : ^^^^^^                 ^^^^^^^^^^^^^^^ 
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
@@ -19,5 +19,5 @@ for (v of [0, ""].values()) { }
 >"" : ""
 >   : ^^
 >values : () => IterableIterator<string | number>
->       : ^^^^^^                 ^^^^^^^^^^^^^^^ 
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

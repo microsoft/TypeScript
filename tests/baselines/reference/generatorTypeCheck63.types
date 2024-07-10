@@ -75,8 +75,8 @@ export interface State extends StrategicState {
 export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing : Strategy<State>
 >        : ^^^^^^^^^^^^^^^
->strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : (a: State) => IterableIterator<State | undefined>
->                                                                              : ^ ^^^^^^^^^^^^                 ^^^^^             
+>strategy("Nothing", function* (state: State) {    yield 1;    return state;}) : (a: State) => IterableIterator<State>
+>                                                                              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                         ^^^^^                                         
 >"Nothing" : "Nothing"
@@ -101,8 +101,8 @@ export const Nothing: Strategy<State> = strategy("Nothing", function* (state: St
 export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing1 : Strategy<State>
 >         : ^^^^^^^^^^^^^^^
->strategy("Nothing", function* (state: State) {}) : (a: State) => IterableIterator<State | undefined>
->                                                 : ^ ^^^^^^^^^^^^                 ^^^^^             
+>strategy("Nothing", function* (state: State) {}) : (a: State) => IterableIterator<State>
+>                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                         ^^^^^                                         
 >"Nothing" : "Nothing"
@@ -117,8 +117,8 @@ export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: S
 export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing2 : Strategy<State>
 >         : ^^^^^^^^^^^^^^^
->strategy("Nothing", function* (state: State) {    return 1;}) : (a: State) => IterableIterator<State | undefined>
->                                                              : ^ ^^^^^^^^^^^^                 ^^^^^             
+>strategy("Nothing", function* (state: State) {    return 1;}) : (a: State) => IterableIterator<State>
+>                                                              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                         ^^^^^                                         
 >"Nothing" : "Nothing"
@@ -137,8 +137,8 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: S
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing3 : Strategy<State>
 >         : ^^^^^^^^^^^^^^^
->strategy("Nothing", function* (state: State) {    yield state;    return 1;}) : (a: State) => IterableIterator<State | undefined>
->                                                                              : ^ ^^^^^^^^^^^^                 ^^^^^             
+>strategy("Nothing", function* (state: State) {    yield state;    return 1;}) : (a: State) => IterableIterator<State>
+>                                                                              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>) => (a: T) => IterableIterator<T | undefined>
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                         ^^^^^                                         
 >"Nothing" : "Nothing"

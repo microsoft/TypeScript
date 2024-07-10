@@ -214,19 +214,24 @@ import {
 } from "../_namespaces/ts.js";
 
 /** @internal */
-export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
+export function getDeclarationDiagnostics(
+    host: EmitHost,
+    resolver: EmitResolver,
+    file: SourceFile,
+): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
     const files = filter(getSourceFilesToEmit(host, file), isSourceFileNotJson);
-    const result = transformNodes(
-        resolver,
-        host,
-        factory,
-        compilerOptions,
-        file ? contains(files, file) ? [file] : emptyArray : files,
-        [transformDeclarations],
-        /*allowDtsFiles*/ false,
-    );
-    return result.diagnostics;
+    return contains(files, file) ?
+        transformNodes(
+            resolver,
+            host,
+            factory,
+            compilerOptions,
+            [file],
+            [transformDeclarations],
+            /*allowDtsFiles*/ false,
+        ).diagnostics :
+        undefined;
 }
 
 const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals |
@@ -303,6 +308,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
     function reportInferenceFallback(node: Node) {
         if (!isolatedDeclarations || isSourceFileJS(currentSourceFile)) return;
+        if (getSourceFileOfNode(node) !== currentSourceFile) return; // Nested error on a declaration in another file - ignore, will be reemitted if file is in the output file set
         if (isVariableDeclaration(node) && resolver.isExpandoFunctionDeclaration(node)) {
             reportExpandoFunctionErrors(node);
         }

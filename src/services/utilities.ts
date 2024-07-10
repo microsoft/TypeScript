@@ -30,7 +30,6 @@ import {
     ConditionalExpression,
     contains,
     ContextFlags,
-    createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createRange,
     createScanner,
     createTextSpan,
@@ -53,7 +52,6 @@ import {
     DoStatement,
     ElementAccessExpression,
     EmitFlags,
-    EmitHint,
     emitModuleKindIsNonNodeESM,
     emptyArray,
     EndOfFileToken,
@@ -177,7 +175,6 @@ import {
     isFunctionExpression,
     isFunctionLike,
     isGetAccessorDeclaration,
-    isGlobalScopeAugmentation,
     isHeritageClause,
     isIdentifier,
     isIdentifierPart,
@@ -649,8 +646,7 @@ export function climbPastPropertyAccess(node: Node) {
     return isRightSideOfPropertyAccess(node) ? node.parent : node;
 }
 
-/** @internal */
-export function climbPastPropertyOrElementAccess(node: Node) {
+function climbPastPropertyOrElementAccess(node: Node) {
     return isRightSideOfPropertyAccess(node) || isArgumentExpressionOfElementAccess(node) ? node.parent : node;
 }
 
@@ -1149,8 +1145,7 @@ export function findListItemInfo(node: Node): ListItemInfo | undefined {
     };
 }
 
-/** @internal */
-export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
+function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
     return !!findChildOfKind(n, kind, sourceFile);
 }
 
@@ -2008,8 +2003,7 @@ export function findPrecedingMatchingToken(token: Node, matchingTokenKind: Synta
     }
 }
 
-/** @internal */
-export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
+function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
     return isOptionalExpression ? type.getNonNullableType() :
         isOptionalChain ? type.getNonOptionalType() :
         type;
@@ -2398,8 +2392,7 @@ export function isTypeKeyword(kind: SyntaxKind): boolean {
     return contains(typeKeywords, kind);
 }
 
-/** @internal */
-export function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKeyword> {
+function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKeyword> {
     return node.kind === SyntaxKind.TypeKeyword;
 }
 
@@ -2872,8 +2865,7 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
     }
 }
 
-/** @internal */
-export function symbolPart(text: string, symbol: Symbol) {
+function symbolPart(text: string, symbol: Symbol) {
     return displayPart(text, displayPartKind(symbol));
 
     function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
@@ -2958,13 +2950,11 @@ export function typeParameterNamePart(text: string) {
     return displayPart(text, SymbolDisplayPartKind.typeParameterName);
 }
 
-/** @internal */
-export function linkTextPart(text: string) {
+function linkTextPart(text: string) {
     return displayPart(text, SymbolDisplayPartKind.linkText);
 }
 
-/** @internal */
-export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
+function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
     return {
         text,
         kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
@@ -2975,8 +2965,7 @@ export function linkNamePart(text: string, target: Declaration): JSDocLinkDispla
     };
 }
 
-/** @internal */
-export function linkPart(text: string) {
+function linkPart(text: string) {
     return displayPart(text, SymbolDisplayPartKind.link);
 }
 
@@ -3087,15 +3076,6 @@ export function signatureToDisplayParts(typechecker: TypeChecker, signature: Sig
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
         typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
-    });
-}
-
-/** @internal */
-export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
-    const file = enclosingDeclaration.getSourceFile();
-    return mapToDisplayParts(writer => {
-        const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
-        printer.writeNode(EmitHint.Unspecified, node, file, writer);
     });
 }
 
@@ -3251,7 +3231,7 @@ export function suppressLeadingTrivia(node: Node) {
 /**
  * Sets EmitFlags to suppress trailing trivia on the node.
  *
- * @internal
+ * @internal @knipignore
  */
 export function suppressTrailingTrivia(node: Node) {
     addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
@@ -3490,8 +3470,7 @@ function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
     return kind === SyntaxKind.ModuleDeclaration;
 }
 
-/** @internal */
-export function syntaxRequiresTrailingSemicolonOrASI(kind: SyntaxKind) {
+function syntaxRequiresTrailingSemicolonOrASI(kind: SyntaxKind) {
     return kind === SyntaxKind.VariableStatement
         || kind === SyntaxKind.ExpressionStatement
         || kind === SyntaxKind.DoStatement
@@ -3509,8 +3488,7 @@ export function syntaxRequiresTrailingSemicolonOrASI(kind: SyntaxKind) {
         || kind === SyntaxKind.ExportAssignment;
 }
 
-/** @internal */
-export const syntaxMayBeASICandidate = or(
+const syntaxMayBeASICandidate = or(
     syntaxRequiresTrailingCommaOrSemicolonOrASI,
     syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI,
     syntaxRequiresTrailingModuleBlockOrSemicolonOrASI,
@@ -3650,8 +3628,7 @@ export function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
     }
 }
 
-/** @internal */
-export function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
+function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
     return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
 }
 
@@ -3683,8 +3660,7 @@ export function findPackageJson(directory: string, host: LanguageServiceHost): s
     return packageJson;
 }
 
-/** @internal */
-export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
+function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
     if (!host.fileExists) {
         return [];
     }
@@ -3922,8 +3898,7 @@ export function isInsideNodeModules(fileOrDirectory: string): boolean {
     return contains(getPathComponents(fileOrDirectory), "node_modules");
 }
 
-/** @internal */
-export function isDiagnosticWithLocation(diagnostic: Diagnostic): diagnostic is DiagnosticWithLocation {
+function isDiagnosticWithLocation(diagnostic: Diagnostic): diagnostic is DiagnosticWithLocation {
     return diagnostic.file !== undefined && diagnostic.start !== undefined && diagnostic.length !== undefined;
 }
 
@@ -4058,8 +4033,7 @@ export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string 
     });
 }
 
-/** @internal */
-export function getSymbolParentOrFail(symbol: Symbol) {
+function getSymbolParentOrFail(symbol: Symbol) {
     return Debug.checkDefined(
         symbol.parent,
         `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
@@ -4144,22 +4118,6 @@ export function stringContainsAt(haystack: string, needle: string, startIndex: n
 /** @internal */
 export function startsWithUnderscore(name: string): boolean {
     return name.charCodeAt(0) === CharacterCodes._;
-}
-
-/** @internal */
-export function isGlobalDeclaration(declaration: Declaration) {
-    return !isNonGlobalDeclaration(declaration);
-}
-
-/** @internal */
-export function isNonGlobalDeclaration(declaration: Declaration) {
-    const sourceFile = declaration.getSourceFile();
-    // If the file is not a module, the declaration is global
-    if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
-        return false;
-    }
-    // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-    return isInJSFile(declaration) || !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
 }
 
 /** @internal */

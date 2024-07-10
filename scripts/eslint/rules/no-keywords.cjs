@@ -1,6 +1,9 @@
 const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
+
 module.exports = createRule({
     name: "no-keywords",
     meta: {
@@ -37,12 +40,12 @@ module.exports = createRule({
         /** @type {(name: string) => boolean} */
         const isKeyword = name => keywords.includes(name);
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Identifier) => void} */
+        /** @type {(node: TSESTree.Identifier) => void} */
         const report = node => {
             context.report({ messageId: "noKeywordsError", data: { name: node.name }, node });
         };
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ObjectPattern) => void} */
+        /** @type {(node: TSESTree.ObjectPattern) => void} */
         const checkProperties = node => {
             node.properties.forEach(property => {
                 if (
@@ -56,7 +59,7 @@ module.exports = createRule({
             });
         };
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ArrayPattern) => void} */
+        /** @type {(node: TSESTree.ArrayPattern) => void} */
         const checkElements = node => {
             node.elements.forEach(element => {
                 if (
@@ -69,7 +72,7 @@ module.exports = createRule({
             });
         };
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.ArrowFunctionExpression | import("@typescript-eslint/utils").TSESTree.FunctionDeclaration | import("@typescript-eslint/utils").TSESTree.FunctionExpression | import("@typescript-eslint/utils").TSESTree.TSMethodSignature | import("@typescript-eslint/utils").TSESTree.TSFunctionType) => void} */
+        /** @type {(node: TSESTree.ArrowFunctionExpression | TSESTree.FunctionDeclaration | TSESTree.FunctionExpression | TSESTree.TSMethodSignature | TSESTree.TSFunctionType) => void} */
         const checkParams = node => {
             if (!node || !node.params || !node.params.length) {
                 return;

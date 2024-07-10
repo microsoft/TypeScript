@@ -398,7 +398,7 @@ import {
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */
