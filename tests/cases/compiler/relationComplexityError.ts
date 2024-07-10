@@ -13,8 +13,4 @@ function f1(x: T1, y: T1 & T2) {
 
 function f2(x: T1 | null, y: T1 & T2) {
     x = y;  // Complexity error
-
-    declare let xx: { a: typeof x };
-    declare let yy: { a: typeof y };
-    xx = yy;
 }

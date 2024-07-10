@@ -2328,7 +2328,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var subtypeRelation = new Map<string, RelationComparisonResult>();
     var strictSubtypeRelation = new Map<string, RelationComparisonResult>();
-    var assignableRelation = (console.log("\n\n>>> Creating assignable relation"), new Map<string, RelationComparisonResult>());
+    var assignableRelation = new Map<string, RelationComparisonResult>();
     var comparableRelation = new Map<string, RelationComparisonResult>();
     var identityRelation = new Map<string, RelationComparisonResult>();
     var enumRelation = new Map<string, RelationComparisonResult>();
@@ -21670,7 +21670,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
                 Diagnostics.Excessive_stack_depth_comparing_types_0_and_1;
             const diag = error(errorNode || currentNode, message, typeToString(source), typeToString(target));
-            console.log(`>>> Overflow: ${id}`);
             if (errorOutputContainer) {
                 (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
             }
@@ -21705,9 +21704,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
             }
             if (!errorOutputContainer || !errorOutputContainer.skipLogging) {
-                if (source.id === 31222 && target.id === 31223) {
-                    console.log(`>>> CT diagnostics add`);
-                }
                 diagnostics.add(diag);
             }
         }
@@ -21752,7 +21748,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportError(...stack[0]);
                 if (info) {
                     // Actually do the last relation error
-                    console.log(`>>> reportRelationError 1`);
                     reportRelationError(/*message*/ undefined, ...info);
                 }
                 return;
@@ -21849,7 +21844,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (info) {
                 // Actually do the last relation error
-                console.log(`>>> reportRelationError 2`);
                 reportRelationError(/*message*/ undefined, ...info);
             }
         }
@@ -21936,9 +21930,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
                             return;
                         }
-                    }
-                    if (source.id === 31222 && target.id === 31223) {
-                        console.log(`>>> Report relation error: setting message to 2322`);  
                     }
                     message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                 }
@@ -22079,7 +22070,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isPerformingExcessPropertyChecks) {
                     if (hasExcessProperties(source as FreshObjectLiteralType, target, reportErrors)) {
                         if (reportErrors) {
-                            console.log(`>>> reportRelationError 3`);
                             reportRelationError(headMessage, source, originalTarget.aliasSymbol ? originalTarget : target);
                         }
                         return Ternary.False;
@@ -22115,9 +22105,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const skipCaching = source.flags & TypeFlags.Union && (source as UnionType).types.length < 4 && !(target.flags & TypeFlags.Union) ||
                     target.flags & TypeFlags.Union && (target as UnionType).types.length < 4 && !(source.flags & TypeFlags.StructuredOrInstantiable);
-                if (source.id === 31222 && target.id === 31223) {
-                    console.log(`>>> Skip caching: ${skipCaching}`);
-                }
                 const result = skipCaching ?
                     unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState) :
                     recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
@@ -22127,7 +22114,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (reportErrors) {
-                console.log(`>>> IR 2 report error results`);
                 reportErrorResults(originalSource, originalTarget, source, target, headMessage);
             }
             return Ternary.False;
@@ -22176,7 +22162,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // we call `reportRelationError` here and then undo its effects to figure out what would be the diagnostic
                 // if we hadn't supress it, and save that as a canonical diagnostic for deduplication purposes.
                 const savedErrorState = captureErrorCalculationState();
-                console.log(`>>> reportRelationError 4`);
                 reportRelationError(headMessage, source, target);
                 let canonical;
                 if (errorInfo && errorInfo !== savedErrorState.errorInfo) {
@@ -22190,7 +22175,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 lastSkippedInfo = [source, target];
                 return;
             }
-            console.log(`>>> reportRelationError 5`);
             reportRelationError(headMessage, source, target);
             if (source.flags & TypeFlags.TypeParameter && source.symbol?.declarations?.[0] && !getConstraintOfType(source as TypeVariable)) {
                 const syntheticParam = cloneTypeParameter(source as TypeParameter);
@@ -22576,41 +22560,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // and issue an error. Otherwise, actually compare the structure of the two types.
         function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
             if (overflow) {
-                if (source.id === 31222 && target.id === 31223) {
-                    console.log(`>>> Recursive type related to OVERFLOW`);
-                }
                 return Ternary.False;
             }
             const id = getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ false);
             const entry = relation.get(id);
             if (entry !== undefined) {
-                if (source.id === 31222 && target.id === 31223) {
-                    let rel;
-                    switch (relation) {
-                        case subtypeRelation:
-                            rel = "subtype";
-                            break;
-                        case strictSubtypeRelation:
-                            rel = "strictSubtype";
-                            break;
-                        case assignableRelation:
-                            rel = "assignable";
-                            break;
-                        case comparableRelation:
-                            rel = "comparable";
-                            break;
-                        case identityRelation:
-                            rel = "identity";
-                            break;
-                    }
-                    console.log(`>>> Recursive type related cache hit: ${id} relation: ${rel}`);  
-                }
                 if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Overflow)) {
                     // We are elaborating errors and the cached result is a failure not due to a comparison overflow,
                     // so we will do the comparison again to generate an error message.
-                    if (source.id === 31222 && target.id === 31223) {
-                        console.log(`>>> Recursive type related cache hit and will NOT return entry: ${id}`);  
-                    }
                 }
                 else {
                     if (outofbandVarianceMarkerHandler) {
@@ -22623,13 +22580,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             instantiateType(source, reportUnreliableMapper);
                         }
                     }
-                    if (source.id === 31222 && target.id === 31223) {
-                        console.log(`>>> Recursive type related cache hit and will return entry`);  
-                    }
                     if (reportErrors && entry & RelationComparisonResult.Overflow) {
-                        if (source.id === 31222 && target.id === 31223) {
-                            console.log(`>>> Recursive type related set head message`);
-                        }
                         const message = entry & RelationComparisonResult.ComplexityOverflow ?
                             Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
                             Diagnostics.Excessive_stack_depth_comparing_types_0_and_1;
@@ -22638,27 +22589,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                 }
-            }
-            if (source.id === 31222 && target.id === 31223) {
-                let rel;
-                switch (relation) {
-                    case subtypeRelation:
-                        rel = "subtype";
-                        break;
-                    case strictSubtypeRelation:
-                        rel = "strictSubtype";
-                        break;
-                    case assignableRelation:
-                        rel = "assignable";
-                        break;
-                    case comparableRelation:
-                        rel = "comparable";
-                        break;
-                    case identityRelation:
-                        rel = "identity";
-                        break;
-                }
-                console.log(`>>> Recursive type related cache miss: ${id} relation: ${rel}`);  
             }
             if (relationCount <= 0) {
                 overflow = true;
