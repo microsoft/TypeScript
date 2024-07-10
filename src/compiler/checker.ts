@@ -25163,7 +25163,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
-        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        const cacheKey = "H" + source.id + "," + target.id + "," + constraint.id;
         if (reverseMappedCache.has(cacheKey)) {
             return reverseMappedCache.get(cacheKey);
         }
