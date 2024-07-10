@@ -5,9 +5,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectImportHelpers::", () => {
     it("import helpers sucessfully", () => {
@@ -16,24 +14,21 @@ describe("unittests:: tsserver:: projectImportHelpers::", () => {
             content: `
 export type Foo {
     bar: number;
-};
-`
-        }
+};`,
+        };
         const file1 = {
             path: "/a/file1.ts",
             content: `
 import { Foo } from "./type";
 const a: Foo = { bar : 1 };
-a.bar;
-`,
+a.bar;`,
         };
         const file2 = {
             path: "/a/file2.ts",
             content: `
 import { Foo } from "./type";
 const a: Foo = { bar : 2 };
-a.bar;
-`,
+a.bar;`,
         };
 
         const config1 = {
@@ -44,7 +39,7 @@ a.bar;
                     importHelpers: true,
                 },
             }),
-        }
+        };
 
         const file3 = {
             path: "/file3.js",
@@ -67,7 +62,7 @@ a.bar;
             arguments: {
                 file: file1.path,
                 line: 4,
-                offset: 3
+                offset: 3,
             },
         });
 
