@@ -32,12 +32,12 @@ export function main(a: string[] | undefined) {
   z.a //
 >z.a //    ? z.a.toString()    : z.b.toString() : string
 >                                               : ^^^^^^
->z.a : string[] | undefined
->    : ^^^^^^^^^^^^^^^^^^^^
+>z.a : string[]
+>    : ^^^^^^^^
 >z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : string[] | undefined
->  : ^^^^^^^^^^^^^^^^^^^^
+>a : string[]
+>  : ^^^^^^^^
 
     ? z.a.toString()
 >z.a.toString() : string
@@ -46,8 +46,8 @@ export function main(a: string[] | undefined) {
 >             : ^^^^^^      
 >z.a : string[]
 >    : ^^^^^^^^
->z : { a: string[]; b?: never; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >toString : () => string
@@ -60,8 +60,8 @@ export function main(a: string[] | undefined) {
 >             : ^^^^^^      
 >z.b : string[]
 >    : ^^^^^^^^
->z : { b: string[]; a?: never; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string[]
 >  : ^^^^^^^^
 >toString : () => string

@@ -109,8 +109,8 @@ var result2 = true ? {} : 1;
 >  : ^
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; b?: undefined; } | { a: number; b: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result3 : { a: number; b?: never; } | { a: number; b: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -244,8 +244,8 @@ var result6 = true ? 1 : {};
 >   : ^^
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; b: string; } | { a: number; b?: undefined; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result7 : { a: number; b: string; } | { a: number; b?: never; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true

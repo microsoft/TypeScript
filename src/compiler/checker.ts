@@ -25216,12 +25216,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return widened === original ? prop : createSymbolWithType(prop, widened);
     }
 
-    function getUndefinedProperty(prop: Symbol) {
+    function getOptionalNeverProperty(prop: Symbol) {
         const cached = undefinedProperties.get(prop.escapedName);
         if (cached) {
             return cached;
         }
-        const result = createSymbolWithType(prop, undefinedOrMissingType);
+        const result = createSymbolWithType(prop, neverType);
         result.flags |= SymbolFlags.Optional;
         undefinedProperties.set(prop.escapedName, result);
         return result;
@@ -25235,7 +25235,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (context) {
             for (const prop of getPropertiesOfContext(context)) {
                 if (!members.has(prop.escapedName)) {
-                    members.set(prop.escapedName, getUndefinedProperty(prop));
+                    members.set(prop.escapedName, getOptionalNeverProperty(prop));
                 }
             }
         }

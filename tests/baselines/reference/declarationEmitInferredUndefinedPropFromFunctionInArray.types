@@ -4,8 +4,8 @@
 // repro from https://github.com/microsoft/TypeScript/issues/53914
 
 export let b = [{ foo: 0, m() {} }, { bar: 1 }];
->b : ({ foo: number; m(): void; bar?: undefined; } | { bar: number; foo?: undefined; m?: undefined; })[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : ({ foo: number; m(): void; bar?: never; } | { bar: number; foo?: never; m?: never; })[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ foo: 0, m() {} }, { bar: 1 }] : ({ foo: number; m(): void; } | { bar: number; })[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: 0, m() {} } : { foo: number; m(): void; }

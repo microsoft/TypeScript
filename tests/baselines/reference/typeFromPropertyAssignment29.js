@@ -185,10 +185,10 @@ declare const ExpandoExpr: {
     (n: number): string;
     prop: {
         x: number;
-        y?: undefined;
+        y?: never;
     } | {
         y: string;
-        x?: undefined;
+        x?: never;
     };
     m(n: number): number;
 };

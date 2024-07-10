@@ -17,9 +17,9 @@ exports.b = [{ foo: 0, m: function () { } }, { bar: 1 }];
 export declare let b: ({
     foo: number;
     m(): void;
-    bar?: undefined;
+    bar?: never;
 } | {
     bar: number;
-    foo?: undefined;
-    m?: undefined;
+    foo?: never;
+    m?: never;
 })[];

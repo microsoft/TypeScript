@@ -33,16 +33,16 @@ declare const j: {
     obj: {
         items: ({
             x: number;
-            y?: undefined;
-            err?: undefined;
+            y?: never;
+            err?: never;
         } | {
             x: number;
             y: number;
-            err?: undefined;
+            err?: never;
         } | {
             x: number;
             err: boolean;
-            y?: undefined;
+            y?: never;
         })[];
     };
 };

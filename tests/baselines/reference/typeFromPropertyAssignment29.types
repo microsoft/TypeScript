@@ -86,10 +86,10 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
 >       : ^^^^^^
 
 const ExpandoExpr = function (n: number) {
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->                                                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>                                                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -106,12 +106,12 @@ const ExpandoExpr = function (n: number) {
 ExpandoExpr.prop = { x: 2 }
 >ExpandoExpr.prop = { x: 2 } : { x: number; }
 >                            : ^^^^^^^^^^^^^^
->ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ExpandoExpr.prop : { x: number; y?: never; } | { y: string; x?: never; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>prop : { x: number; y?: never; } | { y: string; x?: never; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 2 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
@@ -122,12 +122,12 @@ ExpandoExpr.prop = { x: 2 }
 ExpandoExpr.prop = { y: "" }
 >ExpandoExpr.prop = { y: "" } : { y: string; }
 >                             : ^^^^^^^^^^^^^^
->ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ExpandoExpr.prop : { x: number; y?: never; } | { y: string; x?: never; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>prop : { x: number; y?: never; } | { y: string; x?: never; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ y: "" } : { y: string; }
 >          : ^^^^^^^^^^^^^^
 >y : string
@@ -140,8 +140,8 @@ ExpandoExpr.m = function(n: number) {
 >                                                        : ^ ^^      ^^^^^^^^^^^
 >ExpandoExpr.m : (n: number) => number
 >              : ^ ^^      ^^^^^^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
@@ -164,28 +164,28 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >                                                                        : ^^^^^^
 >(ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) : number
 >                                              : ^^^^^^
->(ExpandoExpr.prop.x || 0) : 0
->                          : ^
->ExpandoExpr.prop.x || 0 : 0
->                        : ^
->ExpandoExpr.prop.x : undefined
->                   : ^^^^^^^^^
->ExpandoExpr.prop : { y: string; x?: undefined; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->prop : { y: string; x?: undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : undefined
->  : ^^^^^^^^^
+>(ExpandoExpr.prop.x || 0) : never
+>                          : ^^^^^
+>ExpandoExpr.prop.x || 0 : never
+>                        : ^^^^^
+>ExpandoExpr.prop.x : never
+>                   : ^^^^^
+>ExpandoExpr.prop : { y: string; x?: never; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>prop : { y: string; x?: never; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : never
+>  : ^^^^^
 >0 : 0
 >  : ^
 >ExpandoExpr.m(12) : number
 >                  : ^^^^^^
 >ExpandoExpr.m : (n: number) => number
 >              : ^ ^^      ^^^^^^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >12 : 12
@@ -194,8 +194,8 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >                        : ^^^^^^
 >ExpandoExpr(101) : string
 >                 : ^^^^^^
->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: never; } | { y: string; x?: never; }; m(n: number): number; }
+>            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >101 : 101
 >    : ^^^
 >length : number

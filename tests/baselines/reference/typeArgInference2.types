@@ -74,10 +74,10 @@ var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
 >  : ^
 
 var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
->z6 : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z6 : { name: string; a: number; b?: never; } | { name: string; b: number; a?: never; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo({ name: "abc", a: 5 }, { name: "def", b: 5 }) : { name: string; a: number; b?: never; } | { name: string; b: number; a?: never; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
 >    : ^ ^^^^^^^^^    ^^ ^^^ ^^ ^^^ ^^^^^ 
 >{ name: "abc", a: 5 } : { name: string; a: number; }

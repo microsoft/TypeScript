@@ -11,8 +11,8 @@ type Foo = {
 
 };
 function getFoo() {
->getFoo : () => { stuff: { a: number; b?: undefined; }; } | { stuff: { b: number; a?: undefined; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFoo : () => { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -59,8 +59,8 @@ function getFoo() {
 const p: Foo = getFoo();
 >p : Foo
 >  : ^^^
->getFoo() : { stuff: { a: number; b?: undefined; }; } | { stuff: { b: number; a?: undefined; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->getFoo : () => { stuff: { a: number; b?: undefined; }; } | { stuff: { b: number; a?: undefined; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFoo() : { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFoo : () => { stuff: { a: number; b?: never; }; } | { stuff: { b: number; a?: never; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

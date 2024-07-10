@@ -4,8 +4,8 @@
 // https://github.com/microsoft/TypeScript/issues/58150
 
 function doSthWithParams(params: unknown) {
->doSthWithParams : (params: unknown) => { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
->                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams : (params: unknown) => { c?: never; p?: never; s?: never; } | { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >params : unknown
 >       : ^^^^^^^
 
@@ -50,10 +50,10 @@ function doSthWithParams(params: unknown) {
 }
 
 const bar = {
->bar : { c?: undefined; p: any; s: any; } | { c: string; p: string; s: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{  p: null,  s: null,  ...doSthWithParams({    p: "hello",    s: "world",  }),} : { c?: undefined; p: null; s: null; } | { c: string; p: string; s: string; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { c?: never; p: any; s: any; } | { c: string; p: string; s: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  p: null,  s: null,  ...doSthWithParams({    p: "hello",    s: "world",  }),} : { c?: never; p: null; s: null; } | { c: string; p: string; s: string; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   p: null,
 >p : null
@@ -64,10 +64,10 @@ const bar = {
 >  : ^^^^
 
   ...doSthWithParams({
->doSthWithParams({    p: "hello",    s: "world",  }) : { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->doSthWithParams : (params: unknown) => { c?: undefined; p?: undefined; s?: undefined; } | { c: string; p: string; s: string; }
->                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams({    p: "hello",    s: "world",  }) : { c?: never; p?: never; s?: never; } | { c: string; p: string; s: string; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doSthWithParams : (params: unknown) => { c?: never; p?: never; s?: never; } | { c: string; p: string; s: string; }
+>                : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    p: "hello",    s: "world",  } : { p: string; s: string; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -15,10 +15,10 @@ var y = [(_a = {}, _a["a-b"] = "string", _a), {}];
 declare var x: ({
     "a-b": string;
 } | {
-    "a-b"?: undefined;
+    "a-b"?: never;
 })[];
 declare var y: ({
     "a-b": string;
 } | {
-    "a-b"?: undefined;
+    "a-b"?: never;
 })[];
