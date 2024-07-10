@@ -199,6 +199,7 @@ export * from "./unittests/tsserver/partialSemanticServer.js";
 export * from "./unittests/tsserver/pasteEdits.js";
 export * from "./unittests/tsserver/plugins.js";
 export * from "./unittests/tsserver/pluginsAsync.js";
+export * from "./unittests/tsserver/projectImportHelpers.js";
 export * from "./unittests/tsserver/projectErrors.js";
 export * from "./unittests/tsserver/projectReferenceCompileOnSave.js";
 export * from "./unittests/tsserver/projectReferenceErrors.js";
