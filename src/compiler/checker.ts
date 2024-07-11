@@ -40888,7 +40888,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
             error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
         }
-        if (hasEffectiveModifier(node, (ModifierFlags.Deferred | ModifierFlags.JSDocDeferred))) {
+        if (hasEffectiveModifier(node, ModifierFlags.Deferred | ModifierFlags.JSDocDeferred)) {
             const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
             if (!areTypesComparable(getTypeOfSymbol(node.symbol), funcType)) {
                 error(node, Diagnostics.A_deferred_parameter_must_have_a_type_that_permits_functions);
