@@ -6992,7 +6992,7 @@ function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysInclude
         node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+    if (alwaysIncludeJSDoc || includeJSDoc && (isInJSFile(node) || isParameter(node) && node.jsDoc)) {
         if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
             node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
@@ -7040,9 +7040,9 @@ function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
                 if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
             }
-            if (getJSDocDeferredTagNoCache(node)) flags |= ModifierFlags.JSDocDeferred;
         }
         if (!isParameter(node) && getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+        if (getJSDocDeferredTagNoCache(node)) flags |= ModifierFlags.JSDocDeferred;
     }
 
     return flags;
@@ -7054,7 +7054,7 @@ function selectSyntacticModifierFlags(flags: ModifierFlags) {
 
 function selectEffectiveModifierFlags(flags: ModifierFlags) {
     return (flags & ModifierFlags.NonCacheOnlyModifiers) |
-        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 22); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
+        ((flags & ModifierFlags.JSDocCacheOnlyModifiers) >>> 23); // shift ModifierFlags.JSDoc* to match ModifierFlags.*
 }
 
 function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {

@@ -1563,6 +1563,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (flags & ModifierFlags.Ambient) result.push(createModifier(SyntaxKind.DeclareKeyword));
         if (flags & ModifierFlags.Default) result.push(createModifier(SyntaxKind.DefaultKeyword));
         if (flags & ModifierFlags.Const) result.push(createModifier(SyntaxKind.ConstKeyword));
+        if (flags & ModifierFlags.Deferred) result.push(createModifier(SyntaxKind.DeferredKeyword));
         if (flags & ModifierFlags.Public) result.push(createModifier(SyntaxKind.PublicKeyword));
         if (flags & ModifierFlags.Private) result.push(createModifier(SyntaxKind.PrivateKeyword));
         if (flags & ModifierFlags.Protected) result.push(createModifier(SyntaxKind.ProtectedKeyword));
@@ -1574,7 +1575,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
         if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
         if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
-        if (flags & ModifierFlags.Deferred) result.push(createModifier(SyntaxKind.DeferredKeyword));
         return result.length ? result : undefined;
     }
 

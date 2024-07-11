@@ -7581,7 +7581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const parameterType = getTypeOfSymbol(parameterSymbol);
             const parameterTypeNode = serializeTypeForDeclaration(context, parameterDeclaration, parameterType, parameterSymbol);
 
-            const modifiers = parameterDeclaration && canHaveModifiers(parameterDeclaration) && (!(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags || hasSyntacticModifier(parameterDeclaration, ModifierFlags.Deferred)) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
+            const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
             const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
             const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
             const name = parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration, context);
@@ -28452,7 +28452,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // circularities. Instead, we simply check if any signature has a deferred callback marker in the
                         // particular argument position.
                         signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
-                        if (!some(signatures, sig => !!(getModifiersAtPosition(sig, i) & ModifierFlags.Deferred))) {
+                        if (!some(signatures, sig => !!(getModifiersAtPosition(sig, i) & (ModifierFlags.Deferred | ModifierFlags.JSDocDeferred)))) {
                             const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                             if (lambdaType !== initialType) {
                                 lambdaTypes ??= [initialType];
@@ -40888,7 +40888,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
             error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
         }
-        if (hasSyntacticModifier(node, ModifierFlags.Deferred)) {
+        if (hasEffectiveModifier(node, (ModifierFlags.Deferred | ModifierFlags.JSDocDeferred))) {
             const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
             if (!areTypesComparable(getTypeOfSymbol(node.symbol), funcType)) {
                 error(node, Diagnostics.A_deferred_parameter_must_have_a_type_that_permits_functions);

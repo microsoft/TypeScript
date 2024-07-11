@@ -856,37 +856,37 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    Deferred =           1 << 5,  // Parameter
 
     // Syntactic-only modifiers
-    Export =             1 << 6,  // Declarations
-    Abstract =           1 << 7,  // Class/Method/ConstructSignature
-    Ambient =            1 << 8,  // Declarations
-    Static =             1 << 9,  // Property/Method
-    Accessor =           1 << 10, // Property
-    Async =              1 << 11, // Property/Method/Function
-    Default =            1 << 12, // Function/Class (export default declaration)
-    Const =              1 << 13, // Const enum
-    In =                 1 << 14, // Contravariance modifier
-    Out =                1 << 15, // Covariance modifier
-    Decorator =          1 << 16, // Contains a decorator.
+    Export =             1 << 5,  // Declarations
+    Abstract =           1 << 6,  // Class/Method/ConstructSignature
+    Ambient =            1 << 7,  // Declarations
+    Static =             1 << 8,  // Property/Method
+    Accessor =           1 << 9,  // Property
+    Async =              1 << 10, // Property/Method/Function
+    Default =            1 << 11, // Function/Class (export default declaration)
+    Const =              1 << 12, // Const enum
+    In =                 1 << 13, // Contravariance modifier
+    Out =                1 << 14, // Covariance modifier
+    Decorator =          1 << 15, // Contains a decorator.
+    Deferred =           1 << 16, // Parameter
 
     // JSDoc-only modifiers
     Deprecated =         1 << 17, // Deprecated tag.
+    JSDocDeferred =      1 << 18, // Parameter
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
-    /** @internal */ JSDocPublic = 1 << 22, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
-    /** @internal */ JSDocPrivate = 1 << 23,
-    /** @internal */ JSDocProtected = 1 << 24,
-    /** @internal */ JSDocReadonly = 1 << 25,
-    /** @internal */ JSDocOverride = 1 << 26,
-    /** @internal */ JSDocDeferred = 1 << 27,
-
-    /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override | Deferred,
-    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator,
+    /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
+    /** @internal */ JSDocPrivate = 1 << 24,
+    /** @internal */ JSDocProtected = 1 << 25,
+    /** @internal */ JSDocReadonly = 1 << 26,
+    /** @internal */ JSDocOverride = 1 << 27,
+    
+    /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator | Deferred,
     /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
-    /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride | JSDocDeferred,
-    /** @internal */ JSDocOnlyModifiers = Deprecated,
+    /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
+    /** @internal */ JSDocOnlyModifiers = Deprecated | JSDocDeferred,
     /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
 
     HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
