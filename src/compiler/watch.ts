@@ -55,6 +55,7 @@ import {
     generateDjb2Hash,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEmitDeclarations,
     getEmitScriptTarget,
     getLineAndCharacterOfPosition,
     getNameOfScriptTarget,
@@ -570,7 +571,7 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     emitResult: EmitResult;
     diagnostics: SortedReadonlyArray<Diagnostic>;
 } {
-    const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
+    const options = program.getCompilerOptions();
 
     // First get and report any syntactic errors.
     const allDiagnostics = program.getConfigFileParsingDiagnostics().slice();
@@ -582,17 +583,25 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
         addRange(allDiagnostics, program.getOptionsDiagnostics(cancellationToken));
 
-        if (!isListFilesOnly) {
+        if (!options.listFilesOnly) {
             addRange(allDiagnostics, program.getGlobalDiagnostics(cancellationToken));
 
             if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
                 addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
+
+            if (
+                options.noEmit &&
+                getEmitDeclarations(options) &&
+                allDiagnostics.length === configFileParsingDiagnosticsLength
+            ) {
+                addRange(allDiagnostics, program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+            }
         }
     }
 
     // Emit and report any errors we ran into.
-    const emitResult = isListFilesOnly
+    const emitResult = options.listFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
         : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
     addRange(allDiagnostics, emitResult.diagnostics);

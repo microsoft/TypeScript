@@ -1187,7 +1187,7 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
 
     if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
         // JsxText cannot actually contain comments, even though the scanner will think it sees comments
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
     if (includeJsDoc && hasJSDocNodes(node)) {
@@ -1199,14 +1199,15 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
     // first child to determine the actual position of its first token.
     if (node.kind === SyntaxKind.SyntaxList) {
-        const first = firstOrUndefined(getNodeChildren(node));
+        sourceFile ??= getSourceFileOfNode(node);
+        const first = firstOrUndefined(getNodeChildren(node, sourceFile));
         if (first) {
             return getTokenPosOfNode(first, sourceFile, includeJsDoc);
         }
     }
 
     return skipTrivia(
-        (sourceFile || getSourceFileOfNode(node)).text,
+        (sourceFile ?? getSourceFileOfNode(node)).text,
         node.pos,
         /*stopAfterLineBreak*/ false,
         /*stopAtComments*/ false,
@@ -6315,15 +6316,15 @@ export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, exten
 
 /** @internal */
 export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host);
 }
 
 /** @internal */
-export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, host: Pick<EmitHost, "getCommonSourceDirectory" | "getCurrentDirectory" | "getCanonicalFileName">): string {
     const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
     const path = outputDir
-        ? getSourceFilePathInNewDirWorker(fileName, outputDir, currentDirectory, commonSourceDirectory, getCanonicalFileName)
+        ? getSourceFilePathInNewDirWorker(fileName, outputDir, host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f))
         : fileName;
     const declarationExtension = getDeclarationEmitExtensionForPath(path);
     return removeFileExtension(path) + declarationExtension;

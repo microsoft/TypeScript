@@ -680,11 +680,11 @@ function f12() {
 >fooMap.get("a") : number[] | undefined
 >                : ^^^^^^^^^^^^^^^^^^^^
 >fooMap.get : (key: string) => number[] | undefined
->           : ^   ^^^^^^^^^^^^^^^^^^^^^            
+>           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fooMap : Map<string, number[]>
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => number[] | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 

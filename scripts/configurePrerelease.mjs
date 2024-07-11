@@ -57,7 +57,7 @@ function main() {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
+    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, undefined, 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 

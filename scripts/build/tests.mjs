@@ -15,6 +15,9 @@ import {
     rimraf,
 } from "./utils.mjs";
 
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
+
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
@@ -25,7 +28,7 @@ export const coverageDir = "coverage";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {object} options
- * @param {import("@esfx/canceltoken").CancelToken} [options.token]
+ * @param {CancelToken} [options.token]
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
