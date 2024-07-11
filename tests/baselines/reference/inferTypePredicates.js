@@ -299,6 +299,24 @@ function isStringForWhichWeHaveACaseHandler(anyString: string) {
   }
 }
 
+function twoReturnExpressions(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x === 10 || x === 11;
+  }
+}
+
+function oneNarrowingOneNot(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x >= 0 && x <= 10;
+  }
+}
+
 function ifElseIfPredicate(x: Date | string | number) {
   if (x instanceof Date) {
     return true;
@@ -306,6 +324,12 @@ function ifElseIfPredicate(x: Date | string | number) {
     return true;
   }
   return false;
+}
+
+function isArrayOfStrings(x: unknown) {
+  if (!(x instanceof Array)) return false;
+
+  return x.every((y) => typeof y === 'string');
 }
 
 
@@ -583,6 +607,22 @@ function isStringForWhichWeHaveACaseHandler(anyString) {
             return false;
     }
 }
+function twoReturnExpressions(x) {
+    switch (typeof x) {
+        case 'string':
+            return x === 'a' || x === 'b';
+        case 'number':
+            return x === 10 || x === 11;
+    }
+}
+function oneNarrowingOneNot(x) {
+    switch (typeof x) {
+        case 'string':
+            return x === 'a' || x === 'b';
+        case 'number':
+            return x >= 0 && x <= 10;
+    }
+}
 function ifElseIfPredicate(x) {
     if (x instanceof Date) {
         return true;
@@ -591,6 +631,11 @@ function ifElseIfPredicate(x) {
         return true;
     }
     return false;
+}
+function isArrayOfStrings(x) {
+    if (!(x instanceof Array))
+        return false;
+    return x.every(function (y) { return typeof y === 'string'; });
 }
 
 
@@ -686,4 +731,7 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
 };
 declare function assertReturnTrue(x: string | number | Date): x is string | number;
 declare function isStringForWhichWeHaveACaseHandler(anyString: string): anyString is "a" | "b" | "c";
+declare function twoReturnExpressions(x: string | number): x is 10 | "a" | "b" | 11;
+declare function oneNarrowingOneNot(x: string | number): boolean;
 declare function ifElseIfPredicate(x: Date | string | number): x is string | Date;
+declare function isArrayOfStrings(x: unknown): x is string[];

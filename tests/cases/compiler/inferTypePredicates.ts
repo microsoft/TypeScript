@@ -299,6 +299,24 @@ function isStringForWhichWeHaveACaseHandler(anyString: string) {
   }
 }
 
+function twoReturnExpressions(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x === 10 || x === 11;
+  }
+}
+
+function oneNarrowingOneNot(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x >= 0 && x <= 10;
+  }
+}
+
 function ifElseIfPredicate(x: Date | string | number) {
   if (x instanceof Date) {
     return true;
@@ -306,4 +324,10 @@ function ifElseIfPredicate(x: Date | string | number) {
     return true;
   }
   return false;
+}
+
+function isArrayOfStrings(x: unknown) {
+  if (!(x instanceof Array)) return false;
+
+  return x.every((y) => typeof y === 'string');
 }
