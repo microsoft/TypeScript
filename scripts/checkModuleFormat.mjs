@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+import pc from "picocolors";
 import {
     __importDefault,
     __importStar,
@@ -41,7 +42,7 @@ for (const [fn, shouldSucceed] of fns) {
         console.log(`${fn.toString()} ${status} as expected.`);
     }
     else {
-        console.log(`${fn.toString()} unexpectedly ${status}.`);
+        console.log(pc.red(`${fn.toString()} unexpectedly ${status}.`));
         process.exitCode = 1;
     }
 }
