@@ -5356,7 +5356,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     /**
      * Generate the text for a generated identifier.
      */
-    function generateName(name: GeneratedIdentifier | GeneratedPrivateIdentifier): string {
+    function generateName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
         const autoGenerate = name.emitNode.autoGenerate;
         if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
             // Node names generate unique names based on their original node
@@ -5371,7 +5371,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function generateNameCached(node: Node, privateName: boolean, flags?: GeneratedIdentifierFlags, prefix?: string | GeneratedNamePart, suffix?: string): string {
+    function generateNameCached(node: Node, privateName: boolean, flags?: GeneratedIdentifierFlags, prefix?: string | GeneratedNamePart, suffix?: string) {
         const nodeId = getNodeId(node);
         const cache = privateName ? nodeIdToGeneratedPrivateName : nodeIdToGeneratedName;
         return cache[nodeId] || (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
