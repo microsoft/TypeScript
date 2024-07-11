@@ -13,7 +13,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: moduleResolution", () => {
+describe("unittests:: tsc-watch:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `watches for changes to package-json main fields`,
@@ -637,6 +637,78 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
                 },
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "ambient module names are resolved correctly",
+        commandLineArgs: ["-w", "--extendedDiagnostics", "--explainFiles"],
+        sys: () =>
+            createWatchedSystem({
+                "/home/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        noEmit: true,
+                        traceResolution: true,
+                    },
+                    include: ["**/*.ts"],
+                }),
+                "/home/src/project/witha/node_modules/mymodule/index.d.ts": Utils.dedent`
+                    declare module 'mymodule' {
+                        export function readFile(): void;
+                    }
+                    declare module 'mymoduleutils' {
+                        export function promisify(): void;
+                    }
+                `,
+                "/home/src/project/witha/a.ts": Utils.dedent`
+                    import { readFile } from 'mymodule';
+                    import { promisify, promisify2 } from 'mymoduleutils';
+                    readFile();
+                    promisify();
+                    promisify2();
+                `,
+                "/home/src/project/withb/node_modules/mymodule/index.d.ts": Utils.dedent`
+                    declare module 'mymodule' {
+                        export function readFile(): void;
+                    }
+                    declare module 'mymoduleutils' {
+                        export function promisify2(): void;
+                    }
+                `,
+                "/home/src/project/withb/b.ts": Utils.dedent`
+                    import { readFile } from 'mymodule';
+                    import { promisify, promisify2 } from 'mymoduleutils';
+                    readFile();
+                    promisify();
+                    promisify2();
+                `,
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/home/src/project" }),
+        edits: [
+            {
+                caption: "remove a file that will remove module augmentation",
+                edit: sys => {
+                    sys.replaceFileText("/home/src/project/withb/b.ts", `import { readFile } from 'mymodule';`, "");
+                    sys.deleteFile("/home/src/project/withb/node_modules/mymodule/index.d.ts");
+                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "write a file that will add augmentation",
+                edit: sys => {
+                    sys.ensureFileOrFolder({
+                        path: "/home/src/project/withb/node_modules/mymoduleutils/index.d.ts",
+                        content: Utils.dedent`
+                            declare module 'mymoduleutils' {
+                                export function promisify2(): void;
+                            }
+                        `,
+                    });
+                    sys.replaceFileText("/home/src/project/withb/b.ts", `readFile();`, "");
+                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
     });
