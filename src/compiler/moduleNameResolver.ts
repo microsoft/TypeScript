@@ -518,12 +518,13 @@ function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolution
     };
 }
 
+function isNodeModulesAtTypes(typeRoot: string) {
+    return endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/");
+}
+
 function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: string, moduleResolutionState: ModuleResolutionState) {
-    const nameForLookup = endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
-        mangleScopedPackageNameWithTrace(
-            nonRelativeModuleNameForTypingCacheWithTrace(typeReferenceDirectiveName, moduleResolutionState),
-            moduleResolutionState,
-        ) :
+    const nameForLookup = isNodeModulesAtTypes(typeRoot) ?
+        mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState) :
         typeReferenceDirectiveName;
     return combinePaths(typeRoot, nameForLookup);
 }
@@ -591,13 +592,34 @@ export function nonRelativeModuleNameForTypingCache(moduleName: string) {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 
-/** For a core node module, we must look in `@types/node` instead of `@types/fs`. */
-function nonRelativeModuleNameForTypingCacheWithTrace(moduleName: string, state: ModuleResolutionState): string {
+function withTypeRoots<T>(
+    getTypeRoots: () => readonly string[] | undefined,
+    moduleName: string,
+    state: ModuleResolutionState,
+    action: (typeRoots: readonly string[], moduleName: string, forNode: boolean) => T | undefined,
+): T | undefined {
+    const typeRoots = getTypeRoots();
+    return typeRoots ?
+        action(typeRoots, moduleName, /*forNode*/ false) ??
+            withTypeRootsFromNode(() => typeRoots, moduleName, state, action) :
+        undefined;
+}
+
+function withTypeRootsFromNode<T>(
+    getTypeRoots: () => readonly string[] | undefined,
+    moduleName: string,
+    state: ModuleResolutionState,
+    action: (typeRoots: readonly string[], moduleName: string, forNode: boolean) => T | undefined,
+): T | undefined {
     const mangled = nonRelativeModuleNameForTypingCache(moduleName);
-    if (state.traceEnabled && mangled !== moduleName) {
-        trace(state.host, Diagnostics.Found_core_node_module_0_looking_in_node, moduleName);
+    if (mangled === moduleName) return;
+    const typeRoots = getTypeRoots()?.filter(isNodeModulesAtTypes);
+    if (typeRoots?.length) {
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Found_core_node_module_0_looking_in_node, moduleName);
+        }
+        return action(typeRoots, mangled, /*forNode*/ true);
     }
-    return mangled;
 }
 
 /**
@@ -732,28 +754,35 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     function primaryLookup(): PathAndPackageId | undefined {
         // Check primary library paths
         if (typeRoots && typeRoots.length) {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
-            }
-            return firstDefined(typeRoots, typeRoot => {
-                const candidate = getCandidateFromTypeRoot(typeRoot, typeReferenceDirectiveName, moduleResolutionState);
-                const directoryExists = directoryProbablyExists(typeRoot, host);
-                if (!directoryExists && traceEnabled) {
-                    trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
-                }
-                if (options.typeRoots) {
-                    // Custom typeRoots resolve as file or directory just like we do modules
-                    const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState);
-                    if (resolvedFromFile) {
-                        const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
-                        const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, moduleResolutionState) : undefined;
-                        return resolvedTypeScriptOnly(withPackageId(packageInfo, resolvedFromFile, moduleResolutionState));
+            return withTypeRoots(
+                () => typeRoots,
+                typeReferenceDirectiveName,
+                moduleResolutionState,
+                (typeRoots, typeReferenceDirectiveName) => {
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
                     }
-                }
-                return resolvedTypeScriptOnly(
-                    loadNodeModuleFromDirectory(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState),
-                );
-            });
+                    return firstDefined(typeRoots, typeRoot => {
+                        const candidate = getCandidateFromTypeRoot(typeRoot, typeReferenceDirectiveName, moduleResolutionState);
+                        const directoryExists = directoryProbablyExists(typeRoot, host);
+                        if (!directoryExists && traceEnabled) {
+                            trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
+                        }
+                        if (options.typeRoots) {
+                            // Custom typeRoots resolve as file or directory just like we do modules
+                            const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState);
+                            if (resolvedFromFile) {
+                                const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
+                                const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, moduleResolutionState) : undefined;
+                                return resolvedTypeScriptOnly(withPackageId(packageInfo, resolvedFromFile, moduleResolutionState));
+                            }
+                        }
+                        return resolvedTypeScriptOnly(
+                            loadNodeModuleFromDirectory(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState),
+                        );
+                    });
+                },
+            );
         }
         else {
             if (traceEnabled) {
@@ -3118,18 +3147,7 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
             }
             nodeModulesAtTypesExists = false;
         }
-        return loadModuleFromSpecificNodeModulesDirectory(
-            Extensions.Declaration,
-            mangleScopedPackageNameWithTrace(
-                nonRelativeModuleNameForTypingCacheWithTrace(moduleName, state),
-                state,
-            ),
-            nodeModulesAtTypes,
-            nodeModulesAtTypesExists,
-            state,
-            cache,
-            redirectedReference,
-        );
+        return loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, mangleScopedPackageNameWithTrace(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, state, cache, redirectedReference);
     }
 }
 
@@ -3373,23 +3391,29 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 }
 
 function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
-    if (!state.compilerOptions.typeRoots?.length) return;
-    // const moduleName = nonRelativeModuleNameForTypingCache(inputModuleName);
-    for (const typeRoot of state.compilerOptions.typeRoots) {
-        const candidate = getCandidateFromTypeRoot(typeRoot, moduleName, state);
-        const directoryExists = directoryProbablyExists(typeRoot, state.host);
-        if (!directoryExists && state.traceEnabled) {
-            trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
-        }
-        const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, state);
-        if (resolvedFromFile) {
-            const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
-            const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, state) : undefined;
-            return toSearchResult(withPackageId(packageInfo, resolvedFromFile, state));
-        }
-        const resolved = loadNodeModuleFromDirectory(Extensions.Declaration, candidate, !directoryExists, state);
-        if (resolved) return toSearchResult(resolved);
-    }
+    return (state.compilerOptions.typeRoots ? withTypeRoots : withTypeRootsFromNode)(
+        () => getEffectiveTypeRoots(state.compilerOptions, state.host),
+        moduleName,
+        state,
+        (typeRoots, moduleName) =>
+            forEach(typeRoots, typeRoot => {
+                const candidate = getCandidateFromTypeRoot(typeRoot, moduleName, state);
+                const directoryExists = directoryProbablyExists(typeRoot, state.host);
+                if (!directoryExists && state.traceEnabled) {
+                    trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
+                }
+                if (state.compilerOptions.typeRoots) {
+                    const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, state);
+                    if (resolvedFromFile) {
+                        const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
+                        const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, state) : undefined;
+                        return toSearchResult(withPackageId(packageInfo, resolvedFromFile, state));
+                    }
+                }
+                const resolved = loadNodeModuleFromDirectory(Extensions.Declaration, candidate, !directoryExists, state);
+                if (resolved) return toSearchResult(resolved);
+            }),
+    );
 }
 
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
