@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { createRequire } from "module";
 import {
     __importDefault,
@@ -41,7 +42,7 @@ for (const [fn, shouldSucceed] of fns) {
         console.log(`${fn.toString()} ${status} as expected.`);
     }
     else {
-        console.log(`${fn.toString()} unexpectedly ${status}.`);
+        console.log(chalk.red(`${fn.toString()} unexpectedly ${status}.`));
         process.exitCode = 1;
     }
 }
