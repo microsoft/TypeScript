@@ -141,7 +141,7 @@ const query = Object.entries(obj).map(
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`) : string[]
 >                                                                         : ^^^^^^^^
 >Object.entries(obj).map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
->                        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.entries(obj) : [string, string][]
 >                    : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
@@ -153,7 +153,7 @@ const query = Object.entries(obj).map(
 >obj : { param2?: string | undefined; param1: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 
     ([k, v]) => `${k}=${encodeURIComponent(v)}`
 >([k, v]) => `${k}=${encodeURIComponent(v)}` : ([k, v]: [string, string]) => string

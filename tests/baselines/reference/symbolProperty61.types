@@ -100,7 +100,7 @@ function from<T>(obs: InteropObservable<T>) {
 >obs[Symbol.obs]() : { subscribe(next: (val: T) => void): void; }
 >                  : ^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
->                : ^^^^^^                        ^                   
+>                : ^^^^^^^^^^^^^^^^^^    ^^^   ^^^^^^^^    ^^^    ^^^
 >obs : InteropObservable<T>
 >    : ^^^^^^^^^^^^^^^^^^^^
 >Symbol.obs : unique symbol

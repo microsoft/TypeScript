@@ -130,6 +130,7 @@ import {
     TextRange,
     TextSpan,
     textSpanEnd,
+    timestamp,
     toArray,
     toFileNameLowerCase,
     tracing,
@@ -337,15 +338,21 @@ interface NextStep {
     delay(actionType: string, ms: number, action: () => void): void;
 }
 
+/** @internal */
+export type PerformanceData =
+    & Omit<protocol.PerformanceData, "diagnosticsDuration">
+    & { diagnosticsDuration?: Map<NormalizedPath, protocol.DiagnosticPerformanceData>; };
+
 /**
  * External capabilities used by multistep operation
  */
 interface MultistepOperationHost {
     getCurrentRequestId(): number;
-    sendRequestCompletedEvent(requestId: number): void;
+    getPerformanceData(): PerformanceData | undefined;
+    sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void;
     getServerHost(): ServerHost;
     isCancellationRequested(): boolean;
-    executeWithRequestId(requestId: number, action: () => void): void;
+    executeWithRequestId(requestId: number, action: () => void, performanceData: PerformanceData | undefined): void;
     logError(error: Error, message: string): void;
 }
 
@@ -355,6 +362,7 @@ interface MultistepOperationHost {
  */
 class MultistepOperation implements NextStep {
     private requestId: number | undefined;
+    private performanceData: PerformanceData | undefined;
     private timerHandle: any;
     private immediateId: number | undefined;
 
@@ -368,11 +376,12 @@ class MultistepOperation implements NextStep {
 
     private complete() {
         if (this.requestId !== undefined) {
-            this.operationHost.sendRequestCompletedEvent(this.requestId);
+            this.operationHost.sendRequestCompletedEvent(this.requestId, this.performanceData);
             this.requestId = undefined;
         }
         this.setTimerHandle(undefined);
         this.setImmediateId(undefined);
+        this.performanceData = undefined;
     }
 
     public immediate(actionType: string, action: () => void) {
@@ -381,7 +390,7 @@ class MultistepOperation implements NextStep {
         this.setImmediateId(
             this.operationHost.getServerHost().setImmediate(() => {
                 this.immediateId = undefined;
-                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
             }, actionType),
         );
     }
@@ -393,7 +402,7 @@ class MultistepOperation implements NextStep {
             this.operationHost.getServerHost().setTimeout(
                 () => {
                     this.timerHandle = undefined;
-                    this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
+                    this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
                 },
                 ms,
                 actionType,
@@ -428,6 +437,7 @@ class MultistepOperation implements NextStep {
                 this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
             }
         }
+        this.performanceData = this.operationHost.getPerformanceData();
         if (stop || !this.hasPendingWork()) {
             this.complete();
         }
@@ -975,7 +985,7 @@ export class Session<TMessage = string> implements EventSender {
     protected projectService: ProjectService;
     private changeSeq = 0;
 
-    private performanceData: protocol.PerformanceData | undefined;
+    private performanceData: PerformanceData | undefined;
 
     private currentRequestId!: number;
     private errorCheck: MultistepOperation;
@@ -1013,11 +1023,12 @@ export class Session<TMessage = string> implements EventSender {
             ? opts.eventHandler || (event => this.defaultEventHandler(event))
             : undefined;
         const multistepOperationHost: MultistepOperationHost = {
-            executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
+            executeWithRequestId: (requestId, action, performanceData) => this.executeWithRequestId(requestId, action, performanceData),
             getCurrentRequestId: () => this.currentRequestId,
+            getPerformanceData: () => this.performanceData,
             getServerHost: () => this.host,
             logError: (err, cmd) => this.logError(err, cmd),
-            sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
+            sendRequestCompletedEvent: (requestId, performanceData) => this.sendRequestCompletedEvent(requestId, performanceData),
             isCancellationRequested: () => this.cancellationToken.isCancellationRequested(),
         };
         this.errorCheck = new MultistepOperation(multistepOperationHost);
@@ -1067,15 +1078,34 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private sendRequestCompletedEvent(requestId: number): void {
-        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId, performanceData: this.performanceData }, "requestCompleted");
+    private sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void {
+        this.event<protocol.RequestCompletedEventBody>(
+            {
+                request_seq: requestId,
+                performanceData: performanceData && toProtocolPerformanceData(performanceData),
+            },
+            "requestCompleted",
+        );
     }
 
-    private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
+    private addPerformanceData(key: Exclude<keyof PerformanceData, "diagnosticsDuration">, value: number) {
         if (!this.performanceData) {
             this.performanceData = {};
         }
         this.performanceData[key] = (this.performanceData[key] ?? 0) + value;
+    }
+
+    private addDiagnosticsPerformanceData(
+        file: NormalizedPath,
+        kind: protocol.DiagnosticEventKind,
+        duration: number,
+    ): void {
+        if (!this.performanceData) {
+            this.performanceData = {};
+        }
+        let fileDiagnosticDuration = this.performanceData.diagnosticsDuration?.get(file);
+        if (!fileDiagnosticDuration) (this.performanceData.diagnosticsDuration ??= new Map()).set(file, fileDiagnosticDuration = {});
+        fileDiagnosticDuration[kind] = duration;
     }
 
     private performanceEventHandler(event: PerformanceEvent) {
@@ -1217,14 +1247,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** @internal */
-    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    doOutput(
+        info: {} | undefined,
+        cmdName: string,
+        reqSeq: number,
+        success: boolean,
+        performanceData: PerformanceData | undefined,
+        message?: string,
+    ): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",
             command: cmdName,
             request_seq: reqSeq,
             success,
-            performanceData: this.performanceData,
+            performanceData: performanceData && toProtocolPerformanceData(performanceData),
         };
 
         if (success) {
@@ -1259,7 +1296,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
-        const diagnosticsStartTime = this.hrtime();
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
@@ -1269,21 +1306,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
-        const diagnosticsStartTime = this.hrtime();
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
-        const diagnosticsStartTime = this.hrtime();
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
-        const diagnosticsStartTime = this.hrtime();
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         let diagnosticsResult;
         if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
@@ -1308,23 +1345,22 @@ export class Session<TMessage = string> implements EventSender {
         project: Project,
         diagnostics: readonly Diagnostic[],
         kind: protocol.DiagnosticEventKind,
-        diagnosticsStartTime: [number, number],
+        diagnosticsStartTime: number,
         spans?: TextSpan[],
     ): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-            const duration = hrTimeToMilliseconds(this.hrtime(diagnosticsStartTime));
-
+            const duration = timestamp() - diagnosticsStartTime;
             const body: protocol.DiagnosticEventBody = {
                 file,
                 diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
                 spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
-                duration,
             };
             this.event<protocol.DiagnosticEventBody>(
                 body,
                 kind,
             );
+            this.addDiagnosticsPerformanceData(file, kind, duration);
         }
         catch (err) {
             this.logError(err, kind);
@@ -2606,16 +2642,14 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
+    private reload(args: protocol.ReloadRequestArgs) {
         const file = toNormalizedPath(args.file);
         const tempFileName = args.tmpfile === undefined ? undefined : toNormalizedPath(args.tmpfile);
         const info = this.projectService.getScriptInfoForNormalizedPath(file);
         if (info) {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
-            if (info.reloadFromFile(tempFileName)) {
-                this.doOutput(/*info*/ undefined, protocol.CommandTypes.Reload, reqSeq, /*success*/ true);
-            }
+            info.reloadFromFile(tempFileName);
         }
     }
 
@@ -3292,12 +3326,13 @@ export class Session<TMessage = string> implements EventSender {
 
     exit() {/*overridden*/}
 
-    private notRequired(): HandlerResponse {
-        return { responseRequired: false };
+    private notRequired(request: protocol.Request | undefined): HandlerResponse {
+        if (request) this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ true, this.performanceData);
+        return { responseRequired: false, performanceData: this.performanceData };
     }
 
     private requiredResponse(response: {} | undefined): HandlerResponse {
-        return { response, responseRequired: true };
+        return { response, responseRequired: true, performanceData: this.performanceData };
     }
 
     private handlers = new Map(Object.entries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
@@ -3376,7 +3411,7 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.Exit]: () => {
             this.exit();
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Definition]: (request: protocol.DefinitionRequest) => {
             return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
@@ -3427,7 +3462,7 @@ export class Session<TMessage = string> implements EventSender {
                 convertScriptKindName(request.arguments.scriptKindName!), // TODO: GH#18217
                 request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined,
             );
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Quickinfo]: (request: protocol.QuickInfoRequest) => {
             return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
@@ -3534,34 +3569,33 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
             this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
             this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
             this.change(request.arguments);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Configure]: (request: protocol.ConfigureRequest) => {
             this.projectService.setHostConfiguration(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Configure, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Reload]: (request: protocol.ReloadRequest) => {
-            this.reload(request.arguments, request.seq);
+            this.reload(request.arguments);
             return this.requiredResponse({ reloadFinished: true });
         },
         [protocol.CommandTypes.Saveto]: (request: protocol.Request) => {
             const savetoArgs = request.arguments as protocol.SavetoRequestArgs;
             this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Close]: (request: protocol.Request) => {
             const closeArgs = request.arguments as protocol.FileRequestArgs;
             this.closeClientFile(closeArgs.file);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Navto]: (request: protocol.NavtoRequest) => {
             return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
@@ -3600,9 +3634,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
             return this.requiredResponse(this.getProjectInfo(request.arguments));
         },
-        [protocol.CommandTypes.ReloadProjects]: () => {
+        [protocol.CommandTypes.ReloadProjects]: request => {
             this.projectService.reloadProjects();
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
@@ -3657,8 +3691,7 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
             this.configurePlugin(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.ConfigurePlugin, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
             return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
@@ -3726,36 +3759,40 @@ export class Session<TMessage = string> implements EventSender {
         this.cancellationToken.resetRequest(requestId);
     }
 
-    public executeWithRequestId<T>(requestId: number, f: () => T) {
+    public executeWithRequestId<T>(requestId: number, f: () => T): T;
+    /** @internal */
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData: PerformanceData | undefined): T; // eslint-disable-line @typescript-eslint/unified-signatures
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData?: PerformanceData) {
+        const currentPerformanceData = this.performanceData;
         try {
+            this.performanceData = perfomanceData;
             this.setCurrentRequest(requestId);
             return f();
         }
         finally {
             this.resetCurrentRequest(requestId);
+            this.performanceData = currentPerformanceData;
         }
     }
 
     public executeCommand(request: protocol.Request): HandlerResponse {
         const handler = this.handlers.get(request.command);
         if (handler) {
-            const response = this.executeWithRequestId(request.seq, () => handler(request));
+            const response = this.executeWithRequestId(request.seq, () => handler(request), /*perfomanceData*/ undefined);
             this.projectService.enableRequestedPlugins();
             return response;
         }
         else {
             this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, /*performanceData*/ undefined, `Unrecognized JSON command: ${request.command}`);
             return { responseRequired: false };
         }
     }
 
     public onMessage(message: TMessage) {
         this.gcTimer.scheduleCollect();
-
-        this.performanceData = undefined;
-
         let start: [number, number] | undefined;
+        const currentPerformanceData = this.performanceData;
         if (this.logger.hasLevel(LogLevel.requestTime)) {
             start = this.hrtime();
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -3772,7 +3809,7 @@ export class Session<TMessage = string> implements EventSender {
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
 
             tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
-            const { response, responseRequired } = this.executeCommand(request);
+            const { response, responseRequired, performanceData } = this.executeCommand(request);
             tracing?.pop();
 
             if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -3788,10 +3825,23 @@ export class Session<TMessage = string> implements EventSender {
             // Note: Log before writing the response, else the editor can complete its activity before the server does
             tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
             if (response) {
-                this.doOutput(response, request.command, request.seq, /*success*/ true);
+                this.doOutput(
+                    response,
+                    request.command,
+                    request.seq,
+                    /*success*/ true,
+                    performanceData,
+                );
             }
             else if (responseRequired) {
-                this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                this.doOutput(
+                    /*info*/ undefined,
+                    request.command,
+                    request.seq,
+                    /*success*/ false,
+                    performanceData,
+                    "No content available.",
+                );
             }
         }
         catch (err) {
@@ -3801,7 +3851,7 @@ export class Session<TMessage = string> implements EventSender {
             if (err instanceof OperationCanceledException) {
                 // Handle cancellation exceptions
                 tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
-                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
+                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true, this.performanceData);
                 return;
             }
 
@@ -3813,8 +3863,12 @@ export class Session<TMessage = string> implements EventSender {
                 request ? request.command : protocol.CommandTypes.Unknown,
                 request ? request.seq : 0,
                 /*success*/ false,
+                this.performanceData,
                 "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack,
             );
+        }
+        finally {
+            this.performanceData = currentPerformanceData;
         }
     }
 
@@ -3846,6 +3900,12 @@ export class Session<TMessage = string> implements EventSender {
 interface FileAndProject {
     readonly file: NormalizedPath;
     readonly project: Project;
+}
+
+function toProtocolPerformanceData(performanceData: PerformanceData): protocol.PerformanceData {
+    const diagnosticsDuration = performanceData.diagnosticsDuration &&
+        arrayFrom(performanceData.diagnosticsDuration, ([file, data]) => ({ ...data, file }));
+    return { ...performanceData, diagnosticsDuration };
 }
 
 function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
@@ -3898,6 +3958,7 @@ function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): proto
 export interface HandlerResponse {
     response?: {};
     responseRequired?: boolean;
+    /** @internal */ performanceData?: PerformanceData;
 }
 
 /** @internal */
