@@ -24,7 +24,7 @@ type EventMap = Record<string, Function>;
 interface B<M extends EventMap> extends A {
     emit<Event extends keyof M>(event: Event, ...args: Args<M[Event]>): boolean;
 >emit : <Event extends keyof M>(event: Event, ...args: Args<M[Event]>) => boolean
->     : ^     ^^^^^^^^^^^^^^^^^^     ^^     ^^^^^    ^^              ^^^^^       
+>     : ^     ^^^^^^^^^       ^^     ^^     ^^^^^    ^^              ^^^^^       
 >event : Event
 >      : ^^^^^
 >args : Args<M[Event]>

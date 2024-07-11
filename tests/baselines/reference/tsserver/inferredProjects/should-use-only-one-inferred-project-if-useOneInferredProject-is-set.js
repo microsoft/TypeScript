@@ -64,7 +64,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/b/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -143,7 +150,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/c/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -235,7 +249,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/d/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -296,12 +317,11 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/b/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/a/b/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/a/b/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/a/b/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/a/b/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Before running Timeout callback:: count: 2
-3: /user/username/projects/myproject/a/b/tsconfig.json
-4: *ensureProjectForOpenFiles*
+1: /user/username/projects/myproject/a/b/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/a/b/tsconfig.json]
 {
                     "compilerOptions": {
@@ -342,8 +362,8 @@ FsWatches::
   {}
 
 Timeout callback:: count: 2
-3: /user/username/projects/myproject/a/b/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+1: /user/username/projects/myproject/a/b/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -355,7 +375,6 @@ Projects::
     dirty: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -363,7 +382,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/user/username/projects/myproject/a/b/tsconfig.json",
-        "reason": "Change in config file detected"
+        "reason": "Change in config file /user/username/projects/myproject/a/b/tsconfig.json detected, Creating possible configured project for /user/username/projects/myproject/a/b/main.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/a/b/tsconfig.json : {

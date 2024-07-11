@@ -73,7 +73,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -92,6 +95,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -125,7 +129,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -144,6 +151,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -177,7 +185,10 @@ Program files::
 /a/b.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 

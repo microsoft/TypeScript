@@ -43,7 +43,7 @@ var v1 = numberMapToArray(numberMap);  // Ok
 >numberMapToArray(numberMap) : Function[]
 >                            : ^^^^^^^^^^
 >numberMapToArray : <T>(object: NumberMap<T>) => T[]
->                 : ^ ^^      ^^            ^^^^^^^^
+>                 : ^ ^^      ^^            ^^^^^   
 >numberMap : NumberMap<Function>
 >          : ^^^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,7 @@ var v1 = numberMapToArray(stringMap);  // Ok
 >numberMapToArray(stringMap) : Function[]
 >                            : ^^^^^^^^^^
 >numberMapToArray : <T>(object: NumberMap<T>) => T[]
->                 : ^ ^^      ^^            ^^^^^^^^
+>                 : ^ ^^      ^^            ^^^^^   
 >stringMap : StringMap<Function>
 >          : ^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ var v1 = stringMapToArray(numberMap);  // Error expected here
 >stringMapToArray(numberMap) : unknown[]
 >                            : ^^^^^^^^^
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
->                 : ^ ^^      ^^            ^^^^^^^^
+>                 : ^ ^^      ^^            ^^^^^   
 >numberMap : NumberMap<Function>
 >          : ^^^^^^^^^^^^^^^^^^^
 
@@ -73,7 +73,7 @@ var v1 = stringMapToArray(stringMap);  // Ok
 >stringMapToArray(stringMap) : Function[]
 >                            : ^^^^^^^^^^
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
->                 : ^ ^^      ^^            ^^^^^^^^
+>                 : ^ ^^      ^^            ^^^^^   
 >stringMap : StringMap<Function>
 >          : ^^^^^^^^^^^^^^^^^^^
 

@@ -66,7 +66,7 @@ if (c !== undefined) {
 >useA(c) : void
 >        : ^^^^
 >useA : (_: A) => void
->     : ^ ^^ ^^^^^^^^^
+>     : ^ ^^ ^^^^^    
 >c : A
 >  : ^
 
@@ -76,7 +76,7 @@ if (c !== undefined) {
 >useB(c) : void
 >        : ^^^^
 >useB : (_: B) => void
->     : ^ ^^ ^^^^^^^^^
+>     : ^ ^^ ^^^^^    
 >c : B
 >  : ^
 
@@ -84,7 +84,7 @@ if (c !== undefined) {
 >never(c) : never
 >         : ^^^^^
 >never : (_: never) => never
->      : ^ ^^     ^^^^^^^^^^
+>      : ^ ^^     ^^^^^     
 >c : never
 >  : ^^^^^
     }

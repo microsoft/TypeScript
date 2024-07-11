@@ -121,10 +121,9 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-/** @internal */
-export const compileOnSaveCommandLineOption: CommandLineOption = {
+const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
     type: "boolean",
     defaultValueDescription: false,
@@ -503,6 +502,25 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: true,
+        defaultValueDescription: false,
+        // Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
+    },
+    {
+        name: "noEmit",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Disable_emitting_files_from_a_compilation,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+    },
+    {
         name: "assumeChangesOnlyAffectDirectDependencies",
         type: "boolean",
         affectsSemanticDiagnostics: true,
@@ -773,33 +791,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Disable_emitting_comments,
     },
     {
-        name: "noCheck",
-        type: "boolean",
-        showInSimplifiedHelpView: false,
-        category: Diagnostics.Compiler_Diagnostics,
-        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-        affectsSemanticDiagnostics: true,
-        affectsBuildInfo: true,
-        extraValidation() {
-            return [Diagnostics.Unknown_compiler_option_0, "noCheck"];
-        },
-    },
-    {
-        name: "noEmit",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_emitting_files_from_a_compilation,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-    },
-    {
         name: "importHelpers",
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
+        affectsSourceFile: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Allow_importing_helper_functions_from_tslib_once_per_project_instead_of_including_them_per_file,
         defaultValueDescription: false,
@@ -1270,6 +1266,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        affectsSourceFile: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
         defaultValueDescription: "react",
@@ -1630,14 +1627,19 @@ export const optionsAffectingProgramStructure: readonly CommandLineOption[] = op
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
 
-/** @internal */
-export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
+const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
-/** @internal */
-export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
+
+const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
 
 // Build related options
 /** @internal */
@@ -1743,8 +1745,7 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap,
 };
 
-/** @internal */
-export const defaultInitCompilerOptions: CompilerOptions = {
+const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
     strict: true,
@@ -2574,9 +2575,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
-    return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-    };
+    return Object.fromEntries(optionMap);
 }
 
 function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
@@ -2903,8 +2902,7 @@ function directoryOfCombinedPath(fileName: string, basePath: string) {
     return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
 }
 
-/** @internal */
-export const defaultIncludeSpec = "**/*";
+const defaultIncludeSpec = "**/*";
 
 /**
  * Parse the contents of a config file from json or json source file (tsconfig.json).

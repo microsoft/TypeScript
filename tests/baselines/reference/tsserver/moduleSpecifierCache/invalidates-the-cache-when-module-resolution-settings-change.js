@@ -229,7 +229,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 
@@ -320,7 +328,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -407,7 +419,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -484,15 +500,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 4,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *,
-        "createAutoImportProviderProgramDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -969,7 +977,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -985,6 +996,9 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/a.ts ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/b.ts ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/c.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /tsconfig.json 1:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
@@ -1010,7 +1024,6 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

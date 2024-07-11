@@ -31,11 +31,11 @@ namespace Validation {
 >lettersRegexp.test(s2) : boolean
 >                       : ^^^^^^^
 >lettersRegexp.test : (string: string) => boolean
->                   : ^      ^^      ^^^^^^^^^^^^
+>                   : ^      ^^      ^^^^^       
 >lettersRegexp : RegExp
 >              : ^^^^^^
 >test : (string: string) => boolean
->     : ^      ^^      ^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^       
 >s2 : string
 >   : ^^^^^^
         }

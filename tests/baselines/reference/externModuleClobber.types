@@ -49,9 +49,9 @@ x = ec.getPosition();
 >ec.getPosition() : EM.Position
 >                 : ^^^^^^^^^^^
 >ec.getPosition : () => EM.Position
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^           
 >ec : EM.EC
 >   : ^^^^^
 >getPosition : () => EM.Position
->            : ^^^^^^^^^^^^^^^^^
+>            : ^^^^^^           
 

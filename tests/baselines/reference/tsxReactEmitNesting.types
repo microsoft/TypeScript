@@ -191,7 +191,7 @@ let render = (ctrl, model) =>
 >      : ^^^^^^
 
                             {(!todo.editable) ?
->(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null : any
+>(!todo.editable) ?                                <input class="toggle" type="checkbox"></input>                                : null : error
 >(!todo.editable) : boolean
 >                 : ^^^^^^^
 >!todo.editable : boolean

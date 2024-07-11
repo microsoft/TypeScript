@@ -29,7 +29,7 @@ create<GraphActions>({
 >create<GraphActions>({  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },}) : void
 >                                                                                                     : ^^^^
 >create : <T>(config: T) => void
->       : ^ ^^      ^^ ^^^^^^^^^
+>       : ^ ^^      ^^ ^^^^^    
 >{  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },} : { setDirection: (direction?: CanvasDirection) => void; }
 >                                                                               : ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -47,7 +47,7 @@ create<GraphActions>({
 >takesDirection(direction) : void
 >                          : ^^^^
 >takesDirection : (direction: CanvasDirection) => void
->               : ^         ^^               ^^^^^^^^^
+>               : ^         ^^               ^^^^^    
 >direction : CanvasDirection
 >          : ^^^^^^^^^^^^^^^
 

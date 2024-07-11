@@ -43,11 +43,11 @@ class RegisteredUser extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
         // super call in a lambda in a constructor 
         var x = () => super.sayHello();
@@ -58,11 +58,11 @@ class RegisteredUser extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
     }
     sayHello(): void {
 >sayHello : () => void
@@ -73,11 +73,11 @@ class RegisteredUser extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
         // super call in a lambda in a method
        var x = () => super.sayHello();
@@ -88,11 +88,11 @@ class RegisteredUser extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
     }
 }
 class RegisteredUser2 extends User {
@@ -127,11 +127,11 @@ class RegisteredUser2 extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
     }
     sayHello(): void {
 >sayHello : () => void
@@ -150,11 +150,11 @@ class RegisteredUser2 extends User {
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >super : User
 >      : ^^^^
 >sayHello : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
     }
 }
 

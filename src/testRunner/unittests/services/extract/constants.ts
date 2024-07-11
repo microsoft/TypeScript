@@ -1,8 +1,8 @@
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
 import {
     testExtractSymbol,
     testExtractSymbolFailed,
-} from "./helpers";
+} from "./helpers.js";
 
 describe("unittests:: services:: extract:: extractConstants", () => {
     testExtractConstant("extractConstant_TopLevel", `let x = [#|1|];`);

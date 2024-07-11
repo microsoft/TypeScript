@@ -16,7 +16,7 @@ const res = f((n): n is number => true);
 >f((n): n is number => true) : number
 >                            : ^^^^^^
 >f : <T>(predicate: (x: {}) => x is T) => T
->  : ^ ^^         ^^                 ^^^^^^
+>  : ^ ^^         ^^                 ^^^^^ 
 >(n): n is number => true : (n: {}) => n is number
 >                         : ^ ^^^^^^^^^           
 >n : {}

@@ -135,11 +135,11 @@ for ((g satisfies number) of [10]) {
 >console.log(g) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >g : number
 >  : ^^^^^^
 }
@@ -168,11 +168,11 @@ for ((x satisfies string) in { a: 10 }) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : string
 >  : ^^^^^^
 }

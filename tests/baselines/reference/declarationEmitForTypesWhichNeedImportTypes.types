@@ -14,7 +14,7 @@ export function createNamed(): Named {
 === a.ts ===
 import { createNamed } from "./b";
 >createNamed : () => import("b").Named
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^       ^^^  ^^^^^
 
 export const Value = createNamed();
 >Value : import("b").Named
@@ -22,5 +22,5 @@ export const Value = createNamed();
 >createNamed() : import("b").Named
 >              : ^^^^^^^^^^^^^^^^^
 >createNamed : () => import("b").Named
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^       ^^^  ^^^^^
 

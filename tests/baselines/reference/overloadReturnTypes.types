@@ -7,13 +7,13 @@ class Accessor {}
 
 function attr(name: string): string;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >name : string
 >     : ^^^^^^
 
 function attr(name: string, value: string): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >name : string
 >     : ^^^^^^
 >value : string
@@ -21,12 +21,12 @@ function attr(name: string, value: string): Accessor;
 
 function attr(map: any): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^^^^^^^^   ^^   ^^^        ^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >map : any
 
 function attr(nameOrMap: any, value?: string): any {
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >nameOrMap : any
 >value : string
 >      : ^^^^^^
@@ -62,13 +62,13 @@ function attr(nameOrMap: any, value?: string): any {
 interface IFace {
 	attr(name:string):string;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >name : string
 >     : ^^^^^^
 
 	attr(name: string, value: string): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >name : string
 >     : ^^^^^^
 >value : string
@@ -76,7 +76,7 @@ interface IFace {
 
 	attr(map: any): Accessor;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
->     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^^^^^^^^   ^^   ^^^        ^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >map : any
 }
 

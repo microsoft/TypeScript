@@ -32,7 +32,7 @@ if (isDefined(foo)) {
 >isDefined(foo) : boolean
 >               : ^^^^^^^
 >isDefined : <T>(value: T | undefined | null | void) => value is T
->          : ^ ^^     ^^                           ^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^                           ^^^^^          
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -40,18 +40,18 @@ if (isDefined(foo)) {
 >console.log(foo.toUpperCase()) : void
 >                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >foo.toUpperCase() : string
 >                  : ^^^^^^
 >foo.toUpperCase : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >foo : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 }
 

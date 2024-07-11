@@ -39,11 +39,11 @@ export default React.createClass({
 >React.createClass({  render() {    return (      null    );  }}) : import("react").ClassicComponentClass
 >                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React.createClass : (spec: any) => import("react").ClassicComponentClass
->                  : ^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^    ^^   ^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >React : typeof import("react")
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 >createClass : (spec: any) => import("react").ClassicComponentClass
->            : ^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^   ^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >{  render() {    return (      null    );  }} : { render(): any; }
 >                                              : ^^^^^^^^^^^^^^^^^^
 

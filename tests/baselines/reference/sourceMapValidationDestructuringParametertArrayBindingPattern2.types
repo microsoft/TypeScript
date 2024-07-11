@@ -40,11 +40,11 @@ function foo1([, skillA]: Robot) {
 >console.log(skillA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >skillA : [string, string]
 >       : ^^^^^^^^^^^^^^^^
 }
@@ -59,11 +59,11 @@ function foo2([nameMB]: Robot) {
 >console.log(nameMB) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameMB : string
 >       : ^^^^^^
 }
@@ -82,11 +82,11 @@ function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 >console.log(nameMA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >nameMA : string
 >       : ^^^^^^
 }
@@ -101,11 +101,11 @@ function foo4([...multiRobotAInfo]: Robot) {
 >console.log(multiRobotAInfo) : void
 >                             : ^^^^
 >console.log : (msg: any) => void
->            : ^   ^^   ^^^^^^^^^
+>            : ^   ^^   ^^^^^    
 >console : { log(msg: any): void; }
->        : ^^^^^^   ^^   ^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 >log : (msg: any) => void
->    : ^   ^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^    
 >multiRobotAInfo : [string, [string, string]]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

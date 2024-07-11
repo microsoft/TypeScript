@@ -21,7 +21,7 @@ constructorsWithSpecializedSignatures.ts(26,5): error TS2394: This overload sign
     class D {
         constructor(x: "hi");
         constructor(x: "foo");
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
 !!! related TS2750 constructorsWithSpecializedSignatures.ts:20:5: The implementation signature is declared here.
         constructor(x: number);
@@ -32,7 +32,7 @@ constructorsWithSpecializedSignatures.ts(26,5): error TS2394: This overload sign
     class D2 {
         constructor(x: "hi");
         constructor(x: "foo");
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
 !!! related TS2750 constructorsWithSpecializedSignatures.ts:28:5: The implementation signature is declared here.
         constructor(x: string);

@@ -36,11 +36,11 @@ fn<string | number>(m => m.toFixed());
 >m.toFixed() : string
 >            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >m : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 fn<number>(m => m.toFixed());
 >fn<number>(m => m.toFixed()) : void
@@ -54,11 +54,11 @@ fn<number>(m => m.toFixed());
 >m.toFixed() : string
 >            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >m : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 // Ensure the following real-world example that relies on substitution still works
 type ExtractParameters<T> = "parameters" extends keyof T
@@ -106,7 +106,7 @@ function fn2<T>(arg: Q2<T>) {
 >useT(arg) : void
 >          : ^^^^
 >useT : (_arg: T) => void
->     : ^    ^^ ^^^^^^^^^
+>     : ^    ^^ ^^^^^    
 >arg : T & number
 >    : ^^^^^^^^^^
 }
@@ -117,13 +117,13 @@ fn2<string | number>(m => m(42));
 >fn2 : <T>(arg: Q2<T>) => void
 >    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
->           : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    
 >m(42) : void
 >      : ^^^^
 >m : (n: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 
@@ -133,13 +133,13 @@ fn2<number>(m => m(42));
 >fn2 : <T>(arg: Q2<T>) => void
 >    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
->           : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    
 >m(42) : void
 >      : ^^^^
 >m : (n: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 

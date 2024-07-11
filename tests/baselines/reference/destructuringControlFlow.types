@@ -12,16 +12,16 @@ function f1(obj: { a?: string }) {
     if (obj.a) {
 >obj.a : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->obj : { a?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
         obj = {};
 >obj = {} : {}
 >         : ^^
->obj : { a?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >{} : {}
 >   : ^^
 
@@ -30,8 +30,8 @@ function f1(obj: { a?: string }) {
 >   : ^^^^^^^^^^^^^^^^^^
 >obj["a"] : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
->obj : { a?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -40,8 +40,8 @@ function f1(obj: { a?: string }) {
 >   : ^^^^^^^^^^^^^^^^^^
 >obj.a : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->obj : { a?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     }
@@ -170,14 +170,14 @@ function f3(obj: { a?: number, b?: string }) {
 >               : ^^^^^^^^^^^^^^^^^^^^^^
 >obj.a : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->obj : { a?: number | undefined; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->obj : { a?: number | undefined; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -186,22 +186,22 @@ function f3(obj: { a?: number, b?: string }) {
 >  : ^^^^^^
 >b : string
 >  : ^^^^^^
->obj : { a?: number | undefined; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 
         ({ a, b } = obj);
->({ a, b } = obj) : { a?: number | undefined; b?: string | undefined; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a, b } = obj : { a?: number | undefined; b?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ a, b } = obj) : { a?: number; b?: string; }
+>                 : ^^^^^^      ^^^^^^      ^^^
+>{ a, b } = obj : { a?: number; b?: string; }
+>               : ^^^^^^      ^^^^^^      ^^^
 >{ a, b } : { a: number; b: string; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : string
 >  : ^^^^^^
->obj : { a?: number | undefined; b?: string | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
     }
 }
 

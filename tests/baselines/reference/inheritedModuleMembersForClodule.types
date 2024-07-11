@@ -51,11 +51,11 @@ class E extends D {
 >this.foo() : number
 >           : ^^^^^^
 >this.foo : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : typeof E
 >     : ^^^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
     }
 }
 

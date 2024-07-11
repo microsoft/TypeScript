@@ -131,7 +131,7 @@ class A {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -141,7 +141,7 @@ class A {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -151,7 +151,7 @@ class A {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     [fieldNameA]: any;
 >[fieldNameA] : any
@@ -266,7 +266,7 @@ void class B {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -276,7 +276,7 @@ void class B {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -286,7 +286,7 @@ void class B {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     [fieldNameA]: any;
 >[fieldNameA] : any
@@ -398,7 +398,7 @@ class C {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -408,7 +408,7 @@ class C {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -418,7 +418,7 @@ class C {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     [fieldNameA]: any;
 >[fieldNameA] : any
@@ -543,7 +543,7 @@ void class D {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -553,7 +553,7 @@ void class D {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -563,7 +563,7 @@ void class D {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     [fieldNameA]: any;
 >[fieldNameA] : any
@@ -685,7 +685,7 @@ class E {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -695,7 +695,7 @@ class E {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -705,7 +705,7 @@ class E {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     ["some" + "method"]() {}
 >["some" + "method"] : () => void
@@ -830,7 +830,7 @@ void class F {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -840,7 +840,7 @@ void class F {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -850,7 +850,7 @@ void class F {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     ["some" + "method"]() {}
 >["some" + "method"] : () => void
@@ -972,7 +972,7 @@ class G {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -982,7 +982,7 @@ class G {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -992,7 +992,7 @@ class G {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     ["some" + "method"]() {}
 >["some" + "method"] : () => void
@@ -1127,7 +1127,7 @@ void class H {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -1137,7 +1137,7 @@ void class H {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -1147,7 +1147,7 @@ void class H {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     ["some" + "method"]() {}
 >["some" + "method"] : () => void
@@ -1279,7 +1279,7 @@ class I {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -1289,7 +1289,7 @@ class I {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -1299,7 +1299,7 @@ class I {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x ["some" + "method"]() {}
 >x : (o: object, k: PropertyKey) => void
@@ -1436,7 +1436,7 @@ void class J {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
@@ -1446,7 +1446,7 @@ void class J {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
@@ -1456,7 +1456,7 @@ void class J {
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     @x ["some" + "method"]() {}
 >x : (o: object, k: PropertyKey) => void

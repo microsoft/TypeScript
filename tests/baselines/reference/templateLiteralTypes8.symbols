@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes8.ts] ////
+
+=== templateLiteralTypes8.ts ===
+const enum E {
+>E : Symbol(E, Decl(templateLiteralTypes8.ts, 0, 0))
+
+  a = "a",
+>a : Symbol(E.a, Decl(templateLiteralTypes8.ts, 0, 14))
+
+  b = "b",
+>b : Symbol(E.b, Decl(templateLiteralTypes8.ts, 1, 10))
+}
+
+type Stringify<T extends string> = `${T}`;
+>Stringify : Symbol(Stringify, Decl(templateLiteralTypes8.ts, 3, 1))
+>T : Symbol(T, Decl(templateLiteralTypes8.ts, 5, 15))
+>T : Symbol(T, Decl(templateLiteralTypes8.ts, 5, 15))
+
+let z1: `${E}` = "a";
+>z1 : Symbol(z1, Decl(templateLiteralTypes8.ts, 7, 3))
+>E : Symbol(E, Decl(templateLiteralTypes8.ts, 0, 0))
+
+let z2: Stringify<E> = "a";
+>z2 : Symbol(z2, Decl(templateLiteralTypes8.ts, 8, 3))
+>Stringify : Symbol(Stringify, Decl(templateLiteralTypes8.ts, 3, 1))
+>E : Symbol(E, Decl(templateLiteralTypes8.ts, 0, 0))
+

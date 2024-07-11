@@ -7,7 +7,7 @@ export class BuildWorkspaceService {
 
     public injectRequestService<P0, P1, P2>(service: P0) {
 >injectRequestService : <P0, P1, P2>(service: P0) => void
->                     : ^  ^^^^^^^^^^       ^^  ^^^^^^^^^
+>                     : ^  ^^  ^^  ^^       ^^  ^^^^^^^^^
 >service : P0
 >        : ^^
 
@@ -15,11 +15,11 @@ export class BuildWorkspaceService {
 >this.injectBuildService<number>(new X(service)) : void
 >                                                : ^^^^
 >this.injectBuildService : <P0_1>(service: P0_1) => void
->                        : ^    ^^       ^^    ^^^^^^^^^
+>                        : ^^^^^^^       ^^    ^^^^^^^^^
 >this : this
 >     : ^^^^
 >injectBuildService : <P0_1>(service: P0_1) => void
->                   : ^    ^^       ^^    ^^^^^^^^^
+>                   : ^^^^^^^       ^^    ^^^^^^^^^
 >new X(service) : any
 >               : ^^^
 >X : any

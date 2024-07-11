@@ -19,21 +19,21 @@ let b = a.getB().x.toFixed();
 >a.getB().x.toFixed() : string
 >                     : ^^^^^^
 >a.getB().x.toFixed : (fractionDigits?: number) => string
->                   : ^              ^^^      ^^^^^^^^^^^
+>                   : ^              ^^^      ^^^^^      
 >a.getB().x : number
 >           : ^^^^^^
 >a.getB() : import("b").B
 >         : ^^^^^^^^^^^^^^^^^^^
 >a.getB : () => import("b").B
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^       ^^^^^^^^^  ^
 >a : A
 >  : ^
 >getB : () => import("b").B
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^       ^^^^^^^^^  ^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 let c = a.getCls().y.toLowerCase();
 >c : string
@@ -41,21 +41,21 @@ let c = a.getCls().y.toLowerCase();
 >a.getCls().y.toLowerCase() : string
 >                           : ^^^^^^
 >a.getCls().y.toLowerCase : () => string
->                         : ^^^^^^^^^^^^
+>                         : ^^^^^^      
 >a.getCls().y : string
 >             : ^^^^^^
 >a.getCls() : import("C").Cls
 >           : ^^^^^^^^^^^^^^^
 >a.getCls : () => import("C").Cls
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^       ^^^  ^^^
 >a : A
 >  : ^
 >getCls : () => import("C").Cls
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^       ^^^  ^^^
 >y : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 === a.ts ===
 export class A {}
@@ -120,7 +120,7 @@ A.prototype.getCls = function () { return undefined; }
 >A.prototype.getCls = function () { return undefined; } : () => any
 >                                                       : ^^^^^^^^^
 >A.prototype.getCls : () => Cls
->                   : ^^^^^^^^^
+>                   : ^^^^^^   
 >A.prototype : A
 >            : ^
 >A : typeof A
@@ -128,7 +128,7 @@ A.prototype.getCls = function () { return undefined; }
 >prototype : A
 >          : ^
 >getCls : () => Cls
->       : ^^^^^^^^^
+>       : ^^^^^^   
 >function () { return undefined; } : () => any
 >                                  : ^^^^^^^^^
 >undefined : undefined

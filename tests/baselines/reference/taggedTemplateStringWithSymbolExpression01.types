@@ -20,7 +20,7 @@ let result: number = foo`${x}`;
 >foo`${x}` : number
 >          : ^^^^^^
 >foo : (template: any, val: symbol) => number
->    : ^        ^^   ^^   ^^      ^^^^^^^^^^^
+>    : ^        ^^   ^^   ^^      ^^^^^      
 >`${x}` : string
 >       : ^^^^^^
 >x : symbol
