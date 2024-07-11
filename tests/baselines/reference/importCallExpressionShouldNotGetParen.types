@@ -10,16 +10,16 @@ const localeName = "zh-CN";
 import(`./locales/${localeName}.js`).then(bar => {
 >import(`./locales/${localeName}.js`).then(bar => {    let x = bar;}) : Promise<void>
 >                                                                     : ^^^^^^^^^^^^^
->import(`./locales/${localeName}.js`).then : <TResult1 = any, TResult2 = never>(deferred onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                                          : ^        ^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import(`./locales/${localeName}.js`).then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                          : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import(`./locales/${localeName}.js`) : Promise<any>
 >                                     : ^^^^^^^^^^^^
 >`./locales/${localeName}.js` : "./locales/zh-CN.js"
 >                             : ^^^^^^^^^^^^^^^^^^^^
 >localeName : "zh-CN"
 >           : ^^^^^^^
->then : <TResult1 = any, TResult2 = never>(deferred onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => {    let x = bar;} : (bar: any) => void
 >                          : ^   ^^^^^^^^^^^^^^
 >bar : any
@@ -33,8 +33,8 @@ import(`./locales/${localeName}.js`).then(bar => {
 import("./locales/" + localeName + ".js").then(bar => {
 >import("./locales/" + localeName + ".js").then(bar => {    let x = bar;}) : Promise<void>
 >                                                                          : ^^^^^^^^^^^^^
->import("./locales/" + localeName + ".js").then : <TResult1 = any, TResult2 = never>(deferred onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                                               : ^        ^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./locales/" + localeName + ".js").then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                               : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./locales/" + localeName + ".js") : Promise<any>
 >                                          : ^^^^^^^^^^^^
 >"./locales/" + localeName + ".js" : string
@@ -47,8 +47,8 @@ import("./locales/" + localeName + ".js").then(bar => {
 >           : ^^^^^^^
 >".js" : ".js"
 >      : ^^^^^
->then : <TResult1 = any, TResult2 = never>(deferred onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => {    let x = bar;} : (bar: any) => void
 >                          : ^   ^^^^^^^^^^^^^^
 >bar : any

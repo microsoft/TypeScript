@@ -67,8 +67,8 @@ export class BrokenClass {
         this.doStuff(order.id)
 >this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          }) : Promise<void>
 >                                                                                                                          : ^^^^^^^^^^^^^
->this.doStuff(order.id)          .then : <TResult1 = void, TResult2 = never>(deferred onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                                      : ^        ^^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.doStuff(order.id)          .then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                      : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.doStuff(order.id) : Promise<void>
 >                       : ^^^^^^^^^^^^^
 >this.doStuff : (id: number) => Promise<void>
@@ -84,8 +84,8 @@ export class BrokenClass {
 >   : ^^^
 
           .then((items) => {
->then : <TResult1 = void, TResult2 = never>(deferred onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(items) => {            order.items = items;            resolve(order);          } : (items: void) => void
 >                                                                                   : ^     ^^^^^^^^^^^^^^^
 >items : void
@@ -116,8 +116,8 @@ export class BrokenClass {
     return Promise.all(result.map(populateItems))
 >Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      }) : Promise<void>
 >                                                                                                                         : ^^^^^^^^^^^^^
->Promise.all(result.map(populateItems))      .then : <TResult1 = unknown[], TResult2 = never>(deferred onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                                                  : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all(result.map(populateItems))      .then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                                  : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all(result.map(populateItems)) : Promise<unknown[]>
 >                                       : ^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
@@ -138,8 +138,8 @@ export class BrokenClass {
 >              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       .then((orders: Array<MyModule.MyModel>) => {
->then : <TResult1 = unknown[], TResult2 = never>(deferred onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, deferred onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^        ^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: Array<MyModule.MyModel>) => void
 >                                                                      : ^      ^^                       ^^^^^^^^^
 >orders : MyModule.MyModel[]
