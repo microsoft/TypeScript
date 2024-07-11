@@ -520,7 +520,10 @@ function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolution
 
 function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: string, moduleResolutionState: ModuleResolutionState) {
     const nameForLookup = endsWith(typeRoot, "/node_modules/@types") || endsWith(typeRoot, "/node_modules/@types/") ?
-        mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState) :
+        mangleScopedPackageNameWithTrace(
+            nonRelativeModuleNameForTypingCacheWithTrace(typeReferenceDirectiveName, moduleResolutionState),
+            moduleResolutionState,
+        ) :
         typeReferenceDirectiveName;
     return combinePaths(typeRoot, nameForLookup);
 }
@@ -586,6 +589,15 @@ export const nodeCoreModules = new Set(nodeCoreModuleList);
 /** @internal */
 export function nonRelativeModuleNameForTypingCache(moduleName: string) {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
+}
+
+/** For a core node module, we must look in `@types/node` instead of `@types/fs`. */
+function nonRelativeModuleNameForTypingCacheWithTrace(moduleName: string, state: ModuleResolutionState): string {
+    const mangled = nonRelativeModuleNameForTypingCache(moduleName);
+    if (state.traceEnabled && mangled !== moduleName) {
+        trace(state.host, Diagnostics.Found_core_node_module_0_looking_in_node, moduleName);
+    }
+    return mangled;
 }
 
 /**
@@ -3106,7 +3118,18 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
             }
             nodeModulesAtTypesExists = false;
         }
-        return loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, mangleScopedPackageNameWithTrace(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, state, cache, redirectedReference);
+        return loadModuleFromSpecificNodeModulesDirectory(
+            Extensions.Declaration,
+            mangleScopedPackageNameWithTrace(
+                nonRelativeModuleNameForTypingCacheWithTrace(moduleName, state),
+                state,
+            ),
+            nodeModulesAtTypes,
+            nodeModulesAtTypesExists,
+            state,
+            cache,
+            redirectedReference,
+        );
     }
 }
 
@@ -3350,7 +3373,8 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 }
 
 function resolveFromTypeRoot(moduleName: string, state: ModuleResolutionState) {
-    if (!state.compilerOptions.typeRoots) return;
+    if (!state.compilerOptions.typeRoots?.length) return;
+    // const moduleName = nonRelativeModuleNameForTypingCache(inputModuleName);
     for (const typeRoot of state.compilerOptions.typeRoots) {
         const candidate = getCandidateFromTypeRoot(typeRoot, moduleName, state);
         const directoryExists = directoryProbablyExists(typeRoot, state.host);

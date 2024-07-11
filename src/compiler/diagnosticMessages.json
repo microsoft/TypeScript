@@ -5237,6 +5237,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Found core node module '{0}', looking in 'node'": {
+        "category": "Message",
+        "code": 6185
+    },
     "Enable strict checking of function types.": {
         "category": "Message",
         "code": 6186

@@ -78,8 +78,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/index.ts Text-1 "access"
 	/lib.d.ts Text-1 lib.d.ts-Text
-	/node_modules/@types/fs-extra/index.d.ts Text-1 "export * from \"fs\";"
 	/node_modules/@types/node/index.d.ts Text-1 "declare module \"fs\" {\n  export function accessSync(path: string): void;\n}"
+	/node_modules/@types/fs-extra/index.d.ts Text-1 "export * from \"fs\";"
 
 
 	lib.decorators.d.ts
@@ -92,10 +92,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Matched by default include pattern '**/*'
 	lib.d.ts
 	  Matched by default include pattern '**/*'
+	node_modules/@types/node/index.d.ts
+	  Imported via "fs" from file 'node_modules/@types/fs-extra/index.d.ts'
+	  Entry point for implicit type library 'node'
 	node_modules/@types/fs-extra/index.d.ts
 	  Entry point for implicit type library 'fs-extra'
-	node_modules/@types/node/index.d.ts
-	  Entry point for implicit type library 'node'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -127,8 +128,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\"\n  }\n}"
-	/node_modules/@types/fs-extra/index.d.ts Text-1 "export * from \"fs\";"
 	/node_modules/@types/node/index.d.ts Text-1 "declare module \"fs\" {\n  export function accessSync(path: string): void;\n}"
+	/node_modules/@types/fs-extra/index.d.ts Text-1 "export * from \"fs\";"
 
 
 	lib.d.ts
@@ -139,10 +140,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
 	tsconfig.json
 	  Root file specified for compilation
+	node_modules/@types/node/index.d.ts
+	  Imported via "fs" from file 'node_modules/@types/fs-extra/index.d.ts'
+	  Entry point for implicit type library 'node'
 	node_modules/@types/fs-extra/index.d.ts
 	  Entry point for implicit type library 'fs-extra'
-	node_modules/@types/node/index.d.ts
-	  Entry point for implicit type library 'node'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)

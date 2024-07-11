@@ -177,15 +177,15 @@ Program options: {
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
-/users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
+/users/username/projects/project/foo.ts
 
 Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
+/users/username/projects/project/foo.ts
 
 Shape signatures in builder refreshed for::
-/users/username/projects/project/foo.ts (computed .d.ts)
 /users/username/projects/project/node_modules/@types/node/index.d.ts (used version)
+/users/username/projects/project/foo.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

@@ -15,15 +15,15 @@ fs: {
     "/fs.ts",
     "/fs.tsx",
     "/fs.d.ts",
-    "/a/b/node_modules/@types/fs/package.json",
-    "/a/b/node_modules/@types/fs.d.ts",
-    "/a/b/node_modules/@types/fs/index.d.ts",
-    "/a/node_modules/@types/fs/package.json",
-    "/a/node_modules/@types/fs.d.ts",
-    "/a/node_modules/@types/fs/index.d.ts",
-    "/node_modules/@types/fs/package.json",
-    "/node_modules/@types/fs.d.ts",
-    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/node_modules/@types/node/package.json",
+    "/a/b/node_modules/@types/node.d.ts",
+    "/a/b/node_modules/@types/node/index.d.ts",
+    "/a/node_modules/@types/node/package.json",
+    "/a/node_modules/@types/node.d.ts",
+    "/a/node_modules/@types/node/index.d.ts",
+    "/node_modules/@types/node/package.json",
+    "/node_modules/@types/node.d.ts",
+    "/node_modules/@types/node/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
     "/a/fs.js",
@@ -50,15 +50,18 @@ File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
-File '/a/b/node_modules/@types/fs/package.json' does not exist.
-File '/a/b/node_modules/@types/fs.d.ts' does not exist.
-File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.
-File '/a/node_modules/@types/fs/package.json' does not exist.
-File '/a/node_modules/@types/fs.d.ts' does not exist.
-File '/a/node_modules/@types/fs/index.d.ts' does not exist.
-File '/node_modules/@types/fs/package.json' does not exist.
-File '/node_modules/@types/fs.d.ts' does not exist.
-File '/node_modules/@types/fs/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/a/b/node_modules/@types/node/package.json' does not exist.
+File '/a/b/node_modules/@types/node.d.ts' does not exist.
+File '/a/b/node_modules/@types/node/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/a/node_modules/@types/node/package.json' does not exist.
+File '/a/node_modules/@types/node.d.ts' does not exist.
+File '/a/node_modules/@types/node/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/node_modules/@types/node/package.json' does not exist.
+File '/node_modules/@types/node.d.ts' does not exist.
+File '/node_modules/@types/node/index.d.ts' does not exist.
 File '/a/b/fs.js' does not exist.
 File '/a/b/fs.jsx' does not exist.
 File '/a/fs.js' does not exist.
@@ -91,15 +94,15 @@ fs: {
     "/fs.ts",
     "/fs.tsx",
     "/fs.d.ts",
-    "/a/b/node_modules/@types/fs/package.json",
-    "/a/b/node_modules/@types/fs.d.ts",
-    "/a/b/node_modules/@types/fs/index.d.ts",
-    "/a/node_modules/@types/fs/package.json",
-    "/a/node_modules/@types/fs.d.ts",
-    "/a/node_modules/@types/fs/index.d.ts",
-    "/node_modules/@types/fs/package.json",
-    "/node_modules/@types/fs.d.ts",
-    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/node_modules/@types/node/package.json",
+    "/a/b/node_modules/@types/node.d.ts",
+    "/a/b/node_modules/@types/node/index.d.ts",
+    "/a/node_modules/@types/node/package.json",
+    "/a/node_modules/@types/node.d.ts",
+    "/a/node_modules/@types/node/index.d.ts",
+    "/node_modules/@types/node/package.json",
+    "/node_modules/@types/node.d.ts",
+    "/node_modules/@types/node/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
     "/a/fs.js",
@@ -167,15 +170,15 @@ fs: {
     "/fs.ts",
     "/fs.tsx",
     "/fs.d.ts",
-    "/a/b/node_modules/@types/fs/package.json",
-    "/a/b/node_modules/@types/fs.d.ts",
-    "/a/b/node_modules/@types/fs/index.d.ts",
-    "/a/node_modules/@types/fs/package.json",
-    "/a/node_modules/@types/fs.d.ts",
-    "/a/node_modules/@types/fs/index.d.ts",
-    "/node_modules/@types/fs/package.json",
-    "/node_modules/@types/fs.d.ts",
-    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/node_modules/@types/node/package.json",
+    "/a/b/node_modules/@types/node.d.ts",
+    "/a/b/node_modules/@types/node/index.d.ts",
+    "/a/node_modules/@types/node/package.json",
+    "/a/node_modules/@types/node.d.ts",
+    "/a/node_modules/@types/node/index.d.ts",
+    "/node_modules/@types/node/package.json",
+    "/node_modules/@types/node.d.ts",
+    "/node_modules/@types/node/index.d.ts",
     "/a/b/fs.js",
     "/a/b/fs.jsx",
     "/a/fs.js",
@@ -202,15 +205,18 @@ File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
-File '/a/b/node_modules/@types/fs/package.json' does not exist.
-File '/a/b/node_modules/@types/fs.d.ts' does not exist.
-File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.
-File '/a/node_modules/@types/fs/package.json' does not exist.
-File '/a/node_modules/@types/fs.d.ts' does not exist.
-File '/a/node_modules/@types/fs/index.d.ts' does not exist.
-File '/node_modules/@types/fs/package.json' does not exist.
-File '/node_modules/@types/fs.d.ts' does not exist.
-File '/node_modules/@types/fs/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/a/b/node_modules/@types/node/package.json' does not exist.
+File '/a/b/node_modules/@types/node.d.ts' does not exist.
+File '/a/b/node_modules/@types/node/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/a/node_modules/@types/node/package.json' does not exist.
+File '/a/node_modules/@types/node.d.ts' does not exist.
+File '/a/node_modules/@types/node/index.d.ts' does not exist.
+Found core node module 'fs', looking in 'node'
+File '/node_modules/@types/node/package.json' does not exist.
+File '/node_modules/@types/node.d.ts' does not exist.
+File '/node_modules/@types/node/index.d.ts' does not exist.
 File '/a/b/fs.js' does not exist.
 File '/a/b/fs.jsx' does not exist.
 File '/a/fs.js' does not exist.
