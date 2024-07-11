@@ -24860,6 +24860,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, isUnitType) : isUnitType(t);
     }
 
+    function typeMayWitnessLiteralTypes(target: Type): boolean {
+        if (target.flags & TypeFlags.Union) {
+            return some((target as UnionType).types, typeMayWitnessLiteralTypes);
+        }
+
+        // We do not account for `any` because `getContextFreeTypeOfExpression`
+        // specifically pushes a cached `any`.
+        const nonBaseFlags = ~(TypeFlags.Unknown | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt | TypeFlags.Never | TypeFlags.Nullable);
+        return (target.flags & nonBaseFlags) !== 0;
+    }
+
     function extractUnitType(type: Type) {
         return type.flags & TypeFlags.Intersection ? find((type as IntersectionType).types, isUnitType) || type : type;
     }
@@ -40583,14 +40594,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NullKeyword:
                 return nullWideningType;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.StringLiteral:
+            case SyntaxKind.StringLiteral: {
+                const contextualType = getContextualType(node, ContextFlags.NoConstraints);
+                if (contextualType !== undefined && !typeMayWitnessLiteralTypes(contextualType)) return stringType;
+
                 return hasSkipDirectInferenceFlag(node) ?
                     blockedStringType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral:
+            }
+            case SyntaxKind.NumericLiteral: {
+                const contextualType = getContextualType(node, ContextFlags.NoConstraints);
+                if (contextualType !== undefined && !typeMayWitnessLiteralTypes(contextualType)) return numberType;
+
                 checkGrammarNumericLiteral(node as NumericLiteral);
                 return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
+            }
             case SyntaxKind.BigIntLiteral:
+                const contextualType = getContextualType(node, ContextFlags.NoConstraints);
+                if (contextualType !== undefined && !typeMayWitnessLiteralTypes(contextualType)) return bigintType;
+
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
                     negative: false,
