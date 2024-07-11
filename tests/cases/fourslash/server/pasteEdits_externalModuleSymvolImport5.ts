@@ -3,26 +3,25 @@
 // @Filename: /folder/c.ts
 //// [||]
 
-
 // @Filename: /a.ts
 //// const abc = 10;
 //// const def = 20;
-//// export interface testInterface {
+//// export default interface testInterface {
 ////     abc: number;
 ////     def: number;
 //// }
 
-// @Filename: /b.mts
-//// import test from "./a.js";
+// @Filename: /b.ts
+//// import testInterface from "./a.ts";
 ////
-//// [|function foo(abc: test.testInterface, def: test.testInterface) {
+//// [|function foo(abc: testInterface, def: testInterface) {
 ////    console.log(abc);
 ////    console.log(def);
 //// }|]
 //// 
 
 // @Filename: /tsconfig.json
-////{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "a.ts", "b.mts"] }
+////{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "a.ts", "b.ts"] }
 
 const range = test.ranges();
 verify.pasteEdits({
@@ -32,11 +31,11 @@ console.log(abc);
 console.log(def);
 }`],
         pasteLocations: [range[0]],
-        copiedFrom: { file: "b.mts", range: [range[1]] },
+        copiedFrom: { file: "b.ts", range: [range[1]] },
     },
     newFileContents: {
         "/folder/c.ts":
-`import test from "../a";
+`import testInterface from "../a";
 
 function foo(abc: test.abc, def: test.def) {
 console.log(abc);

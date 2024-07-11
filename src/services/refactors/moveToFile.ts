@@ -1134,14 +1134,14 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
             declaration.importClause.namedBindings
         ) {
             if (isNamespaceImport(declaration.importClause.namedBindings)) {
-                const symbol = checker.getSymbolAtLocation(declaration.importClause.namedBindings.name);
+                const symbol = declaration.importClause.namedBindings.symbol;
                 if (symbol) {
                     existingLocals.add(skipAlias(symbol, checker));
                 }
             }
             else if (isNamedImports(declaration.importClause.namedBindings)) {
                 for (const e of declaration.importClause.namedBindings.elements) {
-                    const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
+                    const symbol = e.symbol;
                     if (symbol) {
                         existingLocals.add(skipAlias(symbol, checker));
                     }
@@ -1150,7 +1150,7 @@ export function getExistingLocals(sourceFile: SourceFile, statements: readonly S
         }
         if (isVariableDeclarationInitializedToRequire(declaration.parent) && isObjectBindingPattern(declaration.parent.name)) {
             for (const e of declaration.parent.name.elements) {
-                const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
+                const symbol = e.symbol;
                 if (symbol) {
                     existingLocals.add(skipAlias(symbol, checker));
                 }

@@ -82,7 +82,7 @@ export function addTargetFileImports(
             importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
         }
         else {
-            isExternalModuleSymbol(targetSymbol) ? importAdder.addImportForExternalModuleSymbol(symbol, targetSymbol, isValidTypeOnlyUseSite) : importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
+            isExternalModuleSymbol(targetSymbol) ? importAdder.addImportForExternalModuleSymbol(targetSymbol, symbol.name, isValidTypeOnlyUseSite, declaration) : importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
         }
     });
 

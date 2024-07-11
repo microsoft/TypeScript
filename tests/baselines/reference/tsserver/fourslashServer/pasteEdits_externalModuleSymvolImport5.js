@@ -3,15 +3,15 @@ Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/a.ts]
 const abc = 10;
 const def = 20;
-export interface testInterface {
+export default interface testInterface {
     abc: number;
     def: number;
 }
 
-//// [/b.mts]
-import test from "./a.js";
+//// [/b.ts]
+import testInterface from "./a.ts";
 
-function foo(abc: test.testInterface, def: test.testInterface) {
+function foo(abc: testInterface, def: testInterface) {
    console.log(abc);
    console.log(def);
 }
@@ -30,7 +30,7 @@ lib.decorators.d.ts-Text
 lib.decorators.legacy.d.ts-Text
 
 //// [/tsconfig.json]
-{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "a.ts", "b.mts"] }
+{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "a.ts", "b.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -59,7 +59,7 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/folder/c.ts",
   "/a.ts",
-  "/b.mts"
+  "/b.ts"
  ],
  "options": {
   "module": 199,
@@ -67,15 +67,15 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  }
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.esnext.full.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/folder/c.ts SVC-1-0 ""
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport default interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/b.ts Text-1 "import testInterface from \"./a.ts\";\n\nfunction foo(abc: testInterface, def: testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
 	folder/c.ts
@@ -83,10 +83,11 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  File is CommonJS module because 'package.json' was not found
 	a.ts
 	  Part of 'files' list in tsconfig.json
-	  Imported via "./a.js" from file 'b.mts'
+	  Imported via "./a.ts" from file 'b.ts'
 	  File is CommonJS module because 'package.json' was not found
-	b.mts
+	b.ts
 	  Part of 'files' list in tsconfig.json
+	  File is CommonJS module because 'package.json' was not found
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -166,7 +167,7 @@ After Request
 watchedFiles::
 /a.ts: *new*
   {"pollingInterval":500}
-/b.mts: *new*
+/b.ts: *new*
   {"pollingInterval":500}
 /lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
@@ -183,7 +184,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/b.mts *new*
+/b.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -255,7 +256,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "copiedFrom": {
-          "file": "b.mts",
+          "file": "b.ts",
           "spans": [
             {
               "start": {
@@ -277,10 +278,12 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json pr
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport default interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/b.ts Text-1 "import testInterface from \"./a.ts\";\n\nfunction foo(abc: testInterface, def: testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -305,7 +308,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import test from \"../a\";\n\n"
+                "newText": "import testInterface from \"../a\";\n\n"
               },
               {
                 "start": {
@@ -336,7 +339,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/b.mts
+/b.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json
