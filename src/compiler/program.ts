@@ -1545,7 +1545,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let commonSourceDirectory: string;
     let typeChecker: TypeChecker;
     let classifiableNames: Set<__String>;
-    const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
     let filesWithReferencesProcessed: Set<Path> | undefined;
     let fileReasonsToChain: Map<Path, FileReasonToChainCache> | undefined;
@@ -2250,50 +2249,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             canReuseResolutionsInFile: () =>
                 containingFile === oldProgram?.getSourceFile(containingFile.fileName) &&
                 !hasInvalidatedResolutions(containingFile.path),
-            isEntryResolvingToAmbientModule: moduleNameResolvesToAmbientModule,
+            resolveToOwnAmbientModule: true,
         });
-    }
-
-    function moduleNameResolvesToAmbientModule(moduleName: StringLiteralLike, file: SourceFile) {
-        // We know moduleName resolves to an ambient module provided that moduleName:
-        // - is in the list of ambient modules locally declared in the current source file.
-        // - resolved to an ambient module in the old program whose declaration is in an unmodified file
-        //   (so the same module declaration will land in the new program)
-        if (contains(file.ambientModuleNames, moduleName.text)) {
-            if (isTraceEnabled(options, host)) {
-                trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName.text, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
-            }
-            return true;
-        }
-        else {
-            return moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName, file);
-        }
-    }
-
-    // If we change our policy of rechecking failed lookups on each program create,
-    // we should adjust the value returned here.
-    function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike, file: SourceFile): boolean {
-        const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName))?.resolvedModule;
-        const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
-        if (resolutionToFile && resolvedFile) {
-            // In the old program, we resolved to an ambient module that was in the same
-            //   place as we expected to find an actual module file.
-            // We actually need to return 'false' here even though this seems like a 'true' case
-            //   because the normal module resolution algorithm will find this anyway.
-            return false;
-        }
-
-        // at least one of declarations should come from non-modified source file
-        const unmodifiedFile = ambientModuleNameToUnmodifiedFileName.get(moduleName.text);
-
-        if (!unmodifiedFile) {
-            return false;
-        }
-
-        if (isTraceEnabled(options, host)) {
-            trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName.text, unmodifiedFile);
-        }
-        return true;
     }
 
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
@@ -2333,7 +2290,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolutionFromOldProgram: (name: string, mode: ResolutionMode) => Resolution | undefined;
         getResolved: (oldResolution: Resolution) => ResolutionWithResolvedFileName | undefined;
         canReuseResolutionsInFile: () => boolean;
-        isEntryResolvingToAmbientModule?: (entry: Entry, containingFile: SourceFileOrString) => boolean;
+        resolveToOwnAmbientModule?: true;
     }
 
     function resolveNamesReusingOldState<Entry, SourceFileOrString, SourceFileOrUndefined extends SourceFile | undefined, Resolution>({
@@ -2346,10 +2303,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolutionFromOldProgram,
         getResolved,
         canReuseResolutionsInFile,
-        isEntryResolvingToAmbientModule,
+        resolveToOwnAmbientModule,
     }: ResolveNamesReusingOldStateInput<Entry, SourceFileOrString, SourceFileOrUndefined, Resolution>): readonly Resolution[] {
         if (!entries.length) return emptyArray;
-        if (structureIsReused === StructureIsReused.Not && (!isEntryResolvingToAmbientModule || !containingSourceFile!.ambientModuleNames.length)) {
+        if (structureIsReused === StructureIsReused.Not && (!resolveToOwnAmbientModule || !containingSourceFile!.ambientModuleNames.length)) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
             return resolutionWorker(
@@ -2394,14 +2351,27 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     continue;
                 }
             }
-            if (isEntryResolvingToAmbientModule?.(entry, containingFile)) {
-                (result ??= new Array(entries.length))[i] = emptyResolution;
+            if (resolveToOwnAmbientModule) {
+                const name = nameAndModeGetter.getName(entry);
+                // We know moduleName resolves to an ambient module provided that moduleName:
+                // - is in the list of ambient modules locally declared in the current source file.
+                if (contains(containingSourceFile!.ambientModuleNames, name)) {
+                    if (isTraceEnabled(options, host)) {
+                        trace(
+                            host,
+                            Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1,
+                            name,
+                            getNormalizedAbsolutePath(containingSourceFile!.originalFileName, currentDirectory),
+                        );
+                    }
+                    (result ??= new Array(entries.length))[i] = emptyResolution;
+                    continue;
+                }
             }
-            else {
-                // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
-                (unknownEntries ??= []).push(entry);
-                (unknownEntryIndices ??= []).push(i);
-            }
+
+            // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
+            (unknownEntries ??= []).push(entry);
+            (unknownEntryIndices ??= []).push(i);
         }
 
         if (!unknownEntries) return result!;
@@ -2585,11 +2555,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
                 // add file to the modified list so that we will resolve it later
                 modifiedSourceFiles.push(newSourceFile);
-            }
-            else {
-                for (const moduleName of oldSourceFile.ambientModuleNames) {
-                    ambientModuleNameToUnmodifiedFileName.set(moduleName, oldSourceFile.fileName);
-                }
             }
 
             // if file has passed all checks it should be safe to reuse it

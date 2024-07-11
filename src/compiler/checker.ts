@@ -1794,11 +1794,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tryGetMemberInModuleExports: (name, symbol) => tryGetMemberInModuleExports(escapeLeadingUnderscores(name), symbol),
         tryGetMemberInModuleExportsAndProperties: (name, symbol) => tryGetMemberInModuleExportsAndProperties(escapeLeadingUnderscores(name), symbol),
         tryFindAmbientModule: moduleName => tryFindAmbientModule(moduleName, /*withAugmentations*/ true),
-        tryFindAmbientModuleWithoutAugmentations: moduleName => {
-            // we deliberately exclude augmentations
-            // since we are only interested in declarations of the module itself
-            return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
-        },
         getApparentType,
         getUnionType,
         isTypeAssignableTo,
