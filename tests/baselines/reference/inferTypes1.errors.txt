@@ -14,12 +14,15 @@ inferTypes1.ts(83,43): error TS1338: 'infer' declarations are only permitted in 
 inferTypes1.ts(83,53): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
 inferTypes1.ts(84,15): error TS2304: Cannot find name 'U'.
 inferTypes1.ts(84,43): error TS2304: Cannot find name 'U'.
+inferTypes1.ts(85,27): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(85,54): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes1.ts(85,64): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
 inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
 inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
 
 
-==== inferTypes1.ts (14 errors) ====
+==== inferTypes1.ts (17 errors) ====
     type Unpacked<T> =
         T extends (infer U)[] ? U :
         T extends (...args: any[]) => infer U ? U :
@@ -133,6 +136,12 @@ inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string
                                               ~
 !!! error TS2304: Cannot find name 'U'.
     type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
+                              ~~~~~~~
+!!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+                                                         ~~~~~~~
+!!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+                                                                   ~~~~~~~
+!!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
     
     type T70<T extends string> = { x: T };
     type T71<T> = T extends T70<infer U> ? T70<U> : never;

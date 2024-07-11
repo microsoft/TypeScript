@@ -41647,7 +41647,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkInferType(node: InferTypeNode) {
-        if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (n.parent as ConditionalTypeNode).extendsType === n)) {
+        if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && ((n.parent as ConditionalTypeNode).extendsType === n || "quit"))) {
             grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
         }
         checkSourceElement(node.typeParameter);

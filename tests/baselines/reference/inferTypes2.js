@@ -52,3 +52,29 @@ export declare function foo2<T>(obj: T): T extends {
 export declare function bar2<T>(obj: T): T extends {
     x: infer P extends number ? infer P : string;
 } ? P : never;
+
+
+//// [DtsFileErrors]
+
+
+inferTypes2.d.ts(10,8): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+inferTypes2.d.ts(10,33): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+
+
+==== inferTypes2.d.ts (2 errors) ====
+    export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
+    export declare function bar<T>(obj: T): T extends () => infer P ? P : never;
+    export type BadNested<T> = {
+        x: T extends number ? T : string;
+    };
+    export declare function foo2<T>(obj: T): T extends {
+        [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+    } ? P : never;
+    export declare function bar2<T>(obj: T): T extends {
+        x: infer P extends number ? infer P : string;
+           ~~~~~~~
+!!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+                                    ~~~~~~~
+!!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+    } ? P : never;
+    
