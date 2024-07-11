@@ -357,7 +357,10 @@ export function transformDeclarations(context: TransformationContext) {
     function reportPrivateInBaseOfClassExpression(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName),
+                addRelatedInfo(
+                    createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected, propertyName),
+                    ...(isVariableDeclaration((errorNameNode || errorFallbackNode)!.parent) ? [createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Add_a_type_annotation_to_the_variable_0, errorDeclarationNameWithFallback())] : []),
+                ),
             );
         }
     }
