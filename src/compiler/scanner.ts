@@ -1882,18 +1882,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
 
             const ch = codePointUnchecked(pos);
-            if (pos === 0) {
-                // Special handling for shebang
-                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
-                    pos = scanShebangTrivia(text, pos);
-                    if (skipTrivia) {
-                        continue;
-                    }
-                    else {
-                        return token = SyntaxKind.ShebangTrivia;
-                    }
-                }
-            }
 
             switch (ch) {
                 case CharacterCodes.lineFeed:
@@ -2302,13 +2290,24 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.Unknown;
                 case CharacterCodes.hash:
-                    if (pos !== 0 && text[pos + 1] === "!") {
-                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
-                        pos++;
-                        return token = SyntaxKind.Unknown;
+                    // Special handling for shebang
+                    const charAfterHash = codePointUnchecked(pos + 1);
+                    if (charAfterHash === CharacterCodes.exclamation) {
+                        if (pos !== 0) {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
+
+                        pos = scanShebangTrivia(text, pos);
+                        if (skipTrivia) {
+                            continue;
+                        }
+                        else {
+                            return token = SyntaxKind.ShebangTrivia;
+                        }
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
                     if (charAfterHash === CharacterCodes.backslash) {
                         pos++;
                         const extendedCookedChar = peekExtendedUnicodeEscape();
