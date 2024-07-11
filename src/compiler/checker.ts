@@ -5787,7 +5787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
-        let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
+        let aliasesToMakeVisible: Set<LateVisibilityPaintedStatement> | undefined;
         if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
             return undefined;
         }
@@ -5856,7 +5856,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // since we will do the emitting later in trackSymbol.
             if (shouldComputeAliasToMakeVisible) {
                 getNodeLinks(declaration).isVisible = true;
-                aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, aliasingStatement);
+                (aliasesToMakeVisible ??= new Set()).add(aliasingStatement);
             }
             return true;
         }

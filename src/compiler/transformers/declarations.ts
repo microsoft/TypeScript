@@ -170,12 +170,10 @@ import {
     NodeId,
     normalizeSlashes,
     OmittedExpression,
-    orderedRemoveItem,
     ParameterDeclaration,
     parseNodeFactory,
     PropertyDeclaration,
     PropertySignature,
-    pushIfUnique,
     removeAllComments,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -260,7 +258,7 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
+    let lateMarkedStatements: Set<LateVisibilityPaintedStatement> | undefined;
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
 
@@ -325,7 +323,7 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 else {
                     for (const ref of symbolAccessibilityResult.aliasesToMakeVisible) {
-                        pushIfUnique(lateMarkedStatements, ref);
+                        lateMarkedStatements.add(ref);
                     }
                 }
             }
@@ -960,8 +958,7 @@ export function transformDeclarations(context: TransformationContext) {
         // In such a scenario, only Q and D are initially visible, but we don't consider imports as private names - instead we say they if they are referenced they must
         // be recorded. So while checking D's visibility we mark C as visible, then we must check C which in turn marks B, completing the chain of
         // dependent imports and allowing a valid declaration file output. Today, this dependent alias marking only happens for internal import aliases.
-        while (length(lateMarkedStatements)) {
-            const i = lateMarkedStatements!.shift()!;
+        for (const i of lateMarkedStatements ?? emptyArray) {
             if (!isLateVisibilityPaintedStatement(i)) {
                 return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${Debug.formatSyntaxKind((i as Node).kind)}`);
             }
@@ -1380,9 +1377,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
-        if (lateMarkedStatements) {
-            while (orderedRemoveItem(lateMarkedStatements, input));
-        }
+        lateMarkedStatements?.delete(input);
         if (shouldStripInternal(input)) return;
         switch (input.kind) {
             case SyntaxKind.ImportEqualsDeclaration: {
