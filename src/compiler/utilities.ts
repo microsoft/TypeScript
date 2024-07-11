@@ -10006,26 +10006,25 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
 /** @internal */
 export interface ParsedPatterns {
     matchableStringSet: ReadonlySet<string> | undefined;
-    sortedPatterns: (readonly Pattern[]) | undefined;
+    patterns: (readonly Pattern[]) | undefined;
 }
 
 const parsedPatternsCache = new WeakMap<MapLike<string[]>, ParsedPatterns>();
 
 /**
- * Divides patterns into a set of exact specifiers and sorted patterns.
- * NOTE that this function caches, and assumes the same `paths` argument will
- * never be provided with a different value for `sortByAggregateLength`.
+ * Divides patterns into a set of exact specifiers and patterns.
+ * NOTE that this function caches the result based on object identity.
  *
  * @internal
  */
-export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength: boolean = false): ParsedPatterns {
+export function tryParsePatterns(paths: MapLike<string[]>): ParsedPatterns {
     let result = parsedPatternsCache.get(paths);
     if (result !== undefined) {
         return result;
     }
 
     let matchableStringSet: Set<string> | undefined;
-    let sortedPatterns: Pattern[] | undefined;
+    let patterns: Pattern[] | undefined;
 
     const pathList = getOwnKeys(paths);
     for (const path of pathList) {
@@ -10037,23 +10036,15 @@ export function tryParsePatterns(paths: MapLike<string[]>, sortByAggregateLength
             (matchableStringSet ??= new Set()).add(patternOrStr);
         }
         else {
-            (sortedPatterns ??= []).push(patternOrStr);
+            (patterns ??= []).push(patternOrStr);
         }
     }
-
-    sortedPatterns?.sort((a, b) => {
-        const prefixComparison = compareStringsCaseSensitive(a.prefix, b.prefix);
-        if (prefixComparison === 0 && sortByAggregateLength) {
-            return a.suffix.length - b.suffix.length;
-        }
-        return prefixComparison;
-    });
 
     parsedPatternsCache.set(
         paths,
         result = {
             matchableStringSet,
-            sortedPatterns,
+            patterns,
         },
     );
 
@@ -10121,17 +10112,17 @@ export const emptyFileSystemEntries: FileSystemEntries = {
  * @internal
  */
 export function matchPatternOrExact(patternOrStrings: ParsedPatterns, candidate: string): string | Pattern | undefined {
-    const { matchableStringSet, sortedPatterns } = patternOrStrings;
+    const { matchableStringSet, patterns } = patternOrStrings;
 
     if (matchableStringSet?.has(candidate)) {
         return candidate;
     }
 
-    if (sortedPatterns === undefined || sortedPatterns.length === 0) {
+    if (patterns === undefined || patterns.length === 0) {
         return undefined;
     }
 
-    return findBestPatternMatch(sortedPatterns, _ => _, candidate);
+    return findBestPatternMatch(patterns, _ => _, candidate);
 }
 
 /** @internal */

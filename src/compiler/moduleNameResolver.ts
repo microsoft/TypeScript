@@ -1568,7 +1568,6 @@ function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: s
             trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
         }
         const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-        // TODO: do we need to sort by aggregate length?
         const pathPatterns = tryParsePatterns(paths);
         return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
     }
@@ -2525,7 +2524,6 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
         }
-        // TODO: do we need to sort by aggregate length?
         const pathPatterns = tryParsePatterns(versionPaths.paths);
         const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, pathPatterns, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
         if (result) {
@@ -3121,7 +3119,6 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, rest);
         }
         const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-        // TODO: do we need to sort by aggregate length?
         const pathPatterns = tryParsePatterns(versionPaths.paths);
         const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, versionPaths.paths, pathPatterns, loader, !packageDirectoryExists, state);
         if (fromPaths) {
