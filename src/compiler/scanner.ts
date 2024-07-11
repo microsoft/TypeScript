@@ -1883,6 +1883,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointUnchecked(pos);
 
+            if (CharacterCodes.a <= (ch | 32) && (ch | 32) <= CharacterCodes.z) {
+                const identifierKind = scanIdentifier(ch, languageVersion);
+                return identifierKind!;
+            }
+
             switch (ch) {
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
@@ -1901,10 +1906,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                         return token = SyntaxKind.NewLineTrivia;
                     }
+                case CharacterCodes.space:
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
                 case CharacterCodes.formFeed:
-                case CharacterCodes.space:
                 case CharacterCodes.nonBreakingSpace:
                 case CharacterCodes.ogham:
                 case CharacterCodes.enQuad:
