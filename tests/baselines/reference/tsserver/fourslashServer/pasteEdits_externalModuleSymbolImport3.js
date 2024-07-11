@@ -1,25 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/a.ts]
-const abc = 10;
-const def = 20;
-export interface testInterface {
-    abc: number;
-    def: number;
-}
-
-//// [/b.mts]
-import test from "./a.js";
-
-function foo(abc: test.testInterface, def: test.testInterface) {
-   console.log(abc);
-   console.log(def);
-}
-
-
-//// [/folder/c.ts]
-
-
 //// [/lib.d.ts]
 lib.d.ts-Text
 
@@ -29,8 +9,28 @@ lib.decorators.d.ts-Text
 //// [/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
-//// [/tsconfig.json]
-{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "a.ts", "b.mts"] }
+//// [/src/a.ts]
+const abc = 10;
+const def = 20;
+export interface testInterface {
+    abc: number;
+    def: number;
+}
+
+//// [/src/b.mts]
+import test from "./a.js";
+
+function foo(abc: test.testInterface, def: test.testInterface) {
+   console.log(abc);
+   console.log(def);
+}
+
+
+//// [/src/folder/c.ts]
+
+
+//// [/src/tsconfig.json]
+{ "compilerOptions": { "module": "nodenext" }, "files": ["/src/folder/c.ts", "/src/a.ts", "/src/b.mts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -38,44 +38,44 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/folder/c.ts"
+        "file": "/src/folder/c.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /folder/c.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/folder/c.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /folder/c.ts to open"
+        "projectName": "/src/tsconfig.json",
+        "reason": "Creating possible configured project for /src/folder/c.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /src/tsconfig.json : {
  "rootNames": [
-  "/folder/c.ts",
-  "/a.ts",
-  "/b.mts"
+  "/src/folder/c.ts",
+  "/src/a.ts",
+  "/src/b.mts"
  ],
  "options": {
   "module": 199,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/src/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.esnext.full.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.esnext.full.d.ts 500 undefined Project: /src/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/folder/c.ts SVC-1-0 ""
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/src/folder/c.ts SVC-1-0 ""
+	/src/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/src/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
 	folder/c.ts
@@ -95,7 +95,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/src/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -104,8 +104,8 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/folder/c.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/src/folder/c.ts",
+        "configFile": "/src/tsconfig.json",
         "diagnostics": [
           {
             "text": "File '/lib.esnext.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'esnext'",
@@ -155,42 +155,42 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /folder/c.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /src/folder/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
 After Request
 watchedFiles::
-/a.ts: *new*
-  {"pollingInterval":500}
-/b.mts: *new*
-  {"pollingInterval":500}
 /lib.esnext.full.d.ts: *new*
   {"pollingInterval":500}
-/tsconfig.json: *new*
+/src/a.ts: *new*
+  {"pollingInterval":500}
+/src/b.mts: *new*
+  {"pollingInterval":500}
+/src/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a.ts *new*
+/src/a.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/b.mts *new*
+        /src/tsconfig.json
+/src/b.mts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/folder/c.ts (Open) *new*
+        /src/tsconfig.json
+/src/folder/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
+        /src/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -238,7 +238,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/folder/c.ts",
+        "file": "/src/folder/c.ts",
         "pastedText": [
           "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
         ],
@@ -255,7 +255,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "copiedFrom": {
-          "file": "b.mts",
+          "file": "/src/b.mts",
           "spans": [
             {
               "start": {
@@ -272,13 +272,13 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getPasteEdits"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
-	/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/src/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
+	/src/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/src/b.mts Text-1 "import test from \"./a.js\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
@@ -294,7 +294,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/folder/c.ts",
+            "fileName": "/src/folder/c.ts",
             "textChanges": [
               {
                 "start": {
@@ -326,21 +326,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
+/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
 
 ScriptInfos::
-/a.ts
+/src/a.ts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/b.mts
+        /src/tsconfig.json
+/src/b.mts
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/folder/c.ts (Open) *changed*
+        /src/tsconfig.json
+/src/folder/c.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /tsconfig.json *default*
+        /src/tsconfig.json *default*
